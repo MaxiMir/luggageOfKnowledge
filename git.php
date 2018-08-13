@@ -50,9 +50,9 @@ Packagist ( https://packagist.org/about)- как публиковать паке
 
 
 <?php
-GIT
+############### GIT ######################
 
-gitk // дефолтный UI редактор
+gitk // дефолтный UI редакторd
 
 git config --global user.name "Max"
 git config --global user.email mmirrev@example.com
@@ -84,7 +84,6 @@ hello.txt
 
 $ git add hello.txt // добавить файл на коммит кандидат - начать индексировать файл. Здесь это hello.txt
 
-$ git add -A // добавить все, что находится в директории
 $ git add * // добавить все Untracked файлы на индексацию
 $ git add . // добавить все Untracked файлы из текущей директории на индексацию
 
@@ -118,7 +117,7 @@ $ git commit -m "Initial commit." // Эта команда создаст нов
 
 # Подключение к удаленному репозиторию
 
-$ git remote add origin https://github.com/tutorialzine/awesome-project.git // связать наш локальный репозиторий с репозиторием на GitHub
+git remote add origin https://github.com/MaxiMir/luggageOfKnowledge.git // связать наш локальный репозиторий с репозиторием на GitHub
 
 
 # Отправка изменений на сервер
