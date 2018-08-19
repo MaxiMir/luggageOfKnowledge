@@ -5175,28 +5175,53 @@ echo cdr($pair); // метод селектор - выбор второго зн
 
 function cons($x, $y)
 {
-	return function($method) use ($x, $y) { // лямбда-функция
-		switch ($method) {
-			case 'car':
-				return $x;		
-			case 'cdr':
-				return $y;		
-
-		}
-	};
+    return function ($method) use ($x, $y) {
+        switch ($method) {
+            case "car":
+                return $x;
+            case "cdr":
+                return $y;
+            default:
+                throw new \InvalidArgumentException("Invalid method $method.");
+        }
+    };
 }
 
-function car($pair)
+function car(callable $pair)
 {
 	return $pair('car');
 }
 
-function cdr($pair)
+function cdr(callable $pair)
 {
 	return $pair('cdr');
 }
 
 echo $pair("car"); // так нарушаем абстракцию, просто для понимания. 'car' - называется сообщением, а способ программирования - 'передачей сообщений' => 1
+
+function isPair($pair)
+{
+    return is_callable($pair);
+}
+
+function toString($list)
+{
+    if (!isPair($list)) {
+        return $list;
+    }
+ 
+    $iter = function ($items, array $acc = []) use (&$iter) {
+        if ($items == null) {
+            return $acc;
+        }
+        return $iter(cdr($items), array_merge($acc, [toString(car($items))]));
+    };
+    $arr = $iter($list);
+ 
+    return "(" . implode(", ", $arr) . ")";
+}
+
+
 
 
 /*
@@ -5225,6 +5250,14 @@ function cdr(callable $pair)
     return function ($x, $y) use ($pair) {
     	return $y;
     };
+}
+
+
+function makeList(...$elements)
+{
+    return array_reduce(array_reverse($elements), function ($acc, $item) {
+        return cons($item, $acc);
+    });
 }
 
 
@@ -5267,14 +5300,16 @@ function denom($rat)
 
 function cons($x, $y)
 {
-	return function($method) use ($x, $y) {
-		switch ($method) {
-			case 'car':
-				return $x;
-			case 'cdr':
-				return $y;	
-		}
-	};
+    return function ($method) use ($x, $y) {
+        switch ($method) {
+            case "car":
+                return $x;
+            case "cdr":
+                return $y;
+            default:
+                throw new \InvalidArgumentException("Invalid method $method.");
+        }
+    };
 }
 
 
@@ -5343,6 +5378,12 @@ function equalRat($rat1, $rat2)
 
 #>>>>>  Замкнутые множества  <<<<<<<#
 
+/*
+Список - это абстрактный тип данных, представляющий собой упорядоченный набор значений, в котором некоторое значение может встречаться более одного раза. Экземпляр списка является компьютерной реализацией математического понятия конечной последовательности.
+
+В списке нет индексированного доступа и невозможно получить напрямую доступ к произвольному элементу. В программе у нас есть доступ к голове списка через которую мы можем продвигаться дальше вглубь к хвосту списка.
+*/
+
 cons(10, cons(1, 30)); // алгебраическое замыкание 
 $list = cons(1, cons(2,cons(3, null))); // структура данных "список"(или "последовательность"). null - показывает конец списка
 makeList(1, 2, 3); // аналогично коду выше
@@ -5396,14 +5437,13 @@ use function Pairs\cdr;
 
 function length($items)
 {
-	$count = 1;
-    
-	if (is_null(cdr($items))) {
-		return 0;
-	}
-
-	return $count + length(cdr($items));
+	if ($items === null || !is_callable($items)) {
+        return 0;
+    } else {
+        return 1 + length(cdr($items));
+    }
 }
+
 
 // Реализуйте функцию append, которая соединяет два списка; Подсказка: Попробуйте сначала представить как работала бы функция copy, которая принимает на вход список и возвращает его копию.
 
@@ -5415,37 +5455,12 @@ use function Pairs\cdr;
 
 function append($list1, $list2)
 {
-	$currList = $list1;
-
-	if (is_null(cdr($currList))) {
-		$currList = cons(car($currList), $list2);
-		
-		if (is_null($list2)) {
-			return cons(car($currList), null);
-		}
-		
-		$list2 = null;
-	}
-
-	return cons(car($currList), append(cdr($currList), $list2));
+    if ($list1 === null) {
+        return $list2;
+    } else {
+        return cons(car($list1), append(cdr($list1), $list2));
+    }
 }
-
-/** Пример: */
-
-$list1 = cons(4, cons(5, cons(6, null)));
-$list2 = cons(7, cons(8, null));
-
-// =>
-
-cons(4, append( cons(5, cons(6, null)), $list2 ));
-cons(4, cons(5, append( cons(6, null), $list2 )));
-cons(4, cons(5, cons(6, append( cdr(7, cons(7, cons(8, null))), $list2 ))));
-cons(4, cons(5, cons(6, append( cons(7, cons(8, null)), $list2 ))));
-cons(4, cons(5, cons(6, append( cons(7, cons(8, null)), $list2 ))));
-cons(4, cons(5, cons(6, cons(7, append( cons(8, null), $list2 )))));
-cons(4, cons(5, cons(6, cons(7, append( cons(8, null), $list2 )))));
-cons(4, cons(5, cons(6, cons(7, cons(8, null)))));
-
 
 
 // Реализуйте функцию reverse, которая переворачивает список;
@@ -5460,19 +5475,82 @@ function reverse($list)
 {
 	$data = [];
 	
-	$iter = function ($list) use (&$iter) {
+	$iterCreateArr = function ($list) use ($data, &$iterCreateArr) {
 		$data[] = car($list);
 		
 		if(is_null(cdr($list))) {
 			return; 
 		}
 
-		return $iter(cdr($list));
+		return $iterCreateArr(cdr($list));
 	};
 
-	return cons(array_pop($data), reverse(cdr($list)));
-	
+	$iterCreateArr($list);
+
+	$iterCreateList = function ($data) use (&$iterCreateList) {
+		if (empty($data)) {
+			return null;
+		}
+
+		return cons(array_pop($data), $iterCreateList($data));
+	};
+
+	return $iterCreateList($data);
 }
 
 
-cons(4, cons(5, cons(6, cons(7, null))))
+function reverse($list)
+{
+    $iter = function ($list, $acc) use (&$iter) {
+        return is_null($list) ? $acc : $iter(cdr($list), cons(car($list), $acc));
+    };
+ 
+    return $iter($list, null);
+}
+
+
+
+
+#>>>>>  Map   <<<<<<<#
+
+// map — функция высшего порядка, используемая во многих языках программирования, которая применяет данную функцию к каждому элементу списка, возвращая список результатов. При рассмотрении в функциональной форме она часто называется «применить-ко-всем». https://ru.wikipedia.org/wiki/Map 
+// https://codeclimate.com/github/hexlet-components/php-pairs/
+
+$scaleList = function ($list, $factor) use (&$scaleList) {
+	if ($list == null) {
+		return null;
+	} else {
+		$rest = $scaleList(cdr($list), $factor);
+		return cons(car($list) * $factor, $rest);
+	}
+};
+
+#
+$scaleList(cons(1, cons(2, cons(3, null))), 2); // =>
+ $rest = $scaleList(cons(2, cons(3, null)), 2);
+ return cons(2, $scaleList(cons(2, cons(3, null)), 2));
+
+ $rest = $scaleList(cons(3, null), 2);
+ return cons(2, cons(4, $scaleList(cons(3, null), 2)));
+
+ $rest = $scaleList((null), 2);
+ return cons(2, cons(4, cons(6, $scaleList((null), 2))));	
+
+ return cons(2, cons(4, cons(6, null)));	
+#
+
+$list = makeList(1, 2, 3);
+echo listToString($scaleList($list, 2)); // => 2,4,6
+
+$map = function ($func, $list) use (&$map) { // повышаем уровень абстракции
+	if ($list == null) {
+		return null;
+	} else {
+		$rest = $map($func, cdr($list));
+		return cons($func(car($list), $rest);
+
+	}
+};
+
+$func = function($item) { return $item * 3; }
+echo listToString($map($func, $list)); // => 3,6,9
