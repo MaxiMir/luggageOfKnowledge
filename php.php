@@ -14,7 +14,7 @@ https://guides.hexlet.io
 Книги:
 https://ru.hexlet.io/pages/recommended-books
 + Роберт Мартин идеальный программист
-+ Адитьи Бхаргавы “Грокаем алгоритмы” -> репозиторий https://github.com/egonSchiele/grokking_algorithms
++ Адитьи Бхаргавы “Грокаем алгоритмы” -> ревпозиторий https://github.com/egonSchiele/grokking_algorithms
 + Томас Кормен “Алгоритмы. Вводный курс”
 + Эви Немет Unix и Linux. Руководство системного администратора  - использовать, как справочник, время от времени углубляясь в необходимые темы по мере возникновения вопросов.
 + Структура и интерпритация компьютерных программ
@@ -5215,20 +5215,16 @@ function cons($x, $y)
 
 function car(callable $pair)
 {
-    // BEGIN (write your solution here)dd
     return function ($x, $y) use ($pair) {
     	return $x;
     };
-    // END
 }
 
 function cdr(callable $pair)
 {
-    // BEGIN (write your solution here)
     return function ($x, $y) use ($pair) {
     	return $y;
     };
-    // END
 }
 
 
@@ -5271,7 +5267,7 @@ function denom($rat)
 
 function cons($x, $y)
 {
-	return function($nethod) use ($x, $y) {
+	return function($method) use ($x, $y) {
 		switch ($method) {
 			case 'car':
 				return $x;
@@ -5392,21 +5388,91 @@ echo cdr(cdr(cdr($l))); // => null
 $list = cons(1, cons(2, cons(3, null)));
 
 
+namespace App\Length;
+
+use function Pairs\cons;
+use function Pairs\car;
+use function Pairs\cdr;
+
 function length($items)
 {
-	$count = 0;
-
-	if(is_null(cdr($items))) {
-		return $count;
+	$count = 1;
+    
+	if (is_null(cdr($items))) {
+		return 0;
 	}
 
-	++$count;
-	return length(cdr($items));
+	return $count + length(cdr($items));
 }
 
 // Реализуйте функцию append, которая соединяет два списка; Подсказка: Попробуйте сначала представить как работала бы функция copy, которая принимает на вход список и возвращает его копию.
 
+namespace App\Append;
+
+use function Pairs\cons;
+use function Pairs\car;
+use function Pairs\cdr;
+
+function append($list1, $list2)
+{
+	$currList = $list1;
+
+	if (is_null(cdr($currList))) {
+		$currList = cons(car($currList), $list2);
+		
+		if (is_null($list2)) {
+			return cons(car($currList), null);
+		}
+		
+		$list2 = null;
+	}
+
+	return cons(car($currList), append(cdr($currList), $list2));
+}
+
+/** Пример: */
+
+$list1 = cons(4, cons(5, cons(6, null)));
+$list2 = cons(7, cons(8, null));
+
+// =>
+
+cons(4, append( cons(5, cons(6, null)), $list2 ));
+cons(4, cons(5, append( cons(6, null), $list2 )));
+cons(4, cons(5, cons(6, append( cdr(7, cons(7, cons(8, null))), $list2 ))));
+cons(4, cons(5, cons(6, append( cons(7, cons(8, null)), $list2 ))));
+cons(4, cons(5, cons(6, append( cons(7, cons(8, null)), $list2 ))));
+cons(4, cons(5, cons(6, cons(7, append( cons(8, null), $list2 )))));
+cons(4, cons(5, cons(6, cons(7, append( cons(8, null), $list2 )))));
+cons(4, cons(5, cons(6, cons(7, cons(8, null)))));
 
 
 
 // Реализуйте функцию reverse, которая переворачивает список;
+
+namespace App\Reverse;
+
+use function Pairs\cons;
+use function Pairs\car;
+use function Pairs\cdr;
+
+function reverse($list)
+{
+	$data = [];
+	
+	$iter = function ($list) use (&$iter) {
+		$data[] = car($list);
+		
+		if(is_null(cdr($list))) {
+			return; 
+		}
+
+		return $iter(cdr($list));
+	};
+
+	return cons(array_pop($data), reverse(cdr($list)));
+	
+}
+
+
+cons(4, cons(5, cons(6, cons(7, null))))
