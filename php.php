@@ -5554,19 +5554,18 @@ use function App\Pair\listToString;
 
 function map($func, $list)
 {
-    $iterList = function ($list, $acc) use (&$iterList, $func) {
-    	return is_null($list) ? reverse($acc) : $iterList(cdr($list), cons($func(car($list)), $acc));
+    $iter = function ($list, $acc) use (&$iter, $func) {
+    	return is_null($list) ? reverse($acc) : $iter(cdr($list), cons($func(car($list)), $acc));
     };
-	return $iterList($list, null);
+	return $iter($list, null);
 }
 
 
 
 
 #>>>>>  Фильтрация   <<<<<<<#
- 
 
-$removeOdds = function ($list) use (&$removeOdds) {
+$removeOdds = function ($list) use (&$removeOdds) { // по четным числам
 	if ($list == null) {
 		return null;
 	} else {
@@ -5580,6 +5579,82 @@ $removeOdds = function ($list) use (&$removeOdds) {
 		}
 	}
 };
+
+$list = makeList(1,2,3,5,101,100);
+echo listToString($removeOdds($list)); // => (2, 10, 100)
+
+// Реализуйте функцию filter, используя итеративный процесс.
+
+function filter($func, $list)
+{
+	$iter = function ($list, $acc) use (&$iter, $func) {
+    	if ($list === null) {
+        	return reverse($acc);
+    	}
+
+    	$newAcc = $func(car($list)) ? cons(car($list), $acc) : $acc;
+        return $iter(cdr($list), $newAcc);
+    };
+
+    return $iter($list, null);
+}
+
+
+
+
+#>>>>>  Свертка   <<<<<<<#
+ 
+function sum($list)
+{
+	$iter = function ($list, $acc) use (&$iter) {
+		if ($list == null) {
+			return $acc;
+		}
+
+		return $iter(cdr($list, $acc + car($list)));
+	}; 
+
+	return $iter($list, 0);
+}
+
+function accumulate($list, $func, $acc)
+{
+	$iter = function ($list, $acc) use (&$iter, $func) {
+		if ($list == null) {
+			return $acc;
+		}
+
+		return $iter(cdr($list), $func(car($list), $acc));
+	}
+
+	return $iter($list, $acc);
+}
+
+$list = makeList(1, 5, 9);
+$func = function ($item, $acc) { return $acc + $item; }
+echo accumulate($list, $func, 0); // => 15
+$func = function ($item, $acc) { return cons($item * 2, $acc); }
+echo listToString(accumulate($list, $func, null)); // => (18, 10, 2)
+
+
+/*
+Реализуйте функцию solution которая принимает на вход список чисел и выполняет следующие действия:
+  округляет все числа в списке до верхней границы.
+  удаляет нечетные числа.
+  возвращает произведение оставшихся элементов.
+
+Подсказки
+    Округление до верхней границы: ceil.
+    Используйте функции map, filter, reduce из пакета hexlet/pairs, определение которых можно подсмотреть тут https://github.com/hexlet-components/php-pairs.
+*/
+
+solution(l(1.3, 3.01, 5.5, 100.9, 2.5)); // → 48.0
+solution(l(1.49, 1.99, 9.9, 9.0, -1.2, -2.5)); // → -80.0
+
+
+
+
+
 
 
 
