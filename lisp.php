@@ -1,4 +1,5 @@
 <?
+
 ################## LISP ##################
 
 // В () выражение
@@ -20,7 +21,7 @@ circumference // => 106,814150022205297
 (square 2) // => 4
 square // => <procedure: square>
 (square (+ 1 3)) // => 16
-(squeare (square 6)) // => 1296
+(square (square 6)) // => 1296
 (define (sum-of-squares x y) (+ (square x) (square y))) // сумма квадратов
 (sum-of-squares 9 26) // => 757
 (define (f a) (sum-of-squares (+ a 1) (+ a 2)))
@@ -29,7 +30,7 @@ square // => <procedure: square>
 # предикат
 
 (define (abs x)
-	(cond ((> x 0) x)
+	(cond ((> x 0) x) // cond - условие
 		  ((= x 0) 0)
 		  ((< x 0) (- x))))		  
 
@@ -56,3 +57,21 @@ square // => <procedure: square>
 (>= 10 10) // => #t
 
 
+# рекурсия
+(define (sqrt-iter guess x)
+	(if (good-enough? guess x) guess
+		(sqrt-iter (improve guess x) x)))
+
+(define (improve guess x)
+	(average guess (/ x guess)))
+
+(degine (average a b)
+	(/ (a + b) 2))
+
+(define (good-enough? guess x)
+	(< (abs (- (square guess) x)) 0.01))
+
+(define (sqrt x)
+	(sqrt-iter 1.0 x))
+
+(sqrt 9) // => 3.0000915

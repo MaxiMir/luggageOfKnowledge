@@ -4873,6 +4873,7 @@ function factorial($num)
 	return $num <= 1 ? 1 : $num * factorial($num - 1);
 }
 
+
 /* Реализуйте рекурсивную функцию fib, находящую числа Фибоначчи, используя древовидно-рекурсивный процесс.
 
 Формула:
@@ -5015,21 +5016,6 @@ f(f(f($left3, $right3), $right2), $right1); // $right3 = 2
 f(f(f(1, 2), 3), 4);
 f(f(-1, 3), 4);
 f(-4, 4); // -8
-
-function product($num1, $num2, $func) // my
-{
-    if ($num1 == $num2) { return $num1; }
-    
-    $iter = function ($num1, $acc) use ($num2, $func, &$iter) {
-        if ($num1 == $num2) {
-            return $acc;
-        }
-
-        return $iter(++$num1, $func($acc, $num1));
-    };
-    
-    return $iter($num1, $num1); 
-}
 
 function product($num1, $num2, $func) // hexlet
 {
@@ -5426,6 +5412,7 @@ echo cdr(cdr(cdr($l))); // => null
 
 
 // Реализуйте функцию length, которая считает длину списка;
+
 $list = cons(1, cons(2, cons(3, null)));
 
 
@@ -5547,10 +5534,98 @@ $map = function ($func, $list) use (&$map) { // повышаем уровень 
 		return null;
 	} else {
 		$rest = $map($func, cdr($list));
-		return cons($func(car($list), $rest);
-
+		return cons($func(car($list), $rest));
 	}
 };
 
 $func = function($item) { return $item * 3; }
 echo listToString($map($func, $list)); // => 3,6,9
+
+
+// Реализуйте map используя итеративный процесс.
+
+require_once 'Pair.php';
+
+use function App\Pair\cons;
+use function App\Pair\car;
+use function App\Pair\cdr;
+use function App\Pair\reverse;
+use function App\Pair\listToString;
+
+function map($func, $list)
+{
+    $iterList = function ($list, $acc) use (&$iterList, $func) {
+    	return is_null($list) ? reverse($acc) : $iterList(cdr($list), cons($func(car($list)), $acc));
+    };
+	return $iterList($list, null);
+}
+
+
+
+
+#>>>>>  Фильтрация   <<<<<<<#
+ 
+
+$removeOdds = function ($list) use (&$removeOdds) {
+	if ($list == null) {
+		return null;
+	} else {
+		$curr = car($list);
+
+		$rest = $removeOdds(cdr($list));
+		if ($curr% 2 == 0) {
+			return cons($curr, $rest);	
+		} else {
+			return $rest;
+		}
+	}
+};
+
+
+
+
+
+
+
+
+
+
+
+// ЗАДАНИЯ:
+
+# Заменить абсолютные ссылки на относительные:
+
+require 'common/connect.php';
+
+$changeColunmData = function ($table, $column, $changeText, $newText) {
+	$changeTextScr = addslashes($changeText);
+	$sql = "SELECT id, $column FROM $table WHERE $column LIKE('%{$changeTextScr}%')"; 
+	$res = mysql_query($sql);
+
+	if (!$res) {
+		return mysql_errno() . ": " . mysql_error() . "\n";
+	} elseif ($resOp = mysql_num_rows($res)) {
+		while ($row = mysql_fetch_assoc($res)) {
+			$id = $row['id'];
+			$currData = $row[$column];
+						
+			$newData = addslashes(str_replace($changeText, $newText, $currData));	
+			$sqlIns = "UPDATE $table SET $column='$newData' WHERE id=$id";
+			$resIns = mysql_query($sqlIns);
+			if (!$resIns) {
+				print mysql_errno() . ": " . mysql_error() . "\n\n error with id=$id";
+			}		
+		}
+		
+		$resOpIns = mysql_num_rows($resIns);
+		
+		return "change $resOp from $resOpIns <br>"; 
+	}
+};
+
+
+echo $changeColunmData('ap_categories', 'text', '="http://www.stald.ru/', '="/');
+echo $changeColunmData('ap_categories', 'text', '=\'http://www.stald.ru/', '=\'/'); 
+
+
+
