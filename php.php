@@ -3985,7 +3985,7 @@ print_r($usersByAge);
 
 $oldest = array_reduce($users, function ($acc, $user) {
     return $user['age'] > $acc['age'] ? $user : $acc;
-}, $users[0]); 
+}, $users[0]); 	
 
 print_r($oldest); // => ['name' => 'Igor', 'age' => 19]
 
@@ -5460,34 +5460,6 @@ use function Pairs\cdr;
 
 function reverse($list)
 {
-	$data = [];
-	
-	$iterCreateArr = function ($list) use ($data, &$iterCreateArr) {
-		$data[] = car($list);
-		
-		if(is_null(cdr($list))) {
-			return; 
-		}
-
-		return $iterCreateArr(cdr($list));
-	};
-
-	$iterCreateArr($list);
-
-	$iterCreateList = function ($data) use (&$iterCreateList) {
-		if (empty($data)) {
-			return null;
-		}
-
-		return cons(array_pop($data), $iterCreateList($data));
-	};
-
-	return $iterCreateList($data);
-}
-
-
-function reverse($list)
-{
     $iter = function ($list, $acc) use (&$iter) {
         return is_null($list) ? $acc : $iter(cdr($list), cons(car($list), $acc));
     };
@@ -5583,6 +5555,7 @@ $removeOdds = function ($list) use (&$removeOdds) { // по четным чис�
 $list = makeList(1,2,3,5,101,100);
 echo listToString($removeOdds($list)); // => (2, 10, 100)
 
+
 // Реализуйте функцию filter, используя итеративный процесс.
 
 function filter($func, $list)
@@ -5652,6 +5625,105 @@ solution(l(1.3, 3.01, 5.5, 100.9, 2.5)); // → 48.0
 solution(l(1.49, 1.99, 9.9, 9.0, -1.2, -2.5)); // → -80.0
 
 
+namespace App\Solution;
+
+use function Lists\map;
+use function Lists\filter;
+use function Lists\reduce;
+
+function solution($list) 
+{ 
+   $ceilNums = map( function ($num) {
+   	return ceil($num); 
+   }, $list);
+
+   $evenNums = filter(function ($num) { 
+   	return $num % 2 == 0; 
+   }, $ceilNums); 
+
+   return reduce( function ($num, $acc) {
+   	return $num * $acc; 
+   }, $evenNums, $acc = 1);
+}
+
+
+
+#>>>>>  Деревья   <<<<<<<#
+
+/* 
+Дерево — одна из наиболее широко распространённых структур данных в информатике, эмулирующая древовидную структуру в виде набора связанных узлов. Является связным графом, не содержащим циклы. Большинство источников также добавляют условие на то, что рёбра графа не должны быть ориентированными. В дополнение к этим трём ограничениям, в некоторых источниках указывается, что рёбра графа не должны быть взвешенными. https://ru.wikipedia.org/wiki/Дерево_(структура_данных)
+
+Дерево можно назвать рекурсивной структурой данных, потому что каждая его часть по сути является деревом само по себе.
+
+*/
+
+function treeMap($list, $func, $acc)
+{
+	$iter = function ($list, $acc) use (&$iter, $func) {
+		if ($list == null) {
+			return $acc;
+		}
+	
+		$element = car($list);
+		if (isPair($element)) { // isPair - метод проверяет является ли элемент парой
+			$newAcc = treeMap($element, $func, $acc);
+		} else {
+			$newAcc = $func($element, $acc);
+		}
+		return $iter(cdr($list), $newAcc);
+	};
+	return $iter($list, $acc);	
+}
+
+$list = l(1,3,l(1,l(2,3),2),9); // l == makeList()
+
+$result = treeMap($list, function($item, $acc) { // считает кол-во элементов
+	return $acc + 1;
+}, 0); // => 7
+
+
+// Реализуйте функцию reverse, которая переворачивает переданный на вход список рекурсивно.
+
+
+require 'Pair.php';
+
+use function App\Pair\car;
+use function App\Pair\isPair;
+use function App\Pair\cdr;
+use function App\Pair\cons;
+use function App\Pair\listToString;
+
+function reverse($list)
+{
+    // BEGIN (write your solution here)
+    $iter = function ($list, $acc) use (&$iter) {
+    	if (is_null($list)) {
+    		return $acc;
+    	}
+
+    	$elem = car($list);
+    	if (isPair($elem)) {
+    		$newAcc = $iter($elem, $acc);
+    	} else {
+    		$newAcc = cons($elem, $acc);
+    	}
+
+    	return $iter(cdr($list), $newAcc);
+    };
+
+    return $iter($list, null);
+    // END
+}
+
+
+function reverse($list)
+{
+	$iter = function ($list) use (&$iter) {
+		return is_null($list) ? $acc : $iter(cdr($list), cons(car($list), $acc));
+	};
+
+	return $iter($list, null);
+}
 
 
 
@@ -5662,11 +5734,7 @@ solution(l(1.49, 1.99, 9.9, 9.0, -1.2, -2.5)); // → -80.0
 
 
 
-
-
-
-
-// ЗАДАНИЯ:
+###################### ЗАДАНИЯ ################################
 
 # Заменить абсолютные ссылки на относительные:
 
