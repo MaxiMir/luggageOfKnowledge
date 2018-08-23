@@ -5695,34 +5695,50 @@ use function App\Pair\listToString;
 
 function reverse($list)
 {
-    // BEGIN (write your solution here)
     $iter = function ($list, $acc) use (&$iter) {
     	if (is_null($list)) {
     		return $acc;
     	}
 
     	$elem = car($list);
-    	if (isPair($elem)) {
-    		$newAcc = $iter($elem, $acc);
-    	} else {
-    		$newAcc = cons($elem, $acc);
-    	}
+    	$newAcc = isPair($elem) ? $iter($elem, $acc) : cons(car($list), $acc);
 
     	return $iter(cdr($list), $newAcc);
     };
 
     return $iter($list, null);
-    // END
 }
+
+
+l(1, l(3, 2), 5, l(6, l(5, 4)) => (((4, 5), 6), 5, (2, 3), 1)
+l(l(3, l(4, 100), 5, 6, l(7)) => (((7), 6, 5, (100, 4), 3))
+
+
+
+
+cons(1, null);
+cons(1, cons(3,2))
+
+
+-'(((4, 5), 6), 5, (2, 3), 1)'
++'((6, (5, 4)), (5, 4), 4, 5, (3, 2), 2, 1)',0.
+
 
 
 function reverse($list)
 {
-	$iter = function ($list) use (&$iter) {
-		return is_null($list) ? $acc : $iter(cdr($list), cons(car($list), $acc));
-	};
+    $iter = function ($list, $acc) use (&$iter) {
+    	if (is_null($list)) {
+    		return $acc;
+    	}
 
-	return $iter($list, null);
+    	$elem = car($list);
+    	$newAcc = isPair($elem) ? $iter($elem, $acc) : cons(car($list), $acc);
+
+    	return $iter(cdr($list), $newAcc);
+    };
+
+    return $iter($list, null);
 }
 
 
