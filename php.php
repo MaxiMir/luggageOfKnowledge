@@ -4888,8 +4888,9 @@ function fib($num)
 }
 
 
+######################### ДЕКЛАРАТИВНОЕ ПРОГРАММИРОВАНИЕ #########################
 
-
+	
 #>>>>>  Линейно-итеративный процесс <<<<<<<#
 
 function myPow($base, $exp) { 
@@ -5607,7 +5608,7 @@ function accumulate($list, $func, $acc)
 $list = makeList(1, 5, 9);
 $func = function ($item, $acc) { return $acc + $item; }
 echo accumulate($list, $func, 0); // => 15
-$func = function ($item, $acc) { return cons($item * 2, $acc); }
+$func = function ($item, $acc) { return cons($item * 2, $acc); } 
 echo listToString(accumulate($list, $func, null)); // => (18, 10, 2)
 
 
@@ -5763,7 +5764,7 @@ echo ($result3); // => 30
 /*
 Реализуйте функцию solution, которая принимает на вход список чисел и выполняет следующие действия:
 
- удаляет все числа, не кратные трем.
+ удаляет все числа, не кратные трем. 
  возводит оставшиеся числа в квадрат.
  возвращает среднее арифметическое списка полученного после предыдущей операции.
 
@@ -5795,10 +5796,167 @@ function solution ($list)
     
 
 #>>>>>  Оператор присваивания  <<<<<<<#
-    
+
+# Процедурный стиль :
+	
+// Демонстрация - так не делать!
+function deposit(&$balance, $amount)
+{
+	$balance += $amount;
+}
+	
+$balance = 100;
+deposit($balance, 10);
+echo $balance; // => 100
+
+	
+function newDeposit($balance) // инкапсуляция	
+{
+	return function ($amount) use (&$balance) {
+		$balance += $amount;
+		return $balance;
+	};
+}
+
+$d = newDeposit(100);	
+echo $d(10); // => 110	
+$d2 = newDeposit(100);	
+echo $d2(10); // => 110		
+	
+
+
+/*	
+Напишите функцию newWithdraw, которая снимает деньги со счета. При попытке снять больше денег, чем есть на счете, она должна возвращать too much.
+Пример:
+
+$withdraw = newWithdraw(100);
+$withdraw(1000); // 'too much'
+$withdraw(50); // 50
+$withdraw(45); // 5
+*/
+	
+function newWithdraw($balance) // my
+{
+    return function ($amount) use (&$balance) {
+        $newBalance = $balance - $amount; 
+        return ($newBalance >= 0) ? $balance = $newBalance : 'too much';
+    };
+}	
+	
+function newWithdraw($balance) // hexlet
+{
+    return function ($amount) use (&$balance) {
+        if ($balance < $amount) {
+			  	return "too much";
+        } else {
+            $balance -= $amount;
+            return $balance;
+        }
+    };
+}
+
+
+	
+	
+#>>>>>  Объекты  <<<<<<<#	
+ 		
+function newAccount($balance)
+{
+	$withdraw = function ($amount) use (&$balance) {
+		$balance -= $amount;
+		return $balance;
+	};
+	
+	$deposit = function ($amount) use (&$balance) {
+		$balance += $amount;
+		return $balance;
+	}
+	
+	return function ($funcName, $amount) use ($withdraw, $deposit) { // стиль "передача сообщений"
+		switch ($funcName) {
+			case "withdraw":
+					return $withdraw($amount);
+					break;
+			case "deposit": 	
+					return $deposit($amount);
+					break;
+		}
+	};
+}
+	
+	
+$a = newAccount(100);
+echo $a("deposit", 50);	// 110
+echo $a("deposit", 100); // 10	
+	
+	
+/*	
+Измените функцию newAccount из видео так, чтобы она создавала счета, защищенные паролем.
+
+Пример:
+
+$acc = newAccount(100, "secret password");
+110 == $acc("deposit", 10, "secret password");
+60 == $acc("withdraw", 50, "secret password");
+"wrong password!" == $acc("deposit", 10, "wrong password");	
+*/	
+
+namespace App;
+
+function newAccount($balance, $password)
+{
+    $withdraw = function ($amount) use (&$balance) {
+        $balance -= $amount;
+        return $balance;
+    };
+
+    $deposit = function ($amount) use (&$balance) {
+        $balance += $amount;
+        return $balance;
+    };
+	
+
+    return function ($funcName, $amount, $p) use ($password, $withdraw, $deposit) {
+        if ($password !== $p) {
+            return "wrong password!";
+        }
+
+        switch ($funcName) {
+            case "withdraw":
+                return $withdraw($amount);
+                break;
+            case "deposit":
+                return $deposit($amount);
+                break;
+        }
+    };
+}
 
 
 
+#>>>>>  Преимущества присваивания   <<<<<<<#	
+ 
+
+function random($seed)
+{
+	return function () use (&$seed) {
+		$a = 45;
+		$c = 21;
+		$m = 67;
+		$seed = ($a * $seed + $c) % $m;
+
+		return $seed;
+	};
+}	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 ###################### ЗАДАНИЯ ################################
 
 # Заменить абсолютные ссылки на относительные:
@@ -5834,6 +5992,7 @@ $changeColunmData = function ($table, $column, $changeText, $newText) {
 
 echo $changeColunmData('ap_categories', 'text', '="http://www.stald.ru/', '="/');
 echo $changeColunmData('ap_categories', 'text', '=\'http://www.stald.ru/', '=\'/'); 
+
 
 
 
