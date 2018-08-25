@@ -5992,6 +5992,86 @@ function random($seed) // псевдослучайные  числа
 
 
 
+#>>>>>  Недостатки присваивания   <<<<<<<#	
+
+function makeDecrementer($balance) // чистая функция
+{
+	return function ($amount) use ($balance) {
+		return $balance - $amount;
+	};
+}
+
+$d = makeDecrementer(100);
+echo $d(10); // 90
+echo $d(10); // 90
+echo $d(10); // 90
+
+$d2 = makeDecrementer(100); // $d и $d2 - являются одним и тем же объектом
+
+
+function makeWithdraw($balance) // нечистая функция
+{
+	return function ($amount) use (&$balance) { 
+		$balance -= $amount;
+		return $balance;
+	};
+}
+
+$w = makeWithdraw(100); // $w и $w2 разные объекты
+$w2 = makeWithdraw(100);
+$w(10); // => 90
+$w(10); // => 80
+$w2 = makeWithdraw(100); // => 90
+
+# референциальная (ссылочная) прозрачность
+
+function factorial($n) // функция в полуимперативном стиле
+{
+	$product = 1;
+	$counter = 1;
+	$iter = function () use ($n, &$iter, &$product, &$counter) {
+		if ($counter > $n) {
+			return $product;	
+		} else {
+			$product *= $counter;
+			$couner += 1;
+			return $iter();
+		}
+		
+	};
+
+	return $iter;
+}
+
+
+/*
+Реализуйте функцию fib находящую числа Фибоначчи используя рекурсивно-итеративный процесс, но вместо аккумулятора параметров для вложенной функции $iter используйте переменные.
+
+Формула:
+
+f(0) = 0
+f(1) = 1
+f(n) = f(n-1) + f(n-2)
+
+Пример:
+
+2 == fib(3);
+5 == fib(5);
+55 == fib(10);
+*/
+
+
+/*
+[0, 0]
+[1, 1]
+[1, 2]
+[2, 3]
+[3, 4]
+[5, 5]
+[55, 10]
+*/
+
+
 /*
 Реализуйте функцию fringe, которая берет в качестве аргумента дерево (представленное в виде списка) и возвращает список, элементы которого - все листья дерева, упорядоченные слева направо.
 
