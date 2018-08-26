@@ -1,3 +1,7 @@
+<?
+############## PHP ##############
+/*
+
 Код-гайд:
 https://www.php-fig.org/psr/psr-1/
 http://www.php-fig.org/psr/psr-2/
@@ -31,8 +35,8 @@ https://intsystem.org/security/asymmetric-encryption-how-it-work/
 http://www.netcode.ru/cpp/?artID=4010
 https://urbanculture.in/%D0%9A%D1%80%D0%B8%D0%BF%D1%82%D0%BE%D0%B3%D1%80%D0%B0%D1%84%D0%B8%D1%8F
 https://m.habrahabr.ru/post/188042/
-	
-<?
+*/	
+
 
 #>>>>>  Введение <<<<<<<#
 
@@ -6036,8 +6040,7 @@ function factorial($n) // функция в полуимперативном с�
 			$product *= $counter;
 			$couner += 1;
 			return $iter();
-		}
-		
+		}	
 	};
 
 	return $iter;
