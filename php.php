@@ -1,7 +1,8 @@
 <?
-############## PHP ##############
-/*
 
+############## PHP ##############
+
+/*
 Код-гайд:
 https://www.php-fig.org/psr/psr-1/
 http://www.php-fig.org/psr/psr-2/
