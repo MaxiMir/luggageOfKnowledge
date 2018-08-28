@@ -7,13 +7,13 @@
 
 
 Ссылки
-Запуск на выполнение и переменная окружения PATH: https://habrahabr.ru/post/105495/
++ Запуск на выполнение и переменная окружения PATH: https://habrahabr.ru/post/105495/
 
 Как я смогу запускать программы на выполнение?
-https://www.sao.ru/hq/sts/linux/doc/lnag/3.html#run_program
++ https://www.sao.ru/hq/sts/linux/doc/lnag/3.html#run_program
 
 Шебанг
-https://goo.gl/p7IdS8
++https://goo.gl/p7IdS8
 
 Composer https://habrahabr.ru/post/145946/
 
