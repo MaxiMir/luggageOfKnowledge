@@ -1221,7 +1221,7 @@ function addPrefix($names, $prefix)
 function reverseArray($coll) 
 {
     $size = sizeof($coll); 
-    $maxIndex = floor($size / 2);  
+    $maxIndex = floor($size / 2);  // округляет дробь в меньшую сторону
 	
     for ($i = 0; $i < $maxIndex; $i++) {
         $mirrorIndex = $size - $i - 1;
@@ -1234,22 +1234,8 @@ function reverseArray($coll)
 }
 
 
+
 // Реализуйте функцию swap, которая меняет местами два элемента относительно переданного индекса. Например, если передан индекс 5, то функция меняет местами элементы, находящиеся по индексам 4 и 6. 
-
-function swap($arr, $num) // my
-{
-	$res = $arr;
-	$arr_size = sizeof($arr);
-
-	if ($num == 0 || $num >= $arr_size - 1 || $arr_size == 2) {
-		return $arr;
-	}
-
-	array_splice($res, $num - 1, 3, [ $arr[$num + 1], $arr[$num], $arr[$num - 1] ]);
-
-    return $res;
-}
-
 
 function swap($coll, $center) // hexlet
 {
@@ -1321,7 +1307,7 @@ print_r(calculateMax([3, 2, -10, 38, 0]));
 
 function calculateAverage($arr) // my
 {
-	return $arr ? array_sum($arr) / sizeof($arr) : null;
+	return empty($arr) ? null : array_sum($arr) / sizeof($arr);
 }
 
 function calculateAverage($coll) // hexlet
@@ -1343,9 +1329,7 @@ function calculateAverage($coll) // hexlet
 
 function isContinuousSequence($coll)
 {
-    if (empty($coll)) {
-        return false;
-    }
+    if (empty($coll)) { return false; }
 
     $start = $coll[0];
 
@@ -1372,8 +1356,7 @@ function isContinuousSequence($coll)
 function mycompact($coll)
 {
     $result = [];
-    foreach ($coll as $item) {
-        // is_null функция (предикат) стандартной библиотеки
+    foreach ($coll as $item) {       
         if (!is_null($item)) {
             $result[] = $item;
         }
@@ -1522,21 +1505,6 @@ $arr2 = str_split($str, 3); // ->
 Словом считается любая непрерывная последовательность символов, включая любые спецсимволы.
 */
 
-function makeCensored(string $text, $stopWord) // My
-{	
-	$arr_words = explode(' ', $text);
-    $arr_keys = array_keys($arr_words, $stopWord); // возвращает все или некоторое подмножество ключей массива
-	
-	if (!empty($arr_keys)) {
-		foreach ($arr_keys as $key) {
-			$arr_words[$key] = '$#%!';
-		}	
-	}
-	
-	return implode(' ', $arr_words);
-	
-}
-
 function makeCensored(string $text, $stopWord) // hexlet
 {
     $words = explode(' ', $text);
@@ -1627,6 +1595,7 @@ function getSameCount($coll1, $coll2)
 
 
 
+
 #>>>>>  Теория Множеств <<<<<<<#
 
 /*
@@ -1643,7 +1612,7 @@ function getSameCount($coll1, $coll2)
 Переходя к программированию, можно заметить, что массив очень похож на множество, и его действительно можно так рассматривать. Почему это так важно? Понимая принципы, на которых основаны некоторые операции, вы сможете реализовывать их наиболее быстрым и эффективным способом. Например, зная, что вам нужна операция пересечения множеств в php, вы можете попытаться найти функцию, которая делает поставленную задачу. Для этого достаточно ввести в гугл запрос: php set intersect (set — множество, intersect — пересечение). Первая (по крайней мере, у меня) ссылка в поисковой выдаче ведет на нужную функцию array_intersect. Тоже самое вас ждет и с другими операциями.
 
 Отдельно стоит сказать, что реляционные базы данных построены на идеях реляционной алгебры, в которой теория множеств играет центральную роль.
-http://ilib.mccme.ru/pdf/rasomn.pdf
+Рассказы о множествах книга: http://ilib.mccme.ru/pdf/rasomn.pdf
 */
 
 
