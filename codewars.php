@@ -32,52 +32,115 @@ function dont_give_me_five($start, $end)
 
 
 /*
-Some numbers have funny properties. For example:
+Write a function that takes a string of braces, and determines if the order of the braces is valid. It should return true if the string is valid, and false if it's invalid.
 
-    89 --> 8¹ + 9² = 89 * 1
+This Kata is similar to the Valid Parentheses Kata, but introduces new characters: brackets [], and curly braces {}. Thanks to @arnedag for the idea!
 
-    695 --> 6² + 9³ + 5⁴= 1390 = 695 * 2
+All input strings will be nonempty, and will only consist of parentheses, brackets and curly braces: ()[]{}.
 
-    46288 --> 4³ + 6⁴+ 2⁵ + 8⁶ + 8⁷ = 2360688 = 46288 * 51
+What is considered Valid?
+A string of braces is considered valid if all braces are matched with the correct brace.
 
-Given a positive integer n written as abcd... (a, b, c, d... being digits) and a positive integer p we want to find a positive integer k, if it exists, such as the sum of the digits of n taken to the successive powers of p is equal to k * n. In other words:
-
-Is there an integer k such as : (a ^ p + b ^ (p+1) + c ^(p+2) + d ^ (p+3) + ...) = n * k
-
-If it is the case we will return k, if not return -1.
-
-Note: n, p will always be given as strictly positive integers.
-
-digPow(89, 1) should return 1 since 8¹ + 9² = 89 = 89 * 1
-digPow(92, 1) should return -1 since there is no k such as 9¹ + 2² equals 92 * k
-digPow(695, 2) should return 2 since 6² + 9³ + 5⁴= 1390 = 695 * 2
-digPow(46288, 3) should return 51 since 4³ + 6⁴+ 2⁵ + 8⁶ + 8⁷ = 2360688 = 46288 * 51
-
+Examples
+"(){}[]"   =>  True
+"([{}])"   =>  True
+"(}"       =>  False
+"[(])"     =>  False
+"[({})](]" =>  False
 */
 
+ function validBraces($braces){
+	$brackets = ['()','[]','{}'];
+ 	$closeBrackets = [')', ']', '}'];
+	$stack = [];
+	 
+  	for ($i = 0; $i < strlen($braces); $i++) {
+		$currElem = $braces[$i];
+		if (!in_array($currElem, $closeBrackets)) {
+			array_push($stack, $currElem);
+		} else {
+			$lastElem = array_pop($stack);
+			$pair = "{$lastElem}.{$currElem}";
+			if (!in_array($pair, $brackets)) {
+				return false;
+			}
+		}
+	}
+	 
+	return sizeof($stack) == 0;	
+}
 
-function digPow($n, $p) {
-    // your code
+
+/*
+Write a function called repeatStr which repeats the given string string exactly n times.
+
+repeatStr(6, "I") // "IIIIII"
+repeatStr(5, "Hello") // "HelloHelloHelloHelloHello"
+*/
+
+#1:
+function repeatStr(int $n, string $str)
+{
+	$res = '';
+	while ($n > 0) {
+		$res .= $str;
+		$n--;
+	}
+	
+	return $res;
+}
+
+#2:
+function repeatStr($n, $str)
+{
+  return str_repeat($str, n);
 }
 
 
 
+
 /*
-In a factory a printer prints labels for boxes. For one kind of boxes the printer has to use colors which, for the sake of simplicity, are named with letters from a to m.
+Your job is to create a calculator which evaluates expressions in Reverse Polish notation.
 
-The colors used by the printer are recorded in a control string. For example a "good" control string would be aaabbbbhaijjjm meaning that the printer used three times color a, four times color b, one time color h then one time color a...
+For example expression 5 1 2 + 4 * + 3 - (which is equivalent to 5 + ((1 + 2) * 4) - 3 in normal notation) should evaluate to 14.
 
-Sometimes there are problems: lack of colors, technical malfunction and a "bad" control string is produced e.g. aaaxbbbbyyhwawiwjjjwwm.
+Note that for simplicity you may assume that there are always spaces between numbers and operations, e.g. 1 3 + expression is valid, but 1 3+ isn't.
 
-You have to write a function printer_error which given a string will output the error rate of the printer as a string representing a rational whose numerator is the number of errors and the denominator the length of the control string. Don't reduce this fraction to a simpler expression.
+Empty expression should evaluate to 0.
 
-The string has a length greater or equal to one and contains only letters from ato z.
+Valid operations are +, -, *, /.
 
-#Examples:
-
-s="aaabbbbhaijjjm"
-error_printer(s) => "0/14"
-
-s="aaaxbbbbyyhwawiwjjjwwm"
-error_printer(s) => "8/22"
+You may assume that there won't be exceptional situations (like stack underflow or division by zero).
 */
+
+
+function calc(string $expr)
+{
+	if(!$expr) { return 0; }
+    $stack = [];
+	 $intAndOper = explode(' ', $expr);		
+	 foreach ($intAndOper as $val) {
+        if (is_int($val) or is_float($val)) {
+            $stack[] = $val;
+        } else {
+           $endElemDel = array_pop($stack);
+
+           switch ($val) {
+                case '*':
+                    $stack[sizeof($stack) - 1] *= $end_elem_del;
+                    break; 
+                case '/':
+                    $stack[sizeof($stack) - 1] /= $end_elem_del;
+                    break;
+                case '+':
+                    $stack[sizeof($stack) - 1] += $end_elem_del;
+                    break;
+                case '-':
+                    $stack[sizeof($stack) - 1] -= $end_elem_del;
+                    break;        
+            }
+        }
+    }   
+
+    return $stack[0];
+}
