@@ -289,3 +289,150 @@ Extra large >= 120px .col-xl
 			</div>
 	</div>
 </div>		 
+	
+	
+# кнопка
+<button class="btn btn-primary"></button> // кнопка с синим цветом	
+<button class="btn active"></button> // кнопка активна
+<button class="btn btn-outline-succes"></button> // прозрачная кнопка с зеленой рамкой
+<button class="btn btn-block"></button> // сделать кнопку блочным элементом -> 100% ширины родителя
+<button class="btn btn-sm"></button> // размер кнопки (lg,md и т.д)
+<a href="#" class="btn btn-warning" role="button"></a> // стилизация ссылки под кнопку
+
+
+# button-group
+
+<div class="btn-group" role="group" aria-label="Basic example"> // btn-group-vertical - вертикальное размещение группы кнопок
+  <button type="button" class="btn btn-secondary">Left</button>
+  <button type="button" class="btn btn-secondary">Middle</button>
+  <button type="button" class="btn btn-secondary">Right</button>
+</div>
+
+
+<div class="btn-group" data-toggle="buttons">// стилизация чекбоксов под кнопки
+	<label class="btn btn-secondary">
+		<input type="checkbox" id="check1">Check1 // или radio 
+	</label>	
+	<label class="btn btn-secondary">	
+		<input type="checkbox" id="check2">Check2
+	</label>
+	<label class="btn btn-secondary">	
+		<input type="checkbox" id="check3">Check3
+	</label>
+</div>
+	
+<script>
+	$('input[type=checkbox]').change(function(){
+		$('input[type=checkbox]').each(function(){
+			console.log($(this).attr('id'), $(this).prop('check'));
+		});
+	});
+</script>
+	
+# выпадающее меню:
+<div class="dropdown">
+  <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown button</button> // dropdown-toggle - курсор вниз
+  <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton"> // dropdown-menu-right - выравнивание списка
+    <a class="dropdown-item" href="#">Action</a>
+    <a class="dropdown-item" href="#">Another action</a>
+    <a class="dropdown-item" href="#">Something else here</a>
+  </div>
+</div>
+// Сделать выпадающий список при клике на именно на стрелку у кнопки:
+<button class="btn btn-primary">Dropdown</button> 
+<button class="btn btn-primary" data-toggle="dropdown"></button> 
+
+# карточки товаров // посты
+
+<div class="container">
+	<div class="row mt-3">
+		<div class="col-sm-4 my-3">
+			<div class="card>
+				<img src="" alt="">
+				<div class="card-body">
+					<h4 class="card-title">Product Title</h4>
+					<p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Mollitia optio sed nisi eligendi velit aspernatur.</p>
+					<a href="" class="card-link">About</a>
+				</div>
+			</div>
+		</div>	
+		<div class="col-sm-4 my-3">
+			<div class="card">
+				<img src="" alt="">
+				<div class="card-body">
+					<h4 class="card-title">Product Title</h4>
+					<p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Mollitia optio sed nisi eligendi velit aspernatur.</p>
+					<a href="" class="card-link">About</a>
+				</div>
+			</div>			
+		</div>
+	</div>
+</div>
+
+<div class="container">
+	<row class="mt-3"></row>
+	<row class="my-5">
+		<div class="col-12">
+			<div class="card my-3">
+				<img src="" alt="">
+				<h4 class="card-header">Post Title</h4>
+				<div class="card-body">
+					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. At, facilis?</p>
+					<p>Atque perferendis assumenda, ea, ipsa cumque optio impedit eligendi aspernatur!</p>
+					<p>Eius asperiores cum repellat, veniam totam, deserunt enim nemo laborum.</p>
+					<p>Cupiditate libero quasi hic ullam molestiae fugiat! Delectus, non, saepe.</p>
+					<a href="#" class="btn btn-primary float-right">Read more...</a>
+				</div>
+			</div>
+		</div>
+		<div class="col-12">
+			<div class="card my-3">
+				<img src="" alt="">
+				<h4 class="card-header">Post Title</h4>
+				<div class="card-body">
+					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. At, facilis?</p>
+					<p>Atque perferendis assumenda, ea, ipsa cumque optio impedit eligendi aspernatur!</p>
+					<p>Eius asperiores cum repellat, veniam totam, deserunt enim nemo laborum.</p>
+					<p>Cupiditate libero quasi hic ullam molestiae fugiat! Delectus, non, saepe.</p>
+					<a href="#" class="btn btn-primary float-right">Read more...</a>
+				</div>
+			</div>			
+		</div>
+	</row>	
+</div>
+
+# modal
+<div class="container">
+	<div class="row mt-3">
+		<div class="col-12">
+			<button class="btn btn-success" data-toggle="modal" data-target="#mymodal">Open modal</button>
+			<button id="open" class="btn btn-success">Open modal 2</button>	// открытие модального окна с помощью jQuery	* 
+			<div class="modal fade" id="mymodal"> // fade - эффект анимации
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title">modal-title</h5>
+							<button class="close" data-dismiss="modal">&times;</button> // крестик
+						</div>
+						<div class="modal-body">
+							<p>Text</p>
+						</div>
+						<div class="modal-footer">
+							<button class="btn btn-primary" data-dismiss="modal">Close</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+								
+$('#open').click(function(){ // запуск модального окна * 
+		$('mymodal').modal({
+			backdrop: 'static'
+		});						
+});	
+
+$('#myModal').on('show.bs.modal', function (e) { // события модального окна
+	alert('hi');
+});

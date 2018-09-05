@@ -3527,7 +3527,7 @@ Collection\firstN([1, 2, 3], 2); // => [1, 2]
 function takeOldest(array $users, int $count = 1)
 {
     usort($users, function ($user1, $user2) {
-        return strtotime($user1['birthday']) >= strtotime($user2['birthday']) ? 1 : -1;
+        return strtotime($user1['birthday']) >= strtotime($user2['birthday']) ? 1 : -1; // strtotime - преобразует текстовое представление даты на английском языке в метку времени
     });
 
     return firstN($users, $count);
@@ -3733,7 +3733,7 @@ function myFilter($coll, callable $callback)
     return $result;
 }
 
-// Обратите внимание на то, что array_filter сохраняет ключи. При работе с индексированными массивами такое поведение нежелательно, поэтому придется использовать функцию array_values для сброса порядка.
+// Обратите внимание на то, что array_filter сохраняет ключи. При работе с индексированными массивами такое поведение нежелательно, поэтому придется использовать функцию !!! array_values для сброса порядка.
 
 
 
@@ -3768,6 +3768,7 @@ function getGirlfriends(array $users)
     $friends = array_map(function ($user) {
         return $user['friends'];
     }, $users);
+
     $friends = flatten($friends);
 
     $girlfriends = array_filter($friends, function ($user) {
@@ -3775,6 +3776,8 @@ function getGirlfriends(array $users)
     });
     return array_values($girlfriends);
 }
+
+
 
 
 >>>>>   Агрегация (reduce)  <<<<<<<
@@ -3916,6 +3919,7 @@ function getMensCountByYear(array $users)
         return $acc;
     }, []);
 }
+
 function myReduce($coll, callable $callback, $init = null)
 {
     $acc = $init;
