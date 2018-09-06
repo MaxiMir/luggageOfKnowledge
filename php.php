@@ -4149,6 +4149,7 @@ function getFreeDomainsCount(array $emails) // hexlet
 }
 
 
+
 >>>>>  Полезные функции высшего порядка  <<<<<<<
 
 // Библиотека Funct, которую мы рассматривали ранее, кроме обычных функций содержит функции высшего порядка. В этом уроке мы рассмотрим некторые из них, которые могут быть полезными в будущем. 
@@ -4292,9 +4293,6 @@ without([3, 4, 10, 4, 'true'], 4); // => [3, 10, 'true']
     Паради́гма программи́рования — это совокупность идей и понятий, определяющих стиль написания компьютерных программ (подход к программированию). Это способ концептуализации, определяющий организацию вычислений и структурирование работы, выполняемой компьютером. (Wikipedia)
 
 Парадигма — это больше, чем просто другой алгоритм решения задачи. Как правило, структура кода при использовании разных парадигм отличается очень значительно и требует знаний, выходящих за рамки только синтаксиса языка (например, автоматное программирование требует хотя бы базового понимания теории автоматов). Причем подавляющее большинство современных (и не очень) языков программирования являются мультипарадигменными и позволяют писать код используя множество стилей. Иногда эти стили взаимоисключающие, иногда они дополняют друг друга. К текущему моменту мы писали код используя две парадигмы: императивную и декларативную.
-
-
-#Paradigms
 
 
 # Императивная парадигма
@@ -4459,6 +4457,7 @@ function findIndexOfNearest(array $items, $value)
     if (sizeof($items) === 0) {
         return null;
     }
+
     return array_reduce(array_keys($items), function ($acc, $i) use ($items, $value) {
         return abs($items[$i] - $value) < abs($items[$acc] - $value) ? $i : $acc;
     }, 0);
@@ -4520,26 +4519,7 @@ enlargeArrayImage($arr);
 // ********
 // ********
 
-
-function enlargeArrayImage(Array $arrs)
-{
-    $res = [];
-    $f_line = 0;
-    $n_line = 0;
-
-    foreach($arrs as $key_arr => $arr) {
-        foreach($arr as $key => $val) {
-            $res[$key_arr + $f_line][] = $res[$key_arr + $f_line][] = $res[$key_arr + $n_line + 1][] = $res[$key_arr + $n_line + 1][] = $val;
-        }
-       $f_line++;
-       $n_line++;
-    }
-
-    return $res;
-}
-
-
-function enlargeArrayImage($arr) // hexlet
+function enlargeArrayImage($arr)
 {
     $result = [];
 
@@ -4555,24 +4535,6 @@ function enlargeArrayImage($arr) // hexlet
     }
 
     return $result;
-}
-
-
-function duplicateEachItemInArray($arr) // hexlet 2
-{
-  // create subarrays for each value
-  $arrayOfArraysOfTwoItems = array_map(function($a) {
-    return [$a, $a];
-  }, $arr);
-
-  // flatten
-  return call_user_func_array('array_merge', $arrayOfArraysOfTwoItems);
-}
-
-function enlargeArrayImage($arr)
-{
-  $verticallyStretched = array_map("App\Arrays\duplicateEachItemInArray", $arr);
-  return duplicateEachItemInArray($verticallyStretched);
 }
 
 
@@ -4599,25 +4561,6 @@ decode($signal_3); // => '010010000100111'
 * К сожалению, str_split умеет работать только с ASCII символами, поэтому для разделения строки на символы используйте конструкцию preg_split("//u", $str, -1, PREG_SPLIT_NO_EMPTY);, где $str - строка.
 
 */
-
-function decode (String $signal)
-{
-    $res = '';
-    $bin_code = $signal;
-    
-    if (strlen($bin_code) > 1) {
-        $bin_code = str_replace('|¯|_', '11', $bin_code);
-        $bin_code = str_replace(['|¯', '|_'], '1', $bin_code);
-      
-        $arr = preg_split("//u", $bin_code, -1, PREG_SPLIT_NO_EMPTY);
-        
-        foreach ($arr as $val) {
-            $res .= ($val == '1') ? $val : '0';
-        }
-    }
-
-    return $res;
-}
 
 function decode($str)
 {
@@ -4648,9 +4591,7 @@ function decode($str)
 {
     $result = [];
     
-    if (empty($coll)) {
-        return $result;
-    }
+    if (empty($coll)) { return $result; }
     
     $reminder = $coll[0] % 2;
     foreach ($coll as $item) {
@@ -4661,6 +4602,7 @@ function decode($str)
 
     return $reminder;
 }
+
 
 /*
 Реализуйте функцию getIndexOfWarmestDay, которая находит самый тёплый день (тот, в котором была зарегистрирована максимальная температура) и возвращает индекс этого дня в исходном массиве. Если на вход поступил пустой массив, то функция должна вернуть null
@@ -4688,11 +4630,8 @@ function getIndexOfWarmestDay(array $data)
             $index = $key;
         }
     }
-
     return $index;
 }
-
-
 
 
 
@@ -4808,21 +4747,22 @@ function smallestDivisor($num)
         if ($num % $acc == 0) {
             return $acc;
         }
-        return $iter($acc + 1);
+        return $iter($acc++);
     };
 
-    return $iter(2);    
+    return $iter(2);   
 }
+
 
 
 
 >>>>>  Функции первого класса. Передача как аргументов <<<<<<<
 
+
 $sumIntegers = function ($a, $b) use (&$sumIntegers) {
 	if ($a > $b) { return 0; }
 	return $a + $sumIntegers($a + 1, $b);
 };
-
 
 $sumCubes = function ($a, $b) use (&$sumCubes) {
 	if ($a > $b) { return 0; }
@@ -5519,6 +5459,7 @@ function solution($list)
    	return $num * $acc; 
    }, $evenNums, $acc = 1);
 }
+
 
 
 
