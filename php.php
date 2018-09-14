@@ -5777,19 +5777,19 @@ $result == $seq(); // 22
 	
 function random($seed) // псевдослучайные  числа
 {
-	$generate = function () use (&$seed) {
-		$a = 45;
-		$c = 21;
-		$m = 67;
-		$seed = ($a * $seed + $c) % $m;
+    $start = $seed;
+    
+    $reset = function() use (&$start, $seed) {
+        $start = $seed;
+    };
+    
 
-		return $seed;
-	};
-
-	return function($func = null) use (&$seed) {
+	return function($func = null) use ($reset, $generate) {
 		switch ($func) {
-			case null: 
+			case null:
+			    return $generate();
 			case 'reset':
+			    $reset();
 		}
 	};
 }
@@ -5873,6 +5873,7 @@ f(n) = f(n-1) + f(n-2)
 [5, 5]
 [55, 10]
 */
+
 
 
 /*
