@@ -221,7 +221,7 @@ jQuery(function( $ ) {
 		} else {
 			img.attr( 'src', 'images/1.jpg' ); // меняем значение атрибута 'src'
 		}
-		img.toggleClass( '.redClass .greenClass' ); // передача нескольких классов
+		img.toggleClass( 'redClass greenClass' ); // передача нескольких классов
 	}	
 });
 

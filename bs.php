@@ -7,7 +7,7 @@
 
 /*
 Breakpoints Bootstrap 4:
-Extra small < 576px .col-
+Extra small < 576px .col-xs
 Small >= 576px .col-sm
 Medium >= 768px .col-md
 Large >= 992px .col-lg
