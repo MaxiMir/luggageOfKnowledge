@@ -161,8 +161,9 @@ require_once 'Example.php';
 require_once 'Another.php';
 
 echo \Theory\Example\iam(); // с полным путем (абсолютный путь - а значит не смотрим относительно текущего namespace) 
+echo \Another\iam();
+
 echo Example\iam(); // относительно текущего namespace Theory
-echo \Another\iam(); // с полным путем
 
 
 // Ниже задаются абсолютные пути, но без ведущего '/'
@@ -192,9 +193,8 @@ function iam()
 	return "example\n";
 }
 
-/*
- * Настоятельно не рекомендуется при программировании комбинировать несколько пространств имен в один файл. Основным применением этому может быть объединение нескольких PHP-файлов в один файл.
-*/
+
+// Настоятельно не рекомендуется при программировании комбинировать несколько пространств имен в один файл.  Основным применением этому может быть объединение нескольких PHP-файлов в один файл.
 
 namespace MyProject {
 	const CONNECT_OK = 1;
@@ -208,9 +208,10 @@ namespace { // глобальный код
 	echo MyProject\Connection::start();
 }
 
-// PHP-код не может находиться вне скобок конструкции пространства имен, кроме начального выражения declare.
-
-// Значение константы __NAMESPACE__ - это строка, которая содержит имя текущего пространства имен. В глобальном пространстве, вне пространства имен, она содержит пустую строку.
+/*
+PHP-код не может находиться вне скобок конструкции пространства имен, кроме начального выражения declare.
+Значение константы __NAMESPACE__ - это строка, которая содержит имя текущего пространства имен. В глобальном пространстве, вне пространства имен, она содержит пустую строку.
+*/
 
 
 
@@ -286,7 +287,7 @@ function isOdd($num) // проверка на нечетность
 
 function lucky($num)
 {
-	if ($num == rand(1,3)) {
+	if ($num == rand(1,3)) { //  генерирует случайное число
 		return 'You are lucky!';
 	} elseif ($num < 1 || $num > 3) {
 		return 'Unexpected number';
@@ -320,7 +321,6 @@ function result($a, $b, $c, $d)
 
 
 >>>>>  Переменные <<<<<<<
-
 
 function factorial($n)
 {
@@ -463,11 +463,10 @@ function increment($num)
 
 
 
-
 >>>>>  Строки <<<<<<<
 
 $value = 'text';
-echo "string \t with \n \\ escape sequence\n" . PHP_EOL; //  \\ - экранирование '\', PHP_EOL - константа конец строки (в Unix системах - \n / в Windows \n\r)
+echo "string \t with \n \\ escape sequence\n" . PHP_EOL; //  \\ - экранирование '\', PHP_EOL - константа конец  строки (в Unix системах - \n / в Windows \n\r)
 
 echo "interpolation example: $value" . PHP_EOL; // интерполяция
 
@@ -502,13 +501,13 @@ echo $str[strlen($str) - 1]; // => g
 
 function reverse(String $str)
 {
-	 $result = '';
+	$result = '';
 	 
-	 for($i = strlen($str) - 1; $i >= 0; $i--) {
-		  $result .= $str[$i];
-	 }
+	for($i = strlen($str) - 1; $i >= 0; $i--) {
+		$result .= $str[$i];
+	}
 			 
-	 return $result;
+	return $result;
 }
 
 
@@ -519,7 +518,6 @@ function reverse(String $str)
 [1, 2, 3, 5] + [8, 1, 2]; // [1, 2, 3, 5]
 [] == []; // true
 [1] != [2]; // true
-
 
 sizeof($arr); // размер массива (кол-во элментов)
 in_array('apple', $arr); // проверяет наличие элемента в массиве
@@ -562,9 +560,7 @@ function uniq(Array $arr) {
 
 >>>>>  Ассоциативный массив <<<<<<<
 
-
 array_key_exists('undefined', $map); // проверяет присутствует ли данный ключ в ассоц. массиве
-
 
 $arr = [];
 $arr[] = 'val1';
@@ -605,7 +601,6 @@ round(1.55, 1); // 1.6
 round(1.55, 1, PHP_ROUND_HALF_DOWN); // округление вниз 1.5 
 
 // float, string, bool, int, array
-
 
 function drop(Array $array, Int $count = 1) // возвращает обрезанный с начала массив на count элементов
 {
@@ -669,7 +664,7 @@ function compact(array $array)
 	 $newArray = [];
 	 foreach ($array as $key => $value) {
 		  if (!is_null($value)) {
-				$newArray[$key] = $value;
+			$newArray[$key] = $value;
 		  }
 	 }
 	 return $newArray;
@@ -729,26 +724,25 @@ function drop(Array $array, Int $count = 1): array // float, string, bool, int, 
 }
 
 
-
-/* Дано неотрицательное целое число num. Итеративно сложите все входящие в него цифры до тех пор, пока не останется одна цифра.
+/* 
+Дано неотрицательное целое число num. Итеративно сложите все входящие в него цифры до тех пор, пока не останется одна цифра.
 
 Для числа 38 процесс будет выглядеть так:
 
 3 + 8 = 11
 1 + 1 = 2
 Результат: 2
-
 */
 
 function addDigits(Int $num)
 {
-	 $sum = (string) $num;
+	$sum = (string) $num;
 
-	 while (strlen($sum) > 1) {
-		  $sum = array_sum(str_split($sum));
-	 }
+	while (strlen($sum) > 1) {
+	  $sum = array_sum(str_split($sum));
+	}
 
-	 return $sum;
+	return $sum;
 }
  
 
@@ -764,28 +758,29 @@ function binarySum($num1, $num2)
 	// decbin — переводит число из десятичной системы счисления в двоичную
 	// bindec — переводит двоичное число в десятичное
 	return decbin( bindec((int) $num1) + bindec((int) $num2) );
-}
+} 
 
 
 /*
 Реализуйте функцию isPrime определяющую, является ли число простым. Пример:
 echo isPrime(1); // → false
- echo isPrime(7); // → true
- echo isPrime(10); // → false
+echo isPrime(7); // → true
+echo isPrime(10); // → false
 */
 
 function isPrime($num)
 {
-	 if ($num < 2) {
-		  return false;
-	 }
-	 for ($i = 2; $i <= $num / 2; $i++) {
-		  if ($num % $i == 0) {
-				return false;
-		  }
-	 }
+	if ($num < 2) {
+	  return false;
+	}
 
-	 return true;
+	for ($i = 2; $i <= $num / 2; $i++) {
+	  if ($num % $i == 0) {
+			return false;
+		}
+	}
+
+	return true;
 }
 
 
@@ -800,15 +795,15 @@ isPowerOfThree(9); // → true
 
 function isPowerOfThree(Int $num)
 {
-	 $current = 1;
-	 while ($current <= $num) {
-		  if ($current === $num) {
-				return true;
-		  }
-		  $current *= 3;
-	 }
+	$current = 1;
+	while ($current <= $num) {
+	  	if ($current === $num) {
+			return true;
+	  	}
+	  	$current *= 3;
+	}
 
-	 return false;
+	return false;
 }
 
 
@@ -820,14 +815,8 @@ function isPowerOfThree(Int $num)
 
 function reverseInt($num)
 {
-	 $reverse = (int) strrev((string) abs($num)); // strrev - переворачивает строку задом наперед / abs - модуль числа
-	 return $num > 0 ? $reverse : -$reverse;
-}
-
-function reverseInt(Int $num)
-{
-	$reverseAbsInt = (int) strrev((string) (abs($num)));
-	return $num > 0 ? $reverseAbsInt : -$reverseAbsInt;
+	$reverse = (int) strrev((string) abs($num)); // strrev - переворачивает строку задом наперед / abs - модуль числа
+	return $num > 0 ? $reverse : -$reverse;
 }
 
 
@@ -869,7 +858,6 @@ http нужно не просто знать, но и уметь делать с
 
 
 
-
 >>>>>  Микрофреймворки <<<<<<<
 
 /*
@@ -892,7 +880,6 @@ http нужно не просто знать, но и уметь делать с
  * Интеграция с frontend инструментами.
  * Кеширование.
 */
-
 
 
 
@@ -995,7 +982,7 @@ https://habr.com/post/193756/
 
 Итератор
 Fluent Interface.
-кранирование, SQL Injection.
+Экранирование, SQL Injection.
 */
 
 
