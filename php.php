@@ -213,7 +213,90 @@ PHP-код не может находиться вне скобок констр
 Значение константы __NAMESPACE__ - это строка, которая содержит имя текущего пространства имен. В глобальном пространстве, вне пространства имен, она содержит пустую строку.
 */
 
+// Неймспейс задается с помощью ключевого слова namespace, за которым следует имя неймспейса. По стандарту, один файл должен соответствовать одному неймспейсу. В случае когда внутри неймспейса определяются только функции (а не классы) имя неймспейса должно соответстовать имени файла с учетом регистра, то есть для нашего примера имя файла math.php, следовательно имя неймспейса math. Теперь посмотрим на то, как использовать функции определенные в неймспейсе:
 
+// file: math.php:
+
+namespace math;
+
+function sum($a, $b)
+{
+    return $a + $b;
+}
+
+// file: index.php:
+
+require_once('math.php');
+
+\math\sum(5, 8); // 13
+
+
+/*
+
+Файловая структура практически любого проекта на PHP выглядит так:
+
+src/
+    Formatters/
+      	Pretty.php
+    	Generator.php
+
+tests/
+composer.json
+composer.lock
+.git
+README.md
+*/
+
+// file: Pretty.php:
+
+namespace Formatters\Pretty;
+
+function render($data)
+{
+    // some code
+}
+
+// file: Generator.php
+
+namespace Generator;
+
+function generate($data)
+{
+    return \Formatters\Pretty\render($data);
+}
+
+// Каждый проект или пакет принято помещать в одно общее пространство и не загрязнять глобальное пространство множеством неймспейсов. Это название выбирается на основе названия самого проекта, той директории внутри которой лежит src. В нашей структуре директорий это my-site. Это значит, что общим пространством для всех файлов внутри src будет MySite:
+
+// file: src/Formatters/Pretty.php
+
+namespace MySite\Formatters\Pretty;
+
+// some code
+
+
+// C помошью механизма импорта функцию можно импортировать в текущий неймспейс так, как будто она определена прямо здесь:
+
+namespace Generator;
+
+use function Formatters\Pretty\render;
+
+function generate($data)
+{
+    return render($data);
+}
+
+
+// Изредка случаются ситуации, когда хочется импортировать функцию, но в текущем пространстве либо уже определена функция с таким именем, либо функция с таким именем была импортирована ранее из другого неймспейса. Сделать это можно через алиасы (псевдонимы), механизм позволяющий переименовывать импортируемые функции: 
+
+namespace Generator;
+
+use function Formatters\Pretty\render;
+use function Formatters\Simple\render as simpleRender;
+
+function generate($data)
+{
+    return simpleRender($data);
+}
 
 
 >>>>>  Константы <<<<<<<
@@ -534,8 +617,37 @@ function reverse(String $str)
 	return $result;
 }
 
+// Для определения является ли слово палиндромом, достаточно сравнивать попарно символ с обоих концов слова. Если они все равны, то это палиндром. Решите задачу без использования реверса строки. Примеры использования:
+
+isPalindrome('radar'); // true
+isPalindrome('maam'); // true
+isPalindrome('a');     // true
+isPalindrome('abs');   // false
+
+function isPalindrome(string $word)
+{
+    $charsCount = strlen($word) - 1;
+    for ($i = 0; $i < ceil($charsCount / 2); $i++) {
+        if ($word[$i] !== $word[$charsCount - $i]) {
+            return false;
+        }
+    }
+    return true;
+}
 
 
+// Реализуйте функцию reverse, которая переворачивает цифры в переданном числе:
+
+use function Number\reverse;
+
+reverse(13); // 31
+reverse(-123); // -321
+
+function reverse(int $num): int
+{
+    $reverse = (int) strrev((string) abs($num));
+    return $num > 0 ? $reverse : -$reverse;
+}
 
 >>>>>  Массив <<<<<<<
 
@@ -1925,7 +2037,7 @@ $b = $temp;
 $a = 5;
 $b = 8;
 
-list($b,$a) = [$a, $b]; 
+list($b, $a) = [$a, $b]; 
 [$b, $a] = [$a, $b]; // c версии 7.1
 
 // Не так круто, как в других языках, где можно писать a, b = b, a, но уже что-то.
@@ -6016,3 +6128,58 @@ $smoothFunc(10) // ~ 0.438
 	 }
 }            
 */
+
+
+######################### HTTP #########################
+
+telnet google.com 80 // ответ будет содержать IP, который мы затем вводим
+telnet 74.125.21.139 80
+HEAD / HTTP/1.0
+user-agent: google chrome
+
+HEAD / HTTP/1.1
+HOST: hexlet.io // в 1.1 есть виртуальные хосты
+Connection:close // ручное отключение keep-alive (соединение TCP не отключается пока не произойдет timeout)
+
+Content-Type: text/plain // тип контента. Решает проблему с отправкой данных после 2 переводов строк.
+Content-Length: 184 // длина в байтах опционального тела ответа. Благодаря этому заголовку, 2 перевода строки не приводят к отправке данных. После передачи последнего символа соединение закрывается.
+
+# Отправка формы:
+HEAD / HTTP/1.1
+HOST: hexlet.io
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 28
+Connection:close
+
+login=user&password=D12345
+
+login=user&password%3D1234=5 // body; %3D - закодированное =, т.к в пароле содержится так же =
+user[login]=user&user[password]=12345 // как при отправке с формы вида <input name="user[login]">. HTTP не поддерживает такие конструкции
+
+# Transfer-Encoding
+Cache-Control: no-cache, np-store
+Transfer-Encoding: chunked // другой способ ответа (вместо Content-Length). В стандартном ответе получаем все body целиком и обрабатываем. В этом способе обрабатываем ответ до его полного получения. 0 с 2 переводами строки в конце ответа означает, что запрос полностью передан.
+Content-Type: image/jpeg; charset=utf-8
+
+
+# Query String
+POST /?key=1&val=2 HTTP/1.1 // Передаваемые параметры не имеют никакого отношения к GET. Ограничение 255 символов
+HOST: hexlet.io
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 28
+Connection:close
+
+login=user&password=D12345
+
+# Базовая аутентификация
+// В случае введения неверных данных или нажатия на cancel =>
+HTTP/1.1 401 Access Denied
+WWW-Authenticate: Basic realm="My Server"
+Content-Length: 0
+// В случаев введения правильного логина и пароля:
+GET /securefiles/ HTTP/1.1
+Host: www.httpwatch.com
+Authorization: Basic aHR0cHdhdGNo0my= // закодированнная base64 фраза из <username>:<password>
+
+# COOKIE
+curl —head https://ru.hexlet.io
