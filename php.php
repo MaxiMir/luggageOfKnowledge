@@ -1,7 +1,6 @@
-<?
-/*
+<?/*
 
-############## PHP ##############
+############## PHP Basics ##############
 
 Код-гайд:
 https://www.php-fig.org/psr/psr-1/
@@ -5751,7 +5750,7 @@ function newWithdraw($balance) // hexlet
 
 	
 	
->>>>>  Объекты  <<<<<<<#
+>>>>>  Объекты  <<<<<<<
 		
 function newAccount($balance)
 {
@@ -5828,7 +5827,7 @@ function newAccount($balance, $password)
 
 
 
->>>>>  Преимущества присваивания   <<<<<<<#
+>>>>>  Преимущества присваивания   <<<<<<<
  
 
 function random($seed) // псевдослучайные  числа
@@ -5885,7 +5884,7 @@ function random($seed) // псевдослучайные  числа
 
 
 
->>>>>  Недостатки присваивания   <<<<<<<#
+>>>>>  Недостатки присваивания   <<<<<<<
 
 function makeDecrementer($balance) // чистая функция
 {
@@ -6081,8 +6080,6 @@ f(n) = f(n-1) + f(n-2)
 */
 
 
-
-
 /*
 Идея сглаживания (smoothing a function) играет важную роль в обработке сигналов. Если f — функция, а dx — некоторое малое число, то сглаженная версия f есть функция, значение которой в точке x есть среднее между f(x − dx), f(x) и f(x + dx).
 Solution.php
@@ -6097,9 +6094,6 @@ $smoothFunc = smooth(function ($sum) {
 }, 15);
 
 $smoothFunc(10) // ~ 0.438
-
-
-
 
 
 /*
@@ -6130,7 +6124,7 @@ $smoothFunc(10) // ~ 0.438
 */
 
 
-######################### HTTP #########################
+>>>>>  HTTP <<<<<<<  
 
 telnet google.com 80 // ответ будет содержать IP, который мы затем вводим
 telnet 74.125.21.139 80
@@ -6185,8 +6179,10 @@ Authorization: Basic aHR0cHdhdGNo0my= // закодированнная base64 �
 curl —head https://ru.hexlet.io
 
 
-############################# Веб-разработка на PHP #########################################
 
+>>>>>  Веб-разработка на PHP <<<<<<<  
+
+/*
 Переход от написания скриптов (то что мы делали ранее) к созданию полноценных сайтов, сопровождается необходимостью знакомиться с большим числом понятий и инструментов выходящих далеко за рамки языка. Взаимодействие с внешним миром вовлекает в себя знание операционных систем, в частности сетей, работу с регистраторами, хостингом, деплоем сайта. На собеседованиях веб-программистов часто задают вопрос "Что происходит после того как в адресной строке браузера набирается сайт www.google.com и нажимается enter?". Очень подробный ответ на этот вопрос доступен здесь (https://github.com/alex/what-happens-when). Спрашивающий, в этот момент, хочет услышать от вас ключевые понятия связанные с веб-разработкой.
 
 1. Выполнение DNS запроса для получения IP адреса по имени домена.
@@ -6542,4 +6538,400 @@ $_POST содержит данные отправленные методом POS
 Такой способ программирования возможен только в PHP. Весь сайт начинает представлять из себя мешанину HTML и кода. Если количество разных страниц сайта достигнет хотя бы десятка (а их обычно сотни и больше), то поддержка уже станет невероятно сложной.
 
 Поэтому несмотря на наличие встроенных механизмов (к слову неудачных), в PHP как и в других языках, принято работать поверх программных абстракций, с которыми мы познакомимся в следующих уроках.
+*/
+
+
+
+>>>>>  PHP: Ввод и вывод <<<<<<< 
+
+# Пути
+
+echo __FILE__ . PHP_EOL; // абсолютный путь к текущему файлу
+echo __DIR__ . PHP_EOL; // абсолютный путь к текущему каталогу <-> dirname(__FILE__)
+echo basename(__FILE__) . PHP_EOL; // возвращает название файла 
+print_r(pathinfo(__FILE__)); // массив с данными о файле: директория, название файла, расширение, название файла без расширения
+echo getcwd(); // возвращает директорию в которой был запущен скрипт
+
+// build path
+$pathParts = ['var', 'tmp', 'hexlet'];
+$path = implode(DIRECTORY_SEPARATOR, $pathParts);
+echo DIRECTORY_SEPARATOR . $path . PHP_EOL;
+
+$file = new \SplFileInfo(__FILE__); // класс для работы с файлами
+echo $file->getPathInfo() . PHP_EOL;
+echo $file->getFileName() . PHP_EOL;
+echo $file->getExtansion() . PHP_EOL;
+
+
+/***
+Реализуйте функцию cd, принимающую на вход два параметра: текущую директорию и путь для перехода. Функция должна вернуть директорию, в которую необходимо перейти.
+
+Пример использования:
+***/
+
+cd('/current/path', '/etc'); // /etc
+cd('/current/path', '.././anotherpath'); // /current/anotherpath
+/*
+Правила перехода
+Если путь для перехода начинается с /, то он же и является конечным путем (так как абсолютный путь).
+.. - на уровень выше
+. - та же директория
+*/
+
+namespace App\FileUtils;
+
+function cd($current, $move)
+{
+    // BEGIN (write your solution here)
+    $paths = explode('/', $current);
+    $stack = array_filter($paths, function($path) {
+       return $path == ''; 
+    });
+    foreach ($move as $item) {
+        if ($item == '..' || $item == '../') {
+            array_pop($stack);
+        } elseif ($item == '.') {
+            continue;
+        }
+    }
+    return $stack;
+    // END
+}
+
+// Tests:
+
+namespace App\Tests;
+
+use PHPUnit\Framework\TestCase;
+use function App\FileUtils\cd;
+
+class FileUtilsTest extends TestCase
+{
+    /**
+     * @dataProvider additionProvider
+     */
+    public function testCd($actual, $current, $move)
+    {
+        $this->assertEquals($actual, cd($current, $move));
+    }
+
+    public function additionProvider()
+    {
+        return [
+            ['/', '/current/path', '/'],
+            ['/current', '/current/path', '..'],
+            ['/current', '/current/path', '../'],
+            ['/current', '/current', '.'],
+            ['/current/anotherpath', '/current/path', '.././anotherpath'],
+            ['/etc', '/current/path', '/etc'],
+            ['/current/anotherpath/path', '/current/anotherpath', '../anotherpath/path'],
+        ];
+    }
+}
+
+
+# Файловая система
+
+namespace Theory;
+
+if (!file_exists($path)) { // проверяет существование файла/директории(в unix директория тоже файл). Проверить на директорию: is_dir($path) 
+	mkdir($path, 0755, $recursive); // создать директорию
+} 
+
+rmdir($path); // удаление директории
+
+if (!file_exists($path)) { // проверить на файл: is_file($path)
+	touch($path); // создать файл
+}
+
+unlink($path); // удаление файла
+
+rename($old, $new); // переименование файла
+copy($old, $new); // копирование файлов
+
+print_r(glob("/var/tmp/*"));
+print_r(scandir("/var/tmp"));
+
+
+// DirectoryIterator FilesystemIterator RecursiveDirectoryIterator
+$iterator = new \GlobIterator('../*');
+foreach ($iterator as $item) {
+	print_r($item);
+}
+
+$info = new \SplFileInfo(__FILE__);
+echo $info->isFile();
+
+
+/***
+
+Реализуйте функцию rrmdir, удаляющую директорию рекурсивно, то есть вместе со всем своим содержимым.
+
+Подсказка
+Одна из возможных реализаций может использовать итераторы.
+Воспользуйтесь функцией scandir вместо функции glob.
+
+***/
+
+namespace App\FileUtils;
+
+function rrmdir($dir)
+{
+    $dirIterator = new \RecursiveDirectoryIterator($dir, \FilesystemIterator::SKIP_DOTS);
+    $iterator = new \RecursiveIteratorIterator($dirIterator, \RecursiveIteratorIterator::CHILD_FIRST);
+    foreach ($iterator as $filename => $fileInfo) {
+        if ($fileInfo->isDir()) {
+            rmdir($filename);
+        } else {
+            unlink($filename);
+        }
+    }
+    rmdir($dir);
+}
+
+
+
+# Чтение файла
+
+namespace Theory;
+
+$file = __FILE__;
+
+if (file_exists($file) && is_readable($file)) {
+	#1
+	$lines = file(__FILE__); 
+	foreach($lines as $line) {
+		echo $line;
+	}
+
+	#2
+	$content = file_get_content(__FILE__);
+	echo $content;
+
+	// #1, #2 - подходят для маленьких файлов (тк. эти функции загружают все в память). Поэтому для больших файлов надо делать это потоково:
+
+	#3
+	$handle = fopen($filename, "rb"); // rb - чтение без модификации. r+
+	if ($handle) { // $handle - файловый дискриптор. Файл получилось открыть
+		try {
+			$contents = fread($handle, filesize($filename)); // 2-й параметр сколько байт прочитать
+		} finally {
+			fclose($handler);
+		}
+	}
+
+	#4
+	$handler = fopen($file, "rb"); 
+	if ($handler) {
+		try {
+			while (!feof($handler)) { // проверяет не достигли ли мы конца файла.
+				echo fgets($handler, 1024); // 2-й параметр сколько байт прочитать
+			}
+		} finally { // потому что во время работы могут быть выброшены исключения
+			fclose($handler);		
+		}
+	}
+
+	#5
+	$handler = fopen($filename);
+	if ($handler) {
+		try {
+			/* javier	argonout	pe */
+			/* hiroshi	sculptor	jp */
+			/* robert	slacker	us*/
+			while ($userinfo = fsconf($handle, "%s\t%s\t%s\n")) { // возвращает массив значений соотствующий этому паттерну
+				list($name, $profession, $countrycode) = $userinfo;
+			}
+		} finally {
+			fclose($handler);
+		}
+	}
+}
+
+#6
+$file = new SplFileObject('file.txt');
+while(!$file->eof()) {
+	echo $file->fgets();
+}
+
+#7
+foreach ($file as $lineNumber => $content) {
+	printf("Line %d: %s", $lineNumber, $content);
+}
+
+#8:
+$linesTenToTwentyIterator = new LinitIteratir(
+	$file,
+	9, // start at line 10
+	10 // iterate 10 lines
+);
+
+foreach ($linesTenToTwentyIterator as $line) {
+	echo $line; // outputs line 10 to 20
+}
+
+
+
+# Запись в файл
+
+namespace Theory;
+$file = __DIR__ .DIRECTORY_SEPARATOR . 'temp';
+$data = "my data\n";
+
+file_put_contents($file, $data); // FILE_APPEND - не перезаписывать, добавлять в конец. 
+
+if (is_writable($file)) {
+	$handle = fopen($file, 'ab'); // ab - добавление данных в конец; r - перезаписывать; a+ c
+	if ($handle) {
+		try {
+			fwrite($handle, $data);
+		} finally {
+			fclose($handler);
+		}
+	}
+}
+
+$file = new \SplFileObject($file, 'ab');
+$file->fwrite($data);
+
+
+
+# Манипуляция с файловыми указателями
+
+namespace Theoty;
+
+$data = 'ehu';
+$handle = fopen('temp', 'wb');
+fwrite($handle, $data);
+echo ftell($handle) . PHP_EOL; // возвращает позицию указателя => 3
+fseek($handle, 0); // rewind($handle); // перемещение указателя; 0 - в начало <-> rewind($handle)
+echo ftell($handle) . PHP_EOL; // => 0
+
+// SplFileObject
+
+# Временный файл
+
+$dir = sys_get_temp_dir(); // возращает временную системную директорию
+
+$tmpfname = tempnam(sys_get_temp_dir(), "HEXLET"); // создает пустой временный файл. В первом аргументе передается директория (здесь временная системная директория)
+
+$temp = tmpfile(); // создает файловый дискриптор временного файла
+try {
+	fwrite($temp, 'my data');
+	fseek($temp, 0);
+	echo fread($temp, 1024);
+} finally {
+	fclose($temp);
+}
+
+// SplTempFileObject
+
+
+/***
+Реализуйте функцию tmpdir, принимающую на вход лямбда-функцию. tmpdir при этом должна создать временную директорию, а потом вызвать лямбду с переданным туда путем до директории. После вызова tmpdir должна удалить эту временную директорию. Функция tmpdir должна вернуть результат выполнения лямбда-функции.
+
+Пример:
+***/
+
+$path = FileUtils\tmpdir(function ($dir) {
+    is_dir($dir); // true
+    return tempnam($dir, 'hexlet');
+});
+
+file_exists($path); // false
+
+
+namespace App\FileUtils;
+
+// BEGIN (write your solution here)
+
+// END
+
+function rrmdir($dir)
+{
+    $iterator = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($dir, \FilesystemIterator::SKIP_DOTS), \RecursiveIteratorIterator::CHILD_FIRST); // RecursiveIteratorIterator - делает рекурсивное перемещение по всем файлам и каталогам
+    foreach ($iterator as $filename => $fileInfo) {
+        if ($fileInfo->isDir()) {
+            rmdir($filename);
+        } else {
+            unlink($filename);
+        }
+    }
+    rmdir($dir);
+}
+
+// Tests:
+
+class FileUtilsTest extends TestCase
+{
+    public function testTmpdir1()
+    {
+        $exists = false;
+        $path = tmpdir(function ($dir) use (&$exists) {
+            $exists = is_dir($dir);
+            return tempnam($dir, 'hexlet');
+        });
+
+        $this->assertTrue($exists);
+        $this->assertFalse(file_exists($path));
+    }
+
+    public function testTmpdir2()
+    {
+        $exists = false;
+        $isEmpty = tmpdir(function ($dir) use (&$exists) {
+            $exists = is_dir($dir);
+            return !(new \FilesystemIterator($dir))->valid();
+        });
+
+        $this->assertTrue($exists);
+        $this->assertTrue($isEmpty);
+    }
+}
+
+$files = new RecursiveIteratorIterator($dir);
+
+echo "[$path]\n";
+foreach ($files as $file) {
+    echo " ├ $file\n";
+}
+
+/*
+[tree]
+ ├ tree\.
+ ├ tree\..
+ ├ tree\dirA\.
+ ├ tree\dirA\..
+ ├ tree\dirA\dirB\.
+ ├ tree\dirA\dirB\..
+ ├ tree\dirA\dirB\fileD
+ ├ tree\dirA\fileB
+ ├ tree\dirA\fileC
+ ├ tree\fileA
+
+
+Удаляем записи точек (. и ..), также режим рекурсии будет изменен, чтобы сначала взять родительский элемент (подкаталог) (SELF_FIRST) перед дочерними элементами (файлы и под-поддиректории в подкаталоге):
+
+LEAVES_ONLY (по умолчанию): только файлы списка, нет каталогов.
+SELF_FIRST: Перечислите каталог, а затем файлы там.
+CHILD_FIRST: сначала укажите файлы в подкаталоге, затем каталог.
+*/
+
+$dir  = new RecursiveDirectoryIterator($path, RecursiveDirectoryIterator::SKIP_DOTS);
+$files = new RecursiveIteratorIterator($dir, RecursiveIteratorIterator::SELF_FIRST);
+
+echo "[$path]\n";
+foreach ($files as $file) {
+    $indent = str_repeat('   ', $files->getDepth());
+    echo $indent, " ├ $file\n";
+}
+
+/*
+[tree]
+ ├ tree\dirA
+    ├ tree\dirA\dirB
+       ├ tree\dirA\dirB\fileD
+    ├ tree\dirA\fileB
+    ├ tree\dirA\fileC
+ ├ tree\fileA
 */
