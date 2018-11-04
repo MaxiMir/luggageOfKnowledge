@@ -1050,12 +1050,12 @@ $app->post('/ads', function(ServerRequestInterface $request) {
 
 	 $insertStatement = $pdo->insert(['telephone', 'title'])
 							  ->into('ads')
-							  ->values([$parsedBody['telephone'], $parsedBody['title']]);
+							  ->VALUES([$parsedBody['telephone'], $parsedBody['title']]);
 
 	 $insertId = $insertStatement->execute(false);
 });
 
-// Обратите внимание на то, что библиотека Slim-PDO позволяет выполнять SQL не в виде "сырых" запросов, где SQL писался бы как строка текста (как в репле), а предоставляет небольшой DSL (мини-язык) для написания запроса: insert()->into()->values(). Библиотеку, позволяющую таким образом строить запросы, называют Query Builder. В отличие от сырого SQL в виде строчки, подход, описанный выше, удобен в случаях, когда SQL собирается по условиям. Такое часто бывает на страницах с фильтрами.
+// Обратите внимание на то, что библиотека Slim-PDO позволяет выполнять SQL не в виде "сырых" запросов, где SQL писался бы как строка текста (как в репле), а предоставляет небольшой DSL (мини-язык) для написания запроса: insert()->into()->VALUES(). Библиотеку, позволяющую таким образом строить запросы, называют Query Builder. В отличие от сырого SQL в виде строчки, подход, описанный выше, удобен в случаях, когда SQL собирается по условиям. Такое часто бывает на страницах с фильтрами.
 
 /*
 Нормализация баз данных заключается в приведении структуры хранения данных к нормальным формам (NF). Всего таких форм существует 8, но часто достаточным является соблюдение первых трех.
@@ -2194,12 +2194,12 @@ foreach($keys as $key) {
 // Выше files — обычный массив, а config — ассоциативный.
 
 
-// Функция array_values извлекает из ассоциативного массива значения и создает из них массив.
+// Функция array_VALUES извлекает из ассоциативного массива значения и создает из них массив.
 
 
 $data = ['first_name' => 'Mark', 'last_name' => 'Smith'];
 
-$keys = array_values($data); // => ['Mark', 'Smith']
+$keys = array_VALUES($data); // => ['Mark', 'Smith']
 
 /*
 array_merge
@@ -3211,7 +3211,7 @@ union(['a', 3, false], [true, false, 3], [false, 5, 8]); // => ['a', 3, false, t
 
 function union($first,...$rest)
 {
-	return array_values(array_unique(array_merge($first, ...$rest)));
+	return array_VALUES(array_unique(array_merge($first, ...$rest)));
 } 
 
 
@@ -3821,7 +3821,7 @@ function myFilter($coll, callable $callback)
 	 return $result;
 }
 
-// Обратите внимание на то, что array_filter сохраняет ключи. При работе с индексированными массивами такое поведение нежелательно, поэтому придется использовать функцию !!! array_values для сброса порядка.
+// Обратите внимание на то, что array_filter сохраняет ключи. При работе с индексированными массивами такое поведение нежелательно, поэтому придется использовать функцию !!! array_VALUES для сброса порядка.
 
 
 
@@ -3862,7 +3862,7 @@ function getGirlfriends(array $users)
 	 $girlfriends = array_filter($friends, function ($user) {
 		  return $user['gender'] === 'female';
 	 });
-	 return array_values($girlfriends);
+	 return array_VALUES($girlfriends);
 }
 
 
@@ -4362,7 +4362,7 @@ function without(array $items, $value)
 		  return $item !== $value;
 	 });
 	 // !!! Сбрасываем ключи
-	 return array_values($filtered);
+	 return array_VALUES($filtered);
 }
 
 without([3, 4, 10, 4, 'true'], 4); // => [3, 10, 'true']
@@ -6935,3 +6935,550 @@ foreach ($files as $file) {
     ├ tree\dirA\fileC
  ├ tree\fileA
 */
+
+ ############################ PHP PDO: Работа с базой данных ####################
+
+>>>>>  Соединение с базой данных  <<<<<<< 
+
+namespace Theory
+
+$opt = [
+    \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION   // режим ошибок - Exceptions    
+       ];
+
+/* $dsn = "mysql:host=$host;dbname=$db;charset=$charset"; // Формат описывающий параметры для подключения */
+
+$pdo = new \PDO('sqlite::memory', null, null, $opt); // 2-й, 3-й параметр логин и пароль.
+
+$pdo->exec("CREATE TABLE users (id integer, name string)");    
+$pdo->exec("INSERT INTO users VALUES 3, 'adel')");     
+$pdo->exec("INSERT INTO users VALUES (7, 'ada')");    
+$data = $pdo->query("SELECT * FROM users")->fetchAll();
+print_r($data);
+
+
+/**
+Реализуйте интерфейс App\DDLManagerInterface в классе App\DDLManager
+
+Пример использования:
+**/
+
+$dsn = 'sqlite::memory:';
+$ddl = new DDLManager($dsn);
+
+$ddl->createTable('users', [
+    'id' => 'integer',
+    'name' => 'string'
+]);
+
+/*
+Получившийся запрос в базу:
+
+CREATE TABLE users (
+    id integer,
+    name string
+);
+*/
+
+namespace App;
+
+interface DDLManagerInterface
+{
+    public function __construct($dsn, $user = null, $pass = null);
+
+    public function createTable($table, array $params);
+}
+
+
+namespace App;
+
+class DDLManager implements DDLManagerInterface
+{
+    private $pdo;
+
+    public function __construct($dsn, $user = null, $pass = null)
+    {
+        $options = [\PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION];
+        $this->pdo = new \PDO($dsn, $user, $pass, $options);
+    }
+
+    public function createTable($table, array $params)
+    {
+        $fieldParts = array_map(function ($key, $value) {
+            return "{$key} {$value}";
+        }, array_keys($params), $params);
+        $fieldsDescription = implode(", ", $fieldParts);
+        $sql = sprintf("CREATE TABLE %s (%s)", $table, $fieldsDescription);
+        return $this->pdo->exec($sql);
+    }  
+
+    public function getConnection()
+    {
+        return $this->pdo;
+    }
+}
+
+
+
+>>>>>  Безопасность при работе с внешними данными  <<<<<<<
+
+// WRONG!!!
+
+$id = 7;
+$name = 'ada';
+$pdo->exec("INSERT INTO users VALUES ($id, '$name')");
+
+
+// SQL INJECTION:
+$id = 8;
+$name = "ada'); DELETE FROM users; --";  //  '); - закрываем запрос; -- комментируем оставшуюся часть запроса'); в конце
+$sql = "INSERT INTO users VALUES ($id, '$name')";
+print_r($sql);
+$pdo->exec($sql);
+
+// OK:
+$VALUES = [3, 'm\'ark --']; 
+$data = implode(', ', array_map(function ($item) use ($pdo) { 
+    return $pdo->quote($item);  // заключает строку в кавычки (если требуется) и экранирует специальные символы внутри строки подходящим для драйвера способом.
+}, $VALUES));
+$sql = "INSERT INTO users VALUES ($id, '$name')";
+print_r($sql);
+
+$data = $pdo->query("select * from users")->fetchAll();
+print_r($data);
+
+
+/**
+Query класс который предоставляет абстракцию поверх sql. Его главное достоинство это возможность строить динамические запросы без склеивания строк. Реализуйте метод toSql.
+
+Пример использования:
+**/
+
+$query = new Query($pdo, 'users');
+$query = $query->where('from', 'github');
+$query = $query->where('id', '3')->where('age', 21);
+
+// SELECT * FROM users WHERE from = 'github' AND id = 3 AND age = 21;
+$query->toSql();
+
+$query->all();
+
+namespace App;
+
+class Query
+{
+    private $pdo;
+    private $where = [];
+
+    public function __construct($pdo, $table, $where = [])
+    {
+        $this->pdo = $pdo;
+        $this->table = $table;
+        $this->where = $where;
+    }
+
+    public function where($key, $value)
+    {
+        $where = [$key => $value];
+        return $this->getClone($where);
+    }
+
+    public function all()
+    {
+        return $this->pdo->query($this->toSql())->fetchAll();
+    }
+
+    public function toSql()
+    {
+        $sqlParts = [];
+        $sqlParts[] = "SELECT * FROM {$this->table}";
+        
+        if ($this->where) {
+            $where = implode(' AND ', array_map(function ($key, $value) {
+                $quotedValue = $this->pdo->quote($value);
+                return "$key = $quotedValue";
+            }, array_keys($this->where), $this->where));
+            $sqlParts[] = "WHERE $where";
+        }
+
+        return implode(' ', $sqlParts);        
+    }
+
+    private function getClone($where)
+    {
+        $mergedData = array_merge($this->where, $where);
+        return new self($this->pdo, $this->table, $mergedData);
+    }
+}
+
+
+
+>>>>>  Результат запроса в базу данных  <<<<<<<
+
+$stmt = $pdo->query("select * from users"); // подготовленный запрос, возращает объект PDO Statement 
+
+print_r($stmt->fetchAll()); // данные извлекаются сразу. При этом, ключи представлены дважды: как числовые индексы и как ключ в ассоциативном массиве.
+print_r($stmt->fetchAll(\PSO::FETCH_ASSOC)); // возращает ассоциативный массив
+
+// задаем дефолтный способ извлечения:
+$options = [
+             \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION,
+             \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_ASSOC
+           ];
+
+while ($row = $stmt->fetch()) { // работаем с курсором, данные как правило находятся в базе (зависит от клиента) 
+    print_r($row);
+} 
+
+// или        
+
+foreach ($stmt as $value) {
+    print_r($value);
+}
+
+// PDO::FETCH_COLUMN - вытаскивает только одну колонку из результата.
+
+$data = $pdo->query('SELECT name FROM users')->fetchAll(PDO::FETCH_COLUMN);
+
+/* array (
+  0 => 'John',
+  1 => 'Mike',
+  2 => 'Mary',
+  3 => 'Kathy',
+) */
+
+// PDO::FETCH_KEY_PAIR - из двух запрошенных полей содержимое первого становится ключом, а второго - значением одномерного массива.
+
+$data = $pdo->query('SELECT name, car FROM users')->fetchAll(PDO::FETCH_KEY_PAIR);
+
+/* array (
+  'John' => 'Toyota',
+  'Mike' => 'Ford',
+  'Mary' => 'Mazda',
+  'Kathy' => 'Mazda',
+)*/
+
+// PDO::FETCH_UNIQ - возвращает массив с остальными полями. Первое поле должно быть уникальным.
+
+$data = $pdo->query('SELECT * FROM users')->fetchAll(PDO::FETCH_UNIQUE);
+
+/* array (
+  'John' => array (
+    'sex' => 'male',
+    'car' => 'Toyota',
+  ),
+  'Mike' => array (
+    'sex' => 'male',
+    'car' => 'Ford',
+  ),
+  'Mary' => array (
+    'sex' => 'female',
+    'car' => 'Mazda',
+  ),
+  'Kathy' => array (
+    'sex' => 'female',
+    'car' => 'Mazda',
+  ),
+) */
+
+$stmt = $pdo->query("select MAX(id) from users");
+print_r($stmt->fetchColumn() . "\n"); // возвращает данные одного столбца  => 3
+
+
+/*
+Query — класс, который является абстракцией поверх sql. Его главное достоинство это возможность строить динамические запросы без склеивания строк.
+
+Реализуйте метод count в соответствии с примером ниже.
+Реализуйте метод map в соответствии с примером ниже.
+
+Пример использования:
+*/
+
+$query = new Query($this->pdo, 'users');
+$query = $query->where('social', 'github');
+$query = $query->select('id', 'name');
+
+$query->count() == sizeof($query->all());
+
+$coll = $query->map(function ($row) {
+    return $row['id'] . '-' . $row['name'];
+});
+print_r($coll); // ['id1-name1', 'id2-name2', ...]
+
+
+namespace App;
+
+class Query
+{
+    private $pdo;
+    private $table;
+    private $data = [
+        'select' => '*',
+        'where' => []
+    ];
+
+    public function __construct($pdo, $table, $data = null)
+    {
+        $this->pdo = $pdo;
+        $this->table = $table;
+        if ($data) {
+            $this->data = $data;
+        }
+    }
+
+    public function count()
+    {
+        $query = $this->select('COUNT(*)');
+        $stmt = $this->pdo->query($query->toSql());
+        return $stmt->fetchColumn();
+    }
+
+    public function map($func)
+    {
+        $stmt = $this->pdo->query($this->toSql());
+        return array_map($func, $stmt->fetchAll());
+    }
+
+    public function select(...$arguments)
+    {
+        $select = implode(', ', $arguments);
+        return $this->getClone(['select' => $select]);
+    }
+
+    public function where($key, $value)
+    {
+        $data = ['where' => array_merge($this->data['where'], [$key => $value])];
+        return $this->getClone($data);
+    }
+
+    public function all()
+    {
+        return $this->pdo->query($this->toSql())->fetchAll();
+    }
+
+    public function toSql()
+    {
+        $sqlParts = [];
+        $sqlParts[] = "SELECT {$this->data['select']} FROM {$this->table}";
+        if ($this->data['where']) {
+            $where = $this->buildWhere();
+            $sqlParts[] = "WHERE $where";
+        }
+
+        return implode(' ', $sqlParts);
+    }
+
+    private function buildWhere()
+    {
+        return implode(' AND ', array_map(function ($key, $value) {
+            $quotedValue = $this->pdo->quote($value);
+            return "$key = $quotedValue";
+        }, array_keys($this->data['where']), $this->data['where']));
+    }
+
+    private function getClone($data)
+    {
+        $mergedData = array_merge($this->data, $data);
+        return new self($this->pdo, $this->table, $mergedData);
+    }
+}
+
+// TEST:
+
+namespace App;
+
+class QueryTest extends \PHPUnit_Framework_TestCase
+{
+    private $pdo;
+
+    public function setUp()
+    {
+        $opt = array(
+            \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION
+        );
+        $pdo = new \PDO('sqlite::memory:', null, null, $opt);
+        $pdo->exec("
+                CREATE TABLE users (id integer,
+                                    name string,
+                                    social string,
+                                    age integer)
+            ");
+
+        $pdo->exec("INSERT INTO users VALUES (1, 'John', 'github', 17)");
+        $pdo->exec("INSERT INTO users VALUES (3, 'Adel', 'facebook', 17)");
+        $pdo->exec("INSERT INTO users VALUES (8, 'Mike', 'github', 17)");
+        $this->pdo = $pdo;
+    }
+
+    public function testCount()
+    {
+        $query = new Query($this->pdo, 'users');
+
+        $this->assertEquals(3, $query->count());
+        $this->assertCount(3, $query->all());
+    }
+
+    public function testMap()
+    {
+      $query = new Query($this->pdo, 'users');
+      $query = $query->where('social', 'github')
+          ->where('age', 17);
+
+      $coll = $query->map(function ($row) {
+          return $row['id'] . '-' . $row['name'];
+      });
+      $this->assertEquals(['1-John', '8-Mike'], $coll);
+    }
+}
+
+
+
+
+>>>>>  Формирование подготовленных запросов  <<<<<<<
+
+namespace Theory
+
+$opt = [
+    \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION,   // режим ошибок - Exceptions 
+    \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_ASSOC   
+       ];
+
+$pdo = new \PDO('sqlite::memory', null, null, $opt); // 2-й, 3-й параметр логин и пароль.
+
+$pdo->exec("CREATE table users (id integer, name string, role string)");    
+$pdo->exec("INSERT INTO users VALUES (1, 'jorn', 'member')");
+$pdo->exec("INSERT INTO users VALUES (3, 'adel', 'admin')");
+$pdo->exec("INSERT INTO users VALUES (7, 'ada', 'member')");	
+
+$stmt = $pdo->query("SELECT * FROM users");
+
+$stmt = $pdo->prepare('SELECT name FROM users WHERE role :=role'); // подготавливает запрос, :role - символьное имя. При многократном вызове такой способ работает быстрее из-за кеширования плана запроса
+$stmt->bindValue(':role', 'member', \PDO::PARAM_STR); // 3-й параметр необязательный - тип данных
+$stmt->execute(); // подставляет данные в запрос
+
+$data = [
+		  [1, 'jorn', 'member'],
+		  [2, 'mike', 'admin'],
+		  [3, 'adel', 'member']
+];
+
+$stmt = $pdo->prepare("INSERT INTO users VALUES (?, ?, ?)");
+foreach ($data as $value) {
+	$stmt->execute($value);
+}
+
+$stmt = $pdo->prepare("SELECT name FROM users WHERE role = ? AND name != ?"); // ? - плейсхолдер
+$stmt->execute(['member', '']);
+
+print_r($stmt->fetchAll());
+
+
+/**
+UserMapper это класс отвечающий за сохранение объектов класса User в базе вместе с зависимостями. В нашем примере User может содержать фотографии (класс Photo).
+
+Структура таблиц описана в файле UserMapperTest.php.
+
+Пример:
+**/
+$user = new User();
+$user->addPhoto('family', '/path/to/photo/family');
+$user->addPhoto('party', '/path/to/photo/party');
+$user->addPhoto('friends', '/path/to/photo/friends');
+
+$mapper = new UserMapper($pdo);
+$mapper->save($user);
+
+// Реализуйте функцию save в классе UserMapper. В этом задании достаточно реализовать логику сохранения (только вставку) фотографий пользователя.
+
+// file Photo.php:
+
+namespace App;
+
+class Photo
+{
+    private $user;
+    private $name;
+    private $filepath;
+
+    public function __construct($user, $name, $filepath)
+    {
+        $this->user = $user;
+        $this->name = $name;
+        $this->filepath = $filepath;
+    }
+
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    public function getFilepath()
+    {
+        return $this->filepath;
+    }
+}
+
+// file: User.php
+
+namespace App;
+
+class User
+{
+    private $photos;
+    private $id;
+
+    public function __construct($name)
+    {
+        $this->name = $name;
+    }
+
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
+
+    public function addPhoto($name, $filepath)
+    {
+        $photo = new Photo($this, $name, $filepath);
+        $this->photos[] = $photo;
+    }
+
+    public function getPhotos()
+    {
+        return $this->photos;
+    }
+}
+
+// file: UserMapper.php
+
+namespace App;
+
+class UserMapper
+{
+    private $pdo;
+
+    public function __construct(\PDO $pdo)
+    {
+        $this->pdo = $pdo;
+    }
+    public function save(User $user)
+    {
+        $stmtUser = $this->pdo->prepare("INSERT INTO users (name) VALUES (?)");
+        $stmtUser->execute([$user->getName()]);
+        $user->setId($this->pdo->lastInsertId());
+
+        // BEGIN (write your solution here)
+        
+        // END
+    }
+}
