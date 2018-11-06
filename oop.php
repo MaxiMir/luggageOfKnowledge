@@ -2471,8 +2471,6 @@ $cars->all();
 
 /*
 Теперь каждый вызов возвращает новый объект. Такой код значительно безопаснее в использовании и позволяет без проблем переиспользовать новые коллекции. Изменение одной, не приведет к автоматическому изменению всех остальных.
-
-self
 */
 
 class Coll
@@ -2640,6 +2638,137 @@ count($stringy);  // 3
 Кроме того, объект, возвращаемый функцией s, реализует магический метод toString, а это значит, что не придется заниматься преобразованием типов, как в случае с Collect. Каждый раз, когда объект используется как строка, на его месте оказывается строка.
 
 Всего в библиотеке около 100 функций https://github.com/danielstjules/Stringy.
+
+
+
+/**
+Реализуйте класс Circle для описания кругов. У круга есть только одно свойство - его радиус. Реализуйте методы getArea и getCircumference, которые возвращают площадь и периметр круга соответственно.
+**/
+$circle = new Circle(10);
+
+class Circle
+{
+    private $radius;
+
+    public function __construct($radius)
+    {
+        $this->radius = $radius;
+    }
+
+    public function getArea()
+    {
+        return pi() * ($this->radius ** 2);
+    }
+
+    public function getCircumference()
+    {
+       return 2 * pi() * $this->radius; 
+    }
+
+}
+
+
+/**
+Реализуйте генератор рандомных чисел, представленный классом Random. Интерфейс объекта включает в себя три функции:
+
+Конструктор. Принимает на вход seed, начальное число генератора псевдослучайных чисел
+getNext — метод, возврающающий новое случайное число
+reset — метод, сбрасывающий генератор на начальное значение
+Простейший способ реализовать случайные числа — линейный конгруэнтный метод https://ru.wikipedia.org/wiki/Линейный_конгруэнтный_метод.
+**/
+
+$seq = new Random(100);
+$result1 = $seq->getNext();
+$result2 = $seq->getNext();
+
+$result1 != $result2; // => true
+
+$seq->reset();
+
+$result21 = $seq->getNext();
+$result22 = $seq->getNext();
+
+$result1 == $result21; // => true
+$result2 == $result22; // => true
+
+
+class Random
+{
+    protected $seed;
+    protected $init;
+
+    public function __construct($seed)
+    {
+        $this->seed = $seed;
+        $this->init = $seed;
+    }
+
+    public function reset()
+    {
+        $this->seed = $this->init;
+    }
+
+    public function getNext()
+    {
+        $a = 45 + $this->init;
+        $c = 21 + $this->init;
+        $m = 67 + $this->init;
+
+        $this->seed = ($a * $this->seed + $c) % $m;
+
+        return $this->seed;
+    }
+}
+
+
+/**
+Реализуйте класс Square для описания квадратов. У квадрата есть только одно свойство — сторона. Реализуйте метод getSide, возвращающий значение стороны.
+**/
+
+$square = new Square(10);
+$square->getSide(); // 10
+
+/**
+Реализуйте класс SquaresGenerator со статическим методом generate, принимающим два параметра: сторону и количество экземпляров квадрата, которые нужно создать. Функция должна вернуть массив из квадратов.
+**/
+
+$squares = SquaresGenerator::generate(3, 2); // [new Square(3), new Square(3)];
+
+
+class Square
+{
+    private $side;
+
+    public function __construct($side)
+    {
+        $this->side = $side;
+    }
+
+    public function getSide()
+    {
+        return $this->side;
+    }
+}
+
+
+class SquaresGenerator
+{
+    public static function generate($side, $count = 5)
+    {
+        $squares = [];
+        for ($i = 0; $i < $count; $i++) {
+            $squares[] = new Square($side);
+        }
+
+        return $squares;
+    }
+}
+
+
+
+
+
+
 
 
 
