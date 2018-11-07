@@ -3099,3 +3099,538 @@ try {
 }
 
 /*******************************/
+
+
+
+# http://php.net/manual/ru/language.oop5.phps
+get_class($obj); // возращает класс объекта
+
+# 1: 
+
+// file theory/Guest.php
+
+namespace Theory;
+
+final class Guest implements UserInterface // final - предотвратить  переопределение класса в дочерних классах
+{
+    public function isGuest()
+    {
+        return true;
+    }
+
+    public function getFullName()
+    {
+        return 'Guest';
+    }
+ }
+
+
+// file theory/UserInterface.php
+
+namespace Theory;
+
+interface UserInterface
+{
+    public function isGuest();
+    public function getFullName();  
+}
+
+
+// file theory/UserInterface.php
+
+namespace Theory;
+
+interface MemberInterface
+{
+    public function __construct($id, $firstName, $lastName);
+    public function getId();    
+    public function canScanUserList();  
+}
+
+
+
+// file theory/User.php
+
+namespace Theory;
+
+class User implements UserInterface, MemberInterface
+{
+    private $id;
+    private $firstName;
+    protected $lastName;
+
+    public function __construct($id, $firstName, $lastName)
+    {
+        $this->id = $id;
+        $this->firstName = $firstName;
+        $this->lastName = $lastName;
+    }
+
+    final public function isGuest() // метод переопределить нельзя
+    {
+        return false;
+    }
+
+    final public function getId() // метод переопределить нельзя
+    {
+        return $this->id;
+    }   
+
+    public function getFullName()
+    {
+        return $this->firstName . " " . $this->lastName;
+    }
+
+    public function canScanUserList()
+    {
+        return false;
+    }
+}
+
+
+// file theory/Teacher.php
+
+namespace Theory;
+
+class Teacher extends UserInterface
+{
+    public function getCourses()
+    {
+        return [];
+    }
+
+    public function getFullName()
+    {
+        return 'Teacher: ' . parent::getFullName(); // for __construct - parent::__construct()
+    }
+}
+
+
+// file theory/HrManager.php
+
+namespace Theory;
+
+class HrManager extends User
+{
+    public function getCandidates()
+    {
+        return [];
+    }
+
+    public function canScanUserList()
+    {
+        return true;
+    }   
+
+    public function getFullName()
+    {
+        return "{$this->lastName} {$this->firstName}";
+    }   
+}
+
+
+# 2
+
+/*
+Абстрактный класс может не содержать абстрактных методов
+Абстрактный класс может наследоваться от абстрактного класса
+
+С абстрактными классами в php есть одна интересная особенность. Если этот класс реализует (не полностью) интерфейс, то определения методов из интерфейса становятся абстрактными методами в этом классе.
+*/
+
+// file theory/CasheInterface.php
+
+namespace Theory;
+
+interface CasheInterface
+{
+    public function __construct($options);
+    public function get($key);
+    public function set($key, $value);
+}
+
+// Пример:
+// $cashe = new DbCashe($options);
+// $cashe->set('user', 3);
+// 3 == $cashe->get('user');
+
+
+// file theory/Cashe.php
+
+namespace Theory;
+
+abstract class Cashe implements CasheInterface
+{
+    protected $options;
+
+    public function __construct($options)
+    {
+        $this->options = $options;
+        $this->connect();
+    }
+
+    abstrat protected function connect();
+}
+
+// file theory/DbCashe.php
+
+namespace Theory;
+
+class DbCashe extends Cache
+{
+    public function get($key)
+    {
+        return $this->connection->get($key);
+    }
+
+    public function set($key, $value)
+    {
+        return $this->connection->set($key, $value);
+    }
+
+    protected function connect()
+    {
+        // ...
+    }
+}
+
+# 3
+// file theory/index.php
+namespace Theory;
+
+require_once 'Enumarable.php';
+require_once 'Router.php';
+
+$router = new Router();
+$router->addRouter('root', '/');
+$router->addRouter('users', '/users');
+$router->addRouter('new-user', '/users/new');
+$router->addRouter('new-photos', '/users/{id}/photos');
+$router->addRouter('new-user-photo', '/users/{id}/photos/new');
+
+echo "Routes count: {$router->count()\n}"; // количество маршрутов
+echo "Is `/users a member? : {$router->isMember('/users')\n}"; // => 1
+echo "Is `/photos a member? : {$router->isMember('/photos')\n}"; // => 
+
+
+// file theory/Router.php
+
+namespace Theory;
+
+class Router
+{
+    use Enumarable; // используем трейт. Можно использовать несколько, перечислив через ','
+
+    private $options;
+    private $routes = [];
+
+    public function __construct($options = [])
+    {
+        $this->options = $options;
+    }
+
+    public function addRoute($name, $url)
+    {
+        $this->routes[$name] = $url;
+    }
+
+    public function each($lambda)
+    {
+        foreach ($this->routes as $value) {
+            $lambda($value);
+        }
+    }
+}
+
+
+// file theory/Router.php
+
+namespace Theory;
+
+trait Enumarable
+{
+    function count()
+    {
+        $count = 0;
+        $this->each(function ($element) use (&$count) {
+            $count++;
+        });
+        
+        return $count;
+    }
+    
+    function isMember($obj)
+    {
+        $isMember = false;
+        $this->each(function ($element) use ($objm &$isMember)) {
+            if ($element == $obj) {
+                $isMember = true;
+            }
+        };
+        
+        return $isMember;
+    }
+}
+
+#4
+
+/*
+Полезно использовать статические свойства и методы:
+Когда у класса есть метаинформация используемая его объектами
+Если создание объектов комплексная операция (нужно произвести какие-то вычисления)
+*/
+
+function Parser
+{
+    public static $formats = ['xml', 'html', 'json'];
+    
+    public static function factory($options)
+    {
+        $parser = new self($args);
+        return $parser;
+    }
+    
+    public static function getStaticValue()
+    {
+        return self::$formats;
+    }
+    
+    public function callStaticFunction()
+    {
+        return self::getStaticValueFromStatic();
+    }
+}
+
+print_r(Parser::$formats);
+print_r(Parser::getStaticValueFromStatic());
+
+$parser = new Parset();
+print_r($parser->getStaticValue());
+print_r($parser->callStaticFunction());
+
+
+#5
+
+function foo($arg)
+{
+    if (is_string($arg)) {
+        return -1;      
+    }
+    return;
+}
+
+function bar($arg)
+{
+    if (-1 == foo($arg)) {
+        return -1;
+    }
+    return;
+}
+
+echo bar('foo'); // => -1
+
+
+namespace Theory;
+
+function myReadFile($filepath)
+{
+    if (!file_exists($filepath)) {
+        throw new \Exception("file '{$filepath}' doesn`t exist");
+    }
+}
+
+function readFolder($folderPath)
+{
+    //NOTE: write logic here
+    return [myReadFile($folderPath)];
+}
+
+function tryReadFile()
+{
+    try {
+        $bodies = readFolder("path/to/Folder");
+        return $bodies;
+    } catch (\Exception $e) { // наи
+        echo $e->getMessage();
+        return [];
+    }
+}
+
+$result = tryReadFile();
+print_r($result);
+
+
+
+namespace Thery;
+
+$handle = fopen($filepath, "r");
+
+try {
+    $data = fread($handle, filesize($filepath));
+} finally { // Выполняется в любом случае, независимо от того было исключение или нет. Отсюда можно бросать исключение
+    fclose($handle);
+}
+
+
+# 6 Динамическое создание свойств
+namespace Theory;
+
+class DynamicProps
+{
+    private $data = [];
+
+    public $declared = 1;
+    private $hidden = 2;
+
+    public function __set($name, $value)
+    {
+        $this->data[$name] = $value;
+    }
+
+    public function __get($name)
+    {
+        return $this->data[$name];
+    }
+
+    public function getHidden()
+    {
+        return $this->hidden;
+    }
+
+    public function __isset(); // проверяет существование свойства
+    public function __unset(); // удаляет свойтсво
+}
+
+$obj = new DynamicProps();
+$obj->customKey = 'value2';
+echo $obj->customKey;
+isset($obj->customKey); // если реализован магический метод __isset
+unset($obj->customKey); // если реализован магический метод __unset
+
+
+
+/**
+Реализуйте функцию compare, которая сравнивает переданных пользователей на основе их идентификаторов. При этом функция должна убедиться, что переданные объекты - пользователи.
+**/
+
+use function App\UserFunctions\compare;
+
+$user1 = new User();
+$user1->id = 1;
+
+$user2 = new User();
+$user2->id = 1;
+
+compare($user1, $user2); // => true
+
+$cat = new Cat();
+$user2->id = 1;
+
+compare($user1, $cat); // => false
+
+
+function compare(User $user1, User $user2)
+{
+    return $user1->id === $user2->id;
+}
+
+/**
+Реализуйте функцию toStd, которая принимает на вход ассоциативнвый массив и ввозвращает объект типа stdClass такой же структуры. Выполните задачу проставляя ключи и значения вручную без использования преобразования типа.
+**/
+
+$data = [
+    'key' => 'value',
+    'key2' => 'value2',
+];
+$config = toStd($data);
+
+$config->key; // value
+$config->key2; // value2
+
+
+function toStd($data)
+{
+    $std = new \stdClass();
+    foreach ($data as $key => $value) {
+        $std->$key = $value;
+    }
+
+    return $std;
+}
+
+
+# 7 Переопределение методов 
+
+namespace Theory;
+/*
+Вызовы через __call работают медленнее обычных вызовов
+Код с использованием __call сложнее в отладке (реального метода не существует)
+__call($name, $args);
+preg_match("/findBy(.*)/", $finder, $outputArray);
+*/
+$repository = new repository('users');
+$repository ->findByEmail('admin@exapmple.com');
+$repository->findByEmail('John');
+$repository->findByNameAndAge('John', 18);
+
+#8
+
+namespace Theory;
+
+class Base
+{
+    public static function who()
+    {
+        echo __CLASS__ . "\n";
+    }
+
+    public static function test()
+    {
+        self::who(); // привязывает к текущему классу
+        static::who(); // позднее статическое связывание
+    }
+}
+
+class Child extends Base
+{
+    // public static function who()
+    // {
+    //  echo __CLASS__ . "\n";
+    // }    
+}
+
+echo Child::who(); // Theory\Base - 2 раза;
+echo Child::who(); /* => если раскоменторовать => 
+Theory\Base 
+Theory\Child 
+*/
+
+
+#9
+
+/*
+http://php.net/manual/ru/function.spl-autoload.php
+http://php.net/manual/ru/language.oop5.autoload.php
+*/
+
+namespace Theory;
+
+
+__autoload(); // DEPRECATED!
+
+// #1
+spl_autoload_extensions(".php");
+spl_autoload_register(); // если namespace соответствует папке
+
+// #2
+spl_autoload_register(function($class) {
+    $path = dirname(__FILE__) . "/" .strtolower(str_replace("\\", "/", $class));
+    spl_autoload($path); // загрузка класса
+});
+
+
+
+$app = new \ns\Application();
+var_dump($app);
+
+
