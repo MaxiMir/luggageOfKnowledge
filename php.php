@@ -24,7 +24,7 @@ https://ru.hexlet.io/pages/recommended-books
 + Структура и интерпритация компьютерных программ
 
 + Книга Продуманная оптимизация http://optimization.guide
-*/	
+*/  
 
 
 >>>>> Введение <<<<<<<
@@ -86,9 +86,9 @@ cos(pi()); // => -1
 
 >>>>>  Функции <<<<<<<
 
-function hypotenuse($cathetus1, $cathetus2)	// $cathetus1, $cathetus2 - формальные параметры
+function hypotenuse($cathetus1, $cathetus2) // $cathetus1, $cathetus2 - формальные параметры
 {
-	return sqrt($cathetus1 ** 2 + $cathetus2 ** 2);
+    return sqrt($cathetus1 ** 2 + $cathetus2 ** 2);
 }
 
 echo hypotenuse(3, 4); // 3, 4 - фактические параметры => 25
@@ -147,9 +147,9 @@ namespace App\Template;
 /* 
 Директории:
  * theory/
- * 	 Another.php
- * 	 Example.php
- * 	 main.php 
+ *   Another.php
+ *   Example.php
+ *   main.php 
 */
 
 // Файл main.php
@@ -180,7 +180,7 @@ namespace Another;
 
 function iam()
 {
-	return "another\n";
+    return "another\n";
 }
 
 // Файл Example.php
@@ -189,22 +189,22 @@ namespace Theory\Example; // вложенный namespace
 
 function iam()
 {
-	return "example\n";
+    return "example\n";
 }
 
 
 // Настоятельно не рекомендуется при программировании комбинировать несколько пространств имен в один файл.  Основным применением этому может быть объединение нескольких PHP-файлов в один файл.
 
 namespace MyProject {
-	const CONNECT_OK = 1;
-	class Connection { /* ... */ }
-	function connect() { /* ... */  }
+    const CONNECT_OK = 1;
+    class Connection { /* ... */ }
+    function connect() { /* ... */  }
 }
 
 namespace { // глобальный код
-	session_start();
-	$a = MyProject\connect();
-	echo MyProject\Connection::start();
+    session_start();
+    $a = MyProject\connect();
+    echo MyProject\Connection::start();
 }
 
 /*
@@ -236,8 +236,8 @@ require_once('math.php');
 
 src/
     Formatters/
-      	Pretty.php
-    	Generator.php
+        Pretty.php
+        Generator.php
 
 tests/
 composer.json
@@ -383,7 +383,7 @@ constant('FOO'); //  возвратит значение константы, у�
 
 function isOdd($num) // проверка на нечетность
 {
-	return $num % 2 != 0;
+    return $num % 2 != 0;
 }
 
 
@@ -393,18 +393,18 @@ function isOdd($num) // проверка на нечетность
 
 function lucky($num)
 {
-	if ($num == rand(1,3)) { //  генерирует случайное число
-		return 'You are lucky!';
-	} elseif ($num < 1 || $num > 3) {
-		return 'Unexpected number';
-	} else {
-		return 'Sorry, you are not lucky!';
-	}
+    if ($num == rand(1,3)) { //  генерирует случайное число
+        return 'You are lucky!';
+    } elseif ($num < 1 || $num > 3) {
+        return 'Unexpected number';
+    } else {
+        return 'Sorry, you are not lucky!';
+    }
 }
 
 function mod($num)
 {
-	return $mod >= 0 ? $num : -$num; // тернарный оператор
+    return $mod >= 0 ? $num : -$num; // тернарный оператор
 }
 
 
@@ -414,13 +414,13 @@ function mod($num)
 
 function result($a, $b, $c, $d)
 {
-	 if ($a == $c && $b == $d) {
-		  return 2;
-	 } elseif ($a > $b && $c > $d || $a < $b && $c < $d || $a == $b && $c == $d) {
-		  return 1;
-	 } else {
-		  return 0;
-	 }
+     if ($a == $c && $b == $d) {
+          return 2;
+     } elseif ($a > $b && $c > $d || $a < $b && $c < $d || $a == $b && $c == $d) {
+          return 1;
+     } else {
+          return 0;
+     }
 }
 
 
@@ -430,24 +430,24 @@ function result($a, $b, $c, $d)
 
 function factorial($n)
 {
-	$result = 1;
+    $result = 1;
 
-	for ($i = 2; $i <= $n; $i++) {
-		$result *= $i;
-	}
+    for ($i = 2; $i <= $n; $i++) {
+        $result *= $i;
+    }
 
-	return $result;
+    return $result;
 }
 
 function isPrime($n) // проверка на простое число
 {
-	for ($i = 2; $i = $n / 2; $i++) {
-		if ($n % $i == 0) {
-			return false;
-		}
-	}
+    for ($i = 2; $i = $n / 2; $i++) {
+        if ($n % $i == 0) {
+            return false;
+        }
+    }
 
-	return true;
+    return true;
 }
 
 /*
@@ -456,13 +456,13 @@ function isPrime($n) // проверка на простое число
 
 function sumDouble($a, $b)
 {
-	 $result = 0;
+     $result = 0;
 
-	 for ($i = $start; $i <= $finish; $i += 2) {
-		  $result += $i ** 2;
-	 }
+     for ($i = $start; $i <= $finish; $i += 2) {
+          $result += $i ** 2;
+     }
 
-	 return $result;
+     return $result;
 }
 
 
@@ -542,11 +542,11 @@ canViewProfile(user)
 
 // переменная доступна вне цикла for и if:
 for ($i = 0; $i < 3; $i++) {
-	echo $i . "\n";
+    echo $i . "\n";
 }
 
 if (true) {
-	$val = 'cat'
+    $val = 'cat'
 }
 
 echo $i; // => 2
@@ -563,8 +563,8 @@ $increment = 1;
 
 function increment($num)
 {
-	global $increment; // <-> $_GLOBALS['increment']
-	return $num + $increment;
+    global $increment; // <-> $_GLOBALS['increment']
+    return $num + $increment;
 }
 
 
@@ -578,23 +578,23 @@ echo "interpolation example: $value" . PHP_EOL; // интерполяция
 
 function hereDoc($hello)
 {
-	return <<<EOD
-		Example "of $hello string"
-		spaning 'multiple lines
-		using heredoc syntax.\n\n
+    return <<<EOD
+        Example "of $hello string"
+        spaning 'multiple lines
+        using heredoc syntax.\n\n
 EOD;
 
 }
 
 function nowDoc()
 {
-	return <<<'EOD'
-		Example of string
-		spaning 'multiple lines
-		using nowdoc syntax. $hello.
+    return <<<'EOD'
+        Example of string
+        spaning 'multiple lines
+        using nowdoc syntax. $hello.
 EOD;
-	
-}	
+    
+}   
 
 
 $str = 'simple string';
@@ -607,13 +607,13 @@ echo $str[strlen($str) - 1]; // => g
 
 function reverse(String $str)
 {
-	$result = '';
-	 
-	for($i = strlen($str) - 1; $i >= 0; $i--) {
-		$result .= $str[$i];
-	}
-			 
-	return $result;
+    $result = '';
+     
+    for($i = strlen($str) - 1; $i >= 0; $i--) {
+        $result .= $str[$i];
+    }
+             
+    return $result;
 }
 
 // Для определения является ли слово палиндромом, достаточно сравнивать попарно символ с обоих концов слова. Если они все равны, то это палиндром. Решите задачу без использования реверса строки. Примеры использования:
@@ -662,33 +662,33 @@ unset($arr[2]); // удаление элмента массива
 
 function myMax(Array $arr)
 {
-	if (empty($arr)) {
-		return;
-	}
+    if (empty($arr)) {
+        return;
+    }
 
-	$max = $arr[0];
+    $max = $arr[0];
 
-	foreach ($arr as $val) {
-		if ($max < $val) {
-			$max = $val;
-		}
-	}
+    foreach ($arr as $val) {
+        if ($max < $val) {
+            $max = $val;
+        }
+    }
 
-	return $max;
+    return $max;
 }
 
 
 // Реализуйте функцию uniq, которая принимает, как аргумент, массив, и возвращает новый массив, в котором ни один элемент исходного массива не повторяется.
 
 function uniq(Array $arr) {
-	$res = [];
-	foreach ($arr as $value) {
-		if (!in_array($res, $value)) {
-			$res[] = $val;
-		}
-	}
+    $res = [];
+    foreach ($arr as $value) {
+        if (!in_array($res, $value)) {
+            $res[] = $val;
+        }
+    }
 
-	return $res;
+    return $res;
 }
 
 
@@ -716,15 +716,15 @@ $arr[] = 'val5';
 
 function wordsCount(String $sentence)
 {
-	$words = explode(' ', $sentence);
-	$countWords = [];
+    $words = explode(' ', $sentence);
+    $countWords = [];
 
-	foreach ($words as $word) {
-		if (empty($word)) { continue; }
-		array_key_exists($word, $countWords) ? $countWords[$word]++ : $countWords[$word] = 1;
-	}
+    foreach ($words as $word) {
+        if (empty($word)) { continue; }
+        array_key_exists($word, $countWords) ? $countWords[$word]++ : $countWords[$word] = 1;
+    }
 
-	return $countWords;
+    return $countWords;
 }
 
 
@@ -739,27 +739,27 @@ round(1.55, 1, PHP_ROUND_HALF_DOWN); // округление вниз 1.5
 
 function drop(Array $array, Int $count = 1) // возвращает обрезанный с начала массив на count элементов
 {
-	$result = [];
-	for ($i = $count; $i < sizeof($array); $i++) {
-		$result[$i] = $array[$i];
-	}
+    $result = [];
+    for ($i = $count; $i < sizeof($array); $i++) {
+        $result[$i] = $array[$i];
+    }
 
-	return $result;
+    return $result;
 }
 
 function sumArgs()
 {
-	return array_sum(func_get_args()); // func_get_args() - возвращает массив переданных аргументов
+    return array_sum(func_get_args()); // func_get_args() - возвращает массив переданных аргументов
 }
 
 function sumArgs1(...$numbers)
 {
-	return array_sum($numbers); // $numbers - массив переданных аргументов
+    return array_sum($numbers); // $numbers - массив переданных аргументов
 }
 
 function sumArgs2($arg, ...$numbers) // $arg - можно задавать обязательные параметры
 {
-	return array_sum($numbers); // $numbers - массив переданных аргументов
+    return array_sum($numbers); // $numbers - массив переданных аргументов
 }
 
 sumArgs2(10, 2, 4); // !!! => 6
@@ -770,7 +770,7 @@ sumArgs2(10, 2, 4); // !!! => 6
 
 function multiArgs(...$numbers)
 {
-	 return !empty($numbers) ? array_product($numbers) : null; // array_product - произведение элементов массива
+     return !empty($numbers) ? array_product($numbers) : null; // array_product - произведение элементов массива
 }
 
 
@@ -788,7 +788,7 @@ example(); // вызов пустой функции возвращает null
 
 function example($var = null) // необязательный аргумент
 {
-	return; // <-> return null;
+    return; // <-> return null;
 }
 
 
@@ -796,13 +796,13 @@ function example($var = null) // необязательный аргумент
 
 function compact(array $array)
 {
-	 $newArray = [];
-	 foreach ($array as $key => $value) {
-		  if (!is_null($value)) {
-			$newArray[$key] = $value;
-		  }
-	 }
-	 return $newArray;
+     $newArray = [];
+     foreach ($array as $key => $value) {
+          if (!is_null($value)) {
+            $newArray[$key] = $value;
+          }
+     }
+     return $newArray;
 }
 
 
@@ -871,13 +871,13 @@ function drop(Array $array, Int $count = 1): array // float, string, bool, int, 
 
 function addDigits(Int $num)
 {
-	$sum = (string) $num;
+    $sum = (string) $num;
 
-	while (strlen($sum) > 1) {
-	  $sum = array_sum(str_split($sum));
-	}
+    while (strlen($sum) > 1) {
+      $sum = array_sum(str_split($sum));
+    }
 
-	return $sum;
+    return $sum;
 }
  
 
@@ -890,9 +890,9 @@ function addDigits(Int $num)
 
 function binarySum($num1, $num2)
 {
-	// decbin — переводит число из десятичной системы счисления в двоичную
-	// bindec — переводит двоичное число в десятичное
-	return decbin( bindec((int) $num1) + bindec((int) $num2) );
+    // decbin — переводит число из десятичной системы счисления в двоичную
+    // bindec — переводит двоичное число в десятичное
+    return decbin( bindec((int) $num1) + bindec((int) $num2) );
 } 
 
 
@@ -905,17 +905,17 @@ echo isPrime(10); // → false
 
 function isPrime($num)
 {
-	if ($num < 2) {
-	  return false;
-	}
+    if ($num < 2) {
+      return false;
+    }
 
-	for ($i = 2; $i <= $num / 2; $i++) {
-	  if ($num % $i == 0) {
-			return false;
-		}
-	}
+    for ($i = 2; $i <= $num / 2; $i++) {
+      if ($num % $i == 0) {
+            return false;
+        }
+    }
 
-	return true;
+    return true;
 }
 
 
@@ -930,15 +930,15 @@ isPowerOfThree(9); // → true
 
 function isPowerOfThree(Int $num)
 {
-	$current = 1;
-	while ($current <= $num) {
-	  	if ($current === $num) {
-			return true;
-	  	}
-	  	$current *= 3;
-	}
+    $current = 1;
+    while ($current <= $num) {
+        if ($current === $num) {
+            return true;
+        }
+        $current *= 3;
+    }
 
-	return false;
+    return false;
 }
 
 
@@ -950,8 +950,8 @@ function isPowerOfThree(Int $num)
 
 function reverseInt($num)
 {
-	$reverse = (int) strrev((string) abs($num)); // strrev - переворачивает строку задом наперед / abs - модуль числа
-	return $num > 0 ? $reverse : -$reverse;
+    $reverse = (int) strrev((string) abs($num)); // strrev - переворачивает строку задом наперед / abs - модуль числа
+    return $num > 0 ? $reverse : -$reverse;
 }
 
 
@@ -1031,28 +1031,28 @@ $conn = new PDO('pgsql:host=localhost;dbname=yourdbname', 'username', 'password'
 // A quick Select Query with For Loop
 $result = $conn->query("SELECT * FROM profile");
 foreach ($result as $row) {
-	 echo $row['id'];
-	 echo $row['title'];
-	 echo $row['telephone'];
+     echo $row['id'];
+     echo $row['title'];
+     echo $row['telephone'];
 }
 
 // Slim-PDO. Для Slim /https://github.com/FaaPz/Slim-PDO/ существует проект Slim-PDO, который позволяет взаимодействовать с базой из фреймворка Slim.
 
 $app->post('/ads', function(ServerRequestInterface $request) {
-	 $parsedBody = $request->getParsedBody(); // Данные пришедшие из формы
+     $parsedBody = $request->getParsedBody(); // Данные пришедшие из формы
 
-	 // Соединение с базой должно выполняться на этапе старта приложения (как было с шаблонизатором), а не в конкретном обработчике.
-	 $dsn = 'mysql:host=your_db_host;dbname=your_db_name;charset=utf8';
-	 $usr = 'your_db_username';
-	 $pwd = 'your_db_password';
+     // Соединение с базой должно выполняться на этапе старта приложения (как было с шаблонизатором), а не в конкретном обработчике.
+     $dsn = 'mysql:host=your_db_host;dbname=your_db_name;charset=utf8';
+     $usr = 'your_db_username';
+     $pwd = 'your_db_password';
 
-	 $pdo = new \Slim\PDO\Database($dsn, $usr, $pwd);
+     $pdo = new \Slim\PDO\Database($dsn, $usr, $pwd);
 
-	 $insertStatement = $pdo->insert(['telephone', 'title'])
-							  ->into('ads')
-							  ->VALUES([$parsedBody['telephone'], $parsedBody['title']]);
+     $insertStatement = $pdo->insert(['telephone', 'title'])
+                              ->into('ads')
+                              ->VALUES([$parsedBody['telephone'], $parsedBody['title']]);
 
-	 $insertId = $insertStatement->execute(false);
+     $insertId = $insertStatement->execute(false);
 });
 
 // Обратите внимание на то, что библиотека Slim-PDO позволяет выполнять SQL не в виде "сырых" запросов, где SQL писался бы как строка текста (как в репле), а предоставляет небольшой DSL (мини-язык) для написания запроса: insert()->into()->VALUES(). Библиотеку, позволяющую таким образом строить запросы, называют Query Builder. В отличие от сырого SQL в виде строчки, подход, описанный выше, удобен в случаях, когда SQL собирается по условиям. Такое часто бывает на страницах с фильтрами.
@@ -1145,73 +1145,73 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Photo
 {
-	 /**
-	  * @ORM\Id
-	  * @ORM\Column(name="id", type="integer")
-	  * @ORM\GeneratedValue(strategy="AUTO")
-	  */
-	 protected $id;
-	 /**
-	  * @ORM\Column(type="string", length=64)
-	  */
-	 protected $title;
-	 /**
-	  * @ORM\Column(type="string", length=150)
-	  */
-	 protected $image;
-	 /**
-	  * @ORM\Column(type="string", length=100)
-	  */
-	 protected $slug;
+     /**
+      * @ORM\Id
+      * @ORM\Column(name="id", type="integer")
+      * @ORM\GeneratedValue(strategy="AUTO")
+      */
+     protected $id;
+     /**
+      * @ORM\Column(type="string", length=64)
+      */
+     protected $title;
+     /**
+      * @ORM\Column(type="string", length=150)
+      */
+     protected $image;
+     /**
+      * @ORM\Column(type="string", length=100)
+      */
+     protected $slug;
 
-	 /**
-	  * Get photo id
-	  *
-	  * @ORM\return integer
-	  */
-	 public function getId()
-	 {
-		  return $this->id;
-	 }
+     /**
+      * Get photo id
+      *
+      * @ORM\return integer
+      */
+     public function getId()
+     {
+          return $this->id;
+     }
 
-	 /**
-	  * Get photo title
-	  *
-	  * @ORM\return string
-	  */
-	 public function getTitle()
-	 {
-		  return $this->title;
-	 }
+     /**
+      * Get photo title
+      *
+      * @ORM\return string
+      */
+     public function getTitle()
+     {
+          return $this->title;
+     }
 
-	 /**
-	  * Get photo slug
-	  *
-	  * @ORM\return string
-	  */
-	 public function getSlug()
-	 {
-		  return $this->slug;
-	 }
+     /**
+      * Get photo slug
+      *
+      * @ORM\return string
+      */
+     public function getSlug()
+     {
+          return $this->slug;
+     }
 
-	 /**
-	  * Get photo image
-	  *
-	  * @ORM\return string
-	  */
-	 public function getImage()
-	 {
-		  return $this->image;
-	 }
+     /**
+      * Get photo image
+      *
+      * @ORM\return string
+      */
+     public function getImage()
+     {
+          return $this->image;
+     }
 }
 
 // Использование
 
 $app->get('/photos', function() {
-	 // Получаем из базы список всех фотографий
-	 $photos = $this->entityManager->getRepository('App\Entity\Photo')->findAll();
-	 // Передаем их в шаблон
-	 return $this->renderer->render($response, "/photos.phtml", ['photos' => $photos]);
+     // Получаем из базы список всех фотографий
+     $photos = $this->entityManager->getRepository('App\Entity\Photo')->findAll();
+     // Передаем их в шаблон
+     return $this->renderer->render($response, "/photos.phtml", ['photos' => $photos]);
 });
 
 /*
@@ -1269,9 +1269,9 @@ use Illuminate\Support\Collection;
 $users = ['PetYA', 'Vasya', 'KolyA', 'Mark', 'TonYa', 'John'];
 $collection = collect($users);
 $filteredUsers = $collection->map(function($n) {
-	 return strtolower($n);
+     return strtolower($n);
 })->filter(function($n) {
-	 return s($n)->endsWith('ya');
+     return s($n)->endsWith('ya');
 }
 
 
@@ -1281,7 +1281,7 @@ $filteredUsers = $collection->map(function($n) {
 >>>>>  Другое <<<<<<<
 
 /*
-# Аутентификация и авторизация	
+# Аутентификация и авторизация  
 Аутентификация почти целиком построена на сессиях http, то авторизация требует понимания принципов построения списков контроля доступа (ACL). В наиболее продвинутых фреймворках подобная функциональность либо встроена в сам фреймворк, либо существует в виде дополнений, которые если и не покрывают все потребности, то, по крайней мере, дают основу для построения своей системы.
 
 # OAuth
@@ -1305,21 +1305,21 @@ $filteredUsers = $collection->map(function($n) {
 #1:
 function addPrefix($names, $prefix)
 {
-	 $result = [];
-	
-	 for ($i = 0; $i < sizeof($names); $i++) {
-		  $result[$i] = "{$prefix} {$names[$i]}";
-	 }
+     $result = [];
+    
+     for ($i = 0; $i < sizeof($names); $i++) {
+          $result[$i] = "{$prefix} {$names[$i]}";
+     }
 
-	 return $result;
+     return $result;
 }
 
 #2:
 function addPrefix($names, $prefix)
 {
-	 return array_map(function($name) use ($prefix)  {
-		return "{$prefix} {$name}";
-	 }, $names);
+     return array_map(function($name) use ($prefix)  {
+        return "{$prefix} {$name}";
+     }, $names);
 }
 
 
@@ -1328,17 +1328,17 @@ function addPrefix($names, $prefix)
 
 function reverseArray($coll) 
 {
-	 $size = sizeof($coll); 
-	 $maxIndex = floor($size / 2);  // округляет дробь в меньшую сторону
-	
-	 for ($i = 0; $i < $maxIndex; $i++) {
-		  $mirrorIndex = $size - $i - 1;
-		  $temp = $coll[$i];
-		  $coll[$i] = $coll[$mirrorIndex];
-		  $coll[$mirrorIndex] = $temp;
-	 }
-	 
-	 return $coll;
+     $size = sizeof($coll); 
+     $maxIndex = floor($size / 2);  // округляет дробь в меньшую сторону
+    
+     for ($i = 0; $i < $maxIndex; $i++) {
+          $mirrorIndex = $size - $i - 1;
+          $temp = $coll[$i];
+          $coll[$i] = $coll[$mirrorIndex];
+          $coll[$mirrorIndex] = $temp;
+     }
+     
+     return $coll;
 }
 
 
@@ -1347,17 +1347,17 @@ function reverseArray($coll)
 
 function swap($coll, $center) // hexlet
 {
-	 $prevIndex = $center - 1;
-	 $nextIndex = $center + 1;
-	 $isSwappable = array_key_exists($prevIndex, $coll) && array_key_exists($nextIndex, $coll);
+     $prevIndex = $center - 1;
+     $nextIndex = $center + 1;
+     $isSwappable = array_key_exists($prevIndex, $coll) && array_key_exists($nextIndex, $coll);
 
-	 if ($isSwappable) {
-		  $temp = $coll[$prevIndex];
-		  $coll[$prevIndex] = $coll[$nextIndex];
-		  $coll[$nextIndex] = $temp;
-	 }
+     if ($isSwappable) {
+          $temp = $coll[$prevIndex];
+          $coll[$prevIndex] = $coll[$nextIndex];
+          $coll[$nextIndex] = $temp;
+     }
 
-	 return $coll;
+     return $coll;
 }
 
 
@@ -1387,18 +1387,18 @@ mark[3]; // 17
 
 function calculateMax($coll)
 {
-	 if (empty($coll)) {
-		  return null;
-	 }
+     if (empty($coll)) {
+          return null;
+     }
 
-	 $max = $coll[0];
-	 for ($i = 1; $i < sizeof($coll); $i++) {
-		  if ($coll[$i] > $max) {
-				$max = $coll[$i];
-		  }
-	 }
+     $max = $coll[0];
+     for ($i = 1; $i < sizeof($coll); $i++) {
+          if ($coll[$i] > $max) {
+                $max = $coll[$i];
+          }
+     }
 
-	 return $max;
+     return $max;
 }
 
 print_r(calculateMax([]));
@@ -1415,21 +1415,21 @@ print_r(calculateMax([3, 2, -10, 38, 0]));
 
 function calculateAverage($arr) // my
 {
-	return empty($arr) ? null : array_sum($arr) / sizeof($arr);
+    return empty($arr) ? null : array_sum($arr) / sizeof($arr);
 }
 
 function calculateAverage($coll) // hexlet
 {
-	 if (empty($coll)) {
-		  return null;
-	 }
+     if (empty($coll)) {
+          return null;
+     }
 
-	 $sum = 0;
-	 foreach ($coll as $item) {
-		  $sum += $item;
-	 }
+     $sum = 0;
+     foreach ($coll as $item) {
+          $sum += $item;
+     }
 
-	 return $sum / sizeof($coll);
+     return $sum / sizeof($coll);
 }
 
 
@@ -1437,17 +1437,17 @@ function calculateAverage($coll) // hexlet
 
 function isContinuousSequence($coll)
 {
-	 if (empty($coll)) { return false; }
+     if (empty($coll)) { return false; }
 
-	 $start = $coll[0];
+     $start = $coll[0];
 
-	 foreach ($coll as $i => $item) {
-		  if ($start + $i !== $item) {
-				return false;
-		  }
-	 }
+     foreach ($coll as $i => $item) {
+          if ($start + $i !== $item) {
+                return false;
+          }
+     }
 
-	 return true;
+     return true;
 }
 
 
@@ -1463,14 +1463,14 @@ function isContinuousSequence($coll)
 
 function mycompact($coll)
 {
-	 $result = [];
-	 foreach ($coll as $item) {       
-		  if (!is_null($item)) {
-				$result[] = $item;
-		  }
-	 }
-	 
-	 return $result;
+     $result = [];
+     foreach ($coll as $item) {       
+          if (!is_null($item)) {
+                $result[] = $item;
+          }
+     }
+     
+     return $result;
 }
 
 print_r(mycompact([0, 1, false, null, true, 'wow', null])); 
@@ -1495,9 +1495,9 @@ buildList($coll); // => <ul><li>milk</li><li>butter</li><li>eggs</li><li>bread</
 $result = '';
 
 foreach ($coll as $item) {
-	 $result .= "<li>{$item}</li>";
-	 // либо так
-	 // $result = "{$result}<li>{$item}</li>";
+     $result .= "<li>{$item}</li>";
+     // либо так
+     // $result = "{$result}<li>{$item}</li>";
 }
 
 $result = "<ul>{$result}</ul>";
@@ -1508,7 +1508,7 @@ $coll = ['milk', 'butter', 'eggs', 'bread'];
 $parts = []; // переименовал для того, чтобы не менять значения переменной
 
 foreach ($coll as $item) {
-	 $parts[] = "<li>{$item}</li>";
+     $parts[] = "<li>{$item}</li>";
 }
 
 $innerValue = implode("\n", $parts);
@@ -1536,8 +1536,8 @@ $definitions = [
 */
 
 $definitions = [
-	 ['Блямба', 'Выпуклость, утолщения на поверхности чего-либо'],
-	 ['Бобр', 'Животное из отряда грызунов'],
+     ['Блямба', 'Выпуклость, утолщения на поверхности чего-либо'],
+     ['Бобр', 'Животное из отряда грызунов'],
 ];
 
 buildDefinitionList($definitions); // => '<dl><dt>Блямба</dt><dd>Выпуклость, утолщение на поверхности чего-либо</dd><dt>Бобр</dt><dd>Живтоное из отряда грызунов</dd></dl>'; 
@@ -1545,16 +1545,16 @@ buildDefinitionList($definitions); // => '<dl><dt>Блямба</dt><dd>Выпу�
 
 function buildDefinitionList(Array $definitions)
 {
-	 $parts = [];
-	 foreach ($definitions as $definition) {
-		  $name = $definition[0];
-		  $description = $definition[1];
-		  $parts[] = "<dt>{$name}</dt><dd>{$description}</dd>";
-	 }
-	 $innerValue = implode('', $parts);
-	 $result = "<dl>{$innerValue}</dl>";
+     $parts = [];
+     foreach ($definitions as $definition) {
+          $name = $definition[0];
+          $description = $definition[1];
+          $parts[] = "<dt>{$name}</dt><dd>{$description}</dd>";
+     }
+     $innerValue = implode('', $parts);
+     $result = "<dl>{$innerValue}</dl>";
 
-	 return $result;
+     return $result;
 }
 
 
@@ -1575,13 +1575,13 @@ function buildDefinitionList(Array $definitions)
 
 function capitalizeWords($sentence)
 {
-	 $words = explode(' ', $sentence);
-	 
-	 for ($i = 0; $i < sizeof($words); $i++) {
-		$words[$i] = ucfirst($words[$i]);
-	 }
-	
-	return implode(' ', $words);
+     $words = explode(' ', $sentence);
+     
+     for ($i = 0; $i < sizeof($words); $i++) {
+        $words[$i] = ucfirst($words[$i]);
+     }
+    
+    return implode(' ', $words);
 }
 
 
@@ -1589,7 +1589,7 @@ function capitalizeWords($sentence)
 
 $chars = str_split($text);
 foreach ($chars as $char) {
-	 print_r($char);
+     print_r($char);
 }
 
 // str_split принимает второй параметр, в котором можно указать количество символов в каждой группе (элементе получившегося массива). По умолчанию используется число 1, поэтому мы получаем массив, в котором каждый элемент — один символ. Но, если указать, например, 3, то в каждом элементе массива будет по три символа.
@@ -1612,13 +1612,13 @@ $arr2 = str_split($str, 3); // ->
 
 function makeCensored(string $text, $stopWord) // hexlet
 {
-	 $words = explode(' ', $text);
-	 $result = [];
-	 foreach ($words as $word) {
-		  $result[] = ($word === $stopWord) ? '$#%!' : $word;
-	 }
+     $words = explode(' ', $text);
+     $result = [];
+     foreach ($words as $word) {
+          $result[] = ($word === $stopWord) ? '$#%!' : $word;
+     }
 
-	 return implode(' ', $result);
+     return implode(' ', $result);
 }
 
 
@@ -1635,19 +1635,19 @@ flatten([[3, 2], 5, 3, [3, [4, 2]], 10]); // => [3, 2, 5, 3, 3, 4, 2, 10]
 
 function flatten($coll)
 {
-	 $result = [];
+     $result = [];
 
-	 foreach ($coll as $item) {      
-		  if (is_array($item)) {
-				foreach ($item as $subitem) {
-					 $result[] = $subitem;
-				}
-		  } else {
-				$result[] = $item;
-		  }
-	 }
-	 
-	 return $result;
+     foreach ($coll as $item) {      
+          if (is_array($item)) {
+                foreach ($item as $subitem) {
+                     $result[] = $subitem;
+                }
+          } else {
+                $result[] = $item;
+          }
+     }
+     
+     return $result;
 }
 
 /*
@@ -1658,24 +1658,24 @@ function flatten($coll)
 
 function concat($result, $items)
 {
-	 foreach ($items as $item) {
-		  $result[] = $item;
-	 }
-	 return $result;
+     foreach ($items as $item) {
+          $result[] = $item;
+     }
+     return $result;
 }
 
 function flatten($coll)
 {
-	 $result = [];
-	 foreach ($coll as $item) {
-		  if (is_array($item)) {
-				$result = concat($result, $item)
-		  } else {
-				$result[] = $item;
-		  }
-	 }
+     $result = [];
+     foreach ($coll as $item) {
+          if (is_array($item)) {
+                $result = concat($result, $item)
+          } else {
+                $result[] = $item;
+          }
+     }
 
-	 return $result;
+     return $result;
 }
 
 
@@ -1683,19 +1683,19 @@ function flatten($coll)
 
 function getSameCount($coll1, $coll2) 
 {
-	 $count = 0;
-	 $uniqColl1 = array_unique($coll1);
-	 $uniqColl2 = array_unique($coll2);
+     $count = 0;
+     $uniqColl1 = array_unique($coll1);
+     $uniqColl2 = array_unique($coll2);
 
-	 foreach ($uniqColl1 as $item1) {
-		  foreach ($uniqColl2 as $item2) {
-				if ($item1 === $item2) {
-					 $count++;
-				}
-		  }
-	 }
+     foreach ($uniqColl1 as $item1) {
+          foreach ($uniqColl2 as $item2) {
+                if ($item1 === $item2) {
+                     $count++;
+                }
+          }
+     }
 
-	 return $count;
+     return $count;
 }
 
 
@@ -1751,7 +1751,7 @@ array_diff($friends1, $friends2); // => ['kolya']
 $terribleNumbers = [4, 13];
 
 if (in_array(10, $terribleNumbers)) {
-	 print_r('woah!');
+     print_r('woah!');
 }
 
 
@@ -1759,20 +1759,20 @@ if (in_array(10, $terribleNumbers)) {
 
 function countUniqChars($text)
 {
-	 if ($text === '') {
-		  return 0;
-	 }
+     if ($text === '') {
+          return 0;
+     }
 
-	 $uniqChars = [];
-	 $chars = str_split($text);
-	 
-	 foreach ($chars as $char) {
-		  if (!in_array($char, $uniqChars)) {
-				$uniqChars[] = $char;
-		  }
-	 }
+     $uniqChars = [];
+     $chars = str_split($text);
+     
+     foreach ($chars as $char) {
+          if (!in_array($char, $uniqChars)) {
+                $uniqChars[] = $char;
+          }
+     }
 
-	 return count($uniqChars);
+     return count($uniqChars);
 }
 
 
@@ -1783,22 +1783,22 @@ function countUniqChars($text)
 // пузырьковая сортировка
 function bubbleSort(array $arr)
 {
-	 $size_arr = sizeof($arr);
+     $size_arr = sizeof($arr);
 
-	 do {
-		  $flag = false;
+     do {
+          $flag = false;
 
-		  for ($i = 0; $i < $size_arr - 1; $i++) {
-				if ($arr[$i] > $arr[$i + 1]) {
-					  $curr_val = $arr[$i];
-					  $arr[$i] = $arr[$i + 1];
-					  $arr[$i + 1] = $curr_val;
-					  $flag = true;
-				} 
-		  }
-		  $size_arr--;
-	 } while($flag);
-	 return $arr;
+          for ($i = 0; $i < $size_arr - 1; $i++) {
+                if ($arr[$i] > $arr[$i + 1]) {
+                      $curr_val = $arr[$i];
+                      $arr[$i] = $arr[$i + 1];
+                      $arr[$i + 1] = $curr_val;
+                      $flag = true;
+                } 
+          }
+          $size_arr--;
+     } while($flag);
+     return $arr;
 }
 
 /*
@@ -1885,32 +1885,32 @@ print_r($arr);
 
 function checkIfBalanced(string $expression): boolean
 {
-	 
-	 $stack = [];
-	 
-	 $startSymbols = ['{', '(', '<', '['];
-	 
-	 $pairs = ['{}', '()', '<>', '[]'];
+     
+     $stack = [];
+     
+     $startSymbols = ['{', '(', '<', '['];
+     
+     $pairs = ['{}', '()', '<>', '[]'];
 
-	 
-	 for ($i = 0; $i < strlen($expression); $i++) {
-		  $curr = $expression[$i];
-		  
-		  if (in_array($curr, $startSymbols)) {
-				array_push($stack, $curr);
-		  } else { 
-				$prev = array_pop($stack);
-				
-				$pair = "{$prev}{$curr}";
-				
-				
-				if (!in_array($pair, $pairs)) {
-					 return false;
-				}
-		  }
-	 }
-	
-	 return sizeof($stack) == 0;
+     
+     for ($i = 0; $i < strlen($expression); $i++) {
+          $curr = $expression[$i];
+          
+          if (in_array($curr, $startSymbols)) {
+                array_push($stack, $curr);
+          } else { 
+                $prev = array_pop($stack);
+                
+                $pair = "{$prev}{$curr}";
+                
+                
+                if (!in_array($pair, $pairs)) {
+                     return false;
+                }
+          }
+     }
+    
+     return sizeof($stack) == 0;
 }
 
 /*
@@ -1931,22 +1931,22 @@ function checkIfBalanced(string $expression): boolean
  
 function checkIfBalanced(string $expression): bool
 {
-	 // инициализируем стек
-	 $stack = [];
-	 for ($i = 0; $i < strlen($expression); $i++) {
-		  $curr = $expression[$i];
-		  if ($curr == '(') {
-				array_push($stack, $curr);
-		  } elseif ($curr == ')') {
-				if (empty($stack)) {
-					 return false;
-				}
-				array_pop($stack);
-		  };
-	 }
+     // инициализируем стек
+     $stack = [];
+     for ($i = 0; $i < strlen($expression); $i++) {
+          $curr = $expression[$i];
+          if ($curr == '(') {
+                array_push($stack, $curr);
+          } elseif ($curr == ')') {
+                if (empty($stack)) {
+                     return false;
+                }
+                array_pop($stack);
+          };
+     }
 
-	 // Если стек оказался пустой после обхода строки, то значит все хорошо
-	 return sizeof($stack) == 0;
+     // Если стек оказался пустой после обхода строки, то значит все хорошо
+     return sizeof($stack) == 0;
 }
 
 
@@ -1984,30 +1984,30 @@ Big O, во многом, теоретическая оценка, на прак
 
 function getIntersectionOfSortedArray($arr1, $arr2)
 {
-	$size1 = sizeof($arr1);
-	 $size2 = sizeof($arr2);
+    $size1 = sizeof($arr1);
+     $size2 = sizeof($arr2);
 
-	 if ($size1 == 0 || $size2 == 0) {
-		  return [];
-	 }
+     if ($size1 == 0 || $size2 == 0) {
+          return [];
+     }
 
-	 $i1 = 0;
-	 $i2 = 0;
-	
-	 $result = [];
-	 do {
-		  if ($arr1[$i1] == $arr2[$i2]) {
-				$result[] = $arr1[$i1];
-				$i1++;
-				$i2++;
-		  } elseif ($arr1[$i1] > $arr2[$i2]) {
-				$i2++;
-		  } else {
-				$i1++;
-		  }
-	 } while ($i1 < $size1 && $i2 < $size2);
+     $i1 = 0;
+     $i2 = 0;
+    
+     $result = [];
+     do {
+          if ($arr1[$i1] == $arr2[$i2]) {
+                $result[] = $arr1[$i1];
+                $i1++;
+                $i2++;
+          } elseif ($arr1[$i1] > $arr2[$i2]) {
+                $i2++;
+          } else {
+                $i1++;
+          }
+     } while ($i1 < $size1 && $i2 < $size2);
 
-	 return $result;
+     return $result;
 }
 
 
@@ -2059,19 +2059,19 @@ $lastName = $arr[1];
 $points = [ [4, 3], [0, -3] ];
 
 foreach ($points as [$x, $y]) {
-	 print_r([$x, $y]);
+     print_r([$x, $y]);
 }
 
 // =>
 Array
 (
-	 [0] => 4
-	 [1] => 3
+     [0] => 4
+     [1] => 3
 )
 Array
 (
-	 [0] => 0
-	 [1] => -3
+     [0] => 0
+     [1] => -3
 )
 
 
@@ -2079,19 +2079,19 @@ Array
 
 function getWordsCount($content)
 {
-	 // Разбиваем на слова
-	 $words = explode(' ', $content);
-	 $result = [];
-	 foreach ($words as $word) {
-		  if (!array_key_exists($word, $result)) {
-				// Инициализация при первом упоминании
-				$result[$word] = 1;
-		  } else {
-				$result[$word]++;
-		  }
-	 }
+     // Разбиваем на слова
+     $words = explode(' ', $content);
+     $result = [];
+     foreach ($words as $word) {
+          if (!array_key_exists($word, $result)) {
+                // Инициализация при первом упоминании
+                $result[$word] = 1;
+          } else {
+                $result[$word]++;
+          }
+     }
 
-	 return $result;
+     return $result;
 }
 
 
@@ -2099,17 +2099,17 @@ function getWordsCount($content)
 
 function getIn(array $data, array $keys)
 {
-	 $current = $data;
+     $current = $data;
 
-	 foreach ($keys as $key) {
-		  if (!is_array($current) || !array_key_exists($key, $current)) {
-				return null;
-		  }
+     foreach ($keys as $key) {
+          if (!is_array($current) || !array_key_exists($key, $current)) {
+                return null;
+          }
 
-		  $current = $current[$key];
-	 }
+          $current = $current[$key];
+     }
 
-	 return $current;
+     return $current;
 }
 
 
@@ -2132,14 +2132,14 @@ $result = findKeys($lessonMembers, 3);
 
 function findKeys(array $data, $expectedValue)
 {
-	 $result = [];
-	 foreach ($data as $key => $value) {
-		  if ($value === $expectedValue) {
-				$result[] = $key;
-		  }
-	 }
+     $result = [];
+     foreach ($data as $key => $value) {
+          if ($value === $expectedValue) {
+                $result[] = $key;
+          }
+     }
 
-	 return $result;
+     return $result;
 }
 
 
@@ -2147,15 +2147,15 @@ function findKeys(array $data, $expectedValue)
 
 function pick(array $arr, array $keys)
 {
-	$res = [];
-	
-	foreach ($keys as $key) {
-		if (array_key_exists($key, $arr)) {
-			$res[$key] = $arr[$key];
-		}
-	}
-	
-	return $res;
+    $res = [];
+    
+    foreach ($keys as $key) {
+        if (array_key_exists($key, $arr)) {
+            $res[$key] = $arr[$key];
+        }
+    }
+    
+    return $res;
 }
 
 
@@ -2175,19 +2175,19 @@ $data = ['first_name' => 'Mark', 'last_name' => 'Smith'];
 
 $keys = array_keys($data);
 foreach($keys as $key) {
-	 print_r($data[$key]);
+     print_r($data[$key]);
 }
 
 // В PHP то же самое самое делается прямым обходом ассоциативного массива, но знать про функцию все равно полезно. Например, в JSON (как и в языках, отличных от PHP) массив и ассоциативный массив — разные типы данных.
 
 {
   "autoload": {
-	 "files": [
-		"src/Arrays.php"
-	 ]
+     "files": [
+        "src/Arrays.php"
+     ]
   },
   "config": {
-	 "vendor-dir": "/composer/vendor"
+     "vendor-dir": "/composer/vendor"
   }
 }
 
@@ -2213,13 +2213,13 @@ array_merge
 */
 
 $data1 = [
-	 'first_name' => 'Mark',
-	 'last_name' => 'Polo',
+     'first_name' => 'Mark',
+     'last_name' => 'Polo',
 ];
 
 $data2 = [
-	 'last_name' => 'Brin',
-	 'age' => 15,
+     'last_name' => 'Brin',
+     'age' => 15,
 ];
 
 $result = array_merge($data1, $data2);
@@ -2244,8 +2244,8 @@ $result = array_merge($data1, $data2);
 * Unchanged - ключ присутствовал и в первом и во втором массиве с одинаковыми значениями
 
 $result = genDiff(
-	 ['one' => 'eon', 'two' => 'two', 'four' => true],
-	 ['two' => 'own', 'zero' => 4, 'four' => true]
+     ['one' => 'eon', 'two' => 'two', 'four' => true],
+     ['two' => 'own', 'zero' => 4, 'four' => true]
 );
 
 // => [
@@ -2259,29 +2259,29 @@ $result = genDiff(
 
 function union(array $data1, array $data2)
 {
-	 return array_unique(array_merge($data1, $data2));
+     return array_unique(array_merge($data1, $data2));
 }
 
 function genDiff(array $data1, array $data2)
 {
-	 $keys = union(array_keys($data1), array_keys($data2));
-	 $result = [];
+     $keys = union(array_keys($data1), array_keys($data2));
+     $result = [];
 
-	 foreach ($keys as $key) {
-		  if (array_key_exists($key, $data1) && array_key_exists($key, $data2)) {
-				if ($data1[$key] === $data2[$key]) {
-					 $result[$key] = 'unchanged';
-				} else {
-					 $result[$key] = 'changed';
-				}
-		  } elseif (array_key_exists($key, $data2)) {
-				$result[$key] = 'added';
-		  } elseif (array_key_exists($key, $data1)) {
-				$result[$key] = 'deleted';
-		  }
-	 }
+     foreach ($keys as $key) {
+          if (array_key_exists($key, $data1) && array_key_exists($key, $data2)) {
+                if ($data1[$key] === $data2[$key]) {
+                     $result[$key] = 'unchanged';
+                } else {
+                     $result[$key] = 'changed';
+                }
+          } elseif (array_key_exists($key, $data2)) {
+                $result[$key] = 'added';
+          } elseif (array_key_exists($key, $data1)) {
+                $result[$key] = 'deleted';
+          }
+     }
 
-	 return $result;
+     return $result;
 }
 
 
@@ -2306,10 +2306,10 @@ $person = ['first' => 'Rasmus', 'last' => 'Lerdorf', 'manager' => true];
 $options = ['enabled' => true, 'compression' => ['algo' => 'gzip']];
 
 [
-	 'enabled' => $enabled,
-	 'compression' => [
-		  'algo' => $compressionAlgo
-	 ]
+     'enabled' => $enabled,
+     'compression' => [
+          'algo' => $compressionAlgo
+     ]
 ] = $options;
 
 // Дестракчеринг ассоциативного массива можно комбинировать с дестракчерингом индексированного.
@@ -2323,13 +2323,13 @@ $y = ['o' => [[1, 2, 3], ['what' => 'WHAT']]];
 // Дестракчеринг допустим и в циклах:
 
 $persons = [
-	 ['first' => 'Rasmus', 'last' => 'Lerdorf'],
-	 ['first' => 'Fabien', 'last' => 'Potencier'],
-	 ['first' => 'Taylor', 'last' => 'Otwell']
+     ['first' => 'Rasmus', 'last' => 'Lerdorf'],
+     ['first' => 'Fabien', 'last' => 'Potencier'],
+     ['first' => 'Taylor', 'last' => 'Otwell']
 ];
 
 foreach ($persons as ['first' => $firstname, 'last' => $lastname]) {
-	 var_dump($firstname, $lastname);
+     var_dump($firstname, $lastname);
 } // =>
 /*
 string(6) "Rasmus"
@@ -2391,7 +2391,7 @@ Elixir/Java - Map
 */
 
 $checksum = crc32('The quick brown fox jumped over the lazy dog.'); // => 2191738434
-	
+    
 /*
 И хотя хеширование позволяет отображать ассоциативный массив на обычный массив, оно не лишено недостатков, с которыми нужно уметь работать.
 
@@ -2454,12 +2454,12 @@ fromPairs([['fred', 30], ['barney', 40]]); // → ['fred' => 30, 'barney' => 40]
 
 function fromPairs(array $data)
 {
-	 $result = [];
-	 foreach ($data as [$key, $value]) {
-		  $result[$key] = $value;
-	 }
+     $result = [];
+     foreach ($data as [$key, $value]) {
+          $result[$key] = $value;
+     }
 
-	 return $result;
+     return $result;
 }
 
 
@@ -2472,44 +2472,44 @@ buildQueryString(['per' => 10, 'page' => 1 ]);
 
 function buildQueryString(array $array)
 {
-	 ksort($array);
-	 $result = [];
-	 foreach($array as $key => $value) {
-		  $result[] = "{$key}={$value}";
-	 }
+     ksort($array);
+     $result = [];
+     foreach($array as $key => $value) {
+          $result[] = "{$key}={$value}";
+     }
 
-	 return implode('&', $result);
+     return implode('&', $result);
 }
 
 
 // Реализуйте функцию findWhere, которая принимает на вход массив (элементы которого - ассоциативные массивы) и пары ключ-значение (тоже в виде массива), а возвращает первый элемент исходного массива, значения которого соответствуют переданным парам.
 
 findWhere(
-	 [
-		  ['title' => 'Book of Fooos', 'author' => 'FooBar', 'year' => 1111],
-		  ['title' => 'Cymbeline', 'author' => 'Shakespeare', 'year' => 1611],
-		  ['title' => 'The Tempest', 'author' => 'Shakespeare', 'year' => 1611],
-		  ['title' => 'Book of Foos Barrrs', 'author' => 'FooBar', 'year' => 2222],
-		  ['title' => 'Still foooing', 'author' => 'FooBar', 'year' => 3333],
-		  ['title' => 'Happy Foo', 'author' => 'FooBar', 'year' => 4444],
-	 ],
-	 ['author' => 'Shakespeare', 'year' => 1611]
+     [
+          ['title' => 'Book of Fooos', 'author' => 'FooBar', 'year' => 1111],
+          ['title' => 'Cymbeline', 'author' => 'Shakespeare', 'year' => 1611],
+          ['title' => 'The Tempest', 'author' => 'Shakespeare', 'year' => 1611],
+          ['title' => 'Book of Foos Barrrs', 'author' => 'FooBar', 'year' => 2222],
+          ['title' => 'Still foooing', 'author' => 'FooBar', 'year' => 3333],
+          ['title' => 'Happy Foo', 'author' => 'FooBar', 'year' => 4444],
+     ],
+     ['author' => 'Shakespeare', 'year' => 1611]
 ); // => ['title' => 'Cymbeline', 'author' => 'Shakespeare', 'year' => 1611]
 
 
 function findWhere($data, $where) 
 {
-	 foreach ($data as $item) {
-		  $find = true;
-		  foreach ($where as $key => $value) {
-				if ($item[$key] !== $value) {
-					 $find = false;
-				}
-		  }
-		  if ($find) {
-				return $item;
-		  }
-	 }
+     foreach ($data as $item) {
+          $find = true;
+          foreach ($where as $key => $value) {
+                if ($item[$key] !== $value) {
+                     $find = false;
+                }
+          }
+          if ($find) {
+                return $item;
+          }
+     }
 }
 
 
@@ -2529,12 +2529,12 @@ getChunked( ['a', 'b', 'c', 'd', 'e', 'f'], 2)); // → [['a', 'b'] ['c', 'd'], 
 
 function getChunked(Array $array, Int $size) 
 {
-	 $result = [];
-	 for ($i = 0; $i < ceil(sizeof($array) / $size); $i++) { // ceil - округляет дробь в большую сторону
-		  $result[] = array_slice($array, $i * $size, $size);
-	 }
+     $result = [];
+     for ($i = 0; $i < ceil(sizeof($array) / $size); $i++) { // ceil - округляет дробь в большую сторону
+          $result[] = array_slice($array, $i * $size, $size);
+     }
 
-	 return $result;
+     return $result;
 }
 
 
@@ -2551,16 +2551,16 @@ compareVersion("4.2", "4.2"); // → 0
 
 function compareVersion(String $first, String $second)
 {
-	 $version1 = explode('.', $first);
-	 $version2 = explode('.', $second);
+     $version1 = explode('.', $first);
+     $version2 = explode('.', $second);
 
-	 if ($version1 > $version2) {
-		  return 1;
-	 } elseif ($version1 === $version2) {
-		  return 0;
-	 } else {
-		  return -1;
-	 }
+     if ($version1 > $version2) {
+          return 1;
+     } elseif ($version1 === $version2) {
+          return 0;
+     } else {
+          return -1;
+     }
 }
 
 
@@ -2577,24 +2577,24 @@ hammingWeight(101); // → 4
 
 function hammingWeight(int $num) // my
 {
-	// decbin — переводит число из десятичной системы счисления в двоичную
-	// bindec — переводит двоичное число в десятичное
-	$bin_str = (string)	decbin($num);
-	return substr_count($bin_str, '1'); // substr_count - возвращает число вхождений подстроки
+    // decbin — переводит число из десятичной системы счисления в двоичную
+    // bindec — переводит двоичное число в десятичное
+    $bin_str = (string) decbin($num);
+    return substr_count($bin_str, '1'); // substr_count - возвращает число вхождений подстроки
 
 }
 
 function hammingWeight(Int $num) // hexlet
 {
-	 $weight = 0;
-	 $digits = str_split(decbin($num));
-	 foreach ($digits as $value) {
-		  if ($value === '1') {
-				$weight += 1;
-		  }
-	 }
+     $weight = 0;
+     $digits = str_split(decbin($num));
+     foreach ($digits as $value) {
+          if ($value === '1') {
+                $weight += 1;
+          }
+     }
 
-	 return $weight;
+     return $weight;
 }
 
 
@@ -2608,8 +2608,8 @@ lengthOfLastWord('hello, world!  '); // → 6
 
 function lengthOfLastWord(String $str)
 {
-	 $words = explode(' ', trim($str));
-	 return strlen(end($words));
+     $words = explode(' ', trim($str));
+     return strlen(end($words));
 }
 
 
@@ -2622,52 +2622,52 @@ summaryRanges([110, 111, 112, 111, -5, -4, -2, -3, -4, -5]); // → ['110->112',
 
 function summaryRanges(array $arr) // my
 {
-	$resOp = [];
-	$rec = false;
-	
-	foreach ($arr as $key => $val) {
-		if($key == 0) { continue; }
-		if (!$rec && $arr[$key - 1] == $val - 1) {
-			$beginningOfSequence = $arr[$key - 1];
-			$rec = true;
-		} elseif ($rec && $arr[$key - 1] != $val - 1) {
-			$resOp[] = "$beginningOfSequence->".$arr[$key - 1];
-			$rec = false;	
-		} elseif($rec && $key == sizeof($arr) - 1) {
-			$resOp[] = "$beginningOfSequence->{$val}";
-		}
-	}
-	return $resOp;
+    $resOp = [];
+    $rec = false;
+    
+    foreach ($arr as $key => $val) {
+        if($key == 0) { continue; }
+        if (!$rec && $arr[$key - 1] == $val - 1) {
+            $beginningOfSequence = $arr[$key - 1];
+            $rec = true;
+        } elseif ($rec && $arr[$key - 1] != $val - 1) {
+            $resOp[] = "$beginningOfSequence->".$arr[$key - 1];
+            $rec = false;   
+        } elseif($rec && $key == sizeof($arr) - 1) {
+            $resOp[] = "$beginningOfSequence->{$val}";
+        }
+    }
+    return $resOp;
 }
 
 
 function summaryRanges(Array $array) // hexlet
 {
-	 $result = [];
+     $result = [];
 
-	 if (empty($array)) {
-		  return $array;
-	 }
+     if (empty($array)) {
+          return $array;
+     }
 
-	 $firstValue = $array[0];
-	 $firstIndex = 0;
-	 foreach ($array as $index => $value) {
-		  if ($index === 0) {
-				continue;
-		  }
-		  $expectedValue = $array[$index - 1] + 1;
-		  if ($expectedValue !== $value) {
-				if ($firstIndex !== $index - 1) {
-					 $result[] = "$firstValue->{$array[$index - 1]}";
-				}
-				$firstValue = $value;
-				$firstIndex = $index;
-		  } elseif ($index === sizeof($array) - 1 && $expectedValue === $value) {
-				$result[] = "$firstValue->{$array[$index]}";
-		  }
-	 }
+     $firstValue = $array[0];
+     $firstIndex = 0;
+     foreach ($array as $index => $value) {
+          if ($index === 0) {
+                continue;
+          }
+          $expectedValue = $array[$index - 1] + 1;
+          if ($expectedValue !== $value) {
+                if ($firstIndex !== $index - 1) {
+                     $result[] = "$firstValue->{$array[$index - 1]}";
+                }
+                $firstValue = $value;
+                $firstIndex = $index;
+          } elseif ($index === sizeof($array) - 1 && $expectedValue === $value) {
+                $result[] = "$firstValue->{$array[$index]}";
+          }
+     }
 
-	 return $result;
+     return $result;
 }
 
 
@@ -2689,17 +2689,17 @@ getMirrorMatrix([
 
 function getMirrorMatrix(array $array)
 {
-	 $size = sizeof($array);
-	 $mirrorArray = [];
+     $size = sizeof($array);
+     $mirrorArray = [];
 
-	 for ($i = 0; $i < $size; $i ++) {
-		  for ($j = 0; $j < $size / 2; $j ++) {
-				$mirrorArray[$i][$j] = $array[$i][$j];
-				$mirrorArray[$i][$size - $j - 1] = $array[$i][$j];
-		  }
-	 }
+     for ($i = 0; $i < $size; $i ++) {
+          for ($j = 0; $j < $size / 2; $j ++) {
+                $mirrorArray[$i][$j] = $array[$i][$j];
+                $mirrorArray[$i][$size - $j - 1] = $array[$i][$j];
+          }
+     }
 
-	 return $mirrorArray;
+     return $mirrorArray;
 }
 
 
@@ -2719,21 +2719,21 @@ toRna('ACGTGGTCTTAA'); // → 'UGCACCAGAAUU'
 
 function toRna(String $nucleotide) 
 {
-	 $map = [
-		  'G' => 'C',
-		  'C' => 'G',
-		  'T' => 'A',
-		  'A' => 'U',
-	 ];
+     $map = [
+          'G' => 'C',
+          'C' => 'G',
+          'T' => 'A',
+          'A' => 'U',
+     ];
 
-	 $length = strlen($nucleotide);
-	 $result = [];
+     $length = strlen($nucleotide);
+     $result = [];
 
-	 for ($i = 0; $i < $length; $i++) {
-		  $result[] = $map[$nucleotide[$i]];
-	 }
+     for ($i = 0; $i < $length; $i++) {
+          $result[] = $map[$nucleotide[$i]];
+     }
 
-	 return implode('', $result);
+     return implode('', $result);
 }
 
 
@@ -2754,21 +2754,21 @@ generate(4); // → [1, 4, 6, 4, 1]
 
 function generate(Int $rowNumber) // hexlet
 {
-	$currentRow = [1];
-	 
-	 for ($i = 0; $i < $rowNumber; $i++) {      
-		  $newRow = [];
-		  
-		  for ($j = 0; $j <= $rowNumber; $j++) {
-				$first = isset($currentRow[$j - 1]) ? $currentRow[$j - 1] : 0;
-				$second = isset($currentRow[$j]) ? $currentRow[$j] : 0;
-				$newRow[$j] = $first + $second;
-		  }
+    $currentRow = [1];
+     
+     for ($i = 0; $i < $rowNumber; $i++) {      
+          $newRow = [];
+          
+          for ($j = 0; $j <= $rowNumber; $j++) {
+                $first = isset($currentRow[$j - 1]) ? $currentRow[$j - 1] : 0;
+                $second = isset($currentRow[$j]) ? $currentRow[$j] : 0;
+                $newRow[$j] = $first + $second;
+          }
 
-		  $currentRow = $newRow;
-	 }
+          $currentRow = $newRow;
+     }
 
-	 return $currentRow;
+     return $currentRow;
 }
 
 
@@ -2789,30 +2789,30 @@ calcInPolishNotation([7, 2, 3, '*', '-']); // → 1
 
 function calcInPolishNotation(Array $expr)
 {
-	 $stack = [];
-	 foreach ($expr as $val) {
-		  if (is_int($val)) {
-				array_push($stack, $val);
-		  } else {
-			  $endElemDel = array_pop($stack);
-			  $indexLastElem = sizeof($stack) - 1;
-			  switch ($val) {
-					 case '*':
-						  $stack[$indexLastElem] *= $endElemDel;
-						  break; 
-					 case '/':
-						  $stack[$indexLastElem] /= $endElemDel;
-						  break;
-					 case '+':
-						  $stack[$indexLastElem] += $endElemDel;
-						  break;
-					 case '-':
-						  $stack[$indexLastElem] -= $endElemDel;
-						  break;        
-				}
-		  }
-	 }   
-	 return $stack[0];
+     $stack = [];
+     foreach ($expr as $val) {
+          if (is_int($val)) {
+                array_push($stack, $val);
+          } else {
+              $endElemDel = array_pop($stack);
+              $indexLastElem = sizeof($stack) - 1;
+              switch ($val) {
+                     case '*':
+                          $stack[$indexLastElem] *= $endElemDel;
+                          break; 
+                     case '/':
+                          $stack[$indexLastElem] /= $endElemDel;
+                          break;
+                     case '+':
+                          $stack[$indexLastElem] += $endElemDel;
+                          break;
+                     case '-':
+                          $stack[$indexLastElem] -= $endElemDel;
+                          break;        
+                }
+          }
+     }   
+     return $stack[0];
 }
 
 
@@ -2829,10 +2829,10 @@ require 'vendor/autoload.php';
 
 $app = new \Slim\App;
 $app->get('/hello/{name}', function (Request $request, Response $response, array $args) {
-	 $name = $args['name'];
-	 $response->getBody()->write("Hello, $name");
+     $name = $args['name'];
+     $response->getBody()->write("Hello, $name");
 
-	 return $response;
+     return $response;
 });
 $app->run();
 
@@ -2881,8 +2881,8 @@ var_dump(print_r('lala')); // => bool(true)
 
 function getCurrentShell()
 {
-	 // Функция getenv обращается к указанной переменной окружения
-	 return getenv('SHELL'); // => /bin/bash 
+     // Функция getenv обращается к указанной переменной окружения
+     return getenv('SHELL'); // => /bin/bash 
 }
 
 # Побочные эффекты 
@@ -2892,14 +2892,14 @@ function getCurrentShell()
 
 function sayHiTo($name)
 {
-	 print_r("Hi, {$name}");
+     print_r("Hi, {$name}");
 }
 
 // С другой стороны, любые вычислительные операции не являются побочными эффектами. Например, функция, суммирующая два переданных аргументами числа.
 
 function sum($num1, $num2)
 {
-	 return $num1 + $num2;
+     return $num1 + $num2;
 }
 
 
@@ -2945,19 +2945,19 @@ sayPrimeOrNot(4); // => no
 
 function isPrime(int $num)
 {
-	 for ($i = 2; $i < $num; $i++) {
-		  if ($num % $i == 0) {
-				return false;
-		  }
-	 }
+     for ($i = 2; $i < $num; $i++) {
+          if ($num % $i == 0) {
+                return false;
+          }
+     }
 
-	 return true;
+     return true;
 }
 
 function sayPrimeOrNot($num)
 {
-	 $text = isPrime($num) ? 'yes' : 'no';
-	 print_r($text);
+     $text = isPrime($num) ? 'yes' : 'no';
+     print_r($text);
 }
 
 
@@ -3046,7 +3046,7 @@ array_merge([1], [1], [3, 4], []);
 
 function sum(...$numbers)
 {
-	 return array_sum($numbers);
+     return array_sum($numbers);
 }
 
 echo sum(9, 4); // => 13
@@ -3064,7 +3064,7 @@ echo sum(); // => 0
 
 function show(...$arguments)
 {
-	 print_r($arguments);
+     print_r($arguments);
 }
 
 show([]);
@@ -3100,7 +3100,7 @@ array array_merge ( array $array1 [, array $... ] )
 
 function sum($a, ...$numbers)
 {
-	 return $a + array_sum($numbers);
+     return $a + array_sum($numbers);
 }
 
 echo sum();
@@ -3114,21 +3114,21 @@ echo sum(8, 10, 4); // => 22
 
 function sum($a, $b, ...$numbers)
 {
-	 # ...
+     # ...
 }
 
 // Эту идею можно продолжать и дальше, делая обязательными то количество аргументов, которое требуется. Единственное ограничение: Splat Operator может быть использован только для последнего аргумента. То есть такой код синтаксически не верен:
 
 function sum(...$numbers, $a)
 {
-	 # ...
+     # ...
 }
 
 // и такой тоже:
 
 function sum($a, ...$numbers, $a)
 {
-	 # ...
+     # ...
 }
 
 
@@ -3140,7 +3140,7 @@ average(-3, 4, 2, 10); // => 3.25
 
 function average($num1,...$numbers)
 {
-	return (array_sum($numbers) + $num1) / (sizeof($numbers) + 1);
+    return (array_sum($numbers) + $num1) / (sizeof($numbers) + 1);
 }
 
 
@@ -3151,8 +3151,8 @@ function average($num1,...$numbers)
 // Splat Operator в вызовах функций синтаксически идентичен Splat Operator в определениях, но выполняет обратное действие:
 
 $arrayOfArrays = [
-	 [1, 2],
-	 [2, 3]
+     [1, 2],
+     [2, 3]
 ];
 
 array_merge(...$arrayOfArrays);
@@ -3211,7 +3211,7 @@ union(['a', 3, false], [true, false, 3], [false, 5, 8]); // => ['a', 3, false, t
 
 function union($first,...$rest)
 {
-	return array_VALUES(array_unique(array_merge($first, ...$rest)));
+    return array_VALUES(array_unique(array_merge($first, ...$rest)));
 } 
 
 
@@ -3223,14 +3223,14 @@ function union($first,...$rest)
 
 Объектные:
 
-	 Collect https://github.com/tightenco/collect
-	 Stringy https://github.com/danielstjules/Stringy
-	 Carbon https://github.com/briannesbitt/Carbon
+     Collect https://github.com/tightenco/collect
+     Stringy https://github.com/danielstjules/Stringy
+     Carbon https://github.com/briannesbitt/Carbon
 
 Использующие только функции:
 
-	 Funct https://github.com/phpfunct/funct
-	 Bottomline https://github.com/maciejczyzewski/bottomline
+     Funct https://github.com/phpfunct/funct
+     Bottomline https://github.com/maciejczyzewski/bottomline
 
 Скажу сразу, что необходимость использования такой библиотеки в реальной работе возникает практически сразу. Те, кто не знает про них, постоянно пишут велосипеды. Еще не так давно программисты в PHP создавали файлики с полезными функциями и таскали их из одного проекта в другой. Хорошо, что эти времена уже прошли и можно не тратить время на то, что уже делалось тысячу раз до нас. Однако, мы не сможем разобрать все возможные функции в рамках наших курсов. Кое-что рассмотрим, но в дальнейшем не забывайте периодически просматривать их на наличие чего-либо полезного.
 
@@ -3296,15 +3296,15 @@ Collection\union([1, 2, 3], [101, 2, 1, 10], [2, 1]); // => [1, 2, 3, 101, 10]
 */
 
 Collection\findWhere(
-	 [
-		  ['title' => 'Book of Fooos', 'author' => 'FooBar', 'year' => 1111],
-		  ['title' => 'Cymbeline', 'author' => 'Shakespeare', 'year' => 1611],
-		  ['title' => 'The Tempest', 'author' => 'Shakespeare', 'year' => 1611],
-		  ['title' => 'Book of Foos Barrrs', 'author' => 'FooBar', 'year' => 2222],
-		  ['title' => 'Still foooing', 'author' => 'FooBar', 'year' => 3333],
-		  ['title' => 'Happy Foo', 'author' => 'FooBar', 'year' => 4444],
-	 ],
-	 ['author' => 'Shakespeare', 'year' => 1611]
+     [
+          ['title' => 'Book of Fooos', 'author' => 'FooBar', 'year' => 1111],
+          ['title' => 'Cymbeline', 'author' => 'Shakespeare', 'year' => 1611],
+          ['title' => 'The Tempest', 'author' => 'Shakespeare', 'year' => 1611],
+          ['title' => 'Book of Foos Barrrs', 'author' => 'FooBar', 'year' => 2222],
+          ['title' => 'Still foooing', 'author' => 'FooBar', 'year' => 3333],
+          ['title' => 'Happy Foo', 'author' => 'FooBar', 'year' => 4444],
+     ],
+     ['author' => 'Shakespeare', 'year' => 1611]
 ); // => ['title' => 'Cymbeline', 'author' => 'Shakespeare', 'year' => 1611]
 
 
@@ -3347,9 +3347,9 @@ Strings\endsWith("hello jon", 'jon'); // => true
 /*
 Реализуйте функцию getSentenceType, которая принимает на вход текст, определяет его тип и возвращает наружу его название. Тип предложения определяется по последнему символу в тексте.
 
-	 ? - question
-	 ! - shouting
-	 Все остальное - common
+     ? - question
+     ! - shouting
+     Все остальное - common
 
 Если передана пустая строчка, то функция должна вернуть null.
 */
@@ -3363,16 +3363,16 @@ $ composer require funct/funct // in Terminal - installation library 'funct'
 
 function getSentenceType($sentence)
 {
-	 if ($sentence === '') {
-		  return null;
-	 }
+     if ($sentence === '') {
+          return null;
+     }
 
-	 $types = [
-		  '?' => 'question',
-		  '!' => 'shouting'
-	 ];
-	 $symbol = \Funct\Strings\right($sentence, 1);
-	 return array_key_exists($symbol, $types) ? $types[$symbol] : 'common';
+     $types = [
+          '?' => 'question',
+          '!' => 'shouting'
+     ];
+     $symbol = \Funct\Strings\right($sentence, 1);
+     return array_key_exists($symbol, $types) ? $types[$symbol] : 'common';
 }
 
 
@@ -3400,7 +3400,7 @@ $func();
 
 function greeting()
 {
-	 // ...
+     // ...
 }
 
 // У функции есть имя, которое указывается после ключевого слова function, а сама конструкция является инструкцией (кстати, поэтому в конце нет точки запятой). Мы не можем написать так:
@@ -3408,19 +3408,19 @@ function greeting()
 // переменная содержащая определение функции?
 $fn = function greeting()
 {
-	 // ...
+     // ...
 }
 
 // Так как определение функции - инструкция, то оно не может подставляться в те места, где ожидаются выражения. Присваивание как раз подразумевает то, что в правой части находится именно выражение. Соответственно, такой код падает с ошибкой. А следующий код уже работает.
 
 $func = function () {
-	 echo "For hands of gold are always cold. But a woman's hands are warm";
+     echo "For hands of gold are always cold. But a woman's hands are warm";
 };
 
 // Даже не вникая в синтаксис можно делать вывод о том, что конструкция справа от «равно» - выражение. И это выражение порождает функцию. В PHP подобные функции называют анонимными, потому что у них нет имени. Глядя на код выше нужно понимать, что определение функции и ее присваивание переменной - две разных операции. Чистое определение выглядит так:
 
 function () {
-	 echo "For hands of gold are always cold. But a woman's hands are warm";
+     echo "For hands of gold are always cold. But a woman's hands are warm";
 };
 
 // Очень похоже на обычную функцию за исключением отсутствия имени. Правда, есть еще и стилевые отличия, закрепленные стандартом PSR-2. В других языках анонимные функции нередко называют лямбда-функциями. В принципе, и в PHP их иногда зовут также.
@@ -3434,7 +3434,7 @@ $func();
 */
 
 $sum = function ($a, $b) {
-	 return $a + $b;
+     return $a + $b;
 }; // Определение анонимной функции должно заканчиваться символом ;, так как это выражение.
 
 $sum(1, 4); // => 5
@@ -3443,12 +3443,12 @@ $sum(1, 4); // => 5
 
 function sum($a, $b)
 {
-	 // определяем анонимную функцию
-	 $sum = function ($a, $b) {
-		  return $a + $b;
-	 };
-	 // вызываем анонимную функцию и возвращаем результат ее выполнения
-	 return $sum($a, $b);
+     // определяем анонимную функцию
+     $sum = function ($a, $b) {
+          return $a + $b;
+     };
+     // вызываем анонимную функцию и возвращаем результат ее выполнения
+     return $sum($a, $b);
 }
 
 sum(1, 4); // => 5
@@ -3460,11 +3460,11 @@ sum(1, 4); // => 5
 */
 
 $square = function($num) {
-	return $num ** 2;
+    return $num ** 2;
 };
 
 $sumOfSquares = function($num1, $num2) use ($square) {
-	return $squares($num1) + $squares($num2);
+    return $squares($num1) + $squares($num2);
 };
 
 
@@ -3479,7 +3479,7 @@ print_r($fn('clojure for brave')); // => 17
 
 function call(string $fn, $argument)
 {
-	 return $fn($argument);
+     return $fn($argument);
 }
 
 $result = call('strlen', 'haskell is power!');
@@ -3490,14 +3490,14 @@ print_r($result); // => 16
 
 function run(string $text)
 {
-	 $last = function (string $text) {
-		  if ($text === '') {
-				return null;
-		  }
-		  return $text[strlen($text) - 1];
-	 };
+     $last = function (string $text) {
+          if ($text === '') {
+                return null;
+          }
+          return $text[strlen($text) - 1];
+     };
 
-	 return $last($text);
+     return $last($text);
 }
 
 // Анонимные функции: http://php.net/manual/ru/functions.anonymous.php
@@ -3514,10 +3514,10 @@ function run(string $text)
 */
 
 $users = [
-	 ['name' => 'Igor', 'age' => 19],
-	 ['name' => 'Danil', 'age' => 1],
-	 ['name' => 'Vovan', 'age' => 4],
-	 ['name' => 'Matvey', 'age' => 16],
+     ['name' => 'Igor', 'age' => 19],
+     ['name' => 'Danil', 'age' => 1],
+     ['name' => 'Vovan', 'age' => 4],
+     ['name' => 'Matvey', 'age' => 16],
 ];
 
 /*
@@ -3542,10 +3542,10 @@ $users = [
 ];
 
 usort($users, function ($a, $b) {
-	 if ($a['age'] == $b['age']) {
-		  return 0;
-	 }
-	 return $a['age'] > $b['age'] ? 1 : -1;
+     if ($a['age'] == $b['age']) {
+          return 0;
+     }
+     return $a['age'] > $b['age'] ? 1 : -1;
 });
 
 print_r($users);
@@ -3565,11 +3565,11 @@ print_r($users);
 */
 
 function say(callable $fn) {
-	 echo $fn();
+     echo $fn();
 }
 
 say(function () {
-	 return 'hi!';
+     return 'hi!';
 }); // => hi!
 
 /*
@@ -3592,11 +3592,11 @@ const getJsFiles = dir => fs.readdirSync(dir)
 // Реализуйте функцию takeOldest, которая принимает на вход список пользователей и возвращает самых взрослых. Количество возвращаемых пользователей задается вторым параметром, который по-умолчанию равен единице.
 
 $users = [
-	 ['name' => 'Tirion', 'birthday' => '1988-11-19'],
-	 ['name' => 'Sam', 'birthday' => '1999-11-22'],
-	 ['name' => 'Rob', 'birthday' => '1975-01-11'],
-	 ['name' => 'Sansa', 'birthday' => '2001-03-20'],
-	 ['name' => 'Tisha', 'birthday' => '1992-02-27']
+     ['name' => 'Tirion', 'birthday' => '1988-11-19'],
+     ['name' => 'Sam', 'birthday' => '1999-11-22'],
+     ['name' => 'Rob', 'birthday' => '1975-01-11'],
+     ['name' => 'Sansa', 'birthday' => '2001-03-20'],
+     ['name' => 'Tisha', 'birthday' => '1992-02-27']
 ];
 
 takeOldest($users);
@@ -3614,11 +3614,11 @@ Collection\firstN([1, 2, 3], 2); // => [1, 2]
 
 function takeOldest(array $users, int $count = 1)
 {
-	 usort($users, function ($user1, $user2) {
-		  return strtotime($user1['birthday']) >= strtotime($user2['birthday']) ? 1 : -1; // strtotime - преобразует текстовое представление даты на английском языке в метку времени
-	 });
+     usort($users, function ($user1, $user2) {
+          return strtotime($user1['birthday']) >= strtotime($user2['birthday']) ? 1 : -1; // strtotime - преобразует текстовое представление даты на английском языке в метку времени
+     });
 
-	 return firstN($users, $count);
+     return firstN($users, $count);
 }
 
 
@@ -3632,15 +3632,15 @@ function takeOldest(array $users, int $count = 1)
 */
 
 $users = [
-	 ['name' => 'Igor', 'age' => 19], // $v = ['name' => 'Igor', 'age' => 19]
-	 ['name' => 'Danil', 'age' => 1],
-	 ['name' => 'Vovan', 'age' => 4],
-	 ['name' => 'Matvey', 'age' => 16],
+     ['name' => 'Igor', 'age' => 19], // $v = ['name' => 'Igor', 'age' => 19]
+     ['name' => 'Danil', 'age' => 1],
+     ['name' => 'Vovan', 'age' => 4],
+     ['name' => 'Matvey', 'age' => 16],
 ];
 
 $result = [];
 foreach ($users as ['name' => $name]) {
-	 $result[] = $name;
+     $result[] = $name;
 }
 print_r($result); // => ['Igor', 'Danil', 'Vovan', 'Matvey']
 
@@ -3649,7 +3649,7 @@ print_r($result); // => ['Igor', 'Danil', 'Vovan', 'Matvey']
 $points = [ [4, 3], [0, -3] ];
 
 foreach ($points as [$x, $y]) {
-	 print_r([$x, $y]);
+     print_r([$x, $y]);
 }
 */
 
@@ -3657,7 +3657,7 @@ foreach ($points as [$x, $y]) {
 
 $result = [];
 foreach ($users as ['age' => $age]) { // destructuring
-	 $result[] = $age;
+     $result[] = $age;
 }
 print_r($result); // => [19, 1, 4, 16]
 
@@ -3668,7 +3668,7 @@ print_r($result); // => [19, 1, 4, 16]
 */
 
 $names = array_map(function ($user) {
-	 return $user['name'];
+     return $user['name'];
 }, $users);
 
 print_r($names); // => ['Igor', 'Danil', 'Vovan', 'Matvey']
@@ -3685,8 +3685,8 @@ array_map принимает первым параметром анонимну�
 $numbers = [5, 2, 3];
 
 $newNumbers = array_map(function ($number) {
-	 // возводим в квадрат каждое число
-	 return $number ** 2;
+     // возводим в квадрат каждое число
+     return $number ** 2;
 }, $numbers);
 
 print_r($newNumbers); // => [25, 4, 9]
@@ -3696,11 +3696,11 @@ print_r($newNumbers); // => [25, 4, 9]
 
 function myMap(callable $callback, $coll)
 {
-	 $result = [];
-	 foreach ($coll as $item) {
-		  $result[] = $callback($item);
-	 }
-	 return $result;
+     $result = [];
+     foreach ($coll as $item) {
+          $result[] = $callback($item);
+     }
+     return $result;
 }
 
 /*
@@ -3711,17 +3711,17 @@ function myMap(callable $callback, $coll)
 */
 
 $users = [
-	 ['name' => 'Tirion', 'children' => [
-		  ['name' => 'Mira', 'birdhday' => '1983-03-23']
-	 ]],
-	 ['name' => 'Bronn', 'children' => []],
-	 ['name' => 'Sam', 'children' => [
-		  ['name' => 'Aria', 'birdhday' => '2012-11-03'],
-		  ['name' => 'Keit', 'birdhday' => '1933-05-14']
-	 ]],
-	 ['name' => 'Rob', 'children' => [
-		  ['name' => 'Tisha', 'birdhday' => '2012-11-03']
-	 ]],
+     ['name' => 'Tirion', 'children' => [
+          ['name' => 'Mira', 'birdhday' => '1983-03-23']
+     ]],
+     ['name' => 'Bronn', 'children' => []],
+     ['name' => 'Sam', 'children' => [
+          ['name' => 'Aria', 'birdhday' => '2012-11-03'],
+          ['name' => 'Keit', 'birdhday' => '1933-05-14']
+     ]],
+     ['name' => 'Rob', 'children' => [
+          ['name' => 'Tisha', 'birdhday' => '2012-11-03']
+     ]],
 ];
 
 getChildren($users);
@@ -3742,11 +3742,11 @@ Collection\flatten(['a', ['b', ['c', ['d']]]], 3); // => ['a', 'b', 'c', 'd']
 
 function getChildren(array $users)
 {
-	 $children = array_map(function ($user) {
-		  return $user['children'];
-	 }, $users);
+     $children = array_map(function ($user) {
+          return $user['children'];
+     }, $users);
 
-	 return flatten($children);
+     return flatten($children);
 }
 
 // без flatten:
@@ -3762,17 +3762,17 @@ function getChildren(array $users)
 
 
 $users = [
-	 ['name' => 'Igor', 'age' => 19],
-	 ['name' => 'Danil', 'age' => 1],
-	 ['name' => 'Vovan', 'age' => 4],
-	 ['name' => 'Matvey', 'age' => 16],
+     ['name' => 'Igor', 'age' => 19],
+     ['name' => 'Danil', 'age' => 1],
+     ['name' => 'Vovan', 'age' => 4],
+     ['name' => 'Matvey', 'age' => 16],
 ];
 
 $result = [];
 foreach ($users as $user) {
-	 if ($user['age'] > 10) {
-		  $result[] = $user;
-	 }
+     if ($user['age'] > 10) {
+          $result[] = $user;
+     }
 }
 print_r($result);
 // => Array
@@ -3803,7 +3803,7 @@ print_r($result);
 
 // Порядок аргументов обратный. Сначала коллекция, затем функция.
 $users = array_filter($users, function ($user) {
-	 return $user['age'] > 10;
+     return $user['age'] > 10;
 });
 
 // В отличие от array_map, функция, которая передается в array_filter должна быть предикатом. То есть ее задача вернуть либо true либо false для каждого элемента коллекции. Ее возврат никак не используется, он всего лишь говорит о том, включать ли текущий элемент в итоговый массив либо нет. Новички часто делают ошибку на этом этапе и начинают возвращать из фильтра то, что они бы хотели увидеть в результирующем массиве (для этого надо применять array_map).
@@ -3812,13 +3812,13 @@ $users = array_filter($users, function ($user) {
 
 function myFilter($coll, callable $callback)
 {
-	 $result = [];
-	 foreach ($coll as $key => $item) {
-		  if ($callback($item)) { // Предикат используется только для проверки
-				$result[$key] = $item; // В результат всегда добавляется элемент исходной коллекции
-		  }
-	 }
-	 return $result;
+     $result = [];
+     foreach ($coll as $key => $item) {
+          if ($callback($item)) { // Предикат используется только для проверки
+                $result[$key] = $item; // В результат всегда добавляется элемент исходной коллекции
+          }
+     }
+     return $result;
 }
 
 // Обратите внимание на то, что array_filter сохраняет ключи. При работе с индексированными массивами такое поведение нежелательно, поэтому придется использовать функцию !!! array_VALUES для сброса порядка.
@@ -3829,18 +3829,18 @@ function myFilter($coll, callable $callback)
 // Реализуйте функцию getGirlFriends, которая принимает на вход список пользователей и возвращает плоский список подруг всех пользователей (без сохранения ключей). Друзья каждого пользователя хранятся в виде массива в ключе friends. Пол доступен по ключу gender и может принимать значения male или female.
 
 $users = [
-	 ['name' => 'Tirion', 'friends' => [
-		  ['name' => 'Mira', 'gender' => 'female'],
-		  ['name' => 'Ramsey', 'gender' => 'male']
-	 ]],
-	 ['name' => 'Bronn', 'friends' => []],
-	 ['name' => 'Sam', 'friends' => [
-		  ['name' => 'Aria', 'gender' => 'female'],
-		  ['name' => 'Keit', 'gender' => 'female']
-	 ]],
-	 ['name' => 'Rob', 'friends' => [
-		  ['name' => 'Taywin', 'gender' => 'male']
-	 ]],
+     ['name' => 'Tirion', 'friends' => [
+          ['name' => 'Mira', 'gender' => 'female'],
+          ['name' => 'Ramsey', 'gender' => 'male']
+     ]],
+     ['name' => 'Bronn', 'friends' => []],
+     ['name' => 'Sam', 'friends' => [
+          ['name' => 'Aria', 'gender' => 'female'],
+          ['name' => 'Keit', 'gender' => 'female']
+     ]],
+     ['name' => 'Rob', 'friends' => [
+          ['name' => 'Taywin', 'gender' => 'male']
+     ]],
 ];
 
 getGirlFriends($users);
@@ -3853,16 +3853,16 @@ getGirlFriends($users);
 
 function getGirlfriends(array $users)
 {
-	 $friends = array_map(function ($user) {
-		  return $user['friends'];
-	 }, $users);
+     $friends = array_map(function ($user) {
+          return $user['friends'];
+     }, $users);
 
-	 $friends = flatten($friends);
+     $friends = flatten($friends);
 
-	 $girlfriends = array_filter($friends, function ($user) {
-		  return $user['gender'] === 'female';
-	 });
-	 return array_VALUES($girlfriends);
+     $girlfriends = array_filter($friends, function ($user) {
+          return $user['gender'] === 'female';
+     });
+     return array_VALUES($girlfriends);
 }
 
 
@@ -3877,17 +3877,17 @@ function getGirlfriends(array $users)
 */
 
 $users = [
-	 ['name' => 'Igor', 'age' => 19],
-	 ['name' => 'Danil', 'age' => 4],
-	 ['name' => 'Vovan', 'age' => 4],
-	 ['name' => 'Matvey', 'age' => 16],
+     ['name' => 'Igor', 'age' => 19],
+     ['name' => 'Danil', 'age' => 4],
+     ['name' => 'Vovan', 'age' => 4],
+     ['name' => 'Matvey', 'age' => 16],
 ];
 
 $oldest = $users[0];
 foreach ($users as $user) {
-	 if ($user['age'] > $oldest['age']) {
-		  $oldest = $user;
-	 }
+     if ($user['age'] > $oldest['age']) {
+          $oldest = $user;
+     }
 }
 
 print_r($oldest); // => ['name' => 'Igor', 'age' => 19]
@@ -3900,18 +3900,18 @@ print_r($oldest); // => ['name' => 'Igor', 'age' => 19]
 */
 
 $users = [
-	 ['name' => 'Igor', 'age' => 19],
-	 ['name' => 'Danil', 'age' => 4],
-	 ['name' => 'Vovan', 'age' => 4],
-	 ['name' => 'Matvey', 'age' => 16],
+     ['name' => 'Igor', 'age' => 19],
+     ['name' => 'Danil', 'age' => 4],
+     ['name' => 'Vovan', 'age' => 4],
+     ['name' => 'Matvey', 'age' => 16],
 ];
 
 $usersByAge = [];
 foreach ($users as $user) {
-	 if (!array_key_exists($user['age'], $usersByAge)) {
-		  $usersByAge[$user['age']] = [];
-	 }
-	 $usersByAge[$user['age']][] = $user['name'];
+     if (!array_key_exists($user['age'], $usersByAge)) {
+          $usersByAge[$user['age']] = [];
+     }
+     $usersByAge[$user['age']][] = $user['name'];
 }
 
 print_r($usersByAge);
@@ -3942,8 +3942,8 @@ print_r($usersByAge);
 */
 
 $oldest = array_reduce($users, function ($acc, $user) {
-	 return $user['age'] > $acc['age'] ? $user : $acc;
-}, $users[0]); 	
+     return $user['age'] > $acc['age'] ? $user : $acc;
+}, $users[0]);  
 
 print_r($oldest); // => ['name' => 'Igor', 'age' => 19]
 
@@ -3957,29 +3957,29 @@ print_r($oldest); // => ['name' => 'Igor', 'age' => 19]
 */
 
 $usersByAge = array_reduce($users, function ($acc, $user) {
-	 if (!array_key_exists($user['age'], $acc)) {
-		  $acc[$user['age']] = [];
-	 }
-	 $acc[$user['age']][] = $user['name'];
+     if (!array_key_exists($user['age'], $acc)) {
+          $acc[$user['age']] = [];
+     }
+     $acc[$user['age']][] = $user['name'];
 
-	 return $acc;
+     return $acc;
 }, []);
 print_r($usersByAge);
 
 function getMensCountByYear($users) 
 {
-	$dates = array_reduce($users, function ($acc, $user) {
-		$year = date('Y', strtotime($user['date']));
+    $dates = array_reduce($users, function ($acc, $user) {
+        $year = date('Y', strtotime($user['date']));
 
-		if (!array_key_exists($year, $acc)) {
-			$acc['year'] = 1;
-		} else {
-			$acc['year']++;
-		}
+        if (!array_key_exists($year, $acc)) {
+            $acc['year'] = 1;
+        } else {
+            $acc['year']++;
+        }
 
-		return $acc;
-	}, []);
-	
+        return $acc;
+    }, []);
+    
 }
 
 // Код практически не изменился, за исключением того, что ушел цикл и появился возврат аккумулятора из анонимной функции.
@@ -3989,32 +3989,32 @@ function getMensCountByYear($users)
 
 function getMensCountByYear(array $users)
 {
-	 $menfolk = array_filter($users, function ($user) {
-		  return $user['gender'] === 'male';
-	 });
+     $menfolk = array_filter($users, function ($user) {
+          return $user['gender'] === 'male';
+     });
 
-	 $years = array_map(function ($user) {
-		  return date('Y', strtotime($user['birthday']));
-	 }, $menfolk);
+     $years = array_map(function ($user) {
+          return date('Y', strtotime($user['birthday']));
+     }, $menfolk);
 
-	 return array_reduce($years, function ($acc, $year) {
-		  if (!array_key_exists($year, $acc)) {
-				$acc[$year] = 1;
-		  } else {
-				$acc[$year] += 1;
-		  }
+     return array_reduce($years, function ($acc, $year) {
+          if (!array_key_exists($year, $acc)) {
+                $acc[$year] = 1;
+          } else {
+                $acc[$year] += 1;
+          }
 
-		  return $acc;
-	 }, []);
+          return $acc;
+     }, []);
 }
 
 function myReduce($coll, callable $callback, $init = null)
 {
-	 $acc = $init;
-	 foreach ($coll as $item) {
-		  $acc = $callback($acc, $item); // Заменяем старый аккумулятор новым
-	 }
-	 return $acc;
+     $acc = $init;
+     foreach ($coll as $item) {
+          $acc = $callback($acc, $item); // Заменяем старый аккумулятор новым
+     }
+     return $acc;
 }
 
 
@@ -4025,16 +4025,16 @@ function myReduce($coll, callable $callback, $init = null)
 // Реализуйте функцию getMensCountByYear, которая принимает на вход список пользователей и возвращает массив, в котором ключ это год рождения, а значение это количество мужчин, родившихся в этот год.
 
 $users = [
-	 ['name' => 'Bronn', 'gender' => 'male', 'birthday' => '1973-03-23'],
-	 ['name' => 'Reigar', 'gender' => 'male', 'birthday' => '1973-11-03'],
-	 ['name' => 'Eiegon',  'gender' => 'male', 'birthday' => '1963-11-03'],
-	 ['name' => 'Sansa', 'gender' => 'female', 'birthday' => '2012-11-03'],
-	 ['name' => 'Jon', 'gender' => 'male', 'birthday' => '1980-11-03'],
-	 ['name' => 'Robb','gender' => 'male', 'birthday' => '1980-05-14'],
-	 ['name' => 'Tisha', 'gender' => 'female', 'birthday' => '2012-11-03'],
-	 ['name' => 'Rick', 'gender' => 'male', 'birthday' => '2012-11-03'],
-	 ['name' => 'Joffrey', 'gender' => 'male', 'birthday' => '1999-11-03'],
-	 ['name' => 'Edd', 'gender' => 'male', 'birthday' => '1973-11-03']
+     ['name' => 'Bronn', 'gender' => 'male', 'birthday' => '1973-03-23'],
+     ['name' => 'Reigar', 'gender' => 'male', 'birthday' => '1973-11-03'],
+     ['name' => 'Eiegon',  'gender' => 'male', 'birthday' => '1963-11-03'],
+     ['name' => 'Sansa', 'gender' => 'female', 'birthday' => '2012-11-03'],
+     ['name' => 'Jon', 'gender' => 'male', 'birthday' => '1980-11-03'],
+     ['name' => 'Robb','gender' => 'male', 'birthday' => '1980-05-14'],
+     ['name' => 'Tisha', 'gender' => 'female', 'birthday' => '2012-11-03'],
+     ['name' => 'Rick', 'gender' => 'male', 'birthday' => '2012-11-03'],
+     ['name' => 'Joffrey', 'gender' => 'male', 'birthday' => '1999-11-03'],
+     ['name' => 'Edd', 'gender' => 'male', 'birthday' => '1973-11-03']
 ];
 
 getMensCountByYear($users);
@@ -4049,36 +4049,36 @@ getMensCountByYear($users);
 function getMensCountByYear($users) // my
 {
 
-	return array_reduce($users, function ($acc, $user) {
-		$year = date('Y', strtotime($user['birthday']));
+    return array_reduce($users, function ($acc, $user) {
+        $year = date('Y', strtotime($user['birthday']));
 
-		if ($user['gender'] == 'male') {
-			array_key_exists($year, $acc) ? $acc["$year"]++ : $acc["$year"] = 1;
-		}
+        if ($user['gender'] == 'male') {
+            array_key_exists($year, $acc) ? $acc["$year"]++ : $acc["$year"] = 1;
+        }
 
-		return $acc;
-	}, []);
+        return $acc;
+    }, []);
 }
 
 function getMensCountByYear(array $users) // hexlet
 {
-	 $menfolk = array_filter($users, function ($user) {
-		  return $user['gender'] === 'male';
-	 });
+     $menfolk = array_filter($users, function ($user) {
+          return $user['gender'] === 'male';
+     });
 
-	 $years = array_map(function ($user) {
-		  return date('Y', strtotime($user['birthday']));
-	 }, $menfolk);
+     $years = array_map(function ($user) {
+          return date('Y', strtotime($user['birthday']));
+     }, $menfolk);
 
-	 return array_reduce($years, function ($acc, $year) {
-		  if (!array_key_exists($year, $acc)) {
-				$acc[$year] = 1;
-		  } else {
-				$acc[$year]++;
-		  }
+     return array_reduce($years, function ($acc, $year) {
+          if (!array_key_exists($year, $acc)) {
+                $acc[$year] = 1;
+          } else {
+                $acc[$year]++;
+          }
 
-		  return $acc;
-	 }, []);
+          return $acc;
+     }, []);
 }
 
 
@@ -4100,15 +4100,15 @@ function getMensCountByYear(array $users) // hexlet
 
 function getPHPFileNames(array $paths)
 {
-	 $result = [];
-	 foreach ($paths as $path) {
-		  $extension = strtolower(pathinfo($path, PATHINFO_EXTENSION));
-		  if (is_file($path) && $extension === 'php') {
-				$result[] = basename($path);
-		  }
-	 }
+     $result = [];
+     foreach ($paths as $path) {
+          $extension = strtolower(pathinfo($path, PATHINFO_EXTENSION));
+          if (is_file($path) && $extension === 'php') {
+                $result[] = basename($path);
+          }
+     }
 
-	 return $result;
+     return $result;
 }
 
 $names = getPHPFileNames(['index.php', 'wop.PHP', 'nonexists', 'node_modules']);
@@ -4130,16 +4130,16 @@ print_r($names);
 
 function getPHPFileNames(array $paths)
 {
-	 // фильтруем оставляя только подходящие пути
-	 $phpFiles = array_filter($paths, function ($path) {
-		  $extension = strtolower(pathinfo($path, PATHINFO_EXTENSION));
-		  return is_file($path) && $extension === 'php';
-	 });
+     // фильтруем оставляя только подходящие пути
+     $phpFiles = array_filter($paths, function ($path) {
+          $extension = strtolower(pathinfo($path, PATHINFO_EXTENSION));
+          return is_file($path) && $extension === 'php';
+     });
 
-	 // извлекаем из оставшихся путей имена файлов и возвращаем их наружу
-	 return array_map(function ($path) {
-		  return basename($path);
-	 }, $phpFiles);
+     // извлекаем из оставшихся путей имена файлов и возвращаем их наружу
+     return array_map(function ($path) {
+          return basename($path);
+     }, $phpFiles);
 }
 
 $names = getPHPFileNames(['index.php', 'wop.PHP', 'nonexists', 'node_modules']);
@@ -4179,19 +4179,19 @@ console.log(names);
 // Реализуйте функцию getFreeDomainsCount, которая принимает на вход список емейлов, а возвращает количество емейлов, расположенных на каждом бесплатном домене. Список бесплатных доменов хранится в константе FREE_EMAIL_DOMAINS.
 
 $emails = [
-	 'info@gmail.com',
-	 'info@yandex.ru',
-	 'info@hotmail.com',
-	 'mk@host.com',
-	 'support@hexlet.io',
-	 'key@yandex.ru',
-	 'sergey@gmail.com',
-	 'vovan@gmail.com',
-	 'vovan@hotmail.com'
+     'info@gmail.com',
+     'info@yandex.ru',
+     'info@hotmail.com',
+     'mk@host.com',
+     'support@hexlet.io',
+     'key@yandex.ru',
+     'sergey@gmail.com',
+     'vovan@gmail.com',
+     'vovan@hotmail.com'
 ];
 
 const FREE_EMAIL_DOMAINS = [
-	 'gmail.com', 'yandex.ru', 'hotmail.com'
+     'gmail.com', 'yandex.ru', 'hotmail.com'
 ];
 
 getFreeDomainsCount($emails);
@@ -4204,36 +4204,36 @@ getFreeDomainsCount($emails);
 
 function getFreeDomainsCount(Array $mails) // my
 {
-	return array_reduce($emails, function ($acc, $mail) {
-		$domen = explode('@', $mail)[1];
-		if (in_array($domen, FREE_EMAIL_DOMAINS) ) {
-			array_key_exists($domen, $acc) ? $acc[$domen]++ : $acc[$domen] = 1;
-		}
+    return array_reduce($emails, function ($acc, $mail) {
+        $domen = explode('@', $mail)[1];
+        if (in_array($domen, FREE_EMAIL_DOMAINS) ) {
+            array_key_exists($domen, $acc) ? $acc[$domen]++ : $acc[$domen] = 1;
+        }
 
-		return $acc;
-	}, []);
+        return $acc;
+    }, []);
 }
 
 function getFreeDomainsCount(array $emails) // hexlet
 {
-	 $domains = array_map(function ($email) {
-		  return explode('@', $email)[1];
-	 }, $emails);
+     $domains = array_map(function ($email) {
+          return explode('@', $email)[1];
+     }, $emails);
 
-	 $freeDomains = array_filter($domains, function ($domain) {
-		  return in_array($domain, FREE_EMAIL_DOMAINS);
-	 });
+     $freeDomains = array_filter($domains, function ($domain) {
+          return in_array($domain, FREE_EMAIL_DOMAINS);
+     });
 
 
-	 return array_reduce($freeDomains, function ($acc, $domain) {
-		  if (!array_key_exists($domain, $acc)) {
-				$acc[$domain] = 1;
-		  } else {
-				$acc[$domain] += 1;
-		  }
+     return array_reduce($freeDomains, function ($acc, $domain) {
+          if (!array_key_exists($domain, $acc)) {
+                $acc[$domain] = 1;
+          } else {
+                $acc[$domain] += 1;
+          }
 
-		  return $acc;
-	 }, []);
+          return $acc;
+     }, []);
 }
 
 
@@ -4263,10 +4263,10 @@ print_r($second); // => [1, 3, 5, 7, 9]
 Collection\every([true, 1, null, 'yes']); // => false
 Collection\every([true, 1, 'yes']); // => true
 Collection\every(
-	 [2, 4, 6],
-	 function ($value) {
-		  return ($value % 2) === 0;
-	 }
+     [2, 4, 6],
+     function ($value) {
+          return ($value % 2) === 0;
+     }
 ); // => true
 
 
@@ -4275,7 +4275,7 @@ Collection\every(
 // Группирует элементы коллекции в множества на основании ключа, полученного в результате вызова колбека.
 
 Collection\groupBy([1.3, 2.1, 2.4], function($num) {
-	 return floor($num);
+     return floor($num);
 }); // => [1 => [1.3], 2 => [2.1, 2.4]]
 
 
@@ -4284,23 +4284,23 @@ Collection\groupBy([1.3, 2.1, 2.4], function($num) {
 // Возвращает минимальный элемент коллекции на основании результата переданной функции.
 
 Collection\minValue(
-	 [
-		  10 => [
-				'title' => 'a',
-				'size'  => 1
-		  ],
-		  20 => [
-				'title' => 'b',
-				'size'  => 2
-		  ],
-		  30 => [
-				'title' => 'c',
-				'size'  => 3
-		  ]
-	 ],
-	 function ($item) {
-		  return $item['size'];
-	 }
+     [
+          10 => [
+                'title' => 'a',
+                'size'  => 1
+          ],
+          20 => [
+                'title' => 'b',
+                'size'  => 2
+          ],
+          30 => [
+                'title' => 'c',
+                'size'  => 3
+          ]
+     ],
+     function ($item) {
+          return $item['size'];
+     }
 );
 
 # => Array (
@@ -4319,7 +4319,7 @@ $age = 5;
 
 function generate()
 {
-	 print_r($age);
+     print_r($age);
 }
 
 generate();
@@ -4329,7 +4329,7 @@ generate();
 $age = 5;
 
 $generate = function () {
-	 print_r($age);
+     print_r($age);
 };
 
 $generate(); // PHP Notice:  Undefined variable: age
@@ -4339,7 +4339,7 @@ $generate(); // PHP Notice:  Undefined variable: age
 $age = 5;
 
 $generate = function () use ($age) {
-	 print_r($age);
+     print_r($age);
 };
 
 $generate(); // 5
@@ -4349,7 +4349,7 @@ $generate(); // 5
 $age = 5;
 
 $generate = function ($age) {
-	 print_r($age);
+     print_r($age);
 };
 
 $generate($age); // 5
@@ -4358,11 +4358,11 @@ $generate($age); // 5
 
 function without(array $items, $value)
 {
-	 $filtered = array_filter($items, function ($item) use ($value) {
-		  return $item !== $value;
-	 });
-	 // !!! Сбрасываем ключи
-	 return array_VALUES($filtered);
+     $filtered = array_filter($items, function ($item) use ($value) {
+          return $item !== $value;
+     });
+     // !!! Сбрасываем ключи
+     return array_VALUES($filtered);
 }
 
 without([3, 4, 10, 4, 'true'], 4); // => [3, 10, 'true']
@@ -4380,7 +4380,7 @@ without([3, 4, 10, 4, 'true'], 4); // => [3, 10, 'true']
 /*
 В программировании часто используется термин "парадигма".
 
-	 Паради́гма программи́рования — это совокупность идей и понятий, определяющих стиль написания компьютерных программ (подход к программированию). Это способ концептуализации, определяющий организацию вычислений и структурирование работы, выполняемой компьютером. (Wikipedia)
+     Паради́гма программи́рования — это совокупность идей и понятий, определяющих стиль написания компьютерных программ (подход к программированию). Это способ концептуализации, определяющий организацию вычислений и структурирование работы, выполняемой компьютером. (Wikipedia)
 
 Парадигма — это больше, чем просто другой алгоритм решения задачи. Как правило, структура кода при использовании разных парадигм отличается очень значительно и требует знаний, выходящих за рамки только синтаксиса языка (например, автоматное программирование требует хотя бы базового понимания теории автоматов). Причем подавляющее большинство современных (и не очень) языков программирования являются мультипарадигменными и позволяют писать код используя множество стилей. Иногда эти стили взаимоисключающие, иногда они дополняют друг друга. К текущему моменту мы писали код используя две парадигмы: императивную и декларативную.
 
@@ -4416,9 +4416,9 @@ without([3, 4, 10, 4, 'true'], 4); // => [3, 10, 'true']
 $numbers = [10, 20, 52, 105, 56, 89, 96];
 $max = $numbers[0];
 foreach ($numbers as $number) {
-	 if ($number > $max) {
-		  $max = $number;
-	 }
+     if ($number > $max) {
+          $max = $number;
+     }
 }
 print_r($max); // => 105
 
@@ -4434,7 +4434,7 @@ PHP как, впрочем, и java/ruby/python/c#/perl/javascript/go относ
 
 $numbers = [10, 20, 52, 105, 56, 89, 96];
 $max = array_reduce($numbers, function ($acc, $number) {
-	 return $number > $acc ? $number : $acc;
+     return $number > $acc ? $number : $acc;
 }, $numbers[0]);
 print_r($max); // => 105
 
@@ -4462,10 +4462,10 @@ print_r($max); // => 105
 
 Большинство других парадигм являются разновидностями функциональной или императивной парадигм. Из наиболее значимых я бы выделил следующие:
 
-	 Логическое программирование
-	 Автоматное программирование
-	 Объекто-ориентированное программирование
-	 Метапрограммирование
+     Логическое программирование
+     Автоматное программирование
+     Объекто-ориентированное программирование
+     Метапрограммирование
 */
 
 
@@ -4505,7 +4505,7 @@ function check($number)
 
 function isEven($number)
 {
-	 return $number % 2 === 0 ? 'yes' : 'no';
+     return $number % 2 === 0 ? 'yes' : 'no';
 }
 
 function check($number)
@@ -4522,7 +4522,7 @@ function check($number)
 
 function isEven($number)
 {
-	 return $number % 2 === 0;
+     return $number % 2 === 0;
 }
 
 function check($number)
@@ -4543,32 +4543,32 @@ findIndexOfNearest([15, 10, 3, 4], 0); // => 2
 
 function findIndexOfNearest(array $items, $value)
 {
-	 if (sizeof($items) === 0) {
-		  return null;
-	 }
+     if (sizeof($items) === 0) {
+          return null;
+     }
 
-	 return array_reduce(array_keys($items), function ($acc, $i) use ($items, $value) {
-		  return abs($items[$i] - $value) < abs($items[$acc] - $value) ? $i : $acc;
-	 }, 0);
+     return array_reduce(array_keys($items), function ($acc, $i) use ($items, $value) {
+          return abs($items[$i] - $value) < abs($items[$acc] - $value) ? $i : $acc;
+     }, 0);
 }
 
 
 // Реализуйте функцию getFirstMenWithLessFriends, которая принимает список пользователей и возвращает пользователя у которого меньше всего друзей. Если список пользователей пустой, то возвращается null.
 
 $users = [
-	 ['name' => 'Tirion', 'friends' => [
-		  ['name' => 'Mira', 'gender' => 'female'],
-		  ['name' => 'Ramsey', 'gender' => 'male']
-	 ]],
-	 ['name' => 'Bronn', 'friends' => []],
-	 ['name' => 'Sam', 'friends' => [
-		  ['name' => 'Aria', 'gender' => 'female'],
-		  ['name' => 'Keit', 'gender' => 'female']
-	 ]],
-	 ['name' => 'Keit', 'friends' => []],
-	 ['name' => 'Rob', 'friends' => [
-		  ['name' => 'Taywin', 'gender' => 'male']
-	 ]],
+     ['name' => 'Tirion', 'friends' => [
+          ['name' => 'Mira', 'gender' => 'female'],
+          ['name' => 'Ramsey', 'gender' => 'male']
+     ]],
+     ['name' => 'Bronn', 'friends' => []],
+     ['name' => 'Sam', 'friends' => [
+          ['name' => 'Aria', 'gender' => 'female'],
+          ['name' => 'Keit', 'gender' => 'female']
+     ]],
+     ['name' => 'Keit', 'friends' => []],
+     ['name' => 'Rob', 'friends' => [
+          ['name' => 'Taywin', 'gender' => 'male']
+     ]],
 ];
 
 getFirstMenWithLessFriends($users); // => ['name' => 'Bronn', 'friends' => []];
@@ -4577,19 +4577,19 @@ use Funct\Collection;
 
 function getFirstMenWithLessFriends(Array $users) 
 {
-	return minValue($users, function ($user) {
-		return sizeof($user['friends']);
-	});
+    return minValue($users, function ($user) {
+        return sizeof($user['friends']);
+    });
 }
 
 
 // Реализуйте функцию enlargeArrayImage, которая принимает изображение в виде двумерного массива и увеличивает его в два раза.
 
 $arr = [
-	 ['*','*','*','*'],
-	 ['*',' ',' ','*'],
-	 ['*',' ',' ','*'],
-	 ['*','*','*','*']
+     ['*','*','*','*'],
+     ['*',' ',' ','*'],
+     ['*',' ',' ','*'],
+     ['*','*','*','*']
 ];
 // ****
 // *  *
@@ -4608,20 +4608,20 @@ enlargeArrayImage($arr);
 
 function enlargeArrayImage($arr)
 {
-	 $result = [];
+     $result = [];
 
-	 foreach($arr as $child) {
-		  $childArray = [];
-		  foreach($child as $symbol) {
-				$childArray[] = $symbol;
-				$childArray[] = $symbol;
-		  }
-		  $result[] = $childArray;
-		  $result[] = $childArray;
+     foreach($arr as $child) {
+          $childArray = [];
+          foreach($child as $symbol) {
+                $childArray[] = $symbol;
+                $childArray[] = $symbol;
+          }
+          $result[] = $childArray;
+          $result[] = $childArray;
 
-	 }
+     }
 
-	 return $result;
+     return $result;
 }
 
 
@@ -4651,23 +4651,23 @@ decode($signal_3); // => '010010000100111'
 
 function decode($str)
 {
-	 $symbols = preg_split("//u", $str, -1, PREG_SPLIT_NO_EMPTY);
+     $symbols = preg_split("//u", $str, -1, PREG_SPLIT_NO_EMPTY);
 
-	 $mapped = array_map(function ($key) use ($symbols) {
-		  if ($symbols[$key] === '|') {
-				return '|';
-		  }
-		  if ($key === 0) {
-				return 0;
-		  }
-		  return $symbols[$key - 1] === '|' ? 1 : 0;
-	 }, array_keys($symbols));
+     $mapped = array_map(function ($key) use ($symbols) {
+          if ($symbols[$key] === '|') {
+                return '|';
+          }
+          if ($key === 0) {
+                return 0;
+          }
+          return $symbols[$key - 1] === '|' ? 1 : 0;
+     }, array_keys($symbols));
 
-	 $filtered = array_filter($mapped, function ($item) {
-		  return $item !== '|';
-	 });
+     $filtered = array_filter($mapped, function ($item) {
+          return $item !== '|';
+     });
 
-	 return implode('', $filtered);
+     return implode('', $filtered);
 }
 
 
@@ -4676,18 +4676,18 @@ function decode($str)
 
  function getSameParity($coll)
 {
-	 $result = [];
-	 
-	 if (empty($coll)) { return $result; }
-	 
-	 $reminder = $coll[0] % 2;
-	 foreach ($coll as $item) {
-		  if ($item % 2 == $reminder) {
-				$result[] = $item;
-		  }
-	 }
+     $result = [];
+     
+     if (empty($coll)) { return $result; }
+     
+     $reminder = $coll[0] % 2;
+     foreach ($coll as $item) {
+          if ($item % 2 == $reminder) {
+                $result[] = $item;
+          }
+     }
 
-	 return $reminder;
+     return $reminder;
 }
 
 
@@ -4695,29 +4695,29 @@ function decode($str)
 Реализуйте функцию getIndexOfWarmestDay, которая находит самый тёплый день (тот, в котором была зарегистрирована максимальная температура) и возвращает индекс этого дня в исходном массиве. Если на вход поступил пустой массив, то функция должна вернуть null
 
 $data = [
-	 [-5, 7, 1],
-	 [3, 2, 3],
-	 [-1, -1, 10],
+     [-5, 7, 1],
+     [3, 2, 3],
+     [-1, -1, 10],
 ]
 
 */
 
 function getIndexOfWarmestDay(array $data)
 {
-	 if (empty($data)) {
-		  return null;
-	 }
+     if (empty($data)) {
+          return null;
+     }
 
-	 $index = 0;
-	 $max = $data[0][0];
-	 foreach ($data as $key => $temperatures) {
-		  $current = max($temperatures);
-		  if ($current > $max) {
-				$max = $current;
-				$index = $key;
-		  }
-	 }
-	 return $index;
+     $index = 0;
+     $max = $data[0][0];
+     foreach ($data as $key => $temperatures) {
+          $current = max($temperatures);
+          if ($current > $max) {
+                $max = $current;
+                $index = $key;
+          }
+     }
+     return $index;
 }
 
 
@@ -4730,8 +4730,8 @@ function getIndexOfWarmestDay(array $data)
 
 function Mypow($base, $exp) // Возведение в степень
 {
-	if ($exp == 1) { return 1; }
-	return $base * Mypow($base, $exp-1);
+    if ($exp == 1) { return 1; }
+    return $base * Mypow($base, $exp-1);
 }
 
 /*
@@ -4750,8 +4750,8 @@ fun(4)
 */
 
 function rFunc($x) {
-	if ($x == 0) { return 1; }
-	return $x + rFunc($x - 1);
+    if ($x == 0) { return 1; }
+    return $x + rFunc($x - 1);
 }
 
 echo rFunc(5); // 5+4+3+2+1+1 => 16
@@ -4768,7 +4768,7 @@ factorial(n) -> n * factorial(n - 1)
 
 function factorial($num)
 {
-	return $num <= 1 ? 1 : $num * factorial($num - 1);
+    return $num <= 1 ? 1 : $num * factorial($num - 1);
 }
 
 
@@ -4782,8 +4782,8 @@ f(n) = f(n-1) + f(n-2)
 
 function fib($num) 
 {
-	if ($num <= 1 ) { return $num; }
-	return fib($num - 1) + fib($num - 2);
+    if ($num <= 1 ) { return $num; }
+    return fib($num - 1) + fib($num - 2);
 }
 
 
@@ -4792,16 +4792,16 @@ function fib($num)
 
 ######################### ДЕКЛАРАТИВНОЕ ПРОГРАММИРОВАНИЕ #########################
 
-	
+    
 >>>>>  Линейно-итеративный процесс <<<<<<<
 
 function myPow($base, $exp) { // возведение в степень
-	$powIter = function ($exp, $acc) use ($base, &$powIter) { // блочная структура - использование внутри функции локальной функции. & - т.к. функцию используем в самой себе и во время определения.
-		if ($exp == 1) { return $acc; }
-		return $powIter($exp - 1, $acc * $base);
-	}; 
+    $powIter = function ($exp, $acc) use ($base, &$powIter) { // блочная структура - использование внутри функции локальной функции. & - т.к. функцию используем в самой себе и во время определения.
+        if ($exp == 1) { return $acc; }
+        return $powIter($exp - 1, $acc * $base);
+    }; 
 
-	return $powIter($exp, 1); // задаем $acc = 1
+    return $powIter($exp, 1); // задаем $acc = 1
 }
 
 /*
@@ -4818,14 +4818,14 @@ powIter 4,1,64
 
 function factorial($num) 
 {
-	# линейно-рекурсивный процесс #
-	return $num <= 1 ? 1 : $num * factorial($num - 1); 
-	
-	# линейно-итеративный процесс #
-	$iter = function ($num, $acc) use (&$iter) {
-		return $num <= 1 ? $acc : $iter($num - 1, $num * $acc);
-	};
-	return $iter($num, 1);
+    # линейно-рекурсивный процесс #
+    return $num <= 1 ? 1 : $num * factorial($num - 1); 
+    
+    # линейно-итеративный процесс #
+    $iter = function ($num, $acc) use (&$iter) {
+        return $num <= 1 ? $acc : $iter($num - 1, $num * $acc);
+    };
+    return $iter($num, 1);
 }
 
 
@@ -4835,12 +4835,12 @@ function factorial($num)
 function smallestDivisor($num)
 {
 
-	 $iter = function ($acc) use ($num, &$iter) {
-		  if ($num <= $acc) { return $num; }            
-		return $num % $acc == 0 ? $acc : $iter($acc++); 
-	 };
+     $iter = function ($acc) use ($num, &$iter) {
+          if ($num <= $acc) { return $num; }            
+        return $num % $acc == 0 ? $acc : $iter($acc++); 
+     };
 
-	 return $iter(2);   
+     return $iter(2);   
 }
 
 
@@ -4850,20 +4850,20 @@ function smallestDivisor($num)
 
 
 $sumIntegers = function ($a, $b) use (&$sumIntegers) {
-	if ($a > $b) { return 0; }
-	return $a + $sumIntegers($a + 1, $b);
+    if ($a > $b) { return 0; }
+    return $a + $sumIntegers($a + 1, $b);
 };
 
 $sumCubes = function ($a, $b) use (&$sumCubes) {
-	if ($a > $b) { return 0; }
-	return ($a * $a * $a) + $sumCubes($a + 1, $b);
+    if ($a > $b) { return 0; }
+    return ($a * $a * $a) + $sumCubes($a + 1, $b);
 };
 
 
 function sum($a, $b, $func) // Функция высшего порядка. Суммирует от a до b, применяя доп. функцию
 {
-	if ($a > $b) { return 0; }
-	return $func($a) + sum($a + 1, $b, $func));
+    if ($a > $b) { return 0; }
+    return $func($a) + sum($a + 1, $b, $func));
 }
 
 echo sum(1, 5, function ($x) { return $x; }); // => 15
@@ -4879,15 +4879,15 @@ echo sum(1, 5, $identity); // => 55
 
 function sum($start, $finish, $func) 
 {
-	 $iter = function ($current, $acc) use ($finish, $func, &$iter) {
-		  if ($current > $finish) {
-				return $acc;
-		  }
+     $iter = function ($current, $acc) use ($finish, $func, &$iter) {
+          if ($current > $finish) {
+                return $acc;
+          }
 
-		  return $iter($current + 1, $acc + $func($current));
-	 };
+          return $iter($current + 1, $acc + $func($current));
+     };
 
-	 return $iter($start, 0);
+     return $iter($start, 0);
 }
 
 
@@ -4923,9 +4923,9 @@ f(-4, 4); // -8
 
 function product($num1, $num2, $func) 
 {
-	 if ($num1 == $num2) { return $num2; }
-	 
-	 return $func(product($num1, $num2 - 1, $func), $num2);
+     if ($num1 == $num2) { return $num2; }
+     
+     return $func(product($num1, $num2 - 1, $func), $num2);
 }
 
 echo product(3, 5, function ($first, $second) { return $first - $second; }); // => -6
@@ -4949,15 +4949,15 @@ $func($func(1,2),3);
 
 function sumGenerator($func)
 {
-	return function($a, $b) use ($func) { // определение лямбда функции и возврат ее как значения
-		return sum($a, $b, $func);
-	};
+    return function($a, $b) use ($func) { // определение лямбда функции и возврат ее как значения
+        return sum($a, $b, $func);
+    };
 }
 
 function sum($a, $b, $func)
 {
-	if ($a > $b) { return 0; }
-	return $func($a) + sum($a + 1, $b, $func);
+    if ($a > $b) { return 0; }
+    return $func($a) + sum($a + 1, $b, $func);
 }
 
 $sumIntegers = sumGenerator(function($x) { return $x ** 2 }); // лямбда-функция
@@ -4972,7 +4972,7 @@ echo $sumCubs(1, 5); // => 255
 
 $exponent = 3;
 $func = function ($number) use ($exponent) {
-	 return $number ** $exponent; // операция возведения в степень
+     return $number ** $exponent; // операция возведения в степень
 };
 
 8 == $func(2); // 2^3
@@ -4981,9 +4981,9 @@ $func = function ($number) use ($exponent) {
 
 function power($exponent)
 {
-	 return function ($number) use ($exponent) {
-		  return $number ** $exponent; // операция возведения в степень
-	 };
+     return function ($number) use ($exponent) {
+          return $number ** $exponent; // операция возведения в степень
+     };
 }
 
 $func = power(3);
@@ -5003,9 +5003,9 @@ $multiTwo = factor(2); // 2 - множитель
 
 function factor($multiplier)
 {
-	 return function ($arg) use ($multiplier) {
-		  return $multiplier * $arg;
-	 };
+     return function ($arg) use ($multiplier) {
+          return $multiplier * $arg;
+     };
 }
 
 
@@ -5029,9 +5029,9 @@ $increment4 = double(double($increment));
 
 function double($func)
 {
-	 return function ($arg) use ($func) {
-		  return $func($func($arg));
-	 };
+     return function ($arg) use ($func) {
+          return $func($func($arg));
+     };
 }
 
 
@@ -5046,16 +5046,16 @@ print_r($pair); // =>
 /*
 Closure Object
 (
-	 [static] => Array
-		  (
-				[x] => 1
-				[y] => 2
-		  )
+     [static] => Array
+          (
+                [x] => 1
+                [y] => 2
+          )
 
-	 [parameter] => Array
-		  (
-				[$method] => <required>
-		  )
+     [parameter] => Array
+          (
+                [$method] => <required>
+          )
 
 )
 */
@@ -5065,50 +5065,50 @@ echo cdr($pair); // метод селектор - выбор второго зн
 
 function cons($x, $y)
 {
-	 return function ($method) use ($x, $y) {
-		  switch ($method) {
-				case "car":
-					 return $x;
-				case "cdr":
-					 return $y;
-				default:
-					 throw new \InvalidArgumentException("Invalid method $method.");
-		  }
-	 };
+     return function ($method) use ($x, $y) {
+          switch ($method) {
+                case "car":
+                     return $x;
+                case "cdr":
+                     return $y;
+                default:
+                     throw new \InvalidArgumentException("Invalid method $method.");
+          }
+     };
 }
 
 function car(callable $pair)
 {
-	return $pair('car');
+    return $pair('car');
 }
 
 function cdr(callable $pair)
 {
-	return $pair('cdr');
+    return $pair('cdr');
 }
 
 echo $pair("car"); // так нарушаем абстракцию, просто для понимания. 'car' - называется сообщением, а способ программирования - 'передачей сообщений' => 1
 
 function isPair($pair)
 {
-	 return is_callable($pair);
+     return is_callable($pair);
 }
 
 function toString($list)
 {
-	 if (!isPair($list)) {
-		  return $list;
-	 }
+     if (!isPair($list)) {
+          return $list;
+     }
  
-	 $iter = function ($items, array $acc = []) use (&$iter) {
-		  if ($items == null) {
-				return $acc;
-		  }
-		  return $iter(cdr($items), array_merge($acc, [toString(car($items))]));
-	 };
-	 $arr = $iter($list);
+     $iter = function ($items, array $acc = []) use (&$iter) {
+          if ($items == null) {
+                return $acc;
+          }
+          return $iter(cdr($items), array_merge($acc, [toString(car($items))]));
+     };
+     $arr = $iter($list);
  
-	 return "(" . implode(", ", $arr) . ")";
+     return "(" . implode(", ", $arr) . ")";
 }
 
 
@@ -5116,38 +5116,38 @@ function toString($list)
 
 /*
 В текущем задании представлен другой способ реализации пар.
-	Допишите функцию car основываясь на том как работает функция cons.
-	Допишите функцию cdr основываясь на том как работает функция cons.
+    Допишите функцию car основываясь на том как работает функция cons.
+    Допишите функцию cdr основываясь на том как работает функция cons.
 
 */
 
 function cons($x, $y)
 {
-	 return function ($func) use ($x, $y) {
-		  return $func($x, $y);
-	 };
+     return function ($func) use ($x, $y) {
+          return $func($x, $y);
+     };
 }
 
 function car(callable $pair)
 {
-	 return function ($x, $y) use ($pair) {
-		return $x;
-	 };
+     return function ($x, $y) use ($pair) {
+        return $x;
+     };
 }
 
 function cdr(callable $pair)
 {
-	 return function ($x, $y) use ($pair) {
-		return $y;
-	 };
+     return function ($x, $y) use ($pair) {
+        return $y;
+     };
 }
 
 
 function makeList(...$elements)
 {
-	 return array_reduce(array_reverse($elements), function ($acc, $item) {
-		  return cons($item, $acc);
-	 });
+     return array_reduce(array_reverse($elements), function ($acc, $item) {
+          return cons($item, $acc);
+     });
 }
 
 
@@ -5174,47 +5174,47 @@ printRat(addRat($rat, makeRat(2,3))); // addRat - сложение рацион�
 
 function makeRat($numer, $denom)
 {
-	return cons($numer, $denom);
+    return cons($numer, $denom);
 }
 
 function numer($rat)
 {
-	return car($rat);
+    return car($rat);
 }
 
 
 function denom($rat)
 {
-	return cdr($rat);
+    return cdr($rat);
 }
 
 function cons($x, $y)
 {
-	 return function ($method) use ($x, $y) {
-		  switch ($method) {
-				case "car":
-					 return $x;
-				case "cdr":
-					 return $y;
-				default:
-					 throw new \InvalidArgumentException("Invalid method $method.");
-		  }
-	 };
+     return function ($method) use ($x, $y) {
+          switch ($method) {
+                case "car":
+                     return $x;
+                case "cdr":
+                     return $y;
+                default:
+                     throw new \InvalidArgumentException("Invalid method $method.");
+          }
+     };
 }
 
 
 function addRat($rat1, $rat2)
 {
-	// n1/d1 + n2/d2 == (n1 * d2 + n2 * d1) / (d1 * d2)
-	$numer = numer($rat1) * denom($rat2) + numer($rat2) * denom($rat1)
-	$denom = denom($rat1) * denom($rat);
+    // n1/d1 + n2/d2 == (n1 * d2 + n2 * d1) / (d1 * d2)
+    $numer = numer($rat1) * denom($rat2) + numer($rat2) * denom($rat1)
+    $denom = denom($rat1) * denom($rat);
 
-	return makeRat($numer, $denom);
+    return makeRat($numer, $denom);
 }
 
 function printRat($rat)
 {
-	printf("%d/%d", numer($rat), denom($rat));
+    printf("%d/%d", numer($rat), denom($rat));
 }
 
 // ПРИНЦИП ОДНОГО УРОВНЯ АБСТРАКЦИИ:
@@ -5252,15 +5252,15 @@ function printRat($rat)
 
 function subRat($rat1, $rat2)
 {
-	 $numer = numer($rat1) * denom($rat2) - numer($rat2) * denom($rat1);
-	 $denom = denom($rat1) * denom($rat2);
+     $numer = numer($rat1) * denom($rat2) - numer($rat2) * denom($rat1);
+     $denom = denom($rat1) * denom($rat2);
 
-	 return makeRat($numer, $denom);
+     return makeRat($numer, $denom);
 }
 
 function equalRat($rat1, $rat2)
 {
-	 return numer($rat1) * denom($rat2) == numer($rat2) * denom($rat1);
+     return numer($rat1) * denom($rat2) == numer($rat2) * denom($rat1);
 }
 
 
@@ -5281,11 +5281,11 @@ makeList(1, 2, 3); // аналогично коду выше
 
 function listRef($list, $n) // показывает элемент определенной позиции (n)
 {
-	if ($n == 0) {
-		return car($list);
-	} else {
-		return listRef(cdr($list), $n - 1);
-	}
+    if ($n == 0) {
+        return car($list);
+    } else {
+        return listRef(cdr($list), $n - 1);
+    }
 }
 
 $l = makeList(1, 2, 5, 7);
@@ -5294,7 +5294,7 @@ echo listRef($l, 1); // => 2
 
 
 $l = cons(1, cons(3, cons(5, null)));
-echo car(cdr($l)); // cdr возвращает список без головы. (5, 2, 3) -> (2, 3) 	=> 3
+echo car(cdr($l)); // cdr возвращает список без головы. (5, 2, 3) -> (2, 3)     => 3
 
 $l = cons(1, cons(3, cons(5, null)));
 echo car(cdr(cdr($l)));// => 5
@@ -5328,11 +5328,11 @@ use function Pairs\cdr;
 
 function length($items)
 {
-	if ($items === null || !is_callable($items)) {
-		  return 0;
-	 } else {
-		  return 1 + length(cdr($items));
-	 }
+    if ($items === null || !is_callable($items)) {
+          return 0;
+     } else {
+          return 1 + length(cdr($items));
+     }
 }
 
 
@@ -5346,11 +5346,11 @@ use function Pairs\cdr;
 
 function append($list1, $list2)
 {
-	 if ($list1 === null) {
-		  return $list2;
-	 } else {
-		  return cons(car($list1), append(cdr($list1), $list2));
-	 }
+     if ($list1 === null) {
+          return $list2;
+     } else {
+          return cons(car($list1), append(cdr($list1), $list2));
+     }
 }
 
 
@@ -5364,11 +5364,11 @@ use function Pairs\cdr;
 
 function reverse($list)
 {
-	 $iter = function ($list, $acc) use (&$iter) {
-		  return is_null($list) ? $acc : $iter(cdr($list), cons(car($list), $acc));
-	 };
+     $iter = function ($list, $acc) use (&$iter) {
+          return is_null($list) ? $acc : $iter(cdr($list), cons(car($list), $acc));
+     };
  
-	 return $iter($list, null);
+     return $iter($list, null);
 }
 
 
@@ -5380,14 +5380,14 @@ function reverse($list)
 map — функция высшего порядка, используемая во многих языках программирования, которая применяет данную функцию к каждому элементу списка, возвращая список результатов. При рассмотрении в функциональной форме она часто называется «применить-ко-всем». https://ru.wikipedia.org/wiki/Map 
 // https://codeclimate.com/github/hexlet-components/php-pairs/
 */
-	 
+     
 $scaleList = function ($list, $factor) use (&$scaleList) {
-	if ($list == null) {
-		return null;
-	} else {
-		$rest = $scaleList(cdr($list), $factor);
-		return cons(car($list) * $factor, $rest);
-	}
+    if ($list == null) {
+        return null;
+    } else {
+        $rest = $scaleList(cdr($list), $factor);
+        return cons(car($list) * $factor, $rest);
+    }
 };
 
 
@@ -5395,12 +5395,12 @@ $list = makeList(1, 2, 3);
 echo listToString($scaleList($list, 2)); // => 2,4,6
 
 $map = function ($func, $list) use (&$map) { // повышаем уровень абстракции
-	if ($list == null) {
-		return null;
-	} else {
-		$rest = $map($func, cdr($list));
-		return cons($func(car($list), $rest));
-	}
+    if ($list == null) {
+        return null;
+    } else {
+        $rest = $map($func, cdr($list));
+        return cons($func(car($list), $rest));
+    }
 };
 
 $func = function($item) { return $item * 3; }
@@ -5419,10 +5419,10 @@ use function App\Pair\listToString;
 
 function map($func, $list)
 {
-	 $iter = function ($list, $acc) use (&$iter, $func) {
-		return is_null($list) ? reverse($acc) : $iter(cdr($list), cons($func(car($list)), $acc));
-	 };
-	return $iter($list, null);
+     $iter = function ($list, $acc) use (&$iter, $func) {
+        return is_null($list) ? reverse($acc) : $iter(cdr($list), cons($func(car($list)), $acc));
+     };
+    return $iter($list, null);
 }
 
 
@@ -5431,18 +5431,18 @@ function map($func, $list)
 >>>>>  Фильтрация   <<<<<<<
 
 $removeOdds = function ($list) use (&$removeOdds) { // по четным числам
-	if ($list == null) {
-		return null;
-	} else {
-		$curr = car($list);
+    if ($list == null) {
+        return null;
+    } else {
+        $curr = car($list);
 
-		$rest = $removeOdds(cdr($list));
-		if ($curr% 2 == 0) {
-			return cons($curr, $rest);	
-		} else {
-			return $rest;
-		}
-	}
+        $rest = $removeOdds(cdr($list));
+        if ($curr% 2 == 0) {
+            return cons($curr, $rest);  
+        } else {
+            return $rest;
+        }
+    }
 };
 
 $list = makeList(1,2,3,5,101,100);
@@ -5453,16 +5453,16 @@ echo listToString($removeOdds($list)); // => (2, 10, 100)
 
 function filter($func, $list)
 {
-	$iter = function ($list, $acc) use (&$iter, $func) {
-		if ($list === null) {
-			return reverse($acc);
-		}
+    $iter = function ($list, $acc) use (&$iter, $func) {
+        if ($list === null) {
+            return reverse($acc);
+        }
 
-		$newAcc = $func(car($list)) ? cons(car($list), $acc) : $acc;
-		  return $iter(cdr($list), $newAcc);
-	 };
+        $newAcc = $func(car($list)) ? cons(car($list), $acc) : $acc;
+          return $iter(cdr($list), $newAcc);
+     };
 
-	 return $iter($list, null);
+     return $iter($list, null);
 }
 
 
@@ -5472,28 +5472,28 @@ function filter($func, $list)
  
 function sum($list)
 {
-	$iter = function ($list, $acc) use (&$iter) {
-		if ($list == null) {
-			return $acc;
-		}
+    $iter = function ($list, $acc) use (&$iter) {
+        if ($list == null) {
+            return $acc;
+        }
 
-		return $iter(cdr($list, $acc + car($list)));
-	}; 
+        return $iter(cdr($list, $acc + car($list)));
+    }; 
 
-	return $iter($list, 0);
+    return $iter($list, 0);
 }
 
 function accumulate($list, $func, $acc)
 {
-	$iter = function ($list, $acc) use (&$iter, $func) {
-		if ($list == null) {
-			return $acc;
-		}
+    $iter = function ($list, $acc) use (&$iter, $func) {
+        if ($list == null) {
+            return $acc;
+        }
 
-		return $iter(cdr($list), $func(car($list), $acc));
-	}
+        return $iter(cdr($list), $func(car($list), $acc));
+    }
 
-	return $iter($list, $acc);
+    return $iter($list, $acc);
 }
 
 $list = makeList(1, 5, 9);
@@ -5526,17 +5526,17 @@ use function Lists\reduce;
 
 function solution($list) 
 { 
-	$ceilNums = map(function ($num) {
-		return ceil($num); 
-	}, $list);
+    $ceilNums = map(function ($num) {
+        return ceil($num); 
+    }, $list);
 
-	$evenNums = filter(function ($num) { 
-		return $num % 2 == 0; 
-	}, $ceilNums); 
+    $evenNums = filter(function ($num) { 
+        return $num % 2 == 0; 
+    }, $ceilNums); 
 
-	return reduce(function ($num, $acc) {
-		return $num * $acc; 
-	}, $evenNums, $acc = 1);
+    return reduce(function ($num, $acc) {
+        return $num * $acc; 
+    }, $evenNums, $acc = 1);
 }
 
 
@@ -5553,35 +5553,35 @@ https://ru.hexlet.io/blog/posts/recursive
 
 l(2, 3, 4); // => cons(2, cons(3, cons(4, null)));
 l(2, 3, l(4, 5)) // => cons(2, cons(3, cons(cons(4, cons(5, null)), null)));
-	 
+     
 
 function treeMap($list, $func, $acc)
 {
-	$iter = function ($list, $acc) use (&$iter, $func) {
-		if ($list == null) {
-			return $acc;
-		}
-	
-		$element = car($list);
-		if (isPair($element)) { // isPair - метод проверяет является ли элемент парой
-			$newAcc = treeMap($element, $func, $acc);
-		} else {
-			$newAcc = $func($element, $acc);
-		}
-		return $iter(cdr($list), $newAcc);
-	};
-	return $iter($list, $acc);	
+    $iter = function ($list, $acc) use (&$iter, $func) {
+        if ($list == null) {
+            return $acc;
+        }
+    
+        $element = car($list);
+        if (isPair($element)) { // isPair - метод проверяет является ли элемент парой
+            $newAcc = treeMap($element, $func, $acc);
+        } else {
+            $newAcc = $func($element, $acc);
+        }
+        return $iter(cdr($list), $newAcc);
+    };
+    return $iter($list, $acc);  
 }
 
 $list = l(1,3,l(1,l(2,3),2),9); // l == makeList()
 
 $result = treeMap($list, function($item, $acc) { // считает кол-во элементов
-	return $acc + 1;
+    return $acc + 1;
 }, 0); // => 7
 
 
 // Реализуйте функцию reverse, которая переворачивает переданный на вход список рекурсивно.
-	
+    
 l(1, l(3, 2), 5, l(6, l(5, 4))) => (((4, 5), 6), 5, (2, 3), 1)
 l(l(3, l(4, 100), 5, 6, l(7))) => (((7), 6, 5, (100, 4), 3))
 
@@ -5596,62 +5596,62 @@ use function App\Pair\listToString;
 
 function reverse($list)
 {
-	 $iter = function ($list, $acc) use (&$iter) {
-		if (is_null($list)) {
-			return $acc;
-		}
+     $iter = function ($list, $acc) use (&$iter) {
+        if (is_null($list)) {
+            return $acc;
+        }
 
-		$elem = car($list);
+        $elem = car($list);
 
-		if(isPair($elem)) {
-			 $newAcc = cons(cons(car($elem), $iter(cdr($elem), null)), $acc);
-		} else {
-			$newAcc = cons($elem, $acc);
-		}
+        if(isPair($elem)) {
+             $newAcc = cons(cons(car($elem), $iter(cdr($elem), null)), $acc);
+        } else {
+            $newAcc = cons($elem, $acc);
+        }
 
-		return $iter(cdr($list), $newAcc);
-	 };
-	 
-	 return $iter($list, null);
+        return $iter(cdr($list), $newAcc);
+     };
+     
+     return $iter($list, null);
 }
 
 
 
-	
+    
 >>>>>  Стандартные интерфейсы  <<<<<<<
-	
-	
+    
+    
 $list = l(1, 4, 5, 8, 9, 100);
 
 function sumOfDoubleOdds($list) // сумма нечетных чисел * 2
 {
-	 return accumalate($list, function ($item, $acc) {
-		  if ($item % 2 === 1) {
-				return $item * 2 + $acc;
-		  } else {
-				return $acc;
-		  }
-	 }, 0);
+     return accumalate($list, function ($item, $acc) {
+          if ($item % 2 === 1) {
+                return $item * 2 + $acc;
+          } else {
+                return $acc;
+          }
+     }, 0);
 }
 
 // Принцип "Разделай и властвуй":
-	 
+     
 $result = filter($list, function ($item) {
-	 return $item % 2 === 1;
+     return $item % 2 === 1;
 });
 
 $result2= map($result, function ($item) {
-	 return $item * 2;
+     return $item * 2;
 });
-	 
+     
 $result3 = accumulate($result2, function ($item, $acc) {
-	 return $acc + $item;
+     return $acc + $item;
 }, 0);
-	 
+     
 echo ($result3); // => 30    
 
-// В других языках реализованы "ленивые коллекции", которые не производят вычислений до их использования.	
-	
+// В других языках реализованы "ленивые коллекции", которые не производят вычислений до их использования.   
+    
 
 /*
 Реализуйте функцию solution, которая принимает на вход список чисел и выполняет следующие действия:
@@ -5671,53 +5671,53 @@ echo ($result3); // => 30
 
 function solution ($list)
 {
-	$multiplicityNums = filter($list, function ($item) {
-		return $item % 3 === 0;
-	});
+    $multiplicityNums = filter($list, function ($item) {
+        return $item % 3 === 0;
+    });
 
-	$squareNums = map($multiplicityNums, function ($item) {
-		return $item ** 2;
-	});
+    $squareNums = map($multiplicityNums, function ($item) {
+        return $item ** 2;
+    });
 
-	$sumNums = accumulate($squareNums, function ($item, $acc) {
-		return $item + $acc;
-	}, 0);
+    $sumNums = accumulate($squareNums, function ($item, $acc) {
+        return $item + $acc;
+    }, 0);
 
-	return $sumNums/length($squareNums);
+    return $sumNums/length($squareNums);
 }
-	 
+     
 
 >>>>>  Оператор присваивания  <<<<<<<
 
 # Процедурный стиль :
-	
+    
 // Демонстрация - так не делать!
 function deposit(&$balance, $amount)
 {
-	$balance += $amount;
+    $balance += $amount;
 }
-	
+    
 $balance = 100;
 deposit($balance, 10);
 echo $balance; // => 100
 
-	
-function newDeposit($balance) // инкапсуляция	
+    
+function newDeposit($balance) // инкапсуляция   
 {
-	return function ($amount) use (&$balance) {
-		$balance += $amount;
-		return $balance;
-	};
+    return function ($amount) use (&$balance) {
+        $balance += $amount;
+        return $balance;
+    };
 }
 
-$d = newDeposit(100);	
-echo $d(10); // => 110	
-$d2 = newDeposit(100);	
-echo $d2(10); // => 110		
-	
+$d = newDeposit(100);   
+echo $d(10); // => 110  
+$d2 = newDeposit(100);  
+echo $d2(10); // => 110     
+    
 
 
-/*	
+/*  
 Напишите функцию newWithdraw, которая снимает деньги со счета. При попытке снять больше денег, чем есть на счете, она должна возвращать too much.
 Пример:
 
@@ -5726,63 +5726,63 @@ $withdraw(1000); // 'too much'
 $withdraw(50); // 50
 $withdraw(45); // 5
 */
-	
+    
 function newWithdraw($balance) // my
 {
-	 return function ($amount) use (&$balance) {
-		  $newBalance = $balance - $amount; 
-		  return ($newBalance >= 0) ? $balance = $newBalance : 'too much';
-	 };
-}	
-	
+     return function ($amount) use (&$balance) {
+          $newBalance = $balance - $amount; 
+          return ($newBalance >= 0) ? $balance = $newBalance : 'too much';
+     };
+}   
+    
 function newWithdraw($balance) // hexlet
 {
-	 return function ($amount) use (&$balance) {
-		  if ($balance < $amount) {
-				return "too much";
-		  } else {
-				$balance -= $amount;
-				return $balance;
-		  }
-	 };
+     return function ($amount) use (&$balance) {
+          if ($balance < $amount) {
+                return "too much";
+          } else {
+                $balance -= $amount;
+                return $balance;
+          }
+     };
 }
 
 
-	
-	
+    
+    
 >>>>>  Объекты  <<<<<<<
-		
+        
 function newAccount($balance)
 {
-	$withdraw = function ($amount) use (&$balance) {
-		$balance -= $amount;
-		return $balance;
-	};
-	
-	$deposit = function ($amount) use (&$balance) {
-		$balance += $amount;
-		return $balance;
-	}
-	
-	return function ($funcName, $amount) use ($withdraw, $deposit) { // стиль "передача сообщений"
-		switch ($funcName) {
-			case "withdraw":
-					return $withdraw($amount);
-					break;
-			case "deposit": 	
-					return $deposit($amount);
-					break;
-		}
-	};
+    $withdraw = function ($amount) use (&$balance) {
+        $balance -= $amount;
+        return $balance;
+    };
+    
+    $deposit = function ($amount) use (&$balance) {
+        $balance += $amount;
+        return $balance;
+    }
+    
+    return function ($funcName, $amount) use ($withdraw, $deposit) { // стиль "передача сообщений"
+        switch ($funcName) {
+            case "withdraw":
+                    return $withdraw($amount);
+                    break;
+            case "deposit":     
+                    return $deposit($amount);
+                    break;
+        }
+    };
 }
-	
-	
+    
+    
 $a = newAccount(100);
-echo $a("deposit", 50);	// 110
-echo $a("deposit", 100); // 10	
-	
-	
-/*	
+echo $a("deposit", 50); // 110
+echo $a("deposit", 100); // 10  
+    
+    
+/*  
 Измените функцию newAccount из видео так, чтобы она создавала счета, защищенные паролем.
 
 Пример:
@@ -5790,40 +5790,40 @@ echo $a("deposit", 100); // 10
 $acc = newAccount(100, "secret password");
 110 == $acc("deposit", 10, "secret password");
 60 == $acc("withdraw", 50, "secret password");
-"wrong password!" == $acc("deposit", 10, "wrong password");	
-*/	
+"wrong password!" == $acc("deposit", 10, "wrong password"); 
+*/  
 
 namespace App;
 
 function newAccount($balance, $password)
 {
-	$isPass = function($pass) use ($password) {
-		return $pass === $password ? true : false;
-	};
+    $isPass = function($pass) use ($password) {
+        return $pass === $password ? true : false;
+    };
 
-	$withdraw = function($amount) use (&$balance) {
-		$balance -= $amount;
-		return $balance;
-	};
-	
-	$deposit = function($amount) use (&$balance) {
-		$balance += $amount;
-		return $balance;
-	};
-	
-	return function ($funcName, $amount, $pass) use ($isPass, $withdraw, $deposit) { 
-		if (!$isPass($pass)) { return "wrong password!"; }
+    $withdraw = function($amount) use (&$balance) {
+        $balance -= $amount;
+        return $balance;
+    };
+    
+    $deposit = function($amount) use (&$balance) {
+        $balance += $amount;
+        return $balance;
+    };
+    
+    return function ($funcName, $amount, $pass) use ($isPass, $withdraw, $deposit) { 
+        if (!$isPass($pass)) { return "wrong password!"; }
 
-		switch ($funcName) {
-			case "withdraw":
-					return $withdraw($amount);
-					break;
-			case "deposit": 	
-					return $deposit($amount);
-					break;
-		}
-	};
-}	
+        switch ($funcName) {
+            case "withdraw":
+                    return $withdraw($amount);
+                    break;
+            case "deposit":     
+                    return $deposit($amount);
+                    break;
+        }
+    };
+}   
 
 
 
@@ -5832,23 +5832,23 @@ function newAccount($balance, $password)
 
 function random($seed) // псевдослучайные  числа
 {
-	return function () use (&$seed) { // число, являющееся базовым значением для вычисления следующего случайного числа
-		$a = 45;
-		$c = 21;
-		$m = 67;
-		$seed = ($a * $seed + $c) % $m;
+    return function () use (&$seed) { // число, являющееся базовым значением для вычисления следующего случайного числа
+        $a = 45;
+        $c = 21;
+        $m = 67;
+        $seed = ($a * $seed + $c) % $m;
 
-		return $seed;
-	};
+        return $seed;
+    };
 }
 
 $a = random(10);
-echo $a(); // => 44	
+echo $a(); // => 44 
 echo $a(); // => 58
 echo $a(); // => 27
 echo $a(); // => 30
 
-	
+    
 /*
 Измените функцию random из видео так, чтобы можно было обнулять сгенерированную последовательность.
 Пример:
@@ -5862,7 +5862,7 @@ $seq(); // 23
 $seq("reset");
 
 $result == $seq(); // 22
-	
+    
 function random($seed) // псевдослучайные  числа
 {
     $start = $seed;
@@ -5872,14 +5872,14 @@ function random($seed) // псевдослучайные  числа
     };
     
 
-	return function($func = null) use ($reset, $generate) {
-		switch ($func) {
-			case null:
-			    return $generate();
-			case 'reset':
-			    $reset();
-		}
-	};
+    return function($func = null) use ($reset, $generate) {
+        switch ($func) {
+            case null:
+                return $generate();
+            case 'reset':
+                $reset();
+        }
+    };
 }
 
 
@@ -5888,9 +5888,9 @@ function random($seed) // псевдослучайные  числа
 
 function makeDecrementer($balance) // чистая функция
 {
-	return function ($amount) use ($balance) {
-		return $balance - $amount;
-	};
+    return function ($amount) use ($balance) {
+        return $balance - $amount;
+    };
 }
 
 $d = makeDecrementer(100);
@@ -5903,10 +5903,10 @@ $d2 = makeDecrementer(100); // $d и $d2 - являются одним и тем
 
 function makeWithdraw($balance) // нечистая функция
 {
-	return function ($amount) use (&$balance) { 
-		$balance -= $amount;
-		return $balance;
-	};
+    return function ($amount) use (&$balance) { 
+        $balance -= $amount;
+        return $balance;
+    };
 }
 
 $w = makeWithdraw(100); // $w и $w2 разные объекты
@@ -5919,19 +5919,19 @@ $w2 = makeWithdraw(100); // => 90
 
 function factorial($n) // функция в полуимперативном стиле
 {
-	$product = 1;
-	$counter = 1;
-	$iter = function () use ($n, &$iter, &$product, &$counter) {
-		if ($counter > $n) {
-			return $product;	
-		} else {
-			$product *= $counter;
-			$couner += 1;
-			return $iter();
-		}	
-	};
+    $product = 1;
+    $counter = 1;
+    $iter = function () use ($n, &$iter, &$product, &$counter) {
+        if ($counter > $n) {
+            return $product;    
+        } else {
+            $product *= $counter;
+            $couner += 1;
+            return $iter();
+        }   
+    };
 
-	return $iter;
+    return $iter;
 }
 
 
@@ -5991,11 +5991,11 @@ Solution.php
 Пример:
 */
 $square = function ($num) {
-	 return $num ** 2;
+     return $num ** 2;
 };
 
 $half = function ($num) {
-	 return $num / 2;
+     return $num / 2;
 };
 
 $func1 = compose([$square, $half]);
@@ -6098,28 +6098,28 @@ $smoothFunc(10) // ~ 0.438
 
 /*
  public function testSmooth($expected, $x, $dx, $func)
-	 {
-		  $smoothFunc = Solution\smooth($func, $dx);
-		  $this->assertEquals($expected, $smoothFunc($x), '', 0.01);
-	 }
+     {
+          $smoothFunc = Solution\smooth($func, $dx);
+          $this->assertEquals($expected, $smoothFunc($x), '', 0.01);
+     }
 
-	 public function additionProvider()
-	 {
-		return [
-				[0.438, 10, 15, function ($num) {
-					 return sin(rad2deg($num));
-				}],
-				[5, 0, 5, function ($num) {
-					 return $num + 5;
-				}],
-				[4, 2, 0.00001, function ($num) {
-					 return $num ** 2;
-				}],
-				[9, 3, 0.00001, function ($num) {
-					 return $num ** 2;
-				}]
-		  ];
-	 }
+     public function additionProvider()
+     {
+        return [
+                [0.438, 10, 15, function ($num) {
+                     return sin(rad2deg($num));
+                }],
+                [5, 0, 5, function ($num) {
+                     return $num + 5;
+                }],
+                [4, 2, 0.00001, function ($num) {
+                     return $num ** 2;
+                }],
+                [9, 3, 0.00001, function ($num) {
+                     return $num ** 2;
+                }]
+          ];
+     }
 }            
 */
 
@@ -6426,7 +6426,7 @@ Content-type: text/html; charset=UTF-8
 
 /*
 Как видно, заголовок появился в ответе. Помните, что функцию header можно вызывать только если клиенту еще не передавались данные. То есть она должна идти первой в выводе, перед ее вызовом не должно быть никаких HTML-тегов, пустых строк и т.п.
-*/	
+*/  
 
 <p>hi</p>
 
@@ -6480,6 +6480,7 @@ $_POST содержит данные отправленные методом POS
 
 С одной стороны, поддержка CGI внутри самого языка позволяет начать делать сайт буквально на коленке без особых знаний программирования и HTTP, что многие и делают. С другой, PHP толкает к созданию абсолютно не поддерживаемого кода, который не может никто прочитать кроме автора. Посмотрите сами:
 */
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -6494,7 +6495,7 @@ $_POST содержит данные отправленные методом POS
 </body>
 </html>
 
-<?php
+//php
   if (!empty($_FILES['uploaded_file'])) {
     $path = "uploads/";
     $path = $path . basename( $_FILES['uploaded_file']['name']);
@@ -6504,7 +6505,7 @@ $_POST содержит данные отправленные методом POS
         echo "There was an error uploading the file, please try again!";
     }
   }
-?>
+//php
 <!DOCTYPE html>
 <html>
 <head>
@@ -6519,7 +6520,7 @@ $_POST содержит данные отправленные методом POS
 </body>
 </html>
 
-<?php
+//php
   if (!empty($_FILES['uploaded_file'])) {
     $path = "uploads/";
     $path = $path . basename( $_FILES['uploaded_file']['name']);
@@ -6529,7 +6530,7 @@ $_POST содержит данные отправленные методом POS
         echo "There was an error uploading the file, please try again!";
     }
   }
-?>
+//php
 
 /*
 Такой способ программирования возможен только в PHP. Весь сайт начинает представлять из себя мешанину HTML и кода. Если количество разных страниц сайта достигнет хотя бы десятка (а их обычно сотни и больше), то поддержка уже станет невероятно сложной.
@@ -6601,7 +6602,7 @@ require __DIR__ . '/../vendor/autoload.php';
 $configuration = [
     'settings' => [
         'displayErrorDetails' => true,
-    ],
+    ]
 ];
 
 $app = new \Slim\App($configuration);
@@ -6706,9 +6707,9 @@ $app->post('/users', function ($request, $response) {
 Реализуйте маршрут /companies, по которому отдаётся список компаний в виде json. Компании отдаются не все сразу, а только соответствующие текущей запрошенной странице. По умолчанию выдаётся 5 результатов на запрос.
 
 Подсказки
-Список компаний лежит в массиве $companies
-Чтобы получить его внутри обработчика, воспользуйтесь замыканием
-Возможно, вам пригодится функция array_slice
+ Список компаний лежит в массиве $companies
+ Чтобы получить его внутри обработчика, воспользуйтесь замыканием
+ Возможно, вам пригодится функция array_slice
 
 **/
 
@@ -6753,6 +6754,252 @@ $configuration = [
 ];
 
 $app = new \Slim\App($configuration);
+
+$app->get('/companies', function ($request, $response) use ($companies) {
+    $page = $request->getQueryParam('page', 1);
+    $per = $request->getQueryParam('per', 5);
+    $offset = ($page - 1) * $per;
+
+    $sliceOfCompanies = array_slice($companies, $offset, $per);
+    return $response->write(json_encode($sliceOfCompanies));
+});
+
+$app->run();
+
+
+# Динамические маршруты
+
+/*
+До сих пор мы встречались только со статическими маршрутами. В статическом маршруте нет изменяемых частей: адрес точно совпадает с маршрутом и не меняется (поэтому называется "статический"). На практике чаще встречаются динамические маршруты. Проанализируем адреса курсов на Хекслете.
+
+https://ru.hexlet.io/courses/php-introduction-to-oop
+https://ru.hexlet.io/courses/php-object-oriented-design
+https://ru.hexlet.io/courses/js-react
+Нетрудно заметить, что в этих адресах прослеживается определенная структура /courses/<имя курса>. Можно предположить, что на каждый такой адрес создается свой собственный маршрут и обработчик, но тогда представьте себе процесс наполнения сайта. При добавлении нового курса придется программировать. И хотя курсов у нас не тысячи, такой процесс все равно крайне трудоемок. Тоже самое можно сказать и про профили пользователей /u/<никнейм пользователя>. Причем пользователей сотни тысяч и добавляются они на сайт непрерывно без нашего участия.
+
+В примерах выше мы столкнулись с так называемыми динамическими маршрутами. Такие маршруты имеют внутри себя изменяемые части, но обработчик у маршрута только один. Например, все указанные выше адреса курсов соответствуют одному маршруту, который можно записать так /courses/:id. Где секция :id означает, что на это место подставляется конкретный идентификатор (уникальная запись, отличающая одну сущность от другой) курса. Имя изменяемой части можно выбирать произвольно, вместо :id можно написать :lala. Сам способ записи (в данном случае имя с ведущим двоеточием) зависит от конкретного фреймворка. В Slim для этого используются фигурные скобки, что создает ощущение использования интерполяции.
+*/
+
+$app->get('/courses/{id}', function ($request, $response, array $args) {
+    $id = $args['id'];
+    return $response->write("Course id: {$id}");
+});
+
+/*
+Любая изменяемая часть маршрута называется плейсхолдером (заполнитель). В маршруте выше только один плейсхолдер id. Доступ к значению конкретного плейсхолдера осуществляется по имени через массив $args, передающийся третьим параметром в функцию-обработчик.
+
+Для удобства пользователей в адресах стараются использовать не числовые идентификаторы, а человекочитаемые названия. Например, вместо /courses/332 показывают /courses/php-mvc. Эту часть адреса называют словом slug. Slug должен быть уникален и его формат обязан соответствовать требованиям формирования адресов. Как правило, эти имена делают, используя символы латинского алфавита с дефисом между ними: this-that-other-outre-collection.
+
+Подведем промежуточный итог. Понятия адрес и маршрут обозначают разные вещи. Если маршрут статический, то он всегда совпадает с адресом, например, /about. Если маршрут динамический, то ему могут соответствовать бесконечное число адресов (даже если таких страниц на сайте нет), например, /courses/:id.
+
+Количество плейсхолдеров в маршруте может быть больше одного. Обычно такие маршруты используются для вложенных ресурсов.
+*/
+
+$app->get('/courses/{courseId}/lessons/{id}', function ($request, $response, array $args) {
+    $courseId = $args['courseId'];
+    $id = $args['id'];
+    return $response->write("Course id: {$courseId}")
+      ->write("Lesson id: {$id}");
+});
+
+
+/*
+Документация:
+https://www.slimframework.com/docs/v3/objects/router.html
+*/
+
+
+/**
+Реализуйте Маршрут /companies/{id}, по которому отдается json представление компании. Компания извлекается из списка $companies. Каждая компания представлена массивом у которого есть текстовый (то есть тип данных - строка) ключ id.
+ **/
+
+namespace App;
+
+require '/composer/vendor/autoload.php';
+
+use Illuminate\Support\Collection;
+
+$companies = Generator::generate(100);
+
+$configuration = [
+    'settings' => [
+        'displayErrorDetails' => true,
+    ],
+];
+
+$app = new \Slim\App($configuration);
+
+$app->get('/companies/{id}', function($request, $response, array $args) use ($companies) {
+    $id = $args['id'];
+    $companiesColl = collect($companies);
+    $company = $companiesColl->firstWhere('id', '==', $id);
+    return $response->write(json_encode($company));
+});
+$app->run();
+
+
+
+# Шаблонизатор
+
+/*
+Формирование HTML во фреймворках — отдельная нетривиальная тема. Конечно, никто не запрещает создавать HTML напрямую в виде строки, но такой способ просто перестает работать на реальных сайтах, где HTML одной страницы — это сотни строк.
+*/
+
+$app->get('/courses/{name}', function ($request, $response, array $args) {
+    $slug = $args['name'];
+    $course = $courses[$slug];
+    return $response->write("<h1>{$course->name}</h1>")
+      ->write("<div>{$course->body}</div>");
+});
+
+/*
+У такого подхода масса недостатков:
+* Он небезопасен и может привести к взлому. Подробнее эта тема рассматривается в конце курса.
+* С ростом количества HTML поддерживать такой код станет практически невозможно из-за неудобства анализа и редактирования.
+* В таком коде будут возникать постояные проблемы с необходимостью экранировать одинарные или двойные кавычки.
+* В таком коде крайне легко допустить ошибку в HTML и крайне сложно ее обнаружить.
+* В типичных сайтах большая часть HTML общая для разных страниц. Выделить, ее используя подход выше — очень сложно.
+Для решения подобных задач придумали шаблонизаторы — специализированные библиотеки, позволяющие описывать шаблон отдельно от остальной части кода. Здесь можно вспомнить, что сам по себе PHP уже шаблонизатор. Но так как мы работаем с фреймворком, то использовать шаблонизацию напрямую не получится, прежде его нужно правильно сконфигурировать.
+
+Для начала необходимо установить пакет slim/php-view. Выполните соответствующую команду в корне проекта:
+
+$ composer require slim/php-view
+
+Добавьте в public/index.php после строчки, где создается переменная $app следующие строки:
+*/
+
+$container = $app->getContainer();
+$container['renderer'] = new \Slim\Views\PhpRenderer(__DIR__ . '/../templates');
+
+/*
+В этих строчках происходит подключение шаблонизатора к Слиму, используя DI container. Наши шаблоны будут храниться в папке templates в корне проекта.
+
+Далее добавьте еще один обработчик:
+*/
+$app->get('/users/{id}', function ($request, $response, $args) {
+    $params = ['id' => $args['id']];
+    return $this->renderer->render($response, 'users/show.phtml', $params);
+});
+
+
+/*
+Метод render выполняет рендеринг указанного шаблона и добавляет результат в ответ. Сама функция принимает на вход три параметра:
+
+ * Объект ответа
+ * Путь до нужного шаблона внутри папки templates
+ * Набор параметров, которые будут доступны внутри шаблона. Сюда можно передавать все, что угодно.
+И последний шаг, добавьте файл templates/users/show.phtml со следующим содержимым:
+
+<h1>Hello, <?= $id ?></h1>
+
+Теперь откройте браузер и попробуйте загрузить страницу http://localhost:8000/users/nick
+
+$ curl localhost:8000/users/nick
+<h1>Hello, nick</h1>
+Кажется, что мы снова начинаем мешать вывод (HTML) вместе с кодом, но это не совсем так. Шаблон — конечная точка обработки запроса. Он не содержит логики обработки. Единственная его цель — по входящим данным отрисовать готовый HTML. Подробнее об этом — в уроке, посвященном MVC.
+
+Расширение phtml используют тогда, когда хотят показать что внутри файла содержится шаблон на PHP, в остальном файл рассматривается как обычный файл с кодом на PHP. Для удобства вставки кода в HTML, PHP предлагает альтернативный синтаксис для стандартных конструкций языка. Например, для вставки значения используется сокращенная версия тега начала PHP кода: <?= <код на php> ?>, она отличается от полной тем что вместо <?php echo ... используется <?= ....
+
+
+If
+
+<?php if ($a == 5): ?>
+  A is equal to 5
+<?php endif; ?>
+
+Switch
+
+<?php switch ($foo): ?>
+    <?php case 1: ?>
+    ...
+<?php endswitch ?>
+
+
+Foreach
+
+<?php foreach ($actions as $action): ?>
+    <option value="<?= $action ?>"><?= $action ?>
+<?php endforeach; ?>
+
+Несмотря на то, что PHP уже готовый шаблонизатор, его использование сопряжено с определенными неудобствами. Например, безопасность такой шаблонизации находится на нуле (см XSS). Так же PHP не поддерживает макеты, то есть специализированые шаблоны, содержащие обвязку сайта, в которую вставляется HTML конкретного обработчика. По этой причине в PHP, как и в других языках, используют шаблонизаторы, написанные на самом PHP. Наиболее популярные среди них Blade и Twig. Лично мне больше импонируют шаблоны на основе Slim, но в PHP они не так популярны, как в JS или Ruby.
+*/
+
+
+
+
+# Безопасность
+
+/*
+Безопасность сайтов, тема о которой редко говорят с новичками, но от которой зависит судьба любого бизнеса. Проблемы с безопасностью могут привести к утечеке данных пользователей и даже к полному уничтожению сайта. Исследования показывают, что подавляющее большинство сайтов имеют проблемы с безопасностью и подвержены атакам. Время от времени случаются громкие взломы и утечки данных сотен тысяч и миллионов пользователей.
+
+Я уверен что говорить о безопасности нужно как можно раньше, это позволит избежать фатальных ошибок.
+
+Главное правило касающееся безопасности звучит так: "Никогда не доверяйте пользователям". В первую очередь это правило касается данных вводимых пользователями. Возьмем практику пример из предыдущего урока, в которой выводилось имя пользователя взятое из адреса: /users/nick. Код который реализует эту функциональность, рассчитывает на то, что в адресе используются только допустимые имена. Но что если попытаться открыть такой адрес:
+
+# Запустите сервер для приложения созданного в предыдущем уроке
+# Попробуйте открыть этот адрес в FireFox, потому что Chrome и Safari блокируют его,
+# они знают про то что такой код вредоносный.
+http://localhost:8000/users/%3Cscript%3Ealert('attack!')%3B%3C%2Fscript%3E
+
+В этом адресе закодирован код на JavaScript, который в оригинале выглядит так:
+
+<script>
+  alert('attack!');
+</script>
+
+
+Проблема в том, что этот код не отобразился, а был вставлен в HTML как часть этого HTML и соответствовано выполнился. Для браузера такой JS выглядит как часть страницы. Если попробовать открыть получившийся HTML, то он будет выглядеть так:
+
+<h1><script>alert('attack!');</script></h1>
+Совсем не то что мы ожидали. Такая атака называется XSS или Межсайтовый скриптинг. Она заключается в том что на страницу внедряется вредоносный код, который выполняется в браузере пользователя и отправляет информацию о пользователе на сервер злоумышленника. Специфика подобных атак заключается в том, что вредоносный код может использовать авторизацию пользователя в веб-системе для получения к ней расширенного доступа или для получения авторизационных данных пользователя. XSS относится к одному из самых распространенных типов атак из-за большого количества уязвимостей даже на сайтах больших и серьезных компаний таких как Facebook.
+
+Уязвимость возникает из-за доверия пользовательским данным. В нашем коде вывод слага делается, без какой-либо предварительной обработки, это в корне неверно. Дело в том, что браузер пытается интерпретировать как HTML все что похоже на HTML. Если в исходном коде встречается конструкция <текст>, то браузер автоматически считает ее тегом. Для вывода данных, которые не рассматриваются как HTML, обязательно использовать специализированные функции превращающие теги в html entities.
+*/
+$str = "A 'quote' is <b>bold</b>";
+
+// Outputs: A 'quote' is &lt;b&gt;bold&lt;/b&gt;
+echo htmlspecialchars($str);
+
+/*
+Получившаяся строка содержит безопасное описание тегов в виде html entities. Например &lt; отобразиться как <, а &gt; как >. Возвращаясь к нашему примеру, правильный вывод в шаблоне должен пропускаться через функцию htmlspecialchars.
+
+<h1><?= htmlspecialchars($id) ?></h1>
+Теперь мы получим тот вывод, который изначально ожидали.
+
+Тоже самое касается любого другого вывода. В следующих уроках мы начнем активно использовать формы в которых подобная уязвимость встречается очень часто.
+
+К сожалению PHP никак не защищает нас от подобных уязвимостей. Необходимо постоянно держать в голове такую возможность и не забывать вызывать функцию htmlspecialchars. На практике вы обязательно забудете), таков человеческий фактор. Это одна из причин почему популярны другие шаблонизаторы. В большинстве из них любые выводимые данные автоматически пропускаются через функцию подобную htmlspecialchars, что гарантирует безопасность без необходимости задумываться о ней.
+
+Кроме XSS часто встречаются и другие виды атак, например SQL Injection, но для их понимания нужно владеть самим инструментом. В будущих уроках и курсах я буду эпизодически затрагивать тему безопасности с примерами типичных ошибок и способах защиты.
+
+Дополнительно:
+Безопасность приложений (Хоть и написано что в Rails, но подходит для всех)
+
+http://rusrails.ru/ruby-on-rails-security-guide
+*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -6855,13 +7102,13 @@ class FileUtilsTest extends TestCase
 namespace Theory;
 
 if (!file_exists($path)) { // проверяет существование файла/директории(в unix директория тоже файл). Проверить на директорию: is_dir($path) 
-	mkdir($path, 0755, $recursive); // создать директорию
+    mkdir($path, 0755, $recursive); // создать директорию
 } 
 
 rmdir($path); // удаление директории
 
 if (!file_exists($path)) { // проверить на файл: is_file($path)
-	touch($path); // создать файл
+    touch($path); // создать файл
 }
 
 unlink($path); // удаление файла
@@ -6876,7 +7123,7 @@ print_r(scandir("/var/tmp"));
 // DirectoryIterator FilesystemIterator RecursiveDirectoryIterator
 $iterator = new \GlobIterator('../*');
 foreach ($iterator as $item) {
-	print_r($item);
+    print_r($item);
 }
 
 $info = new \SplFileInfo(__FILE__);
@@ -6918,76 +7165,76 @@ namespace Theory;
 $file = __FILE__;
 
 if (file_exists($file) && is_readable($file)) {
-	#1
-	$lines = file(__FILE__); 
-	foreach($lines as $line) {
-		echo $line;
-	}
+    #1
+    $lines = file(__FILE__); 
+    foreach($lines as $line) {
+        echo $line;
+    }
 
-	#2
-	$content = file_get_content(__FILE__);
-	echo $content;
+    #2
+    $content = file_get_content(__FILE__);
+    echo $content;
 
-	// #1, #2 - подходят для маленьких файлов (тк. эти функции загружают все в память). Поэтому для больших файлов надо делать это потоково:
+    // #1, #2 - подходят для маленьких файлов (тк. эти функции загружают все в память). Поэтому для больших файлов надо делать это потоково:
 
-	#3
-	$handle = fopen($filename, "rb"); // rb - чтение без модификации. r+
-	if ($handle) { // $handle - файловый дискриптор. Файл получилось открыть
-		try {
-			$contents = fread($handle, filesize($filename)); // 2-й параметр сколько байт прочитать
-		} finally {
-			fclose($handler);
-		}
-	}
+    #3
+    $handle = fopen($filename, "rb"); // rb - чтение без модификации. r+
+    if ($handle) { // $handle - файловый дискриптор. Файл получилось открыть
+        try {
+            $contents = fread($handle, filesize($filename)); // 2-й параметр сколько байт прочитать
+        } finally {
+            fclose($handler);
+        }
+    }
 
-	#4
-	$handler = fopen($file, "rb"); 
-	if ($handler) {
-		try {
-			while (!feof($handler)) { // проверяет не достигли ли мы конца файла.
-				echo fgets($handler, 1024); // 2-й параметр сколько байт прочитать
-			}
-		} finally { // потому что во время работы могут быть выброшены исключения
-			fclose($handler);		
-		}
-	}
+    #4
+    $handler = fopen($file, "rb"); 
+    if ($handler) {
+        try {
+            while (!feof($handler)) { // проверяет не достигли ли мы конца файла.
+                echo fgets($handler, 1024); // 2-й параметр сколько байт прочитать
+            }
+        } finally { // потому что во время работы могут быть выброшены исключения
+            fclose($handler);       
+        }
+    }
 
-	#5
-	$handler = fopen($filename);
-	if ($handler) {
-		try {
-			/* javier	argonout	pe */
-			/* hiroshi	sculptor	jp */
-			/* robert	slacker	us*/
-			while ($userinfo = fsconf($handle, "%s\t%s\t%s\n")) { // возвращает массив значений соотствующий этому паттерну
-				list($name, $profession, $countrycode) = $userinfo;
-			}
-		} finally {
-			fclose($handler);
-		}
-	}
+    #5
+    $handler = fopen($filename);
+    if ($handler) {
+        try {
+            /* javier   argonout    pe */
+            /* hiroshi  sculptor    jp */
+            /* robert   slacker us*/
+            while ($userinfo = fsconf($handle, "%s\t%s\t%s\n")) { // возвращает массив значений соотствующий этому паттерну
+                list($name, $profession, $countrycode) = $userinfo;
+            }
+        } finally {
+            fclose($handler);
+        }
+    }
 }
 
 #6
 $file = new SplFileObject('file.txt');
 while(!$file->eof()) {
-	echo $file->fgets();
+    echo $file->fgets();
 }
 
 #7
 foreach ($file as $lineNumber => $content) {
-	printf("Line %d: %s", $lineNumber, $content);
+    printf("Line %d: %s", $lineNumber, $content);
 }
 
 #8:
 $linesTenToTwentyIterator = new LinitIteratir(
-	$file,
-	9, // start at line 10
-	10 // iterate 10 lines
+    $file,
+    9, // start at line 10
+    10 // iterate 10 lines
 );
 
 foreach ($linesTenToTwentyIterator as $line) {
-	echo $line; // outputs line 10 to 20
+    echo $line; // outputs line 10 to 20
 }
 
 
@@ -7001,14 +7248,14 @@ $data = "my data\n";
 file_put_contents($file, $data); // FILE_APPEND - не перезаписывать, добавлять в конец. 
 
 if (is_writable($file)) {
-	$handle = fopen($file, 'ab'); // ab - добавление данных в конец; r - перезаписывать; a+ c
-	if ($handle) {
-		try {
-			fwrite($handle, $data);
-		} finally {
-			fclose($handler);
-		}
-	}
+    $handle = fopen($file, 'ab'); // ab - добавление данных в конец; r - перезаписывать; a+ c
+    if ($handle) {
+        try {
+            fwrite($handle, $data);
+        } finally {
+            fclose($handler);
+        }
+    }
 }
 
 $file = new \SplFileObject($file, 'ab');
@@ -7037,11 +7284,11 @@ $tmpfname = tempnam(sys_get_temp_dir(), "HEXLET"); // создает пусто�
 
 $temp = tmpfile(); // создает файловый дискриптор временного файла
 try {
-	fwrite($temp, 'my data');
-	fseek($temp, 0);
-	echo fread($temp, 1024);
+    fwrite($temp, 'my data');
+    fseek($temp, 0);
+    echo fread($temp, 1024);
 } finally {
-	fclose($temp);
+    fclose($temp);
 }
 
 // SplTempFileObject

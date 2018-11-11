@@ -381,6 +381,117 @@ CREATE VIEW cars_without_price AS select id, name FROM cars;
 
 
 
+>>>>> SELECT <<<<<<<
+
+select * from products;
+select price, name from products;
+select pricem name as name2 from products; // задание псовдонима колонке
+select price + 2 as newprice from products; // увеличение значений колонок + псовдонима колонке
+select 2 + 3; испольщование SQL как калькулятора
+select random() + price from products; // увеличение колонки price на рандомное значение
+
+/*
+Полезные ссылки
+Использование SQL для извлечения информации из таблиц: http://postgresql.ru.net/gruber/ch3.html
+SELECT / PostgreSQL documentation: http://www.postgresql.org/docs/9.4/static/sql-select.html
+Википедия / Что такое ORM: https://ru.wikipedia.org/wiki/ORM
+
+/**
+Выполните в psql запрос, который выбирает из таблицы products поля name и new_price. new_price вычисляется по формуле price + 1;
+**/
+
+SELECT name, (price + 1) AS new_price FROM products;
+
+
+
+>>>>>  WHERE <<<<<<<
+
+select * from products where product_no = 1;
+select * from products where price = 20 and price = 30; // <->
+select * from  products where product_no in (1, 3, 4); //  product_no = 1 или 3 или 4
+select * from  products where price between 20 and 30; // price от 20 до 30
+select * from  products where name is null; // is null - значение поля не задано (null), задано - is not null
+
+/*
+Полезные ссылки
+PostgreSQL SELECT (with WHERE): http://www.postgresql.org/docs/9.4/static/sql-select.html
+Квалифицированный выбор при использовании предложений: http://www.postgresql.org/docs/9.4/static/sql-select.html
+
+/**
+Выполните в psql запрос который выбирает из таблицы goods все названия товаров, у которых категория products и цена от 3 до 5 включительно;
+**/
+
+SELECT name FROM goods WHERE category = 'products' AND price BETWEEN 3 AND 5
+
+
+
+>>>>>  Where и like <<<<<<<
+
+// like - просматривает всю таблицу
+
+select * from products where name like 'car'; // ищет поле с точным соответствием
+select * from products where name like 'c%'; // поля начинающиеся с 'c'
+select * from products where name like '%c'; // поля заканчивающиеся на 'c'
+select * from products where name like '_v_'; // 3 символа, в середине - 'v'
+select * from products where name ilike '_v_'; // нерегистрозависимый поиск
+
+/* 
+Полезные ссылки
+Pattern matching in PostgreSQL: http://www.postgresql.org/docs/9.4/static/functions-matching.html
+Использование LIKE в PostgreSQL: http://postgresql.ru.net/docs/sql_kg/2-3-4.html
+Что такое полнотекстовый поиск (и отличия от LIKE): http://habrahabr.ru/post/40218/
+*/
+
+
+
+>>>>>  Порядок вывода <<<<<<<
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ############################ PHP PDO: Работа с базой данных ############################
 
 >>>>>  Соединение с базой данных  <<<<<<< 
