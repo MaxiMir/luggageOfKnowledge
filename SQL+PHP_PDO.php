@@ -400,7 +400,8 @@ SELECT / PostgreSQL documentation: http://www.postgresql.org/docs/9.4/static/sql
 Выполните в psql запрос, который выбирает из таблицы products поля name и new_price. new_price вычисляется по формуле price + 1;
 **/
 
-SELECT name, (price + 1) AS new_price FROM products;
+SELECT name, (price + 1) AS new_price 
+    FROM products;
 
 
 
@@ -421,7 +422,10 @@ PostgreSQL SELECT (with WHERE): http://www.postgresql.org/docs/9.4/static/sql-se
 Выполните в psql запрос который выбирает из таблицы goods все названия товаров, у которых категория products и цена от 3 до 5 включительно;
 **/
 
-SELECT name FROM goods WHERE category = 'products' AND price BETWEEN 3 AND 5
+SELECT name 
+    FROM goods
+    WHERE category = 'products' 
+    AND price BETWEEN 3 AND 5
 
 
 
@@ -446,30 +450,105 @@ Pattern matching in PostgreSQL: http://www.postgresql.org/docs/9.4/static/functi
 
 >>>>>  Порядок вывода <<<<<<<
  
+select * form products order by product_no ASC; // ASC - по умолч. - по возрастанию (поля с null - в конце), DESС - по убыванию (поля с null - в начале)
+select * form products order by product_no DESС null last; // null - теперь будут последними
+select * form products order by product_no price, name; // сортировка по нескольким полям
+
+/*
+Полезные ссылки
+Sorting rows in PostgreSQL: http://www.postgresql.org/docs/9.4/static/queries-order.html
+Сортировка строк в PostgreSQL: http://postgresql.ru.net/manual/queries-order.html
+
+
+/**
+Выполните в psql запрос, который выбирает из таблицы goods все названия товаров из категории cars, отсортированных по уменьшению цены.
+**/
+
+SELECT name
+    FROM goods
+    WHERE category = 'cars'
+    ORDER BY price DESC;
 
 
 
+>>>>>  Ограничение выборки <<<<<<<
+
+select * from products order by name limit 1; // использовать с order by!
+select * from products order by name limit 10 offset 50; // offset - пропустить элементов. Пропущенные с помощью offset данные в любом случае проходят выборку, поэтому при большом значении offset запрос будет медленным
+
+/*
+Полезные ссылки
+PostgreSQL Limit and Offset: http://www.postgresql.org/docs/9.4/static/queries-limit.html
+Русскоязычная документация PostgreSQL: http://postgrespro.ru/doc/queries-limit.html
+
+/**
+Выполните в psql запрос который выбирает из таблицы goods название самого дешевого товара;
+**/
+
+SELECT name FROM goods ORDER BY price LIMIT 1;
 
 
 
+>>>>>  Выборка уникальных записей <<<<<<<
+
+select distinct name from products; // => 1 поле с уникальными записями
+select distinct name, price from products; // => 2 поля, с уникальными записями в колонке name
+select distinct on (name) name, price from products order by name desc; // distinct on - дубликаты убирают по одному полю. Обработка DISTINCT ON происходит после сортировки ORDER BY
+
+// Предложение DISTINCT ON не является частью стандарта SQL и иногда считается плохим стилем, потому что потенциально может привести к неожиданным результатам. При разумном использовании GROUP BY и подзапросов в FROM, данное предложение может быть опущено, но часто оно является наиболее удобной альтернативой.
+
+/*
+Полезные ссылки
+PostgreSQL Distinct clause: http://www.postgresql.org/docs/9.4/static/sql-select.html#SQL-DISTINCT
+Distinct / Документация PostgreSQL: http://postgresql.ru.net/manual/queries-select-lists.html#QUERIES-DISTINCT
+
+/**
+Выполните в psql запрос который выбирает из таблицы goods все уникальные названия товаров, у которых категория cars;
+**/
+
+SELECT DISTINCT name FROM goods WHERE category = 'cars';
 
 
+>>>>>  Группировка <<<<<<<
+ 
+DROP TABLE products;
 
+CREATE TABLE products (
+    id SERIAL PRIMARY KEY,
+    category PRIMARY KEY,
+    name character varying,
+    price integer
+);
 
+insert into products (category, name, price) values
+('cars', 'bmw', 900,),
+('cars', 'bmw', 1000),
+('products', 'butter', 80),
+('products', 'eggs', 4);
 
+select category, count(id) from products group by category; // группирока по категории + вывод количества катагорий =>
+cars        | 2
+products    | 2
 
+select category, count(id), avg(price) from products group by category; // -//- + среднее значение =>
+cars        | 2 | 950  
+products    | 2 | 42
 
+select category, name,  count(id), avg(price) from products group by category, name; // группировка по 2 значениям =>
 
+cars        bmw     | 2 | 950  
+products    butter  | 1 | 80
+products    eggs    | 1 | 4
 
+select category, name,  max(id), min(price) from products group by category, name;
 
+select category, name,  max(id), min(price) from products group by category, name having count(id) > 1 AND avg(price) > 5; // having - where для группы
 
-
-
-
-
-
-
-
+/*
+Полезные ссылки
+Aggregate Functions in PostgreSQL: http://www.postgresql.org/docs/9.4/static/functions-aggregate.html
+Агрегатные функции в PostgreSQL: http://postgresql.ru.net/manual/tutorial-agg.html
+*/
 
 
 
