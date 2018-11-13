@@ -550,6 +550,74 @@ Aggregate Functions in PostgreSQL: http://www.postgresql.org/docs/9.4/static/fun
 Агрегатные функции в PostgreSQL: http://postgresql.ru.net/manual/tutorial-agg.html
 */
 
+// count, max, avg - агрегатные функции
+// 'where' применяется к выборке до группировки, а 'having' — после
+
+/**
+Выполните в psql запрос который выбирает из таблицы goods названия категорий и количество товаров в этой категории. Выбираться должны только те группы у которых больше одного товара.
+**/
+
+SELECT category, COUNT(*) FROM goods GROUP BY category HAVING COUNT(*) > 1
+
+
+ Объединения таблиц (Inner join) 
+
+id | category_id | name
+1       1           php
+2  |    1        |  ruby
+
+id | name
+1  | languages
+2  | tools
+
+select * from courses join categories on categories.id = category_id;
+select cs.id as category_id, c.id as course_id from courses c join categories cs on cs.id = category_id; 
+
+/*
+Полезные ссылки
+Наглядное представление работы join на примере множеств: http://sql-joins.leopard.in.ua/
+Join (SQL) / Википедия: http://bit.ly/1HTHZFE 
+
+/**
+Выполните в psql запрос который выбирает из таблиц goods и categories две записи состоящие из названия товаров (name) и имени категории (as category_name), у которых price больше 2 и товары отсортированы по имени в обратном порядке. Выберите не более двух записей;
+**/
+
+CREATE TABLE categories (
+    id SERIAL PRIMARY KEY,
+    name character varying UNIQUE NOT NULL
+);
+
+CREATE TABLE goods (
+    id SERIAL PRIMARY KEY,
+    category_id integer,
+    name character varying UNIQUE NOT NULL,
+    price numeric
+);
+
+INSERT INTO categories (id, name) VALUES (1, 'cars'), (2, 'products'), (3, 'computers');
+
+INSERT INTO goods (category_id, name, price) VALUES
+    (1, 'bmw', 2.10), (null, 'kia', 700.02), (1, 'nissan', 0.9),
+    (2, 'eggs', 2.13), (2, 'milk', 1.02), (null, 'butter', 2.2),
+    (1, 'fiat', 500.3);
+
+
+
+select g.name, c.name from goods g join categories c on g.id = category_id where price > 2 order by name desc;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
