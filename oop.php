@@ -894,6 +894,72 @@ $point->getSymmetricalPoint(); // => (-3, -8)
 Документация: http://php.net/manual/ru/language.oop5.visibility.php
 
 
+/**
+Реализуйте класс для работы с рациональными числами, включающую в себя следующие методы:
+
+Конструктор — принимает на вход числитель и знаменатель.
+Метод getNumer — возвращает числитель
+Метод getDenom — возвращает знаменатель
+Сложение add — складывает переданные дроби
+Вычитание sub — находит разность между двумя дробями
+**/
+$rat1 = new Rational(3, 9);
+$rat1->getNumer(); // => 3
+$rat1->getDenom(); // => 9
+
+$rat2 = new Rational(10, 3);
+
+$rat3 = $rat1->add($rat2); // => Абстракция для рационального числа 99/27
+$rat3->getNumer();         // => 99
+$rat3->getDenom();         // => 27
+
+$rat4 = $rat1->sub($rat2); // => Абстракция для рационального числа -81/27
+$rat4->getNumer();         // => -81
+$rat4->getDenom();         // => 27
+
+class Rational
+{
+    public $numer;
+    public $denom;
+
+    public function __construct($numer, $denom)
+    {
+        $this->numer = $numer;
+        $this->denom = $denom;
+    }
+
+    public function getNumer()
+    {
+        return $this->numer;
+    }
+
+    public function getDenom()
+    {
+        return $this->denom;
+    }
+
+    public function add($rational)
+    {
+        $numer = $rational->getNumer() * $this->getDenom() + $this->getNumer() * $rational->getDenom();
+        $denom = $rational->getDenom() * $this->getDenom();
+        return new Rational($numer, $denom);
+    }
+
+    public function sub($rational)
+    {
+        $numer = $this->getNumer() * $rational->getDenom() - $rational->getNumer() * $this->getDenom();
+        $denom = $rational->getDenom() * $this->getDenom();
+        return new Rational($numer, $denom);
+    }
+}
+
+
+
+
+
+
+
+
 # Data Hiding (Data Protection)
 
 Как я уже упоминал, в терминологии ООП творится довольно серьезная путаница. Она возникает, в первую очередь, из-за того, что многие программируют либо на одном языке, либо если и на разных, то часто схожих по структуре языках. Соответственно, происходит профессиональная деформация, когда программист видит мир сквозь призму одного языка. Одна из таких историй происходит вокруг инкапсуляции и data hiding. Напомню, что data hiding - подход, при котором нельзя изменить данные напрямую, в обход интерфейса, тем самым нарушив инварианты (такое происходит не всегда). Есть языки, в которых присутствует data hiding, например, haskell, но нет инкапсуляции. В ООП data hiding появляется благодаря двум возможностям:
@@ -2197,6 +2263,49 @@ Behat (BDD Framework) http://behat.org/en/latest/quick_start.html
 Codeception (Браузерные тесты) https://codeception.com/
 Начинаем писать тесты (Правильно) https://ru.hexlet.io/blog/posts/how-to-test-code
 
+
+
+
+/**
+Реализуйте тест CourseTest, проверяющий работоспособность метода getName класса Course.
+**/
+
+// file: App/Course.php
+namespace App;
+
+class Course
+{
+    private $name;
+
+    public function __construct($name)
+    {
+        $this->name = $name;
+    }
+
+    public function getName()
+    {
+        return $this->name;
+    }
+}
+
+// tests/CourseTest.php:
+
+namespace App\Tests;
+
+use PHPUnit\Framework\TestCase;
+
+class CourseTest extends TestCase
+{
+    public function testGetName()
+    {
+        $name = 'my super course';
+        $course = new \App\Course($name);
+        $this->assertEquals($name, $course->getName());
+    }
+}
+
+
+
 # DS
 
 PHP поставляется с библиотекой, называемой SPL (Standard PHP Library http://php.net/manual/en/book.spl.php). Кроме прочего, она содержит набор классов, реализующих популярные структуры данных, таких, как стек или очередь.
@@ -2264,6 +2373,61 @@ function checkIfBalanced(string $expression): boolean
 
 /*
 По большому счету, ничего не поменялось. Кода не стало меньше, он не стал проще. С другой стороны, такой подход более канонический для PHP.
+
+/**
+Реализуйте функцию compare, которая сравнивает две строчки набранные в редакторе. Если они равны то возвращает true, иначе - false. Особенность строчек в том они могут содержать символ #, который означает нажатие клавиши Backspace. То есть перед самим сравнением, нужно вычислить реальную строчку отображенную в редакторе.
+**/
+
+compare('ab#c', 'ab#c'); // true
+compare('ab##', 'c#d#'); // true
+compare('a#c', 'b'); // false
+
+
+function compare($str1, $str2)
+{
+    $getRealString = function ($str) {
+        $stack = new \Ds\Stack();
+
+        for ($i = 0; $i < strlen($str); $i++) {
+            $sign = $str[$i];
+            if ($sign == '#') {
+                $stack->pop();
+            } else {
+                $stack->push($sign);
+            }
+        }
+        return implode('', $stack->toArray());
+    };
+    
+    return $getRealString($str1) == $getRealString($str2);
+}
+
+#2:
+
+function compare($text1, $text2)
+{
+    $evaluatedText1 = evaluate($text1);
+    $evaluatedText2 = evaluate($text2);
+
+    return $evaluatedText1 === $evaluatedText2;
+}
+
+function evaluate($text)
+{
+    $stack = new \Ds\Stack();
+    for ($i = 0; $i < mb_strlen($text); $i++) {
+        $current = $text[$i];
+        if ($current == '#') {
+            $stack->pop();
+        } else {
+            $stack->push($current);
+        }
+    }
+
+    return implode('', $stack->toArray());
+}
+
+
 
 # Collect 
 
