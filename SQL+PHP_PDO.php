@@ -608,37 +608,6 @@ select g.name, c.name from goods g join categories c on g.id = category_id where
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ############################ PHP PDO: Работа с базой данных ############################
 
 >>>>>  Соединение с базой данных  <<<<<<< 
@@ -653,16 +622,15 @@ $opt = [
 
 $pdo = new \PDO('sqlite::memory', null, null, $opt); // 2-й, 3-й параметр логин и пароль.
 
-$pdo->exec("CREATE TABLE users (id integer, name string)");    
+$pdo->exec("CREATE TABLE users (id integer, name string)"); // выполняет SQL-запрос и возвращает количество затронутых строк    
 $pdo->exec("INSERT INTO users VALUES 3, 'adel')");     
 $pdo->exec("INSERT INTO users VALUES (7, 'ada')");    
-$data = $pdo->query("SELECT * FROM users")->fetchAll();
+$data = $pdo->query("SELECT * FROM users")->fetchAll(); // выполняет SQL-запрос и возвращает результирующий набор в виде объекта PDOStatement
 print_r($data);
 
 
 /**
 Реализуйте интерфейс App\DDLManagerInterface в классе App\DDLManager
-
 Пример использования:
 **/
 
@@ -763,14 +731,15 @@ $query = $query->where('id', '3')->where('age', 21);
 
 // SELECT * FROM users WHERE from = 'github' AND id = 3 AND age = 21;
 $query->toSql();
-
 $query->all();
+
 
 namespace App;
 
 class Query
 {
     private $pdo;
+    private $table;
     private $where = [];
 
     public function __construct($pdo, $table, $where = [])
@@ -1180,8 +1149,211 @@ class UserMapper
         $stmtUser->execute([$user->getName()]);
         $user->setId($this->pdo->lastInsertId());
 
-        // BEGIN (write your solution here)
-        
-        // END
+        $stmt = $this->pdo->prepare("INSERT INTO user_photos (user_id, name, filepath) VALUES (?, ?, ?)");
+
+        foreach ($user->getPhotos() as $photo) {
+            $stmt->execute([$user->getId(), $photo->getName(), $photo->getFilepath()]);
+        }
     }
+}
+
+namespace App\Tests;
+
+use PHPUnit\Framework\TestCase;
+
+use App\User;
+use App\UserMapper;
+
+class UserMapperTest extends TestCase
+{
+    private $pdo;
+    private $mapper;
+
+    public function setUp()
+    {
+        $opt = array(
+            \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION,
+        );
+        $pdo = new \PDO('sqlite::memory:', null, null, $opt);
+
+        $pdo->exec("create table users (
+            id integer primary key autoincrement,
+            name string not null)");
+
+        $pdo->exec("create table user_photos (
+            id integer primary key autoincrement,
+            user_id integer not null,
+            name string not null,
+            filepath string not null)");
+
+        $this->mapper = new UserMapper($pdo);
+        $this->pdo = $pdo;
+    }
+
+    public function testFetchReducer()
+    {
+        $user = new User('Mark');
+        $user->addPhoto('family', '/path/to/photo/family');
+        $user->addPhoto('party', '/path/to/photo/party');
+        $user->addPhoto('friends', '/path/to/photo/friends');
+
+        $this->mapper->save($user);
+
+        $stmt = $this->pdo->query("SELECT COUNT(*) FROM user_photos");
+        $this->assertEquals(3, $stmt->fetchColumn());
+    }
+}
+
+
+
+
+>>>>>  Like  <<<<<<<
+ 
+$stm = $pdo->prepare("SELECT * FROM users WHERE name LIKE %?"); // так не работает
+
+$name = 'a';
+$value = '$name%';
+$stm = $pdo->prepare("SELECT * FROM users WHERE name LIKE ?");
+$stm->execute($value);
+$data = $stm->fetchAll(\PDO::FETCH_UNIQUE);
+
+print_r($data);
+
+
+/*
+Реализуйте функцию like, которая:
+ * принимает на вход pdo и массив
+ * строит запрос по данным из массива
+ * выполняет запрос
+ * возвращает данные в формате PDO::FETCH_COLUMN
+Запрос должен возвращать id из таблицы users. У массива структура следующая: 1) ключ - это название поля; 2) значение - это часть запроса, которую нужно использовать в like выражении. Лайки из этого массива нужно соединять с помощью OR. Если массив пустой, то запрос должен выполнять следующий sql: select id from users.
+
+Пример:
+**/
+
+$pdo->exec("create table users (id integer, first_name string, email string)");
+$pdo->exec("insert into users values (1, 'john', 'john@gmail.com')");
+$pdo->exec("insert into users values (3, 'adel', 'adel@yahoo.org')");
+
+$params = ['email' => '%gmail%', 'first_name' => 'ad%'];
+
+[1, 3] == like($pdo, $params); // select id from users where email LIKE ? OR first_name LIKE ?
+
+function like($pdo, array $params)
+{
+    if (!$params) {
+       $stmt = $pdo->query("SELECT id FROM users"); 
+    } else {    
+        $keys = array_map(function ($key) {
+            return "$key LIKE ?";
+        }, array_keys($params));
+
+        $values = array_values($params);
+
+        $stmt = $pdo->prepare("SELECT id FROM users WHERE " . implode(' OR ', $keys));
+        $stmt->execute($values);
+    }
+    return $stmt->fetchAll(\PDO::FETCH_COLUMN);
+}
+
+#2:
+
+function like($pdo, array $params)
+{
+    $likeParts = array_reduce(array_keys($params), function ($acc, $item) {
+        $acc[] = "$item LIKE ?";
+        return $acc;
+    }, []);
+    $sqlParts = [];
+    $sqlParts[] = "select id from users";
+    if (!empty($likeParts)) {
+        $sqlParts[] = "where";
+        $sqlParts[] = implode(" OR ", $likeParts);
+    }
+    $sql = implode(" ", $sqlParts);
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute(array_values($params));
+
+    return $stmt->fetchAll(\PDO::FETCH_COLUMN);
+}
+
+
+>>>>>  Реализация in  <<<<<<<
+
+$opt = [
+    \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION,
+    \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_ASSOC
+];
+
+$pdo = new \PDO('sqlite::memory:', null, null, $opt);
+$pdo->exec("create table users (id integer, name string)");
+
+$data = [
+    [1, 'john'],
+    [3, 'adel'],
+    [8, 'ada']
+];
+
+$stmt = $pdo->prepare("insert into users values (?, ?)");
+foreach ($data as $value) {
+    $stmt->execute($value);
+}
+
+$idx = [1, 2, 3];
+$in = implode(', ', array_fill(0, sizeof($idx), '?')); // заполняет массив значениями
+$sql = "SELECT * FROM users WHERE id IN ($in)";
+$stm = $pdo->prepare($sql);
+$stm->execute($idx);
+print_r($stm->fetchAll());
+
+
+/**
+Реализуйте функцию where, которая принимает на вход соединение с базой данных и массив описывающий условия выборки. Функция должна вернуть список идентификаторов пользователей отсортированных по возрастанию.
+
+Пример:
+**/
+
+where($pdo, []);           // select id from users order by id
+where($pdo, ['id' => []]); // select id from users order by id
+
+// select id from users where first_name in ('john', 'adel') order by id
+where($pdo, ['first_name' => ['john', 'adel']])
+
+// select id from users where first_name = 'ada' or source in ('bing', 'gmail') order by id
+where($pdo, ['first_name' => 'ada', 'source' => ['bing', 'gmail']])
+
+
+function where($pdo, $params)
+{
+     $sql = "SELECT id FROM users";
+    
+    if (!empty($params)) {
+        $inParams = array_reduce(array_keys($params), function($acc, $key) use ($params) {
+            $value = $params[$key];
+            if (!empty($value)) {
+                if (is_array($value)) {
+                    $in = implode(', ', array_fill(0, count($value), '?'));    
+                }
+                $acc['inParam'][] = is_array($value) ? "{$key} IN ({$in})" : "{$key} = ?";
+                $acc['inValues'][] = is_array($value) ? implode(", ", $value) : $value; 
+                return $acc;
+            }        
+        }, ['inParam' => [], 'inValues' => []]); 
+
+        if (!empty($inParams['inParam'])) {
+            $sql .= " WHERE " . implode(' OR ', $inParams['inParam']);
+        }       
+    }
+
+    $sql .= " ORDER BY id";
+
+    if (empty($inParams)) {
+        $stmt = $pdo->query($sql);         
+    } else {
+        $stmt = $pdo->prepare($sql);
+        $inValues = implode(', ', $inParams['inValues']);
+        $stmt->execute([$inValues]);    
+    }
+
+    return $stmt->fetchAll(\PDO::FETCH_COLUMN);   
 }

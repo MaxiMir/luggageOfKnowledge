@@ -8005,9 +8005,16 @@ file_exists($path); // false
 
 namespace App\FileUtils;
 
-// BEGIN (write your solution here)
-
-// END
+function tmpdir($func)
+{
+    $dir = sys_get_temp_dir() . DIRECTORY_SEPARATOR . uniqid();
+    mkdir($dir);
+    try {
+        return $func($dir);
+    } finally {
+        rrmdir($dir);
+    }
+}
 
 function rrmdir($dir)
 {
@@ -8098,3 +8105,366 @@ foreach ($files as $file) {
  ├ tree\fileA
 */
 
+
+
+
+
+
+<?
+
+
+>>>>>  Фильтрация коллекций  <<<<<<<
+
+
+
+>>>>>  Zip  <<<<<<<
+
+namespace Theory;
+
+require getenv("HOME") . '/.composer/vendor/autoload.php';
+
+use function Functional\zip;
+
+// [1, 2] zip with [3, 4]  (по индексам) => [[1, 3], [2, 4]]
+
+// array_map
+$result = array_map(null, range(1, 3), range(11, 13)); // если первый аргумент null array_map работает как zip
+
+print_r($result); // => [[1, 11], [2, 12], [3, 13]]
+
+// Functional\zip
+$result = zip(range(1, 3), range(11, 13));
+
+print_r($result); // => [[1, 11], [2, 12], [3, 13]]
+
+// array_map
+$result = array_map(function ($a, $b) { // <-> array_map(null, range(1, 3), range(11, 13))
+    return [$a, $b];
+}, range(1, 3), range(11, 13);
+
+print_r($result);
+
+
+// Returns [['one', 1], ['two', 2], ['three', 3]]
+zip(['one', 'two', 'three'], [1, 2, 3]);
+
+// Returns ['one|1', 'two|2', 'three|3']
+zip(
+    ['one', 'two', 'three'],
+    [1, 2, 3],
+    function ($one, $two) {
+        return $one . '|' . $two;
+    }
+);
+
+
+
+
+>>>>>   Функция reduce  <<<<<<<
+
+namespace Theory;
+
+require getenv("HOME") . '/.composer/vendor/autoload.php';
+
+use function Functional\reduce_left;
+
+$array = [1, 3, 2, 9, 8, 4];
+
+
+// as array
+
+$result = array_reduce($array, function ($acc, $item) { // наибольший элемент массива
+    return $item > $acc ? $item : $acc;
+}, $array[0]);
+
+print_r($result);
+
+// Functional\reduce_left
+
+$result = reduce_left($array, function ($item, $index, $collection, $acc) { // left обход коллекции слева, right - справа
+    return $item > $acc ? $item : $acc;
+}, $array[0]);
+
+print_r($result);
+
+/**
+Реализуйте функцию wordsCount, которая принимает на вход массив слов и возвращает массив, в котором ключ это слово, а значение это количество раз, которое это слово встречалось в исходном массиве.
+Пример:
+**/
+['cat' => 1, 'dog' => 1, 'fish' => 2] == wordsCount(['cat', 'dog', 'fish', 'fish'])
+
+
+function wordsCount($array)
+{
+    $result = reduce_left($array, function ($item, $index, $collection, $acc) {
+        if (!array_key_exists($item, $acc)) {
+            $acc[$item] = 0;
+        }
+        $acc[$item]++;
+        return $acc;
+    }, []);
+
+    return $result;
+}
+
+
+
+>>>>>   Функция sort  <<<<<<<
+
+namespace Theory;
+
+require getenv("HOME") . '/.composer/vendor/autoload.php';
+
+require 'User.php';
+
+use function Functional\sort as fsort;
+
+$collection = ['first' => 'dog', 'second' => 'cat', 'third' => 'bird'];
+
+// Sorts a collection alphabetically
+// uksort, uasort - сохраняет ключи
+
+usort($collection2, function ($left, $right) { // usort - не сохраняет ключи
+    return strcmp($left, $right); // возвращает отрицательное число, если str1 меньше str2, положительное число, если str1 больше str2, и 0, если строки равны.
+});
+
+print_r($collection);
+
+// Sorts a collection alphabetically
+$result = fsort($collection, function ($left, $right) {
+    return strcmp($left, $right);
+});
+
+print_r($collection);
+
+$users = [new User(10), new User(3), new User(4)];
+
+// Functional\sort. Sorts a collection of users by age
+
+$result = fsort($users, function ($user1, $users2) {
+    if ($user->getAge() == $user2->getAge()) {
+        return 0;
+    }
+    return ($user1->getAge() < $user2->getAge()) ? -1 : 1;
+});
+
+
+/**
+Реализуйте функцию sortByBinary, которая сортирует переданную коллекцию и возвращает новую коллекцию. Сортировка происходит следующим образом:
+
+Сортируем по количеству единиц в бинарном представлении (порядок следования не важен).
+Если количество единиц одинаково, то сортируем на основе десятичного представления.
+Пример:
+**/
+[1, 2, 4, 3] == sortByBinary([3, 4, 2, 1]);
+
+function sortByBinary($collection)
+{
+    return fsort($collection, function ($left, $right) {
+        $countBinOneL = substr_count(decbin($left), '1');
+        $countBinOneR = substr_count(decbin($right), '1');
+        if ($countBinOneL == $countBinOneR) {
+           return $left < $right ? -1 : 1;
+        }
+        return $countBinOneL < $countBinOneR ? -1 : 1;
+    });
+}
+
+# 2 
+
+function sortByBinary($collection)
+{
+    $onesCount = function ($number) {
+        $binary = decbin($number);
+        $bitsArray = str_split($binary);
+        return sizeof(array_filter($bitsArray, function ($bit) {
+            return $bit == "1";
+        }));
+    };
+
+    $sorted = fsort($collection, function ($prev, $next) use ($onesCount) {
+        $result = bccomp($onesCount($prev), $onesCount($next));
+        if ($result === 0) {
+            if ($prev > $next) {
+                return 1;
+            } else if ($prev < $next) {
+                return -1;
+            }
+            return 0;
+        }
+        return $result;
+    });
+
+    return $sorted;
+}
+
+
+
+>>>>>   Частичное применение функции  <<<<<<<
+
+
+namespace Theory;
+
+require getenv("HOME") . '/.composer/vendor/autoload.php';
+
+use function Functional\select;
+use function Functional\partial_left;
+use function Functional\partial_any;
+use const Functional\...;
+
+
+$substractor = function ($a, $b) {
+    return $a - $b;
+};
+
+echo substractor(10, 20); // -> -10
+
+// closure 
+$substractor2 = function ($a) {
+    return function ($b) use ($a) { // $a - замыкание
+        return $a - $b;
+    };
+};
+
+$partiallyAppliedSubstractor = $substractor2(10); //  подход - частичное применение функции
+echo $partiallyAppliedSubstractor(20); // => -10
+
+// Functional\partial
+
+$partiallyAppliedSubstractor = partial_left($substractor, 10);
+echo $partiallyAppliedSubstractor(20); // => -10
+
+$elements = [
+    'john',
+    'joe',
+    'joanna',
+    'patric'
+];
+
+$selected = select($elements, partial_any('substr_count', ..., 'jo')); // фильтр по substr_count, в подстроке есть 'jo'. ... - заполнитель
+
+print_r($selected); //  => ['john', 'joe', 'joanna'];
+
+/**
+Реализуйте функцию mapWithPower, которая принимает на вход массив и степень, и возвращает новый массив, в котором каждое значение возведено в переданную степень.
+
+Пример:
+**/
+[1, 1, 9, 100, 0] == mapWithPower([-1, 1, 3, 10, 0], 2)
+
+function mapWithPower($nums, $exp)
+{
+    $func = partial_any('pow', …, $exp);
+    return map($nums, $func);
+}
+
+
+
+>>>>>   Partition  <<<<<<<
+
+namespace Theory;
+
+require getenv("HOME") . '/.composer/vendor/autoload.php';
+
+require 'Admin.php';
+require 'User.php';
+
+use function Functional\partition; 
+
+$collection = [new User(), new Admin(), new User()];
+
+list($admins, $users) = partition($collection, function ($user) { // разбивает на 2 или более коллекций
+    return $user->isAdmin();
+});
+
+print_r($admins);
+print_r($users);
+
+
+/**
+Реализуйте функцию separateEvenAndOddNumbers, которая принимает на вход массив чисел и возвращает массив, в котором первый элемент - это массив четных чисел, а второй элемент - это массив нечетных чисел, полученных из исходного массива.
+**/
+
+function separateEvenAndOddNumbers($numbers)
+{
+    return partition($numbers, function ($num) {
+        return $num % 2 == 0;
+    });
+}
+
+
+>>>>>   Группировка  <<<<<<<
+
+namespace Theory;
+
+require getenv("HOME") . '/.composer/vendor/autoload.php';
+
+require 'User.php';
+
+use function Functional\group;
+
+$array = [
+    new User('english'), new User('spanish'), new User('russian'), new User('english');
+]; 
+
+$grupUser = group($array, function ($user) {
+    return $user->getLang();
+});
+
+print_r($groupUser); // 'english' => ..., 'spanish' => ... , ...
+
+
+
+/**
+Реализуйте функцию ages, которая принимает на вход список пользователей и возвращает массив, в котором пользователи одинакового возраста расположены рядом. Порядок появления возрастов в массиве должен совпадать с порядком появления в исходном массиве.
+
+Пример:
+
+
+**/
+$u1 = User\make(4);
+$u2 = User\make(3);
+$u3 = User\make(5);
+$u4 = User\make(4);
+$u5 = User\make(5);
+
+[$u1, $u4, $u2, $u3, $u5] == ages([$u1, $u2, $u3, $u4, $u5]);
+
+
+function ages($users)
+{
+    $grouped = group($users, function ($user) {
+        return getAge($user);
+    });
+
+    return flatten($grouped);
+}
+
+
+/**
+Реализуйте функцию flatten, которая делает плоским массив любой вложенности.
+**/
+
+flatten([]); // []
+flatten([[1], ['key' => 'value', [4]]]); // [1, 'value', 4]
+
+
+function flatten($arr)
+{
+    $iterator = new \RecursiveIteratorIterator(new \RecursiveArrayIterator($arr));
+    return iterator_to_array($iterator, false);
+}
+
+# 2
+
+function flatten($value)
+{
+    if (!is_array($value)) {
+        return [$value];
+    } elseif (sizeof($value) == 0) {
+        return [];
+    } elseif (sizeof($value) == 1) {
+        return flatten(end($value));
+    }
+    return array_merge(flatten(array_slice($value, 0, 1)), flatten(array_slice($value, 1)));
+}
