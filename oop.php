@@ -1,4 +1,5 @@
 <?
+
 ############### ООП ###############
 
 /*
@@ -3798,3 +3799,589 @@ $app = new \ns\Application();
 var_dump($app);
 
 
+<?
+
+#1
+/*
+Реализуйте функцию buildRange, которая переводит входные данные в удобный для построения графика формат.
+
+На вход эта функция принимает массив данных. Каждая запись массива представляет из себя объект типа [ 'value' => 14, 'date' => '02.08.2018' ]. Например:
+*/
+$data = [
+  [ 'value' => 14, 'date' => '02.08.2018' ],
+  [ 'value' => 43, 'date' => '03.08.2018' ],
+  [ 'value' => 38, 'date' => '05.08.2018' ],
+];
+
+/*
+Вторым и третьим параметрами функция принимает даты (в форме строк типа 'YYYY-MM-DD') начала и конца периода:
+
+$begin = '2018-08-01';
+$end = '2018-08-06';
+Диапазон дат задаёт размер выходного массива, который должна сгенерить реализуемая функция. Правила формирования итогового массива:
+
+он заполняется записями по всем дням из диапазона begin - end
+в него включаются только те записи из входного массива, даты которых попадают в диапазон
+если во входном массиве нет данных для какого-то дня из диапазона, то в свойство value записи этого дня установить значение 0
+<?php
+
+$result = buildRange(data, beginDate, endDate);
+
+// OUTPUT
+// [ [ 'value' => 0, 'date' => '01.08.2018' ],
+//   [ 'value' => 14, 'date' => '02.08.2018' ],
+//   [ 'value' => 43, date => '03.08.2018' ],
+//   [ 'value' => 0, 'date' => '04.08.2018' ],
+//   [ 'value' => 38, 'date' => '05.08.2018' ],
+//   [ 'value' => 0, 'date' => '06.08.2018' ] ]
+
+Подсказки
+Функции из библиотеки Collect, которые могут пригодиться: keyBy.
+Функции из библиотеки Carbon, которые могут пригодиться: \Carbon\CarbonPeriod::create.
+*/
+
+namespace App\Dates;
+
+// BEGIN (write your solution here)
+
+// END
+
+
+
+namespace App\Tests;
+
+use function App\Dates\buildRange;
+use PHPUnit\Framework\TestCase;
+
+class DatesTest extends TestCase
+{
+    public function testGetRange()
+    {
+        $dates = [
+          [ 'value' => 14, 'date' => '02.08.2018' ],
+          [ 'value' => 43, 'date' => '03.08.2018' ],
+          [ 'value' => 38, 'date' => '05.08.2018' ],
+        ];
+        $beginDate = '2018-08-01';
+        $endDate = '2018-08-10';
+        $expected = [
+          [ 'value' => 0, 'date' => '01.08.2018' ],
+          [ 'value' => 14, 'date' => '02.08.2018' ],
+          [ 'value' => 43, 'date' => '03.08.2018' ],
+          [ 'value' => 0, 'date' => '04.08.2018' ],
+          [ 'value' => 38, 'date' => '05.08.2018' ],
+          [ 'value' => 0, 'date' => '06.08.2018' ],
+          [ 'value' => 0, 'date' => '07.08.2018' ],
+          [ 'value' => 0, 'date' => '08.08.2018' ],
+          [ 'value' => 0, 'date' => '09.08.2018' ],
+          [ 'value' => 0, 'date' => '10.08.2018' ],
+        ];
+
+        $actual = buildRange($dates, $beginDate, $endDate);
+        $this->assertEquals($expected, $actual);
+    }
+}
+
+
+#2
+
+/*
+В этой задаче необходимо реализовать ленивую коллекцию https://ru.wikipedia.org/wiki/Отложенная_инициализация
+
+src\Enumerable.php
+Реализуйте класс Enumerable, который работает похожим образом, что и Collect, но предназначен для обработки коллекций ассоциативных массивов. Основная особенность работы данного класса заключается в том, что он использует lazy вариант обработки.
+*/
+
+$elements = [
+    ['key' => 'value', 'year' => 1932],
+    ['key' => '', 'year' => 1100],
+    ['key' => 'value', 'year' => 32]
+];
+
+$coll = Enumerable::wrap($elements);
+$newColl = $coll->where('key', 'value')->where('year', 1932);
+$newCall->all(); // ['key' => 'value', 'year' => 1932]
+
+/*
+Подсказки
+Функции, которые нужно реализовать, описаны в интерфейсе EnumerableInterface
+Усложнённый вариант: добавьте мемоизацию https://ru.wikipedia.org/wiki/Мемоизация
+*/
+
+// file: app/src/EnumerableInterface.php 
+
+namespace App;
+
+interface EnumerableInterface
+{
+    public static function wrap($elements);
+    public function where($key, $value);
+    public function all();
+}
+
+
+// file: app/src/Enumerable.php
+
+namespace App;
+
+// BEGIN (write your solution here)
+
+// END
+
+
+
+// file: app/tests/EnumerableTest.php
+
+namespace App\Tests;
+
+use App\Enumerable;
+use PHPUnit\Framework\TestCase;
+
+class EnumerableTest extends TestCase
+{
+    public function testWhere()
+    {
+        $coll = Enumerable::wrap([]);
+        $this->assertEquals([], $coll->all());
+
+        $elements = [
+            ['key' => 'value'],
+            ['key' => '']
+        ];
+        $coll = Enumerable::wrap($elements);
+        $result = $coll->where('key', 'value');
+        $expected = [
+            ['key' => 'value']
+        ];
+        $this->assertEquals($expected, $result->all());
+        $this->assertEquals($elements, $coll->all());
+    }
+}
+
+
+#3
+
+/*
+Пьяница — карточная игра, в которой побеждает тот игрок, который собирает все карты. В нашей задаче используется модификация игры с двумя игроками. Игрокам раздаётся равное количество карт. Игроки не смотрят в свои карты, а кладут их в стопку рядом с собой. Затем каждый игрок снимает верхнюю карту и показывает её сопернику. Тот игрок, чья карта оказалась большего номинала, берёт обе карты и кладёт их к себе в колоду снизу (так что своя карта идёт первой). Если карты имеют одинаковый номинал, то они выкидываются из игры. В игре возможны три исхода:
+
+У обоих игроков не осталось карт
+Игра не может закончиться
+Победил один из игроков
+src\Drunkard.php
+Реализуйте класс Drunkard с функцией run, которая принимает на вход два списка чисел, которые представляют собой карты для первого и второго игроков.
+
+Если выиграл первый игрок, то метод должен вернуть First player. Round: <номер раунда>.
+Если выиграл второй игрок, то метод должен вернуть Second player. Round: <номер раунда>.
+Если у игроков не осталось карт, то метод должен вернуть Botva!
+Если за 100 раундов не удалось выявить победителя то также возвращается Botva!
+Реальные примеры смотрите в тестах.
+
+Подсказки
+Воспользуйтесь классом \Ds\Deque для работы с колодами
+*/
+
+// file: app/src/Drunkard.php 
+
+namespace App;
+
+use Ds\Deque;
+
+// BEGIN (write your solution here)
+
+// END
+
+
+// file: app/tests/DrunkardTest.php
+
+namespace App\Tests;
+
+use App\Drunkard;
+use PHPUnit\Framework\TestCase;
+
+class DrunkardTest extends TestCase
+{
+    public function testRun()
+    {
+        $game = new Drunkard();
+        $result = $game->run([1], [2]);
+        $this->assertEquals('Second player. Round: 1', $result);
+
+        $result = $game->run([2], [1]);
+        $this->assertEquals('First player. Round: 1', $result);
+
+        $result = $game->run([1], [1]);
+        $this->assertEquals('Botva!', $result);
+
+        $result = $game->run([1, 2], [3, 2]);
+        $this->assertEquals('Second player. Round: 2', $result);
+
+        $result = $game->run([1, 3], [2, 1]);
+        $this->assertEquals('First player. Round: 4', $result);
+    }
+}
+
+
+#4
+
+/*
+Реализуйте функцию getQuestions, которая принимает на вход текст (полученный из редактора) и возвращает список вопросов извлеченных из этого текста разделенных переводом строки.
+
+Входящий текст разбит на строки и может содержать любые пробельные символы. Некоторые из этих строк являются вопросами. Они определяются по последнему символу, который должен равняться знаку ?.
+*/
+
+$text = <<<HEREDOC
+lala\r\nr
+ehu?
+\n \t
+i see you
+/r \n
+one two?\r\n\n
+HEREDOC;
+
+getQuestions($text);
+// ehu?
+// one two?
+
+
+// file: app/src/Normalizer.php
+
+namespace App\Normalizer;
+
+use function Stringy\create as s;
+
+// BEGIN (write your solution here)
+
+// END
+
+// file: app/tests/NormalizerTest.php 
+
+namespace App\Tests;
+
+use function App\Normalizer\getQuestions;
+use PHPUnit\Framework\TestCase;
+
+class NormalizerTest extends TestCase
+{
+    public function testGetQuestions()
+    {
+        $text1 = <<<HEREDOC
+lala\r\nr
+ehu?
+\n \t
+i see you
+/r \n
+one two?\r\n\n
+HEREDOC;
+        $actual1 = getQuestions($text1);
+
+        $expected1 = "ehu?\none two?";
+        $this->assertEquals($expected1, $actual1);
+    }
+}
+
+    
+#5
+
+/*
+Booking — процесс бронирования чего-либо. В интернете существует множество сайтов, предлагающих бронирование машин, квартир, домов, самолётов и многого другого. Несмотря на то, что такие сайты предлагают разные услуги, букинг везде работает почти идентично. Выбираются нужные даты и, если они свободны, производится бронирование.
+
+src\Booking.php
+Реализуйте класс Booking, который позволяет бронировать номер отеля на определённые даты. Единственный интерфейс класса — функция book, которая принимает на вход две даты в текстовом формате. Если бронирование возможно, то метод возвращает true и выполняет бронирование (даты записываются во внутреннее состояние объекта).
+
+Подсказки
+По обычаям гостиничного сервиса время заселения в номер — после полудня первого дня, а время выселения — до полудня последнего дня. Конкретные часы варьируются в разных отелях. Но в данной практике это не важно, главное понять принцип, по которому указываются даты:
+*/
+
+$booking = new Booking();
+
+// забронировать номер на два дня
+$booking->book('10-11-2008', '12-11-2008');
+
+// бронь невозможна, 11-го числа номер будет занят
+$booking->book('11-11-2008', '15-11-2008');
+
+// бронь возможна, потому что 12-го числа номер освободится
+$booking->book('12-11-2008', '13-11-2008');
+
+// бронь невозможна, съём, сроком менее одного дня, обычно не практикуется
+$booking->book('17-11-2008', '17-11-2008');
+
+// бронь возможна, съём номера на один день
+$booking->book('17-11-2008', '18-11-2008');
+
+$booking = new Booking();
+$booking->book('11-11-2008', '13-11-2008'); // true
+$booking->book('12-11-2008', '12-11-2008'); // false
+$booking->book('10-11-2008', '12-11-2008'); // false
+$booking->book('12-11-2008', '14-11-2008'); // false
+$booking->book('10-11-2008', '11-11-2008'); // true
+$booking->book('13-11-2008', '14-11-2008'); // true
+
+
+// file: app/src/Booking.php
+
+namespace App;
+
+use Carbon\Carbon;
+
+// BEGIN (write your solution here)
+
+// END
+
+
+// file: app/tests/BookingTest.php
+
+namespace App\Tests;
+
+use PHPUnit\Framework\TestCase;
+use App\Booking;
+
+class BookingTest extends TestCase
+{
+    public function testBook()
+    {
+        $booking = new Booking();
+        $result1 = $booking->book('11-11-2008', '13-11-2008');
+        $this->assertTrue($result1);
+
+        $result2 = $booking->book('12-11-2008', '12-11-2008');
+        $this->assertFalse($result2);
+
+        $result3 = $booking->book('10-11-2008', '12-11-2008');
+        $this->assertFalse($result3);
+
+        $result4 = $booking->book('12-11-2008', '14-11-2008');
+        $this->assertFalse($result4);
+
+        $result5 = $booking->book('10-11-2008', '11-11-2008');
+        $this->assertTrue($result5);
+
+        $result6 = $booking->book('13-11-2008', '13-11-2008');
+        $this->assertFalse($result6);
+
+        $result7 = $booking->book('13-11-2008', '14-11-2008');
+        $this->assertTrue($result7);
+    }
+}
+
+#6
+
+/*
+Дисклеймер - эту задачу можно решить огромным числом способов. Почти наверняка ваш способ будет не такой как решение учителя.
+
+Для отработки fluent interface в задаче используется библиотека Collect. Мы не даем никаких подсказок насчет того, какие функции нужно использовать. Как минимум вы знаете главную тройку map, filter и reduce. Их вполне достаточно, но можно и лучше если внимательно поизучать функции в документации Collect.
+
+src\Normalizer.php
+Реализуйте функцию normalize которая принимает на вход список городов, производит внутри некоторые преобразования и возвращает структуру определенного формата.
+
+Входные данные
+*/
+
+$raw = [
+    [
+        'name' => 'istambul',
+        'country' => 'turkey'
+    ],
+    [
+        'name' => 'Moscow ',
+        'country' => ' Russia'
+    ],
+    [
+        'name' => 'iStambul',
+        'country' => 'tUrkey'
+    ],
+    [
+        'name' => 'antalia',
+        'country' => 'turkeY '
+    ],
+    [
+        'name' => 'samarA',
+        'country' => '  ruSsiA'
+    ],
+];
+/*
+Входная структура представляет из себя список городов, где каждый город это ассоциативный массив с ключами name и country. Значения в этих ключах не нормализованы. Они могут быть в любом регистре и содержать начальные и концевые пробелы. Сами города могут дублироваться в рамках одной страны.
+
+Результат
+*/
+
+$actual = normalize($raw);
+// $expected = [
+//     'russia' => [
+//         'moscow', 'samara'
+//     ],
+//     'turkey' => [
+//         'antalia', 'istambul'
+//     ]
+// ];
+
+/*
+Конечная структура - ассоциативный массив, в котором ключ это страна, а значение - список имен городов отсортированный по именам. Сама структура отсортирована по городам. Дублей городов в выходной структуре быть не должно, а сами страны и города должны быть записаны в нижнем регистре без ведущих и концевых пробелов.
+*/
+
+// file: app/src/Normalizer.php
+
+namespace App\Normalizer;
+
+// BEGIN (write your solution here)
+
+// END
+
+
+// file: app/tests/NormalizerTest.php
+
+namespace App\Tests;
+
+use function App\Normalizer\normalize;
+use PHPUnit\Framework\TestCase;
+
+class NormalizeTest extends TestCase
+{
+    public function testNormalize()
+    {
+        $raw = [
+            [
+                'name' => 'istambul',
+                'country' => 'turkey'
+            ],
+            [
+                'name' => 'Moscow ',
+                'country' => ' Russia'
+            ],
+            [
+                'name' => 'iStambul',
+                'country' => 'tUrkey'
+            ],
+            [
+                'name' => 'antalia',
+                'country' => 'turkeY '
+            ],
+            [
+                'name' => 'samarA',
+                'country' => '  ruSsiA'
+            ],
+        ];
+
+        $actual = normalize($raw);
+        $expected = [
+            'russia' => [
+                'moscow', 'samara'
+            ],
+            'turkey' => [
+                'antalia', 'istambul'
+            ]
+        ];
+        $this->assertEquals($expected, $actual);
+    }
+
+    public function testNormalize2()
+    {
+        $raw = [
+            [
+                'name' => 'pariS ',
+                'country' => ' france'
+            ],
+            [
+                'name' => ' madrid',
+                'country' => ' sPain'
+            ],
+            [
+                'name' => 'valencia',
+                'country' => 'spain'
+            ],
+            [
+                'name' => 'marcel',
+                'country' => 'france'
+            ],
+            [
+                'name' => ' madrid',
+                'country' => ' sPain'
+            ],
+        ];
+
+        $actual = normalize($raw);
+        $expected = [
+            'france' => [
+                'marcel', 'paris'
+            ],
+            'spain' => [
+                'madrid', 'valencia'
+            ]
+        ];
+        $this->assertEquals($expected, $actual);
+    }
+}
+
+#7
+
+/*
+Реализуйте класс DeckOfCards, который описывает колоду карт и умеет её мешать.
+
+Конструктор класса принимает на вход массив, в котором перечислены номиналы карт в единственном экземпляре, например, [6, 7, 8, 9, 10, 'king'].
+
+Реализуйте публичный метод getShuffled, с помощью которого можно получить полную колоду в виде отсортированного случайным образом массива.
+
+Примечания
+В "полной" колоде каждая карта встречается 4 раза — для простоты не учитываем масть.
+Примеры
+*/
+
+$deck = new DeckOfCards([2, 3]);
+$deck->getShuffled(); // [2, 3, 3, 3, 2, 3, 2, 2]
+$deck->getShuffled(); // [3, 3, 2, 2, 2, 3, 3, 2]
+
+/*
+Подсказки
+Используйте функцию collect для оборачивания массивов
+Документация по доступным функциям https://laravel.com/docs/5.6/collections
+*/
+
+// file: app/src/DeckOfCards.php
+
+namespace App;
+
+// BEGIN (write your solution here)
+
+// END
+
+
+
+// file: app/tests/DeckOfCardsTest.php 
+
+namespace App\Tests;
+
+use App\DeckOfCards;
+use PHPUnit\Framework\TestCase;
+
+class DeckOfCardsTest extends TestCase
+{
+    public function testGetShuffled1()
+    {
+        $expected = [2, 2, 2, 2, 3, 3, 3, 3];
+        $deck = new DeckOfCards([2, 3]);
+        $result1 = $deck->getShuffled();
+        $result2 = $deck->getShuffled();
+        $this->assertNotEquals($result1, $result2);
+
+        sort($result1);
+        $this->assertEquals($expected, $result1);
+
+        sort($result2);
+        $this->assertEquals($expected, $result2);
+    }
+
+    public function testGetShuffled2()
+    {
+        $expected = [7, 7, 7, 7, 8, 8, 8, 8, 9, 9, 9, 9];
+        $deck = new DeckOfCards([8, 9, 7]);
+        $result1 = $deck->getShuffled();
+        $result2 = $deck->getShuffled();
+        $this->assertNotEquals($result1, $result2);
+
+        sort($result1);
+        $this->assertEquals($expected, $result1);
+
+        sort($result2);
+        $this->assertEquals($expected, $result2);
+    }
+}

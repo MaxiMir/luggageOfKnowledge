@@ -156,7 +156,7 @@ LudovicXV, LudovicXVI, LudovicXVIII, LudovicLXVII, LudovicXXL
 **/
 
 // match
-['80:8080, 80:!@#$'];
+80(?=:[^a-z\s])
 
 // not match
 ['80:', '80', '80:d123f'];

@@ -8110,10 +8110,91 @@ foreach ($files as $file) {
 
 
 
-<?
+############## «PHP: Функциональное программирование» ##############
+
+
+>>>>>   Map: Отображение списков  <<<<<<<
+
+$result = array_map(function ($key, $value)) {
+    return $key . $value;
+}, array_keys($map), $map); // передаем ключи массива в array_map
+// не поддерживает итерируемые объекты
+
+// Functional\map - поддерживает:
+$iterator = new \DirectoryIterator('..'); // .. - директория выше
+$result = map($iterator, function ($info) {
+    return $info->getFilename();
+});
+
+
 
 
 >>>>>  Фильтрация коллекций  <<<<<<<
+
+$result = array_filter($array, function ($key) {
+    return $key > 5
+}, ARRAY_FILTER_USE_KEY); // передаем ключи в array_filter. ARRAY_FILTER_USE_BOTH - передать ключ и значение
+// не поддерживает итерируемые объекты
+
+// Functional\select:
+$iterator = new \DirectoryIterator('..');
+$result = select($iterator, function ($item) {
+    return $item->isDir();
+});
+
+/*
+Ссылки
+Итераторы - http://php.net/manual/en/language.oop5.iterations.php
+
+/**
+«Мощность строки» — выдуманное нами понятие, которое показывает ее силу ;-). Вычисляется оно как сумма ASCII кодов букв строки.
+Реализуйте функцию powerOfString, которая находит мощность строки.
+
+Подсказки:
+Сумма элементов массива — array_sum.
+Преобразование строки в массив — str_split.
+Получить ASCII код символа — ord.
+**/
+namespace App\Solution;
+
+require getenv('COMPOSER_HOME') . '/vendor/autoload.php';
+
+use function Functional\select;
+use function Functional\map;
+
+function powerOfString($str)
+{
+    $result = map(str_split($str), function ($item) {
+        return ord($item);
+    });
+
+    return array_sum($result);
+}
+
+/**
+Реализуйте функцию evenSquareSum, которая принимает на вход массив и возвращает сумму квадратов четных чисел.
+[1, 2, 3, 8]; // 2^2 + 8^2 = 68
+**/
+namespace App\Solution;
+
+require getenv('COMPOSER_HOME') . '/vendor/autoload.php';
+
+use function Functional\select;
+use function Functional\map;
+
+function evenSquareSum($array)
+{
+    $evenNumbers = select($array, function ($item) {
+        return $item % 2 == 0;
+    });
+
+    $squaredNumbers = map($evenNumbers, function ($item) {
+        return $item ** 2;
+    });
+
+    return array_sum($squaredNumbers);
+}
+
 
 
 
