@@ -610,6 +610,7 @@ select g.name, c.name from goods g join categories c on g.id = category_id where
 
 ############################ PHP PDO: Работа с базой данных ############################
 
+
 >>>>>  Соединение с базой данных  <<<<<<< 
 
 namespace Theory
@@ -1325,35 +1326,22 @@ where($pdo, ['first_name' => 'ada', 'source' => ['bing', 'gmail']])
 
 function where($pdo, $params)
 {
-     $sql = "SELECT id FROM users";
-    
-    if (!empty($params)) {
-        $inParams = array_reduce(array_keys($params), function($acc, $key) use ($params) {
-            $value = $params[$key];
-            if (!empty($value)) {
-                if (is_array($value)) {
-                    $in = implode(', ', array_fill(0, count($value), '?'));    
-                }
-                $acc['inParam'][] = is_array($value) ? "{$key} IN ({$in})" : "{$key} = ?";
-                $acc['inValues'][] = is_array($value) ? implode(", ", $value) : $value; 
-                return $acc;
-            }        
-        }, ['inParam' => [], 'inValues' => []]); 
+    $whereParts = array_reduce(array_keys($params), function ($acc, $key) use ($pdo, $params) {
+            $values = (array) $params[$key];
+            if ($values) {
+                $in = array_map(function ($item) use ($pdo) {
+                    return $pdo->quote($item);
+                }, $values);
+                $joinedIn = implode(", ", $in);
+                $acc[] = "$key IN ($joinedIn)";
+            }
+            return $acc;
+    },[]);
 
-        if (!empty($inParams['inParam'])) {
-            $sql .= " WHERE " . implode(' OR ', $inParams['inParam']);
-        }       
-    }
+    $where = $whereParts ? 'WHERE ' . implode(' OR ', $whereParts) : '';
+    $query = sprintf("SELECT id FROM users %s ORDER BY id", $where);
+    $stmt = $pdo->prepare($query);
+    $stmt->execute();
 
-    $sql .= " ORDER BY id";
-
-    if (empty($inParams)) {
-        $stmt = $pdo->query($sql);         
-    } else {
-        $stmt = $pdo->prepare($sql);
-        $inValues = implode(', ', $inParams['inValues']);
-        $stmt->execute([$inValues]);    
-    }
-
-    return $stmt->fetchAll(\PDO::FETCH_COLUMN);   
+    return $stmt->fetchAll(\PDO::FETCH_COLUMN); 
 }

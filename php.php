@@ -6322,7 +6322,7 @@ app.get('/', (req, res) => {
 Веб-сервер
 Веб-сервер — специализированная программа для обслуживания сайтов. Один веб-сервер может обрабатывать практически любое число сайтов (благодаря Virtual Hosts). В общем случае он перенаправляет входящие сетевые запросы на код сайтов, получает от них ответ и возвращает его браузеру. Кроме главной функции, у веб-серверов огромное число вспомогательных. Среди них кеширование, перезапись запросов, раздача статики (например, картинки), reverse proxy, балансировка нагрузки и многое другое. Веб-сервера ничего не знают про то, на чём написан сайт. Все способы взаимодействия веб-сервера и сайта на любом языке стандартизированы. Благодря этому веб-серверов существует не так много и все они могут работать с сайтами, написанными на чём угодно.
 
-Первым и самым простым способом взаимодействия веб-сервера с сайтом был CGI (Common Gateway Interface). Этот стандарт сразу разрабатывался с учётом того, что сервер не должен зависеть от того, на чём написан сайт. Он основан на переменных окружения. По сути, сайт представляет из себя исполняемый файл, который запускается веб-сервером во время обработки входящего запроса и передает в него все параметры запроса через переменые окружения. Всё, что требуется от скрипта, — это вернуть HTTP ответ в стандартный вывод (STDOUT). Общий алгоритм работы выглядит так:
+Первым и самым простым способом взаимодействия веб-сервера с сайтом был CGI (Common Gateway Interface - интерфейс, который описывает способ взаимодействие сайта и веб-сервера. Благодаря этому стандарту, веб-сервер не зависит от того на чем написан сайт.). Этот стандарт сразу разрабатывался с учётом того, что сервер не должен зависеть от того, на чём написан сайт. Он основан на переменных окружения. По сути, сайт представляет из себя исполняемый файл, который запускается веб-сервером во время обработки входящего запроса и передает в него все параметры запроса через переменые окружения. Всё, что требуется от скрипта, — это вернуть HTTP ответ в стандартный вывод (STDOUT). Общий алгоритм работы выглядит так:
 
 1. Клиент запрашивает страницу сайта.
 2. Веб-сервер принимает запрос и устанавливает переменные окружения (через них приложению передаются данные и служебная информация).
@@ -6695,9 +6695,6 @@ $app->post('/users', function ($request, $response) {
 Количество обработчиков и маршрутов которые можно добавить ничем не ограничено. При этом микрофреймворки не задают никакой структуры. Если кода становится много, то разделять код по файлам придется самостоятельно.
 
 Во фреймворках не подразумевается прямая работа с PHP в режиме CGI. Данные запроса берутся из объекта $request, ответ вместе с заголовками записывается в объект в $response. Конкретно для отправки тела вызывается функция write. Ее можно использовать множество раз в рамках одного обработчика.
-*/
-
-
 
 
 /**
@@ -6764,6 +6761,57 @@ $app->get('/companies', function ($request, $response) use ($companies) {
 });
 
 $app->run();
+
+
+
+# HTTP Сессия 
+
+/*
+Каждая HTTP сессия определяется двумя вещами - запросом и ответом. Запрос формируется клиентом, ответ кодом обработчика соответствующего маршрута. И запрос и ответ, в Slim представлены двумя объектами, которые передаются в каждый обработчик.
+*/
+
+$app->get('/', function ($request, $response) {
+    return $response->write('Hello, world!');
+});
+
+/*
+$response по стандарту - неизменяемый, это значит, что каждый метод, который выглядит как мутирующий (изменяющий) $response, на самом деле, возвращает новый $response. Не зная этого, очень легко допустить такую ошибку:
+*/
+
+$app->post('/users', function ($request, $response) {
+    // Метод withStatus устанавливает код ответа HTTP
+    $response->withStatus(302);
+    return $response;
+});
+
+/*
+В этом коде withStatus возвращает новый $response, который никак не используется, а наружу возвращается старый. Если попробовать выполнить запрос к этому обработчику, то он не вернет никаких данных.
+
+Query Params не являются частью маршрута и не влияют на выбор обработчика. Связано это с тем, что такие параметры используются для различных вспомогательных целей, например, параметр page, обозначает страницу просматриваемого списка. Обработчик в такой ситуации всегда один и тот же, а вот данные показываются разные.
+*/
+
+$ curl 'localhost:8000/users?page=4&per=3'
+GET /users
+
+// Параметры извлекаются из объекта $request методом getQueryParam($name, $defaultValue):
+
+$app->post('/users', function ($request, $response) {
+    $page = $request->getQueryParam('page', 1); // 1 - значение по умолчанию
+    $per = $request->getQueryParam('per', 10);
+    return $response;
+});
+
+/*
+Количество обработчиков и маршрутов которые можно добавить ничем не ограничено. При этом микрофреймворки не задают никакой структуры. Если кода становится много, то разделять код по файлам придется самостоятельно.
+
+Во фреймворках не подразумевается прямая работа с PHP в режиме CGI. Данные запроса берутся из объекта $request, ответ вместе с заголовками записывается в объект в $response. Конкретно для отправки тела вызывается функция write. Ее можно использовать множество раз в рамках одного обработчика. Подробнее об этих объектах мы поговорим в следующих уроках.
+
+Дополнительные материалы
+Request https://www.slimframework.com/docs/v3/objects/request.html
+Response https://www.slimframework.com/docs/v3/objects/response.html
+*/
+
+
 
 
 # Динамические маршруты
@@ -6922,6 +6970,19 @@ Foreach
 
 Несмотря на то, что PHP уже готовый шаблонизатор, его использование сопряжено с определенными неудобствами. Например, безопасность такой шаблонизации находится на нуле (см XSS). Так же PHP не поддерживает макеты, то есть специализированые шаблоны, содержащие обвязку сайта, в которую вставляется HTML конкретного обработчика. По этой причине в PHP, как и в других языках, используют шаблонизаторы, написанные на самом PHP. Наиболее популярные среди них Blade и Twig. Лично мне больше импонируют шаблоны на основе Slim, но в PHP они не так популярны, как в JS или Ruby.
 */
+
+
+/**
+Реализуйте обработчики для списка пользователей /users и вывода конкретного пользователя /users/{id}. Список пользователей генерируется в начале скрипта. Используйте пейджинг для вывода пользователей. По-умолчанию показывается 5 пользователей.
+
+templates/users/index.phtml
+Реализуйте вывод списка пользователей со ссылкой на просмотр каждого из них. Вывод должен содержать пейджинг.
+
+templates/users/show.phtml
+Реализуйте вывод всех полей пользователя
+**/
+
+
 
 
 
@@ -8549,3 +8610,281 @@ function flatten($value)
     }
     return array_merge(flatten(array_slice($value, 0, 1)), flatten(array_slice($value, 1)));
 }
+
+
+############## PHP: Автоматическое тестирование ##############
+
+/*
+PHP Unit
+В одном тестовом методе желательно тестировать только одну функцию (в юнит тестировании)
+Разные виды assert функций нужны для более удобного автоматического вывода сообщений об ошибках
+*/
+
+
+>>>>> Ассерты <<<<<<<
+
+/* factrorial() */
+assert(6) = factrorial(3)); // assert - утверждение
+
+// file: teory/Solution.php:
+
+namespace App\Solution;
+
+function isOdd($var)
+{
+    return $var % 2 != 0;
+}
+
+// file: teory/tests/SolutionTest.php:
+
+namespace App;
+
+require_once 'Solution.php';
+
+class SolutionTest extends \PHPUnit_Framework_TestCase  // Название файла + Test
+{
+    public function testIsOdd() // test + название функции для теста
+    {
+        $this->assertTrue(Solution\isOdd(1));
+        $this->assertFalse(Solition\isOdd(8), "Error!"); // Добавлением дополнительное сообщение в случае ошибки
+    }
+}
+
+// assertTrue(mixed $value)
+$this->assertTrue(isEven(6));
+
+// assertEquals(mixed $expected, mixed $actual)
+$this->assertEquals(6, factorial(3));
+
+// assertCount(int $size, array $haystack)
+$this->assertCount(1, getChildren());
+
+// assertContains(mixed $needle, Iterator|array $haystack)
+$this->assertContains('john', getNames());
+
+$ phpunit tests/    // запуск тестов из консоли. Каждый тест "." - все ок, F - резльтат о и д не совпадают. :11 - номер строчки с ошибкой
+
+
+/**
+Напишите тесты на функцию isEven, которая принимает на вход целое число и возвращает true, если это число четное, и false в обратном случае.
+**/
+
+namespace App;
+
+class TestSolution extends \PHPUnit_Framework_TestCase
+{
+    public function testIsEven()
+    {
+        $this->assertTrue(isEven(-2));
+        $this->assertFalse(isEven(7));
+        $this->assertTrue(isEven(8));
+    }
+}
+
+
+>>>>> Структура тестов <<<<<<<
+
+// file: teory/Leaf.php
+
+namespace Theory;
+
+class Leaf
+{
+    private $value;
+
+    public function __construct($value = null)
+    {
+        $this->value = $value;
+    }
+
+    public function getValue()
+    {
+        return $this->value;
+    }
+}
+
+// file: teory/tests/LeafTest.php
+
+namespace Treory;
+
+require_once 'Leaf.php';
+
+class TestLeaf extends \PHPUnit_Framework_TestCase
+{
+    public function testGetValue()
+    {
+        $value = 100;
+        $leaf = new Leaf($value);
+        $this->assertEquals($value, $leaf->getValue());
+    }
+}
+
+
+// file: teory/Node.php
+
+namespace Theory;
+
+class Node
+{
+    private $children;
+
+    public function addChild($child)
+    {
+        $this->children[] = $child;
+    }
+
+    public function getChildren()
+    {
+        return $this->children;
+    }
+
+    public function removeChildren()
+    {
+        return $this->children = [];
+    }
+}
+
+
+// file: teory/tests/NodeTest.php
+
+namespace Treory;
+
+require_once 'Node.php';
+
+class TestNode extends \PHPUnit_Framework_TestCase
+{
+    public function testGetChildren()
+    {
+        $tree = new Node();
+        $leaf = new Leaf();
+        $node = new Node();
+
+        $childen = $tree->getChildren();
+        $this->assertCount(0, $children);
+
+        $tree = addChild($leaf);
+        $children = $three->getChildren();
+        $this->assertCount(1, $children);
+        $this->assertContains($leaf, $children); // $children содержит $leaf
+
+        $tree->addChild($node);
+        $childen = $tree->getChildren();
+        $this->assertCount(2, $children);
+        $this->assertContains($leaf, $children);
+        $this->assertContains($node, $children);
+    }
+
+    public function testRemoveChildren()
+    {
+        $tree = new Node();
+        $leaf = new Leaf();
+
+        $tree->addChild($leaf);
+        $tree->removeChildren();
+        $children = $tree->getChildren();
+        $this->assertEmpty($children);
+    }
+}
+
+/**
+QueryBuilder это специальный класс для конструирования sql запросов. Подобная функциональность есть практически во всех ORM. Пример использования:
+
+    QueryBuilder::from('members')->toSql();
+    // SELECT * FROM members
+
+    QueryBuilder::from('members')->where('id', 12)->toSql();
+    // SELECT * FROM members WHERE id = '12'
+
+    QueryBuilder::from('photos')->select('author', 'id')
+        ->where('views_count', null)->where('state', 'archived')->toSql();
+    // SELECT author, id FROM photos WHERE views_count IS NULL AND state = 'archived'
+
+Реализуйте тесты для QueryBuilder основываясь на примере выше.
+**/
+
+
+<?php
+
+namespace App;
+
+class QueryBuilder
+{
+    private $selectPart = '*';
+    private $tablePart;
+    private $whereParts = [];
+
+    public static function from($table)
+    {
+        $builder = new QueryBuilder($table);
+        return $builder;
+    }
+
+    public function __construct($table)
+    {
+        $this->tablePart = $table;
+    }
+
+    public function select(...$args)
+    {
+        if (!empty($args)) {
+            $this->selectPart = implode(", ", $args);
+        }
+        return $this;
+    }
+
+    public function where($key, $value)
+    {
+        $this->whereParts[$key] = $value;
+        return $this;
+    }
+
+    public function toSql()
+    {
+        $sqlParts = [];
+        $sqlParts[] = "SELECT {$this->selectPart} FROM {$this->tablePart}";
+
+        if ($this->whereParts) {
+            $whereParts = array_map(function ($key, $value) {
+                if (is_null($value)) {
+                    return "$key IS NULL";
+                } else {
+                    return "$key = '$value'";
+                }
+            }, array_keys($this->whereParts), $this->whereParts);
+
+            $wheres = implode(' AND ', $whereParts);
+            $sqlParts[] = "WHERE $wheres";
+        }
+
+        return implode(' ', $sqlParts);
+    }
+}
+
+
+namespace App\Tests;
+
+use PHPUnit\Framework\TestCase;
+
+class QueryBuilderTest extends TestCase
+{
+    public function testSelect()
+    {
+        // BEGIN (write your solution here)
+        
+        // END
+    }
+
+    // BEGIN (write your solution here)
+    
+    // END
+}
+
+    QueryBuilder::from('members')->toSql();
+    // SELECT * FROM members
+
+    QueryBuilder::from('members')->where('id', 12)->toSql();
+    // SELECT * FROM members WHERE id = '12'
+
+    QueryBuilder::from('photos')->select('author', 'id')
+        ->where('views_count', null)->where('state', 'archived')->toSql();
+    // SELECT author, id FROM photos WHERE views_count IS NULL AND state = 'archived'

@@ -666,12 +666,11 @@ mysql> DESCRIBE custumers; // просмотр структуры таблицы
 
 -- Создание таблицы
 CREATE TABLE [IF NOT EXISTS] `custumers` (
-	`cnum` smallint(5) unsigned NOT NULL AUTO_INCREMENT
+	`cnum` smallint(5) unsigned NOT NULL AUTO_INCREMENT,
 	`cname` varchar(50) NOT NULL,
 	`text` text NOT NULL,
 	PRIMARY KEY ('cnum'),
 	FULLTEXT KEY ('text') 
-
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8
 
 -- Создание копии страницы
