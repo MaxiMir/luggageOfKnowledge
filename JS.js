@@ -7,6 +7,7 @@ var arr4 = new Array(1,2,3, [4,5,6]); // <-> [1,2,3, [4,5,6]];
 
 alert(arr2[3][0]); // выводим значение
 alert(arr4); // alert приводит к строке => 1,2,3,4,5,6
+
 --
 
 arr[0] = 'num'; //  0 - индекс массива
@@ -1398,7 +1399,7 @@ window.onload = function(e){
 		e.preventDefault();
 		return false;
 
-});	
+};	
 	
 
 

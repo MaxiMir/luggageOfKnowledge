@@ -18,7 +18,7 @@ telnet somehost.com 80
 Вот пример HTTP-запроса, выполненного с помощью утилиты telnet:
 */
 
-battle (master) $ telnet jquery.com 80                                                                                                    // =>                                          
+$ telnet jquery.com 80                                                                                                    // =>                                
 Trying 70.32.120.107...                                                                                                                   
 Connected to jquery.com.                                                                                                                  
 Escape character is '^]'. 
@@ -49,7 +49,7 @@ Escape character is '^]'.
 
 
 HEAD / HTTP/1.1                                                                         
-HOST: jquery.com                                                                                                                          // =>                                                                                                                                    
+HOST: jquery.com                                                                                                           // =>                                                                                                                                    
 HTTP/1.1 200 OK                                                                                                                           
 Server: nginx/1.4.7                                                                                                                       
 Date: Tue, 08 Jul 2014 18:21:30 GMT            
@@ -109,6 +109,7 @@ my request body
 
 
 >>>>> Отправка формы <<<<<<<
+
 telnet hexlet.io 8080 
 POST /login HTTP/1.1 
 HOST: hexlet.io 
@@ -186,6 +187,7 @@ HOST: hexlet.local
 
 
 >>>>> Базовая аутентификация <<<<<<<
+
 // В случае введения неверных данных или нажатия на cancel => 
 HTTP/1.1 401 Access Denied 
 WWW-Authenticate: Basic realm="My Server" 

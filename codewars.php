@@ -280,9 +280,14 @@ You can pass by relying on luck or skill but try not to rely on luck.
 Good luck!
 **/
 
+# 1:
 srand(0); // изменяет начальное число генератора псевдослучайных чисел
 $guess = rand(1,100);
 srand(0);
+
+
+#2:
+$guess = TRUE;
 
 class DontRelyOnLuckKata extends TestCase
 {
@@ -295,9 +300,6 @@ class DontRelyOnLuckKata extends TestCase
 }
 
 
-#2:
-
-$guess = TRUE;
 
 
 /**
