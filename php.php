@@ -1999,7 +1999,15 @@ function getIntersectionOfSortedArray($arr1, $arr2)
     return $result;
 }
 
-
+# Разновидности Big O:
+/* 
+В порядке убывания скорости выполнения:
+> O(log n), или логарифмическое время. Пример: бинарный поиск.
+> 0(n), или линейное время. Пример: простой поиск.
+> O(n * log n). Пример: эффективные алгоритмы сортировки (быстрая сортировка)
+> O (n2). Пример: медленные алгоритмы сортировки (сортировка выбором)
+> O(n!). Пример: очень медленные алгоритмы. 
+*/
 
 >>>>>  Destructuring <<<<<<<
 
@@ -6096,7 +6104,7 @@ $smoothFunc(10) // ~ 0.438
 
 
 
->>>>>  Веб-разработка на PHP <<<<<<<  
+####################  Веб-разработка на PHP ######################
 
 /*
 Переход от написания скриптов (то что мы делали ранее) к созданию полноценных сайтов, сопровождается необходимостью знакомиться с большим числом понятий и инструментов выходящих далеко за рамки языка. Взаимодействие с внешним миром вовлекает в себя знание операционных систем, в частности сетей, работу с регистраторами, хостингом, деплоем сайта. На собеседованиях веб-программистов часто задают вопрос "Что происходит после того как в адресной строке браузера набирается сайт www.google.com и нажимается enter?". Очень подробный ответ на этот вопрос доступен здесь (https://github.com/alex/what-happens-when). Спрашивающий, в этот момент, хочет услышать от вас ключевые понятия связанные с веб-разработкой.
@@ -6121,10 +6129,11 @@ $smoothFunc(10) // ~ 0.438
 Что такое протокол HTTPS, и как он защищает вас в интернете https://yandex.ru/blog/company/77455
 Как работает DNS https://habr.com/post/137587/
 Что такое веб-сервер? https://developer.mozilla.org/ru/docs/Learn/Что_такое_веб_сервер
+*/
 
+>>>>> Архитектура Веба <<<<<<
 
-# Архитектура Веба
-
+/*
 Современные сайты разрабатываются на множестве языков используя совершенно разные технологии, но принципы их устройства одинаковые. То почему сайты внутри устроены похожим образом, определяется архитектурой веба. В его основе лежит протокол HTTP, с которым вы уже знакомы по одноименному курсу.
 
 Современный веб несколько сложнее благодаря Websockets, что существенно влияет на принципы построения сайтов активно их использующих.
@@ -6261,6 +6270,7 @@ FastCGI https://ru.wikipedia.org/wiki/FastCGI
 
 
 >>>>> Встроенный в PHP веб-сервер <<<<<
+
 /*
 PHP единственный язык программирования, в котором работа в CGI режиме встроена прямо в сам язык. А благодаря наличию встроенного веб-сервера, можно сразу видеть результат своей работы.
 
@@ -6503,8 +6513,7 @@ switch ($address) {
 */
 
 
-# Микрофреймворк Slim
-
+>>>>> Микрофреймворк Slim <<<<<
 
 /*
 Цикл запрос-обработка-ответ включает множество элементов, которые идентичны для всех сайтов. Поэтому возникли, так называемые, фреймворки, специализированные библиотеки, которые определяют структуру программы. В этом их отличие от обычных библиотек. Благодаря фреймворкам можно сосредоточиться на логике сайта, а не на продумывании базовой архитектуры или кодированию вспомогательных инструментов.
@@ -6695,7 +6704,7 @@ $app->run();
 
 
 
-# HTTP Сессия 
+>>>>> HTTP Сессия <<<<<
 
 /*
 Каждая HTTP сессия определяется двумя вещами - запросом и ответом. Запрос формируется клиентом, ответ кодом обработчика соответствующего маршрута. И запрос и ответ, в Slim представлены двумя объектами, которые передаются в каждый обработчик.
@@ -6789,7 +6798,7 @@ https://www.slimframework.com/docs/v3/objects/router.html
 
 /**
 Реализуйте Маршрут /companies/{id}, по которому отдается json представление компании. Компания извлекается из списка $companies. Каждая компания представлена массивом у которого есть текстовый (то есть тип данных - строка) ключ id.
- **/
+**/
 
 namespace App;
 
@@ -6913,11 +6922,135 @@ templates/users/show.phtml
 Реализуйте вывод всех полей пользователя
 **/
 
+// file: app/public/index.php:
+
+namespace App;
+
+require '/composer/vendor/autoload.php';
+
+$users = Generator::generate(100);
+
+$configuration = [
+    'settings' => [
+        'displayErrorDetails' => true,
+    ],
+];
+
+$app = new \Slim\App($configuration);
+
+$container = $app->getContainer();
+$container['renderer'] = new \Slim\Views\PhpRenderer(__DIR__ . '/../templates');
+
+$app->get('/', function ($request, $response) {
+    return $this->renderer->render($response, 'index.phtml');
+});
+
+// BEGIN (write your solution here)
+$app->get('/users', function ($request, $response) use ($users) {
+    return $this->renderer->render($response, 'users/show.phtml', $users);
+});
+
+use Illuminate\Support\Collection;
+
+$app->get('/users/{id}', function ($request, $response, array $arg) use ($users) {
+    $id = $arg['id'];
+    $userColl = collect($users);
+    $user = $userColl->firstWhere('id', '==', $id);
+    $html = $user['id'];
+    return $this->renderer->render($response, 'users/index.phtml', $users);
+
+    $page = $request->getQueryParam('page', 1);
+    $per = $request->getQueryParam('per', 5);
+    $offset = ($page - 1) * $per;
+
+    $sliceOfCompanies = array_slice($companies, $offset, $per);
+});
+
+$app->run();
+// END
 
 
+// file: app/templates/users/show.phtml : 
+
+<!-- BEGIN (write your solution here) -->
+
+<!-- END -->
 
 
+// file: app/templates/index.phtml
 
+<a href="/users">Пользователи</a>
+
+
+// file: app/templates/users/index.phtml: 
+
+<a href="/users">Пользователи</a>
+
+<!-- BEGIN (write your solution here) -->
+
+<!-- END -->
+
+## TESTS:
+
+namespace App\Tests;
+
+use PHPUnit\Framework\TestCase;
+
+class Test extends TestCase
+{
+    private $client;
+
+    public function setUp()
+    {
+        $this->client = new \GuzzleHttp\Client([
+            'base_uri' => 'http://localhost:8080'
+        ]);
+    }
+
+    public function testUser()
+    {
+        $response = $this->client->get('/users/1');
+        $body = $response->getBody()->getContents();
+        $this->assertNotEmpty($body);
+    }
+
+    public function testUser2()
+    {
+        $response = $this->client->get('/users/99');
+        $body = $response->getBody()->getContents();
+
+        $this->assertContains('Horace', $body);
+        $this->assertContains('Feest', $body);
+        $this->assertContains('harmstrong@lakin.com', $body);
+    }
+
+    public function testUser3()
+    {
+        $response = $this->client->get('/users/100');
+        $body = $response->getBody()->getContents();
+
+        $this->assertContains('Euna', $body);
+        $this->assertContains('Veum', $body);
+    }
+
+    public function testUsers()
+    {
+        $response = $this->client->get('/users');
+        $body = $response->getBody()->getContents();
+
+        $this->assertContains('Adah', $body);
+        $this->assertContains('Trinity', $body);
+    }
+
+    public function testUsers2()
+    {
+        $response = $this->client->get('/users?page=2');
+        $body = $response->getBody()->getContents();
+
+        $this->assertContains('Cleve', $body);
+        $this->assertContains('Karlie', $body);
+    }
+}
 
 
 # Безопасность
@@ -6970,7 +7103,7 @@ http://rusrails.ru/ruby-on-rails-security-guide
 */
 
 
->>>>>  Поисковые формы <<<<<<< 
+>>>>> Поисковые формы <<<<<<< 
  
 /*
 HTML Формы - основной инструмент для создания интерактивных сайтов. Через них происходит регистрация пользователя, добавление в друзья, оплата покупок, фильтрация товара в магазине и тому подобное. Самые простые формы - поисковые. Они ничего не изменяют и не создают, а используются только для фильтрации данных. Такой поиск реализован на Хекслете на странице курсов https://ru.hexlet.io/courses. Аналогичная строка поиска используется и в поисковых системах.
@@ -7020,7 +7153,94 @@ $app->get('/courses', function ($request, $response) {
   <input type="submit" value="Search" />
 </form>
 Для подобного поля ввода нужно указать аттрибут value и подставить туда текущее значение не забыв его преобразовать в безопасную форму.
-*/
+
+
+/**
+
+public/index.php
+Реализуйте обработчик /users, который формирует список пользователей. Обработчик поддерживает фильтрацию через параметр term, в котором передается начало firstName. Список пользователей доступен в переменной $users.
+
+templates/users/index.phtml
+Реализуйте вывод списка пользователей и формы для фильтрации
+
+**/
+
+// file: app/public/index.php:
+
+namespace App;
+
+require '/composer/vendor/autoload.php';
+
+use function Stringy\create as s;
+
+$users = Generator::generate(100);
+
+$configuration = [
+    'settings' => [
+        'displayErrorDetails' => true,
+    ],
+];
+
+$app = new \Slim\App($configuration);
+
+$container = $app->getContainer();
+$container['renderer'] = new \Slim\Views\PhpRenderer(__DIR__ . '/../templates');
+
+$app->get('/', function ($request, $response) {
+    return $this->renderer->render($response, 'index.phtml');
+});
+
+// BEGIN (write your solution here)
+
+// END
+
+$app->run();
+
+
+// file: app/templates/index.phtml
+
+<a href="/users">Пользователи</a>
+
+
+// file: app/templates/users/index.phtml
+
+<a href="/users">Все Пользователи</a>
+
+<!-- BEGIN (write your solution here) -->
+
+<!-- END -->
+
+
+
+namespace App;
+
+require '/composer/vendor/autoload.php';
+
+use function Stringy\create as s;
+
+$users = Generator::generate(100);
+
+$configuration = [
+    'settings' => [
+        'displayErrorDetails' => true,
+    ],
+];
+
+$app = new \Slim\App($configuration);
+
+$container = $app->getContainer();
+$container['renderer'] = new \Slim\Views\PhpRenderer(__DIR__ . '/../templates');
+
+$app->get('/', function ($request, $response) {
+    return $this->renderer->render($response, 'index.phtml');
+});
+
+// BEGIN (write your solution here)
+
+// END
+
+$app->run();
+
 
 
 
@@ -7288,6 +7508,40 @@ $app->get('/users/new', function ($request, $response) {
 
 
 
+>>>>>  Именованные маршруты  <<<<<<< 
+
+/*
+<form action="/users/<?= $user['id'] ?>" method="post">
+  <input type="hidden" name="_METHOD" value="DELETE">
+  <input type="submit" value="Remove">
+</form>
+
+В примере выше ссылка "зашита" прямо в шаблон. В принципе, ничего криминального, но дальше возможны осложнения. Что если маршрут изменится с /uses/{id} на /u/{id}? Придется пройтись по всем шаблонам и изменить все ссылки. А если этот маршрут удалить? Сайт продолжит работать (и не приемочные тесты тоже), хотя будет лучше если страницы с такими ссылками начнут выдавать ошибки. Тогда выявить подобные ссылки станет крайне просто особенно если есть тесты.
+
+Для решения этой задачи придумали именовать маршруты. Далеко не все микрофреймворки поддерживают именованные маршруты, но Slim здесь отличился в правильную сторону.
+*/
+
+$app->get('/users', function ($request, $response) {
+    // ...
+})->setName('users');
+
+$app->get('/users/{id}', function ($request, $response) {
+    // ...
+})->setName('user');
+
+// Метод setName задает имя маршрута. Построить маршрут по имени можно используя метод pathFor объекта Router.
+
+$app->get('/', function ($request, $response) {
+    $this->router->pathFor('users'); // /users
+    $this->router->pathFor('user', ['id' => 4]); // /users/4
+});
+
+
+// К сожалению, PHP-View, который мы используем, не прокидывает этот метод в шаблоны, в отличие от Twig-View https://github.com/slimphp/Twig-View. Мой совет: используйте в своих приложениях последний.
+
+
+
+
 >>>>>  Стандарт PSR7 <<<<<<< 
 
 /*
@@ -7377,6 +7631,94 @@ $app->get('/bar', function ($req, $res, $args) {
 });
 
 $app->run();
+
+
+
+/**
+public/index.php
+Реализуйте два обработчика:
+
+/ — выводит флеш сообщения в шаблон templates/index.phtml
+/courses — добавляет сообщение Course Added во Flash и делает редирект на /
+templates/index.phtml
+Реализуйте вывод Flash сообщений
+**/
+
+
+// file: app/public/index.php:
+
+namespace App;
+
+require '/composer/vendor/autoload.php';
+
+session_start();
+
+$configuration = [
+    'settings' => [
+        'displayErrorDetails' => true,
+    ],
+];
+
+$app = new \Slim\App($configuration);
+
+$container = $app->getContainer();
+$container['renderer'] = new \Slim\Views\PhpRenderer(__DIR__ . '/../templates');
+$container['flash'] = function () {
+    return new \Slim\Flash\Messages();
+};
+
+// BEGIN (write your solution here)
+
+// END
+
+$app->run();
+
+
+// file: app/templates/index.phtml:
+
+<form action="/courses" method="post">
+  <input type="submit" value="Create Course">
+</form>
+
+<!-- BEGIN (write your solution here) -->
+
+<!-- END -->
+
+## TESTS:
+
+// file: app/tests/Test.php
+
+namespace App\Tests;
+
+use PHPUnit\Framework\TestCase;
+
+class Test extends TestCase
+{
+    private $client;
+
+    public function setUp()
+    {
+        $this->client = new \GuzzleHttp\Client([
+            'cookies' => true,
+            'base_uri' => 'http://localhost:8080'
+        ]);
+    }
+
+    public function testFlash()
+    {
+        $response = $this->client->get('/');
+        $body = $response->getBody()->getContents();
+        $this->assertNotContains("Course Added", $body);
+
+        $response = $this->client->post('/courses', []);
+        $body = $response->getBody()->getContents();
+        $this->assertContains("Course Added", $body);
+
+        $response = $this->client->get('/');
+        $body = $response->getBody()->getContents();
+        $this->assertNotContains("Course Added", $body);
+    }
+}
 
 
 
@@ -7526,40 +7868,323 @@ $app->patch('/users/{id}', function ($request, $response, array $args) use ($rep
 
 /*
 Обновление самое сложное действие из всех по объему действий. С точки зрения кода новое здесь только одно - процесс заполнения сущности данными формы: $user['name'] = $data['name'];. Этот процесс сильно изменится при использовании ORM, а пока мы будем проставлять каждое значение руками. Теоретически можно сделать и так $user = array_merge($user, $data), но у этого подхода есть один фатальный недостаток. Такой способ абсолютно не безопасен, так как пользователь может послать данные в обход формы, например количество денег на счету и array_merge изменит их значение. Эту проблему решают те же пакеты, которые предоставляют Form Builder и, обычно, они сразу встроены во фреймворки.
-*/
 
+/**
+src/Validator.php
+Реализуйте класс валидатор, который проверяет данные курса. Реализация должна соответствовать интерфейсу ValidatorInterface.
 
+Валидации:
 
->>>>>  Именованные маршруты  <<<<<<< 
+Свойство paid - должно быть заполнено
+Свойство title - должно быть заполнено
+Если поле не заполнено, то используется сообщение Can't be blank
 
-/*
-<form action="/users/<?= $user['id'] ?>" method="post">
-  <input type="hidden" name="_METHOD" value="DELETE">
-  <input type="submit" value="Remove">
-</form>
+public/index.php
+Реализуйте создание курсов в которое входит два обработчика /courses/new (отображает форму) и /courses создает курс.
 
-В примере выше ссылка "зашита" прямо в шаблон. В принципе, ничего криминального, но дальше возможны осложнения. Что если маршрут изменится с /uses/{id} на /u/{id}? Придется пройтись по всем шаблонам и изменить все ссылки. А если этот маршрут удалить? Сайт продолжит работать (и не приемочные тесты тоже), хотя будет лучше если страницы с такими ссылками начнут выдавать ошибки. Тогда выявить подобные ссылки станет крайне просто особенно если есть тесты.
+Если данные формы валидны, то сохраните курс $repo->save($course) и выполните редирект на страницу со списком курсов /courses. Если данные не валидны, то выведите форму с заполненными полями и сообщения об ошибках.
 
-Для решения этой задачи придумали именовать маршруты. Далеко не все микрофреймворки поддерживают именованные маршруты, но Slim здесь отличился в правильную сторону.
-*/
+templates/courses/new.phtml
+Выведите форму создания курса со следующими полями:
 
-$app->get('/users', function ($request, $response) {
-    // ...
-})->setName('users');
+paid - селект определяющий платность курса (true/false)
+title - имя курса
+**/
 
-$app->get('/users/{id}', function ($request, $response) {
-    // ...
-})->setName('user');
+// file: app/public/index.php:
 
-// Метод setName задает имя маршрута. Построить маршрут по имени можно используя метод pathFor объекта Router.
+namespace App;
+
+require '/composer/vendor/autoload.php';
+
+use function Stringy\create as s;
+
+$repo = new Repository();
+
+$configuration = [
+    'settings' => [
+        'displayErrorDetails' => true,
+    ],
+];
+
+$app = new \Slim\App($configuration);
+
+$container = $app->getContainer();
+$container['renderer'] = new \Slim\Views\PhpRenderer(__DIR__ . '/../templates');
 
 $app->get('/', function ($request, $response) {
-    $this->router->pathFor('users'); // /users
-    $this->router->pathFor('user', ['id' => 4]); // /users/4
+    return $this->renderer->render($response, 'index.phtml');
 });
 
+$app->get('/courses', function ($request, $response) use ($repo) {
+    $params = [
+        'courses' => $repo->all()
+    ];
+    return $this->renderer->render($response, 'courses/index.phtml', $params);
+});
 
-// К сожалению, PHP-View, который мы используем, не прокидывает этот метод в шаблоны, в отличие от Twig-View https://github.com/slimphp/Twig-View. Мой совет: используйте в своих приложениях последний.
+// BEGIN (write your solution here)
+
+// END
+
+$app->run();
+
+
+// file: app/src/Validator.php:
+
+namespace App;
+
+class Validator implements ValidatorInterface
+{
+    public function validate(array $course)
+    {
+        // BEGIN (write your solution here)
+        
+        // END
+    }
+}
+
+
+// file: app/src/ValidatorInterface.php:
+
+namespace App;
+
+interface ValidatorInterface
+{
+    // Return array of errors, or empty array if no errors
+    public function validate(array $data);
+}
+
+
+// file: app/templates/courses/new.phtml:
+
+<!-- BEGIN (write your solution here) -->
+
+<!-- END -->
+
+
+
+>>>>> CRUD: Создание  <<<<<
+
+/*
+Создание сущности, включает в себя два действия: отображение формы и обработка данных формы. За каждое из этих действий отвечает свой собственный маршрут. Вот несколько примеров:
+
+Пользователь
+
+ GET /users/new
+ POST /users
+
+Курс
+
+ GET /courses/new
+ POST /courses
+
+Сотрудник компании (пример вложенного маршрута)
+
+ GET /companies/3/users/new
+ POST /companies/3/users
+
+# Отображение формы 
+*/
+
+// Обработчик
+$app->get('/schools/new', function ($request, $response) {
+    $params = [
+        'schoolData' => [],
+        'errors' => []
+    ];
+    return $this->renderer->render($response, 'schools/new.phtml', $params);
+})->setName('newSchool'); 
+
+// Шаблон
+
+<form action="/schools" method="post">
+    <div>
+        <label>
+            Название *
+            <input type="text" name="school[name]" value="<?= htmlspecialchars($schoolData['name'] ?? '') ?>">
+        </label>
+        <?php if (isset($errors['name'])): ?>
+            <div><?= $errors['name'] ?></div>
+        <?php endif ?>
+        </div>
+    </div>
+    <input type="submit" value="Create">
+</form>
+
+/*
+Содержимое обработчика очень сильно зависит от того, какой используется инструментарий. В тех местах где есть билдеры форм, в этом обработчике создается форма (как некоторый объект) и отправляется в шаблон. Билдер берет на себя огромное количество задач, он сам обрабатывает вывод ошибок, занимается валидацией и подготовкой данных. Особо умные билдеры знают про ту сущность с которой они рабоают и могут строить формы в полностью автоматическом режиме.
+
+В нашем примере ничего такого нет, поэтому все действия делаются руками. Кроме непосредственно данных, в шаблон передается массив errors. Это нужно по той причине, что форма используется обоими обработчиками: одним только для отображения новой формы, другим для отображения формы в случае наличия ошибок.
+*/
+
+$app->post('/schools', function ($request, $response) {
+    $repo = new SchoolRepository();
+    // Извлекаем данные формы
+    $schoolData = $request->getParsedBodyParam('school');
+
+    $validator = new Validator();
+    // Проверяем корректность данных
+    $errors = $validator->validate($schoolData);
+
+    if (count($errors) === 0) {
+        // Если данные корректны, то сохраняем, добавляем флеш и выполняем редирект
+        $repo->save($schoolData);
+        $this->flash->addMessage('success', 'School has been created');
+        // Обратите внимание на использование именованного роутинга
+        return $response->withRedirect($this->router->pathFor('schools'));
+    }
+
+    $params = [
+        'schoolData' => $schoolData,
+        'errors' => $errors
+    ];
+
+    // Если возникли ошибки, то устанавливаем код ответа в 422 и рендерим форму с указанием ошибок
+    $response = $response->withStatus(422);
+    return $this->renderer->render($response, 'schools/new.phtml', $params);
+});
+
+// Своего шаблона у таких обработчиков не делают. Если данные оказались не валидны, то этот обработчик рисует форму обработчика new и отправляет ее вместе с кодом ответа 422 (Unprocessable Entity).
+
+
+/**
+public/index.php
+Реализуйте следующие обработчики:
+
+Форма создания нового поста: GET /posts/new
+Создание поста: POST /posts
+Посты содержат два поля name и body, которые обязательны к заполнению. Валидация уже написана.
+
+Реализуйте вывод ошибок валидации в форме.
+После каждого успешного действия нужно добавлять флеш сообщение и выводить его на списке постов. Текст:
+
+Post has been created
+templates/posts/new.phtml
+Форма для создания поста
+
+Подсказки
+Для редиректов в обработчиках используйте именованный роутинг
+**/
+
+namespace App;
+
+require '/composer/vendor/autoload.php';
+
+use function Stringy\create as s;
+
+$repo = new Repository();
+
+$configuration = [
+    'settings' => [
+        'displayErrorDetails' => true,
+    ],
+];
+
+$app = new \Slim\App($configuration);
+
+$container = $app->getContainer();
+$container['renderer'] = new \Slim\Views\PhpRenderer(__DIR__ . '/../templates');
+$container['flash'] = function () {
+    return new \Slim\Flash\Messages();
+};
+
+$app->get('/', function ($request, $response) {
+    return $this->renderer->render($response, 'index.phtml');
+});
+
+$app->get('/posts', function ($request, $response) use ($repo) {
+    $flash = $this->flash->getMessages();
+
+    $params = [
+        'flash' => $flash,
+        'posts' => $repo->all()
+    ];
+    return $this->renderer->render($response, 'posts/index.phtml', $params);
+})->setName('posts');
+
+// BEGIN (write your solution here)
+
+// END
+
+$app->run();
+
+
+// file: app/public/index.php
+
+<?php
+
+namespace App;
+
+require '/composer/vendor/autoload.php';
+
+use function Stringy\create as s;
+
+$repo = new Repository();
+
+$configuration = [
+    'settings' => [
+        'displayErrorDetails' => true,
+    ],
+];
+
+$app = new \Slim\App($configuration);
+
+$container = $app->getContainer();
+$container['renderer'] = new \Slim\Views\PhpRenderer(__DIR__ . '/../templates');
+$container['flash'] = function () {
+    return new \Slim\Flash\Messages();
+};
+
+$app->get('/', function ($request, $response) {
+    return $this->renderer->render($response, 'index.phtml');
+});
+
+$app->get('/posts', function ($request, $response) use ($repo) {
+    $flash = $this->flash->getMessages();
+
+    $params = [
+        'flash' => $flash,
+        'posts' => $repo->all()
+    ];
+    return $this->renderer->render($response, 'posts/index.phtml', $params);
+})->setName('posts');
+
+// BEGIN (write your solution here)
+
+// END
+
+$app->run();
+
+
+// file: app/templates/posts/new.phtml
+
+<a href="/posts">Посты</a>
+
+<!-- BEGIN (write your solution here) -->
+
+<!-- END -->
+
+
+// file: app/templates/posts/index.phtml:
+
+<?php if (count($flash) > 0): ?>
+  <ul>
+  <?php foreach ($flash as $messages): ?>
+      <?php foreach ($messages as $message): ?>
+          <li><?= $message ?></li>
+      <?php endforeach ?>
+  <?php endforeach ?>
+  </ul>
+<?php endif ?>
+
+<a href="/posts/new">Новый пост</a>
+
+<?php foreach ($posts as $post): ?>
+  <div>
+    <?= htmlspecialchars($post['name']) ?>
+  </div>
+<?php endforeach ?>
 
 
 
@@ -8739,9 +9364,6 @@ QueryBuilder это специальный класс для конструир�
 Реализуйте тесты для QueryBuilder основываясь на примере выше.
 **/
 
-
-<?php
-
 namespace App;
 
 class QueryBuilder
@@ -8825,3 +9447,5 @@ class QueryBuilderTest extends TestCase
     QueryBuilder::from('photos')->select('author', 'id')
         ->where('views_count', null)->where('state', 'archived')->toSql();
     // SELECT author, id FROM photos WHERE views_count IS NULL AND state = 'archived'
+
+
