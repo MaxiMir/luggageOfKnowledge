@@ -8112,7 +8112,6 @@ $app->run();
 
 // file: app/public/index.php
 
-<?php
 
 namespace App;
 
@@ -8186,6 +8185,469 @@ $app->run();
   </div>
 <?php endforeach ?>
 
+/*
+Какой статус ответа отдается клиенту если данные не прошли валидацию?
+422
+
+Какой глагол HTTP отвечает за создание ресурса?
+POST
+*/
+
+
+/**
+public/index.php
+Реализуйте следующие обработчики:
+
+Форма создания нового поста: GET /posts/new
+Создание поста: POST /posts
+Посты содержат два поля name и body, которые обязательны к заполнению. Валидация уже написана.
+
+Реализуйте вывод ошибок валидации в форме.
+После каждого успешного действия нужно добавлять флеш сообщение и выводить его на списке постов. Текст:
+
+Post has been created
+templates/posts/new.phtml
+Форма для создания поста
+
+Подсказки
+Для редиректов в обработчиках используйте именованный роутинг
+**/
+
+// file: app/src/public/index.php:
+
+namespace App;
+
+require '/composer/vendor/autoload.php';
+
+use function Stringy\create as s;
+
+$repo = new Repository();
+
+$configuration = [
+    'settings' => [
+        'displayErrorDetails' => true,
+    ],
+];
+
+$app = new \Slim\App($configuration);
+
+$container = $app->getContainer();
+$container['renderer'] = new \Slim\Views\PhpRenderer(__DIR__ . '/../templates');
+$container['flash'] = function () {
+    return new \Slim\Flash\Messages();
+};
+
+$app->get('/', function ($request, $response) {
+    return $this->renderer->render($response, 'index.phtml');
+});
+
+$app->get('/posts', function ($request, $response) use ($repo) {
+    $flash = $this->flash->getMessages();
+
+    $params = [
+        'flash' => $flash,
+        'posts' => $repo->all()
+    ];
+    return $this->renderer->render($response, 'posts/index.phtml', $params);
+})->setName('posts');
+
+// BEGIN (write your solution here)
+
+// END
+
+$app->run();
+
+
+// file: app/src/templates/new.phtml:
+
+<a href="/posts">Посты</a>
+
+<!-- BEGIN (write your solution here) -->
+
+<!-- END -->
+
+
+// file: app/src/Repository.php:
+
+namespace App;
+
+class Repository
+{
+    public function __construct()
+    {
+        session_start();
+        if (!array_key_exists('posts', $_SESSION)) {
+            $_SESSION['posts'] = [];
+        }
+    }
+
+    public function all()
+    {
+        return array_values($_SESSION['posts']);
+    }
+
+    public function find(string $id)
+    {
+        return $_SESSION['posts'][$id];
+    }
+
+    public function destroy(string $id)
+    {
+        unset($_SESSION['posts'][$id]);
+    }
+
+    public function save(array $item)
+    {
+        if (empty($item['name']) || empty($item['body'])) {
+            $json = json_encode($item);
+            throw new \Exception("Wrong data: {$json}");
+        }
+        if (!isset($item['id'])) {
+            $item['id'] = uniqid();
+        }
+        $_SESSION['posts'][$item['id']] = $item;
+    }
+}
+
+
+// file: app/src/Validator.php:
+
+namespace App;
+
+class Validator
+{
+    public function validate(array $course)
+    {
+        $errors = [];
+        if ($course['name'] == '') {
+            $errors['name'] = "Can't be blank";
+        }
+
+        if (empty($course['body'])) {
+            $errors['body'] = "Can't be blank";
+        }
+
+        return $errors;
+    }
+}
+
+
+
+
+>>>>> CRUD: Обновление <<<<<<<
+
+/*
+Обновление самое сложное действие из всех по объему действий. С точки зрения кода новое здесь только одно - заполнение сущности данными формы: $school['name'] = $data['name'];. Этот процесс сильно изменится при использовании ORM, а пока мы будем проставлять каждое значение руками.
+
+Обработчик формы
+*/
+
+$app->get('/schools/{id}/edit', function ($request, $response, array $args) {
+    $repo = new SchoolRepository();
+    $id = $args['id'];
+    $school = $repo->find($id);
+    $params = [
+        'school' => $school,
+        'errors' => []
+    ];
+    return $this->renderer->render($response, 'schools/edit.phtml', $params);
+});
+
+# Шаблон
+
+<form action="/schools" method="post">
+    <input type="hidden" name="_METHOD" value="PATCH">
+    <div>
+      <label>
+          Название *
+          <input type="text" name="school[name]" value="<?= htmlspecialchars($schoolData['name'] ?? '') ?>">
+      </label>
+      <?php if (isset($errors['name'])): ?>
+          <div><?= $errors['name'] ?></div>
+      <?php endif ?>
+      </div>
+    </div>
+    <input type="submit" value="Create">
+</form>
+
+# Обработчик действия
+
+$app->patch('/schools/{id}', function ($request, $response, array $args)  {
+    $repo = new SchoolRepository();
+    $id = $args['id'];
+    $school = $repo->find($id);
+    $data = $request->getParsedBodyParam('school');
+
+    // Ручное копирование данных из формы в нашу сущность
+    $school['name'] = $data['name'];
+
+    $validator = new Validator();
+    $errors = $validator->validate($school);
+
+    if (count($errors) === 0) {
+        $this->flash->addMessage('success', 'School has been updated');
+        $repo->save($school);
+        return $response->withRedirect($this->router->pathFor('editSchool', ['id' => $school['id']]));
+    }
+
+    $params = [
+        'school' => $school,
+        'errors' => $errors
+    ];
+
+    $response = $response->withStatus(422);
+    return $this->renderer->render($response, 'schools/edit.phtml', $params);
+});
+
+/*
+Теоретически можно сделать и так $school = array_merge($user, $data), но у этого подхода есть один фатальный недостаток. Такой способ абсолютно не безопасен, так как пользователь может послать данные в обход формы, например количество денег на счету и array_merge изменит их значение. Эту проблему решают те же пакеты, которые предоставляют Form Builder и, обычно, они сразу встроены во фреймворки.
+
+Методы
+Как вы уже знаете, HTML позволяет указывать только два метода внутри аттрибута method тега <form>. С точки зрения семантики HTTP это не совсем верно. POST предназначен для создания нового. Для изменения правильно использовать PATCH или PUT в зависимости от того как происходит обновление, а для удаления DELETE. Если посмотреть на определение обработчика выше, то там мы увидим использование PATCH. Но как это работает? Браузер все равно пошлет POST.
+*/
+
+$app->patch('/schools/{id}', function ($request, $response, array $args)  {
+/*    
+Большинство фреймворков использует один и тот же механизм для обхода этого ограничения. Он простой до безобразия. Если форма не поисковая, то данные в любом случае отправляются POST запросом, но в форму добавляется специальное скрытое поле с именем _METHOD, которое и говорит фреймворку, а какой метод мы бы хотели использовать:
+
+<form action="/schools" method="post">
+    <input type="hidden" name="_METHOD" value="PATCH">
+    ...
+</form>
+
+Какие глаголы HTTP отвечают за обновление ресурса?
+> PATCH
+> PUT
+*/
+
+/**
+public/index.php
+Реализуйте следующие обработчики:
+
+Форма редактирования поста: GET /posts/{id}/edit
+Обновление поста: PATCH /posts/{id}
+Посты содержат поля name и body, которые обязательны к заполнению. Валидация уже написана. После каждого успешного действия нужно добавлять флеш сообщение и выводить его на списке постов. Текст:
+
+Post has been updated
+templates/posts/edit.phtml
+Форма для редактирования поста. Общая часть формы уже выделена в шаблон _form, подключите его по аналогии с templates/posts/new.phtml.
+
+Подсказки
+Для редиректов в обработчиках используйте именованный роутинг
+**/
+
+// file: app/public/index.php
+
+namespace App;
+
+require '/composer/vendor/autoload.php';
+
+use function Stringy\create as s;
+
+$repo = new Repository();
+
+$configuration = [
+    'settings' => [
+        'displayErrorDetails' => true,
+    ],
+];
+
+$app = new \Slim\App($configuration);
+
+$container = $app->getContainer();
+$container['renderer'] = new \Slim\Views\PhpRenderer(__DIR__ . '/../templates');
+$container['flash'] = function () {
+    return new \Slim\Flash\Messages();
+};
+
+$app->get('/', function ($request, $response) {
+    return $this->renderer->render($response, 'index.phtml');
+});
+
+$app->get('/posts', function ($request, $response) use ($repo) {
+    $flash = $this->flash->getMessages();
+
+    $params = [
+        'flash' => $flash,
+        'posts' => $repo->all()
+    ];
+    return $this->renderer->render($response, 'posts/index.phtml', $params);
+})->setName('posts');
+
+$app->get('/posts/new', function ($request, $response) use ($repo) {
+    $params = [
+        'postData' => [],
+        'errors' => []
+    ];
+    return $this->renderer->render($response, 'posts/new.phtml', $params);
+});
+
+$app->post('/posts', function ($request, $response) use ($repo) {
+    $postData = $request->getParsedBodyParam('post');
+
+    $validator = new Validator();
+    $errors = $validator->validate($postData);
+
+    if (count($errors) === 0) {
+        $id = $repo->save($postData);
+        $this->flash->addMessage('success', 'Post has been created');
+        return $response->withHeader('X-ID', $id)
+                        ->withRedirect($this->router->pathFor('posts'));
+    }
+
+    $params = [
+        'postData' => $postData,
+        'errors' => $errors
+    ];
+
+    return $this->renderer->render($response->withStatus(422), 'posts/new.phtml', $params);
+});
+
+// BEGIN (write your solution here)
+
+// END
+
+$app->run();
+
+// app/templates/posts/posts:    
+
+<a href="/posts">Посты</a>
+
+<!-- BEGIN (write your solution here) -->
+
+<!-- END -->
+
+
+>>>>>  CRUD: Удаление <<<<<
+
+/*
+Удаление устроено даже проще чем вывод, но включает в себя много ньюансов. Вместо привычных GET и POST удаление делается запросом DELETE. По спецификации HTTP этот глагол идемпотентный. Это означает, что поведение, в случае наличия или отсутствия сущности, должно быть одинаковое, другими словами HTTP ответ этого обработчика не зависит от того удалена уже сущность или еще нет.
+*/
+$app->delete('/schools/{id}', function ($request, $response, array $args) {
+    $repo = new SchoolRepository();
+    $id = $args['id'];
+    $repo->destroy($id);
+    $this->flash->addMessage('success', 'School has been deleted');
+    return $response->withRedirect($this->router->pathFor('schools'));
+});
+
+/*
+В процессе удаления есть и чисто интерфейсный момент, который начинающие разработчики упускают из виду. Кнопка удаления ни в коем случае не должна сразу удалять. Человеку свойственно ошибаться (а еще он любопытен) и вероятность что он нажмент на эту кнопку по ошибке, крайне высока. Правильный подход состоит в том чтобы спросить у пользователя, уверен ли он в том что хочет удалить. Если да, то только в этом случае удалять.
+
+А что насчет безопасности? Удаление пользователя крайне опасная операция, которую нельзя выполнять всем подряд. Даже те кто могут это делать, должны проходить через процедуру подтверждения чтобы случайно не удалить пользователя. Имеет ли пользователь доступ к конкретным действиям определяется авторизацией.
+
+Авториза́ция — предоставление определённому лицу или группе лиц прав на выполнение определённых действий; а также процесс проверки (подтверждения) данных прав при попытке выполнения этих действий. Авторизацию не следует путать с аутентификацией — процедурой проверки легальности пользователя или данных, например, проверки соответствия введённого пользователем пароля к учётной записи паролю Wiki.
+
+То есть перед выполнением действия необходимо проверить авторизован ли пользователь на выполнение данного действия или нет. Авторизация, отдельная большая тема со своей теоретической базой. Как правило вопрос авторизации решается в каждом конкретном фреймворке https://laravel.com/docs/5.6/authorization самостоятельно, хотя на гитхабе можно найти обобщенные библиотеки.
+
+И последний вопрос который осталось рассмотреть - отправка запроса на удаление. Как вы помните, HTML формы не поддерживают отправку методами отличными от GET и POST. Фреймворки выкручиваются из этой ситуации следующим образом. Если в форме задать скрытое поле с именем _METHOD и значением того глагола который нам нужен, то внутри фреймворка, до входа в обработчик, глагол будет заменен на то что был указан. Таким нехитрым способом фреймворки позволяют посылать любые запросы.
+*/
+
+<form action="/users/<?= $user['id'] ?>" method="post">
+  <input type="hidden" name="_METHOD" value="DELETE">
+  <input type="submit" value="Remove">
+</form>
+
+/*
+Отдельно стоит сказать, что крайне важно соблюдать семантику HTTP. Ни в коем случае нельзя создавать HTML в котором удаление происходит GET запросом, например, по ссылке. Браузеры, их плагины и поисковые системы действуют в соответствии с семантикой HTTP. Если они видят обычную ссылку, то подразумевается что она не может выполнить деструктивных действий, а значит ее можно посетить. Даже если мы работаем в закрытой от поисковиков части сайта, в браузерах встроен механизм предзагрузки страниц, который с удовольствием вызовет все ссылки до которых сможет дотянуться на открытой странице. А плагины могут делать вообще все что угодно.
+Дополнительные материалы
+Библиотека для автоматизации фронтенд части (подстановка правильных глаголов, подтверждение) https://github.com/rails/jquery-ujs
+*/
+
+/**
+public/index.php
+Реализуйте удаление поста (обработчик DELETE /posts/{id})
+
+После каждого успешного действия нужно добавлять флеш сообщение и выводить его на списке постов. Текст:
+
+Post has been removed
+templates/posts/index.phtml
+Реализуйте вывод списка постов и добавьте к каждому посту кнопку на удаление.
+
+Подсказки
+Для редиректов в обработчиках используйте именованный роутинг
+**/
+
+// file: app/public/index.php:
+
+namespace App;
+
+require '/composer/vendor/autoload.php';
+
+use function Stringy\create as s;
+
+$repo = new Repository();
+
+$configuration = [
+    'settings' => [
+        'displayErrorDetails' => true,
+    ],
+];
+
+$app = new \Slim\App($configuration);
+
+$container = $app->getContainer();
+$container['renderer'] = new \Slim\Views\PhpRenderer(__DIR__ . '/../templates');
+$container['flash'] = function () {
+    return new \Slim\Flash\Messages();
+};
+
+$app->get('/', function ($request, $response) {
+    return $this->renderer->render($response, 'index.phtml');
+});
+
+$app->get('/posts', function ($request, $response) use ($repo) {
+    $flash = $this->flash->getMessages();
+
+    $params = [
+        'flash' => $flash,
+        'posts' => $repo->all()
+    ];
+    return $this->renderer->render($response, 'posts/index.phtml', $params);
+})->setName('posts');
+
+$app->get('/posts/new', function ($request, $response) use ($repo) {
+    $params = [
+        'postData' => [],
+        'errors' => []
+    ];
+    return $this->renderer->render($response, 'posts/new.phtml', $params);
+});
+
+$app->post('/posts', function ($request, $response) use ($repo) {
+    $postData = $request->getParsedBodyParam('post');
+
+    $validator = new Validator();
+    $errors = $validator->validate($postData);
+
+    if (count($errors) === 0) {
+        $id = $repo->save($postData);
+        $this->flash->addMessage('success', 'Post has been created');
+        return $response->withHeader('X-ID', $id)
+                        ->withRedirect($this->router->pathFor('posts'));
+    }
+
+    $params = [
+        'postData' => $postData,
+        'errors' => $errors
+    ];
+
+    return $this->renderer->render($response->withStatus(422), 'posts/new.phtml', $params);
+});
+
+// BEGIN (write your solution here)
+
+// END
+
+$app->run();
+
+// file app/templates/posts/new.phtml:
+
+<a href="/posts">Посты</a>
+
+<!-- BEGIN (write your solution here) -->
+
+<!-- END -->
 
 
 >>>>>  Model-View-Controller (MVC)   <<<<<<< 
@@ -8257,8 +8719,126 @@ $app->post('/cart-items', function ($request, $response) {
 У кук существует ограничение на количество данных которые в них можно хранить, оно равно 4кб. Для корзины интернет магазины этого хватит с головой, но в других ситуациях может понадобится больше места и тогда придется воспользоваться сессией.
 */
 
+/*
+Для каких целей можно использовать куки?
+> Хранение пользовательских данных, которые должны оставаться между запросами, например, корзина в интернет магазине
+> Аутентификация
+
+Как правильно во фреймворках получить доступ к кукам?
+> Через объект $request и его методы для получения кук
+*/
+
+/**
+public/index.php
+Реализуйте два обработчика
+
+POST /cart-items для добавления товаров в корзину
+DELETE /cart-items для очистки корзины
+Корзина должна храниться на клиенте в куках. Кроме самого товара, необходимо хранить количество единиц. Повторное добавление того же товара приводит к увеличению счетчика и редиректу на главную. Подробнее смотрите в шаблоне. Для сериализации данных используйте json_encode.
+**/
+
+// file: app/public/index.php:
+
+namespace App;
+
+require '/composer/vendor/autoload.php';
+
+use function Stringy\create as s;
+
+$repo = new Repository();
+
+$configuration = [
+    'settings' => [
+        'displayErrorDetails' => true,
+    ],
+];
+
+$app = new \Slim\App($configuration);
+
+$container = $app->getContainer();
+$container['renderer'] = new \Slim\Views\PhpRenderer(__DIR__ . '/../templates');
+
+$app->get('/', function ($request, $response) {
+    $cart = json_decode($request->getCookieParam('cart', json_encode([])), true);
+    $params = [
+        'cart' => $cart
+    ];
+    return $this->renderer->render($response, 'index.phtml', $params);
+});
+
+// BEGIN (write your solution here)
+
+// END
+
+$app->run();
+
+// app/src/Repository.php: 
+
+namespace App;
+
+class Repository
+{
+    public function __construct()
+    {
+        session_start();
+    }
+
+    public function all()
+    {
+        return array_values($_SESSION);
+    }
+
+    public function find(int $id)
+    {
+        return $_SESSION[$id];
+    }
+
+    public function save(array $item)
+    {
+        if (empty($item['title']) || $item['paid'] == '') {
+            $json = json_encode($item);
+            throw new \Exception("Wrong data: {$json}");
+        }
+        $item['id'] = uniqid();
+        $_SESSION[$item['id']] = $item;
+    }
+}
+
+// file: app/templates/index.phtml:
+
+<form action="/cart-items" method="post">
+    <input type="hidden" name="item[id]" value="1">
+    <input type="hidden" name="item[name]" value="One">
+    One
+    <input type="submit" value="Add">
+</form>
+
+<form action="/cart-items" method="post">
+    <input type="hidden" name="item[id]" value="2">
+    <input type="hidden" name="item[name]" value="Second">
+    Second
+    <input type="submit" value="Add">
+</form>
+
+<form action="/cart-items" method="post">
+    <input type="hidden" name="_METHOD" value="delete">
+    <input type="submit" value="Clean">
+</form>
+
+<?php if (count($cart) == 0): ?>
+    <div>Cart is empty</div>
+<?php else: ?>
+    <?php foreach ($cart as $item): ?>
+        <div>
+            <?= htmlspecialchars($item['name']) ?>: <?= htmlspecialchars($item['count']) ?>
+        </div>
+    <?php endforeach ?>
+<?php endif ?>
 
 
+
+
+<?
 >>>>> Сессия  <<<<<<<   
 
 /*
@@ -8316,8 +8896,201 @@ $app->post('/cart-items', function ($request, $response) {
 
 В целом, у сессий в PHP очень много тонкостей и механизмов для управления ими. Если вам интересно разобраться глубоко в том как устроена ее работа, добро пожаловать в официальную документацию.
 
-
+Сессии можно хранить в куках
 */
+
+/**
+В этой практике необходимо реализовать систему аутентификации. В простейшем случае она состоит из двух маршрутов:
+
+POST /session - создает сессию
+DELETE /session - удаляет сессию
+После выполнения каждого из этих действий происходит редирект на главную.
+
+templates/index.phtml
+Если пользователь не аутентифицирован, то ему показывается форма с текстом "Sign In" полем для ввода имени и пароля. Если аутентифицирован, то его имя и форма с кнопкой "Sign Out".
+
+public/index.php
+Реализуйте указанные выше маршруты и дополнительно маршрут /
+
+Список пользователей с именами и паролями доступен в массиве $users. Обратите внимание на то что пароль хранится в зашифрованном виде (их не хранят в открытом виде). Это значит, что при сравнении необходимо шифровать пароль, приходящий от пользователя, и сравнивать хеши.
+
+Если имя или пароль неверные, то происходит редирект на главную, и показывается флеш сообщение Wrong password or name.
+**/
+
+// file: app/public/index.php:
+
+namespace App;
+
+require '/composer/vendor/autoload.php';
+
+use function Stringy\create as s;
+
+$configuration = [
+    'settings' => [
+        'displayErrorDetails' => true,
+    ],
+];
+
+session_start();
+
+$app = new \Slim\App($configuration);
+
+$container = $app->getContainer();
+$container['renderer'] = new \Slim\Views\PhpRenderer(__DIR__ . '/../templates');
+$container['flash'] = function () {
+    return new \Slim\Flash\Messages();
+};
+
+$users = [
+    ['name' => 'admin', 'passwordDigest' => hash('sha256', 'secret')],
+    ['name' => 'mike', 'passwordDigest' => hash('sha256', 'superpass')],
+    ['name' => 'kate', 'passwordDigest' => hash('sha256', 'strongpass')]
+];
+
+// BEGIN (write your solution here)
+
+// END
+
+$app->run();
+
+
+// file app/templates/index.phtml:
+
+<?php if (count($flash) > 0): ?>
+  <ul>
+  <?php foreach ($flash as $messages): ?>
+      <?php foreach ($messages as $message): ?>
+          <li><?= $message ?></li>
+      <?php endforeach ?>
+  <?php endforeach ?>
+  </ul>
+<?php endif ?>
+
+<!-- BEGIN (write your solution here) -->
+
+<!-- END -->
+<?
+
+
+
+>>>>>> Деплой <<<<<<<
+/*
+После того как сайт написан, встает вопрос о том как выложить его в интернет. Стандартный путь включает три пункта:
+
+Покупка домена
+Покупка хостинга и его настройка
+Деплой
+Первый я пропущу (скоро мы его опишем в https://guides.hexlet.io), а вот про два других поговорим.
+
+Деплой - процесс выкладки новой версии сайта на сервер (или сервера). Этот процесс может быть довольно сложным и сильно зависит от используемых технологий. Во время деплоя выполняются следующие задачи (ниже всего лишь один из возможных вариантов, причем довольно примитивный):
+
+Код проекта скачивается на сервер (обычно через клонирование git)
+Ставятся все необходимые зависимости
+Выполняется процесс сборки, например собирается фронтенд часть
+Выполняются миграции. Миграции - sql скрипты, которые изменяют структуру базы данных
+Запускается новая версия кода
+Как это ни странно, но во многих компаниях прямо сейчас весь этот процесс выполняется руками. Программист заходит на сервер, запускает git pull и далее проходится по списку выше. Это худший способ деплоить. Деплой относится к тем задачам, которые должны быть автоматизированы от и до.
+
+Несмотря на разнообразие способов деплоя, есть одно важное правило общее для всех - деплоить можно только вперед! Деплой нельзя "откатывать" (в первую очередь это касается миграций, но про базы мы пока не говорим). Если после или во время деплоя что-то пошло не так, то правильно деплоить снова, но предыдущую версию.
+
+Кроме того, деплои можно классифицировать по способу обновления и отката:
+
+Последовательное обновление - сервера обновляются по очереди
+Сине-Зеленый деплой https://habr.com/post/309832/ - полное дублирование инфраструктуры с подменой
+Отдельно стоит сказать про Канареечный релиз, при таком подходе переключение на использовании новой версии происходит постепенно, сначала для небольшого процента пользователей, а затем и для всех
+
+Способ деплоя сильно зависит от используемого хостинга и даже способа настройки серверного окружения. Выделяют следующие типы хостингов:
+
+Shared Hosting - самый дешевый способ размещать сайт в интернете. Такая услуга включает в себя доступ на сервер с уже настроенным программным обеспечением под конкретный стек, например Linux + PHP + MySQL. Этот способ подходит для самых простых сайтов и требует минимальной настройки.
+VPS/VDS - наиболее сбалансированная услуга, в рамках которой предоставляет виртуальная машина. Плюс в том что такой вид хостинга позволяет задействовать больше серверных мощностей: цпу, память и диск. Предустановленного ПО нет, все нужно делать самостоятельно. По сравнению с Shared Hosting вы не ограничены в правах и можете настраивать сервер как вам угодно.
+Dedicated Server - выделеный сервер (либо свой, либо арендованный). Такой хостинг требует больше всего участия, но зато вы получаете лучшее соотношение производительность/цена.
+IaaS - инфраструктура как сервис. Вид хостинга при котором большая часть возможностей представляется как сервис. Как пример Amazon Web Service (AWS).
+PaaS - платформа как сервис. Наиболее дорогой и самый автоматизированный способ из коробки по размещению сайтов. Выкладка сайта происходит буквально по команде git push. Кроме цены важно учитывать используемые технологии и подходы. PaaS обладает наибольшим числом ограничений по тому что и как можно делать, но в обмен вы получаете не просто автоматизированный хостинг, но и платформу которая автоматически "скейлится" (масштабируется) под нагрузку.
+Все способы деплоя можно грубо разбить на две большие категории. Деплой на PaaS и деплой на все остальное.
+
+# PaaS
+Самый простой способ начать деплоить. Большинство PaaS хостеров имеют бесплатные планы, достаточные для выкладки учебных проектов. Из плюсов, не придется покупать адрес, домен третьего уровня предоставляется бесплатно. Самое популярное PaaS решение на текущий день - Heroku. У Хероку прекрасная документация https://devcenter.heroku.com/start, следуя которой можно быстро выложить свой первый сайт. Пошаговый гайд описывающий выкладку сайта на PHP доступен по ссылке https://devcenter.heroku.com/articles/getting-started-with-php. Хероку используется на Хекслете для JavaScript и PHP проектов.
+*/
+
+$ heroku create
+Creating sharp-rain-871... done, stack is cedar-14
+http://sharp-rain-871.herokuapp.com/ | https://git.heroku.com/sharp-rain-871.git
+Git remote heroku added
+
+$ git push heroku master
+remote: Building source:
+remote:
+remote: -----> PHP app detected
+remote: -----> Bootstrapping...
+remote: -----> Installing platform packages...
+remote:        NOTICE: No runtime required in composer.json; requirements
+remote:        from dependencies in composer.lock will be used for selection
+remote:        - php (7.1.3)
+remote:        - apache (2.4.20)
+remote:        - nginx (1.8.1)
+remote: -----> Installing dependencies...
+remote:        Composer version 1.4.1 2017-03-10 09:29:45
+remote:        Loading composer repositories with package information
+remote:        Installing dependencies from lock file
+remote:        Package operations: 12 installs, 0 updates, 0 removals
+remote:          - Installing psr/log (1.0.2): Loading from cache
+remote:          - Installing monolog/monolog (1.22.1): Loading from cache
+...
+remote:          - Installing symfony/twig-bridge (v3.2.7): Loading from cache
+remote:        Generating optimized autoload files
+remote: -----> Preparing runtime environment...
+remote: -----> Checking for additional extensions to install...
+remote: -----> Discovering process types
+remote:        Procfile declares types -> web
+remote:
+remote: -----> Compressing...
+remote:        Done: 14.8M
+remote: -----> Launching...
+remote:        Released v17
+remote:        https://gsphpjon.herokuapp.com/ deployed to Heroku
+remote:
+remote: Verifying deploy... done.
+To https://git.heroku.com/gsphpjon.git
+ + 264e577...4f2369c master -> master (forced update)
+
+/*
+Самостоятельная работа
+Выложите на Хероку тот код который вы делали на Slim в течении этого курса.
+
+Все остальное
+Если не брать в рассчет самый примитивный Shared Hosting, который не позволяет никак настраивать серверное окружение, все остальные виды хостингов имеют схожие задачи для выкладки.
+
+Самая первая задача - настроить окружение. Если в Shared Hosting всегда есть набор предустановленных программ, то во всех остальных видах хостинга нет ничего кроме голой операционной системы. Установка необходимого ПО такой же автоматизируемый процесс как процесс деплоя и у него есть даже собственное название - Configuration Management. Рекомендую использовать Ansible, популярное решение для настройки.
+- hosts: all
+
+  tasks:
+
+    - lineinfile:
+        create: yes
+        regexp: ~/.local
+        path: ~/.bash_profile
+        line: "export PATH=$PATH:~/.local/bin"
+
+    - name: install packages
+      apt: pkg=python3-pip state=latest update_cache=yes
+      tags: pip
+      become: yes
+
+    - pip:
+        name: pip
+        state: latest
+      become: yes
+Ключевое понятие Ansible - Playbook. Это файл (или файлы) описывающие в yaml, что нужно сделать на указанной машине. В каждом плейбуке используются готовые модули поставляемые вместе с Ansible. Этих модулей сотни, с помощью них можно делать практически все, начиная от установки программ, до настройки сети и управления правами файловой системы. Ansible универасальный инструмент, с его помощью можно не только настраивать окружение, но и собственно деплоить. Причем для деплоя есть готовый модуль - deploy helper https://docs.ansible.com/ansible/2.5/modules/deploy_helper_module.html.
+
+В более продвинутых случаях, там где используется, например, Docker, развертывание осуществляется системами оркестрации, среди которых выделяется Kubernetes https://kubernetes.io/.
+
+Дополнительные материалы
+Среды разработки https://ru.hexlet.io/blog/posts/environment
+DevOps https://ru.atlassian.com/devops
+Непрерывное развертывание https://en.wikipedia.org/wiki/Continuous_delivery
+Terraform http://terraform.io/ 
+Ansible https://www.ansible.com/
+*/ 
 
 
 
