@@ -163,6 +163,12 @@ LudovicXV, LudovicXVI, LudovicXVIII, LudovicLXVII, LudovicXXL
 ['80:', '80', '80:d123f'];
 
 
+/**
+Поиск содержимого в ...data-path="..."...
+**/
+str.match(/(?<=data-path=")[^"]*/g);
+
+
 >>>>> Флаги <<<<<<<
 
 /aa/ // aa aa aa => AA aa aa
