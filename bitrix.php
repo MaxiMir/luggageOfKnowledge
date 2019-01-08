@@ -1,6 +1,8 @@
 # Удаляем все кроме: /bitrix /upload .htaccess .access 404.php index.php robots urlrewrite web
 
-<?if(!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die(); // исключить обращение по ссылке к шаблону ?>  
+<?
+if(!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die(); // исключить обращение по ссылке к шаблону 
+?>  
 
 <? $APPLICATION->showHead() ?> // Метод предназначен для вывода в шаблоне сайта основных полей тега <head>: мета-теги Content-Type, robots, keywords, description; стили CSS; скрипты, заданные через CMain::AddHeadScript.
 
@@ -8,10 +10,10 @@
 <?
 	use Bitrix\Main\Page\Asset;
 
-	Asset::getInstance()->addCss(SITE_TEMPLATE_PATH . 'css/style.css'); // подключение стилей. SITE_TEMPLATE_PATH - путь к активному шаблону сайта
+	Asset::getInstance()->addCss(SITE_TEMPLATE_PATH . '/css/style.css'); // подключение стилей. SITE_TEMPLATE_PATH - путь к активному шаблону сайта
 	$APPLICATION->SetAdditionalCss(); // устаревший метод подключения стилей
 	CJSCore::Init(['jquery']); // подключение библиотек из ядра битрикса
-	Asset::getInstance()->addJs(SITE_TEMPLATE_PATH . 'js/jquery-1.11.1.min.js');
+	Asset::getInstance()->addJs(SITE_TEMPLATE_PATH . '/js/jquery-1.11.1.min.js');
 	$APPLICATION->AddHeadScript(); // устаревший метод подключения скриптов
 	Asset::getInstance()->addString('<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1>');
 	Asset::getInstance()->addString('<link href="//fonts.googleapis.com/css?family=Monda" rel="stylesheet" type="text/css">');
@@ -22,7 +24,9 @@
 	<h1><? $APPLICATION->showTitle(false) ?></h1>
 <?
 
-$USER->isAdmin(); // пользователь админ
+
+// пользователь админ
+$USER->isAdmin(); 
 
 
 // Файл init.php file: local/php_interface/init.php (/bitrix/php_interface/init.php): // сюда можно вывести пользовательские функции, к-л. логику, которыми хотели бы пользоваться в шаблоне, до его подключения.
@@ -56,14 +60,14 @@ foreach ($arResult['ITEMS'] as &$item) {
 unset($item); // поскольку массив передаем по ссылке
 
 
-
+// вывод пагинации
 <? if ($arParams['DISPLAY_BOTTOM_PAGER']): ?>
-	<?=arResult['NAV_STRING']; ?> // вывод пагинации
+	<?=arResult['NAV_STRING']; ?> 
 <? endif; ?>
 
+
+
 <?
-
-
 $APPLICATION->SetPageProperty('title', 'Заголовок окна браузера');
 $APPLICATION->SetTitle('Отзывы');
 
@@ -82,7 +86,7 @@ $APPLICATION->ShowTitle(false); // => Отзывы
 - новости bitrix:news
 - список новостей bitrix:news.list
 - структура разделов bitrix:catalog.section.list
-- форма поиска
+- форма поиска bitrix:search.form (так же необходимо создать раздел search)
 - стандартная страница поиска bitrix:search.page
 */
 
@@ -112,4 +116,5 @@ $file = CFile::ResizeImageGet(
 	true
 );
 $file['src']; // путь до новой картинки
+
 
