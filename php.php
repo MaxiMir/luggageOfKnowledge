@@ -2075,17 +2075,17 @@ function getWordsCount($content)
 
 function getIn(array $data, array $keys)
 {
-	 $current = $data;
+	$current = $data;
 
-	 foreach ($keys as $key) {
-		  if (!is_array($current) || !array_key_exists($key, $current)) {
-				return null;
-		  }
+	foreach ($keys as $key) {
+	  if (!is_array($current) || !array_key_exists($key, $current)) {
+			return null;
+	  }
 
-		  $current = $current[$key];
-	 }
+	  $current = $current[$key];
+	}
 
-	 return $current;
+	return $current;
 }
 
 
@@ -2108,14 +2108,15 @@ $result = findKeys($lessonMembers, 3);
 
 function findKeys(array $data, $expectedValue)
 {
-	  $result = [];
-	  foreach ($data as $key => $value) {
-			 if ($value === $expectedValue) {
-					 $result[] = $key;
-			 }
-	  }
+	$result = [];
 
-	  return $result;
+	foreach ($data as $key => $value) {
+		if ($value === $expectedValue) {
+			 $result[] = $key;
+		}
+	}
+
+	return $result;
 }
 
 
@@ -2123,15 +2124,15 @@ function findKeys(array $data, $expectedValue)
 
 function pick(array $arr, array $keys)
 {
-	 $res = [];
-	 
-	 foreach ($keys as $key) {
-		  if (array_key_exists($key, $arr)) {
-				$res[$key] = $arr[$key];
-		  }
-	 }
-	 
-	 return $res;
+	$res = [];
+
+	foreach ($keys as $key) {
+	  if (array_key_exists($key, $arr)) {
+			$res[$key] = $arr[$key];
+	  }
+	}
+
+	return $res;
 }
 
 
@@ -2174,7 +2175,7 @@ foreach($keys as $key) {
 
 $data = ['first_name' => 'Mark', 'last_name' => 'Smith'];
 
-$keys = array_VALUES($data); // => ['Mark', 'Smith']
+$keys = array_values($data); // => ['Mark', 'Smith']
 
 /*
 array_merge
@@ -2234,29 +2235,29 @@ $result = genDiff(
 
 function union(array $data1, array $data2)
 {
-	  return array_unique(array_merge($data1, $data2));
+	 return array_unique(array_merge($data1, $data2));
 }
 
 function genDiff(array $data1, array $data2)
 {
-	  $keys = union(array_keys($data1), array_keys($data2));
-	  $result = [];
+	$keys = union(array_keys($data1), array_keys($data2));
+	$result = [];
 
-	  foreach ($keys as $key) {
-			 if (array_key_exists($key, $data1) && array_key_exists($key, $data2)) {
-					 if ($data1[$key] === $data2[$key]) {
-							$result[$key] = 'unchanged';
-					 } else {
-							$result[$key] = 'changed';
-					 }
-			 } elseif (array_key_exists($key, $data2)) {
-					 $result[$key] = 'added';
-			 } elseif (array_key_exists($key, $data1)) {
-					 $result[$key] = 'deleted';
+	foreach ($keys as $key) {
+		if (array_key_exists($key, $data1) && array_key_exists($key, $data2)) {
+			 if ($data1[$key] === $data2[$key]) {
+					$result[$key] = 'unchanged';
+			 } else {
+					$result[$key] = 'changed';
 			 }
-	  }
+		} elseif (array_key_exists($key, $data2)) {
+			 $result[$key] = 'added';
+		} elseif (array_key_exists($key, $data1)) {
+			 $result[$key] = 'deleted';
+		}
+	}
 
-	  return $result;
+	return $result;
 }
 
 
@@ -2281,10 +2282,10 @@ $person = ['first' => 'Rasmus', 'last' => 'Lerdorf', 'manager' => true];
 $options = ['enabled' => true, 'compression' => ['algo' => 'gzip']];
 
 [
-	  'enabled' => $enabled,
-	  'compression' => [
-			 'algo' => $compressionAlgo
-	  ]
+  'enabled' => $enabled,
+  'compression' => [
+		 'algo' => $compressionAlgo
+  ]
 ] = $options;
 
 // Дестракчеринг ассоциативного массива можно комбинировать с дестракчерингом индексированного.
@@ -2298,9 +2299,9 @@ $y = ['o' => [[1, 2, 3], ['what' => 'WHAT']]];
 // Дестракчеринг допустим и в циклах:
 
 $persons = [
-	  ['first' => 'Rasmus', 'last' => 'Lerdorf'],
-	  ['first' => 'Fabien', 'last' => 'Potencier'],
-	  ['first' => 'Taylor', 'last' => 'Otwell']
+	['first' => 'Rasmus', 'last' => 'Lerdorf'],
+	['first' => 'Fabien', 'last' => 'Potencier'],
+	['first' => 'Taylor', 'last' => 'Otwell']
 ];
 
 foreach ($persons as ['first' => $firstname, 'last' => $lastname]) {
@@ -2426,12 +2427,13 @@ fromPairs([['fred', 30], ['barney', 40]]); // → ['fred' => 30, 'barney' => 40]
 
 function fromPairs(array $data)
 {
-	  $result = [];
-	  foreach ($data as [$key, $value]) {
-			 $result[$key] = $value;
-	  }
+	$result = [];
 
-	  return $result;
+	foreach ($data as [$key, $value]) {
+		 $result[$key] = $value;
+	}
+
+	return $result;
 }
 
 
@@ -2444,45 +2446,47 @@ buildQueryString(['per' => 10, 'page' => 1 ]);
 
 function buildQueryString(array $array)
 {
-	  $result = []; 
-	  ksort($array);
-	  
-	  foreach($array as $key => $value) {
-			 $result[] = "{$key}={$value}";
-	  }
+  $result = []; 
+  ksort($array);
+  
+  foreach($array as $key => $value) {
+		 $result[] = "{$key}={$value}";
+  }
 
-	  return implode('&', $result);
+  return implode('&', $result);
 }
 
 
 // Реализуйте функцию findWhere, которая принимает на вход массив (элементы которого - ассоциативные массивы) и пары ключ-значение (тоже в виде массива), а возвращает первый элемент исходного массива, значения которого соответствуют переданным парам.
 
 findWhere(
-	  [
-			 ['title' => 'Book of Fooos', 'author' => 'FooBar', 'year' => 1111],
-			 ['title' => 'Cymbeline', 'author' => 'Shakespeare', 'year' => 1611],
-			 ['title' => 'The Tempest', 'author' => 'Shakespeare', 'year' => 1611],
-			 ['title' => 'Book of Foos Barrrs', 'author' => 'FooBar', 'year' => 2222],
-			 ['title' => 'Still foooing', 'author' => 'FooBar', 'year' => 3333],
-			 ['title' => 'Happy Foo', 'author' => 'FooBar', 'year' => 4444],
-	  ],
-	  ['author' => 'Shakespeare', 'year' => 1611]
+  [
+	 ['title' => 'Book of Fooos', 'author' => 'FooBar', 'year' => 1111],
+	 ['title' => 'Cymbeline', 'author' => 'Shakespeare', 'year' => 1611],
+	 ['title' => 'The Tempest', 'author' => 'Shakespeare', 'year' => 1611],
+	 ['title' => 'Book of Foos Barrrs', 'author' => 'FooBar', 'year' => 2222],
+	 ['title' => 'Still foooing', 'author' => 'FooBar', 'year' => 3333],
+	 ['title' => 'Happy Foo', 'author' => 'FooBar', 'year' => 4444],
+  ],
+  ['author' => 'Shakespeare', 'year' => 1611]
 ); // => ['title' => 'Cymbeline', 'author' => 'Shakespeare', 'year' => 1611]
 
 
 function findWhere($data, $where) 
 {
-	  foreach ($data as $item) {
-			 $find = true;
-			 foreach ($where as $key => $value) {
-					 if ($item[$key] !== $value) {
-							$find = false;
-					 }
-			 }
-			 if ($find) {
-					 return $item;
-			 }
-	  }
+	foreach ($data as $item) {
+		 $find = true;
+
+		foreach ($where as $key => $value) {
+			if ($item[$key] !== $value) {
+				$find = false;
+			}
+		}
+
+		if ($find) {
+			return $item;
+		}
+	}
 }
 
 
@@ -2502,12 +2506,13 @@ getChunked( ['a', 'b', 'c', 'd', 'e', 'f'], 2)); // → [['a', 'b'] ['c', 'd'], 
 
 function getChunked(Array $array, Int $size) 
 {
-	  $result = [];
-	  for ($i = 0; $i < ceil(sizeof($array) / $size); $i++) { // ceil - округляет дробь в большую сторону
-			 $result[] = array_slice($array, $i * $size, $size);
-	  }
+	$result = [];
 
-	  return $result;
+	for ($i = 0; $i < ceil(sizeof($array) / $size); $i++) { // ceil - округляет дробь в большую сторону
+		$result[] = array_slice($array, $i * $size, $size);
+	}
+
+	return $result;
 }
 
 
@@ -2524,16 +2529,16 @@ compareVersion("4.2", "4.2"); // → 0
 
 function compareVersion(String $first, String $second)
 {
-	  $version1 = explode('.', $first);
-	  $version2 = explode('.', $second);
+	$version1 = explode('.', $first);
+	$version2 = explode('.', $second);
 
-	  if ($version1 > $version2) {
-			 return 1;
-	  } elseif ($version1 === $version2) {
-			 return 0;
-	  } else {
-			 return -1;
-	  }
+	if ($version1 > $version2) {
+		 return 1;
+	} elseif ($version1 === $version2) {
+		 return 0;
+	} else {
+		 return -1;
+	}
 }
 
 
@@ -2550,24 +2555,23 @@ hammingWeight(101); // → 4
 
 function hammingWeight(int $num) // my
 {
-	 // decbin — переводит число из десятичной системы счисления в двоичную
-	 // bindec — переводит двоичное число в десятичное
-	 $bin_str = (string) decbin($num);
-	 return substr_count($bin_str, '1'); // substr_count - возвращает число вхождений подстроки
-
+	// decbin — переводит число из десятичной системы счисления в двоичную
+	// bindec — переводит двоичное число в десятичное
+	$bin_str = (string) decbin($num);
+	return substr_count($bin_str, '1'); // substr_count - возвращает число вхождений подстроки
 }
 
 function hammingWeight(Int $num) // hexlet
 {
-	  $weight = 0;
-	  $digits = str_split(decbin($num));
-	  foreach ($digits as $value) {
-			 if ($value === '1') {
-					 $weight += 1;
-			 }
-	  }
+	$weight = 0;
+	$digits = str_split(decbin($num));
+	foreach ($digits as $value) {
+		 if ($value === '1') {
+				 $weight += 1;
+		 }
+	}
 
-	  return $weight;
+	return $weight;
 }
 
 
@@ -2581,8 +2585,8 @@ lengthOfLastWord('hello, world!  '); // → 6
 
 function lengthOfLastWord(String $str)
 {
-	  $words = explode(' ', trim($str));
-	  return strlen(end($words));
+	$words = explode(' ', trim($str));
+	return strlen(end($words));
 }
 
 
@@ -2595,52 +2599,53 @@ summaryRanges([110, 111, 112, 111, -5, -4, -2, -3, -4, -5]); // → ['110->112',
 
 function summaryRanges(array $arr) // my
 {
-	 $resOp = [];
-	 $rec = false;
-	 
-	 foreach ($arr as $key => $val) {
-		  if($key == 0) { continue; }
-		  if (!$rec && $arr[$key - 1] == $val - 1) {
-				$beginningOfSequence = $arr[$key - 1];
-				$rec = true;
-		  } elseif ($rec && $arr[$key - 1] != $val - 1) {
-				$resOp[] = "$beginningOfSequence->".$arr[$key - 1];
-				$rec = false;   
-		  } elseif($rec && $key == sizeof($arr) - 1) {
-				$resOp[] = "$beginningOfSequence->{$val}";
-		  }
-	 }
-	 return $resOp;
+	$resOp = [];
+	$rec = false;
+
+	foreach ($arr as $key => $val) {
+	  if($key == 0) { continue; }
+
+	  if (!$rec && $arr[$key - 1] == $val - 1) {
+			$beginningOfSequence = $arr[$key - 1];
+			$rec = true;
+	  } elseif ($rec && $arr[$key - 1] != $val - 1) {
+			$resOp[] = "$beginningOfSequence->".$arr[$key - 1];
+			$rec = false;   
+	  } elseif($rec && $key == sizeof($arr) - 1) {
+			$resOp[] = "$beginningOfSequence->{$val}";
+	  }
+	}
+	return $resOp;
 }
 
 
 function summaryRanges(Array $array) // hexlet
 {
-	  $result = [];
+	$result = [];
 
-	  if (empty($array)) {
-			 return $array;
-	  }
+	if (empty($array)) {
+		return $array;
+	}
 
-	  $firstValue = $array[0];
-	  $firstIndex = 0;
-	  foreach ($array as $index => $value) {
-			 if ($index === 0) {
-					 continue;
+	$firstValue = $array[0];
+	$firstIndex = 0;
+	foreach ($array as $index => $value) {
+		if ($index === 0) {
+			 continue;
+		}
+		$expectedValue = $array[$index - 1] + 1;
+		if ($expectedValue !== $value) {
+			 if ($firstIndex !== $index - 1) {
+					$result[] = "$firstValue->{$array[$index - 1]}";
 			 }
-			 $expectedValue = $array[$index - 1] + 1;
-			 if ($expectedValue !== $value) {
-					 if ($firstIndex !== $index - 1) {
-							$result[] = "$firstValue->{$array[$index - 1]}";
-					 }
-					 $firstValue = $value;
-					 $firstIndex = $index;
-			 } elseif ($index === sizeof($array) - 1 && $expectedValue === $value) {
-					 $result[] = "$firstValue->{$array[$index]}";
-			 }
-	  }
+			 $firstValue = $value;
+			 $firstIndex = $index;
+		} elseif ($index === sizeof($array) - 1 && $expectedValue === $value) {
+			 $result[] = "$firstValue->{$array[$index]}";
+		}
+	}
 
-	  return $result;
+	return $result;
 }
 
 
@@ -2662,17 +2667,17 @@ getMirrorMatrix([
 
 function getMirrorMatrix(array $array)
 {
-	  $size = sizeof($array);
-	  $mirrorArray = [];
+	$size = sizeof($array);
+	$mirrorArray = [];
 
-	  for ($i = 0; $i < $size; $i ++) {
-			 for ($j = 0; $j < $size / 2; $j ++) {
-					 $mirrorArray[$i][$j] = $array[$i][$j];
-					 $mirrorArray[$i][$size - $j - 1] = $array[$i][$j];
-			 }
-	  }
+	for ($i = 0; $i < $size; $i ++) {
+		for ($j = 0; $j < $size / 2; $j ++) {
+			$mirrorArray[$i][$j] = $array[$i][$j];
+			$mirrorArray[$i][$size - $j - 1] = $array[$i][$j];
+		}
+	}
 
-	  return $mirrorArray;
+	return $mirrorArray;
 }
 
 
@@ -2692,21 +2697,21 @@ toRna('ACGTGGTCTTAA'); // → 'UGCACCAGAAUU'
 
 function toRna(String $nucleotide) 
 {
-	  $map = [
-			 'G' => 'C',
-			 'C' => 'G',
-			 'T' => 'A',
-			 'A' => 'U',
-	  ];
+	$map = [
+		'G' => 'C',
+		'C' => 'G',
+		'T' => 'A',
+		'A' => 'U',
+	];
 
-	  $length = strlen($nucleotide);
-	  $result = [];
+	$length = strlen($nucleotide);
+	$result = [];
 
-	  for ($i = 0; $i < $length; $i++) {
-			 $result[] = $map[$nucleotide[$i]];
-	  }
+	for ($i = 0; $i < $length; $i++) {
+		$result[] = $map[$nucleotide[$i]];
+	}
 
-	  return implode('', $result);
+	return implode('', $result);
 }
 
 
@@ -2727,21 +2732,21 @@ generate(4); // → [1, 4, 6, 4, 1]
 
 function generate(Int $rowNumber) // hexlet
 {
-	 $currentRow = [1];
-	  
-	  for ($i = 0; $i < $rowNumber; $i++) {      
-			 $newRow = [];
-			 
-			 for ($j = 0; $j <= $rowNumber; $j++) {
-					 $first = isset($currentRow[$j - 1]) ? $currentRow[$j - 1] : 0;
-					 $second = isset($currentRow[$j]) ? $currentRow[$j] : 0;
-					 $newRow[$j] = $first + $second;
-			 }
+	$currentRow = [1];
 
-			 $currentRow = $newRow;
-	  }
+	for ($i = 0; $i < $rowNumber; $i++) {      
+		$newRow = [];
+		 
+		for ($j = 0; $j <= $rowNumber; $j++) {
+		 	$first = isset($currentRow[$j - 1]) ? $currentRow[$j - 1] : 0;
+			$second = isset($currentRow[$j]) ? $currentRow[$j] : 0;
+		 	$newRow[$j] = $first + $second;
+	 	}
 
-	  return $currentRow;
+	 	$currentRow = $newRow;
+	}
+
+	return $currentRow;
 }
 
 
@@ -2762,30 +2767,33 @@ calcInPolishNotation([7, 2, 3, '*', '-']); // → 1
 
 function calcInPolishNotation(Array $expr)
 {
-	  $stack = [];
-	  foreach ($expr as $val) {
-			 if (is_int($val)) {
-					 array_push($stack, $val);
-			 } else {
-				  $endElemDel = array_pop($stack);
-				  $indexLastElem = sizeof($stack) - 1;
-				  switch ($val) {
-							case '*':
-								  $stack[$indexLastElem] *= $endElemDel;
-								  break; 
-							case '/':
-								  $stack[$indexLastElem] /= $endElemDel;
-								  break;
-							case '+':
-								  $stack[$indexLastElem] += $endElemDel;
-								  break;
-							case '-':
-								  $stack[$indexLastElem] -= $endElemDel;
-								  break;        
-					 }
-			 }
-	  }   
-	  return $stack[0];
+	$stack = [];
+
+	foreach ($expr as $val) {
+		if (is_int($val)) {
+			array_push($stack, $val);
+		} else {
+			$endElemDel = array_pop($stack);
+			$indexLastElem = sizeof($stack) - 1;
+
+			switch ($val) {
+				case '*':
+					$stack[$indexLastElem] *= $endElemDel;
+					break; 
+				case '/':
+					$stack[$indexLastElem] /= $endElemDel;
+				break;
+				case '+':
+					$stack[$indexLastElem] += $endElemDel;
+					break;
+				case '-':
+					$stack[$indexLastElem] -= $endElemDel;
+					break;        
+			}
+		}
+	}   
+
+	return $stack[0];
 }
 
 
@@ -2802,10 +2810,10 @@ require 'vendor/autoload.php';
 
 $app = new \Slim\App;
 $app->get('/hello/{name}', function (Request $request, Response $response, array $args) {
-	  $name = $args['name'];
-	  $response->getBody()->write("Hello, $name");
+	$name = $args['name'];
+	$response->getBody()->write("Hello, $name");
 
-	  return $response;
+	return $response;
 });
 $app->run();
 
@@ -2854,25 +2862,24 @@ var_dump(print_r('lala')); // => bool(true)
 
 function getCurrentShell()
 {
-	  // Функция getenv обращается к указанной переменной окружения
-	  return getenv('SHELL'); // => /bin/bash 
+	// Функция getenv обращается к указанной переменной окружения
+	return getenv('SHELL'); // => /bin/bash 
 }
 
 # Побочные эффекты 
-
 
 // Вторая ключевая характеристика функций - наличие побочных эффектов. Побочным эффектом называют любые действия изменяющие среду выполнения. К ним относятся любые файловые операции, такие как запись в файл, отправка или прием данных по сети, даже вывод в консоль или чтение файла. Кроме того, побочными эффектами считаются обращения к глобальным переменным (как на чтение, так и запись) и изменение входных аргументов в случае, когда они передаются по ссылке. Вызов функции с побочными эффектами также считается побочным эффектом.
 
 function sayHiTo($name)
 {
-	  print_r("Hi, {$name}");
+	print_r("Hi, {$name}");
 }
 
 // С другой стороны, любые вычислительные операции не являются побочными эффектами. Например, функция, суммирующая два переданных аргументами числа.
 
 function sum($num1, $num2)
 {
-	  return $num1 + $num2;
+	return $num1 + $num2;
 }
 
 
@@ -2918,19 +2925,19 @@ sayPrimeOrNot(4); // => no
 
 function isPrime(int $num)
 {
-	  for ($i = 2; $i < $num; $i++) {
-			 if ($num % $i == 0) {
-					 return false;
-			 }
-	  }
+	for ($i = 2; $i < $num; $i++) {
+		if ($num % $i == 0) {
+			return false;
+		}
+	}
 
-	  return true;
+	return true;
 }
 
 function sayPrimeOrNot($num)
 {
-	  $text = isPrime($num) ? 'yes' : 'no';
-	  print_r($text);
+	$text = isPrime($num) ? 'yes' : 'no';
+	print_r($text);
 }
 
 
@@ -3019,7 +3026,7 @@ array_merge([1], [1], [3, 4], []);
 
 function sum(...$numbers)
 {
-	  return array_sum($numbers);
+	return array_sum($numbers);
 }
 
 echo sum(9, 4); // => 13
@@ -3037,7 +3044,7 @@ echo sum(); // => 0
 
 function show(...$arguments)
 {
-	  print_r($arguments);
+	print_r($arguments);
 }
 
 show([]);
@@ -3073,7 +3080,7 @@ array array_merge ( array $array1 [, array $... ] )
 
 function sum($a, ...$numbers)
 {
-	  return $a + array_sum($numbers);
+	return $a + array_sum($numbers);
 }
 
 echo sum();
@@ -3123,8 +3130,8 @@ function average($num1,...$numbers)
 // Splat Operator в вызовах функций синтаксически идентичен Splat Operator в определениях, но выполняет обратное действие:
 
 $arrayOfArrays = [
-	  [1, 2],
-	  [2, 3]
+  [1, 2],
+  [2, 3]
 ];
 
 array_merge(...$arrayOfArrays);
@@ -3183,7 +3190,7 @@ union(['a', 3, false], [true, false, 3], [false, 5, 8]); // => ['a', 3, false, t
 
 function union($first,...$rest)
 {
-	 return array_values(array_unique(array_merge($first, ...$rest)));
+	return array_values(array_unique(array_merge($first, ...$rest)));
 } 
 
 
@@ -3195,14 +3202,14 @@ function union($first,...$rest)
 
 Объектные:
 
-	  Collect https://github.com/tightenco/collect
-	  Stringy https://github.com/danielstjules/Stringy
-	  Carbon https://github.com/briannesbitt/Carbon
+	Collect https://github.com/tightenco/collect
+	Stringy https://github.com/danielstjules/Stringy
+	Carbon https://github.com/briannesbitt/Carbon
 
 Использующие только функции:
 
-	  Funct https://github.com/phpfunct/funct
-	  Bottomline https://github.com/maciejczyzewski/bottomline
+	Funct https://github.com/phpfunct/funct
+	Bottomline https://github.com/maciejczyzewski/bottomline
 
 Скажу сразу, что необходимость использования такой библиотеки в реальной работе возникает практически сразу. Те, кто не знает про них, постоянно пишут велосипеды. Еще не так давно программисты в PHP создавали файлики с полезными функциями и таскали их из одного проекта в другой. Хорошо, что эти времена уже прошли и можно не тратить время на то, что уже делалось тысячу раз до нас. Однако, мы не сможем разобрать все возможные функции в рамках наших курсов. Кое-что рассмотрим, но в дальнейшем не забывайте периодически просматривать их на наличие чего-либо полезного.
 
@@ -3268,15 +3275,15 @@ findWhere($collection, $value)
 */
 
 Collection\findWhere(
-	  [
-			 ['title' => 'Book of Fooos', 'author' => 'FooBar', 'year' => 1111],
-			 ['title' => 'Cymbeline', 'author' => 'Shakespeare', 'year' => 1611],
-			 ['title' => 'The Tempest', 'author' => 'Shakespeare', 'year' => 1611],
-			 ['title' => 'Book of Foos Barrrs', 'author' => 'FooBar', 'year' => 2222],
-			 ['title' => 'Still foooing', 'author' => 'FooBar', 'year' => 3333],
-			 ['title' => 'Happy Foo', 'author' => 'FooBar', 'year' => 4444],
-	  ],
-	  ['author' => 'Shakespeare', 'year' => 1611]
+  [
+	 ['title' => 'Book of Fooos', 'author' => 'FooBar', 'year' => 1111],
+	 ['title' => 'Cymbeline', 'author' => 'Shakespeare', 'year' => 1611],
+	 ['title' => 'The Tempest', 'author' => 'Shakespeare', 'year' => 1611],
+	 ['title' => 'Book of Foos Barrrs', 'author' => 'FooBar', 'year' => 2222],
+	 ['title' => 'Still foooing', 'author' => 'FooBar', 'year' => 3333],
+	 ['title' => 'Happy Foo', 'author' => 'FooBar', 'year' => 4444],
+  ],
+  ['author' => 'Shakespeare', 'year' => 1611]
 ); // => ['title' => 'Cymbeline', 'author' => 'Shakespeare', 'year' => 1611]
 
 
@@ -3316,15 +3323,15 @@ Strings\endsWith("hello jon", 'jon'); // => true
 // функции для работы с массивами: http://php.net/manual/ru/ref.array.php
 
 
-/*
+/**
 Реализуйте функцию getSentenceType, которая принимает на вход текст, определяет его тип и возвращает наружу его название. Тип предложения определяется по последнему символу в тексте.
 
-	  ? - question
-	  ! - shouting
-	  Все остальное - common
+	? - question
+	! - shouting
+	Все остальное - common
 
 Если передана пустая строчка, то функция должна вернуть null.
-*/
+**/
 
 getSentenceType(''); // => null;
 getSentenceType('what?'); // => question
@@ -3335,16 +3342,16 @@ $ composer require funct/funct // in Terminal - installation library 'funct'
 
 function getSentenceType($sentence)
 {
-	  if ($sentence === '') {
-			 return null;
-	  }
+	if ($sentence === '') {
+		 return null;
+	}
 
-	  $types = [
-			 '?' => 'question',
-			 '!' => 'shouting'
-	  ];
-	  $symbol = \Funct\Strings\right($sentence, 1);
-	  return array_key_exists($symbol, $types) ? $types[$symbol] : 'common';
+	$types = [
+		'?' => 'question',
+		'!' => 'shouting'
+	];
+	$symbol = \Funct\Strings\right($sentence, 1);
+	return array_key_exists($symbol, $types) ? $types[$symbol] : 'common';
 }
 
 
@@ -3380,19 +3387,19 @@ function greeting()
 // переменная содержащая определение функции?
 $fn = function greeting()
 {
-	  // ...
+	 // ...
 }
 
 // Так как определение функции - инструкция, то оно не может подставляться в те места, где ожидаются выражения. Присваивание как раз подразумевает то, что в правой части находится именно выражение. Соответственно, такой код падает с ошибкой. А следующий код уже работает.
 
 $func = function () {
-	  echo "For hands of gold are always cold. But a woman's hands are warm";
+	 echo "For hands of gold are always cold. But a woman's hands are warm";
 };
 
 // Даже не вникая в синтаксис можно делать вывод о том, что конструкция справа от «равно» - выражение. И это выражение порождает функцию. В PHP подобные функции называют анонимными, потому что у них нет имени. Глядя на код выше нужно понимать, что определение функции и ее присваивание переменной - две разных операции. Чистое определение выглядит так:
 
 function () {
-	  echo "For hands of gold are always cold. But a woman's hands are warm";
+	echo "For hands of gold are always cold. But a woman's hands are warm";
 };
 
 // Очень похоже на обычную функцию за исключением отсутствия имени. Правда, есть еще и стилевые отличия, закрепленные стандартом PSR-2. В других языках анонимные функции нередко называют лямбда-функциями. В принципе, и в PHP их иногда зовут также.
@@ -3406,7 +3413,7 @@ $func();
 */
 
 $sum = function ($a, $b) {
-	  return $a + $b;
+	return $a + $b;
 }; // Определение анонимной функции должно заканчиваться символом ;, так как это выражение.
 
 $sum(1, 4); // => 5
@@ -3415,12 +3422,12 @@ $sum(1, 4); // => 5
 
 function sum($a, $b)
 {
-	  // определяем анонимную функцию
-	  $sum = function ($a, $b) {
-			 return $a + $b;
-	  };
-	  // вызываем анонимную функцию и возвращаем результат ее выполнения
-	  return $sum($a, $b);
+	// определяем анонимную функцию
+	$sum = function ($a, $b) {
+		 return $a + $b;
+	};
+	// вызываем анонимную функцию и возвращаем результат ее выполнения
+	return $sum($a, $b);
 }
 
 sum(1, 4); // => 5
@@ -3432,11 +3439,11 @@ sum(1, 4); // => 5
 */
 
 $square = function($num) {
-	 return $num ** 2;
+	return $num ** 2;
 };
 
 $sumOfSquares = function($num1, $num2) use ($square) {
-	 return $squares($num1) + $squares($num2);
+	return $squares($num1) + $squares($num2);
 };
 
 
@@ -3451,7 +3458,7 @@ print_r($fn('clojure for brave')); // => 17
 
 function call(string $fn, $argument)
 {
-	  return $fn($argument);
+	return $fn($argument);
 }
 
 $result = call('strlen', 'haskell is power!');
@@ -3462,14 +3469,12 @@ print_r($result); // => 16
 
 function run(string $text)
 {
-	  $last = function (string $text) {
-			 if ($text === '') {
-					 return null;
-			 }
-			 return $text[strlen($text) - 1];
-	  };
+	$last = function (string $text) {
+		if ($text === '') { return null; }
+		return $text[strlen($text) - 1];
+	};
 
-	  return $last($text);
+	return $last($text);
 }
 
 // Анонимные функции: http://php.net/manual/ru/functions.anonymous.php
@@ -3485,10 +3490,10 @@ function run(string $text)
 */
 
 $users = [
-	  ['name' => 'Igor', 'age' => 19],
-	  ['name' => 'Danil', 'age' => 1],
-	  ['name' => 'Vovan', 'age' => 4],
-	  ['name' => 'Matvey', 'age' => 16],
+  ['name' => 'Igor', 'age' => 19],
+  ['name' => 'Danil', 'age' => 1],
+  ['name' => 'Vovan', 'age' => 4],
+  ['name' => 'Matvey', 'age' => 16]
 ];
 
 /*
@@ -3513,10 +3518,11 @@ $users = [
 ];
 
 usort($users, function ($a, $b) {
-	  if ($a['age'] == $b['age']) {
-			 return 0;
-	  }
-	  return $a['age'] > $b['age'] ? 1 : -1;
+	if ($a['age'] == $b['age']) {
+		return 0;
+	}
+
+	return $a['age'] > $b['age'] ? 1 : -1;
 });
 
 print_r($users);
@@ -3536,11 +3542,11 @@ print_r($users);
 */
 
 function say(callable $fn) {
-	  echo $fn();
+	echo $fn();
 }
 
 say(function () {
-	  return 'hi!';
+	return 'hi!';
 }); // => hi!
 
 /*
@@ -3563,11 +3569,11 @@ const getJsFiles = dir => fs.readdirSync(dir)
 // Реализуйте функцию takeOldest, которая принимает на вход список пользователей и возвращает самых взрослых. Количество возвращаемых пользователей задается вторым параметром, который по-умолчанию равен единице.
 
 $users = [
-	  ['name' => 'Tirion', 'birthday' => '1988-11-19'],
-	  ['name' => 'Sam', 'birthday' => '1999-11-22'],
-	  ['name' => 'Rob', 'birthday' => '1975-01-11'],
-	  ['name' => 'Sansa', 'birthday' => '2001-03-20'],
-	  ['name' => 'Tisha', 'birthday' => '1992-02-27']
+	['name' => 'Tirion', 'birthday' => '1988-11-19'],
+	['name' => 'Sam', 'birthday' => '1999-11-22'],
+	['name' => 'Rob', 'birthday' => '1975-01-11'],
+	['name' => 'Sansa', 'birthday' => '2001-03-20'],
+	['name' => 'Tisha', 'birthday' => '1992-02-27']
 ];
 
 takeOldest($users);
@@ -3585,11 +3591,11 @@ Collection\firstN([1, 2, 3], 2); // => [1, 2]
 
 function takeOldest(array $users, int $count = 1)
 {
-	  usort($users, function ($user1, $user2) {
-			 return strtotime($user1['birthday']) >= strtotime($user2['birthday']) ? 1 : -1; // strtotime - преобразует текстовое представление даты на английском языке в метку времени
-	  });
+	usort($users, function ($user1, $user2) {
+		 return strtotime($user1['birthday']) >= strtotime($user2['birthday']) ? 1 : -1; // strtotime - преобразует текстовое представление даты на английском языке в метку времени
+	});
 
-	  return firstN($users, $count);
+	return firstN($users, $count);
 }
 
 
