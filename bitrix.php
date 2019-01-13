@@ -88,6 +88,7 @@ $APPLICATION->ShowTitle(false); // => Отзывы
 - структура разделов bitrix:catalog.section.list
 - форма поиска bitrix:search.form (так же необходимо создать раздел search)
 - стандартная страница поиска bitrix:search.page
+- форма обратной связи bitrix:main.feedback
 */
 
 
