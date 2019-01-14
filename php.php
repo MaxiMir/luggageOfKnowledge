@@ -6243,9 +6243,9 @@ def hello():
 import static spark.Spark.*;
 
 public class HelloWorld {
-	 public static void main(String[] args) {
-		  get("/hello", (req, res) -> "Hello World");
-	 }
+	public static void main(String[] args) {
+	  get("/hello", (req, res) -> "Hello World");
+	}
 }
 
 // JavaScript
@@ -6265,6 +6265,7 @@ app.get('/', (req, res) => {
 
 >>>>> Веб-сервер <<<<<
 /*
+
 # Процессы
 
 Давайте теперь посмотрим для чего нужен веб-сервер. Ответ на этот вопрос требует небольшой подготовки.
@@ -6279,7 +6280,7 @@ app.get('/', (req, res) => {
 
 Здесь нужно сделать небольшую ремарку насчет "слушать сетевой сокет". Сетевое взаимодействие между программами двух компьютеров осуществляется с помощью протокола TCP, поверх которого уже работает HTTP. Для обращения к другому комьютеру нужно знать два параметра: IP адрес и порт. Так вот "слушать сетевой сокет" означает занять определённый порт (на определённом сетевом интерфейсе) и дать возможность обращаться к процессу через него. Именно по номеру порта операционная система понимает, к какому процессу пытаются обратиться.
 
-Браузер, благодаря DNS, получает IP адрес компьютера, на котором расположен сайт указанного домена (например, google.com). А вот откуда он знает порт, на котором висит веб-сервер в ожидании входящих запросов? Ответ на этот вопрос очень простой: существует соглашение, согласно которому веб-сервер, обслуживающий сайт по протоколу HTTP, слушает порт 80, а протокол HTTPS обслуживается на порту 443. Но так бывает не всегда. Во время локальной разработки, обычно, используются другие порты, например, 3000, или 4000. Сам номер не принципиален, главное, что он доступен для веб-сервера, и вы обращаетесь через браузер именно к нему. Порт указыавется через двоеточие после названия сайта, например www.google.com:80.
+Браузер, благодаря DNS, получает IP адрес компьютера, на котором расположен сайт указанного домена (например, google.com). А вот откуда он знает порт, на котором висит веб-сервер в ожидании входящих запросов? Ответ на этот вопрос очень простой: существует соглашение, согласно которому веб-сервер, обслуживающий сайт по протоколу HTTP, слушает порт 80, а протокол HTTPS обслуживается на порту 443. Но так бывает не всегда. Во время локальной разработки, обычно, используются другие порты, например, 3000, или 4000. Сам номер не принципиален, главное, что он доступен для веб-сервера, и вы обращаетесь через браузер именно к нему. Порт указывавется через двоеточие после названия сайта, например www.google.com:80.
 
 # Веб-сервер
 Веб-сервер — специализированная программа для обслуживания сайтов. Один веб-сервер может обрабатывать практически любое число сайтов (благодаря Virtual Hosts). В общем случае он перенаправляет входящие сетевые запросы на код сайтов, получает от них ответ и возвращает его браузеру. Кроме главной функции, у веб-серверов огромное число вспомогательных. Среди них кеширование, перезапись запросов, раздача статики (например, картинки), reverse proxy, балансировка нагрузки и многое другое. Веб-сервера ничего не знают про то, на чём написан сайт. Все способы взаимодействия веб-сервера и сайта на любом языке стандартизированы. Благодря этому веб-серверов существует не так много и все они могут работать с сайтами, написанными на чём угодно.
@@ -6325,7 +6326,8 @@ Press Ctrl-C to quit.
 /*
 После того как сервер будет запущен, он полностью забирает управление. Вкладка терминала больше не доступна для ввода команд. В отличии от обычных скриптов, которые выполняют свою задачу и заканчиваются, веб-сервера должны слушать порт непрерывно и сразу реагировать на входящие соединения. Поэтому однажды запустив сервер, он продолжит работать до тех пор пока его не остановят. Остановить сервер можно набрав Ctrl-C.
 
-Такой способ запуска удобен в разработке, но в реальном окружении сервера запускают в виде Демонов. Демон - процесс операционной системы работающий в фоне.
+Такой способ запуска удобен в разработке, но в реальном окружении сервера запускают в виде Демонов. 
+Демон - процесс операционной системы работающий в фоне.
 
 Если в это время попытаться запустить еще один веб-сервер в соседней вкладке на том же порту, то запуск завершиться с такой ошибкой:
 
@@ -6463,7 +6465,7 @@ $_POST содержит данные отправленные методом POS
 </body>
 </html>
 
-//php
+//<?php
   if (!empty($_FILES['uploaded_file'])) {
 	 $path = "uploads/";
 	 $path = $path . basename( $_FILES['uploaded_file']['name']);
@@ -6473,7 +6475,7 @@ $_POST содержит данные отправленные методом POS
 		  echo "There was an error uploading the file, please try again!";
 	 }
   }
-//php
+//?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -6488,7 +6490,7 @@ $_POST содержит данные отправленные методом POS
 </body>
 </html>
 
-//php
+//<?php
   if (!empty($_FILES['uploaded_file'])) {
 	 $path = "uploads/";
 	 $path = $path . basename( $_FILES['uploaded_file']['name']);
@@ -6498,7 +6500,7 @@ $_POST содержит данные отправленные методом POS
 		  echo "There was an error uploading the file, please try again!";
 	 }
   }
-//php
+//?>
 
 /*
 Такой способ программирования возможен только в PHP. Весь сайт начинает представлять из себя мешанину HTML и кода. Если количество разных страниц сайта достигнет хотя бы десятка (а их обычно сотни и больше), то поддержка уже станет невероятно сложной.
@@ -6524,25 +6526,27 @@ Page not found. <a href="/">main</a>
 **/
 
 $address = $_SERVER['REQUEST_URI'];
+
 switch ($address) {
-	 case '/':
-		  echo '<a href="/welcome">welcome</a>';
-		  echo '<br>';
-		  echo '<a href="/not-found">not-found</a>';
-		  break;
-	 case '/welcome':
-		  echo '<a href="/">main</a>';
-		  break;
-	 default:
-		  header("HTTP/1.0 404 Not Found");
-		  echo 'Page not found. <a href="/">main</a>';
-		  break;
+	case '/':
+	  echo '<a href="/welcome">welcome</a>';
+	  echo '<br>';
+	  echo '<a href="/not-found">not-found</a>';
+	  break;
+	case '/welcome':
+	  echo '<a href="/">main</a>';
+	  break;
+	default:
+	  header("HTTP/1.0 404 Not Found");
+	  echo 'Page not found. <a href="/">main</a>';
+	  break;
 }
 
 /*
 Что значит фраза "PHP имеет встроенную поддержку CGI"?
 > Любой PHP скрипт сразу может работать как CGI скрипт, всю работу по анализу входящего окружения (параметры запроса) и возврат ответа, берет на себя рантайм (то что исполняет PHP код).
 */
+
 
 
 >>>>> Микрофреймворк Slim <<<<<
@@ -6610,7 +6614,7 @@ Press Ctrl-C to quit.
 $app = new \Slim\App();
 
 $app->get('/', function ($request, $response) {
-	 return $response->write('Welcome to Slim!');
+	return $response->write('Welcome to Slim!');
 });
 
 /*
@@ -6622,11 +6626,11 @@ $app->get('/', function ($request, $response) {
 $app = new \Slim\App;
 
 $app->get('/users', function ($request, $response) {
-	 return $response->write('GET /users');
+	return $response->write('GET /users');
 });
 
 $app->post('/users', function ($request, $response) {
-	 return $response->write('POST /users');
+	return $response->write('POST /users');
 });
 
 $app->run();
@@ -6658,9 +6662,9 @@ GET /users
 */
 
 $app->post('/users', function ($request, $response) {
-	 $page = $request->getQueryParam('page', 1); // 1 - значение по умолчанию
-	 $per = $request->getQueryParam('per', 10);
-	 return $response;
+	$page = $request->getQueryParam('page', 1); // 1 - значение по умолчанию
+	$per = $request->getQueryParam('per', 10);
+	return $response;
 });
 
 /*
@@ -6675,10 +6679,9 @@ $app->post('/users', function ($request, $response) {
 Реализуйте маршрут /companies, по которому отдаётся список компаний в виде json. Компании отдаются не все сразу, а только соответствующие текущей запрошенной странице. По умолчанию выдаётся 5 результатов на запрос.
 
 Подсказки
- Список компаний лежит в массиве $companies
- Чтобы получить его внутри обработчика, воспользуйтесь замыканием
- Возможно, вам пригодится функция array_slice
-
+Список компаний лежит в массиве $companies
+Чтобы получить его внутри обработчика, воспользуйтесь замыканием
+Возможно, вам пригодится функция array_slice
 **/
 
 // file: src/Generator.php:
@@ -6687,24 +6690,24 @@ namespace App;
 
 class Generator
 {
-	 public static function generate($count)
-	 {
-		  $numbers = range(1, 100);
-		  shuffle($numbers);
+	public static function generate($count)
+	{
+		$numbers = range(1, 100);
+		shuffle($numbers);
 
-		  $faker = \Faker\Factory::create();
-		  $faker->seed(1);
-		  $companies = [];
-		  for ($i = 0; $i < $count; $i++) {
-				$companies[] = [
-					 'id' => $numbers[$i],
-					 'name' => $faker->company,
-					 'phone' => $faker->phoneNumber
-				];
-		  }
+		$faker = \Faker\Factory::create();
+		$faker->seed(1);
+		$companies = [];
+		for ($i = 0; $i < $count; $i++) {
+			$companies[] = [
+				 'id' => $numbers[$i],
+				 'name' => $faker->company,
+				 'phone' => $faker->phoneNumber
+			];
+		}
 
-		  return $companies;
-	 }
+		return $companies;
+	}
 }
 
 // file: public/index.php:
@@ -6743,7 +6746,7 @@ $app->run();
 */
 
 $app->get('/', function ($request, $response) {
-	 return $response->write('Hello, world!');
+	return $response->write('Hello, world!');
 });
 
 /*
@@ -6815,10 +6818,10 @@ $app->get('/courses/{id}', function ($request, $response, array $args) {
 */
 
 $app->get('/courses/{courseId}/lessons/{id}', function ($request, $response, array $args) {
-	 $courseId = $args['courseId'];
-	 $id = $args['id'];
-	 return $response->write("Course id: {$courseId}")
-		->write("Lesson id: {$id}");
+	$courseId = $args['courseId'];
+	$id = $args['id'];
+	return $response->write("Course id: {$courseId}")
+	->write("Lesson id: {$id}");
 });
 
 
@@ -6896,8 +6899,8 @@ $container['renderer'] = new \Slim\Views\PhpRenderer(__DIR__ . '/../templates');
 Далее добавьте еще один обработчик:
 */
 $app->get('/users/{id}', function ($request, $response, $args) {
-	 $params = ['id' => $args['id']];
-	 return $this->renderer->render($response, 'users/show.phtml', $params);
+	$params = ['id' => $args['id']];
+	return $this->renderer->render($response, 'users/show.phtml', $params);
 });
 
 
@@ -7135,11 +7138,11 @@ http://rusrails.ru/ruby-on-rails-security-guide
 */
 
 
+
 >>>>> Поисковые формы <<<<<<< 
  
 /*
 HTML Формы - основной инструмент для создания интерактивных сайтов. Через них происходит регистрация пользователя, добавление в друзья, оплата покупок, фильтрация товара в магазине и тому подобное. Самые простые формы - поисковые. Они ничего не изменяют и не создают, а используются только для фильтрации данных. Такой поиск реализован на Хекслете на странице курсов https://ru.hexlet.io/courses. Аналогичная строка поиска используется и в поисковых системах.
-
 
 <form action="/courses" method="get">
   <input type="search" required name="term">
@@ -7184,6 +7187,7 @@ $app->get('/courses', function ($request, $response) {
   <input type="search" name="term" value="<?= htmlspecialchars($term) ?>" />
   <input type="submit" value="Search" />
 </form>
+
 Для подобного поля ввода нужно указать аттрибут value и подставить туда текущее значение не забыв его преобразовать в безопасную форму.
 
 
@@ -7272,7 +7276,6 @@ $app->get('/', function ($request, $response) {
 // END
 
 $app->run();
-
 
 
 
@@ -7397,25 +7400,26 @@ key=value&key2=value2&user%5Bname%5D%3Djon
 $repo = new Repository();
 
 $app->post('/users', function ($request, $response) use ($repo) {
-	 $validator = new Validator();
-	 $user = $request->getParsedBodyParam('user');
-	 $errors = $validator->validate($user);
-	 if (count($errors) === 0) {
-		  $repo->save($user);
-		  return $response->withRedirect('/');
-	 }
-	 $params = [
-		  'user' => $user,
-		  'errors' => $errors
-	 ];
-	 return $this->renderer->render($response, "users/new.phtml", $params);
+	$validator = new Validator();
+	$user = $request->getParsedBodyParam('user');
+	$errors = $validator->validate($user);
+	if (count($errors) === 0) {
+	  $repo->save($user);
+	  return $response->withRedirect('/');
+	}
+	$params = [
+	  'user' => $user,
+	  'errors' => $errors
+	];
+	return $this->renderer->render($response, "users/new.phtml", $params);
 });
 
 /*
 Обработка данных формы начинается с извлечения данных из тела запроса. Для этого используется метод getParsedBodyParam, который позволяет достать значение по конкретному ключу. Если нужно получить сразу все, то подойдет метод getParsedBody.
 */
 
-$user = $request->getParsedBodyParam('user');$user = $request->getParsedBodyParam('user');
+$user = $request->getParsedBodyParam('user');
+
 
 /*
 Далее нужно убедиться в том что данные введены верно. Процесс проверки корректности данных называется валидацией. Slim, как и большинство микрофреймворков не предоставляет никаких механизмов для валидации. Ее можно получить из сторонних библиотек. В простейшем случае валидация реализуется простой функцией, которая проверяет данные формы и формирует специальный массив $errors, в котором ключ это название поля, а значение это текст ошибки, который нужно вывести в форме.
@@ -7441,8 +7445,8 @@ $errors = validate($user);
 */
 
 if (count($errors) === 0) {
-	 $repo->save($user);
-	 return $response->withRedirect('/');
+	$repo->save($user);
+	return $response->withRedirect('/');
 }
 
 
@@ -7452,8 +7456,8 @@ if (count($errors) === 0) {
 
 
 $params = [
-	 'user' => $user,
-	 'errors' => $errors
+	'user' => $user,
+	'errors' => $errors
 ];
 return $this->renderer->render($response, "users/new.phtml", $params);
 
@@ -7520,11 +7524,11 @@ return $this->renderer->render($response, "users/new.phtml", $params);
 
 
 $app->get('/users/new', function ($request, $response) {
-	 $params = [
-		  'user' => [],
-		  'errors' => []
-	 ];
-	 return $this->renderer->render($response, "users/new.phtml", $params);
+	$params = [
+	  'user' => [],
+	  'errors' => []
+	];
+	return $this->renderer->render($response, "users/new.phtml", $params);
 }
 
 /*
@@ -7564,13 +7568,12 @@ $app->get('/users/{id}', function ($request, $response) {
 // Метод setName задает имя маршрута. Построить маршрут по имени можно используя метод pathFor объекта Router.
 
 $app->get('/', function ($request, $response) {
-	 $this->router->pathFor('users'); // /users
-	 $this->router->pathFor('user', ['id' => 4]); // /users/4
+	$this->router->pathFor('users'); // /users
+	$this->router->pathFor('user', ['id' => 4]); // /users/4
 });
 
 
 // К сожалению, PHP-View, который мы используем, не прокидывает этот метод в шаблоны, в отличие от Twig-View https://github.com/slimphp/Twig-View. Мой совет: используйте в своих приложениях последний.
-
 
 
 
@@ -7587,8 +7590,8 @@ require 'vendor/autoload.php';
 
 $app = new \Slim\App;
 $app->get('/hello/{name}', function (Request $request, Response $response, array $args) {
-	 $name = $args['name'];
-	 return $response->getBody()->write("Hello, $name");
+	$name = $args['name'];
+	return $response->getBody()->write("Hello, $name");
 });
 $app->run();
 
@@ -7603,7 +7606,7 @@ $request->getHeaderLine('Host');
 
 // Возвращает массив заголовков, в котором значения заголовков разделены по элементам массива
 foreach ($request->getHeaders() as $name => $values) {
-  echo $name . ': ' . implode(', ', $values);
+	echo $name . ': ' . implode(', ', $values);
 }
 
 /*
@@ -7639,15 +7642,15 @@ $app = new \Slim\App();
 $container = $app->getContainer();
 
 $container['flash'] = function () {
-	 return new \Slim\Flash\Messages();
+	return new \Slim\Flash\Messages();
 };
 
 $app->get('/foo', function ($req, $res) {
-	 // Добавление flash сообщения. Оно станет доступным на следующий HTTP запрос.
-	 $this->flash->addMessage('Test', 'This is a message');
+	// Добавление flash сообщения. Оно станет доступным на следующий HTTP запрос.
+	$this->flash->addMessage('Test', 'This is a message');
 
-	 // Redirect
-	 return $res->withStatus(302)->withHeader('Location', '/bar');
+	// Redirect
+	return $res->withStatus(302)->withHeader('Location', '/bar');
 });
 
 /*
@@ -7757,7 +7760,8 @@ class Test extends TestCase
 >>>>> CRUD  <<<<<<< 
 
 /*
-Несмотря на огромное число разнообразных сайтов, практически всю веб разработку можно свести к CRUD https://ru.wikipedia.org/wiki/CRUD операциям. CRUD широко распространенный термин, означающий 4 стандартные операции над любой сущностью (ресурсом): создание, чтение, обновление и удаление. Например в случае с пользователем можно составить такое соответствие:
+Несмотря на огромное число разнообразных сайтов, практически всю веб разработку можно свести к CRUD https://ru.wikipedia.org/wiki/CRUD операциям. 
+CRUD широко распространенный термин, означающий 4 стандартные операции над любой сущностью (ресурсом): создание, чтение, обновление и удаление. Например в случае с пользователем можно составить такое соответствие:
 
 Create
 	 Регистрация
@@ -7799,17 +7803,18 @@ DELETE      /users/:id                          Удаление пользов�
 С первыми тремя маршрутами мы уже знакомы и умеем с ними работать. Осталось разобрать отображение, обновление и удаление.
 */
 
+
 # Отображение (SHOW)
 
 $app->get('/users/{id}', function ($request, $response, array $args) use ($repo) {
-	 $id = $args['id'];
-	 $user = $repo->find($id);
+	$id = $args['id'];
+	$user = $repo->find($id);
 
-	 $params = [
-		  'user' => $user
-	 ];
+	$params = [
+	  'user' => $user
+	];
 
-	 return $this->renderer->render($response, "users/show.phtml", $params);
+	return $this->renderer->render($response, "users/show.phtml", $params);
 });
 
 /*
@@ -7821,12 +7826,12 @@ $app->get('/users/{id}', function ($request, $response, array $args) use ($repo)
 */
 
 $app->get('/users/{id}', function ($request, $response, array $args) use ($repo) {
-	 $id =  $args['id'];
-	 $user = $repo->find($id);
+	$id =  $args['id'];
+	$user = $repo->find($id);
 
-	 if (!$user) {
-		  return $response->withStatus(404)->write('Page not found');
-	 }
+	if (!$user) {
+	  return $response->withStatus(404)->write('Page not found');
+	}
 });
 
 /*
@@ -7836,10 +7841,10 @@ $app->get('/users/{id}', function ($request, $response, array $args) use ($repo)
 # Удаление (DELETE)
 
 $app->delete('/users/{id}', function ($request, $response, array $args) use ($repo) {
-	 $id = $args['id'];
-	 $repo->destroy($id);
-	 $this->flash->addMessage('success', 'User has been deleted');
-	 return $response->withRedirect('/users');
+	$id = $args['id'];
+	$repo->destroy($id);
+	$this->flash->addMessage('success', 'User has been deleted');
+	return $response->withRedirect('/users');
 });
 
 /*
@@ -7861,40 +7866,41 @@ $app->delete('/users/{id}', function ($request, $response, array $args) use ($re
 Отдельно стоит сказать, что крайне важно соблюдать семантику HTTP. Ни в коем случае нельзя создавать HTML в котором удаление происходит GET запросом, например, по ссылке. Браузеры, их плагины и поисковые системы действуют в соответствии с семантикой HTTP. Если они видят обычную ссылку, то подразумевается что она не может выполнить деструктивных действий, а значит ее можно посетить. Даже если мы работаем в закрытой от поисковиков части сайта, в браузерах встроен механизм предзагрузки страниц, который с удовольствием вызовет все ссылки до которых сможет дотянуться на открытой странице. А плагины могут делать вообще все что угодно.
 */
 
+
 # Обновление (UPDATE/PATCH)
 
 $app->get('/users/{id}/edit', function ($request, $response, array $args) use ($repo) {
-	 $id = $args['id'];
-	 $user = $repo->find($id);
-	 $params = [
-		  'user' => $user,
-		  'errors' => []
-	 ];
-	 return $this->renderer->render($response, 'users/edit.phtml', $params);
+	$id = $args['id'];
+	$user = $repo->find($id);
+	$params = [
+	  'user' => $user,
+	  'errors' => []
+	];
+	return $this->renderer->render($response, 'users/edit.phtml', $params);
 });
 
 $app->patch('/users/{id}', function ($request, $response, array $args) use ($repo) {
-	 $id = $args['id'];
-	 $user = $repo->find($id);
-	 $data = $request->getParsedBodyParam('user');
+	$id = $args['id'];
+	$user = $repo->find($id);
+	$data = $request->getParsedBodyParam('user');
 
-	 $user['name'] = $data['name'];
+	$user['name'] = $data['name'];
 
-	 $validator = new Validator();
-	 $errors = $validator->validate($user);
+	$validator = new Validator();
+	$errors = $validator->validate($user);
 
-	 if (count($errors) === 0) {
-		  $this->flash->addMessage('success', 'User has been updated');
-		  $repo->save($user);
-		  return $response->withRedirect("/users/{$user['id']}/edit");
-	 }
+	if (count($errors) === 0) {
+	  $this->flash->addMessage('success', 'User has been updated');
+	  $repo->save($user);
+	  return $response->withRedirect("/users/{$user['id']}/edit");
+	}
 
-	 $params = [
-		  'user' => $user,
-		  'errors' => $errors
-	 ];
+	$params = [
+	  'user' => $user,
+	  'errors' => $errors
+	];
 
-	 return $this->renderer->render($response, 'users/edit.phtml', $params);
+	return $this->renderer->render($response, 'users/edit.phtml', $params);
 });
 
 
@@ -8016,6 +8022,7 @@ interface ValidatorInterface
  GET /companies/3/users/new
  POST /companies/3/users
 
+
 # Отображение формы 
 */
 
@@ -8051,30 +8058,30 @@ $app->get('/schools/new', function ($request, $response) {
 */
 
 $app->post('/schools', function ($request, $response) {
-	 $repo = new SchoolRepository();
-	 // Извлекаем данные формы
-	 $schoolData = $request->getParsedBodyParam('school');
+	$repo = new SchoolRepository();
+	// Извлекаем данные формы
+	$schoolData = $request->getParsedBodyParam('school');
 
-	 $validator = new Validator();
-	 // Проверяем корректность данных
-	 $errors = $validator->validate($schoolData);
+	$validator = new Validator();
+	// Проверяем корректность данных
+	$errors = $validator->validate($schoolData);
 
-	 if (count($errors) === 0) {
-		  // Если данные корректны, то сохраняем, добавляем флеш и выполняем редирект
-		  $repo->save($schoolData);
-		  $this->flash->addMessage('success', 'School has been created');
-		  // Обратите внимание на использование именованного роутинга
-		  return $response->withRedirect($this->router->pathFor('schools'));
-	 }
+	if (count($errors) === 0) {
+	  // Если данные корректны, то сохраняем, добавляем флеш и выполняем редирект
+	  $repo->save($schoolData);
+	  $this->flash->addMessage('success', 'School has been created');
+	  // Обратите внимание на использование именованного роутинга
+	  return $response->withRedirect($this->router->pathFor('schools'));
+	}
 
-	 $params = [
-		  'schoolData' => $schoolData,
-		  'errors' => $errors
-	 ];
+	$params = [
+	  'schoolData' => $schoolData,
+	  'errors' => $errors
+	];
 
-	 // Если возникли ошибки, то устанавливаем код ответа в 422 и рендерим форму с указанием ошибок
-	 $response = $response->withStatus(422);
-	 return $this->renderer->render($response, 'schools/new.phtml', $params);
+	// Если возникли ошибки, то устанавливаем код ответа в 422 и рендерим форму с указанием ошибок
+	$response = $response->withStatus(422);
+	return $this->renderer->render($response, 'schools/new.phtml', $params);
 });
 
 // Своего шаблона у таких обработчиков не делают. Если данные оказались не валидны, то этот обработчик рисует форму обработчика new и отправляет ее вместе с кодом ответа 422 (Unprocessable Entity).
@@ -8108,9 +8115,9 @@ use function Stringy\create as s;
 $repo = new Repository();
 
 $configuration = [
-	 'settings' => [
-		  'displayErrorDetails' => true,
-	 ],
+	'settings' => [
+	  'displayErrorDetails' => true,
+	],
 ];
 
 $app = new \Slim\App($configuration);
@@ -8118,21 +8125,21 @@ $app = new \Slim\App($configuration);
 $container = $app->getContainer();
 $container['renderer'] = new \Slim\Views\PhpRenderer(__DIR__ . '/../templates');
 $container['flash'] = function () {
-	 return new \Slim\Flash\Messages();
+	return new \Slim\Flash\Messages();
 };
 
 $app->get('/', function ($request, $response) {
-	 return $this->renderer->render($response, 'index.phtml');
+	return $this->renderer->render($response, 'index.phtml');
 });
 
 $app->get('/posts', function ($request, $response) use ($repo) {
-	 $flash = $this->flash->getMessages();
+	$flash = $this->flash->getMessages();
 
-	 $params = [
-		  'flash' => $flash,
-		  'posts' => $repo->all()
-	 ];
-	 return $this->renderer->render($response, 'posts/index.phtml', $params);
+	$params = [
+	  'flash' => $flash,
+	  'posts' => $repo->all()
+	];
+	return $this->renderer->render($response, 'posts/index.phtml', $params);
 })->setName('posts');
 
 // BEGIN (write your solution here)
@@ -8154,9 +8161,9 @@ use function Stringy\create as s;
 $repo = new Repository();
 
 $configuration = [
-	 'settings' => [
-		  'displayErrorDetails' => true,
-	 ],
+	'settings' => [
+	  'displayErrorDetails' => true,
+	],
 ];
 
 $app = new \Slim\App($configuration);
@@ -8168,17 +8175,17 @@ $container['flash'] = function () {
 };
 
 $app->get('/', function ($request, $response) {
-	 return $this->renderer->render($response, 'index.phtml');
+	return $this->renderer->render($response, 'index.phtml');
 });
 
 $app->get('/posts', function ($request, $response) use ($repo) {
-	 $flash = $this->flash->getMessages();
+	$flash = $this->flash->getMessages();
 
-	 $params = [
-		  'flash' => $flash,
-		  'posts' => $repo->all()
-	 ];
-	 return $this->renderer->render($response, 'posts/index.phtml', $params);
+	$params = [
+	  'flash' => $flash,
+	  'posts' => $repo->all()
+	];
+	return $this->renderer->render($response, 'posts/index.phtml', $params);
 })->setName('posts');
 
 // BEGIN (write your solution here)
@@ -8256,9 +8263,9 @@ use function Stringy\create as s;
 $repo = new Repository();
 
 $configuration = [
-	 'settings' => [
-		  'displayErrorDetails' => true,
-	 ],
+	'settings' => [
+	  'displayErrorDetails' => true,
+	]
 ];
 
 $app = new \Slim\App($configuration);
@@ -8266,21 +8273,21 @@ $app = new \Slim\App($configuration);
 $container = $app->getContainer();
 $container['renderer'] = new \Slim\Views\PhpRenderer(__DIR__ . '/../templates');
 $container['flash'] = function () {
-	 return new \Slim\Flash\Messages();
+	return new \Slim\Flash\Messages();
 };
 
 $app->get('/', function ($request, $response) {
-	 return $this->renderer->render($response, 'index.phtml');
+	return $this->renderer->render($response, 'index.phtml');
 });
 
 $app->get('/posts', function ($request, $response) use ($repo) {
-	 $flash = $this->flash->getMessages();
+	$flash = $this->flash->getMessages();
 
-	 $params = [
-		  'flash' => $flash,
-		  'posts' => $repo->all()
-	 ];
-	 return $this->renderer->render($response, 'posts/index.phtml', $params);
+	$params = [
+	  'flash' => $flash,
+	  'posts' => $repo->all()
+	];
+	return $this->renderer->render($response, 'posts/index.phtml', $params);
 })->setName('posts');
 
 // BEGIN (write your solution here)
@@ -8305,40 +8312,40 @@ namespace App;
 
 class Repository
 {
-	 public function __construct()
-	 {
-		  session_start();
-		  if (!array_key_exists('posts', $_SESSION)) {
-				$_SESSION['posts'] = [];
-		  }
-	 }
+	public function __construct()
+	{
+	  session_start();
+	  if (!array_key_exists('posts', $_SESSION)) {
+			$_SESSION['posts'] = [];
+	  }
+	}
 
-	 public function all()
-	 {
-		  return array_values($_SESSION['posts']);
-	 }
+	public function all()
+	{
+	  return array_values($_SESSION['posts']);
+	}
 
-	 public function find(string $id)
-	 {
-		  return $_SESSION['posts'][$id];
-	 }
+	public function find(string $id)
+	{
+	  return $_SESSION['posts'][$id];
+	}
 
-	 public function destroy(string $id)
-	 {
-		  unset($_SESSION['posts'][$id]);
-	 }
+	public function destroy(string $id)
+	{
+	  unset($_SESSION['posts'][$id]);
+	}
 
-	 public function save(array $item)
-	 {
-		  if (empty($item['name']) || empty($item['body'])) {
-				$json = json_encode($item);
-				throw new \Exception("Wrong data: {$json}");
-		  }
-		  if (!isset($item['id'])) {
-				$item['id'] = uniqid();
-		  }
-		  $_SESSION['posts'][$item['id']] = $item;
-	 }
+	public function save(array $item)
+	{
+	  if (empty($item['name']) || empty($item['body'])) {
+			$json = json_encode($item);
+			throw new \Exception("Wrong data: {$json}");
+	  }
+	  if (!isset($item['id'])) {
+			$item['id'] = uniqid();
+	  }
+	  $_SESSION['posts'][$item['id']] = $item;
+	}
 }
 
 
@@ -8348,21 +8355,20 @@ namespace App;
 
 class Validator
 {
-	 public function validate(array $course)
-	 {
-		  $errors = [];
-		  if ($course['name'] == '') {
-				$errors['name'] = "Can't be blank";
-		  }
+	public function validate(array $course)
+	{
+	  $errors = [];
+	  if ($course['name'] == '') {
+			$errors['name'] = "Can't be blank";
+	  }
 
-		  if (empty($course['body'])) {
-				$errors['body'] = "Can't be blank";
-		  }
+	  if (empty($course['body'])) {
+			$errors['body'] = "Can't be blank";
+	  }
 
-		  return $errors;
-	 }
+	  return $errors;
+	}
 }
-
 
 
 
@@ -8375,14 +8381,14 @@ class Validator
 */
 
 $app->get('/schools/{id}/edit', function ($request, $response, array $args) {
-	 $repo = new SchoolRepository();
-	 $id = $args['id'];
-	 $school = $repo->find($id);
-	 $params = [
-		  'school' => $school,
-		  'errors' => []
-	 ];
-	 return $this->renderer->render($response, 'schools/edit.phtml', $params);
+	$repo = new SchoolRepository();
+	$id = $args['id'];
+	$school = $repo->find($id);
+	$params = [
+		'school' => $school,
+		'errors' => []
+	];
+	return $this->renderer->render($response, 'schools/edit.phtml', $params);
 });
 
 # Шаблон
@@ -8405,30 +8411,30 @@ $app->get('/schools/{id}/edit', function ($request, $response, array $args) {
 # Обработчик действия
 
 $app->patch('/schools/{id}', function ($request, $response, array $args)  {
-	 $repo = new SchoolRepository();
-	 $id = $args['id'];
-	 $school = $repo->find($id);
-	 $data = $request->getParsedBodyParam('school');
+	$repo = new SchoolRepository();
+	$id = $args['id'];
+	$school = $repo->find($id);
+	$data = $request->getParsedBodyParam('school');
 
-	 // Ручное копирование данных из формы в нашу сущность
-	 $school['name'] = $data['name'];
+	// Ручное копирование данных из формы в нашу сущность
+	$school['name'] = $data['name'];
 
-	 $validator = new Validator();
-	 $errors = $validator->validate($school);
+	$validator = new Validator();
+	$errors = $validator->validate($school);
 
-	 if (count($errors) === 0) {
-		  $this->flash->addMessage('success', 'School has been updated');
-		  $repo->save($school);
-		  return $response->withRedirect($this->router->pathFor('editSchool', ['id' => $school['id']]));
-	 }
+	if (count($errors) === 0) {
+	  $this->flash->addMessage('success', 'School has been updated');
+	  $repo->save($school);
+	  return $response->withRedirect($this->router->pathFor('editSchool', ['id' => $school['id']]));
+	}
 
-	 $params = [
-		  'school' => $school,
-		  'errors' => $errors
-	 ];
+	$params = [
+	  'school' => $school,
+	  'errors' => $errors
+	];
 
-	 $response = $response->withStatus(422);
-	 return $this->renderer->render($response, 'schools/edit.phtml', $params);
+	$response = $response->withStatus(422);
+	return $this->renderer->render($response, 'schools/edit.phtml', $params);
 });
 
 /*
@@ -8550,17 +8556,18 @@ $app->run();
 <!-- END -->
 
 
+
 >>>>>  CRUD: Удаление <<<<<
 
 /*
 Удаление устроено даже проще чем вывод, но включает в себя много ньюансов. Вместо привычных GET и POST удаление делается запросом DELETE. По спецификации HTTP этот глагол идемпотентный. Это означает, что поведение, в случае наличия или отсутствия сущности, должно быть одинаковое, другими словами HTTP ответ этого обработчика не зависит от того удалена уже сущность или еще нет.
 */
 $app->delete('/schools/{id}', function ($request, $response, array $args) {
-	 $repo = new SchoolRepository();
-	 $id = $args['id'];
-	 $repo->destroy($id);
-	 $this->flash->addMessage('success', 'School has been deleted');
-	 return $response->withRedirect($this->router->pathFor('schools'));
+	$repo = new SchoolRepository();
+	$id = $args['id'];
+	$repo->destroy($id);
+	$this->flash->addMessage('success', 'School has been deleted');
+	return $response->withRedirect($this->router->pathFor('schools'));
 });
 
 /*
@@ -8611,9 +8618,9 @@ use function Stringy\create as s;
 $repo = new Repository();
 
 $configuration = [
-	 'settings' => [
-		  'displayErrorDetails' => true,
-	 ],
+	'settings' => [
+	  'displayErrorDetails' => true,
+	],
 ];
 
 $app = new \Slim\App($configuration);
@@ -8621,50 +8628,50 @@ $app = new \Slim\App($configuration);
 $container = $app->getContainer();
 $container['renderer'] = new \Slim\Views\PhpRenderer(__DIR__ . '/../templates');
 $container['flash'] = function () {
-	 return new \Slim\Flash\Messages();
+	return new \Slim\Flash\Messages();
 };
 
 $app->get('/', function ($request, $response) {
-	 return $this->renderer->render($response, 'index.phtml');
+	return $this->renderer->render($response, 'index.phtml');
 });
 
 $app->get('/posts', function ($request, $response) use ($repo) {
-	 $flash = $this->flash->getMessages();
+	$flash = $this->flash->getMessages();
 
-	 $params = [
-		  'flash' => $flash,
-		  'posts' => $repo->all()
-	 ];
-	 return $this->renderer->render($response, 'posts/index.phtml', $params);
+	$params = [
+	  'flash' => $flash,
+	  'posts' => $repo->all()
+	];
+	return $this->renderer->render($response, 'posts/index.phtml', $params);
 })->setName('posts');
 
 $app->get('/posts/new', function ($request, $response) use ($repo) {
-	 $params = [
-		  'postData' => [],
-		  'errors' => []
-	 ];
-	 return $this->renderer->render($response, 'posts/new.phtml', $params);
+	$params = [
+	  'postData' => [],
+	  'errors' => []
+	];
+	return $this->renderer->render($response, 'posts/new.phtml', $params);
 });
 
 $app->post('/posts', function ($request, $response) use ($repo) {
-	 $postData = $request->getParsedBodyParam('post');
+	$postData = $request->getParsedBodyParam('post');
 
-	 $validator = new Validator();
-	 $errors = $validator->validate($postData);
+	$validator = new Validator();
+	$errors = $validator->validate($postData);
 
-	 if (count($errors) === 0) {
-		  $id = $repo->save($postData);
-		  $this->flash->addMessage('success', 'Post has been created');
-		  return $response->withHeader('X-ID', $id)
-								->withRedirect($this->router->pathFor('posts'));
-	 }
+	if (count($errors) === 0) {
+	  $id = $repo->save($postData);
+	  $this->flash->addMessage('success', 'Post has been created');
+	  return $response->withHeader('X-ID', $id)
+							->withRedirect($this->router->pathFor('posts'));
+	}
 
-	 $params = [
-		  'postData' => $postData,
-		  'errors' => $errors
-	 ];
+	$params = [
+	  'postData' => $postData,
+	  'errors' => $errors
+	];
 
-	 return $this->renderer->render($response->withStatus(422), 'posts/new.phtml', $params);
+	return $this->renderer->render($response->withStatus(422), 'posts/new.phtml', $params);
 });
 
 // BEGIN (write your solution here)
@@ -8680,6 +8687,7 @@ $app->run();
 <!-- BEGIN (write your solution here) -->
 
 <!-- END -->
+
 
 
 >>>>>  Model-View-Controller (MVC)   <<<<<<< 
@@ -8720,29 +8728,29 @@ getCookieParam($name, $default = null) - возвращает указанную
 */
 
 $app->post('/example', function ($request, $response) {
-	 // Set-Cookie: <cookie-name>=<cookie-value>
-	 return $response->withHeader('Set-Cookie', "foo=bar")
+	// Set-Cookie: <cookie-name>=<cookie-value>
+	return $response->withHeader('Set-Cookie', "foo=bar")
 });
 
 
 // Типичный вариант использования кук - корзина в интернет-магазине. Во время добавления товара, код магазина формирует куку, в которую начинает заносить данные о заказе.
 
 $app->post('/cart-items', function ($request, $response) {
-	 // Информация о добавляемом товаре
-	 $item = $request->getParsedBodyParam('item');
+	// Информация о добавляемом товаре
+	$item = $request->getParsedBodyParam('item');
 
-	 // Данные корзины
-	 $cart = json_decode($request->getCookieParam('cart', json_encode([])));
+	// Данные корзины
+	$cart = json_decode($request->getCookieParam('cart', json_encode([])));
 
-	 // Добавление нового товара
-	 $cart[] = $item;
+	// Добавление нового товара
+	$cart[] = $item;
 
-	 // Кодирование корзины
-	 $encodedCart = json_encode($cart);
+	// Кодирование корзины
+	$encodedCart = json_encode($cart);
 
-	 // Установка новой корзины в куку
-	 return $response->withHeader('Set-Cookie', "cart={$encodedCart}")
-		  ->withRedirect('/');
+	// Установка новой корзины в куку
+	return $response->withHeader('Set-Cookie', "cart={$encodedCart}")
+	  ->withRedirect('/');
 });
 
 /*
@@ -8780,9 +8788,9 @@ use function Stringy\create as s;
 $repo = new Repository();
 
 $configuration = [
-	 'settings' => [
-		  'displayErrorDetails' => true,
-	 ],
+	'settings' => [
+		'displayErrorDetails' => true,
+	]
 ];
 
 $app = new \Slim\App($configuration);
@@ -8791,11 +8799,11 @@ $container = $app->getContainer();
 $container['renderer'] = new \Slim\Views\PhpRenderer(__DIR__ . '/../templates');
 
 $app->get('/', function ($request, $response) {
-	 $cart = json_decode($request->getCookieParam('cart', json_encode([])), true);
-	 $params = [
-		  'cart' => $cart
-	 ];
-	 return $this->renderer->render($response, 'index.phtml', $params);
+	$cart = json_decode($request->getCookieParam('cart', json_encode([])), true);
+	$params = [
+	  'cart' => $cart
+	];
+	return $this->renderer->render($response, 'index.phtml', $params);
 });
 
 // BEGIN (write your solution here)
@@ -8810,30 +8818,30 @@ namespace App;
 
 class Repository
 {
-	 public function __construct()
-	 {
-		  session_start();
-	 }
+	public function __construct()
+	{
+	  session_start();
+	}
 
-	 public function all()
-	 {
-		  return array_values($_SESSION);
-	 }
+	public function all()
+	{
+	  return array_values($_SESSION);
+	}
 
-	 public function find(int $id)
-	 {
-		  return $_SESSION[$id];
-	 }
+	public function find(int $id)
+	{
+	  return $_SESSION[$id];
+	}
 
-	 public function save(array $item)
-	 {
-		  if (empty($item['title']) || $item['paid'] == '') {
-				$json = json_encode($item);
-				throw new \Exception("Wrong data: {$json}");
-		  }
-		  $item['id'] = uniqid();
-		  $_SESSION[$item['id']] = $item;
-	 }
+	public function save(array $item)
+	{
+	  if (empty($item['title']) || $item['paid'] == '') {
+			$json = json_encode($item);
+			throw new \Exception("Wrong data: {$json}");
+	  }
+	  $item['id'] = uniqid();
+	  $_SESSION[$item['id']] = $item;
+	}
 }
 
 // file: app/templates/index.phtml:
@@ -8871,6 +8879,7 @@ class Repository
 
 
 <?
+
 >>>>> Сессия  <<<<<<<   
 
 /*
@@ -8890,9 +8899,9 @@ Set-Cookie: _hexlet_session=CM5DvfXch6M3uPJHyfLDpv52wBe4iu3og domain=.hexlet.io;
 session_start();
 
 if (!isset($_SESSION['count'])) {
-	 $_SESSION['count'] = 0;
+	$_SESSION['count'] = 0;
 } else {
-	 $_SESSION['count']++;
+	$_SESSION['count']++;
 }
 
 print_r($_SESSION['count']);
@@ -8906,13 +8915,13 @@ print_r($_SESSION['count']);
 session_start();
 
 $app->post('/cart-items', function ($request, $response) {
-	 // Информация о добавляемом товаре
-	 $item = $request->getParsedBodyParam('item');
+	// Информация о добавляемом товаре
+	$item = $request->getParsedBodyParam('item');
 
-	 // Добавление нового товара
-	 $_SESSION['cart'][] = $item;
+	// Добавление нового товара
+	$_SESSION['cart'][] = $item;
 
-	 return $response->withRedirect('/');
+	return $response->withRedirect('/');
 });
 
 
@@ -8974,9 +8983,9 @@ $container['flash'] = function () {
 };
 
 $users = [
-	 ['name' => 'admin', 'passwordDigest' => hash('sha256', 'secret')],
-	 ['name' => 'mike', 'passwordDigest' => hash('sha256', 'superpass')],
-	 ['name' => 'kate', 'passwordDigest' => hash('sha256', 'strongpass')]
+	['name' => 'admin', 'passwordDigest' => hash('sha256', 'secret')],
+	['name' => 'mike', 'passwordDigest' => hash('sha256', 'superpass')],
+	['name' => 'kate', 'passwordDigest' => hash('sha256', 'strongpass')]
 ];
 
 // BEGIN (write your solution here)
@@ -9020,7 +9029,7 @@ $app->run();
 Ставятся все необходимые зависимости
 Выполняется процесс сборки, например собирается фронтенд часть
 Выполняются миграции. Миграции - sql скрипты, которые изменяют структуру базы данных
-Запускается новая версия кода
+Запускается новая версия кода.
 Как это ни странно, но во многих компаниях прямо сейчас весь этот процесс выполняется руками. Программист заходит на сервер, запускает git pull и далее проходится по списку выше. Это худший способ деплоить. Деплой относится к тем задачам, которые должны быть автоматизированы от и до.
 
 Несмотря на разнообразие способов деплоя, есть одно важное правило общее для всех - деплоить можно только вперед! Деплой нельзя "откатывать" (в первую очередь это касается миграций, но про базы мы пока не говорим). Если после или во время деплоя что-то пошло не так, то правильно деплоить снова, но предыдущую версию.
@@ -9034,9 +9043,13 @@ $app->run();
 Способ деплоя сильно зависит от используемого хостинга и даже способа настройки серверного окружения. Выделяют следующие типы хостингов:
 
 Shared Hosting - самый дешевый способ размещать сайт в интернете. Такая услуга включает в себя доступ на сервер с уже настроенным программным обеспечением под конкретный стек, например Linux + PHP + MySQL. Этот способ подходит для самых простых сайтов и требует минимальной настройки.
+
 VPS/VDS - наиболее сбалансированная услуга, в рамках которой предоставляет виртуальная машина. Плюс в том что такой вид хостинга позволяет задействовать больше серверных мощностей: цпу, память и диск. Предустановленного ПО нет, все нужно делать самостоятельно. По сравнению с Shared Hosting вы не ограничены в правах и можете настраивать сервер как вам угодно.
+
 Dedicated Server - выделеный сервер (либо свой, либо арендованный). Такой хостинг требует больше всего участия, но зато вы получаете лучшее соотношение производительность/цена.
+
 IaaS - инфраструктура как сервис. Вид хостинга при котором большая часть возможностей представляется как сервис. Как пример Amazon Web Service (AWS).
+
 PaaS - платформа как сервис. Наиболее дорогой и самый автоматизированный способ из коробки по размещению сайтов. Выкладка сайта происходит буквально по команде git push. Кроме цены важно учитывать используемые технологии и подходы. PaaS обладает наибольшим числом ограничений по тому что и как можно делать, но в обмен вы получаете не просто автоматизированный хостинг, но и платформу которая автоматически "скейлится" (масштабируется) под нагрузку.
 Все способы деплоя можно грубо разбить на две большие категории. Деплой на PaaS и деплой на все остальное.
 
@@ -9112,6 +9125,7 @@ To https://git.heroku.com/gsphpjon.git
 		  name: pip
 		  state: latest
 		become: yes
+
 Ключевое понятие Ansible - Playbook. Это файл (или файлы) описывающие в yaml, что нужно сделать на указанной машине. В каждом плейбуке используются готовые модули поставляемые вместе с Ansible. Этих модулей сотни, с помощью них можно делать практически все, начиная от установки программ, до настройки сети и управления правами файловой системы. Ansible универасальный инструмент, с его помощью можно не только настраивать окружение, но и собственно деплоить. Причем для деплоя есть готовый модуль - deploy helper https://docs.ansible.com/ansible/2.5/modules/deploy_helper_module.html.
 
 В более продвинутых случаях, там где используется, например, Docker, развертывание осуществляется системами оркестрации, среди которых выделяется Kubernetes https://kubernetes.io/.
@@ -9123,9 +9137,6 @@ DevOps https://ru.atlassian.com/devops
 Terraform http://terraform.io/ 
 Ansible https://www.ansible.com/
 */ 
-
-
-
 
 
 
@@ -9169,20 +9180,20 @@ namespace App\FileUtils;
 
 function cd($current, $move)
 {
-	 // BEGIN (write your solution here)
-	 $paths = explode('/', $current);
-	 $stack = array_filter($paths, function($path) {
-		 return $path == ''; 
-	 });
-	 foreach ($move as $item) {
-		  if ($item == '..' || $item == '../') {
-				array_pop($stack);
-		  } elseif ($item == '.') {
-				continue;
-		  }
-	 }
-	 return $stack;
-	 // END
+	// BEGIN (write your solution here)
+	$paths = explode('/', $current);
+	$stack = array_filter($paths, function($path) {
+	 return $path == ''; 
+	});
+	foreach ($move as $item) {
+	  if ($item == '..' || $item == '../') {
+			array_pop($stack);
+	  } elseif ($item == '.') {
+			continue;
+	  }
+	}
+	return $stack;
+	// END
 }
 
 // Tests:
@@ -9194,26 +9205,26 @@ use function App\FileUtils\cd;
 
 class FileUtilsTest extends TestCase
 {
-	 /**
-	  * @dataProvider additionProvider
-	  */
-	 public function testCd($actual, $current, $move)
-	 {
-		  $this->assertEquals($actual, cd($current, $move));
-	 }
+	/**
+	* @dataProvider additionProvider
+	*/
+	public function testCd($actual, $current, $move)
+	{
+	  $this->assertEquals($actual, cd($current, $move));
+	}
 
-	 public function additionProvider()
-	 {
-		  return [
-				['/', '/current/path', '/'],
-				['/current', '/current/path', '..'],
-				['/current', '/current/path', '../'],
-				['/current', '/current', '.'],
-				['/current/anotherpath', '/current/path', '.././anotherpath'],
-				['/etc', '/current/path', '/etc'],
-				['/current/anotherpath/path', '/current/anotherpath', '../anotherpath/path'],
-		  ];
-	 }
+	public function additionProvider()
+	{
+	  return [
+			['/', '/current/path', '/'],
+			['/current', '/current/path', '..'],
+			['/current', '/current/path', '../'],
+			['/current', '/current', '.'],
+			['/current/anotherpath', '/current/path', '.././anotherpath'],
+			['/etc', '/current/path', '/etc'],
+			['/current/anotherpath/path', '/current/anotherpath', '../anotherpath/path'],
+	  ];
+	}
 }
 
 
@@ -9223,13 +9234,13 @@ class FileUtilsTest extends TestCase
 namespace Theory;
 
 if (!file_exists($path)) { // проверяет существование файла/директории(в unix директория тоже файл). Проверить на директорию: is_dir($path) 
-	 mkdir($path, 0755, $recursive); // создать директорию
+	mkdir($path, 0755, $recursive); // создать директорию
 } 
 
 rmdir($path); // удаление директории
 
 if (!file_exists($path)) { // проверить на файл: is_file($path)
-	 touch($path); // создать файл
+	touch($path); // создать файл
 }
 
 unlink($path); // удаление файла
@@ -9244,7 +9255,7 @@ print_r(scandir("/var/tmp"));
 // DirectoryIterator FilesystemIterator RecursiveDirectoryIterator
 $iterator = new \GlobIterator('../*');
 foreach ($iterator as $item) {
-	 print_r($item);
+	print_r($item);
 }
 
 $info = new \SplFileInfo(__FILE__);
@@ -9265,16 +9276,16 @@ namespace App\FileUtils;
 
 function rrmdir($dir)
 {
-	 $dirIterator = new \RecursiveDirectoryIterator($dir, \FilesystemIterator::SKIP_DOTS);
-	 $iterator = new \RecursiveIteratorIterator($dirIterator, \RecursiveIteratorIterator::CHILD_FIRST);
-	 foreach ($iterator as $filename => $fileInfo) {
-		  if ($fileInfo->isDir()) {
-				rmdir($filename);
-		  } else {
-				unlink($filename);
-		  }
-	 }
-	 rmdir($dir);
+	$dirIterator = new \RecursiveDirectoryIterator($dir, \FilesystemIterator::SKIP_DOTS);
+	$iterator = new \RecursiveIteratorIterator($dirIterator, \RecursiveIteratorIterator::CHILD_FIRST);
+	foreach ($iterator as $filename => $fileInfo) {
+	  if ($fileInfo->isDir()) {
+			rmdir($filename);
+	  } else {
+			unlink($filename);
+	  }
+	}
+	rmdir($dir);
 }
 
 
@@ -9286,76 +9297,76 @@ namespace Theory;
 $file = __FILE__;
 
 if (file_exists($file) && is_readable($file)) {
-	 #1
-	 $lines = file(__FILE__); 
-	 foreach($lines as $line) {
-		  echo $line;
-	 }
+	#1
+	$lines = file(__FILE__); 
+	foreach($lines as $line) {
+		echo $line;
+	}
 
-	 #2
-	 $content = file_get_content(__FILE__);
-	 echo $content;
+	#2
+	$content = file_get_content(__FILE__);
+	echo $content;
 
-	 // #1, #2 - подходят для маленьких файлов (тк. эти функции загружают все в память). Поэтому для больших файлов надо делать это потоково:
+	// #1, #2 - подходят для маленьких файлов (тк. эти функции загружают все в память). Поэтому для больших файлов надо делать это потоково:
 
-	 #3
-	 $handle = fopen($filename, "rb"); // rb - чтение без модификации. r+
-	 if ($handle) { // $handle - файловый дискриптор. Файл получилось открыть
-		  try {
-				$contents = fread($handle, filesize($filename)); // 2-й параметр сколько байт прочитать
-		  } finally {
-				fclose($handler);
-		  }
-	 }
+	#3
+	$handle = fopen($filename, "rb"); // rb - чтение без модификации. r+
+	if ($handle) { // $handle - файловый дискриптор. Файл получилось открыть
+		try {
+			$contents = fread($handle, filesize($filename)); // 2-й параметр сколько байт прочитать
+		} finally {
+			fclose($handler);
+		}
+	}
 
-	 #4
-	 $handler = fopen($file, "rb"); 
-	 if ($handler) {
-		  try {
-				while (!feof($handler)) { // проверяет не достигли ли мы конца файла.
-					 echo fgets($handler, 1024); // 2-й параметр сколько байт прочитать
-				}
-		  } finally { // потому что во время работы могут быть выброшены исключения
-				fclose($handler);       
-		  }
-	 }
+	#4
+	$handler = fopen($file, "rb"); 
+	if ($handler) {
+		try {
+			while (!feof($handler)) { // проверяет не достигли ли мы конца файла.
+				echo fgets($handler, 1024); // 2-й параметр сколько байт прочитать
+			}
+		} finally { // потому что во время работы могут быть выброшены исключения
+			fclose($handler);       
+		}
+	}
 
-	 #5
-	 $handler = fopen($filename);
-	 if ($handler) {
-		  try {
-				/* javier   argonout    pe */
-				/* hiroshi  sculptor    jp */
-				/* robert   slacker us*/
-				while ($userinfo = fsconf($handle, "%s\t%s\t%s\n")) { // возвращает массив значений соотствующий этому паттерну
-					 list($name, $profession, $countrycode) = $userinfo;
-				}
-		  } finally {
-				fclose($handler);
-		  }
-	 }
+	#5
+	$handler = fopen($filename);
+	if ($handler) {
+		try {
+			/* javier   argonout    pe */
+			/* hiroshi  sculptor    jp */
+			/* robert   slacker us*/
+			while ($userinfo = fsconf($handle, "%s\t%s\t%s\n")) { // возвращает массив значений соотствующий этому паттерну
+				 list($name, $profession, $countrycode) = $userinfo;
+			}
+		} finally {
+			fclose($handler);
+		}
+	}
 }
 
 #6
 $file = new SplFileObject('file.txt');
 while(!$file->eof()) {
-	 echo $file->fgets();
+	echo $file->fgets();
 }
 
 #7
 foreach ($file as $lineNumber => $content) {
-	 printf("Line %d: %s", $lineNumber, $content);
+	printf("Line %d: %s", $lineNumber, $content);
 }
 
 #8:
 $linesTenToTwentyIterator = new LinitIteratir(
-	 $file,
-	 9, // start at line 10
-	 10 // iterate 10 lines
+	$file,
+	9, // start at line 10
+	10 // iterate 10 lines
 );
 
 foreach ($linesTenToTwentyIterator as $line) {
-	 echo $line; // outputs line 10 to 20
+	echo $line; // outputs line 10 to 20
 }
 
 
@@ -9369,14 +9380,14 @@ $data = "my data\n";
 file_put_contents($file, $data); // FILE_APPEND - не перезаписывать, добавлять в конец. 
 
 if (is_writable($file)) {
-	 $handle = fopen($file, 'ab'); // ab - добавление данных в конец; r - перезаписывать; a+ c
-	 if ($handle) {
-		  try {
-				fwrite($handle, $data);
-		  } finally {
-				fclose($handler);
-		  }
-	 }
+	$handle = fopen($file, 'ab'); // ab - добавление данных в конец; r - перезаписывать; a+ c
+	if ($handle) {
+		try {
+			fwrite($handle, $data);
+		} finally {
+			fclose($handler);
+		}
+	}
 }
 
 $file = new \SplFileObject($file, 'ab');
@@ -9407,11 +9418,11 @@ $tmpfname = tempnam(sys_get_temp_dir(), "HEXLET"); // создает пусто�
 
 $temp = tmpfile(); // создает файловый дискриптор временного файла
 try {
-	 fwrite($temp, 'my data');
-	 fseek($temp, 0);
-	 echo fread($temp, 1024);
+	fwrite($temp, 'my data');
+	fseek($temp, 0);
+	echo fread($temp, 1024);
 } finally {
-	 fclose($temp);
+	fclose($temp);
 }
 
 // SplTempFileObject
@@ -9424,8 +9435,8 @@ try {
 ***/
 
 $path = FileUtils\tmpdir(function ($dir) {
-	 is_dir($dir); // true
-	 return tempnam($dir, 'hexlet');
+	is_dir($dir); // true
+	return tempnam($dir, 'hexlet');
 });
 
 file_exists($path); // false
@@ -9435,62 +9446,62 @@ namespace App\FileUtils;
 
 function tmpdir($func)
 {
-	 $dir = sys_get_temp_dir() . DIRECTORY_SEPARATOR . uniqid();
-	 mkdir($dir);
-	 try {
-		  return $func($dir);
-	 } finally {
-		  rrmdir($dir);
-	 }
+	$dir = sys_get_temp_dir() . DIRECTORY_SEPARATOR . uniqid();
+	mkdir($dir);
+	try {
+	  return $func($dir);
+	} finally {
+	  rrmdir($dir);
+	}
 }
 
 function rrmdir($dir)
 {
-	 $iterator = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($dir, \FilesystemIterator::SKIP_DOTS), \RecursiveIteratorIterator::CHILD_FIRST); // RecursiveIteratorIterator - делает рекурсивное перемещение по всем файлам и каталогам
-	 foreach ($iterator as $filename => $fileInfo) {
-		  if ($fileInfo->isDir()) {
-				rmdir($filename);
-		  } else {
-				unlink($filename);
-		  }
-	 }
-	 rmdir($dir);
+	$iterator = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($dir, \FilesystemIterator::SKIP_DOTS), \RecursiveIteratorIterator::CHILD_FIRST); // RecursiveIteratorIterator - делает рекурсивное перемещение по всем файлам и каталогам
+	foreach ($iterator as $filename => $fileInfo) {
+	  if ($fileInfo->isDir()) {
+			rmdir($filename);
+	  } else {
+			unlink($filename);
+	  }
+	}
+	rmdir($dir);
 }
 
 // Tests:
 
 class FileUtilsTest extends TestCase
 {
-	 public function testTmpdir1()
-	 {
-		  $exists = false;
-		  $path = tmpdir(function ($dir) use (&$exists) {
-				$exists = is_dir($dir);
-				return tempnam($dir, 'hexlet');
-		  });
+	public function testTmpdir1()
+	{
+	  $exists = false;
+	  $path = tmpdir(function ($dir) use (&$exists) {
+			$exists = is_dir($dir);
+			return tempnam($dir, 'hexlet');
+	  });
 
-		  $this->assertTrue($exists);
-		  $this->assertFalse(file_exists($path));
-	 }
+	  $this->assertTrue($exists);
+	  $this->assertFalse(file_exists($path));
+	}
 
-	 public function testTmpdir2()
-	 {
-		  $exists = false;
-		  $isEmpty = tmpdir(function ($dir) use (&$exists) {
-				$exists = is_dir($dir);
-				return !(new \FilesystemIterator($dir))->valid();
-		  });
+	public function testTmpdir2()
+	{
+	  $exists = false;
+	  $isEmpty = tmpdir(function ($dir) use (&$exists) {
+			$exists = is_dir($dir);
+			return !(new \FilesystemIterator($dir))->valid();
+	  });
 
-		  $this->assertTrue($exists);
-		  $this->assertTrue($isEmpty);
-	 }
+	  $this->assertTrue($exists);
+	  $this->assertTrue($isEmpty);
+	}
 }
 
 $files = new RecursiveIteratorIterator($dir);
 
 echo "[$path]\n";
 foreach ($files as $file) {
-	 echo " ├ $file\n";
+	echo " ├ $file\n";
 }
 
 /*
@@ -9519,8 +9530,8 @@ $files = new RecursiveIteratorIterator($dir, RecursiveIteratorIterator::SELF_FIR
 
 echo "[$path]\n";
 foreach ($files as $file) {
-	 $indent = str_repeat('   ', $files->getDepth());
-	 echo $indent, " ├ $file\n";
+	$indent = str_repeat('   ', $files->getDepth());
+	echo $indent, " ├ $file\n";
 }
 
 /*
@@ -9535,23 +9546,20 @@ foreach ($files as $file) {
 
 
 
-
-
-
 ############## «PHP: Функциональное программирование» ##############
 
 
 >>>>>   Map: Отображение списков  <<<<<<<
 
 $result = array_map(function ($key, $value)) {
-	 return $key . $value;
+	return $key . $value;
 }, array_keys($map), $map); // передаем ключи массива в array_map
 // не поддерживает итерируемые объекты
 
 // Functional\map - поддерживает:
 $iterator = new \DirectoryIterator('..'); // .. - директория выше
 $result = map($iterator, function ($info) {
-	 return $info->getFilename();
+	return $info->getFilename();
 });
 
 
@@ -9560,14 +9568,14 @@ $result = map($iterator, function ($info) {
 >>>>>  Фильтрация коллекций  <<<<<<<
 
 $result = array_filter($array, function ($key) {
-	 return $key > 5
+	return $key > 5;
 }, ARRAY_FILTER_USE_KEY); // передаем ключи в array_filter. ARRAY_FILTER_USE_BOTH - передать ключ и значение
 // не поддерживает итерируемые объекты
 
 // Functional\select:
 $iterator = new \DirectoryIterator('..');
 $result = select($iterator, function ($item) {
-	 return $item->isDir();
+	return $item->isDir();
 });
 
 /*
@@ -9592,11 +9600,11 @@ use function Functional\map;
 
 function powerOfString($str)
 {
-	 $result = map(str_split($str), function ($item) {
-		  return ord($item);
-	 });
+	$result = map(str_split($str), function ($item) {
+	  return ord($item);
+	});
 
-	 return array_sum($result);
+	return array_sum($result);
 }
 
 /**

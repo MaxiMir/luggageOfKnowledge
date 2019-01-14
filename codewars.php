@@ -426,3 +426,93 @@ class MyTestCases extends TestCase
     }
 }
 
+#find sum of positive numbers
+
+function getSumPosNums ($numbers)
+{
+	return array_reduce($numbers, function ($acc, $num) {
+		return $num > 0 ? $acc + $num : $acc;	
+	}, 0);
+}
+
+/*
+Given an array (arr) as an argument complete the function countSmileys that should return the total number of smiling faces.
+
+Rules for a smiling face:
+-Each smiley face must contain a valid pair of eyes. Eyes can be marked as : or ;
+-A smiley face can have a nose but it does not have to. Valid characters for a nose are - or ~
+-Every smiling face must have a smiling mouth that should be marked with either ) or D.
+No additional characters are allowed except for those mentioned.
+Valid smiley face examples:
+:) :D ;-D :~)
+Invalid smiley faces:
+;( :> :} :]
+
+Example cases:
+
+countSmileys([':)', ';(', ';}', ':-D']);       // should return 2;
+countSmileys([';D', ':-(', ':-)', ';~)']);     // should return 3;
+countSmileys([';]', ':[', ';*', ':$', ';-D']); // should return 1;
+*/
+
+#1
+function count_smileys($arr): int {
+  return preg_match_all('/[:;][-~]?[\)D]/', implode(",", $arr));
+}
+
+#2
+
+function count_smileys($arr): int {
+  return count(preg_grep('/[:;][-~]?[D)]/',$arr));
+}
+
+https://www.codewars.com/kata/pairs-of-integers-from-m-to-n/train/php
+
+$output = shell_exec('ls -lart');
+echo "<pre>$output</pre>";
+
+
+/*
+Write a function generatePairs that accepts two integer arguments m and n and generates an array containing the pairs of integers [a, b] that satisfy the following conditions:
+
+m <= a <= b <= n
+The pairs should be sorted by increasing values of a then increasing values of b.
+
+For example, generatePairs(2, 4) should return
+
+[ [2, 2], [2, 3], [2, 4], [3, 3], [3, 4], [4, 4] ]
+*/
+
+
+#1
+function generatePairs($m,$n){
+
+	$iter = function ($car, $step, $acc) use ($n, &$iter) {
+		$cdr = $car + $step;
+		if ($car === $n) {
+			return $acc;	
+		} elseif ($cdr > $n) {
+			$car++;
+			$step = 0;
+			$cdr = $car;	
+		}
+		$step++;
+		$acc[] = [$car, $cdr];
+		return $iter($car, $step, $acc);		
+	};
+  	return $iter($m, 0, []);
+}
+
+#2
+
+function generatePairs(int $m, int $n): array {
+  $result = [];
+  
+  for ($i = $m; $i <= $n; $i++) {
+    for ($j = $i; $j <= $n; $j++) {
+        array_push($result, [$i, $j]);
+    }      
+  }
+  
+  return $result;
+}
