@@ -1127,16 +1127,34 @@ class Connection
         $this->link = new PDO($this->dsn, $this->username, $this->password);
     }
     
-    public function __sleep()
+    public function __sleep() // вызывается перед сериализацией ($connData = serialize($obj); unset($obj); $connData = unserialize($connData)). Должен возвращать массив с именами свойств для сериализации.
     {
         return array('dsn', 'username', 'password');
     }
     
-    public function __wakeup()
+    public function __wakeup() // вызывается после сериализации. Метод __construct не вызывается!
     {
         $this->connect();
     }
+
+	public function __call($name, $args) // запускается при вызове недоступных методов в контексте объекта.
+	{
+		echo "Call method '{$name}' with arguments:" . implode(', ', $args);
+	}
+
+	public function __callStatic($name, $args) // запускается при вызове недоступных статических методов в контексте объекта.
+	{
+		echo "Call static method '{$name}' with arguments:" . implode(', ', $args);	
+	}  
+	
+	public function __invoke($num, $action) // вызывается при обращении к объекту как к функции
+	{
+		// some code...	
+	} 
 }
+
+
+
 
 /*
 #  Константы классов
@@ -2266,7 +2284,6 @@ Codeception (Браузерные тесты) https://codeception.com/
 
 
 
-
 /**
 Реализуйте тест CourseTest, проверяющий работоспособность метода getName класса Course.
 **/
@@ -3267,7 +3284,6 @@ try {
 /*******************************/
 
 
-
 # http://php.net/manual/ru/language.oop5.phps
 get_class($obj); // возращает класс объекта
 
@@ -3277,14 +3293,14 @@ get_class($obj); // возращает класс объекта
 
 namespace Theory;
 
-final class Guest implements UserInterface // final - предотвратить  переопределение класса в дочерних классах
+final class Guest implements UserInterface // final - предотвратить переопределение класса в дочерних классах (не может быть унаследован)
 {
     public function isGuest()
     {
         return true;
     }
 
-    public function getFullName()
+    final public function getFullName() // предотвратить переопределение метода в дочерних классах
     {
         return 'Guest';
     }
@@ -3297,8 +3313,8 @@ namespace Theory;
 
 interface UserInterface
 {
-    public function isGuest();
-    public function getFullName();  
+	public function isGuest();
+	public function getFullName();  
 }
 
 
@@ -3410,9 +3426,9 @@ namespace Theory;
 
 interface CasheInterface
 {
-    public function __construct($options);
-    public function get($key);
-    public function set($key, $value);
+	public function __construct($options);
+	public function get($key);
+	public function set($key, $value);
 }
 
 // Пример:
@@ -3538,11 +3554,41 @@ trait Enumarable
     }
 }
 
+// Разрешение конфликтов имен в трейтах:
+
+trait Hello
+{
+	private function sayHello()
+	{
+		return 'Hello';
+	}
+}
+
+trait User
+{
+	public function sayHello($name)
+	{
+		return $name;
+	}
+}
+
+class Welcome
+{
+	use User, Hello {
+		Hello::sayHello as public word; // изменяем модификатор доступа + даем пседвоним `word`
+		User::sayHello insteadof Hello; // для разрешения конфликтов именования между трейтами, используемыми в одном и том же классе, необходимо использовать оператор insteadof для того, чтобы точно выбрать один из конфликтующих методов.
+	}
+}
+
+$obj = new Welcome();
+echo $obj->word(), ', ', $obj->sayHello('Jorn'), ', ';
+
+
 #4
 
 /*
 Полезно использовать статические свойства и методы:
-Когда у класса есть метаинформация используемая его объектами
+Когда у класса есть мета информация используемая его объектами
 Если создание объектов комплексная операция (нужно произвести какие-то вычисления)
 */
 
@@ -4386,3 +4432,20 @@ class DeckOfCardsTest extends TestCase
         $this->assertEquals($expected, $result2);
     }
 }
+
+
+
+
+
+function foo (callable $x) // ожидается callback функция
+{
+	// some code
+}
+
+echo foo($obj, "func"); // функция должна принимать метод Класса 
+echo foo(['MyClass', 'staticFunc']); // функция должна принимать статический метод Класса `MyClass`
+echo foo($obj); // Функция может принимать объект, если у него описан магический метод __invoke
+
+
+
+
