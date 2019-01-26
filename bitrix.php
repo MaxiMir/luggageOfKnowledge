@@ -119,3 +119,24 @@ $file = CFile::ResizeImageGet(
 $file['src']; // путь до новой картинки
 
 
+CModule::IncludeModule('iblock');
+$arSelect = ['ID', 'IBLOCK_ID', 'NAME', 'PREVIEW_TEXT', 'DETAIL_PAGE_URL', 'PREVIEW_PICTURE', 'ACTIVE_FROM'];
+$arFilter = ['IBLOCK_ID' => 1, 'ACTIVE_DATE' => 'Y', 'ACTIVE' => 'Y', '!PROPERTY_SHOW_ON_MAIN' => false];
+$res = CIBlockElement::GetList([], $arFilter, false, ['nPageSize' => 3], $arSelect);
+
+
+// Вывод новостей:
+<?if ($res->arResult):?>
+	<? while($ob = $res->GetNextElement()): $arFieds = $ob->GetFields(); ?>
+        <? $srcImg = CFile::GetPath($arFieds['PREVIEW_PICTURE']); ?>
+
+        <div class="col-md-4">
+            <div class="card card-blog">
+                <div class="card-img">
+                    <a href="<?=$arFieds['DETAIL_PAGE_URL']?>" title="Прочитать новость">
+                        <img src="<?=$srcImg?>" alt="" class="img-fluid">
+                    </a>
+                </div>
+            </div>
+        </div>
+// ...                
