@@ -42,7 +42,7 @@ $a = new A($x); // агрегация - в случае удаления $a, $x 
 
 /*
 Порождающие шаблоны проектирования (возвращают объект):
-	Factory Methid / Фабричный метод
+	Factory Method / Фабричный метод
 	Abstract Factory / Абстрактная фабрика
 	Singleton / Одиночка
 
@@ -141,21 +141,24 @@ interface Shape
 
 class Rectangle implements Shape
 {
-	function draw() {
+	function draw() 
+	{
 		echo __METHOD__ . "\n";
 	}
 }
 
 class Square implements Shape
 {
-	function draw() {
+	function draw() 
+	{
 		echo __METHOD__ . "\n";
 	}
 }
 
 class Circle implements Shape
 {
-	function draw() {
+	function draw() 
+	{
 		echo __METHOD__ . "\n";
 	}
 }
@@ -207,21 +210,24 @@ interface Strategy
 
 class Add implements Strategy
 {
-	function doOperation($n1, $n2) {
+	function doOperation($n1, $n2) 
+	{
 		return $n1 + $n2;
 	}
 }
 
 class Sub implements Strategy
 {
-	function doOperation($n1, $n2) {
+	function doOperation($n1, $n2) 
+	{
 		return $n1 - $n2;
 	}
 }
 
 class Mult implements Strategy
 {
-	function doOperation($n1, $n2) {
+	function doOperation($n1, $n2) 
+	{
 		return $n1 * $n2;
 	}
 }
@@ -230,9 +236,20 @@ class Context
 {
 	private $s;
 
-	function __construct(Strategy $s)
+	function __construct($op)
 	{
-		$this->s = $s;
+		switch ($op) {
+			case '+': 
+				$this->s = new Add();
+				break;
+			case '-':
+				$this->s = new Sub();
+				break;		
+			case '*':
+				$this->s = new Mult();
+				break;		
+			default: throw new Exception('Wrong type!');				
+		}
 	}
 
 	function execute($n1, $n2)
@@ -241,5 +258,165 @@ class Context
 	}
 }
 
-$c = new Context(new Add);
+$c = new Context('+');
 echo $c->execute(1, 5);
+
+
+// Шаблон decorator:
+
+interface Shape
+{
+	function draw();
+}
+
+class Rectangle implements Shape
+{
+	function draw() 
+	{
+		echo __METHOD__ . "\n";
+	}
+}
+
+class Square implements Shape
+{
+	function draw() 
+	{
+		echo __METHOD__ . "\n";
+	}
+}
+
+class Circle implements Shape
+{
+	function draw() 
+	{
+		echo __METHOD__ . "\n";
+	}
+}
+
+abstract class ShapeDecorator implements Shape
+{
+	protected $decorator;
+
+	function __construct(Shape $decoratedShape) 
+	{
+		$this->decoratedShape = $decoratedShape;
+	}
+
+	function draw() 
+	{
+		$this->decoratedShape->draw();
+	}
+}
+
+class RedShapeDecorator exdends ShapeDecorator
+{
+	function __construct(Shape $decoratedShape)
+	{
+		parent::__construct($decoratedShape);
+	}
+
+	private function setRedBorder()
+	{
+		echo 'border color red';
+	}
+
+	function draw()
+	{
+		$this->decoratedShape->draw();
+		$this->setRedBorder();
+	}
+}
+
+$c = new Circle;
+$rc = new RedShapeDecorator(new Circle);
+$c->draw();
+$rc->draw();
+
+
+// Шаблон Adapter: 
+
+interface MediaPlayer
+{
+	function play($type, $name);
+}
+
+interface SuperMediaPlayer
+{
+	function playOgg($name);
+	function playMP4($name);
+}
+
+class OggPlayer implements SuperMediaPlayer
+{
+	function playOgg($name)
+	{
+		echo "Playing OGG {$name}";
+	}
+
+	function playMP4($name){}
+}
+
+class Mp4Player implements SuperMediaPlayer
+{
+	function playMP4($name)
+	{
+		echo "Playing OGG {$name}";
+	}
+
+	function playOgg($name){}
+}
+
+class MediaAdapter implements MediaPlayer // adapter
+{
+	private $superMediaPlayer;
+
+	function __contruct ($type)
+	{
+		switch ($type) {
+			case 'OGG':
+				$this->superMediaPlayer = new OggPlayer;
+				break;
+			case 'MP4':
+				$this->superMediaPlayer = new Mp4Player;
+				break;
+		}		
+	}
+
+	function play($t, $n)
+	{
+		switch ($t) {
+			case 'OGG':
+				$this->superMediaPlayer->playOgg($n);
+				break;
+			case 'MP4':
+				$this->superMediaPlayer->playMP4($n);
+				break;
+		}
+	}
+}
+
+class AudioPlayer implements MediaPlayer
+{
+	private $mediaAdapter
+	function play($t, $n)
+	{
+		switch ($t) {
+			case 'WAV':
+				echo "Playing WAV {$n}";
+				break;
+			case 'MP3':
+				echo "Playing MP3 {$n}";
+				break;
+			case 'OGG':	
+			case 'MP4': 	
+				$this->mediaAdapter = new MediaAdapter($t);
+				$this->mediaAdapter->play($t, $n);
+		}
+	}
+}
+
+$p = new AudioPlayer;
+$p->play('WAV', 'Song1');
+$p->play('MP3', 'Song2');
+$p->play('OGG', 'Song3');
+$p->play('MP4', 'Song4');
