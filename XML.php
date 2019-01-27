@@ -485,20 +485,20 @@ $i = imagecreatetruecolor(500, 300) // создание полноцветног
 imageantialias($i, true); // применить функции сглаживания
 
 // Рисуем текст:
-imagestring($i, 5, 150, 200, 'PHP7', $black);
-imagechar($i, 3, 20, 20, 'PHP7', $black);
-imagetfttext($i, 30, 10, 300, 150, $green, 'arial.ttf', 'PHP7');
+imagestring($i, 5, 150, 200, 'PHP7', $black); // рисование строки текста горизонтально. 5 - размер шрифта 
+imagechar($i, 3, 20, 20, 'PHP7', $black); // рисование символа по горизонтали
+imagettftext($i, 30, 10, 300, 150, $green, 'arial.ttf', 'PHP7'); // наносит текст text поверх изображения, используя TrueType шрифт.
 
 // Создание цветов для изображения:
 $red = imagecolorallocate($i, 255, 0, 0); // станет фоном для картинки, если используем imagecreate()
 $white = imagecolorallocate($i, 0xFF, 0xFF, 0xFF);
 $black = imagecolorallocate($i, 0, 0, 0);
 
-// Производит заливку
+// Производит заливку:
 imagefill($i, 0, 0, $white); // начиная с заданных координат (верхний левый угол имеет координаты 0, 0)
 
 
-// Рисуем примитивы
+// Рисуем примитивы:
 imagesetpixel($i, 10, 10, $black); // рисует точку (пиксел) на заданных координатах.
 imageline($i, 20, 20, 80, 280, $red); // рисует линию
 imagerectangle($i, 20, 20, 80, 280, $red); // рисует прямоугольник
@@ -508,8 +508,26 @@ $points = [0, 0, 100, 200, 300, 200];
 imagepolygon($i, $points, 3, $red); // рисуем многоугольник; 3 - количество точек
 
 imageellipse($i, 200, 150, 300, 200, $white); // рисует эллипс (200, 150 - центр, 300, 200 - ширина и высота)
-imagearc($i, cx, cy, w, h, s, e, col)
+imagefilledellipse($i, 200, 150, 300, 200, $white); // рисует эллипс, залитый выбранным цветом
 
+imagearc($i, 200, 150, 300, 200, 0, 40, $red); // рисование дуги (200, 150 - центр, 300, 200 - ширина и высота, 0, 40 - градусы начальный и конечный)
+imagefilledarc($i, 210, 160, 300, 200, 0, 90, $red, IMG_ARC_PIE); // рисует дугу, залитый выбранным цветом
+
+
+// Использование существующего изображения:
+$img = imagecreatefromgif('picture.gif');
+$img = imagecreatefrompng('picture.png');
+$img = imagecreatefromjpeg('picture.jpg');
+$img = imagecreatefromstring($string);
+
+
+// Установка толщины линии:
+imagesetthickness($img, 5);
+
+// Использование стилей:
+$style = [$red, $red, $red, $black, $black, $black];
+imagesetstyle($img, $style);
+imageline($img, 20, 20, 80, 280, $red);
 
 // Отдаем изображение:
 header('Content-Type: image/gif');
@@ -522,3 +540,57 @@ header('Content-Type: image/jpg');
 imagejpeg($i, '', 90); // 3-й параметр сжатие(75 - по умолчанию)
 
 
+// CAPCHA
+
+// file: noise-picture.php^
+session_start();
+
+$img = imagecreatefromjpeg('images/noise.jpg');
+$color = imagecolorallocate($img, 64, 64, 64);
+imageantialias($img, true);
+$countChars = 5;
+$randStr = substr(md5(uniqid()), 0, $countChars); // uniqid - возвращает уникальную строчку
+$_SESSION['randStr'] = $randStr;
+
+$x = 20; 
+$y = 30;
+$deltaX = 40;
+
+for ($i = 0; $i < $countChars; $i++) {
+	$size = rand(16, 30);
+	$angle = -30 + rand(0, 60);
+	imagettftext($img, $size, $angle, $x, $y, 'fonts/bellb.ttf', $randStr[$i], $color);
+	$x += $deltaX;
+}
+
+header('Content-Type: image/jpg');
+imagejpeg($img);
+
+// file: registration.php:
+<?php
+	session_start();
+	$output = '';
+	if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+		if (!isset($_SESSION['randStr'])) {
+			$output = 'Включи картинки!';
+		} else {
+			if ($_SESSION['randStr'] === strtolower($_POST['answer']) {
+				$output = "DONE!"
+			} else {
+				$output = "ERROR!";
+			}
+		}
+	}
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Регистрация</title>
+</head>
+<body>
+	...
+	<?=$output?>
+</body>
+</html>
