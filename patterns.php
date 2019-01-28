@@ -420,3 +420,306 @@ $p->play('WAV', 'Song1');
 $p->play('MP3', 'Song2');
 $p->play('OGG', 'Song3');
 $p->play('MP4', 'Song4');
+
+
+################ Класс Closure ################
+
+// Обращение к функции через переменную:
+function sayHi($name)
+{
+	echo "Hi {$name}";
+}
+
+$func = "sayHi";
+$func('Jorn');
+
+// Анонимная функция:
+$sayHi = function ($name) { // анонимная функция - экземляр класса Closure
+	echo "Hi {$name}";
+};
+$sayHi('Jorn');
+
+
+// Стандартный вариант:
+$arr = [1, 2, 3, 4, 5];
+function doubleValue($v)
+{
+	return $v * 2;
+}
+
+$new_arr = array_map(doubleValue, $arr);
+
+// Хак (до анонимных функций):
+$new_arr = array_map(create_function('$v', '$v * 10;'), $arr);
+
+// Самый удобный вариант:
+$new_arr = array_map(function ($v) { return $v * 2 }, $arr);
+
+// Closure (замыкание):
+$string = 'Hello, world';
+$closure = function () use ($string) {
+	echo $string;
+}
+$closure();
+
+$mult = function ($num) {
+	return function ($x) use ($num) {
+		return $x * $num;
+	};	
+}
+
+$mult_by_2 = $mult(2);
+$mult_by_3 = $mult(3);
+echo $mult_by_2(2); // => 4
+echo $mult_by_2(5); // => 10
+echo $mult_by_3(2); // => 6
+echo $mult_by_3(5); // => 15
+
+// Использование в классах:
+class User 
+{
+	private $name;
+
+	function __construct($name)
+	{
+		$this->name = $name;
+	}
+
+	function greet ($greeting)
+	{
+		return function () use ($greeting) {
+			return "$greeting {$this->name}";
+		}
+	}
+}
+
+$user = new User('John');
+$en = $user->greet('Hi');
+echo $en; // => 'Hi John'
+
+
+################ Интерфейс Iterator ################
+
+Iterator extends Traversable
+
+mixed current (void)
+scalar key (void)
+void next (void)
+void rewind (void)
+boolean valid (void)
+
+class MyIterator implements Iterator // описываем логику перебора
+{
+	private $var = [];
+
+	public function __construct($array)
+	{
+		if (is_array($array)) {
+			$this->var = $array;
+		}
+	}
+
+	public function rewind()
+	{
+		echo "rewinding\n";
+		reset($this->var);
+	}
+
+	public function current()
+	{
+		$var = current($this->var);
+		echo "current: {$var}\n";
+		return $var;
+	}
+
+	public function key()
+	{
+		$var = key($this->var);
+		echo "key: {$var}\n";
+		return $var;
+	}
+
+	public function next()
+	{
+		$var = next($this->var);
+		echo "next: {$var}\n";
+		return $var;
+	}
+
+	public function valid()
+	{
+		$var = $this->current !== false;
+		echo "valid: {$var}\n";
+		return $var;
+	}
+}
+
+$values = [1, 2, 3];
+$it = new MyIterator($values);
+
+foreach ($it as $key => $value) {
+	print "{$key}: {$value}\n";
+}
+
+################ Интерфейс IteratorAggregate ################
+
+IteratorAggregate extends Traversable
+public Traversable getIterator (void)
+
+class MyIterator implements Iterator
+{
+	private $var = [];
+	private $count = 0;
+
+	public function __construct(array $array)
+	{
+		$this->var = $array;
+		$this->count = count($array);
+	}
+
+	public function rewind()
+	{
+		reset($this->var);
+	}
+
+	public function current()
+	{
+		$this->count--;
+		return date('d-m-Y', current($this->var));
+	}
+
+	public function key()
+	{
+		return key($this->var);
+	}
+
+	public function next()
+	{
+		return next($this->var);
+	}
+
+	public function valid()
+	{
+		return $this->count !== 0;
+	}
+}
+
+class MySchedule implements IteratorAggregate
+{
+	private $items = [];
+
+	public function getIterator() // должен вернуть объект реализующий итератор
+	{
+		asort($this->items);
+		return new MyIterator($this->items);
+	}
+
+	public function add($key, $value)
+	{
+		$this->items[$key] = $value;
+	}
+}
+
+$schedule = new MySchedule();
+$schedule->add('PHP', mktime(0, 0, 0, 3, 20, 2018));
+$schedule->add('HTML', mktime(0, 0, 0, 2, 20, 2018));
+$schedule->add('XML', mktime(0, 0, 0, 2, 12, 2018));
+$schedule->add('AJAX', mktime(0, 0, 0, 4, 16, 2018));
+
+foreach ($schedule as $key => $value) {
+	print "{$key}: {$value}\n";
+}
+
+
+// Возведение в квадрат:
+
+class NumberSquared implements Iterator
+{
+	private $cur;
+	private $obj;
+
+	function __constructor($obj)
+	{
+		$this->obj = $obj;
+	}
+
+	public function rewind()
+	{
+		$this->cur = $this->obj->getStart();
+	}
+
+	public function key()
+	{
+		return $this->cur;
+	}
+
+	public function current()
+	{
+		return pow($this->cur, 2);
+	}
+
+	public function next()
+	{
+		$this->cur++;
+	}
+
+	public function valid()
+	{
+		return $this->cur <= $this->obj->getEnd();		
+	}
+}
+
+class NumberSquared implements Iterator
+{
+
+	// <->
+	public function current()
+	{
+		return sqrt($this->cur);
+	}
+	// <->
+}
+
+class MathIterator implements IteratorAggregate 
+{
+	public $start; 
+	public $end;
+	public $action;
+
+	public function __construct($start, $end, $action)
+	{
+		$this->start = $start;
+		$this->end = $end;
+		$this->action = $action;
+	}
+
+	public function getStart()
+	{
+		return $this->start;
+	}
+
+	public function getEnd()
+	{
+		return $this->end;
+	}
+
+	public function getIterator()
+	{
+		switch ($this->action) {
+			case 'pow':
+				return new NumberSquared($this); 
+			case 'sqrt':
+				return new NumberSquareRoot($this); 				
+		}
+	}
+}
+
+$obj = new MathIterator(3, 7, 'pow');
+foreach ($obj as $key => $value) {
+	print "Квадрат числа {$key} = {$value}<br>";
+}
+
+$obj = new MathIterator(3, 7, 'sqrt');
+foreach ($obj as $key => $value) {
+	print "Квадратный корень числа {$key} = {$value}<br>";
+}
