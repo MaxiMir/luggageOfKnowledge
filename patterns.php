@@ -723,3 +723,284 @@ $obj = new MathIterator(3, 7, 'sqrt');
 foreach ($obj as $key => $value) {
 	print "Квадратный корень числа {$key} = {$value}<br>";
 }
+
+/* pow => 
+Квадрат числа 3 = 9
+Квадрат числа 4 = 16
+Квадрат числа 5 = 25
+Квадрат числа 6 = 36
+Квадрат числа 7 = 49
+*/
+
+
+################ Интерфейс ArrayAccess ################
+
+ArrayAccess // позволяет обращаться с объектом как с массивом
+boolean offsetExists (mixed $offset)
+mixed offsetGet (mixed $offset)
+void offsetSet (mixed $offset, mixed $value)
+void offsetUnset (mixed $offset)
+
+
+class Registry implements ArrayAccess
+{
+	private $props = [];
+
+	public function offsetSet($name, $value)
+	{
+		$this->props[$name] = $value;
+		return true;
+	}
+
+	public function offsetExists($name)
+	{
+		return isset($this->props[$name]);
+	}
+
+
+	public function offsetUnset($name)
+	{
+		unset($this->props[$name]);
+		return true;
+	}
+
+	public function offsetGet($name) 
+	{
+		if (!isset($this->props[$name])) {
+			return null;
+		}
+		return $this->props[$offset];
+	}
+}
+
+$obj = new Registry();
+$obj['login'] = 'root';
+$obj['password'] = '1234';
+if (isset($obj['login']))
+	echo $obj['login'] . ":" . $obj['password'];
+unset($obj['password']);
+
+
+################ Перегрузка сериализации ################
+
+Serialize
+string serialize (void)
+void unserialize (string $serialized)
+
+class MyData implements Serializable
+{
+	public $data;
+
+	public function __construct()
+	{
+		$this->data = 'Some Data';
+	}
+
+	public function getData()
+	{
+		return $this->data;
+	}
+
+	public function serialize()
+	{
+		return serialize($this->data);
+	}
+
+	public function unserialize($data)
+	{
+		$this->data = unserialize($data);
+	}
+}
+
+
+class A 
+{
+	private $varA;
+
+	public function __construct()
+	{
+		$this->varA = 'A';
+	}
+
+	public function getA()
+	{
+		return $this->varA;
+	}
+}
+
+class B exdends A 
+{
+	private $varB;
+
+	public function __construct()
+	{
+		parent::__construct();
+		$this->varB = 'B'
+	}
+
+	public function __sleep()
+	{
+		return ['varB', 'varA'];
+	}
+}
+
+$obj = new B();
+$serialized = serialize($obj); // перед запуском запустит __sleep() и созранит указанные свойства
+echo "{$serialized}\n";
+$restored = unserialize($serialized);
+echo $restored->getA();
+
+// Notice т.к. private $varA, а сериализуем объект класса B
+// Решение:
+
+class A implements Serializable
+{
+	private $varA;
+
+	public function __construct()
+	{
+		$this->varA = 'A';
+	}
+
+	public function serialize()
+	{
+		return serialize($this->varA);
+	}
+
+	public function unserialize($serialized)
+	{
+		$this->varA = unserialize($serialized);
+	}
+
+	public function getA()
+	{
+		return $this->varA;
+	}	
+}
+
+class B exdends A 
+{
+	private $varB;
+
+	public function __construct()
+	{
+		parent::__construct();
+		$this->varB = 'B'
+	}
+
+	public function serialize()
+	{
+		$aSerialized = parent::serialize();
+		return serialize([$this->varB, $aSerialized]);
+	}	
+
+	public function unserialize($serialized)
+	{
+		$temp = unserialize($serialized);
+		$this->varB = $temp[0];
+		parent::unserialize($temp[1]);
+	}
+}
+
+$obj = new B();
+$serialized = serialize($obj); // перед запуском запустит __sleep() и созранит указанные свойства
+echo "{$serialized}\n";
+$restored = unserialize($serialized);
+echo $restored->getA();
+
+
+################ Класс Generator ################
+
+function numbers()
+{
+	echo "START\n";
+	
+	for ($i = 0; $i < 5: ++$i) { 
+		yield $i; // yield - передает значение в ** и возвращается обратно
+	}
+
+	echo "FINISH\n";
+}
+
+foreach (numbers() as $value) { // вместо numbers() приходит объект класса Generator, который в свою очередь реализует интерфейс Iterator
+	echo "VALUE: $value\n"; // **
+}
+
+/*
+При больших масштабах перебора — генераторы быстрее. Примерно в 4 раза быстрее чем итераторы и на 40% быстрее обычного перебора. При небольшом количестве элементов могут быть медленнее обычного перебора, но все еще быстрее итераторов.
+START
+VALUE: 0
+VALUE: 1
+VALUE: 2
+VALUE: 3
+VALUE: 4
+FINISH
+*/
+
+// Возврат ключей
+function gen()
+{
+	yield 'a';
+	yield 'b';
+	yield 'name' => 'John';
+	yield 10 => 'e';
+}
+
+foreach (gen() as $key => $value) {
+	echo "{$key} : {$value}\n";
+}
+
+// Принимаем значение:
+
+function printLogger()
+{
+	while(true) {
+		echo 'Log ' . yield . '<br>';
+	}
+}
+
+$logger = printLogger();
+$logger->send('Foo'); // метод генератора
+$logger->send('Bar');
+
+/*
+Log Foo
+Log Bar
+*/
+
+
+// Комбинируем возврат и приём значений
+
+function numbers()
+{
+	$i = 0;
+	while (true) {
+		$cmd (yield $i);
+		++$i;
+		if ($cmd == 'stop') {
+			return; // Выход из цикла
+		}
+	}
+}
+
+$gen = numbers();
+foreach($gen as $v) {
+	if ($v == 3) {
+		$gen->send('stop');
+	}
+	echo $v;
+}
+
+// Чтение данных файла с помощью генератора:
+function getLines($file) {
+	$f = fopen($file, 'r');
+	if (!$f) throw new Exception();
+	while ($line = fgets($f)) {          
+	  yield $line;
+	}
+	fclose($f);
+}
+
+foreach (getLines("someFile.txt") as $line) {
+	echo "{$line}\n";
+}
