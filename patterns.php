@@ -1004,3 +1004,292 @@ function getLines($file) {
 foreach (getLines("someFile.txt") as $line) {
 	echo "{$line}\n";
 }
+
+
+<?
+/*
+SPL PHP Library - стандартная библиотека PHP - коллекция класов и интерфейсов для решения стандартных проблем в PHP c версии 5.3.
+
+Обрабока файлов:
+SplFileInfo
+SplFileObject
+*/
+
+#################### Создание итератора из массива ####################
+
+ArrayIterator implements Iteratorm, Traversable, ArrayAccess, SeekableIterator, Countable, Serializable
+	
+$it = new ArrayIterator ([3, 2, 1]);
+
+foreach ($it as $value) {
+	echo $value . " "; // 3 2 1
+}
+
+$it->rewind();
+$it->asort();
+
+foreach ($it as $value) {
+	echo "{$value} "; // 1 2 3
+}
+
+
+// Получаем массив из итератора:
+$array = iterator_to_array($it);
+
+
+// Пример:
+$array = ['Вася', 'Петя', 'Иван', 'Маша'];
+
+try {
+	$object = new ArrayIterator($array);
+	foreach ($object as $key => $value) {
+		echo "{$key} => {$value}\n";
+	}
+} catch (Exception $e){
+	echo $e->getMessage();
+}
+
+print_r((array) $object);
+
+
+
+#################### Рекурсивный итератор ####################
+
+RecursiveArrayIterator extends ArrayIterator implements RecursiveIterator, Traversable, Iterator
+	
+RecursiveIteratorIterator implements OuterIterator, Traversable, Iterator
+	
+
+	
+$arr = [1, [2, [3]], [4]];
+$rit = new RecursiveArrayIterator($arr);
+$rii = new RecursiveIteratorIterator($rit);
+
+foreach ($rii as $key => $value) {
+	$depth = $rit->getDepth(); // уровень вложенности
+	echo "depth=$depth key=$key value=$value\n";
+}
+
+/*
+depth=0 key=0 value=1
+depth=1 key=0 value=2
+depth=2 key=0 value=3
+depth=1 key=0 value=4
+*/
+
+
+$menu = [
+	'Homepage',
+	'Register',
+	'About' => ['The Team', 'Our Story'],
+	'Contact' => ['Locations', 'Support']
+];
+
+// Наследуем RecursiveIteratorIterator
+class MyMenu extends RecursiveIteratorIterator
+{
+	public function beginChildren()
+	{
+		echo "<ul>\n";
+	}
+	
+	public function endChildren()
+	{
+		echo "</ul></li>\n">;
+	}
+}
+
+// Рекурсивная итерация
+$rit = new MyMenu (new RecursiveArrayIterator($menu), RecursiveIteratorIterator::SELF_FIRST);
+
+echo "<ul>\n";
+foreach ($rit as $key => $value) {
+	if ($rit->hasChildren()) {
+		echo "<li>{$key}\n";
+		continue;
+	}
+	echo "<li>{$value}\n";
+}
+
+echo "</ul>\n";
+
+
+#################### Фильтрация элементов ####################
+
+FilerIterator extends IteratorIterator implements OuterIterator, Traversable, Iterator
+
+class MyClass extends FilterIterator
+{
+	public function accept()
+	{
+		return $this->getInnerIterator()->current() > 5;
+	}
+}
+
+$arr = [5, 2, 7, 9, 3, 6, 8];
+$it = new ArrayIterator($arr);
+$fit = new MyClass($it);
+foreach ($fit as $value) {
+	echo "$value "; // 7 9 6 8
+}
+
+
+#################### Ограничение итераций ####################
+
+LimitIterator extends IteratorIterator implements OuterIterator, Traversable, Iterator
+
+$arr = [1, 2, 3, 4, 5, 6, 7, 8];
+
+$it = new LimitIterator($arr, 2, 4); // со 2 позиции 4 элемента
+
+foreach ($it as $value) {
+	echo "{$value} "; // 3 4 5 6
+}
+
+#################### Бесконечная итерация с объединением итераторов ####################
+
+AppendIterator extends IteratorIterator implements OuterIterator, Traversable, Iterator
+	
+
+class MyObject 
+{
+	public function action ()
+	{
+		// что-то делаем
+		return $boolean;
+	}
+}
+
+$object1 = new MyObject();
+$object2 = new MyObject();
+$arrayIterator1 = new ArrayIterator ([$object1, $object2]);
+
+
+$object3 = new MyObject();
+$object4 = new MyObject();
+$arrayIterator2 = new ArrayIterator ([$object3, $object4]);
+
+// Объединение итераторов
+$arrayIterator = new AppendIterator();
+$arrayIterator->append($arryIterator1);
+$arrayIterator->append($arryIterator2);
+
+
+
+// Бесконечная итерация 
+$it = new InfiniteIterator($arrayIterator);
+foreach ($it as $object)
+{
+	$r = $object->action();
+	if (!$r) break;
+}
+
+
+
+#################### Работа с файлами ####################
+
+SplFileInfo
+SplFileObject extends SplFileInfo implements RecursiveIterator, Traversable, Iterator, SeekableIterator
+
+	
+$fileInfo = new SPLFileInfo('data.txt');
+$fileProps = [];
+
+$fileProps['filename'] = $fileInfo->getFilename();
+$fileProps['pathname'] = $fileInfo->getPathname();
+$fileProps['size'] = $fileInfo->getSize();
+$fileProps['mtime'] = $fileInfo->getMTime();
+$fileProps['type'] = $fileInfo->getType();
+$fileProps['isWritable'] = $fileInfo->isWritable();
+$fileProps['isReadable'] = $fileInfo->isReadable();
+$fileProps['isExecutable'] = $fileInfo->isExecutable();
+$fileProps['isFile'] = $fileInfo->isFile();
+$fileProps['isDir'] = $fileInfo->isDir();
+
+var_export($fileProps);
+
+// Чтение файла 1 вариант:
+$file = new SplFileObject('data.txt');
+foreach ($file as $line) {
+    echo "{$line}\n";
+}
+
+// Чтение файла 2 вариант:
+$file->rewind();
+while ($file->valid()) {
+    echo $file->current(). "\n";
+    $file->next();
+}
+
+// Чтение файла 3 вариант:
+$file->seek(3);
+echo $file->current();
+
+
+// Пример чтение csv файла:
+$file = new SplFileObject('data.csv');
+while ($array = $file->fgetcsv()) {
+    var_export($array);
+}
+
+
+#################### Работа с директориями ####################
+
+DirectoryIterator extends SplFileInfo implements RecursiveIterator, Traversable, Iterator, SeekableIterator
+
+// Итерация директорий:
+foreach (new DirectoryIterator(.) as $fileInfo) {
+    echo $fileInfo->getFileName() . "\n";
+}
+
+
+
+FilesystemIterator extends DirectoryIterator implements SeekableIterator
+RecursiveDirectoryIterator extends FilesystemIterator implements SeekableIterator, RecursiveIterator
+
+
+// Рекурсивная итерация директорий:
+
+function callback ($objectName)
+{
+    if ($objectName->isDir()) {
+        echo "[{$objectName}]\n";
+    } else {
+        echo "{$objectName}\n";
+    }
+}
+
+$rdi = new RecursiveDirectoryIterator('.');
+$rii = new RecursiveIteratorIterator($rdi);
+array_map('callback', iterator_to_array($rii));
+
+
+RecursuveTreeIterator extends RecursiveIteratorIterator implements OutherIterator
+
+// Строим дерево:
+$rdi = new RecursiveDirectoryIterator('.');
+$tree = new RecursiveTreeIterator($rdi);
+$tree->setPrefixPart(RecursiveTreeIterator::PREFIX_LEFT, '//');
+$tree->setPrefixPart(RecursiveTreeIterator::PREFIX_MID_HAS_NEXT, ':');
+
+
+#################### Массив как объект ####################
+
+ArrayObject implements IteratorAggregate, ArrayAccess, Traversable, Iterator, Countable
+
+$usersArr = [
+	'Вася', 'Петя', 'Иван', 'Маша', 'Джон'
+];
+
+$usersObj = new ArrayObject($usersArr);
+
+// Добавляем новое значение:
+$usersObj->append('Ира');
+
+// Получаем копию массива:
+$usersArrCopy = $usersObj->getArrayCopy();
+
+// Проверяем существует ли пятый элемент массива
+if ($usersObj->offsetExists(4)) {
+	$usersObj->offsetSet(4, 'Игорь');
+}
