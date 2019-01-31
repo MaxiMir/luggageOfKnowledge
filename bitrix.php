@@ -139,4 +139,20 @@ $res = CIBlockElement::GetList([], $arFilter, false, ['nPageSize' => 3], $arSele
                 </div>
             </div>
         </div>
-// ...                
+// ...         
+
+<?
+/*
+    Выбрать элементы раздела, у которых свойство PROPERTY_SHOW_ON совпадает с текущим ID раздела
+*/
+
+
+$res = CIBlockElement::GetList([], ['IBLOCK_ID' => 5, 'PROPERTY_SHOW_ON' => $arResult['ID']], false, false, ['ID', 'PROPERTY_YOUTUBE_CODE']);
+
+while($arFields = $res->GetNext()) {
+	echo '<pre>';
+	print_r($arFields);
+	echo '</pre>'; 
+}
+
+?>

@@ -1293,3 +1293,254 @@ $usersArrCopy = $usersObj->getArrayCopy();
 if ($usersObj->offsetExists(4)) {
 	$usersObj->offsetSet(4, 'Игорь');
 }
+
+#################### Структура Данных: Хранилище ####################
+
+SplObjectStorage implements ArrayAccess, Serializable, Traversable, Iterator, Countable
+
+$storage = new SplObjectStorage();
+$object1 = (object) ['param' => 'name'];
+$object2 = (object) ['param' => 'numbers'];
+
+$storage[$object1] = 'Jorn'; // ключ выступает в качестве объекта
+$storage[$object2] = [1, 2, 3];
+
+foreach ($storage as $i => $key) {
+	echo "Item {$i}:\n";
+	var_dump($key, $storage[$key]);
+	echo "\n"
+}
+
+// Пример:
+
+class Course 
+{
+	private $name;
+	
+	public function __construct($name)
+	{
+		$this->name = $name;
+	}
+
+	public function __toString()
+	{
+		return strtoupper($this->name);
+	}
+}
+
+$courses = new SplObjectStorage();
+
+$php = new Course('php');
+$xml = new Course('xml');
+$java = new Course('java');
+
+$courses->attach($php); // добавление
+$courses->attach($java);
+var_dump($courses->contains($php)); // проверяет на содержание объекта
+var_dump($courses->contains($xml)); // => false
+var_dump($courses->contains($java)); // => true
+
+$courses->detach($java); // извлечение объекта
+
+foreach ($courses as $course) {
+	$titles[] = (string) $course;	
+}
+
+echo join(', ', $titles);
+
+
+
+#################### Структура Данных: Стек ####################
+
+SplDoublyLinkedList implements Iterator, Countable, ArrayAccess
+SplStack extends SplDoublyLinkedList
+
+$stack = new SplStack();
+
+$stack->push('Jorn');
+$stack->push('Mike');
+$stack->pop(); // Mike
+$stack->pop(); // Jorn
+
+
+$stack->push('Jorn');
+$stack->push('Mike');
+$stack->top(); // Mike
+$stack->pop(); // Mike
+$stack->bottom(); // John
+$stack->pop(); // John
+
+
+#################### Структура Данных: Очередь ####################
+
+SplDoublyLinkedList implements Iterator, Countable, ArrayAccess
+SplQueue extends SplDoublyLinkedList
+
+// Первый элемент зашел, первый 1 выходит
+
+class Work
+{
+	public function __construct($title)
+	{
+		$this->title = $title;
+	}
+
+	public function doIt()
+	{
+		return $this->title;
+	}
+}
+
+$work1 = new Work('Сходить в магазин');
+$work1 = new Work('Прочитать книгу');
+$work1 = new Work('Тупить в телевизор');
+
+$queue = new SplQueue();
+$queue->enqueue($work1); // добавление в очередь
+$queue->enqueue($work2);
+$queue->enqueue($work3);
+
+while($queue->count() > 0) {
+	echo $queue->dequeue()->doIt(); // извлечение из очереди
+}
+
+
+#################### Структура Данных: Куча ####################
+
+SplHeap implements Iterator, Countable
+SplMinHeap extends SplHeap implements Iterator, Countable
+SplMaxHeap extends SplHeap implements Iterator, Countable
+
+
+$minHeap = new SplMinHeap();
+
+$minHeap->insert(2);
+$minHeap->insert(3);
+$minHeap->insert(1);
+
+foreach($minHeap as $value) {
+	echo "{$value} "; // 1 2 3
+}
+
+$maxHeap = new SplMaxHeap();
+
+$minHeap->insert(2);
+$minHeap->insert(3);
+$minHeap->insert(1);
+
+foreach($minHeap as $value) {
+	echo "{$value} "; // 3 2 1
+}
+
+
+// Пример:
+
+class Course
+{
+	private $name;
+
+	public function __construct($name)
+	{
+		$this->name = $name;
+	}
+
+	public function __toString()
+	{
+		return strtolower($this->name);
+	}
+
+	public function getName()
+	{
+		return $this->name;
+	}
+}
+
+$php = new Course('PHP');
+$js = new Course('Javascript');
+$xml = new Course('XML');
+$java = new Course('JAVA');
+
+class CoursesHeap extends SplHeap
+{
+	public function compare (Course $courseA, Course $courseB)
+	{
+		return strcmp((string) $courseB, (string) $courseA);
+	}
+}
+
+$coursesHeap = new CoursesHeap();
+$coursesHeap->insert($php);
+$coursesHeap->insert($xml);
+$coursesHeap->insert($js);
+$coursesHeap->insert($java);
+
+foreach($coursesHeap as $course) {
+	print $course->getName() . "\n";
+}
+
+
+#################### Массив фиксированной длины ####################
+
+SplFixedArray implements Iterator, ArrayAccess, Countable
+
+// Создаем псевдо-массив
+$splArray = new SplFixedArray(5);
+
+$splArray[1] = 2;
+$splArray[4] = 'foo';
+$splArray[5] = 'bar'; // Ошибка!
+
+echo $array->getSize(); // 5
+
+// Увеличиваем псевдо-массив
+$array->setSize(10);
+
+#1
+
+$start = memory_get_usage();
+
+$array = range(1, 100000); // приблизительно 8,5Mb выделенной памяти
+
+echo memory_get_usage() - $start, ' bytes';
+
+#2
+
+$start = memory_get_usage();
+
+$array = new SplFixedArray(100000);
+
+for ($i = 0; $i < 100000; ++$i) { // ++$i быстрее $i++
+	$array[$i] = $i; // приблизительно 3,6Mb выделенной ыпамяти
+}
+
+echo memory_get_usage() - $start, ' bytes';
+
+
+#################### Автозагрузка классов ####################
+
+// Через функцию:
+function loadClass()
+{
+	require_once "classes/{$class_name}.class.php";	
+}
+
+// Через статический метод:
+class Main
+{
+	public static function autoload()
+	{
+		require_once "classes/{$class_name}.class.php";
+	}
+}
+
+// Регистрация функций:
+spl_autoload_register('loadClass');
+
+// Список зарегистрированных функций:
+var_dump(spl_autoload_functions());
+
+// Удаление функции из списка зарегистрированных:
+spl_autoload_unregister('loadClass');
+
+// Регистрация статического метода класса:
+spl_autoload_register(['Main', 'autoload']);
