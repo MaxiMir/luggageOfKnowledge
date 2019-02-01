@@ -1544,3 +1544,263 @@ spl_autoload_unregister('loadClass');
 
 // Регистрация статического метода класса:
 spl_autoload_register(['Main', 'autoload']);
+
+<?
+
+#################### PDO ####################
+
+$sql = "SELECT id, name, email FROM users";
+$pdo = new PDO("sqlite: users.db");
+
+// Приведение результата к объекту:
+$stmt = $pdo->query($sql);
+$obj = $stmt->fetch(PDO::FETCH_OBJ); // для каждой извлеченной строки создаётся анонимный объект (возвращает экземпляр stdClass)
+
+echo $obj->id . "\n";
+echo $obj->name . "\n";
+echo $obj->email . "\n";
+
+// Леновое приведение:
+$stmt = $pdo->query($sql);
+$obj = $stmt->fetch(PDO::FETCH_LAZY); // обращаться к резульатут можно как угодно
+echo $obj[0] . "\n";
+echo $obj['name'] . "\n";
+echo $obj->email . "\n";
+
+
+/*
+Таблица users с полями: id, name, email
+1. First, first@mail.ru
+2. Second, second@mail.ru
+*/
+
+// Поиск названия класса в значении первого поля в выборке:
+$sql = "SELECT id, name FROM users";
+$stmt = $pdo->query($sql);
+
+$obj1 = $stmt->fetch(PDO::FETCH_CLASS|PDO::FETCH_CLASSTYPE); // создать объект экземляр класса stdClass, чье имя находится в 1 поле (здесь id, но оно числовое)
+$obj2 = $stmt->fetch(PDO::FETCH_CLASS|PDO::FETCH_CLASSTYPE); 
+/* Результат:
+stdClass Object ([name] => First [email] => first@email)
+stdClass Object ([name] => Second [email] => second@email)
+*/
+
+class First
+{
+	public $id, $name, $email;
+}
+
+$sql = "SELECT name, email FROM users";
+$stmt = $pdo->query($sql);
+
+$obj = $stmt->fetch(PDO::FETCH_CLASS|PDO::FETCH_CLASSTYPE);
+$obj = $stmt->fetch(PDO::FETCH_CLASS|PDO::FETCH_CLASSTYPE);
+/* Результат:
+First Object ([id] => NULL [name] => NULL [email] => first@email)
+StdClass Object ([email] => second@email)
+*/
+
+class Second
+{
+	public $id, $name, $email; 
+}
+
+$sql = "SELECT name, email FROM users";
+$stmt = $pdo->query($sql);
+
+$obj = $stmt->fetch(PDO::FETCH_CLASS|PDO::FETCH_CLASSTYPE);
+$obj = $stmt->fetch(PDO::FETCH_CLASS|PDO::FETCH_CLASSTYPE);
+/* Результат:
+First Object ([id] => 1 [name] => NULL [email] => first@email)
+Second Object ([id] => 2 [name] => NULL [email] => second@email)
+*/
+
+
+$sql = "SELECT id, name, email FROM users";
+$stmt = $pdo->query($sql);
+
+$obj = $stmt->fetchObject();
+/* Результат:
+stdClass Object ([id] => 1 [name] => First [email] => first@email)
+stdClass Object ([id] => 2 [name] => Second [email] => second@email)
+*/
+
+// Явное указание названия класса для создания объекта
+// По умолчанию stdClass
+class User
+{
+	public $id, $name, $email; 
+}
+
+$sql = "SELECT id, name, email FROM users";
+$stmt = $pdo->query($sql);
+
+$obj = $stmt->fetchObject('User');
+
+/* Результат:
+User Object ([id] => 1 [name] => First [email] => first@email)
+User Object ([id] => 2 [name] => Second [email] => second@email)
+*/
+
+// Явное указание имеющегося класса:
+$user = new User();
+$stmt->setFetchMode(PDO::FETCH_INTO, $user);
+$obj1 = $stmt->fetch(PDO::FETCH_ASSOC); // $obj1 = $user
+$obj2 = $stmt->fetch(PDO::FETCH_ASSOC); // $obj1 = $user
+/* 
+Результат  используется один и тот же объект!
+После извлечения последней записи в объекте будет (перезаписано):
+User Object ([id] => 2 [name] => Second [email] => second@mail.ru)
+*/
+
+// Явное указание класса User для создания объекта
+$stmt->setFetchMode(PDO::FETCH_CLASS, 'User');
+
+
+// Явное указание класса User для создания объекта
+// Свойства заполяются значениями после отработки конструктора
+$stmt->setFetchMode(PDO::FETCH_CLASS|PDO::FETCH_PROPS_LATE, 'User');
+
+
+
+// Полная выборка
+
+class User
+{
+	public $id, $name, $email; 	
+}
+// Получаем массив объектов класса User
+$arr = $stmt->fetchAll(PDO::FETCH_CLASS, 'USER');
+$sql = 'SELECT city, name FROM users';
+$stmt = $pdo->query($sql);
+
+// Выбираем данные только из первого поля
+$arr = $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
+
+// Группируем значения второго полня по значению первого поля
+$arr = $stmt->fetchAll(PDO::FETCH_COLUMN|PDO::FETCH_GRUP);
+
+// Выбираем уникальные значения из первого поля
+$arr = $stmt->fetchAll(PDO::FETCH_COLUMN|PDO::FETCH_UNIQUE);
+
+// Испольщуем функцию обратного вызова:
+function foo ($name, $email)
+{
+	return $name . ':' . $email . '\n';
+}
+
+// Подготовленные запросы
+$sql = "SELECT email FROM users WHERE id = :id AND name := name";
+$stmt = $pdo->prepare($sql);
+$stmt->execute([':id' => 5, ':name' => 'Jorn']);
+$john = $stmt->fetchAll();
+
+// Неименнованные псевдопеременные
+$sql = "SELECT email FROM users WHERE id = ? AND name := ?";
+$stmt = $pdo->prepare($sql);
+$stmt->execute([5, 'Jorn']);
+$john = $stmt->fetchAll();
+
+
+// Привязка параметров 
+$id = 5;
+$name = 'John';
+
+// Для именнованных переменных
+$sql = "SELECT email FROM users WHERE id = :id AND name = :name";
+
+$stmt = $pdo->prepare($sql);
+$stmt->bindValue(':id', $id, PDO::PARAM_INT);
+$stmt->bindValue(':name', $name, PDO::PARAM_STR);
+$stmt->execute();
+
+
+// Для неименнованных псевдопеременных
+$sql = "SELECT email FROM users WHERE id = ? AND name := ?";
+$stmt = $pdo->prepare($sql);
+$stmt->bindValue(1, $id, PDO::PARAM_INT);
+$stmt->bindValue(2, $name, PDO::PARAM_STR);
+$stmt->execute();
+
+
+// Использование хранимых процедур
+
+$id = 5;
+$name = 'John';
+
+$stmt = $db->prepare('CALL getEmail(?,?,?)');
+
+// Параметр IN
+$stmt->bindPara(1, $id, PDO::PARAM_INT);
+
+// Параметр INOUT
+$stmt->bindParam(2, $name, PDO::PARAM_STR|PDO::PARAM_INPUT_OUTPUT);
+
+// Параметр OUT
+$stmt->bindParam(3, $email, PDO::PARAM_STR);
+
+$stmt->execute();
+
+
+// Использование транзакций:
+try {
+	$pdo->beginTransaction();
+
+	// Исполняем много запросов
+	// Если все запросы исполнены успешно, то фиксируем это
+
+	$pdo->commit();
+} catch (PDOException $e) {
+	// Если хотя бы в одном запросе произошла ошибка, откатываем все назад
+	$pdo->rollBack();
+}
+
+
+
+#################### Класс ReflectionFunctionAbsract ####################
+
+// Класс ReflectionFunction сообщает информацию о функциях.
+
+function sayHello($name, $h)
+{
+	static $count = 0;
+	return "<h{$h}>Hello, {$name}</h$h>";
+}
+
+// Обзор функции:
+ReflectionFunction::export(mew ReflectionFunction('sayHello'));
+
+
+// Вывод основной информации:
+$func = new ReflectionFunction('sayHello');
+printf(
+	"<p>===> %s функция '%s'\n".
+	"	объявлена в %s\n".
+	"	строки с %d по %d\n",
+	$func->isInternal() ? 'Internal' : 'User-defined',
+	$func->getName(),
+	$func->getFileName(),
+	$func->getSmartLine(),
+	$func->getEndLine()
+);
+
+// Вывод статических переменных, если они есть:
+if ($statics = $func->getStaticVariables()) {
+	printf("<p>---> Статическая переменная: %s\n",
+	var_export($statics, 1));
+}
+
+// Вызов функции:
+prinf("<p>---> Результат вызова: ");
+$result = $func->invoke('John', '1');
+echo $result;
+
+
+function foo1($a, $b, $c) {}
+function foo2(Exception $a, &$b, $c) {}
+function foo3(ReflectionFunction $a, $b = 1, $c = null) {}
+function foo4() {}
+
+// Создание экземпляра класса ReflectionFunction
+$reflect = new ReflectionFunction('foo1');
+echo $reflect;
