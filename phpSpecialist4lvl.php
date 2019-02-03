@@ -937,7 +937,7 @@ VALUE: 4
 FINISH
 */
 
-// Возврат ключей
+// Возврат ключей:
 function gen()
 {
 	yield 'a';
@@ -969,7 +969,7 @@ Log Bar
 */
 
 
-// Комбинируем возврат и приём значений
+// Комбинируем возврат и приём значений:
 
 function numbers()
 {
@@ -1483,7 +1483,7 @@ foreach($coursesHeap as $course) {
 
 SplFixedArray implements Iterator, ArrayAccess, Countable
 
-// Создаем псевдо-массив
+// Создаем псевдо-массив:
 $splArray = new SplFixedArray(5);
 
 $splArray[1] = 2;
@@ -1492,7 +1492,7 @@ $splArray[5] = 'bar'; // Ошибка!
 
 echo $array->getSize(); // 5
 
-// Увеличиваем псевдо-массив
+// Увеличиваем псевдо-массив:
 $array->setSize(10);
 
 #1
@@ -1653,7 +1653,7 @@ $obj2 = $stmt->fetch(PDO::FETCH_ASSOC); // $obj1 = $user
 User Object ([id] => 2 [name] => Second [email] => second@mail.ru)
 */
 
-// Явное указание класса User для создания объекта
+// Явное указание класса User для создания объекта:
 $stmt->setFetchMode(PDO::FETCH_CLASS, 'User');
 
 
@@ -1663,7 +1663,7 @@ $stmt->setFetchMode(PDO::FETCH_CLASS|PDO::FETCH_PROPS_LATE, 'User');
 
 
 
-// Полная выборка
+// Полная выборка:
 
 class User
 {
@@ -1674,10 +1674,10 @@ $arr = $stmt->fetchAll(PDO::FETCH_CLASS, 'USER');
 $sql = 'SELECT city, name FROM users';
 $stmt = $pdo->query($sql);
 
-// Выбираем данные только из первого поля
+// Выбираем данные только из первого поля:
 $arr = $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
 
-// Группируем значения второго полня по значению первого поля
+// Группируем значения второго полня по значению первого поля:
 $arr = $stmt->fetchAll(PDO::FETCH_COLUMN|PDO::FETCH_GRUP);
 
 // Выбираем уникальные значения из первого поля
@@ -1689,24 +1689,24 @@ function foo ($name, $email)
 	return $name . ':' . $email . '\n';
 }
 
-// Подготовленные запросы
+// Подготовленные запросы:
 $sql = "SELECT email FROM users WHERE id = :id AND name := name";
 $stmt = $pdo->prepare($sql);
 $stmt->execute([':id' => 5, ':name' => 'Jorn']);
 $john = $stmt->fetchAll();
 
-// Неименнованные псевдопеременные
+// Неименнованные псевдопеременные:
 $sql = "SELECT email FROM users WHERE id = ? AND name := ?";
 $stmt = $pdo->prepare($sql);
 $stmt->execute([5, 'Jorn']);
 $john = $stmt->fetchAll();
 
 
-// Привязка параметров 
+// Привязка параметров:
 $id = 5;
 $name = 'John';
 
-// Для именнованных переменных
+// Для именнованных переменных:
 $sql = "SELECT email FROM users WHERE id = :id AND name = :name";
 
 $stmt = $pdo->prepare($sql);
@@ -1715,7 +1715,7 @@ $stmt->bindValue(':name', $name, PDO::PARAM_STR);
 $stmt->execute();
 
 
-// Для неименнованных псевдопеременных
+// Для неименнованных псевдопеременных:
 $sql = "SELECT email FROM users WHERE id = ? AND name := ?";
 $stmt = $pdo->prepare($sql);
 $stmt->bindValue(1, $id, PDO::PARAM_INT);
@@ -1723,20 +1723,20 @@ $stmt->bindValue(2, $name, PDO::PARAM_STR);
 $stmt->execute();
 
 
-// Использование хранимых процедур
+// Использование хранимых процедур:
 
 $id = 5;
 $name = 'John';
 
 $stmt = $db->prepare('CALL getEmail(?,?,?)');
 
-// Параметр IN
+// Параметр IN:
 $stmt->bindPara(1, $id, PDO::PARAM_INT);
 
-// Параметр INOUT
+// Параметр INOUT:
 $stmt->bindParam(2, $name, PDO::PARAM_STR|PDO::PARAM_INPUT_OUTPUT);
 
-// Параметр OUT
+// Параметр OUT:
 $stmt->bindParam(3, $email, PDO::PARAM_STR);
 
 $stmt->execute();
@@ -1801,7 +1801,7 @@ function foo2(Exception $a, &$b, $c) {}
 function foo3(ReflectionFunction $a, $b = 1, $c = null) {}
 function foo4() {}
 
-// Создание экземпляра класса ReflectionFunction
+// Создание экземпляра класса ReflectionFunction:
 $reflect = new ReflectionFunction('foo1');
 echo $reflect;
 
@@ -1842,10 +1842,10 @@ abstract class MyClass
 	}
 }
 
-// Обзор пользовательского класса
+// Обзор пользовательского класса:
 Reflection::export(new ReflectionClass('MyClass'));
 
-// Обзор встроенного класса
+// Обзор встроенного класса:
 Reflection::export(new ReflectionClass('Exception'));
 
 
@@ -1865,7 +1865,7 @@ class Counter extends Object implements MyInterface
 }
 
 
-// Создание экземпляра класса ReflectionClass
+// Создание экземпляра класса ReflectionClass:
 $class = new ReflectionClass('Counter');
 
 printf(
@@ -1883,16 +1883,16 @@ printf(
 	$class->getEndline()
 );
 
-// Вывод тех интерфейсов, которые реализует этот класс
+// Вывод тех интерфейсов, которые реализует этот класс:
 printf("---> Интерфейсы:\n %s\n", var_export($class->getInterfaces(), 1));
 
-// Вывод констант класса
+// Вывод констант класса:
 printf("---> Константы: %s\n", var_export($class->getConstants(), 1));
 
-// Вывод свойств класса
+// Вывод свойств класса:
 printf("---> Свойства: %s\n", var_export($class->getProperties(), 1));
 
-// Вывод методов класса
+// Вывод методов класса:
 printf("---> Методы: %s\n", var_export($class->getMethods(), 1));
 
 
@@ -1910,6 +1910,8 @@ if ($class->isInstantiable()) {
 
 #################### Класс ReflectionMethod ####################
 
+// Класс ReflectionMethod сообщает информацию о методах.
+
 class Counter
 {
 	private static $c = 0;
@@ -1921,10 +1923,10 @@ class Counter
 }
 
 
-// Создание экземпляра класса ReflectionMethod
+// Создание экземпляра класса ReflectionMethod:
 $method = new ReflectionMethod('Counter', 'increment');
 
-// Вывод основной информации
+// Вывод основной информации:
 printf(
 	"===> %s%s%s%s%s%s%s метод '%s' (который является %s)\n".
 	"	объявлен в %s\n".
@@ -1957,10 +1959,12 @@ $result = $method->invoke(null); // статический метод перед
 
 #################### Класс ReflectionExtension ####################
 
-// Создание экземпляра класса ReflectionProperty
-$ext = new ReflectionException('standart');
+// Класс ReflectionExtension сообщает информацию о модулях.
 
+// Создание экземпляра класса ReflectionException:
+$ext = new ReflectionException('standart'); // функции в ядре. Еще пример 'mysqli'
 
+// Вывод основной информации:
 printf(
 	"Имя : %s\n".
 	"Версия : %s\n".
@@ -1970,7 +1974,422 @@ printf(
 	"Классы  : [%d] %s\n",
 	$ext->getName(),
 	$ext->getVersion() ? $ext->getVersion() : 'NO_VERSION',
-	sizeof($ext->getFunction()),
+	sizeof($ext->getFunctions()),
+	var_export($ext->getFunctions(), 1),
+
+	sizeof($ext->getConstans()),
+	var_export($ext->getConstans(), 1),
+
+	sizeof($ext->getINIEnties()),
+	var_export($ext->getINIEnties(), 1),
+
+	sizeof($ext->getClassNames()),
+	var_export($ext->getClassNames(), 1)
 );
 
 
+
+
+class String 
+{
+	public $length = 5;
+}
+
+// Создание экземпляра класса reflectionProperty:
+$prop = new ReflectionProperty('String', 'length'); // ReflectionProperty сообщает информацию о свойствах класса.
+
+// Вывод основной информации о свойстве класса:
+printf(
+	"===> %s%s%s%s свойство '%s' (которое было %s)\n".
+	"	имеет модификаторы %s\n",
+	$prop->isPublic() ? 'public' : '',
+	$prop->isPrivate() ? 'private' : '',
+	$prop->isProtected() ? 'protected' : '',
+	$prop->isStatic() ? 'static' : '',
+	$prop->getName(),
+	$prop->isDefault() ? 'объявлено во время комполяции' : 'создано во время выполнения',
+
+	var_export(Reflection::getModifierName($prop->getModifiers(), 1)
+);
+
+// Создание экземпляра String:
+$obj = new String();
+
+// Получение текущего значения:
+printf("---> Значение: ");
+var_dump($prop->getValue($obj));
+
+// Изменение значения:
+$prop->setValue($obj, 10);
+printf("---> Установка значения 10, новое значение равно: ");
+var_dump($prop->getValue($obj));
+
+// Дамп объекта:
+var_dump($prop->getValue($obj));
+
+
+
+// Пример:
+class Сhest
+{
+	private static $key = 'Palundra!';
+
+	public static function open($key) 
+	{
+		echo self::$key === $key ? 'The chest opens' : 'The chest is closed';
+	}
+}
+
+$classChest = new ReflectionClass("Сhest");
+$propertyKey = $classChest->getProperty("key");
+$propertyKey->setAccessible(true);
+$propertyKey->setValue('This`s PHP, motherfucker!');
+$propertyKey->setAccessible(false);
+Сhest::open('This`s PHP, motherfucker!'); // => The chest opens
+
+
+#################### Reflection API: примеры ####################
+
+// Получаем экземляр класса ReflectionClass
+$rc = ReflectionClass('Имя_класса');
+
+// Наследует ли класс тот или иной интерфейс?
+$rc->implementsInterface('Имя_интерфейса');
+
+// Имеет ли класс тот или иной метод?
+$rc->hasMethod('Имя_метода');
+
+// Получаем экземпляр класса ReflectionMethod
+$rm = $rc->getMethod('Имя_метода');
+
+// Является ли метод статическим:
+$rm->isStatic();
+
+// Выполнение статического метода 
+$result = $rm->invoke(null);
+
+// Выполнение обычного метода:
+$instance = $rc->newInstance();
+$result = $rm->invoke($instance);
+
+
+
+// Пример Reflection API в системе плагинов:
+
+// file: classes/IPlugin.class.php
+interface IPlugin
+{
+	public static function getName();
+}
+
+
+class PluginIvana implements IPlugin
+{
+	private static $links = [
+		// ...
+	];
+
+	private static $articles = [
+		// ...
+	];	
+
+	private static $apps = [
+		// ...
+	];	
+
+	public static function getName()
+	{
+		return 'Ссылки от Ивана';
+	}
+
+	public static function getLinksItems()
+	{
+		return self::$links;
+	}
+
+	public static function getArticlesItems()
+	{
+		return self::articles;
+	}
+
+	public static function getAppsItems()
+	{
+		return self::apps;
+	}	
+}
+
+class PluginSemena implements IPlugin
+{
+	private static $links = [
+		// ...
+	];
+
+	private static $articles = [
+		// ...
+	];	
+
+	private static $apps = [
+		// ...
+	];		
+
+	public static function getLinksItems()
+	{
+		return self::$links;
+	}
+
+	public function getAppsItems()
+	{
+		return $this->articles;
+	}	
+}
+
+// file: classes/Favorites.class.php
+class Favorites
+{
+	private $plugins = [];
+
+	function construct()
+	{
+		$isExists = false;
+
+		foreach(glob('classes/*/*.class.php') as $item) {
+			if (is_file($it)) {
+				include_once($item);
+				$isExists = true;
+			}
+		}
+
+		if ($isExists) $this->findPlugins();
+	}
+
+	private function findPlugins()
+	{
+		foreach (get_declared_classes() as $class) { // возвращает массив с именами объявленных классов
+			$rc = new ReflectionClass($class);
+			if ($rc->implementsInterface('IPlugin')) {
+				$this->plugins[] = $rc;
+			}
+		}
+	}
+
+	public function getFavorites($methodName)
+	{
+		$list = [];
+		$items = [];
+
+		foreach ($this->plugins as $rc):
+			if ($rc->hasMethod($methodName)):
+				$rm = $rc->getMethod($methodName);
+				if ($rm->isStatic())
+					$items = $rm->invoke(null);
+				else
+					$items = $rm->invoke($rm->invoke($rc->newInstance()));
+				$list[] = $items;
+			endif;
+		endforeach;
+
+		return $list;
+	}
+}
+
+// file: index.php
+
+include_once 'classes/Favorites.class.php';
+$fav = new Favorites;
+$links = $fav->getFavorites('getLinksItems');
+$arts = $fav->getFavorites('getLinksArticlesItems');
+$apps = $fav->getFavorites('getAppsItems');
+?>
+//...
+
+<div id='a'>
+	<h2>Полезные сайты</h2>
+	<ul>
+	<? 
+		foreach ($links as $link) {
+			foreach ($link as $item) {
+				echo "<li><a href='{$item[1]}'>{$item[0]}</a></li>"
+			}
+		}
+	?>
+	</ul>
+</div>
+<div id='b'>
+	<h2>Полезные приложения</h2>
+	<ul>
+	<? 
+		foreach ($apps as $app) {
+			foreach ($app as $item) {
+				echo "<li><a href='{$item[1]}'>{$item[0]}</a></li>"
+			}
+		}
+	?>
+	</ul>
+</div>	
+<div id='c'>
+	<h2>Полезные статьи</h2>
+	<ul>
+	<? 
+		foreach ($arts as $art) {
+			foreach ($art as $item) {
+				echo "<li><a href='{$item[1]}'>{$item[0]}</a></li>"
+			}
+		}
+	?>
+	</ul>
+</div>	
+
+
+
+/** 
+* Тестовый класс
+*
+* @param  foo bar
+* @return baz
+*/
+class TestClass { }
+
+$rc = new ReflectionClass('TestClass');
+var_dump($rc->getDocComment()) // парсит комментарии начинающиеся с /** => 
+
+/*
+string(55) "/** 
+* Тестовый класс
+*
+* @param  foo bar
+* @return baz
+*/
+
+
+
+#################### PHP Repository ####################
+
+/*
+PEAR 
+Пакеты с исходными кодами на языке PHP
+Возмодность установки пакетов
+Стандарт оформление исходного кода, включая консоль версий
+
+Документирование: PHP Doc, Doxygen
+*/
+
+#################### cURL ####################
+
+/*
+Свободная, кроссплатформенная служебная программа командной строки для передачи файлов по различным протоколам с синтаксисом URL
+Libcurl - библиотека интерфейся API для передачи, которую разработчики могут встроить в свои программы.
+cURL действует как автономная обертка для библиотеки libcurl
+Для libcurl имеется > 30 различных привязок к языкам программирования: php_curl
+
+Основные функции:
+*/
+
+resource curl_init ([string $url = NULL])
+bool curl_setopt (resourse $ch, int $option, mixed $value) 
+mixed curl_exec(resource $ch)
+void curl_close(resource $ch)
+
+// Использование cURL
+
+// Создание:
+$ch = curl_init();
+
+// Установка опций:
+curl_setopt($ch, CURLOPT_URL, 'http://site.ru'); // необязательная строка, если прописать $ch = curl_init('http://site.ru');
+/*=============*/
+curl_setopt($ch, CURLOPT_URL, 1); //  для возврата необработанного ответа
+
+curl_setopt($ch, CURLOPT_HEADER, 1); // вернуть тело с заголовками
+
+curl_setopt($ch, CURLOPT_NOBODY, 1); // вернуть только заголовками
+
+// Выполнение:
+curl_exec($ch);
+
+// Закрытие:
+curl_close($ch);
+
+
+
+// Пример:
+$curl = curl_init();
+curl_setopt($curl, CURLOPT_URL, HOST_NAME . 'test.txt');
+
+$fp = fopen('empty.txt', 'w');
+$fh = fopen('headers.txt', 'w');
+
+curl_setopt($curl, CURLOPT_FILE, $fp); // файл, в который будет записан результат передачи (тело)
+curl_setopt($curl, CURLOPT_WRITEHEADER, $fh); // (заголовки)
+curl_exec($curl);
+curl_close($curl);
+
+// Пример:
+$curl = curl_init();
+curl_setopt($curl, CURLOPT_URL, HOST_NAME . 'posttest.php');
+
+curl_setopt($curl, CURLOPT_POST, 1);
+curl_setopt($curl, CURLOPT_POSTFIELDS, 'Hello=World&Foo=Bar&Name=Max');
+
+
+curl_exec($curl);
+curl_close($curl);
+
+// file: posttest.php
+var_dump($_POST);
+
+// Пример:
+$curl = curl_init();
+curl_setopt($curl, CURLOPT_URL, HOST_NAME . 'upload/put.txt');
+
+$str = 'Hello, world';
+
+$fp = tmpfile(); // создает в памяти пустой файл
+fwrite($fp, $str);
+fseek($fp, 0);
+
+curl_setopt($curl, CURLOPT_PUT, true);
+curl_setopt($curl, CURLOPT_INFILE, $fp);
+curl_setopt($curl, CURLOPT_INFILESIZE, strlen($str));
+
+$result = curl_exec($curl);
+fclose($fp);
+curl_close($curl);
+
+// file: put.php
+
+if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
+	$exists = false;
+
+	$file = basename($_SERVER['REQUEST_URI']);
+
+	if (file_exists($file)) 
+		$exists = true;
+
+	$dest = fopen($file, 'w');
+
+	if (!$dest) {
+		header('HTTP/1.1 409 Create error');
+		exit;
+	}
+
+	$src = fopen('php://input', 'r');
+	while($kb = fread($src, 1024)) {
+		fwrite($dest, $kb, 1024);
+	}
+	fclose($dest);
+	fclose($src);
+
+	if ($exists) 
+		header('HTTP/1.1 204 No Content');
+	else 
+		header('HTTP/1.1 201 Created');
+} elseif ($_SERVER['REQUEST_METHOD'] == 'GET') {
+	readfile(basename($_SERVER['REQUEST_URI']);
+} else {
+	header('HTTP/1.1 501 Not Implemented');
+}
+
+// file: .htaccess.php
+Options Indexes FollowSymLinks
+RewriteEngine On
+RewriteRule ^(.*)$ put.php?url=$1 [L]

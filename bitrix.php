@@ -155,4 +155,70 @@ while($arFields = $res->GetNext()) {
 	echo '</pre>'; 
 }
 
-?>
+
+// Обновление названия и свойства DETAIL_PAGE_URL у карточек товаров в определенных разделах
+require($_SERVER["DOCUMENT_ROOT"]."/bitrix/header.php");
+
+global $DB;
+
+die();
+
+$sectionsData = [
+	['3', '229'],
+	['3', '230'],
+	['3', '251']
+];
+
+
+foreach ($sectionsData as [$IBLOCK_ID, $ID]) {
+	
+	$arSelect = [
+		'ID',
+		'IBLOCK_ID',
+		'NAME',
+		'PROPERTY_SECHENIE',
+		'PROPERTY_KOLICHESTVO_JIL',
+		'DETAIL_PAGE_URL'
+	];
+	
+	$arFilter = [
+		"IBLOCK_ID"=> $IBLOCK_ID,
+		'SECTION_ID' => $ID,
+		'ACTIVE' => 'Y'
+	];
+	
+	$res = CIBlockElement::GetList(Array(), $arFilter, false, [], $arSelect);
+	
+	while($arFields = $res->GetNext())	{	
+		$valSechenie = $arFields['PROPERTY_SECHENIE_VALUE'];
+		$elemsWithZil = $ID != '411' || $ID != '421' || $ID != '408';
+		$valZhil = $elemsWithZil ? $arFields['PROPERTY_KOLICHESTVO_JIL_VALUE'] : '';
+		$isValidValFields = $elemsWithZil ? ($valSechenie != '' && $valZhil != '') : $valSechenie != '';
+		
+		if ($isValidValFields) {
+			switch($ID) {
+				case '229':
+					$h1 = "Кабель АВБбшв {$valZhil}х{$valSechenie}";
+					$h1Razvodnay = "АВБбшв {$valZhil}х{$valSechenie}";
+					break;
+				case '230':
+					$h1 = "Кабель ВБбшв {$valZhil}х{$valSechenie}";
+					$h1Razvodnay = "Вббшв {$valZhil}х{$valSechenie}";
+					break;
+				case '251':
+					$h1 = "Кабель КВВГнг-LS {$valZhil}х{$valSechenie}";
+					$h1Razvodnay = "КВВГнг-LS {$valZhil}х{$valSechenie}";
+					break;
+				default:
+					throw new Exception("Неизвестный ID: {$ID}!!!");
+					
+			}
+			
+			
+			$cbe = new CIBlockElement;
+			$test = $cbe->Update($arFields["ID"], ['NAME' => $h1Razvodnay]);
+			CIBlockElement::SetPropertyValuesEx($arFields["ID"], $IBLOCK_ID, ["NAME_ITEM" => $h1]);	
+		}
+	
+	}
+}
