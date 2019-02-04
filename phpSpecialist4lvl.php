@@ -2357,8 +2357,7 @@ curl_close($curl);
 
 // file: put.php
 
-if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
-	$exists = false;
+if ($_SERVER['REQUEST_METHOD'] === 'PUT') { 
 
 	$file = basename($_SERVER['REQUEST_URI']);
 
@@ -2372,7 +2371,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
 		exit;
 	}
 
-	$src = fopen('php://input', 'r');
+	$src = fopen('php://input', 'r'); // возвращает все необработанные данные после HTTP-заголовков запроса, независимо от типа контента.
+
 	while($kb = fread($src, 1024)) {
 		fwrite($dest, $kb, 1024);
 	}
@@ -2393,3 +2393,291 @@ if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
 Options Indexes FollowSymLinks
 RewriteEngine On
 RewriteRule ^(.*)$ put.php?url=$1 [L]
+
+
+
+// Пример:
+
+function curlHeaderCallback($curl, $headers) // переопределение заголовков
+{
+	header($headers);
+
+	header('Content-Disposition: attachment; filename="file-name.zip"'); // яожидаемый контент ответа будет отображаться в браузере, как вэб-страница или часть вэб-страницы, или же как вложение, которое затем может быть скачано и сохранено локально.
+
+	return strlen($headers);
+}
+
+$str = HOST_NAME . 'zip.php';
+$curl = curl_init();
+curl_setopt($curl, CURLOPT_URL, $str);
+curl_setopt($curl, CURLOPT_BINARYTRANSFER, 1); // бинарные данные
+curl_setopt($curl, CURLOPT_HEADERFUNCTION, 'curlHeaderCallback');
+
+
+// file: zip.php
+
+$zip = new ZipArchive();
+$filename = 'test,zip';
+
+if ($zip->open($filename, ZIPARCHIVE::CREATE) !== TRUE) {
+	exit ("cannot open $filename\n");
+}
+
+// Создаем в архиве файл 'test-file-php-1.txt' и записываем в него строку
+
+$str = '#1 This is a test string added as testfilephp1.txt.\n';
+$zip->addFromString('test-file-php-1.txt', $str);
+
+// Создаем в архиве файл 'test-file-php-2.txt' и записываем в него строку
+$str = '#2 This is a test string added as testfilephp2.txt.\n';
+$zip->addFromString('test-file-php-2.txt', $str);
+
+// Копируем в архив существующий файл 'test.txt' и переименовываем его в 'test-from-file.txt'
+$zip->addFile('test.text', 'test-from-file.txt');
+
+$zip->close();
+echo file_get_contents($filename);
+
+
+
+#################### Регулярные выражения ####################
+
+/*
+Типы регулярных выражений в PHP:
+PCRE
+POSIX - c 7 выпелена
+
+Формат определения шаблонов:
+<разделитель><шаблон><разделитель>[<модификатор>]
+
+Разделители:
+/
+|
+@
+#
+
+Основные термины:
+Метасимволы
+Кватификаторы
+Классы символов
+Ссылки
+
+Функции поиска, замены, разделения:
+preg_match($pattern, $subject [, $matches]); // поиск до первого вхождения
+preg_match_all($pattern, $subject [, $matches], PREG_CONSTs); // поиск все вхождений
+preg_replace($pattern, $replace, $subject); // поиск и замена
+*/
+
+preg_match('/PHP.7/', 'PHP-7', $matches); // . - любой символ, кроме перевода строки
+$matches[0]; // => PHP-7
+preg_match('/\.com/', 'site.com', $matches);  // \ экранирование метасимволов и разделителей
+$matches[0]; // => .com
+
+/*
+{m} - точное соответствие
+{m, n} - максимум и минимум
+{m,} - минимум
+*/
+
+preg_match('/tre{1,2}f/', 'treef', $matches);  
+$matches[0]; // => treef
+
+/*
+? что и {0, 1}
++ что и {1,}
+* что и {0,}
+*/
+
+preg_match('/PHP.?5/', 'PHP 5', $matches);  
+$matches[0]; // => PHP 5
+
+/*
+Метасимволы
+^ Ограничение начала строки
+$ Ограничение конца строки
+*/
+
+preg_match('/^abc/', 'abcdxyz', $matches);  
+$matches[0]; // => abc
+
+preg_match('/xyz$/', 'abcdxyz', $matches);  
+$matches[0]; // => xyz
+
+
+/*
+[...] Класс искомых символов
+*/
+
+preg_match('/[0-9]+/', 'PHP is released in 1995', $matches);  
+$matches[0]; // => 1995
+
+preg_match('/[^0-9]+/', 'PHP is released in 1995', $matches); // не включая цифры 
+$matches[0]; // => PHP is released in 
+
+preg_match('/[a-zA-Z ]+/', 'PHP is released in 1995', $matches); // не включая цифры 
+$matches[0]; // => PHP is released in 
+
+preg_match('/[^a-zA-Z ]+/', 'PHP is released in 1995', $matches); // не включая цифры 
+$matches[0]; // => 1995 
+
+/*
+(...) Группировка элементов, для раскидывания элементов по массиву. В 0 лежит элемент с полным вхождением, в остальных сгруппированные
+*/
+
+$subject = 'PHP is released is 1995';
+$pattern = '/PHP [a-zA-Z ]+([12][0-9])([0-9]{2})/';
+preg_match($pattern, $subject, $matches);
+print_r($matches); // =>
+/*
+[0] => PHP is released in 1995,
+[1] => 19,
+[2] => 05
+*/
+
+
+/*
+Специальный последовательности:
+\? \+ \* \[ \] \{ \} 	// экранирование
+*/
+$subject = '4**';
+$pattern_in_apos = '/^4\*\*$/'; // в одинарных ковычках
+$pattern_in_quot = "/^4\\*\\*$"; // в двойных ковычках (т.к в них '\' считается экранирующи )
+
+
+/*
+\t \n \f \r (ASCII 9, 10, 12, 13)
+\d ([0-9])
+\D ([^0-9])
+\s ([\t\n\f\r])
+\S ([^\t\n\f\r])
+\w - любая буква, цифра, символ подчеркивания
+\W - противоположность \w
+*/
+
+
+
+/*
+\b позиция между соседними символами \w и \W
+\B противоположность \b
+*/
+
+$string = '##Testing123##';
+preg_match('/\b.+\b/', $string, $matches); 
+$matches[0]; // => Testing123 
+
+/*
+Жадные квантификаторы: * и +
+*/
+$subject = '<b>I am bold.</b> <i>I am Italic.</i> <b>I am also bold.</b>';
+preg_match('#<b>(.+)</b>#', $subject, $matches); 
+$matches[1]; // => I am bold.</b> 	I am Italic.</i>	I am also bold.</b>'
+
+/*
+Таблетка от жадности: ?
+*/
+preg_match('#<b>(.+?)</b>#', $subject, $matches);  // => I am bold.
+
+
+/*
+Модификаторы
+i ([a-zA-Z]) нерегистрозависимый поиск
+*/
+
+
+// m Многострочный поиск
+$subject = "ABC\nDEF\nGHI";
+preg_match('/^DEF/', $subject, $matches);
+$matches[0]; // => 
+
+preg_match('/^DEF/m', $subject, $matches);
+$matches[0]; // => DEF
+
+
+// S Однострочный поиск: "." = . + перевод строки
+$subject = "ABC\nDEF\nGHI";
+preg_match('/BC.DE/', $subject, $matches);
+$matches[0]; // => 
+
+preg_match('/BC.DE/S', $subject, $matches);
+$matches[0]; // => BC\nDE
+
+
+// x Пропуск пробелов и коментариев (#) в тексте шаблона
+$subject = "ABC\nDEF\nGHI";
+preg_match('/A B C/', $subject, $matches);
+$matches[0]; // => 
+
+preg_match('/A B C/x', $subject, $matches);
+$matches[0]; // => ABC
+
+
+// D что и $, если строка не заканчивается \n
+preg_match('/BC$/', 'ABC\n', $matches);
+$matches[0]; // => BC
+
+preg_match('/BC$/D', 'ABC\n', $matches);
+$matches[0]; // => 
+
+// A что и ^ 
+preg_match('/[a-c]{3}/i', '123ABC', $matches);
+$matches[0]; // => ABC
+
+preg_match('/[a-c]{3}/iA', '123ABC', $matches);
+$matches[0]; // => 
+
+// U ленивость по умолчанию
+$subject = '<b>I am bold.</b> <i>I am Italic.</i> <b>I am also bold.</b>';
+preg_match('#<b>(.+)</b>#U', $subject, $matches); 
+$matches[1]; // => I am bold.
+
+
+// Функция замены:
+$subject ='April 15, 2003';
+$pattern = '/(\w+) (\d+), (\d+)/i';
+$replace = '$2 $1, $3'; // если в 2-х ковычках, экранируем: "\$2 \$1 \$3"
+preg_replace($pattern, $replace, subject, $subject); // => 15 April, 2003
+
+
+// Функция разделения:
+$subject = 'hypertext Language, programming';
+$pattern = '/[\s,]+/';
+$words = preg_split($pattern, $subject); // => 
+/*
+[0] => hypertext,
+[1] => language
+[2] => programming
+*/
+
+$chars = preg_match('//', 'PHP', 0, PREG_SPLIT_NO_EMPTY); // => 
+
+/*
+[0] => P,
+[1] => H,
+[2] => P
+*/
+
+
+#################### Регулярные выражения ####################
+
+/*
+phpUnit (phpunit.de)
+
+Запуск в консоли:
+phpunit tests-php-file.php
+*/
+
+// Тестирование операций с массивами PHP при использовании PHPUnit
+
+class ArrayTest extends PHPUnit_Framework_TestCase
+{
+	$arr = [];
+
+	$this->assertEquals(0, count($arr));
+
+	array_push($arr, 'element');
+	$this->assertEquals('element', $arr[count($arr) - 1]);
+	$this->assertEquals(1, count($arr));
+
+	$this->assertEquals('element', array_pop($arr));
+	$this->assertEquals(0, count($arr));
+}
