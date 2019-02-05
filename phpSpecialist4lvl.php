@@ -106,7 +106,9 @@ class Logger
 {
 	const LOG_NAME = 'control.log';
 	static private $instance;
+
 	private function __construct() {}
+
 	private function __clone() {} // псевдоконструктор вызывается при клонировании объекта $copy_of_object = clone $object;
 
 	static function getInstance() 
@@ -2657,7 +2659,7 @@ $chars = preg_match('//', 'PHP', 0, PREG_SPLIT_NO_EMPTY); // =>
 */
 
 
-#################### Регулярные выражения ####################
+#################### PHPUnit ####################
 
 /*
 phpUnit (phpunit.de)
@@ -2681,3 +2683,467 @@ class ArrayTest extends PHPUnit_Framework_TestCase
 	$this->assertEquals('element', array_pop($arr));
 	$this->assertEquals(0, count($arr));
 }
+
+
+// Использование разных методов:
+class StackTest extends PHPUnit_Framework_TestCase
+{
+	public function testEmpty()
+	{
+		$arr = [];
+		$this->assertTrue(empty($arr));
+	}
+
+	public function testPush()
+	{
+		$arr = [];
+		array_push($arr, 'foo');
+		$this->assertEquals('foo', $arr[count($arr) - 1]);
+		$this->assertFalse(empty($arr));
+	}
+
+	public function testPop(array $arr) // Ошибка 
+	{
+		$arr = [];
+		$this->assertEquals('foo', array_pop($arr));
+		$this->assertTrue(empty($arr));
+	}
+}
+
+// Решение: Использование аннтации @depends для описания зависимостей (то что вернет testPop передать в testPush())
+class StackTest extends PHPUnit_Framework_TestCase
+{
+	public function testEmpty()
+	{
+		$arr = [];
+		$this->assertTrue(empty($arr));
+		return $arr;
+	}
+
+	/**
+	 * @depends testEmpty
+	 */
+	public function testPush(array $arr)
+	{
+		array_push($arr, 'foo');
+		$this->assertEquals('foo', $arr[count($arr) - 1]);
+		$this->assertFalse(empty($arr));	
+		return $arr;	
+	}
+}
+
+// Использование источника данных:
+class DataTest extends PHPUnit_Framework_TestCase
+{
+	/**
+	 * @dataProvider provider
+	 */
+	public function testAdd($a, $b, $c) // PHPUnit по очереди будет кидать сюда элементы массива в provider()
+	{
+		$this->assertEquals($c, $a + $b);
+	}
+
+	public function provider()
+	{
+		return [
+			[0, 0, 0],
+			[0, 1, 1],
+			[1, 0, 1],
+			[1, 1, 3]
+		];
+	}
+}
+
+// Применение всех возможных шаблонных методов:
+class TemplateMethodsTest extends PHPUnit_Framework_TestCase
+{
+	public static function setUpBeforeClass() // вызывается вначале (а-ля конструктор)
+	{
+		print __METHOD__ . "\n";
+	}
+	
+	protected function setUp() // вызывается перед каждым тестом
+	{
+		print __METHOD__ . "\n";		
+	}
+
+	protected function assertPreConditions() // вызывается перед каждым Assert
+	{
+		print __METHOD__ . "\n";		
+	}
+
+	public function testOne()
+	{
+		print __METHOD__ . "\n";
+		$this->assertTrue(TRUE);
+	}
+
+	public function testTwo()
+	{
+		print __METHOD__ . "\n";
+		$this->assertTrue(False);
+	}	
+
+	protected function assertPostConditions() // вызывается после каждого Assert
+	{
+		print _
+// Использование источника данных:_METHOD__ . "\n";		
+	}	
+
+	protected function tearDown() // после каждого теста
+	{
+		print __METHOD__ . "\n";
+	}
+
+	public static function tearDownAfterClass() // вызывается в самом конце
+	{
+		print __METHOD__ . "\n";
+	}
+
+	protected function onNotSuccessfulTest(Exception $e) // чтобы не обваливался при failure
+	{
+		print __METHOD__ . "\n";
+		throw $e;
+	}
+}
+
+
+// Пример:
+
+// file: somedemo.php
+class SomeDemo
+{
+	public function div($a, $b)
+	{
+		return $a / $b;
+	}
+
+	public function mult($a, $b)
+	{
+		return $a * $b;
+	}
+}
+
+// file: demo.php
+class Demo
+{
+	public function sum($a, $b)
+	{
+		return $a + $b;
+	}
+
+	public function dummy($a, $b)
+	{
+		return 'nothing';
+		if ($a == 100) $b = 0;
+	}
+
+
+	public function substract($a, $b)
+	{
+		return $a - $b;
+	}
+}
+
+// file: demotest.php
+require_once('classes/demo.php');
+
+class DemoTest extends PHPUnit_Framework_TestCase
+{
+	public function testSum()
+	{
+		$demo = new Demo();
+		$this->assertEquals(4, $demo->sum(2, 2));
+		$this->assertNotEquals(3, $demo->sum(1, 1));
+	}
+}
+
+// file: demotest-2.php
+require_once('classes/demo.php');
+
+class DemoTest extends PHPUnit_Framework_TestCase
+{
+	public function setUp() // вызывается перед каждым тестом
+	{
+		$this->demo = new Demo();
+	}	
+
+	public function testSum() // вызывается перед каждым тестом
+	{
+		$this->assertEquals(4, $this->demo->sum(2, 2));
+	}	
+
+	public function testSubstract() // вызывается перед каждым тестом
+	{
+		$this->assertEquals(0, $this->demo->substract(2, 2));
+	}	
+
+	public function tearDown()
+	{
+		unset($this->demo);
+	}
+}
+
+
+################################ MVC ################################
+
+// View 
+include 'controller.php';
+
+<html>
+	<head>
+		<link rel="stylesheet" href="style.css"	/>
+	</head>
+	<body>
+		echo $output;
+		if (is_string($dresult)) {
+			echo $dbresult;
+		} else {
+			foreach ($dbresult as $record) {
+				foreach ($record as $k => $v) {
+					echo $k . ": " . $v . '<br>'	;
+				}
+			}
+		}
+	</body>
+</html>	
+
+
+// View 
+include 'model.php';
+
+session_start();
+
+if (isset($_SESSION['username'])) {
+	$output = 'Добро пожаловать, ' .  $_SESSION['username'];
+} else {
+	$output = 'Вы не авторизованы на сайте';
+}
+$dbresult = fetchAllProducts();
+
+
+// Model
+function getDBConnection()
+{
+	try {
+		$pdo = new PDO('sqlite:site.db');
+		return $pdo;
+	} catch (PDOException $e) {
+		return 'Извините, ' . $e->getMessage();
+	}
+}
+
+function fetchAllProducts()
+{
+	$pdo = getDBConnection();
+
+	if (!is_object($pdo))
+		return $pdo;
+	try {
+		$stmt = $pdo->prepare("SELECT * FROM products");
+		$stmt->execute();
+		return $stmt->fetchAll(PDO::FETCH_ASSOC);
+	} catch (PDOException $e) {
+		return 'Извините, ' . $e->getMessage();
+	}
+}
+
+/*
+Controllers
+	FrontController (как правило, встроенный)
+		интрепритация переменных запроса и направление исполняемого кода
+		выполняет всю черновую работу: создание моделей, парсинг шаблонов, вывод результата
+	ActionControllers (пользовательские)	
+		action == метод
+
+Мodels
+	классы-утилиты
+
+Views 
+	шаблоны	
+
+
+Маршрутизация:
+/controller/action[/key 1][/key 2]... 	
+/controller/action[/key 1][/value 1]...
+Примеры:
+/
+/book/show 			// book - имя контроллера, show - имя action, опционально дальше идут параметры 
+/book/show/25
+/book/get/format/xml
+
+mod_rewrite => bootstrap file (index.php) 	// единая точка входа
+
+
+Структура:
+
+	application
+		controllers
+		models
+		views
+	images
+	styles
+	index.php
+	.htaccess
+		RewriteCond %{REQUEST_FILENAME}!-f
+		RewriteRule !\.(js|gif|jpg|png|css)$ index.php	
+
+
+Bootsrap
+	Инициализация
+		путей по-умолчанию для поиска файлов
+		необходимых конфигурационных данных
+		автозагрузка файлов
+
+	Инициализация FrontController			
+	Роутинг
+	Вывод данных
+*/
+
+
+// file: index.php
+
+set_include_path(get_include_path() // set_include_path - устанавливает значение настройки конфигурации include_path 
+	. PATH_SEPARATOR . 'application/controllers' // точка с запятой в Windows, двоеточие в других системах.
+	. PATH_SEPARATOR . 'application/models'
+	. PATH_SEPARATOR . 'application/views'
+);
+
+function __autoload($class)
+{
+	require_once ($class . '.php');
+}
+
+$front = FrontController::getInstance();
+$front->route();
+echp $front->getBody();
+
+// file: application/controllers/FrontController.php
+
+class FrontController
+{
+	protected $controller, $action, $params, $body;
+
+	public static $instance;
+
+	public static function getInstance() // Singleton
+	{
+		if (!(self::$instance instanceof self))
+			self::$instance = new self();
+		return self::$instance;
+	}
+
+	private function __construct()
+	{
+		$request = $_SERVER['REQUEST_URI'];
+		$splits = explode('/', trim($request, '/'));
+
+		// Controller
+		$this->controller = !empty($splits[0]) ? ucfirst($splits[0]) . 'Controller' : 'IndexController';
+		// Негласное правило: название контроллера с большой буквы + Controller. IndexController - контроллер по умолчанию.
+
+		// Action
+		$this->action = !empty($splits[1]) ? $splits[1] . 'Actions' : 'IndexActions'; 
+
+		// Есть ли параметры и их значения:
+		if (!empty($splits[2])) {
+			$keys = $values = [];
+
+			for($i = 2, $cnt = count($splits); $i < $cnt; $i++) {
+				if ($i % 2 == 0) {
+					// четное = ключ (параметр)
+					$keys[] = $splits[$i];
+				} else {
+					// значение параметра
+					$values[] = $splits[$i];
+				}
+			}
+			$this->params = array_combine($keys, $values); // cоздает новый массив, используя один массив в качестве ключей, а другой в качестве соответствующих значений
+		}
+	}
+
+	public function route()
+	{
+		if (class_exists($this->getController())) { // есть ли такой контроллер
+			$rc = new ReflectionClass($this->getController());
+
+			if ($rc->implementsInterface('IController')) { // интерфейс как метка
+				if ($rc->hasMethod($this->getAction())) {
+					$controller = $rc->newInstance(); // создаем экземпляр класса контроллера
+					$method = $rc->getMethod($this->getAction());
+					$method->invoke($controller); // вызывает отраженный метод (getAction)
+				} else {
+					throw new Exception('Action');
+				}
+			} else {
+				throw new Exception('Interface');
+			}
+		} else {
+			throw new Exception('Controller');
+		}
+	}
+
+	public function getParams()
+	{
+		return $this->params;				
+	} 
+
+	public function getController()
+	{
+		return $this->controller;				
+	} 
+
+	public function getAction()
+	{
+		return $this->action;				
+	} 	
+
+	public function getBody()
+	{
+		return $this->body;				
+	} 
+
+	public function setBody()
+	{
+		$this->body = $body;				
+	} 	
+}
+
+
+// file: application/controllers/IndexController.php
+
+class IndexController implements IController
+{
+	public function indexAction()
+	{
+		$fc = FrontController::getInstance(); // если уже реализован, вернется ссылка на него
+
+		// Добавляем:
+		//$params = $fc->getParams(); // не на главной
+		$model = new Model();
+		$model->name = 'Guest'
+		//$model->name = $params['name']; // не на главной
+		$result = $model->render('../views/index.php');
+
+		$fc->setBody($result);
+	}
+}
+
+// file: application/models/model.php
+
+class Model
+{
+	public function render($template)
+	{
+		ob_start();
+		include(dirname(__FILE__) . '/' . $template);
+		return ob_get_clean();
+	}
+}
+
+
+// file: application/views/index.php
+
+<h1>Hello, <?=$this->name?>!</h1>
+
+41.46
