@@ -222,3 +222,94 @@ foreach ($sectionsData as [$IBLOCK_ID, $ID]) {
 	
 	}
 }
+
+
+# Галерея изображений:
+/*
+Новое свойство: Галерея тип файл, множественное, название GALLERY, тип загружаемых файлов - изображения
+[PROPTERTIES] => [GALLERY] => [PROPERTY_VALUE_ID] => [44, 45, 46, 47] // ID - картинок
+*/
+
+<?if (!empty($arResult['PROPTERTIES']['GALLERY']['VALUE']): ?>
+	<?php foreach ($arResult['PROPTERTIES']['GALLERY']['VALUE'] as $photo): ?>
+		<img src="<?=CFile::GetPath($photo); ?>" alt="" width="200"> // $photo - содержит ID
+	<?php endforeach; ?>
+<?php endif; ?>
+
+
+
+# Авторизация
+
+define('NEED_AUTH', true); // Если инициализировать данную константу значением "true" до подключения пролога, то будет проведена проверка на авторизованность пользователя. Если пользователь не авторизован, то ему будет предложена форма авторизации.
+
+/*
+Компонент: system.auth.registration
+Компонент: форма авторизации:
+Страница регистрации: /auth/registration.php
+Страница забытого пароля: /auth/
+Страница профиля: /auth/profile.php
++ Показывать ошибки (необходима контстанта NEED_AUTH)
+Компонент: настраиваемая регистрация
+*/
+
+"AJAX_POST" => 'Y' // отправка данных с помощью AJAX
+
+
+
+# Обновление мет
+
+function get_min_price_in_product($id) {
+    $arSelect = Array(
+       "ID",
+       "PROPERTY_PRICE",
+   );
+
+   $arFilter = Array(
+       "ID"             => $id,
+       "IBLOCK_ID"        => IntVal(5),
+       "ACTIVE_DATE"    => "Y",
+       "ACTIVE"        => "Y",
+       ">CATALOG_PRICE_1"        => "0",
+   );
+
+   $res = CIBlockElement::GetList(array("CATALOG_PRICE_1"=>'ASC'), $arFilter, false, array('nTopCount' => 1), $arSelect);
+   $row = $res->GetNext();
+
+   return number_format($row['CATALOG_PRICE_1'], 0, '', ' ');
+}
+
+
+
+$obj = new CIBlockSection();
+$arSect = $obj->GetList(
+   	array(),
+   	array(
+       'IBLOCK_ID' => $arResult['IBLOCK_ID'],
+       'ID' => $arResult['IBLOCK_SECTION_ID'],
+   	),
+   	false,
+   	array('ID', 'UF_PROD_M_TITLE', 'UF_PROD_M_DESCRIPT'),
+   	false
+);
+$rsSect = $arSect->Fetch();
+
+if($rsSect['UF_PROD_M_TITLE']) {
+	$min_price = is_array($arResult['PROPERTIES']['SCLAD']['VALUE']) ? get_min_price_in_product($arResult['PROPERTIES']['SCLAD']['VALUE']) : null;
+	$meta_title = $rsSect['UF_PROD_M_TITLE'];
+	$meta_title = preg_replace('/#H1#/', $arResult["PROPERTIES"]["MENU"]["VALUE"], $meta_title);
+
+	if($min_price) {
+	   $meta_title = preg_replace('/#MIN_PRICE#/', $min_price, $meta_title);
+	}
+
+	$APPLICATION->SetPageProperty("title", $meta_title);
+	$APPLICATION->SetPageProperty("og:title", $meta_title);
+}
+
+if ($rsSect['UF_PROD_M_DESCRIPT']) {
+   $meta_description = $rsSect['UF_PROD_M_DESCRIPT'];
+   $meta_description = preg_replace('/#H1#/', $arResult["PROPERTIES"]["MENU"]["VALUE"], $meta_description);
+
+   $APPLICATION->SetPageProperty("description", $meta_description);
+   $APPLICATION->SetPageProperty("og:description", $meta_description);
+}
