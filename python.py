@@ -316,10 +316,10 @@ print(sec) # => 259200
 # если return ничего не возвращает возвращает None
 
 
-def area_of_disk(r)
+def area_of_disk(r):
 	return 3.14 * r ** 2
 
-def area_of_ring(outer, inner)
+def area_of_ring(outer, inner):
 	return area_of_disk(outer) - area_of_disk(inner) # вызов функции внутри функции
 
 
@@ -355,12 +355,174 @@ def fn():
 
 fn(x) # => 1
 # 2
-def fn()
+def fn():
 	global x # без global, если будем менять значение глобальной переменной x,
 	x = 20 # то она станет локальной
 
+#3
+def fn(*params): # * вернуть кортеж из передаемых параметров
+	for p in params: # работаем с кортежем
+		print(p, end = ' ')
+
+fn(1,2,3,4) # => 1 2 3 4
+
+#4
+def fn(**params): # * вернуть словарь из передаемых параметров
+	for p, m in params.items():
+		print(p, m, end = '')
+
+fn(John = 100, Mike = 200) #
+# John 100
+# Mike 200
 
 
+def area_of_disk(r): # ''' для описания для вывода функции help()
+	'''Help on function:
+
+		area_of_disk(number) => number
+		Return area of disk by radius
+	'''
+	return 3.14 * r ** 2
+
+help(area_of_disk) # => Help on function: ...
+
+
+
+### Модули ###
+
+#1
+import math
+math.cos(1)
+
+dir(math) # выводит список функций (c __ в названии - служебные)
+help(math.gcd) # выводит информацию о методе класса
+
+#2
+from math import cos, sin # импортирование только выбранных методов
+cos(2) # при это виде импортирования вызов методов, делается как у функций без class.
+
+#3
+from math import cos as math_cos # создание алиаса для метода с одинаковыми названиями
+
+#4
+import funcs # подключение файла funcs.py
+
+
+import random
+help(random.choice) # случайный элемент последовательности (строка/кортеж/список/словарь)
+help(random.choice) # список случайных элементов
+
+import string
+help(string.printable) # печатные символы
+help(string.punctuation) # символы пунктуации
+help(string.ascii_uppercase) # заглавные латинские символы
+
+
+$ pip install numpy # установка другого пакета через консоль
+
+import numpy # импорт установленного пакета
+numpty.product([1, 2, 3, 4, 5]) # произведение элементов => 120
+
+$ pip uninstall numpy # удаление установленного пакета
+
+
+
+# ... после установки пакета jupyter:
+jupyter notebook # запускает вебсервер
+
+
+# file: demo.py:
+import funcs
+print(__name__) # => для текущего файл - __main__, а для подключаемых подулей вернет название файла, напр. funcs
+
+# file: funcs.py:
+if __name__ == '__main__':
+	print('Это funcs.py!')
+else:
+	print('Вызван в другом файле!')
+
+
+# модуль sys:
+import sys
+sys.path # список путей по умолчанию для поиска подключаемых модулей (текущая директория по умолч. присутствует)
+
+
+
+# Импортирование пакета модулей:
+# folder: mylib
+	# folder: data
+		# file: dataModul1py
+		# file: __init__.py # должен хранится в каждой папке, где используются файлы
+	# file: modul.py
+	# __init__.py - пустой файл для возможности импортирования пакетов
+
+# file: ../demo.py:
+import mylib.data.dataModul.getData as getData
+import mylib.modul.foo as foo
+
+res = foo()
+data = getData()
+
+
+import this # =>
+# Beautiful is better than ugly.
+# Explicit is better than implicit.
+# Simple is better than complex.
+# Complex is better than complicated.
+# Flat is better than nested.
+# Sparse is better than dense.
+# Readability counts.
+# Special cases aren't special enough to break the rules.
+# Although practicality beats purity.
+# Errors should never pass silently.
+# Unless explicitly silenced.
+# In the face of ambiguity, refuse the temptation to guess.
+# There should be one-- and preferably only one --obvious way to do it.
+# Although that way may not be obvious at first unless you're Dutch.
+# Now is better than never.
+# Although never is often better than *right* now.
+# If the implementation is hard to explain, it's a bad idea.
+# If the implementation is easy to explain, it may be a good idea.
+# Namespaces are one honking great idea -- let's do more of those!
+
+
+
+### Работа с файлами ###
+
+#1
+open('test.txt') # открывает файл только для чтения, указатель стоит в начале файла <-> open('test.txt', 'r')
+open('test.txt', 'r+') # Открывает файл для чтения и записи, указатель стоит в начале файла.
+
+open('test.txt', 'w') # открывает файл только для записи, указатель стоит в начале файла.
+open('test.txt', 'w+') # Открывает файл для чтения и записи, указатель стоит в начале файла.
+
+open('test.txt', 'a') # открывает файл для добавления информации в файл, указатель стоит в конце файла.
+open('test.txt', 'a+') # Открывает файл для добавления и чтения, указатель стоит в конце файла.
+
+f = open('test.txt', 'r', encoding='utf-8') # открытие с указанием кодировки
+pass
+f.close() # закрытие открытого файла
+
+# 2
+with open('test.txt', 'r', encoding='utf-8') as f: # чтение
+	# 1
+	print(f.read(5)) # в () количество символов, которое необходимо прочитать. По умолч. весь файл
+	print(f.read(3)) # курсор сместился на 5 символов, соотвественно прочитает следующие 3 символа
+
+	# 2
+	s = f.readline() # читаем файл построчно со перемещением курсора на след. строку
+
+	# 3
+	line = f.readlines() # возвращает список со строками
+	print(lines) # => ['Line one\n', 'Line two\n', 'Line three\n']
+
+	#4
+	for line in f: # сам дискриптор файла f итерируемый
+		print(line)
+
+
+with open('test.txt', 'a', encoding='utf-8') as f: # запись в файл
+	f.write('\nLine four') # \n для переноса в конце на новую строку
 
 # парсер https://proglib.io/p/parsing-course/ https://losst.ru/parsing-sajtov-python-3
 https://proglib.io/p/python-tips/

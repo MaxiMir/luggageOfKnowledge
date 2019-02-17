@@ -1,4 +1,5 @@
 <?
+
 ################ Шаблоны проектирования ################
 /* 
 UML - Unifed Modeling Language 
@@ -14,6 +15,7 @@ UML - Unifed Modeling Language
 - синхронизации, прецентендов
 - обзора, взаимодействий
 */
+
 class A 
 {
 	function __construct($o)
@@ -2059,7 +2061,7 @@ $matches[0]; // => Testing123
 */
 $subject = '<b>I am bold.</b> <i>I am Italic.</i> <b>I am also bold.</b>';
 preg_match('#<b>(.+)</b>#', $subject, $matches); 
-$matches[1]; // => I am bold.</b> 	I am Italic.</i>	I am also bold.</b>'
+$matches[1]; // => I am bold.</b> 	<i>I am Italic.</i>	<b>I am also bold.';
 
 /*
 Таблетка от жадности: ?
