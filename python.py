@@ -522,7 +522,49 @@ with open('test.txt', 'r', encoding='utf-8') as f: # чтение
 
 
 with open('test.txt', 'a', encoding='utf-8') as f: # запись в файл
-	f.write('\nLine four') # \n для переноса в конце на новую строку
+	f.write('\nLine four') # \n для переноса на новую строку
+	print(f.closed) # открыт ли файл => true
+	print(f.mode) # в каком режиме открыт => a
+	print(f.name) # имя файла => test.txt
+
+
+
+# file: data.csv
+John;Smith;25;123-45-78
+Mike;Dow;33;789-45-94
+
+# file: csvReader.py:
+import csv
+with open('data.csv', 'r', encoding='utf-8') as f:
+	reader = csv.reader(f, delimiter = ';') #  получает доступ к объекту файла
+	for row in reader:
+		print(row) # =>
+#	['John','Smith','25','123-45-78']
+#	['Mike','Dow','33','789-45-94']
+
+
+# file: csvWriter.py:
+with open('data.csv', 'a', encoding='utf-8', newline='\n') as f:
+	writer = csv.writer(f, delimiter = ';')
+	writer.writerow(['Pete','Parker','14','479-93-15'])
+# file: data.csv =>
+John;Smith;25;123-45-78
+Mike;Dow;33;789-45-94
+Pete;Parker;14;479-93-15
+
+
+
+import os
+os.getcwd() # текущая директория => 'C:\\Users\\Public\\python-22-01\\work\\demp'
+os.path.exists('test.txt') # проверяем на существование директорию/файл => true
+os.path.isdir('test.txt') # является ли путь директорией => false
+os.path.isfile('test.txt') # является ли путь директорией => true
+os.listdir('.') # список директорий/файлов в текущей директории
+
+
+
+
+
 
 # парсер https://proglib.io/p/parsing-course/ https://losst.ru/parsing-sajtov-python-3
 https://proglib.io/p/python-tips/
