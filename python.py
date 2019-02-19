@@ -563,8 +563,39 @@ os.listdir('.') # список директорий/файлов в текуще
 
 
 
+# file: params.py
+import sys
+
+print('Script name: ' + sys.argv[0])
+print('First param: ' + sys.argv[1])
+print('Second param: ' + sys.argv[2])
+
+$ python params.py aaa bbb # =>
+# Script name: params.py
+# First param: aaa
+# Second param: bbb
 
 
+### try ###
+
+# перехватить исключение:
+try:
+	long = 20
+	short = 2
+	total = long * 3 + shoort * 2
+	print(total)
+except (NameError, TypeError): # несколько типов ошибок:
+	print('Ой!Что-то из NameError, TypeError')
+except EOFError:
+	print('Ой!EOFError')
+except KeyboardInterrupt:
+	print('Ой!KeyboardInterrupt')
+except: # дефолтно
+	print('Ой!Ошибка')
+else: # если ошибок нет попадаем сюда
+	print('Успех')
+finally: # сюда попадаем в любом случае
+	print('Конец')
 
 # парсер https://proglib.io/p/parsing-course/ https://losst.ru/parsing-sajtov-python-3
 https://proglib.io/p/python-tips/
