@@ -1,7 +1,7 @@
 ################ Python ################
 
 2 + 2 * 2 # => 6
-# сокращенная запись: *= += -= /=
+# сокращенная запись: *= += -= /= //= (целочисленное деление)
 
 
 help(len) # выводит информацию о функции
@@ -30,10 +30,16 @@ age = '18'
 greet = 'Привет, {}. Тебе {}.'.format(name, age) # подстановка значений в строку
 greet = 'Привет, {1}. Тебе {0}.'.format(name, age) # меняем местами
 greet = f'Привет, {name}. Тебе {age}' # форматированная строка Python > 3.6
+
+first_name = 'Joffrey'
+greeting = 'Hello'
+template = "{}, {}!"
+print(template.format(greeting, first_name))
+
 sum = '{} + {} = {}'.format(n1, n2, n1 + n2); # => 2 + 3 = 5
 sum = '{n1} + {n2} = {n1 + n2}' # <-> аналогично примеру выше
 
-
+'abcde'[-1]  # простой способ извлечь последний символ
 
 ### input ###
 w = input('Введите размер первой стороны прямоугольника: ') # выводит переданную строку и возвращает введенное значение
@@ -109,11 +115,20 @@ else: # else if в python - elif
 
 
 
+
+### Тернарный оператор ###
+# <expression on true> if <predicate> else <expression on false>
+number if number >= 0 else -number
+
 ### Заглушка ###
 if 1 == 1:
 	pass # заглушка
 else:
 	pass # заглушка
+
+
+### Константы ###
+DRAGONS_BORN_COUNT = 3
 
 
 
@@ -580,22 +595,70 @@ $ python params.py aaa bbb # =>
 
 # перехватить исключение:
 try:
-	long = 20
-	short = 2
-	total = long * 3 + shoort * 2
-	print(total)
-except (NameError, TypeError): # несколько типов ошибок:
-	print('Ой!Что-то из NameError, TypeError')
+	age = input('Введите свой возраст: ')
+	age = int(age)
+	if age < 18:
+		raise Exception('Не подходите по возрасту')
+	else:
+		print('Все хорошо')
+except (NameError, TypeError): # несколько типов ошибок
+	print('Ой!Что-то из NameError, TypeError') # можно разделить по условиям: if type(e) == NameError: ...
+except ValueError as e: # e -экземпляр класса ValueError; type(e) => class 'ValueError'
+	print(e)
 except EOFError:
 	print('Ой!EOFError')
 except KeyboardInterrupt:
 	print('Ой!KeyboardInterrupt')
+except Exception as e:
+	print(e)
 except: # дефолтно
 	print('Ой!Ошибка')
 else: # если ошибок нет попадаем сюда
 	print('Успех')
 finally: # сюда попадаем в любом случае
 	print('Конец')
+
+
+
+try:
+	n = 1
+	try:
+		s = 'a' > 1
+	except:
+		print('inner')
+		raise Exception('from inner') # поднять исключение *
+	finally:
+		print('ok')
+except:
+	print('outer')
+finally:
+	print('the end')
+
+# =>
+# inner
+# ok
+# outer - выведется если прописано *
+# the end
+
+
+
+### 'Подсказки' ###
+s: str # подсказка, планируется, что переменная s будет строкой
+n: int = 1
+s = 2
+
+from typing import List, Dict, Tuple # для более сложных типов данных, необходим импорт
+lst: List[int] # список: int-ы
+d: Dict[str, int] # словарь: ключи - строки, значения - int-ы
+t: List[Tuple[int, int]] # список, в котором кортежи из 2-х int-ов
+
+
+def is_equal(n1: int, n2L: int)->bool: # подсказки в функциях, тип переменных и тип возвращаемого значения
+	return n1 == n2
+
+
+### Модуль 'mypy' ###
+
 
 # парсер https://proglib.io/p/parsing-course/ https://losst.ru/parsing-sajtov-python-3
 https://proglib.io/p/python-tips/
