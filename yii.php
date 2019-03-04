@@ -361,9 +361,9 @@ class MyController extends Controller
     foreach ($names as $name) {
         echo "<p>$name</p>";
     }
-
+?>
     
-    
+<?
 /* При переходе на /admin/my/index вывести 'ADMIN' в текущем шаблоне
  * folder: /controllers/ создаем папку admin c файлом UserController.php:
  */
@@ -408,19 +408,36 @@ function debug($arr) // функция для использования в view
  */
 namespace app\controllers;
 
+use Yii;
+
 class PostController extends AppController
 {
     public function actionTest()
     {
-        $this->debug(\Yii::$app); // использование функции для debug внутри класса
+        $this->debug(Yii::$app); // использование функции для debug внутри класса
         return $this->render('test');
     }
 }
 
 // folder: /views/ создаем папку post c файлом test:
+<?php
+    use yii\widgets\ActiveForm;
+    use yii\helpers\Html;
+?>
+
 <h1>Test Action</h1>
 
-\app\controllers\debug(Yii::$app); /* использование функции для debug.
+<?php
+    $form = ActiveForm::begin(['options'] => ['id' => 'Tform']); // ActiveForm - виджет - объявление начала создания формы.
+    // В options добавляем id форме
+    $form->field($model, 'name')->label('Имя'); // настройка поля формы (изменение label)
+    $form->field($model, 'email')->input('email');
+    $form->field($model, 'password')->passwordInput(); // <-> input('password');
+    $form->field($model, 'text')->label('Текст сообщения')->textarea(['rows' => 5]); // настройка поля формы (изменение label и типа на textarea)
+    Html::submitButton('Отправить', ['class' => 'btn btn-success']); // создание кнопки
+    $form = ActiveForm::end();
+
+    \app\controllers\debug(Yii::$app); /* использование функции для debug.
 объект Yii доступен без ипортирования. 2-й вариант создать файл functions.php в корне,
 разместить в нем код debug и подключить этот в файл в /web/index.php через require
  */
@@ -430,7 +447,8 @@ class PostController extends AppController
 /* Создание собственного шаблона
  * folder: /views/layouts/ создаем файл basic.php
  */
-use app\assets\AppAsset; // класс со стилями/скриптами и зависимостями
+use app\assets\AppAsset; // класс со стилями/скриптами/зависимостями
+use yii\helpers\Html; // класс для генерации html тегов
 
 AppAsset::register($this); // регистрация объекта AppAsset
 ?>
@@ -441,13 +459,29 @@ AppAsset::register($this); // регистрация объекта AppAsset
 <head>
     <meta charset="<?=Yii::$app->charset ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <?=Html::csrfMetaTags() ?>
-    <title><?=Html::encode($this->title) ?></title>
+    <?=Html::csrfMetaTags() // класс для генерации токенов, позволяет принимать POST запросы ?>
+    <title><?=Html::encode($this->title) // Html::encode - экранирование символов ?></title>
     <?php $this->head() // подключение скриптов?>
 </head>
 <body>
     <?php $this->beginBody() ?>
-    <?=$content // в переменной содержится контент страницы ?>
+    
+    <div class="wrap">
+        <div class="container">
+            <ul class="nav nav-pills">
+                <li><?= Html::a('Главная', '/web/') ?></li>
+                <li><?= Html::a('Статьи', ['post/index']) ?></li>
+                <li><?= Html::a('Статья',  ['post/show']) ?></li>
+            </ul>
+        </div>
+    </div>
+    
+    <?php if (isset($this->blocks['head-block'])) {
+        echo $this->blocks['head-block']; // выводим блок из view *1*. !Выведется только для post/show
+    ?>
+    
+    <?=$content ?> <!-- в $content содержится контент страницы -->
+    
     <?php $this->endBody() ?>
 </body>
 </html>
@@ -464,24 +498,88 @@ $config = [
 // file /controllers/PostController.php:
 namespace app\controllers;
 
+use Yii;
+use TestForm;
+
 class PostController extends AppController
 {
     public $layout = 'basic'; // изменение шаблона для action контроллера
     
+    public function beforeAction($action) // метод выполняется до action
+    {
+        if ($action->id == 'index') {
+            $this->enableCsrfValidation = false; // отключаем csrf валидацию
+        }
+        
+        return parent::beforeAction($action);
+    }
+    
 	public function actionIndex()
 	{
+	    if (Yii:$app->request->isAjax) { // пришли ли данные Ajax-ом
+	        debug(Yii:$app->request->post()); // <-> $_POST
+	        return 'test';
+	    }
+	    
+	    $model = new TestForm();
+	    $this->title = 'Все статьи'; // задание title в контроллере (1 способ)
 	    $this->layout = 'basic'; // изменение шаблона для определенного action
-        return $this->render('test');
+        return $this->render('test', compact('model')); // объект формы передаем во view
 	}
     
     public function actionShow()
     {
+        $this->title = 'Одна статья';
+        $this->view->registerMetaTag([ // задание мета тегов
+            'name' => 'keywords',
+            'content' => 'ключевики...'
+        ]);
+        $this->view->registerMetaTag([
+            'name' => 'description',
+            'content' => 'описание страницы...'
+        ]);
         return $this->render('show');
     }
 }
 
 // folder: /views/post создаем show.php:
+<? $this->title = 'Одна статья'; ?> <!-- задание title в views (2 способ) -->
+
+<? $this->beginBlock('head-block'): ?>  <!-- создаем блок *1* -->
+    <h1>Заголовок страницы</h1>
+<? $this->endBlock(); ?>
+
 <h1>Show Action</h1>
+<button>Click</button>
+
+<? $this->registerJsFile('@web/js/jQueryHandler.js', ['depends' => 'yii\web\YiiAsset']); ?> <!-- регистрация файла - подключаем файл, с указанием зависимостей (подключится после подключения библиотеки jQuery). Так же можно задать position места подключения кода. -->
+<?
+// 1 вариант:
+$this->registerJs("$('.container').append('<p>TEXT</p>');", \yii\web\View::POST_LOAD); // подключение блока кода <-> <script>...</script> По умолч. используется POS_READY - код оборачивается в jQuery(document).ready(),  \yii\web\View::POST_LOAD - оборачивается в jQuery(window).load()
+
+// 2 вариант:
+$script = <<< JS
+    $('button').on('click', function() {
+       $.ajax({
+            url: 'index.php?r=post/index',
+            data: {test: '123'},
+            type: 'POST',
+            success: function (res) {
+                console.log(res);
+            },
+            error: function () {
+                alert('Error!);
+            }
+       });
+    });
+JS;
+
+$this->registerJs($script, \yii\web\View::POST_LOAD);
+
+// константы, опции аналогичны для и CSS:
+$this->registerJsFile('@web/css/reset.css', ['depends' => 'yii\web\YiiAsset']); // регистрация файла со стилями
+$this->registerСss('.container{background: #ccc; }'); // подлючение блока стилей
+
 
 
 # Подключение файлов стилей,скриптов и зависимостей в /assets/AppAsset.php:
@@ -492,11 +590,40 @@ class AppAsset extends AssetBundle
     public $css = [ // файл стилей
         'css/site.css', // путь файла: web/css/site.css
     ];
+    
 	public $js = [ // файл скриптов
 	    'js/script.js',
     ];
+    
+    public $jsOptions = [
+        'position' => \yii\web\View::POS_HEAD, // задать позицию скрипта на странице
+    ];
+        
 	public $depends = [ // файл зависимостей (для сооблюдения очередности подключения)
         'yii\web\YiiAsset',
         'yii\bootstrap\BootstrapAsset',
     ];
 }
+
+
+
+# Форма:
+/* Форма не работает с БД - расширяем класс Modal. Название файла - ИмяформыForm.php
+ * Форма работает с БД - расширяем класс Active
+ * folder: /models создаем файл TestForm.php:
+ */
+
+namespace app\models;
+
+use yii\base\Model;
+
+class TestForm extends Model
+{
+    public $name;
+    public $email;
+    public $password;
+    public $text;
+}
+
+
+
