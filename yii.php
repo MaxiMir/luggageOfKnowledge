@@ -427,10 +427,22 @@ class PostController extends AppController
 
 <h1>Test Action</h1>
 
+<?php if (Yii:$app->session->hasFlash('success')): ?> <!--если есть flash сообщение -->
+    <div class="alert alert-success" role="alert">
+        <?= Yii:$app->session->getFlash('success') ?> <!--выводим его -->
+    </div>
+<?php endif; ?>
+
+<?php if (Yii:$app->session->hasFlash('error')): ?>
+    <div class="alert alert-danger" role="alert">
+        <?= Yii:$app->session->getFlash('error') ?>
+    </div>
+<?php endif; ?>
+
 <?php
     $form = ActiveForm::begin(['options'] => ['id' => 'Tform']); // ActiveForm - виджет - объявление начала создания формы.
     // В options добавляем id форме
-    $form->field($model, 'name')->label('Имя'); // настройка поля формы (изменение label)
+    $form->field($model, 'name')->label('Имя'); // настройка поля формы (изменение label (2 способ))
     $form->field($model, 'email')->input('email');
     $form->field($model, 'password')->passwordInput(); // <-> input('password');
     $form->field($model, 'text')->label('Текст сообщения')->textarea(['rows' => 5]); // настройка поля формы (изменение label и типа на textarea)
@@ -455,7 +467,7 @@ AppAsset::register($this); // регистрация объекта AppAsset
 
 <?php $this->beginPage();?>
 <!DOCTYPE html>
-<html lang="<?=Yii::$app->language ?>">
+<html lang="<?=Yii::$app->language ?>"> <!-- Динамическое изменение языка -->
 <head>
     <meta charset="<?=Yii::$app->charset ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -522,6 +534,15 @@ class PostController extends AppController
 	    }
 	    
 	    $model = new TestForm();
+	    if ($model->load(Yii::$app->request->post())) {  // если данные POST успешно загружены
+	        if ($model->validate()) { // и данные формы валидны
+	           Yii::$app->session->setFlash('success', 'Данные приняты'); // flash сообщения (данные после их запроса будут удалены из сессии)
+                return $this->refrash(); // метод перезапрашивает текущую страницу
+            } else {
+	            Yii::$app->session->setFlash('error', 'Ошибка');
+	        }
+        }
+	    
 	    $this->title = 'Все статьи'; // задание title в контроллере (1 способ)
 	    $this->layout = 'basic'; // изменение шаблона для определенного action
         return $this->render('test', compact('model')); // объект формы передаем во view
@@ -601,7 +622,7 @@ class AppAsset extends AssetBundle
         
 	public $depends = [ // файл зависимостей (для сооблюдения очередности подключения)
         'yii\web\YiiAsset',
-        'yii\bootstrap\BootstrapAsset',
+        'yii\bootstrap\BootstrapPluginAsset',
     ];
 }
 
@@ -623,7 +644,45 @@ class TestForm extends Model
     public $email;
     public $password;
     public $text;
+    
+    public function attributeLabels() // изменить label (1 способ)
+    {
+        return [
+            'name' => 'Имя',
+            'email' => 'Email',
+            'password' => 'Пароль'
+            'text' => 'Текст сообщения',
+        ]    
+    }
+    
+    public function rules()
+    {
+        return [
+            [ ['name', 'email', 'password'], 'required', // обязательные поля 
+            'message' => ' Поле обязательно' ], // изменение стандартного текста подсказок (срабатывает не для всех валидаторов)
+            ['email', 'email'], // задать полю email тип email адреса
+            ['name', 'string', 'min' => 2, 'toShort' => 'Мало'], // задаем полю тип строка с минимальной длиной в 2 символа. toShort - текст ошибки
+            ['name', 'string', 'max' => 5, 'toLong' => 'Много'], // задаем полю тип строка с максимальной длиной в 5 символов. toLong - текст ошибки
+            ['name', 'string', 'legth' => [2, 5]], // задание типа строки с длиной в одну строку
+            ['name', 'myRule'] // собственный валидатор
+            ['text', 'trim'] // после потери фокуса значение поля пропускают через trim
+            ['text', 'safe']  // валидатор данные будут доступны без проверки. Лучше использовать trim
+        ];
+    }
+
+    public function myRule($attr) // описание собственного валидатора (валидация проходит на сервере)
+    {
+        if (!in_array($this->attr, ['USA', 'CHINA'])) {
+            $this->addError($attr, 'Wrong country!');
+        }
+    }
 }
+
+// file: config/web.php:
+$config = [
+    ...
+    'language' => 'ru', // добавляем строку, для изменения текста подсказок на русском + атрибут lang в head
+];
 
 
 
