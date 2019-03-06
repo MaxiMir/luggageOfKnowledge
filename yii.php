@@ -510,6 +510,7 @@ $config = [
 // file /controllers/PostController.php:
 namespace app\controllers;
 
+use app\models\Category;
 use Yii;
 use TestForm;
 
@@ -528,6 +529,9 @@ class PostController extends AppController
     
 	public function actionIndex()
 	{
+        $this->title = 'Все статьи'; // задание title в контроллере (1 способ)
+        $this->layout = 'basic'; // изменение шаблона для определенного action
+    
 	    if (Yii:$app->request->isAjax) { // пришли ли данные Ajax-ом
 	        debug(Yii:$app->request->post()); // <-> $_POST
 	        return 'test';
@@ -543,8 +547,6 @@ class PostController extends AppController
 	        }
         }
 	    
-	    $this->title = 'Все статьи'; // задание title в контроллере (1 способ)
-	    $this->layout = 'basic'; // изменение шаблона для определенного action
         return $this->render('test', compact('model')); // объект формы передаем во view
 	}
     
@@ -559,7 +561,11 @@ class PostController extends AppController
             'name' => 'description',
             'content' => 'описание страницы...'
         ]);
-        return $this->render('show');
+        
+        $cats = Category::find()->orderBy('id' => SORT_DESC)->all(); // Category - модель, find()->all() <-> выполнение запроса 'SELECT * FROM Category ORDER BY id DESC'
+	    $cats = Category::find()->isArray()->where('parent=691')->all(); // isArray - вытаскивает данные в формате массива. (Вместо $cat->title будет $cat['title'])
+        // where['parent' => 691] 2 вариант
+        return $this->render('show', compact('cats'));
     }
 }
 
@@ -572,6 +578,9 @@ class PostController extends AppController
 
 <h1>Show Action</h1>
 <button>Click</button>
+<?php foreach ($cats as $cat) { // перебираем в цикле данные из БД
+    echo $cat->title;
+}?>
 
 <? $this->registerJsFile('@web/js/jQueryHandler.js', ['depends' => 'yii\web\YiiAsset']); ?> <!-- регистрация файла - подключаем файл, с указанием зависимостей (подключится после подключения библиотеки jQuery). Так же можно задать position места подключения кода. -->
 <?
@@ -685,4 +694,39 @@ $config = [
 ];
 
 
+
+# Работа с БД
+
+/*
+ * Таблицы и поля именуются в нижнем регистре
+ * Слова в названиях разделяются символом подчеркивания (например, product_order)
+ * В именах таблиц используются либо единственное число, либо множественное, но не оба сразу.
+ * Рекомендуется использовать единственное число.
+ * Имена таблиц могут содержать префикс. Например, tbl_. Это особенно полезно, когда таблицы
+ * приложения находятся в БД, используемой одновременно др. приложениями.
+ */
+
+// file: /config/db.php:
+return [
+    'class' => 'yii\db\Connection',
+    'dsn' => 'mysql:host=localhost:dbname=yii2basic',
+    'username' => 'root',
+    'password' => '',
+    'charset' => 'utf8'
+];
+
+// folder: /models/ создаем файл Category.php:
+
+namespace app\models;
+
+use yii\db\ActiveRecord;
+
+class Category extends ActiveRecord
+{
+	// Если мы называем модель по имени таблицы (только первая заглавная), то Yii автоматически свяжет модель с таблицей.
+    public static function tableName() // если имя модели не совпадает с названием таблицы
+   {
+       return 'categories';
+   }
+}
 
