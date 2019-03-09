@@ -1,8 +1,8 @@
 <?
-# установка 
+# УСТАНОВКА
 $ composer create-project yiisoft/yii2-app-basic treasure 2.0.10 # treasure название проекта
 
-# в случае ошибки invalid Configuration -yii\base\InvalidConfigException
+# В СЛУЧАЕ ОШИБКИ invalid Configuration -yii\base\InvalidConfigException
 // file: config/web.php находим строку:
 'cookieValidationKey' => '', // и в '' прописываем любой набор символов
 
@@ -45,7 +45,7 @@ RewriteRule . index.php
 ],
 
 
-# Миграции
+# МИГРАЦИИ
 $ cd /treasure
 $ php yii migrate/create create_article_table
 $ php yii migrate/create create_category_table
@@ -54,7 +54,7 @@ $ php yii migrate/create create_user_table
 $ php yii migrate/create create_comment_table
 $ php yii migrate/create create_article_tag_table
 
-# MySQL
+# MYSQL
 // Создаем DB treasure
 
 # file: config/db.php
@@ -512,7 +512,7 @@ namespace app\controllers;
 
 use app\models\Category;
 use Yii;
-use TestForm;
+use app\models\TestForm;
 
 class PostController extends AppController
 {
@@ -536,9 +536,10 @@ class PostController extends AppController
 	        debug(Yii:$app->request->post()); // <-> $_POST
 	        return 'test';
 	    }
+	
+	    $model = new TestForm(); // операции INSERT
 	    
-	    $model = new TestForm();
-	    if ($model->load(Yii::$app->request->post())) {  // если данные POST успешно загружены
+        if ($model->load(Yii::$app->request->post())) {  // если данные POST успешно загружены
 	        if ($model->validate()) { // и данные формы валидны
 	           Yii::$app->session->setFlash('success', 'Данные приняты'); // flash сообщения (данные после их запроса будут удалены из сессии)
                 return $this->refrash(); // метод перезапрашивает текущую страницу
@@ -563,8 +564,20 @@ class PostController extends AppController
         ]);
         
         $cats = Category::find()->orderBy('id' => SORT_DESC)->all(); // Category - модель, find()->all() <-> выполнение запроса 'SELECT * FROM Category ORDER BY id DESC'
-	    $cats = Category::find()->isArray()->where('parent=691')->all(); // isArray - вытаскивает данные в формате массива. (Вместо $cat->title будет $cat['title'])
-        // where['parent' => 691] 2 вариант
+	    $cats = Category::find()->asArray()->where('parent=691')->limit(1)->all(); // asArray - вытаскивает данные в формате массива. (Вместо $cat->title будет $cat['title'])
+	    // one() - одномерный массив с одной записью. Рекомендуется перед ним добавлять limit(1)
+        // where['parent' => 691] 2 вариант, limit(2) - первые 2 попавшиеся записи
+        // count() - количество выбраннных записей
+        // findOne(['parent' => 691]) - возвращает 1 объект с записью. По умолч. ищет по первичному ключу
+        // findAll(['parent' => 691]) - возвращает массив объектов записей 
+        
+        $query = "SELECT * FROM categories WHERE title LIKE :search"; // от SQL инъекций
+        $cats = Category::findBySql($query, [':search' => '%pp%' ])->all(); // findBySql - метод для выполнения SQL запроса
+        
+        $cats = Category::findOne(694); // отложенная загрузка *3*. Использование: 1-3 объекта без использование связей
+    
+        $cats = Category::find()->with('products')->all(); // *4* с with - жадная загрузка, объединение с products
+	    
         return $this->render('show', compact('cats'));
     }
 }
@@ -578,9 +591,30 @@ class PostController extends AppController
 
 <h1>Show Action</h1>
 <button>Click</button>
-<?php foreach ($cats as $cat) { // перебираем в цикле данные из БД
-    echo $cat->title;
-}?>
+
+<?php
+    // запрос *3* при ленивой загрузке:
+    debug($cats); // До *2*: свойства products нет
+    count($cats->products); // *2* ориентируется на название getProducts в модели Products. вернет кол-во продуктов c parent = 684.
+    debug($cats); // После *2*: свойство products содержит массивы с продуктами
+    // при этом подходе в примере было 41 запрос к БД
+    
+    // запрос *4* при жадной загрузке:
+    foreach ($cats as $cat) { // перебираем в цикле данные из БД
+        echo "<ul>";
+        echo "<li>{$cat->title}</li>"; // названия категорий
+        
+        $products  = $cat->products; // используем отложенную загрузку
+        foreach ($products as $product) {
+            echo "<ul>";
+            echo "<li>{$product->title}</li>";
+            echo "<ul>";
+        }
+        
+        echo "<ul>";
+    }
+	// при этом подходе в примере было 6 запросов к БД
+?>
 
 <? $this->registerJsFile('@web/js/jQueryHandler.js', ['depends' => 'yii\web\YiiAsset']); ?> <!-- регистрация файла - подключаем файл, с указанием зависимостей (подключится после подключения библиотеки jQuery). Так же можно задать position места подключения кода. -->
 <?
@@ -637,7 +671,7 @@ class AppAsset extends AssetBundle
 
 
 
-# Форма:
+# ФОРМА:
 /* Форма не работает с БД - расширяем класс Modal. Название файла - ИмяформыForm.php
  * Форма работает с БД - расширяем класс Active
  * folder: /models создаем файл TestForm.php:
@@ -695,7 +729,7 @@ $config = [
 
 
 
-# Работа с БД
+# РАБОТА С БД
 
 /*
  * Таблицы и поля именуются в нижнем регистре
@@ -730,3 +764,149 @@ class Category extends ActiveRecord
    }
 }
 
+# ОТЛОЖЕННАЯ И ЖАДНАЯ ЗАГРУЗКА ДАННЫХ
+
+// folder: models создаем файл Product.php:
+
+namespace app\models;
+
+use yii\db\ActiveRecord
+
+class Product extends ActiveRecord
+{
+    public static function tableName()
+    {
+       return 'products';
+    }
+    
+    public function getProducts()
+    {
+        return $this->hasMany(Product::className(), ['parent' => 'id']); // 1 параметр возвращает строку с именем класса,
+        // с которым связываем, 2-й параметр массив, где ключ поле связываемой таблицы (products),
+        //  а значением поле справочника, на которое мы ссылаемся (category)
+	    // hasOne - связь один ко одному / hasMany - связь один ко многим
+        // возвращает массив объектов
+    }
+	
+	public function getcategories() // 1 продукту соотвествует 1 категория -> hasOne
+	{
+	    return $this->hasOne(Category::className(), ['id' => 'parent']);
+	    // возвращает объект или null если ничего не найдено
+	}
+    
+}
+
+
+# ЗАПИСЬ ДАННЫХ В БД
+
+// Создаем таблицу posts:
+CREATE TABLE `posts` (
+    `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+    `name` varchar(255) NOT NULL,
+    'email' varchar(255) DEFAULT NULL,
+    `text` text NOT NULL,
+    PRIMARY key (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf-8
+
+// file: models/TestForm.php изменяем:
+
+namespace app\models;
+use yii\db\ActiveRecord;
+
+class TestForm extends ActiveRecord
+{
+    // при использовании ActiveRecord в отличие от Model, объявлять свойства с полями не нужно
+	
+    public static tableName()
+    {
+        return 'posts';
+    }
+   
+	public function attributeLabels() // изменить label (1 способ)
+	{
+        return [
+            'name' => 'Имя',
+            'email' => 'Email',
+            'password' => 'Пароль'
+            'text' => 'Текст сообщения',
+        ]
+	}
+	
+	public function rules()
+	{
+        return [
+            [ ['name', 'text', 'password'], 'required'], // изменение стандартного текста подсказок (срабатывает не для всех валидаторов)
+            ['email', 'email'], // задать полю email тип email адреса
+        ];
+	}
+}
+
+// file: controllers/PostController.php изменяем:
+namespace app\controllers;
+
+use app\models\Category;
+use Yii;
+use app\models\TestForm;
+
+class PostController extends AppController
+{
+    public $layout = 'basic'; // изменение шаблона для action контроллера
+
+    public function beforeAction($action) // метод выполняется до action
+    {
+        if ($action->id == 'index') {
+            $this->enableCsrfValidation = false; // отключаем csrf валидацию
+        }
+    
+        return parent::beforeAction($action);
+    }
+    
+    public function actionIndex()
+    {
+        $this->title = 'Все статьи'; // задание title в контроллере (1 способ)
+        $this->layout = 'basic'; // изменение шаблона для определенного action
+        
+        if (Yii:$app->request->isAjax) { // пришли ли данные Ajax-ом
+            debug(Yii:$app->request->post()); // <-> $_POST
+            return 'test';
+        }
+        
+        $model = new TestForm(); // если объект получен из БД (например с помощью find, а значит создает объект Active Record) операция - Update
+        # 1: сохранение данных вручную:
+        $model->name = 'Автор';
+        $model->email = 'mail@mail.com';
+        $model->name = 'Текст сообщения';
+        
+        
+        
+        $model->save(); // сохранение объекта в БД, по умолч. вызывает метод validate. save(false) - сохранение без валидации
+  
+        if ($model->load(Yii::$app->request->post())) {  // если данные POST успешно загружены
+	        #2: сохранение данных из формы
+            if ($model->save()) { // и данные формы сохранены
+                Yii::$app->session->setFlash('success', 'Данные сохранены'); // flash сообщения (данные после их запроса будут удалены из сессии)
+                return $this->refrash(); // метод перезапрашивает текущую страницу
+            } else {
+                Yii::$app->session->setFlash('error', 'Ошибка');
+            }
+        }
+    
+        return $this->render('test', compact('model')); // объект формы передаем во view
+    }
+    
+    public function actionShow()
+    {
+        $this->title = 'Одна статья';
+        $this->view->registerMetaTag([ // задание мета тегов
+            'name' => 'keywords',
+            'content' => 'ключевики...'
+        ]);
+        $this->view->registerMetaTag([
+            'name' => 'description',
+            'content' => 'описание страницы...'
+        ]);
+        
+        $cats = Category::find()->with('products')->all();
+        return $this->render('show', compact('cats'));
+    }
+}
