@@ -871,14 +871,11 @@ class PostController extends AppController
             return 'test';
         }
         
-        $model = new TestForm(); // если объект получен из БД (например с помощью find, а значит создает объект Active Record) операция - Update
+        $model = new TestForm();
         # 1: сохранение данных вручную:
         $model->name = 'Автор';
         $model->email = 'mail@mail.com';
         $model->name = 'Текст сообщения';
-        
-        
-        
         $model->save(); // сохранение объекта в БД, по умолч. вызывает метод validate. save(false) - сохранение без валидации
   
         if ($model->load(Yii::$app->request->post())) {  // если данные POST успешно загружены
@@ -910,3 +907,79 @@ class PostController extends AppController
         return $this->render('show', compact('cats'));
     }
 }
+
+
+# ОБНОВЛЕНИЕ И УДАЛЕНИЕ ДАННЫХ ИЗ БД
+
+// file: controllers/PostController.php изменяем:
+
+class PostController extends AppController
+{
+    ...
+	// если объект получен из БД (например с помощью find, а значит создает объект Active Record) операция - Update
+    $post = TestForm::findOne(3); // по умолч. поиск по id
+    $post->email = 'example@mail.ru';
+    $post->save(); // сохраняем для записи с id = 3 email со значением example@mail.ru
+    // если несколько значений используем updateAll
+	
+	$post = TestForm::findOne(2);
+    $post->delete(); // удаляем запись с id = 2
+    
+    Test::deleteAll('>', 'id', 3); // удаление нескольких значений. По умолч. удаляет все записи
+    ...
+}
+
+# Виджет
+
+/* Виджет в Yii - некая логика, которую можем использовать в видах для реализации
+ * повторяющихся вещей.
+ */
+
+// folder: / создаем папку components, а в ней файл MyWidget.php:
+
+namespace app\components;
+
+use yii\base\Widget;
+
+class MyWidget extends Widget
+{
+    public $name; // свойство - передаваемый параметр в виджет
+    
+    public function init() // занимается нормализацией свойств виджета
+    {
+        parent::init(); // обязательно выполнение родительского метода
+	    #1:
+        $this->name ?? 'Guest'; // если не передан задаем значение по умолч.
+        #2 буферизация вывода:
+        ob_start();
+    }
+    public function run() // рендерим вид c передачей параметра - /components/views/my.php:
+    {
+         #1:
+         return $this->render('my', ['name' => $this->name]);
+         #2 сохраняем в переменную буферизированный вывод:
+         $content = ob_get_clean();
+         $content = mb_strtoupper($content,'utf-8'); // переводим содержимое в верхний регистр
+         return $this->render('my', compact('content'));
+    }
+}
+
+// file: /views/post/show.php:
+use app\components\MyWidget; // импортируем виджет
+
+...
+#1:
+echo MyWidget::widget(['name' => 'Mike']); // вывод виджета с переданным параметром
+#2: ?>
+<?php MyWidget::begin()?>
+    <p>Some Text!</p>  <!-- выведет Some Text!, а затем содержимое виджета -->
+<?php MyWidget::end()?>
+...
+
+<?
+<!-- folder: /components создаем папку views, а в ней файл my.php: -->
+<? #1: ?>
+<p>Hello, <?=$name?></p>
+<? #2: ?>
+<?= $content?>
+
