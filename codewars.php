@@ -12,22 +12,24 @@ In this kata you get the start number and the end number of a region and should 
 #1:
 function dont_give_me_five($start, $end) 
 {
-  $count = 0;
+   $count = 0;
 
-  for ($x=$start; $x<=$end; $x++) {
-    if (strpos($x, "5") === false) { $count++; } 
-  }
+   for ($x = $start; $x <= $end; $x++) {
+      if (strpos($x, "5") === false) $count++;
+   }
 
-  return $count;
+   return $count;
 }
 
 #2:
 function dont_give_me_five($start, $end) 
 {
-  return count(array_filter(range($start, $end), function ($item){ // range - cоздает массив, содержащий диапазон элементов. можно задавать step 
-    return stripos($item, '5') === false;
-  }));
+   return count(array_filter(range($start, $end), function ($item) { 
+      // range - cоздает массив, содержащий диапазон элементов. можно задавать step 
+      return stripos($item, '5') === false;
+   }));
 }
+
 
 
 /**
@@ -49,25 +51,28 @@ Examples
 **/
 
  function validBraces($braces){
-	$brackets = ['()','[]','{}'];
- 	$closeBrackets = [')', ']', '}'];
-	$stack = [];
-	 
-  	for ($i = 0; $i < strlen($braces); $i++) {
-		$currElem = $braces[$i];
-		if (!in_array($currElem, $closeBrackets)) {
-			array_push($stack, $currElem);
-		} else {
-			$lastElem = array_pop($stack);
-			$pair = "{$lastElem}.{$currElem}";
-			if (!in_array($pair, $brackets)) {
-				return false;
-			}
-		}
-	}
-	 
-	return sizeof($stack) == 0;	
+   $brackets = ['()','[]','{}'];
+   $closeBrackets = [')', ']', '}'];
+   $stack = [];
+    
+   for ($i = 0; $i < strlen($braces); $i++) {
+      $currElem = $braces[$i];
+
+      if (!in_array($currElem, $closeBrackets)) {
+         array_push($stack, $currElem);
+      } else {
+         $lastElem = array_pop($stack);
+         $pair = "{$lastElem}{$currElem}";
+
+         if (!in_array($pair, $brackets)) {
+            return false;
+         }
+      }
+   }
+    
+   return sizeof($stack) == 0;   
 }
+
 
 
 /**
@@ -80,13 +85,14 @@ repeatStr(5, "Hello") // "HelloHelloHelloHelloHello"
 #1:
 function repeatStr(int $n, string $str)
 {
-	$res = '';
-	while ($n > 0) {
-		$res .= $str;
-		$n--;
-	}
-	
-	return $res;
+   $res = [];
+
+   while ($n > 0) {
+      $res[] = $str;
+      $n--;
+   }
+   
+   return implode('', $res);
 }
 
 #2:
@@ -113,34 +119,38 @@ You may assume that there won't be exceptional situations (like stack underflow 
 
 function calc(string $expr)
 {
-	if(!$expr) { return 0; }
-    $stack = [];
-	 $intAndOper = explode(' ', $expr);		
-	 foreach ($intAndOper as $val) {
-        if (is_int($val) or is_float($val)) {
-            $stack[] = $val;
-        } else {
-           $endElemDel = array_pop($stack);
+   if(!$expr) return 0;
 
-           switch ($val) {
-                case '*':
-                    $stack[sizeof($stack) - 1] *= $end_elem_del;
-                    break; 
-                case '/':
-                    $stack[sizeof($stack) - 1] /= $end_elem_del;
-                    break;
-                case '+':
-                    $stack[sizeof($stack) - 1] += $end_elem_del;
-                    break;
-                case '-':
-                    $stack[sizeof($stack) - 1] -= $end_elem_del;
-                    break;        
-            }
-        }
-    }   
+   $stack = [];
+   $intAndOper = explode(' ', $expr);    
 
-    return $stack[0];
+   foreach ($intAndOper as $val) {
+
+      if (is_int($val) || is_float($val)) {
+         $stack[] = $val;
+      } else {
+         $endElemDel = array_pop($stack);
+
+         switch ($val) {
+            case '*':
+               $stack[sizeof($stack) - 1] *= $end_elem_del;
+               break; 
+            case '/':
+               $stack[sizeof($stack) - 1] /= $end_elem_del;
+               break;
+            case '+':
+               $stack[sizeof($stack) - 1] += $end_elem_del;
+               break;
+            case '-':
+               $stack[sizeof($stack) - 1] -= $end_elem_del;
+               break;        
+         }
+      }
+   }   
+
+   return $stack[0];
 }
+
 
 
 /**
@@ -154,78 +164,58 @@ in_asc_order([1, 2, 3, 4, 5]); // true
 in_asc_order([1, 6, 10, 18, 2, 4, 20]); // false
 in_asc_order([9, 8, 7, 6, 5, 4, 3, 2, 1]); // false (NOTE: because the numbers are in DESCENDING order, not ascending order)
 
-
+#1:
 function in_asc_order($arr) {
-    foreach ($arr as $key => $val) {
-        if ($key > 0 && $arr[$key - 1] > $val) { 
-        	return false; 
-        }
-    }
-    return true;
+   foreach ($arr as $key => $val) {
+      if ($key > 0 && $arr[$key - 1] > $val) { 
+         return false; 
+      }
+   }
+
+   return true;
 }
 
 #2:
-
 function in_asc_order($arr) {
-  $temp = $arr;
-  sort($temp);
-  return ($temp == $arr);
+   $temp = $arr;
+   sort($temp);
+   return ($temp == $arr);
 }
 
-
-class InAscOrderTest extends TestCase {
-  public function testExamples() {
-    $this->assertTrue(in_asc_order([1, 2, 4, 7, 19]));
-    $this->assertTrue(in_asc_order([1, 2, 3, 4, 5]));
-    $this->assertFalse(in_asc_order([1, 6, 10, 18, 2, 4, 20]));
-    $this->assertFalse(in_asc_order([9, 8, 7, 6, 5, 4, 3, 2, 1]));
-  }
-}
 
 
 /**
 Deoxyribonucleic acid (DNA) is a chemical found in the nucleus of cells and carries the "instructions" for the development and functioning of living organisms.
-In DNA strings, symbols "A" and "T" are complements of each other, as "C" and "G". You have function with one side of the DNA (string, except for Haskell); you need to get the other complementary side. DNA strand is never empty or there is no DNA at all (again, except for Haskell).	
+In DNA strings, symbols "A" and "T" are complements of each other, as "C" and "G". You have function with one side of the DNA (string, except for Haskell); you need to get the other complementary side. DNA strand is never empty or there is no DNA at all (again, except for Haskell).   
 **/
 
 DNA_strand("ATTGC") // returns "TAACG"
 DNA_strand("GTAT") // returns "CATA"
 
-
+#1:
 function DNA_strand($dna) {
    $res = [];
-    $sign = [
+
+   $sign = [
       'A' => 'T',
       'T' => 'A',
       'G' => 'C',
       'C' => 'G'
-    ];
- 
-    for ($i = 0; $i < strlen($dna); $i++) {
+   ];
+
+   for ($i = 0; $i < strlen($dna); $i++) {
       $res[] = $sign[$dna[$i]];
-    }
-  
-    return implode('', $res);
+   }
+
+   return implode('', $res);
 }
 
 
-#2
-
+#2:
 function DNA_strand($dna) {
   return strtr($dna, ['A'=>'T', 'T'=>'A', 'C'=>'G', 'G'=>'C']);
 }
 
-
-class ComplementaryDNATest extends TestCase {
-  public function testExamples() {
-    $this->assertEquals("TTTT", DNA_strand("AAAA"));
-    $this->assertEquals("AAAA", DNA_strand("TTTT"));
-    $this->assertEquals("TAACG", DNA_strand("ATTGC"));
-    $this->assertEquals("ATTGC", DNA_strand("TAACG"));
-    $this->assertEquals("CATA", DNA_strand("GTAT"));
-    $this->assertEquals("GTAT", DNA_strand("CATA"));
-  }
-}
 
 
 /**
@@ -235,40 +225,39 @@ Write a function to calculate factorial for a given input. If input is below 0 o
 
 **/
 
-# 1
+#1:
 function factorial($num)
 {
-	if ($num < 0 || $num > 12) {
-	    throw new RangeException('Out of Range');
-	}
+   if ($num < 0 || $num > 12) {
+      throw new RangeException('Out of Range');
+   }
 
-	return $num <= 1 ? 1 : $num * factorial($num - 1);
+   return $num <= 1 ? 1 : $num * factorial($num - 1);
 }
 
-#2
-
+#2:
 function factorial($num)
 {
-	if ($num < 0 || $num > 12) {
-	    throw new RangeException('Out of Range');
-	}
+   if ($num < 0 || $num > 12) {
+      throw new RangeException('Out of Range');
+   }
   
-	$iter = function ($n, $acc) use (&$iter) {
-		if ($n <= 1) { return $acc; }
-		return $iter($n - 1, $n * $acc);
-	};
+   $iter = function ($n, $acc) use (&$iter) {
+      return $n <= 1 ? $acc: $iter($n - 1, $n * $acc);
+   };
   
-	return $iter($num, 1);
+   return $iter($num, 1);
 }
 
 #3:
-
 function factorial($n) 
 {
-  if ($n < 0 || $n > 12) throw new RangeException();
-  else if ($n == 0) return 1;
-  else return array_product(range(1, $n));
+   if ($n < 0 || $n > 12) throw new RangeException();
+   elseif ($n == 0) return 1;
+
+   return array_product(range(1, $n));
 }
+
 
 
 /**
@@ -291,14 +280,13 @@ $guess = TRUE;
 
 class DontRelyOnLuckKata extends TestCase
 {
-    //This is exactly what the real test fixture looks like.
-    public function testYourLuck() {
+   //This is exactly what the real test fixture looks like.
+   public function testYourLuck() {
       global $guess;
       $lucky_number = rand(1, 100);
       $this->assertEquals($lucky_number, $guess, "Sorry. Unlucky this time.");
-    }
+   }
 }
-
 
 
 
@@ -313,17 +301,6 @@ function countBits($n)
    return substr_count(decbin($n), '1');
 }
 
-
-class CountBitsTestCases extends TestCase
-{
-    public function testResultCountBits() {
-      $this->assertEquals(countBits(0), 0);
-      $this->assertEquals(countBits(4), 1);
-      $this->assertEquals(countBits(7), 3);
-      $this->assertEquals(countBits(9), 2);
-      $this->assertEquals(countBits(10), 2);
-    }
-}
 
 
 /**
@@ -342,26 +319,26 @@ If the input or the result is an empty string it must return false.
 ""                                        =>  false
 **/
 
+#1:
 function generateHashtag($str) {
-  if (strlen(trim($str)) == 0) { return false; }
-  
-  $words = array_filter(explode(' ', $str), function($word) {
-    return trim($word);
-  });
-  
-  $modifyWords = array_map(function($word) {
-    return ucfirst($word);
-  }, $words);
-  
-  $newStr = implode('', $modifyWords);
-  
-  return strlen($newStr) < 140 ? "#{$newStr}" : false;
+   if (strlen(trim($str)) == 0) return false;
+
+   $words = array_filter(explode(' ', $str), function($word) {
+      return trim($word);
+   });
+
+   $modifyWords = array_map(function($word) {
+      return ucfirst($word);
+   }, $words);
+
+   $newStr = implode('', $modifyWords);
+
+   return strlen($newStr) < 140 ? "#{$newStr}" : false;
 }
 
-#2
-
+#2:
 function generateHashtag($str) {
-    if (trim($str) == '') { return false; }
+    if (trim($str) == '') return false;
 
     $hash = '#' . str_replace(' ', '', trim(ucwords($str)));
 
@@ -375,67 +352,59 @@ In this simple Kata your task is to create a function that turns a string into a
 
 1.  The input string will always be lower case but maybe empty.
 2.  If the character in the string is whitespace then pass over it as if it was an empty seat.
-
 **/
 
 wave("hello") => ["Hello", "hEllo", "heLlo", "helLo", "hellO"]
 
+#1:
 function wave($people)
 {
-	$expressions = [];
-	$expression = strtolower($people);
+   $expressions = [];
+   $expression = strtolower($people);
 
-	for ($i = 0; $i < strlen($expression); $i++) {
-		if (preg_match('/\S/', $expression[$i])) {
-			$center = mb_strtoupper($expression[$i]);
-			$exprEnd = substr($expression, $i + 1);
+   for ($i = 0; $i < strlen($expression); $i++) {
+      if (preg_match('/\S/', $expression[$i])) {
+         $center = mb_strtoupper($expression[$i]);
+         $exprEnd = substr($expression, $i + 1);
 
-			if ($i == 0) {
-				$expressions[] = "{$center}{$exprEnd}"; 
-			} else {
-				$exprBegin = substr($expression, 0, $i);
-				$expressions[] = "{$exprBegin}{$center}{$exprEnd}";					
-			}
-		} 
-	}
+         if ($i == 0) {
+            $expressions[] = "{$center}{$exprEnd}"; 
+         } else {
+            $exprBegin = substr($expression, 0, $i);
+            $expressions[] = "{$exprBegin}{$center}{$exprEnd}";               
+         }
+      } 
+   }
 
-	return $expressions;
+   return $expressions;
 }
 
 
 #2:
-
 function wave($people){
-  $result = [];
-  
-  for($i = 0; $i < strlen($people); $i++) {
-    if(ctype_space($people[$i])) continue; // проверяет наличие пробельных символов
-    $result[] = substr_replace($people, strtoupper($people[$i]), $i, 1);
-  }
-  return $result;
+   $result = [];
+
+   for($i = 0; $i < strlen($people); $i++) {
+      if(ctype_space($people[$i])) continue; // проверяет наличие пробельных символов
+      $result[] = substr_replace($people, strtoupper($people[$i]), $i, 1);
+   }
+   return $result;
 }
 
-class MyTestCases extends TestCase
-{
-    public function testThatSomethingShouldHappen() {
-      $this->assertEquals(["Hello", "hEllo", "heLlo", "helLo", "hellO"], wave("hello"));
-      $this->assertEquals(["Codewars", "cOdewars", "coDewars", "codEwars", "codeWars", "codewArs", "codewaRs", "codewarS"], wave("codewars"));
-      $this->assertEquals([], wave(""));
-      $this->assertEquals(["Two words", "tWo words", "twO words", "two Words", "two wOrds", "two woRds", "two worDs", "two wordS"], wave("two words"));
-      $this->assertEquals([" Gap ", " gAp ", " gaP "], wave(" gap "));
-    }
-}
 
-#find sum of positive numbers
+
+/**
+find sum of positive numbers
+*/
 
 function getSumPosNums ($numbers)
 {
-	return array_reduce($numbers, function ($acc, $num) {
-		return $num > 0 ? $acc + $num : $acc;	
-	}, 0);
+   return array_reduce($numbers, function ($acc, $num) {
+      return $num > 0 ? $acc + $num : $acc;  
+   }, 0);
 }
 
-/*
+/**
 Given an array (arr) as an argument complete the function countSmileys that should return the total number of smiling faces.
 
 Rules for a smiling face:
@@ -455,24 +424,18 @@ countSmileys([';D', ':-(', ':-)', ';~)']);     // should return 3;
 countSmileys([';]', ':[', ';*', ':$', ';-D']); // should return 1;
 */
 
-#1
+#1:
 function count_smileys($arr): int {
-  return preg_match_all('/[:;][-~]?[\)D]/', implode(",", $arr));
+   return preg_match_all('/[:;][-~]?[\)D]/', implode(",", $arr));
 }
 
-#2
-
+#2:
 function count_smileys($arr): int {
-  return count(preg_grep('/[:;][-~]?[D)]/',$arr));
+   return count(preg_grep('/[:;][-~]?[D)]/',$arr));
 }
 
-https://www.codewars.com/kata/pairs-of-integers-from-m-to-n/train/php
 
-$output = shell_exec('ls -lart');
-echo "<pre>$output</pre>";
-
-
-/*
+/**
 Write a function generatePairs that accepts two integer arguments m and n and generates an array containing the pairs of integers [a, b] that satisfy the following conditions:
 
 m <= a <= b <= n
@@ -487,32 +450,36 @@ For example, generatePairs(2, 4) should return
 #1
 function generatePairs($m,$n){
 
-	$iter = function ($car, $step, $acc) use ($n, &$iter) {
-		$cdr = $car + $step;
-		if ($car === $n) {
-			return $acc;	
-		} elseif ($cdr > $n) {
-			$car++;
-			$step = 0;
-			$cdr = $car;	
-		}
-		$step++;
-		$acc[] = [$car, $cdr];
-		return $iter($car, $step, $acc);		
-	};
-  	return $iter($m, 0, []);
+   $iter = function ($car, $step, $acc) use ($n, &$iter) {
+      $cdr = $car + $step;
+
+      if ($car === $n) {
+         return $acc;   
+      } elseif ($cdr > $n) {
+         $car++;
+         $step = 0;
+         $cdr = $car;   
+      }
+
+      $step++;
+      $acc[] = [$car, $cdr];
+      
+      return $iter($car, $step, $acc);    
+   };
+
+   return $iter($m, 0, []);
 }
 
 #2
 
 function generatePairs(int $m, int $n): array {
-  $result = [];
-  
-  for ($i = $m; $i <= $n; $i++) {
-    for ($j = $i; $j <= $n; $j++) {
-        array_push($result, [$i, $j]);
-    }      
-  }
-  
-  return $result;
+   $result = [];
+
+   for ($i = $m; $i <= $n; $i++) {
+      for ($j = $i; $j <= $n; $j++) {
+         array_push($result, [$i, $j]);
+      }      
+   }
+
+   return $result;
 }
