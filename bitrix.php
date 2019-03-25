@@ -141,8 +141,13 @@ unset($item); // поскольку массив передаем по ссыл�
 
 - карта сайта: bitrix:site.map
 
-
 - комментарии: bitrix: catalog.comments
+
+- каталог: bitrix:catalog
+- элементы раздела: bitrix:catalog.section
+- элемент: bitrix:catalog.item
+- корзина: bitrix:sale.basket.basket
+- умный фильтр: bitrix:smart.filter
 */
 
 
@@ -252,8 +257,8 @@ E-mail является обязательным полем - отметить
 
 #@@@ ВЫВОД АКТИВНЫХ НОВОСТЕЙ С УСТАНОВЛЕННЫМ СВОЙСТВОМ SHOW_MAIN:
 CModule::IncludeModule('block');
-$arSelect = ['ID', 'IBLOCK_ID', 'NAME', "PREVIEW_TEXT"];
-$arFilter - ['IBLOCK_ID' => 1, 'ACTIVE_DATE' => 'Y', 'ACTIVE' => 'Y', '!SHOW_MAIN' => false]; // IBLOCK_ID - ID инфоблока
+$arSelect = ['ID', 'IBLOCK_ID', 'NAME', 'PREVIEW_TEXT'];
+$arFilter = ['IBLOCK_ID' => 1, 'ACTIVE_DATE' => 'Y', 'ACTIVE' => 'Y', '!SHOW_MAIN' => false]; // IBLOCK_ID - ID инфоблока
 $res = CIBlockElement::GetList([], $arFilter, false, ['nPageSize' => 4], $arSelect); ?>
 
 <? if ($res->arResult): ?>
@@ -430,4 +435,17 @@ $res = CIBlockElement::GetList([], $arFilter, false, ['nPageSize' => 3], $arSele
         </div>
         ...         
     <? endwhile; ?>
-<? endif; ?>    
+<? endif; ?>
+
+<?
+#@@@ ИЗМЕНЕНИЕ arResult + ДОБАВЛЕНИЕ ЦЕН И СВОЙСТВ:
+// file: --template-component--/result_modifier.php:
+
+$arSelect = ['ID', 'IBLOCK_ID', 'PROPERTY_INBOX','CATALOG_GROUP_10']; // необходимо определить какие цены используются (по дефолту CATALOG_GROUP_1)
+$arFilter = ['IBLOCK_ID' => 31, 'ID' => $offerID];
+$dbEl = CIBlockElement::GetList([], $arFilter, false, false, $arSelect);
+
+if ($obEl = $dbEl->Fetch()) {
+$arResult['offerData'][$offerID]['Единиц в коробке'] = $obEl['PROPERTY_INBOX_VALUE'];
+$arResult['offerData'][$offerID]['Цена'] = $obEl['CATALOG_PRICE_10'];
+}

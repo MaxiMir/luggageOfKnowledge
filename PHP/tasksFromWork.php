@@ -1,30 +1,10 @@
 <?
-	###################### ЗАДАНИЯ ################################
+	/*@@@
+	 Дан список слов неограниченной длины. Необходимо максимально быстрым способом найти количество анаграмм этого
+	 слова. Пример: слово - "лото".
+	 Список: "тест", "цифра", "отол", "оолт", "кекс" . Результат - 2.
+	*/
 	
-	# Дан список слов неограниченной длины. Необходимо максимально быстрым способом найти количество анаграмм этого слова. Пример: слово - "лото".
-	# Список: "тест", "цифра", "отол", "оолт", "кекс" . Результат - 2.
-	// JS:
-	const getCountAnagram = (data, origStr) => {
-	let counter = 0;
-	
-	  if (data.length > 0 && origStr.length > 0) {
-		  const sOrigStr = [...origStr].sort().join();
-	    
-	    data.forEach(function(currStr) {
-			  if (typeof currStr !== 'string') {
-				  console.log('Ошибка, элемент не строка');
-			  } else {
-				  if (origStr.length === currStr.length) {
-					  const sCurrStr = [...currStr].sort().join();
-	                if (sCurrStr === sOrigStr) counter++;
-	            }
-			  }
-	    });
-	  }
-	  return counter;
-	};
-	
-	// PHP:
 	class StringHandler
 	{
 		private $origStr;
@@ -63,7 +43,6 @@
 			return $counter;
 		}
 	}
-
 	
 	$start = microtime(true);
 	$str = new StringHandler('лото');
@@ -72,7 +51,7 @@
 	echo "\nTIME:". ($end - $start);
 
 	
-	# Найти абсолютные ссылки на относительные:
+	#@@@ Найти абсолютные ссылки на относительные:
 	class StringHandler
 	{
 		private $origStr;
@@ -119,43 +98,8 @@
 	$end = microtime(true);
 	echo "\nTIME:". ($end - $start);
 	
-    # Заменить абсолютные ссылки на относительные:
     
-    require 'common/connect.php';
-    
-    function changeColunmData ($table, $column, $changeText, $newText) {
-	    $changeTextScr = addslashes($changeText);
-	    $sql = "SELECT id, $column FROM $table WHERE $column LIKE('%{$changeTextScr}%')";
-	    $res = mysql_query($sql);
-	
-	    if (!$res) {
-		    return mysql_errno() . ": " . mysql_error() . "\n";
-	    } elseif ($resOp = mysql_num_rows($res)) {
-		    while ($row = mysql_fetch_assoc($res)) {
-			    $id = $row['id'];
-			    $currData = $row[$column];
-			
-			    $newData = addslashes(str_replace($changeText, $newText, $currData));
-			    $sqlIns = "UPDATE $table SET $column='$newData' WHERE id=$id";
-			    $resIns = mysql_query($sqlIns);
-			    if (!$resIns) {
-				    print mysql_errno() . ": " . mysql_error() . "\n\n error with id=$id";
-			    }
-		    }
-		
-		    $resOpIns = mysql_num_rows($resIns);
-		
-		    return "change $resOp from $resOpIns <br>";
-	    }
-    };
-    
-    
-    echo changeColunmData('ap_categories', 'text', '="http://www.stald.ru/', '="/');
-    echo changeColunmData('ap_categories', 'text', '=\'http://www.stald.ru/', '=\'/'); 
-    
-    
-    # Создать ассоциативный массив исходя из вложенности разделов:
-    
+    #@@@ Создать ассоциативный массив исходя из вложенности разделов:
     $arElements = [
 	    [
 		    0 => "Раздел1 КОРЕНЬ",
@@ -249,8 +193,7 @@
 		
 		    if ($isSeparator) {
 			    $tree = array_merge($tree, $branch);
-			    $branch = [];
-			    $stack = [];
+			    $branch = $stack = [];
 			    $countDepth = 0;
 		    } else {
 			    list($depth, $newCatName) = $infoCat;
@@ -280,65 +223,101 @@
 	    return $getTreeData['tree'];
     }
     
-    
-    # Динамическая вставка в селекты JQUERY:
-    
-    /* Текущий относительный url */
-    const getURN = () => $(location).attr('pathname');
-    
-    /* Подгрузка селектов услуг для каждого из врачей */   
-    const generateSelects = () => {
-	const curURN = getURN();
 	
-	const nameData = {
-		'/some_URN1/': {
-			'title': 'name_1',
-    			'name1' : ['val1', 'val2', 'val3'],
-                'name2' : ['val5', 'val6', 'val7'],
-                'name3' : ['val1', 'val8', 'val9'],
-    		},
-        	'/some_URN2/': {
-			'title': 'name_2',
-    			'name1' : ['val11', 'val12', 'val13'],
-                'name2' : ['val15', 'val16', 'val17'],
-                'name4' : ['val11', 'val18', 'val3'],
-    		},
-    		
-        };
-        
-        const generateSelect = (obj) => {
-		let service;
-        	
-        	$.each(obj, function (name, data) {
-		        if (name === 'title') {
-			        service = data;
-		        } else {
-			        const currSelect = $('#' + name + ' .class_item');
-			
-			        if (currSelect.length > 0) {
-				        currSelect.prepend($('<optgroup>', { label: service }));
-        				optGroup = currSelect.find(`[label="${service}"]`);
-
-            			const htmlOptions = data.map(function (option) {
-					            return '<option value="' + option + '">' + option + '</option>';
-				            }).join('\n');
-
-            			optGroup.prepend(htmlOptions);
-            		}
-		        }
-	        });
-        };
-        
-
-		if (curUrl === '/') {
-			$.each(nameData, function (url, obj) {
-				generateSelect(obj);
-			})
+	 #@@@ Рекурсивно собрать родительские урлы:
+	function getParentsUrls ($table, $belon, $acc)
+	{
+		$sqlNewSel = "SELECT name, belon FROM {$table} WHERE id = '{$belon}'";
+		$resNewSel = mysql_query($sqlNewSel);
+		
+		$row = mysql_fetch_assoc($resNewSel);
+		$name = $row['name'];
+		$pBelon = $row['belon'];
+		
+		if ($belon == 0) {
+			return array_reverse($acc);
 		} else {
-			const isServicePage = curUrl in nameData;
-			
-			if (isServicePage) generateSelect(nameData[curUrl]);
+			$acc[] = $name;
+			return getParentsUrls($table, $pBelon, $acc);
 		}
-    };
-
-    generateSelects();
+	}
+	
+	
+	#@@@ Парсер с callback-функцией:
+	function parseCSV($filename, $func)
+	{
+		$resultLog = __DIR__ . "/resLog.txt";
+		$line = 1;
+		$errors = 0;
+		
+		if (!file_exists($filename)) {
+			die("Файл не существует: {$filename}<br>");
+		}
+		
+		$csvFile = new SplFileObject($filename);
+		
+		while (!$csvFile->eof()) {
+			try {
+				if ($line > 1) {
+					$data = $csvFile->fgetcsv(';');
+					
+					if (!$func($data)) {
+						++$errors;
+						writeToFile($resultLog, "Ошибка на строке {$line}\n");
+					}
+				}
+				
+				++$line;
+			} catch (Exception $e) {
+				writeToFile($resultLog, $e->getMessage() . "Ошибка на строке {$line}\n c данными: " . print_r($data, true));
+			}
+		}
+		
+		writeToFile($resultLog, "Прочитано в '{$filename}' - {$line} строк, из них с ошибками {$errors}");
+	}
+	
+	
+	#@@@ Запись в CSV файл:
+	function writeOnCSV($filename, $data)
+	{
+		$csvFile = new SplFileObject($filename, 'a');
+		return $csvFile->fputcsv($data, ';');
+	}
+	
+	
+	#@@@ Возвращает текущий URN:
+	function getCurrURN($url, $urn)
+	{
+		$uri = "{$url}{$urn}";
+		$headers = get_headers($uri, 1);
+		
+		if ($headers[0] == "HTTP/1.1 404 Not Found") {
+			return '404 Not Found';
+		} elseif ($headers[0] == "HTTP/1.1 301 Moved Permanently") {
+			$location = $headers['Location'];
+			$newURN = !is_array($location) ? $location : $location[1];
+			$urn = str_replace($url, '', $newURN);
+		}
+		
+		return $urn;
+	}
+	
+	#@@@ Запись в конец файла:
+	function writeToFile($file, $content)
+	{
+		$resWrite = file_put_contents($file, $content, FILE_APPEND);
+		
+		if (!$resWrite) die("Ошибка записи в файл: {$file}");
+	}
+	
+	#@@@ Запись в CSV URN сайта:
+	function writeRedirectsAnd404($data)
+	{
+		$checkURN = $data[0];
+		$currURN = getCurrURN('http://www.yandex.ru', $checkURN);
+		
+		return $checkURN == $currURN ? true : writeOnCSV('getLinks.csv', [$checkURN, $currURN]);
+	}
+	
+	
+	
