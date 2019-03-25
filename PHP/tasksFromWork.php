@@ -49,54 +49,6 @@
 	echo $str->getCountAnagram(["тест", "цифра", "отол", "оолт", "кекс", "тест", "цифра", "отол", "оолт", "кекс", "тест", "цифра", "отол", "оолт", "кекс", "тест", "цифра", "отол", "оолт", "кекс", "кекс1"]);
 	$end = microtime(true);
 	echo "\nTIME:". ($end - $start);
-
-	
-	#@@@ Найти абсолютные ссылки на относительные:
-	class StringHandler
-	{
-		private $origStr;
-		private $origLength;
-		
-		public function __construct(string $str)
-		{
-			$this->origStr = $str;
-			$this->origLength = strlen($str);
-		}
-		
-		public function getValuesInStr(string $str)
-		{
-			return array_count_values(str_split($str));
-		}
-		
-		public function getCountAnagram(array $data)
-		{
-			$counter = 0;
-			$validData = !empty($data) && $this->origLength > 0;
-			
-			if ($validData) {
-				$origValuesInStr = $this->getValuesInStr($this->origStr);
-				
-				foreach ($data as $word) {
-					if ($this->origLength == strlen($word)) {
-						$currValuesInStr = $this->getValuesInStr($word);
-						
-						if ($origValuesInStr == $currValuesInStr) {
-							$counter++;
-						}
-					}
-				}
-			}
-			return $counter;
-		}
-	}
-	
-	$start = microtime(true);
-	
-	$str = new StringHandler('лото');
-	echo $str->getCountAnagram(["тест", "цифра", "отол", "оолт", "кекс", "тест", "цифра", "отол", "оолт", "кекс", "тест", "цифра", "отол", "оолт", "кекс", "тест", "цифра", "отол", "оолт", "кекс"]);
-	
-	$end = microtime(true);
-	echo "\nTIME:". ($end - $start);
 	
     
     #@@@ Создать ассоциативный массив исходя из вложенности разделов:
