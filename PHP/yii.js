@@ -1,4 +1,3 @@
-<?
 // УСТАНОВКА
 $ composer create-project yiisoft/yii2-app-basic treasure 2.0.10 // treasure название проекта
 
@@ -30,7 +29,7 @@ class SiteController extends Controller
 }
 
 
-/** При переходе на /site/hello вывести строку "<h1>Hello, world</h1>" в текущем шаблоне:
+/** При переходе на /site/hello вывести строку "<h1>Hello, world<\h1>" в текущем шаблоне:
  * file: /controllers/SiteController.php:
  */
 class SiteController extends Controller
@@ -43,7 +42,7 @@ class SiteController extends Controller
 }
 
 // folder: /views/site/ создаем файл hello.php:
-<h1>Hello, world</h1>
+<h1>Hello, world<\h1>
 
 
 
@@ -55,7 +54,7 @@ class SiteController extends Controller
 
 
 
-/** При переходе на /my/index (или /my/) вывести '<h1>Hello, {$user}</h1> c именами' в текущем шаблоне:
+/** При переходе на /my/index (или /my/) вывести '<h1>Hello, {$user}<\h1> c именами' в текущем шаблоне:
  * folder: /controllers/ создаем файл MyController.php:
  */
 
@@ -81,13 +80,13 @@ class MyController extends Controller
 
 // folder: /views/ создаем папку my и в ней файл index.php: ?>
 
-<h1><?="{$hello} {$id}"?></h1>
+<h1><?="{$hello} {$id}"?><\h1>
 
 <?php
     foreach ($names as $name) {
-        echo "<p>$name</p>";
+        echo "<p>$name<\p>";
     }
-
+?>
 
 
 
@@ -100,14 +99,14 @@ use yii\web\Controller;
 
 class UserController extends Controller
 {
-    public function actionIndex()
-    {
+	public function actionIndex()
+	{
         return $this->render('index');
-    }
+	}
 }
 
 // folder: /views/ создаем папку admin с папкой user, а в ней файл index.php:
-<h1>Admin Zone</h1>
+<h1>Admin Zone<\h1>
 
 
 
@@ -122,13 +121,13 @@ class AppController extends Controller
 {
     public function debug($arr)
     {
-        echo '<pre>' . print_r($arr, true) . '</pre>';
+        echo '<pre>' . print_r($arr, true) . '<\pre>';
     }
 }
 
 function debug($arr) // функция для использования в views
 {
-    echo '<pre>' . print_r($arr, true) . '</pre>';
+    echo '<pre>' . print_r($arr, true) . '<\pre>';
 }
 
 
@@ -155,18 +154,18 @@ class PostController extends AppController
     use yii\helpers\Html;
 ?>
 
-<h1>Test Action</h1>
+<h1>Test Action<\h1>
 
-<?php if (Yii:$app->session->hasFlash('success')): // если есть flash сообщение ?>
+<?php if (Yii:$app->session->hasFlash('success')): ?> // если есть flash сообщение
     <div class="alert alert-success" role="alert">
-        <?= Yii:$app->session->getFlash('success') // выводим его ?>
-    </div>
+        <?= Yii:$app->session->getFlash('success') ?> // выводим его
+    <\div>
 <?php endif; ?>
 
 <?php if (Yii:$app->session->hasFlash('error')): ?>
     <div class="alert alert-danger" role="alert">
         <?= Yii:$app->session->getFlash('error') ?>
-    </div>
+    <\div>
 <?php endif; ?>
 
 <?php
@@ -199,21 +198,21 @@ AppAsset::register($this); // регистрация объекта AppAsset
     <meta charset="<?=Yii::$app->charset ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <?=Html::csrfMetaTags() // класс для генерации токенов, позволяет принимать POST запросы ?>
-    <title><?=Html::encode($this->title) // Html::encode - экранирование символов ?></title>
+    <title><?=Html::encode($this->title) // Html::encode - экранирование символов ?><\title>
     <?php $this->head() // подключение скриптов?>
-</head>
+<\head>
 <body>
     <?php $this->beginBody() ?>
     
     <div class="wrap">
         <div class="container">
             <ul class="nav nav-pills">
-                <li><?= Html::a('Главная', '/web/') ?></li>
-                <li><?= Html::a('Статьи', ['post/index']) ?></li>
-                <li><?= Html::a('Статья',  ['post/show']) ?></li>
-            </ul>
-        </div>
-    </div>
+                <li><?= Html::a('Главная', '/web/') ?><\li>
+                <li><?= Html::a('Статьи', ['post/index']) ?><\li>
+                <li><?= Html::a('Статья',  ['post/show']) ?><\li>
+            <\ul>
+        <\div>
+    <\div>
     
     <?php if (isset($this->blocks['head-block'])) {
         echo $this->blocks['head-block']; // выводим блок из view *1*. !Выведется только для post/show
@@ -222,9 +221,9 @@ AppAsset::register($this); // регистрация объекта AppAsset
     <?=$content ?> // в $content содержится контент страницы
     
     <?php $this->endBody() ?>
-</body>
-</html>
-<?php $this->endPage();?><?
+<\body>
+<\html>
+<?php $this->endPage();?>
 
 
 // file: /config/web:
@@ -254,29 +253,29 @@ class PostController extends AppController
         return parent::beforeAction($action);
     }
     
-    public function actionIndex()
-    {
+	public function actionIndex()
+	{
         $this->title = 'Все статьи'; // задание title в контроллере (1 способ)
         $this->layout = 'basic'; // изменение шаблона для определенного action
     
-        if (Yii:$app->request->isAjax) { // пришли ли данные Ajax-ом
-            debug(Yii:$app->request->post()); // <-> $_POST
-            return 'test';
-        }
-    
-        $model = new TestForm(); // операции INSERT
-        
+	    if (Yii:$app->request->isAjax) { // пришли ли данные Ajax-ом
+	        debug(Yii:$app->request->post()); // <-> $_POST
+	        return 'test';
+	    }
+	
+	    $model = new TestForm(); // операции INSERT
+	    
         if ($model->load(Yii::$app->request->post())) {  // если данные POST успешно загружены
-            if ($model->validate()) { // и данные формы валидны
-               Yii::$app->session->setFlash('success', 'Данные приняты'); // flash сообщения (данные после их запроса будут удалены из сессии)
+	        if ($model->validate()) { // и данные формы валидны
+	           Yii::$app->session->setFlash('success', 'Данные приняты'); // flash сообщения (данные после их запроса будут удалены из сессии)
                 return $this->refrash(); // метод перезапрашивает текущую страницу
             } else {
-                Yii::$app->session->setFlash('error', 'Ошибка');
-            }
+	            Yii::$app->session->setFlash('error', 'Ошибка');
+	        }
         }
-        
+	    
         return $this->render('test', compact('model')); // объект формы передаем во view
-    }
+	}
     
     public function actionShow()
     {
@@ -291,8 +290,8 @@ class PostController extends AppController
         ]);
         
         $cats = Category::find()->orderBy('id' => SORT_DESC)->all(); // Category - модель, find()->all() <-> выполнение запроса 'SELECT * FROM Category ORDER BY id DESC'
-        $cats = Category::find()->asArray()->where('parent=691')->limit(1)->all(); // asArray - вытаскивает данные в формате массива. (Вместо $cat->title будет $cat['title'])
-        // one() - одномерный массив с одной записью. Рекомендуется перед ним добавлять limit(1)
+	    $cats = Category::find()->asArray()->where('parent=691')->limit(1)->all(); // asArray - вытаскивает данные в формате массива. (Вместо $cat->title будет $cat['title'])
+	    // one() - одномерный массив с одной записью. Рекомендуется перед ним добавлять limit(1)
         // where['parent' => 691] 2 вариант, limit(2) - первые 2 попавшиеся записи
         // count() - количество выбраннных записей
         // findOne(['parent' => 691]) - возвращает 1 объект с записью. По умолч. ищет по первичному ключу
@@ -304,23 +303,22 @@ class PostController extends AppController
         $cats = Category::findOne(694); // отложенная загрузка *3*. Использование: 1-3 объекта без использование связей
     
         $cats = Category::find()->with('products')->all(); // *4* с with - жадная загрузка, объединение с products
-        
+	    
         return $this->render('show', compact('cats'));
     }
 }
 
 // folder: /views/post создаем show.php:
-<? $this->title = 'Одна статья'; // задание title в views (2 способ) ?>
+<? $this->title = 'Одна статья'; ?> // задание title в views (2 способ)
 
-<? $this->beginBlock('head-block'): // создаем блок *1* ?>
-    <h1>Заголовок страницы</h1>
+<? $this->beginBlock('head-block'): ?>  // создаем блок *1*
+    <h1>Заголовок страницы<\h1>
 <? $this->endBlock(); ?>
 
-<h1>Show Action</h1>
-<button>Click</button>
+<h1>Show Action<\h1>
+<button>Click<\button>
 
-
-<? // запрос *3* при ленивой загрузке:
+// запрос *3* при ленивой загрузке:
 debug($cats); // До *2*: свойства products нет
 count($cats->products); // *2* ориентируется на название getProducts в модели Products. вернет кол-во продуктов c parent = 684.
 debug($cats); // После *2*: свойство products содержит массивы с продуктами
@@ -329,12 +327,12 @@ debug($cats); // После *2*: свойство products содержит ма
 // запрос *4* при жадной загрузке:
 foreach ($cats as $cat) { // перебираем в цикле данные из БД
     echo "<ul>";
-    echo "<li>{$cat->title}</li>"; // названия категорий
+    echo "<li>{$cat->title}<\li>"; // названия категорий
 
     $products  = $cat->products; // используем отложенную загрузку
     foreach ($products as $product) {
         echo "<ul>";
-        echo "<li>{$product->title}</li>";
+        echo "<li>{$product->title}<\li>";
         echo "<ul>";
     }
 
@@ -346,7 +344,7 @@ foreach ($cats as $cat) { // перебираем в цикле данные и�
 $this->registerJsFile('@web/js/jQueryHandler.js', ['depends' => 'yii\web\YiiAsset']); // регистрация файла - подключаем файл, с указанием зависимостей (подключится после подключения библиотеки jQuery). Так же можно задать position места подключения кода.
 
 // 1 вариант:
-$this->registerJs("$('.container').append('<p>TEXT</p>');", \yii\web\View::POST_LOAD); // подключение блока кода <-> <script>// code ...</script> По умолч. используется POS_READY - код оборачивается в jQuery(document).ready(),  \yii\web\View::POST_LOAD - оборачивается в jQuery(window).load()
+$this->registerJs("$('.container').append('<p>TEXT<\p>');", \yii\web\View::POST_LOAD); // подключение блока кода <-> <script>// code ...<\script> По умолч. используется POS_READY - код оборачивается в jQuery(document).ready(),  \yii\web\View::POST_LOAD - оборачивается в jQuery(window).load()
 
 // 2 вариант:
 $script = <<< JS
@@ -374,6 +372,7 @@ $this->registerСss('.container{background: //ccc; }'); // подлючение 
 
 
 // Подключение файлов стилей,скриптов и зависимостей в /assets/AppAsset.php:
+
 class AppAsset extends AssetBundle
 {
     // code ...
@@ -381,15 +380,15 @@ class AppAsset extends AssetBundle
         'css/site.css', // путь файла: web/css/site.css
     ];
     
-    public $js = [ // файл скриптов
-        'js/script.js',
+	public $js = [ // файл скриптов
+	    'js/script.js',
     ];
     
     public $jsOptions = [
         'position' => \yii\web\View::POS_HEAD, // задать позицию скрипта на странице
     ];
     
-    public $depends = [ // файл зависимостей (для сооблюдения очередности подключения)
+	public $depends = [ // файл зависимостей (для сооблюдения очередности подключения)
         'yii\web\YiiAsset',
         'yii\bootstrap\BootstrapPluginAsset',
     ];
@@ -483,7 +482,7 @@ use yii\db\ActiveRecord;
 
 class Category extends ActiveRecord
 {
-    // Если мы называем модель по имени таблицы (только первая заглавная), то Yii автоматически свяжет модель с таблицей.
+	// Если мы называем модель по имени таблицы (только первая заглавная), то Yii автоматически свяжет модель с таблицей.
     public static function tableName() // если имя модели не совпадает с названием таблицы
    {
        return 'categories';
@@ -493,6 +492,7 @@ class Category extends ActiveRecord
 // ОТЛОЖЕННАЯ И ЖАДНАЯ ЗАГРУЗКА ДАННЫХ
 
 // folder: models создаем файл Product.php:
+
 namespace app\models;
 
 use yii\db\ActiveRecord
@@ -509,15 +509,15 @@ class Product extends ActiveRecord
         return $this->hasMany(Product::className(), ['parent' => 'id']); // 1 параметр возвращает строку с именем класса,
         // с которым связываем, 2-й параметр массив, где ключ поле связываемой таблицы (products),
         //  а значением поле справочника, на которое мы ссылаемся (category)
-        // hasOne - связь один ко одному / hasMany - связь один ко многим
+	    // hasOne - связь один ко одному / hasMany - связь один ко многим
         // возвращает массив объектов
     }
-    
-    public function getcategories() // 1 продукту соотвествует 1 категория -> hasOne
-    {
-        return $this->hasOne(Category::className(), ['id' => 'parent']);
-        // возвращает объект или null если ничего не найдено
-    }
+	
+	public function getcategories() // 1 продукту соотвествует 1 категория -> hasOne
+	{
+	    return $this->hasOne(Category::className(), ['id' => 'parent']);
+	    // возвращает объект или null если ничего не найдено
+	}
  
 }
 
@@ -534,36 +534,36 @@ CREATE TABLE `posts` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf-8;
 
 // file: models/TestForm.php изменяем:
-namespace app\models;
 
+namespace app\models;
 use yii\db\ActiveRecord;
 
 class TestForm extends ActiveRecord
 {
     // при использовании ActiveRecord в отличие от Model, объявлять свойства с полями не нужно
-    
+	
     public static tableName()
     {
         return 'posts';
     }
    
-    public function attributeLabels() // изменить label (1 способ)
-    {
+	public function attributeLabels() // изменить label (1 способ)
+	{
         return [
             'name' => 'Имя',
             'email' => 'Email',
             'password' => 'Пароль'
             'text' => 'Текст сообщения',
         ]
-    }
-    
-    public function rules()
-    {
+	}
+	
+	public function rules()
+	{
         return [
             [ ['name', 'text', 'password'], 'required'], // изменение стандартного текста подсказок (срабатывает не для всех валидаторов)
             ['email', 'email'], // задать полю email тип email адреса
         ];
-    }
+	}
 }
 
 // file: controllers/PostController.php изменяем:
@@ -604,7 +604,7 @@ class PostController extends AppController
         $model->save(); // сохранение объекта в БД, по умолч. вызывает метод validate. save(false) - сохранение без валидации
   
         if ($model->load(Yii::$app->request->post())) {  // если данные POST успешно загружены
-            //2: сохранение данных из формы
+	        //2: сохранение данных из формы
             if ($model->save()) { // и данные формы сохранены
                 Yii::$app->session->setFlash('success', 'Данные сохранены'); // flash сообщения (данные после их запроса будут удалены из сессии)
                 return $this->refrash(); // метод перезапрашивает текущую страницу
@@ -637,16 +637,17 @@ class PostController extends AppController
 // ОБНОВЛЕНИЕ И УДАЛЕНИЕ ДАННЫХ ИЗ БД
 
 // file: controllers/PostController.php изменяем:
+
 class PostController extends AppController
 {
     // code ...
-    // если объект получен из БД (например с помощью find, а значит создает объект Active Record) операция - Update
+	// если объект получен из БД (например с помощью find, а значит создает объект Active Record) операция - Update
     $post = TestForm::findOne(3); // по умолч. поиск по id
     $post->email = 'example@mail.ru';
     $post->save(); // сохраняем для записи с id = 3 email со значением example@mail.ru
     // если несколько значений используем updateAll
-    
-    $post = TestForm::findOne(2);
+	
+	$post = TestForm::findOne(2);
     $post->delete(); // удаляем запись с id = 2
     
     Test::deleteAll('>', 'id', 3); // удаление нескольких значений. По умолч. удаляет все записи
@@ -660,6 +661,7 @@ class PostController extends AppController
  */
 
 // folder: / создаем папку components, а в ней файл MyWidget.php:
+
 namespace app\components;
 
 use yii\base\Widget;
@@ -671,7 +673,7 @@ class MyWidget extends Widget
     public function init() // занимается нормализацией свойств виджета
     {
         parent::init(); // обязательно выполнение родительского метода
-        //1:
+	    //1:
         $this->name ?? 'Guest'; // если не передан задаем значение по умолч.
         //2 буферизация вывода:
         ob_start();
@@ -695,20 +697,18 @@ use app\components\MyWidget; // импортируем виджет
 echo MyWidget::widget(['name' => 'Mike']); // вывод виджета с переданным параметром
 //2:
 <?php MyWidget::begin()?>
-    <p>Some Text!</p>  // выведет Some Text!, а затем содержимое виджета
+    <p>Some Text!<\p>  // выведет Some Text!, а затем содержимое виджета
 <?php MyWidget::end()?>
-
-<?
 // code ...
 
 // folder: /components создаем папку views, а в ней файл my.php:
 //1:
-<p>Hello, <?=$name?></p><?
+<p>Hello, <?=$name?><\p>
 //2:
 <?= $content?>
 
 
-<?
+
 // Установка расширений из консоли
 
 // Поиск расширений: www.yiiframework.com/extensions
@@ -716,9 +716,9 @@ echo MyWidget::widget(['name' => 'Mike']); // вывод виджета с пе�
 // Устанавливаем jQuery UI:
 $ composer require --prefer-dist yiisoft/yii2-jui
 
-// file: /views/post/test.php вставляем UI DatePicker в форму:
+// file: /views/post/test.php вставляем UI DatePicker в форму:?>
 // code ...
-<?= yii\jui\DatePicker::widget(['name' => 'attributeName'])?> <?
+<?= yii\jui\DatePicker::widget(['name' => 'attributeName'])?>
 // code ...
 
 
@@ -755,11 +755,57 @@ RewriteRule . index.php
 'urlManager' => [
     'enablePrettyUrl' => true,
     'showScriptName' => false, // не показывать /index.php?r=...
+    'suffix' => '.html', // ОПЦИОНАЛЬНО! Что дописываем в конец ссылок
     'rules' => [
-        '' => 'site/index',
-        '<controller:\w+>/<action:\w+>/' => '<controller>/<action>',
+        '' => 'site/index', // правило для главной страницы
+        'about' => 'site/about', // при обращении по /about использовать контроллер site с action about
+        'contact' => 'site/contact',
+        '<action:(about|contact|login)>' => 'site/<action>', // правила через регулярные выражения для about,contact,login
+        '<action:\w+>' => 'site/<action>', // правила - для любого названия action
+        'defaultRoute' => 'post/index', // путь по умолчанию
+        ['pattern' => '', 'route' => 'site/index', 'suffix' => ''] // отдельное правило для главной страницы
+        
     ],
 ],
+// так же дополнительно прописать: 
+'request' => [
+    // ...
+    'baseUrl' => ''
+];
+
+
+
+
+// ### ГЕНЕРАЦИЯ ССЫЛОК ###:
+
+use yii\helpers\Url;
+
+// Url::to() вызывает UrlManager::createUrl() для создания URL
+$url = Url::to(['post/view', 'id' => 100]);
+
+
+<?=Html::a('Home', Url::to('/'))?>
+<?=Html::a('About', Url::to(['/about']))?>
+<?=Html::a('Contact', Url::to(['/contact']))?>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -778,6 +824,9 @@ RewriteRule . index.php
 
 // **************************************
 
+
+// В файле /config/web.php необходимо раскоментировать это:
+// code ...
 
 
 
@@ -804,57 +853,57 @@ use yii\db\migration;
 
 class ml// code ....create_article_table extends Migration
 {
-    // // code ...
-    public function up() // срабатывает при запуске миграции
-    {
-        $this->createTable('article', [
-            'id' => $this->primaryKey(),
-            'title' => $this->string(),
-            'description' => $this->text(),
-            'date' => $this->date(),
-            'user_id' => $this->integer(),
-        ]);
-    }
+	// // code ...
+	public function up() // срабатывает при запуске миграции
+	{
+		$this->createTable('article', [
+			'id' => $this->primaryKey(),
+			'title' => $this->string(),
+			'description' => $this->text(),
+			'date' => $this->date(),
+			'user_id' => $this->integer(),
+		]);
+	}
 
-    public function down() // при откате миграции
-    {
-        $this->dropTable('article', [
-    }
+	public function down() // при откате миграции
+	{
+		$this->dropTable('article', [
+	}
 }
 
 
 // create index for column 'user_id'
 $this->createIndex(
-    'idx_tag_id',
-    'article_tag',
-    'tag_id'
+	'idx_tag_id',
+	'article_tag',
+	'tag_id'
 );
 
 // add forein key for table 'user'
 $this->addForeinKey(
-    'fk-tag_id',
-    'article_tag',
-    'tag_id',
-    'tag',
-    'id',
-    'CASCADE'
+	'fk-tag_id',
+	'article_tag',
+	'tag_id',
+	'tag',
+	'id',
+	'CASCADE'
 );
 
 // create index for column 'article_id'
 $this->createIndex(
-    'idx_article_id',
-    'comment',
-    'article_id'
+	'idx_article_id',
+	'comment',
+	'article_id'
 );
 
 // add forein key for table 'article'
 $this->addForeinKey(
-    'fk-article_id',
-    'comment',
-    'article_id',
-    'article',
-    'id',
-    'CASCADE'
+	'fk-article_id',
+	'comment',
+	'article_id',
+	'article',
+	'id',
+	'CASCADE'
 );
 
 
@@ -899,14 +948,14 @@ public $layout = '/admin';
 
 // folder: views/layouts/admin.php создаем файл admin.php (копируем все из main.php):
 echo Nav::widget([
-    // // code ...
-    'items' => [ // здесь меняем на шаблоны админа:
-        ['label' => 'Home', 'url' => ['/admin/default/index']],
-        ['label' => 'Articles', 'url' => ['/admin/article/index']],
-        ['label' => 'Categories', 'url' => ['/admin/category/index']],
-        ['label' => 'Tag', 'url' => ['/admin/tag/index']],
-    // // code ... дальнейший код можно убрать (это меню пользователя - Login)
-    ];
+	// // code ...
+	'items' => [ // здесь меняем на шаблоны админа:
+		['label' => 'Home', 'url' => ['/admin/default/index']],
+		['label' => 'Articles', 'url' => ['/admin/article/index']],
+		['label' => 'Categories', 'url' => ['/admin/category/index']],
+		['label' => 'Tag', 'url' => ['/admin/tag/index']],
+	// // code ... дальнейший код можно убрать (это меню пользователя - Login)
+	];
 ]);
 
 
@@ -915,12 +964,12 @@ echo Nav::widget([
 
 // file: models/Article.php:
 public function rules() {
-    return [
-        [['title'], 'required'], // делаем обязательным
-        [['title','description', 'content'], 'string'],
-        [['date'], 'date', 'format' => 'php:Y-m-d'],
-        [['date'], 'default', 'value' => date('Y-m-d')], // по дефолту текущая дата
-        [['title'], 'string', 'max' => 255] // длина поля до 255
+	return [
+		[['title'], 'required'], // делаем обязательным
+		[['title','description', 'content'], 'string'],
+		[['date'], 'date', 'format' => 'php:Y-m-d'],
+		[['date'], 'default', 'value' => date('Y-m-d')], // по дефолту текущая дата
+		[['title'], 'string', 'max' => 255] // длина поля до 255
 }
 
 // file: modules/controllers/AtricleController.php
@@ -928,16 +977,16 @@ public function rules() {
 
 public function actionCreate()
 {
-    $model = new Article();
+	$model = new Article();
 
-    var_dump(Yii::$app->request->post()); // распечатываем данные из формы
+	var_dump(Yii::$app->request->post()); // распечатываем данные из формы
 
-    if ($_POST['article']) {
-        $model->title = $_POST['Article']['title']; // присваиваем полю title значение из формы. **
-        $model->load(Yii:$app->request->post()); // чтобы не прописывать для каждого поля, как в **
-        var_dump($model->attributes); // просмотр всех свойств модели
-        $model->save(); // перед сохранением проходим процесс валидации по правилам из файла models/Article.php:
-    }
+	if ($_POST['article']) {
+		$model->title = $_POST['Article']['title']; // присваиваем полю title значение из формы. **
+		$model->load(Yii:$app->request->post()); // чтобы не прописывать для каждого поля, как в **
+		var_dump($model->attributes); // просмотр всех свойств модели
+		$model->save(); // перед сохранением проходим процесс валидации по правилам из файла models/Article.php:
+	}
 }
 
 
@@ -951,18 +1000,18 @@ public function actionCreate()
 
 // file: /modules/admin/controllers/ArticleController.php
     // code ...
-    public function actionSetImage($id) // создаем action для кнопки 'Set Image'. В () какую переменную из адресной строки хотим получить (например ?id=20, и в $id = 20)
-    {
-        $model = new ImageUpload; // // класс лежит в /models
+	public function actionSetImage($id) // создаем action для кнопки 'Set Image'. В () какую переменную из адресной строки хотим получить (например ?id=20, и в $id = 20)
+	{
+		$model = new ImageUpload; // // класс лежит в /models
 
-        if (Yii::$app->request->isPost) {
-            $article = $this->findModel($id); // запрос в БД, здесь ищем статью
-            $file = UploadedFile::getInstance($model, 'image'); // ст. метод возвращает файл
-            $article->saveImage($model->uploadFile($file);)
-        }
+		if (Yii::$app->request->isPost) {
+			$article = $this->findModel($id); // запрос в БД, здесь ищем статью
+			$file = UploadedFile::getInstance($model, 'image'); // ст. метод возвращает файл
+			$article->saveImage($model->uploadFile($file);)
+		}
 
-        return $this->render('image'); // название файла в /modules/admin/views/article/image.php
-    }
+		return $this->render('image'); // название файла в /modules/admin/views/article/image.php
+	}
 }
 
 
@@ -970,15 +1019,15 @@ public function actionCreate()
 use // code ...
 
 <div class="article-form">
-    <?php $form = ActiveForm::begin(); ?>
-    <?= $form->field($model, 'image')->fileInput(['maxlength' => true]) ?> // fileInput - тип поля
+	<?php $form = ActiveForm::begin(); ?>
+	<?= $form->field($model, 'image')->fileInput(['maxlength' => true]) ?> // fileInput - тип поля
 
-    <div class="form-group">
-        <?= Html::submitButton('Submit', ['class' => 'btn btn-success']) ?>
-    </div>
+	<div class="form-group">
+		<?= Html::submitButton('Submit', ['class' => 'btn btn-success']) ?>
+	<\div>
 
-    <?php ActiveForm::end(); ?>
-</div>
+	<?php ActiveForm::end(); ?>
+<\div>
 
 <?
 // в folder: /models создаем ImageUpload.php:
@@ -991,22 +1040,22 @@ use yii\web\UploadedFile;
 
 class ImageUpload extends Model
 {
-    public $image;
+	public $image;
 
-    public function uploadFile(UploadedFile $file)
-    {
-        $file->saveAs(Yii::getAlias('@web') . 'uploads/' . $file->name);
-        return $file->name;
-    }
+	public function uploadFile(UploadedFile $file)
+	{
+		$file->saveAs(Yii::getAlias('@web') . 'uploads/' . $file->name);
+		return $file->name;
+	}
 }
 
 // folder: /web создаем папку uploads
 
 // file: /modules/Article.php удаляем методы getArticleTags, getComments
     // code ...
-    public function saveImage($filename)
-    {
-        $this->image = $filename;
-        $this->save(false); // сохраняем данные в БД, с false в () данных сохраются без валидации
-    }
+	public function saveImage($filename)
+	{
+		$this->image = $filename;
+		$this->save(false); // сохраняем данные в БД, с false в () данных сохраются без валидации
+	}
 }

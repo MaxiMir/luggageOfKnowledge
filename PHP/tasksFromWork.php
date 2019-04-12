@@ -174,101 +174,192 @@
 	
 	    return $getTreeData['tree'];
     }
-    
-	
-	 #@@@ Рекурсивно собрать родительские урлы:
-	function getParentsUrls ($table, $belon, $acc)
+
+	class ContentManager
 	{
-		$sqlNewSel = "SELECT name, belon FROM {$table} WHERE id = '{$belon}'";
-		$resNewSel = mysql_query($sqlNewSel);
-		
-		$row = mysql_fetch_assoc($resNewSel);
-		$name = $row['name'];
-		$pBelon = $row['belon'];
-		
-		if ($belon == 0) {
-			return array_reverse($acc);
-		} else {
-			$acc[] = $name;
-			return getParentsUrls($table, $pBelon, $acc);
+		#@@@ Парсер с callback-функцией:
+		public static function parseCSV($filename, $class, $method)
+		{
+			$line = 1;
+			$errors = 0;
+			$resultLog = self::createLogBlock();
+
+			if (!file_exists($filename)) {
+				die("Файл не существует: {$filename}");
+			} elseif (!class_exists($class)) {
+			    die("Класс не существует: {$class}");
+			} elseif (!method_exists($class, $method)) {
+			    die("Метод класса {$class} не существует: {$method}");
+			}
+
+			$csvFile = new SplFileObject($filename);
+
+			while (!$csvFile->eof()) {
+				try {
+					$data = $csvFile->fgetcsv(';');
+
+					if (!empty($data[0]) && $line > 1) {
+						$dataOperation = $class->$method($data);
+						$isError = $dataOperation['result'] == 'error';
+
+						if ($isError) {
+							++$errors;
+							$errorData = implode("\n", $dataOperation['errors']);
+							self::writeToFile($resultLog, "Строкa № {$line}\n {$errorData} \n");
+						}
+					}
+
+					++$line;
+
+				} catch (Exception $e) {
+					self::writeToFile($resultLog, $e->getMessage() . "Ошибка на строке {$line}\n c данными: " . print_r($data, true));
+				}
+			}
+
+			self::writeToFile($resultLog, "Прочитано в '{$filename}' - {$line} строк, из них с ошибками {$errors}");
+		}
+
+		#@@@ Запись в конец файла:
+		public static function writeToFile($file, $content)
+		{
+			$resWrite = file_put_contents($file, $content, FILE_APPEND);
+
+			if (!$resWrite) die("Ошибка записи в файл: {$file}");
+		}
+
+		#@@@ Запись в CSV файл:
+		public static function writeOnCSV($filename, $data)
+		{
+			$csvFile = new SplFileObject($filename, 'a');
+
+			return $csvFile->fputcsv($data, ';');
+		}
+
+		#@@@ Создание пустого файла:
+		public static function createEmptyTxtFile($path)
+		{
+			file_put_contents($path, '');
+		}
+
+		#@@@ Создание файлов для лога:
+		public static function createLogBlock()
+		{
+			$currDate = date('m-d-y-H:i:s');
+			$parentDir = dirname(__DIR__);
+			$folderLog = "{$parentDir}/Log/";
+			$fileLog = "{$folderLog}{$currDate}.txt";
+
+			if (!file_exists("{$parentDir}/Log/")) {
+				mkdir($folderLog);
+			}
+
+			if (!file_exists($fileLog)) {
+				self::createEmptyTxtFile($fileLog);
+			}
+
+			return $fileLog;
 		}
 	}
 	
+
+    class URN 
+    {
+    	#@@@ Возвращает текущий URN:
+    	public function getCurrURN($url, $urn)
+    	{
+    		$uri = "{$url}{$urn}";
+    		$headers = get_headers($uri, 1);
+    		
+    		if ($headers[0] == "HTTP/1.1 404 Not Found") {
+    			return '404 Not Found';
+    		} elseif ($headers[0] == "HTTP/1.1 301 Moved Permanently") {
+    			$location = $headers['Location'];
+    			$newURN = !is_array($location) ? $location : $location[1];
+    			$urn = str_replace($url, '', $newURN);
+    		}
+    		
+    		return $urn;
+    	}
+    	
+    	#@@@ Запись в CSV URN сайта:
+    	public function writeRedirectAnd404($data)
+    	{
+    	    $url = 'https://www.dveri-md.ru/';
+    	    $result = 'success';
+    	    $csvFile = 'getLinks.csv';
+      	    $checkURN = $data[0];
+      	    
+    		$currURN = getCurrURN($url, $checkURN);
+    		
+    		if ($checkURN != $currURN) {
+    		    $isWritten = ContentManager::writeOnCSV($csvFile, [$checkURN, $currURN]);
+    		    
+    		    if (!$isWritten) {
+    		        $result = 'error';
+    		    }
+    		}
+    		
+    		return ['result' => $result];
+    	}        
+    }
 	
-	#@@@ Парсер с callback-функцией:
-	function parseCSV($filename, $func)
+	
+	#@@@ Работа с PDO:
+	class DMLManager
 	{
-		$resultLog = __DIR__ . "/resLog.txt";
-		$line = 1;
-		$errors = 0;
-		
-		if (!file_exists($filename)) {
-			die("Файл не существует: {$filename}<br>");
-		}
-		
-		$csvFile = new SplFileObject($filename);
-		
-		while (!$csvFile->eof()) {
+		public static function getConnection()
+		{
+			$options = [
+				\PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION,
+				\PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_ASSOC,
+				\PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES cp1251'
+			];
+
 			try {
-				if ($line > 1) {
-					$data = $csvFile->fgetcsv(';');
-					
-					if (!$func($data)) {
-						++$errors;
-						writeToFile($resultLog, "Ошибка на строке {$line}\n");
-					}
-				}
-				
-				++$line;
-			} catch (Exception $e) {
-				writeToFile($resultLog, $e->getMessage() . "Ошибка на строке {$line}\n c данными: " . print_r($data, true));
+				return new \PDO('mysql:host=localhost;dbname=mir-door.ru', 'mir-door.ru', '0lD0OgAiQJt8cbZq', $options);
+			} catch (\PDOException $e) {
+				die('Error connecting to the database: ' . $e->getMessage());
 			}
 		}
-		
-		writeToFile($resultLog, "Прочитано в '{$filename}' - {$line} строк, из них с ошибками {$errors}");
-	}
-	
-	
-	#@@@ Запись в CSV файл:
-	function writeOnCSV($filename, $data)
-	{
-		$csvFile = new SplFileObject($filename, 'a');
-		return $csvFile->fputcsv($data, ';');
-	}
-	
-	
-	#@@@ Возвращает текущий URN:
-	function getCurrURN($url, $urn)
-	{
-		$uri = "{$url}{$urn}";
-		$headers = get_headers($uri, 1);
-		
-		if ($headers[0] == "HTTP/1.1 404 Not Found") {
-			return '404 Not Found';
-		} elseif ($headers[0] == "HTTP/1.1 301 Moved Permanently") {
-			$location = $headers['Location'];
-			$newURN = !is_array($location) ? $location : $location[1];
-			$urn = str_replace($url, '', $newURN);
+
+		public static function query($sql)
+		{
+			return self::getConnection()->query($sql);
 		}
-		
-		return $urn;
-	}
-	
-	#@@@ Запись в конец файла:
-	function writeToFile($file, $content)
-	{
-		$resWrite = file_put_contents($file, $content, FILE_APPEND);
-		
-		if (!$resWrite) die("Ошибка записи в файл: {$file}");
-	}
-	
-	#@@@ Запись в CSV URN сайта:
-	function writeRedirectsAnd404($data)
-	{
-		$checkURN = $data[0];
-		$currURN = getCurrURN('http://www.yandex.ru', $checkURN);
-		
-		return $checkURN == $currURN ? true : writeOnCSV('getLinks.csv', [$checkURN, $currURN]);
+
+		public static function one($sql)
+		{
+			return self::getConnection()->query($sql)->fetchColumn();
+		}
+
+		public static function insert($table, $fields, $values)
+		{
+			$pdo = self::getConnection();
+			$fieldsList = implode(', ', $fields);
+			$placeholders = implode(', ', array_fill(0, count($values), '?'));
+			$sql = "INSERT INTO {$table} ({$fieldsList}) VALUES ({$placeholders})";
+			$stmt = $pdo->prepare($sql);
+			$stmt->execute($values);
+
+			if (!$stmt)
+				return false;
+
+			return $pdo->lastInsertId();
+		}
+
+		public static function update($table, $id, $fields, $values)
+		{
+			$fieldsData = array_map(function($v) {return "$v=?";}, $fields);
+			$fields = implode(', ', $fieldsData);
+			$sql = "UPDATE {$table} SET {$fieldsData} WHERE id={$id}";
+			$stmt = self::getConnection()->prepare($sql);
+			$stmt->execute($values);
+
+			if (!$stmt)
+				return false;
+
+			return $stmt->rowCount() == 1;
+		}
 	}
 	
 	
