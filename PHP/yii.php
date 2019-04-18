@@ -2,6 +2,52 @@
 // УСТАНОВКА
 $ composer create-project yiisoft/yii2-app-basic treasure 2.0.10 // treasure название проекта
 
+/**
+ * В корне создаем .htaccess c перенаправлением в папку /web:
+ * В /web создаем .htaccess:
+ * в /config/web.php:
+   * для ЧПУ раскоментировать в /config/web.php ключ 'urlManager'
+   * для удаления из URL web, в ключе 'request' добавить 'baseUrl' => ''
+   * задать дефолтный контроллер/экшн для главной: + 'defaultRoute' => 'site/index'
+ */
+
+// file: /.htaccess:
+?>
+Options +FollowSymLinks
+IndexIgnore */*
+RewriteEngine On
+
+RewriteCond %{REQUEST_URI} !^/(web)
+RewriteRule ^assets/(.*)$ /web/assets/$1 [L]
+RewriteRule ^css/(.*)$ web/css/$1 [L]
+RewriteRule ^js/(.*)$ web/js/$1 [L]
+RewriteRule ^images/(.*)$ web/images/$1 [L]
+RewriteRule (.*) /web/$1
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule . /web/index.php
+
+<?
+// file: /web/.htaccess:
+?>
+RewriteBase /
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule . index.php
+
+
+<?
+// file: /config/web.php раскоментировать строку:
+'urlManager' => [
+    'enablePrettyUrl' => true,
+    'showScriptName' => false, // не показывать /index.php?r=...
+    'rules' => [
+        '' => 'site/index',
+        '<action>' => 'catalog/<action>',
+        '<controller:\w+>/<action:\w+>/' => '<controller>/<action>',
+    ],
+],
 
 /* В СЛУЧАЕ ОШИБКИ invalid Configuration -yii\base\InvalidConfigException:
  * file: config/web.php находим строку:
@@ -22,7 +68,7 @@ $ composer create-project yiisoft/yii2-app-basic treasure 2.0.10 // treasure н�
  */
 class SiteController extends Controller
 {
-    // code // code ...
+    // code
     public function actionHelloWorld()
     {
         return 'Hello, world';
@@ -46,14 +92,11 @@ class SiteController extends Controller
 <h1>Hello, world</h1>
 
 
-
 /* url /site/hello - здесь site - controller, hello - action в этом controller
  * Имя controller задается так: названиеController
  * Имя action задается так: actionНазвание, в случае нескольких слов использовать CamelCase.
  * По умолчанию отрабатывает actionIndex
  */
-
-
 
 /** При переходе на /my/index (или /my/) вывести '<h1>Hello, {$user}</h1> c именами' в текущем шаблоне:
  * folder: /controllers/ создаем файл MyController.php:
@@ -106,11 +149,11 @@ class UserController extends Controller
     }
 }
 
-// folder: /views/ создаем папку admin с папкой user, а в ней файл index.php:
-<h1>Admin Zone</h1>
+// folder: /views/ создаем папку admin с папкой user, а в ней файл index.php: ?>
+<h1>ADMIN</h1>
 
 
-
+<?
 /* Класс для debug
  * folder: /controllers/ создаем файл AppController.php:
  */
@@ -190,7 +233,7 @@ use app\assets\AppAsset; // класс со стилями/скриптами/з
 use yii\helpers\Html; // класс для генерации html тегов
 
 AppAsset::register($this); // регистрация объекта AppAsset
-
+?>
 
 <?php $this->beginPage();?>
 <!DOCTYPE html>
@@ -224,9 +267,9 @@ AppAsset::register($this); // регистрация объекта AppAsset
     <?php $this->endBody() ?>
 </body>
 </html>
-<?php $this->endPage();?><?
+<?php $this->endPage();?>
 
-
+<?
 // file: /config/web:
 $config = [
     // code ...
@@ -542,7 +585,7 @@ class TestForm extends ActiveRecord
 {
     // при использовании ActiveRecord в отличие от Model, объявлять свойства с полями не нужно
     
-    public static tableName()
+    public static function tableName()
     {
         return 'posts';
     }
@@ -724,42 +767,7 @@ $ composer require --prefer-dist yiisoft/yii2-jui
 
 
 
-// ### СОЗДАНИЕ ЧПУ ###:
 
-// file: /.htaccess:
-Options +FollowSymLinks
-IndexIgnore */*
-RewriteEngine On
-
-RewriteCond %{REQUEST_URI} !^/(web)
-RewriteRule ^assets/(.*)$ /web/assets/$1 [L]
-RewriteRule ^css/(.*)$ web/css/$1 [L]
-RewriteRule ^js/(.*)$ web/js/$1 [L]
-RewriteRule ^images/(.*)$ web/images/$1 [L]
-RewriteRule (.*) /web/$1
-
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule . /web/index.php
-
-
-// file: /web/.htaccess:
-RewriteBase /
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule . index.php
-
-
-
-*/// file: /config/web.php раскоментировать строку:
-'urlManager' => [
-    'enablePrettyUrl' => true,
-    'showScriptName' => false, // не показывать /index.php?r=...
-    'rules' => [
-        '' => 'site/index',
-        '<controller:\w+>/<action:\w+>/' => '<controller>/<action>',
-    ],
-],
 
 
 

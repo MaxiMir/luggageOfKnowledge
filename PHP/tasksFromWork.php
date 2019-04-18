@@ -260,7 +260,6 @@
 			return $fileLog;
 		}
 	}
-	
 
     class URN 
     {
