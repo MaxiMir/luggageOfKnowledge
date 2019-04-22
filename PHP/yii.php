@@ -2,14 +2,21 @@
 // УСТАНОВКА
 $ composer create - project yiisoft / yii2 - app - basic treasure 2.0.10 // treasure название проекта
 
-/**
- * В корне создаем .htaccess c перенаправлением в папку /web:
- * В /web создаем .htaccess:
- * в /config/web.php:
- * для ЧПУ раскоментировать в /config/web.php ключ 'urlManager'
- * для удаления из URL web, в ключе 'request' добавить 'baseUrl' => ''
- * задать дефолтный контроллер/экшн для главной: + 'defaultRoute' => 'site/index', аналогично можно задать и для модуля
+/* В СЛУЧАЕ ОШИБКИ invalid Configuration -yii\base\InvalidConfigException:
+ * file: config/web.php находим строку:
+ * 'cookieValidationKey' => '',
+ * и в '' прописываем любой набор символов
  */
+
+
+/** @ РЕДИРЕКТ
+  * В корне создаем .htaccess c перенаправлением в папку /web:
+  * В /web создаем .htaccess:
+  * в /config/web.php:
+  * для ЧПУ раскоментировать в /config/web.php ключ 'urlManager'
+  * для удаления из URL web, в ключе 'request' добавить 'baseUrl' => ''
+  * задать дефолтный контроллер/экшн для главной: + 'defaultRoute' => 'site/index', аналогично можно задать и для модуля
+  */
 
 // file: /.htaccess:
 ?>
@@ -52,26 +59,24 @@ RewriteRule . /web/index.php
     ],
 ],
 
-/* В СЛУЧАЕ ОШИБКИ invalid Configuration -yii\base\InvalidConfigException:
- * file: config/web.php находим строку:
- * 'cookieValidationKey' => '',
- * и в '' прописываем любой набор символов
- */
 
 
-/* folder: /views/layouts/ - папка с шаблонами
- * folder: /views/site/ - папка со всеми views контроллера (здесь - SiteController),
- * именование папок - в нижнем регистре
- * folder: /views/site/about.php - вид контроллера actionAbout
- */
+/** @ СТРУКТУРА
+  * folder: /views/layouts/ - папка с шаблонами
+  * folder: /views/site/ - папка со всеми views контроллера (здесь - SiteController),
+  * folder: /views/site/about.php - вид контроллера actionAbout
+  * folder: /assets/AppAsset.php - класс для поключения файлов стилей/скриптов и их зависимостей
+  */
 
 
-/** При переходе на /site/helloworld вывести строку "Hello, world":
- * file: /controllers/SiteController.php:
- */
+/** @ ЗАДАЧА:
+  * При переходе на /site/helloworld вывести строку "Hello, world":
+  * file: /controllers/SiteController.php:
+  */
+
 class SiteController extends Controller
 {
-    // code
+    // ... code
     public function actionHelloWorld()
     {
         return 'Hello, world';
@@ -79,12 +84,13 @@ class SiteController extends Controller
 }
 
 
-/** При переходе на /site/hello вывести строку "<h1>Hello, world</h1>" в текущем шаблоне:
- * file: /controllers/SiteController.php:
- */
+/** @ ЗАДАЧА:
+  * При переходе на /site/hello вывести строку "<h1>Hello, world</h1>" в текущем шаблоне:
+  * file: /controllers/SiteController.php:
+  */
 class SiteController extends Controller
 {
-    // code ...
+    // ... code
     public function actionHello() // Hello - название action
     {
         return $this->render('hello'); // в () передаем название необходимого view
@@ -102,9 +108,12 @@ class SiteController extends Controller
  * По умолчанию отрабатывает actionIndex
  */
 
-/** При переходе на /my/index (или /my/) вывести '<h1>Hello, {$user}</h1> c именами' в текущем шаблоне:
- * folder: /controllers/ создаем файл MyController.php:
- */
+
+
+/** @ ЗАДАЧА:
+  * При переходе на /my/index&id=7 (или /my/) вывести '<h1>Hello, {$user}</h1>' c именами в текущем шаблоне:
+  * folder: /controllers/ создаем файл MyController.php:
+  */
 
 namespace app\controllers;
 
@@ -112,12 +121,11 @@ use yii\web\Controller;
 
 class MyController extends Controller
 {
-    public function actionIndex($id = 'guest') // $id <-> $_GET['id'].
+    public function actionIndex($id = null) // $id <-> $_GET['id'].
     {
         $hello = 'Hello, ';
         $names = ['Max', 'Andrew', 'Nick'];
-        return $this->render('index', compact('hello', 'names',
-           'id')); // передаем в шаблон переменные (cоздает массив, содержащий названия переменных и их значения).
+        return $this->render('index', compact('hello', 'names', 'id')); // передаем в шаблон переменные (cоздает массив, содержащий названия переменных и их значения).
         // compact('hello', 'names') <-> ['hello' => $hello, 'names' => $names]
     }
     
@@ -139,9 +147,10 @@ foreach ($names as $name) {
 
 
 
-/** При переходе на /admin/my/index вывести 'ADMIN' в текущем шаблоне
- * folder: /controllers/ создаем папку admin c файлом UserController.php:
- */
+/** @ ЗАДАЧА:
+  * При переходе на /admin/my/index вывести 'ADMIN' в текущем шаблоне
+  * folder: /controllers/ создаем папку admin c файлом UserController.php:
+  */
 namespace app\controllers\admin;
 
 use yii\web\Controller;
@@ -156,13 +165,15 @@ class UserController extends Controller
 
 // folder: /views/ создаем папку admin с папкой user, а в ней файл index.php:
 ?>
-    <h1>ADMIN</h1>
+<h1>ADMIN</h1>
+
+
 
 
 <?
-/* Класс для debug
- * folder: /controllers/ создаем файл AppController.php:
- */
+/** @ МЕТОД ДЛЯ debug
+  * folder: /controllers/ создаем файл AppController.php:
+  */
 namespace app\controllers;
 
 use yii\web\Controller;
@@ -175,11 +186,6 @@ class AppController extends Controller
     }
 }
 
-function debug($arr) // функция для использования в views
-{
-    echo '<pre>' . print_r($arr, true) . '</pre>';
-}
-
 
 /* Созданные контроллеры будут наследовать не Controller, AppController
  * Создаем файл PostController:
@@ -190,7 +196,7 @@ use Yii;
 
 class PostController extends AppController
 {
-    public function actionTest()
+    public function actionTestTest() // url вида post/test-test
     {
         $this->debug(Yii::$app); // использование функции для debug внутри класса
         return $this->render('test');
@@ -198,62 +204,28 @@ class PostController extends AppController
 }
 
 
-// folder: /views/ создаем папку post c файлом test:
-<?
-    use yii\widgets\ActiveForm;
-    use yii\helpers\Html;
-?>
 
-    <h1>Test Action</h1>
-    
-    <?php if (Yii:$app->session->hasFlash('success')): // если есть flash сообщение ?>
-    <div class="alert alert-success" role="alert">
-        <?= Yii:$app->session->getFlash('success') // выводим его ?>
-    </div>
-<?php endif; ?>
-
-<?php if (Yii:$app->session->hasFlash('error')): ?>
-    <div class="alert alert-danger" role="alert">
-        <?= Yii:$app->session->getFlash('error') ?>
-    </div>
-<?php endif; ?>
-
-<?php
-    $form = ActiveForm::begin(['options'] => ['id' => 'Tform']); // ActiveForm - виджет - объявление начала создания формы.
-    // В options добавляем id форме
-    $form->field($model, 'name')->label('Имя'); // настройка поля формы (изменение label (2 способ))
-    $form->field($model, 'email')->input('email');
-    $form->field($model, 'password')->passwordInput(); // <-> input('password');
-    $form->field($model, 'text')->label('Текст сообщения')->textarea(['rows' => 5]); // настройка поля формы (изменение label и типа на textarea)
-    Html::submitButton('Отправить', ['class' => 'btn btn-success']); // создание кнопки
-    $form = ActiveForm::end();
-
-    \app\controllers\debug(Yii::$app); // использование функции для debug. Объект Yii доступен без ипортирования. 2-й вариант создать файл functions.php в корне, разместить в нем код debug и подключить этот в файл в /web/index.php через require
-
-
-
-/** Создание собственного шаблона
- * folder: /views/layouts/ создаем файл basic.php
- */
+/** @ СОЗДАНИЕ СОБСТВЕННОГО ШАБЛОНА
+  * folder: /views/layouts/ создаем файл basic.php
+  */
 use app\assets\AppAsset; // класс со стилями/скриптами/зависимостями
 use yii\helpers\Html; // класс для генерации html тегов
 
 AppAsset::register($this); // регистрация объекта AppAsset
 ?>
 
-<?php $this->beginPage();?>
+<?php $this->beginPage(); ?>
     <!DOCTYPE html>
-<html lang="<?= Yii::$app->language ?>"> // Динамическое изменение языка
+<html lang="<?= Yii::$app->language ?>"> <!-- Динамическое изменение языка-->
     <head>
         <meta charset="<?= Yii::$app->charset ?>">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <?= Html::csrfMetaTags() // класс для генерации токенов, позволяет принимать POST запросы  ?>
         <title><?= Html::encode($this->title) // Html::encode - экранирование символов  ?></title>
-        <?php $this->head() // подключение скриптов
-        ?>
+        <?php $this->head() // подключение скриптов ?>
     </head>
 <body>
-    <?php $this->beginBody() ?>
+    <?php $this->beginBody(); ?>
 
     <div class="wrap">
         <div class="container">
@@ -266,66 +238,127 @@ AppAsset::register($this); // регистрация объекта AppAsset
     </div>
     
     <?php if (isset($this->blocks['head-block'])) {
-    echo $this->blocks['head-block']; // выводим блок из view *1*. !Выведется только для post/show
+    	echo $this->blocks['head-block']; // выводим блок из view *1*. !Выведется только для post/show
     ?>
     
-    <?= $content ?> // в $content содержится контент страницы
+    <?= $content ?> <!-- в $content содержится контент страницы -->
     
-    <?php $this->endBody() ?>
+    <?php $this->endBody(); ?>
     </body>
     </html>
     <?php $this->endPage(); ?>
+
     
-    <?
+<?
 // file: /config/web:
-    $config = [
-        // code ...
-       'layout' => 'basic' // изменение шаблона всего сайта на 'basic'
-        // code ...
+$config = [
+    // ... code 
+   'layout' => 'basic' // изменение шаблона всего сайта на 'basic'
+   'language' => 'ru', // добавляем строку, для изменения текста подсказок на русском + атрибут lang в head
+    // ... code 
+];
+
+
+
+/** @ ФОРМА 
+ * Форма не работает с БД - расширяем класс Modal. Название файла - ИмяформыForm.php
+ * Форма работает с БД - расширяем класс ActiveRecord
+ * folder: /models создаем файл TestForm.php:
+ */
+
+namespace app\models;
+
+use yii\base\Model;
+
+class TestForm extends Model
+{
+    public $name;
+    public $email;
+    public $password;
+    public $text;
+    
+    public function attributeLabels() // изменить label (1 способ)
+    {
+        return [
+           'name' => 'Имя',
+           'email' => 'Email',
+           'password' => 'Пароль'
+           'text' => 'Текст сообщения',
+    	];
+	}
+    
+    public function rules()
+    {
+        return [
+           [
+              ['name', 'email', 'password'], 'required', // обязательные поля
+              'message' => ' Поле обязательно'
+           ],
+            // изменение стандартного текста подсказок (срабатывает не для всех валидаторов)
+           ['email', 'email'],
+            // задать полю email тип email адреса
+           ['name', 'string', 'min' => 2, 'toShort' => 'Мало'],
+            // задаем полю тип строка с минимальной длиной в 2 символа. toShort - текст ошибки
+           ['name', 'string', 'max' => 5, 'toLong' => 'Много'],
+            // задаем полю тип строка с максимальной длиной в 5 символов. toLong - текст ошибки
+           ['name', 'string', 'legth' => [2, 5]],
+            // задание типа строки с длиной в одну строку
+           ['name', 'myRule'] // собственный валидатор
+           ['text', 'trim'] // после потери фокуса значение поля пропускают через trim
+        ['text', 'safe']  // валидатор данные будут доступны без проверки. Лучше использовать trim
     ];
+}
+    
+    public function myRule($attr) // описание собственного валидатора (валидация проходит на сервере)
+    {
+        if (!in_array($this->attr, ['USA', 'CHINA'])) {
+            $this->addError($attr, 'Wrong country!');
+        }
+    }
+}
+
 
 // file /controllers/PostController.php:
-    namespace app\controllers;
+namespace app\controllers;
+
+use app\models\Category;
+use Yii;
+use app\models\TestForm;
+
+class PostController extends AppController
+{
+    public $layout = 'basic'; // изменение шаблона для контроллера
     
-    use app\models\Category;
-    use Yii;
-    use app\models\TestForm;
-    
-    class PostController extends AppController
+    public function beforeAction($action) // метод выполняется до action
     {
-        public $layout = 'basic'; // изменение шаблона для action контроллера
-        
-        public function beforeAction($action) // метод выполняется до action
-        {
-            if ($action->id == 'index') {
-                $this->enableCsrfValidation = false; // отключаем csrf валидацию
-            }
-            
-            return parent::beforeAction($action);
+        if ($action->id == 'index') {
+            $this->enableCsrfValidation = false; // отключаем csrf валидацию
         }
         
-        public function actionIndex()
-        {
-            $this->title = 'Все статьи'; // задание title в контроллере (1 способ)
-            $this->layout = 'basic'; // изменение шаблона для определенного action
-            
-            if (Yii:$app->request->isAjax) { // пришли ли данные Ajax-ом
-                debug(Yii:$app->request->post()); // <-> $_POST
-            return 'test';
-        }
+        return parent::beforeAction($action);
+    }
     
-        $model = new TestForm(); // операции INSERT
+    public function actionIndex()
+    {
+        $this->title = 'Все статьи'; // задание title в контроллере (1 способ)
+        $this->layout = 'basic'; // изменение шаблона для определенного action
         
-        if ($model->load(Yii::$app->request->post())) {  // если данные POST успешно загружены
-            if ($model->validate()) { // и данные формы валидны
-                Yii::$app->session->setFlash('success',
-                   'Данные приняты'); // flash сообщения (данные после их запроса будут удалены из сессии)
-                return $this->refrash(); // метод перезапрашивает текущую страницу
-            } else {
-                Yii::$app->session->setFlash('error', 'Ошибка');
-            }
-        }
-        
+        if (Yii:$app->request->isAjax) { // пришли ли данные Ajax-ом
+            debug(Yii:$app->request->post()); // <-> $_POST
+        return 'test';
+    }
+
+    $model = new TestForm(); // операции INSERT
+    
+    if ($model->load(Yii::$app->request->post())) {  // если данные POST успешно загружены
+	        if ($model->validate()) { // и данные формы валидны
+	            Yii::$app->session->setFlash('success', 'Данные приняты'); // flash сообщения (данные после их запроса будут удалены из сессии)
+	            return $this->refrash(); // метод перезапрашивает текущую страницу
+	        } else {
+	            Yii::$app->session->setFlash('error', 'Ошибка');
+	        }
+    	}
+    
         return $this->render('test', compact('model')); // объект формы передаем во view
     }
     
@@ -361,19 +394,21 @@ AppAsset::register($this); // регистрация объекта AppAsset
 }
 
 // folder: /views/post создаем show.php:
-    <?
-    $this->title = 'Одна статья'; // задание title в views (2 способ)
-    ?>
-        
-        <? $this->beginBlock('head-block'): // создаем блок *1* ?>
-        <h1>Заголовок страницы</h1>
-        <? $this->endBlock(); ?>
+$this->title = 'Одна статья'; // задание title в views (2 способ)
+?>
 
-        <h1>Show Action</h1>
-        <button>Click</button>
+<!-- создаем блок (после этого можно вывести в шаблоне, например, basic.php) *1* -->        
+<? $this->beginBlock('head-block'): ?> 
+	
+	<h1>Заголовок страницы</h1>
+<? $this->endBlock(); ?>
+
+<h1>Show Action</h1>
+<button>Click</button>
         
-        
-        <? // запрос *3* при ленивой загрузке:
+  
+
+<? // запрос *3* при ленивой загрузке:
 debug($cats); // До *2*: свойства products нет
 count($cats->products); // *2* ориентируется на название getProducts в модели Products. вернет кол-во продуктов c parent = 684.
 debug($cats); // После *2*: свойство products содержит массивы с продуктами
@@ -396,10 +431,69 @@ foreach ($cats as $cat) { // перебираем в цикле данные и�
 // при этом подходе в примере было 6 запросов к БД
 
 
-$this->registerJsFile('@web/js/jQueryHandler.js', ['depends' => 'yii\web\YiiAsset']); // регистрация файла - подключаем файл, с указанием зависимостей (подключится после подключения библиотеки jQuery). Так же можно задать position места подключения кода.
+// folder: /views/ создаем папку post c файлом test:
+
+use yii\widgets\ActiveForm;
+use yii\helpers\Html;
+?>
+
+<h1>Test Action</h1>
+
+<?php if (Yii:$app->session->hasFlash('success')): // если есть flash сообщение ?>
+<div class="alert alert-success" role="alert">
+    <?= Yii:$app->session->getFlash('success') // выводим его ?>
+</div>
+<?php endif; ?>
+
+<?php if (Yii:$app->session->hasFlash('error')): ?>
+    <div class="alert alert-danger" role="alert">
+        <?= Yii:$app->session->getFlash('error') ?>
+    </div>
+<?php endif; ?>
+
+<?php
+    $form = ActiveForm::begin(['options'] => ['class' => 'forms', 'id' => 'Tform']); // ActiveForm - виджет - объявление начала создания формы. 
+    // В options добавляем id форме
+    $form->field($model, 'name')->label('Имя'); // настройка поля формы (изменение label (2 способ))
+    $form->field($model, 'email')->input('email');
+    $form->field($model, 'password')->passwordInput(); // <-> input type password $form->field($model, 'text')->label('Текст сообщения')->textarea(['rows' => 5]); // настройка поля формы (изменение label и типа на textarea)
+    Html::submitButton('Отправить', ['class' => 'btn btn-success']); // создание кнопки
+    $form = ActiveForm::end();
+
+
+
+
+/** @ ПОДКЛЮЧЕНИЕ ФАЙЛОВ СТИЛЕЙ,СКРИПТОВ И ЗАВИСИМОСТЕЙ
+  * file /assets/AppAsset.php:
+  */
+class AppAsset extends AssetBundle
+{
+    // code ...
+    public $css = [ // файл стилей
+       'css/site.css', // путь файла: web/css/site.css
+    ];
+    
+    public $js = [ // файл скриптов
+       'js/script.js',
+    ];
+    
+    public $jsOptions = [
+       'position' => \yii\web\View::POS_HEAD, // задать позицию скрипта на странице
+    ];
+    
+    public $depends = [ // файл зависимостей (для сооблюдения очередности подключения)
+       'yii\web\YiiAsset',
+       'yii\bootstrap\BootstrapPluginAsset',
+    ];
+}
+
+
+$this->registerJsFile('@web/js/jQueryHandler.js', ['depends' => 'yii\web\YiiAsset']); 
+// регистрация файла - подключаем файл, с указанием зависимостей (подключится после подключения библиотеки jQuery). Так же можно задать position места подключения кода.
 
 // 1 вариант:
-$this->registerJs("$('.container').append('<p>TEXT</p>');", \yii\web\View::POST_LOAD); // подключение блока кода <-> <script>// code ...</script> По умолч. используется POS_READY - код оборачивается в jQuery(document).ready(),  \yii\web\View::POST_LOAD - оборачивается в jQuery(window).load()
+$this->registerJs("$('.container').append('<p>TEXT</p>');", \yii\web\View::POST_LOAD); 
+// подключение блока кода <-> <script>// code ...</script> По умолч. используется POS_READY - код оборачивается в jQuery(document).ready(),  \yii\web\View::POST_LOAD - оборачивается в jQuery(window).load()
 
 // 2 вариант:
 $script = <<< JS
@@ -426,136 +520,48 @@ $this->registerСss('.container{background: //ccc; }'); // подлючение 
 
 
 
-// Подключение файлов стилей,скриптов и зависимостей в /assets/AppAsset.php:
-class AppAsset extends AssetBundle
+
+/** @ РАБОТА С БД
+  * Таблицы и поля именуются в нижнем регистре
+  * Слова в названиях разделяются символом подчеркивания (например, product_order)
+  * В именах таблиц используются либо единственное число, либо множественное, но не оба сразу.
+  * Рекомендуется использовать единственное число.
+  * Имена таблиц могут содержать префикс. Например, tbl_. Это особенно полезно, когда таблицы
+  * приложения находятся в БД, используемой одновременно др. приложениями.
+  */
+
+// file: /config/db.php:
+return [
+   'class' => 'yii\db\Connection',
+   'dsn' => 'mysql:host=localhost:dbname=yii2basic',
+   'username' => 'root',
+   'password' => '',
+   'charset' => 'utf8'
+];
+
+// folder: /models/ создаем файл Category.php:
+    
+namespace app\models;
+
+use yii\db\ActiveRecord;
+
+class Category extends ActiveRecord
 {
-    // code ...
-    public $css = [ // файл стилей
-       'css/site.css', // путь файла: web/css/site.css
-    ];
-    
-    public $js = [ // файл скриптов
-       'js/script.js',
-    ];
-    
-    public $jsOptions = [
-       'position' => \yii\web\View::POS_HEAD, // задать позицию скрипта на странице
-    ];
-    
-    public $depends = [ // файл зависимостей (для сооблюдения очередности подключения)
-       'yii\web\YiiAsset',
-       'yii\bootstrap\BootstrapPluginAsset',
-    ];
+    // Если мы называем модель по имени таблицы (только первая заглавная), то Yii автоматически свяжет модель с таблицей.
+    public static function tableName() // если имя модели не совпадает с названием таблицы
+    {
+        return 'categories';
+    }
 }
 
 
 
-// ФОРМА:
-    /* Форма не работает с БД - расширяем класс Modal. Название файла - ИмяформыForm.php
-     * Форма работает с БД - расширяем класс Active
-     * folder: /models создаем файл TestForm.php:
-     */
-    
-    namespace app\models;
-    
-    use yii\base\Model;
-    
-    class TestForm extends Model
-    {
-        public $name;
-        public $email;
-        public $password;
-        public $text;
-        
-        public function attributeLabels() // изменить label (1 способ)
-        {
-            return [
-               'name' => 'Имя',
-               'email' => 'Email',
-               'password' => 'Пароль'
-            'text' => 'Текст сообщения',
-        ]
-    }
-        
-        public function rules()
-        {
-            return [
-               [
-                  ['name', 'email', 'password'],
-                  'required', // обязательные поля
-                  'message' => ' Поле обязательно'
-               ],
-                // изменение стандартного текста подсказок (срабатывает не для всех валидаторов)
-               ['email', 'email'],
-                // задать полю email тип email адреса
-               ['name', 'string', 'min' => 2, 'toShort' => 'Мало'],
-                // задаем полю тип строка с минимальной длиной в 2 символа. toShort - текст ошибки
-               ['name', 'string', 'max' => 5, 'toLong' => 'Много'],
-                // задаем полю тип строка с максимальной длиной в 5 символов. toLong - текст ошибки
-               ['name', 'string', 'legth' => [2, 5]],
-                // задание типа строки с длиной в одну строку
-               ['name', 'myRule'] // собственный валидатор
-               ['text', 'trim'] // после потери фокуса значение поля пропускают через trim
-            ['text', 'safe']  // валидатор данные будут доступны без проверки. Лучше использовать trim
-        ];
-    }
-        
-        public function myRule($attr) // описание собственного валидатора (валидация проходит на сервере)
-        {
-            if (!in_array($this->attr, ['USA', 'CHINA'])) {
-                $this->addError($attr, 'Wrong country!');
-            }
-        }
-    }
+/** @ ОТЛОЖЕННАЯ И ЖАДНАЯ ЗАГРУЗКА ДАННЫХ
+  * folder: models создаем файл Product.php:
+  */
+namespace app\models;
 
-// file: config/web.php:
-    $config = [
-        // code ...
-       'language' => 'ru', // добавляем строку, для изменения текста подсказок на русском + атрибут lang в head
-    ];
-
-
-// РАБОТА С БД
-    
-    /*
-     * Таблицы и поля именуются в нижнем регистре
-     * Слова в названиях разделяются символом подчеркивания (например, product_order)
-     * В именах таблиц используются либо единственное число, либо множественное, но не оба сразу.
-     * Рекомендуется использовать единственное число.
-     * Имена таблиц могут содержать префикс. Например, tbl_. Это особенно полезно, когда таблицы
-     * приложения находятся в БД, используемой одновременно др. приложениями.
-     */
-
-// file: /config/db.php:
-    return [
-       'class' => 'yii\db\Connection',
-       'dsn' => 'mysql:host=localhost:dbname=yii2basic',
-       'username' => 'root',
-       'password' => '',
-       'charset' => 'utf8'
-    ];
-
-// folder: /models/ создаем файл Category.php:
-    
-    namespace app\models;
-    
-    use yii\db\ActiveRecord;
-    
-    class Category extends ActiveRecord
-    {
-        // Если мы называем модель по имени таблицы (только первая заглавная), то Yii автоматически свяжет модель с таблицей.
-        public static function tableName() // если имя модели не совпадает с названием таблицы
-        {
-            return 'categories';
-        }
-    }
-
-// ОТЛОЖЕННАЯ И ЖАДНАЯ ЗАГРУЗКА ДАННЫХ
-
-// folder: models создаем файл Product.php:
-    namespace app\models;
-    
-    use yii\db\ActiveRecord
+use yii\db\ActiveRecord
 
 class Product extends ActiveRecord
 {
@@ -566,10 +572,10 @@ class Product extends ActiveRecord
     
     public function getProducts()
     {
-        return $this->hasMany(Product::className(),
-           ['parent' => 'id']); // 1 параметр возвращает строку с именем класса,
-        // с которым связываем, 2-й параметр массив, где ключ поле связываемой таблицы (products),
-        //  а значением поле справочника, на которое мы ссылаемся (category)
+        return $this->hasMany(Product::className(), ['parent' => 'id']); 
+        // 1 параметр возвращает строку с именем класса, с которым связываем,
+        // 2-й параметр массив, где ключ поле связываемой таблицы (products),
+        // а значением поле справочника, на которое мы ссылаемся (category)
         // hasOne - связь один ко одному / hasMany - связь один ко многим
         // возвращает массив объектов
     }
@@ -579,13 +585,14 @@ class Product extends ActiveRecord
         return $this->hasOne(Category::className(), ['id' => 'parent']);
         // возвращает объект или null если ничего не найдено
     }
-    
 }
 
 
-// ЗАПИСЬ ДАННЫХ В БД
 
-// Создаем таблицу posts:
+/** @ ЗАПИСЬ ДАННЫХ В БД
+  * Создаем таблицу posts:
+  */
+ 
 CREATE TABLE `posts` (
     `id` int(10) unsigned NOT null AUTO_INCREMENT,
     `name` varchar(255) NOT null,
@@ -595,107 +602,105 @@ CREATE TABLE `posts` (
 ) ENGINE = InnoDB DEFAULT CHARSET = utf - 8;
 
 // file: models/TestForm.php изменяем:
-    namespace app\models;
-    
-    use yii\db\ActiveRecord;
-    
-    class TestForm extends ActiveRecord
-    {
-        // при использовании ActiveRecord в отличие от Model, объявлять свойства с полями не нужно
-        
-        public static function tableName()
-        {
-            return 'posts';
-        }
-        
-        public function attributeLabels() // изменить label (1 способ)
-        {
-            return [
-               'name' => 'Имя',
-               'email' => 'Email',
-               'password' => 'Пароль'
-            'text' => 'Текст сообщения',
-        ]
-    }
-        
-        public function rules()
-        {
-            return [
-               [['name', 'text', 'password'], 'required'],
-                // изменение стандартного текста подсказок (срабатывает не для всех валидаторов)
-               ['email', 'email'],
-                // задать полю email тип email адреса
-            ];
-        }
-    }
+namespace app\models;
 
-// file: controllers/PostController.php изменяем:
-    namespace app\controllers;
+use yii\db\ActiveRecord;
     
-    use app\models\Category;
-    use Yii;
-    use app\models\TestForm;
+class TestForm extends ActiveRecord
+{
+    // при использовании ActiveRecord в отличие от Model, объявлять свойства с полями не нужно
     
-    class PostController extends AppController
+    public static function tableName()
     {
-        public $layout = 'basic'; // изменение шаблона для action контроллера
-        
-        public function beforeAction($action) // метод выполняется до action
-        {
-            if ($action->id == 'index') {
-                $this->enableCsrfValidation = false; // отключаем csrf валидацию
-            }
-            
-            return parent::beforeAction($action);
-        }
-        
-        public function actionIndex()
-        {
-            $this->title = 'Все статьи'; // задание title в контроллере (1 способ)
-            $this->layout = 'basic'; // изменение шаблона для определенного action
-            
-            if (Yii:$app->request->isAjax)  // пришли ли данные Ajax-ом
-                debug(Yii:$app->request->post()); // <-> $_POST
-            return 'test';
-        }
-        
-        $model = new TestForm();
-        // 1: сохранение данных вручную:
-        $model->name = 'Автор';
-        $model->email = 'mail@mail.com';
-        $model->name = 'Текст сообщения';
-        $model->save(); // сохранение объекта в БД, по умолч. вызывает метод validate. save(false) - сохранение без валидации
-  
-        if ($model->load(Yii::$app->request->post())) {  // если данные POST успешно загружены
-            //2: сохранение данных из формы
-            if ($model->save()) { // и данные формы сохранены
-                Yii::$app->session->setFlash('success',
-                   'Данные сохранены'); // flash сообщения (данные после их запроса будут удалены из сессии)
-                return $this->refrash(); // метод перезапрашивает текущую страницу
-            } else {
-                Yii::$app->session->setFlash('error', 'Ошибка');
-            }
-        }
-    
-        return $this->render('test', compact('model')); // объект формы передаем во view
+        return 'posts';
     }
     
-    public function actionShow()
+    public function attributeLabels() // изменить label (1 способ)
     {
-        $this->title = 'Одна статья';
-        $this->view->registerMetaTag([ // задание мета тегов
-           'name' => 'keywords',
-           'content' => 'ключевики// code ...'
-        ]);
-        $this->view->registerMetaTag([
-           'name' => 'description',
-           'content' => 'описание страницы// code ...'
-        ]);
+        return [
+           'name' => 'Имя',
+           'email' => 'Email',
+           'password' => 'Пароль'
+    		'text' => 'Текст сообщения',
+    	];
+	}
     
-        $cats = Category::find()->with('products')->all();
-        return $this->render('show', compact('cats'));
+    public function rules()
+    {
+        return [
+           [['name', 'text', 'password'], 'required'],
+            // изменение стандартного текста подсказок (срабатывает не для всех валидаторов)
+           ['email', 'email'],
+            // задать полю email тип email адреса
+        ];
     }
 }
+
+// file: controllers/PostController.php изменяем:
+namespace app\controllers;
+
+use app\models\Category;
+use Yii;
+use app\models\TestForm;
+
+class PostController extends AppController
+{
+    public $layout = 'basic'; // изменение шаблона для action контроллера
+    
+    public function beforeAction($action) // метод выполняется до action
+    {
+        if ($action->id == 'index') {
+            $this->enableCsrfValidation = false; // отключаем csrf валидацию
+        }
+        
+        return parent::beforeAction($action);
+    }
+    
+    public function actionIndex()
+    {
+        $this->title = 'Все статьи'; // задание title в контроллере (1 способ)
+        $this->layout = 'basic'; // изменение шаблона для определенного action
+        
+	    $model = new TestForm();
+	    // 1: сохранение данных вручную:
+	    $model->name = 'Автор';
+	    $model->email = 'mail@mail.com';
+	    $model->name = 'Текст сообщения';
+	    $model->save(); // сохранение объекта в БД, по умолч. вызывает метод validate. save(false) - сохранение без валидации
+
+	    if ($model->load(Yii::$app->request->post())) {  // если данные POST успешно загружены
+	        //2: сохранение данных из формы
+	        if ($model->save()) { // и данные формы сохранены
+	            Yii::$app->session->setFlash('success',
+	               'Данные сохранены'); // flash сообщения (данные после их запроса будут удалены из сессии)
+	            return $this->refrash(); // метод перезапрашивает текущую страницу
+	        } else {
+	            Yii::$app->session->setFlash('error', 'Ошибка');
+	        }
+	    }
+
+    	return $this->render('test', compact('model')); // объект формы передаем во view
+	}
+
+	public function actionShow()
+	{
+	    $this->title = 'Одна статья';
+	    $this->view->registerMetaTag([ // задание мета тегов
+	       'name' => 'keywords',
+	       'content' => 'ключевики// code ...'
+	    ]);
+	    $this->view->registerMetaTag([
+	       'name' => 'description',
+	       'content' => 'описание страницы// code ...'
+	    ]);
+
+	    $cats = Category::find()->with('products')->all();
+	    return $this->render('show', compact('cats'));
+	    }
+	}
+}
+
+
 
 
 // ОБНОВЛЕНИЕ И УДАЛЕНИЕ ДАННЫХ ИЗ БД
