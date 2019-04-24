@@ -9,6 +9,7 @@ $ composer create - project yiisoft / yii2 - app - basic treasure 2.0.10 // trea
  */
 
 
+
 /** @ РЕДИРЕКТ
   * В корне создаем .htaccess c перенаправлением в папку /web:
   * В /web создаем .htaccess:
@@ -69,6 +70,7 @@ RewriteRule . /web/index.php
   */
 
 
+
 /** @ ЗАДАЧА:
   * При переходе на /site/helloworld вывести строку "Hello, world":
   * file: /controllers/SiteController.php:
@@ -82,6 +84,7 @@ class SiteController extends Controller
         return 'Hello, world';
     }
 }
+
 
 
 /** @ ЗАДАЧА:
@@ -169,7 +172,6 @@ class UserController extends Controller
 
 
 
-
 <?
 /** @ МЕТОД ДЛЯ debug
   * folder: /controllers/ создаем файл AppController.php:
@@ -185,6 +187,7 @@ class AppController extends Controller
         echo '<pre>' . print_r($arr, true) . '</pre>';
     }
 }
+
 
 
 /* Созданные контроллеры будут наследовать не Controller, AppController
@@ -277,7 +280,7 @@ class TestForm extends Model
     public $password;
     public $text;
     
-    public function attributeLabels() // изменить label (1 способ)
+    public function attributeLabels() // изменить label (1 способ) наиболее удобный
     {
         return [
            'name' => 'Имя',
@@ -290,24 +293,19 @@ class TestForm extends Model
     public function rules()
     {
         return [
-           [
-              ['name', 'email', 'password'], 'required', // обязательные поля
-              'message' => ' Поле обязательно'
-           ],
-            // изменение стандартного текста подсказок (срабатывает не для всех валидаторов)
-           ['email', 'email'],
-            // задать полю email тип email адреса
-           ['name', 'string', 'min' => 2, 'toShort' => 'Мало'],
-            // задаем полю тип строка с минимальной длиной в 2 символа. toShort - текст ошибки
-           ['name', 'string', 'max' => 5, 'toLong' => 'Много'],
-            // задаем полю тип строка с максимальной длиной в 5 символов. toLong - текст ошибки
-           ['name', 'string', 'legth' => [2, 5]],
-            // задание типа строки с длиной в одну строку
-           ['name', 'myRule'] // собственный валидатор
-           ['text', 'trim'] // после потери фокуса значение поля пропускают через trim
-        ['text', 'safe']  // валидатор данные будут доступны без проверки. Лучше использовать trim
-    ];
-}
+			[
+			  ['name', 'email', 'password'], 'required', // обязательные поля
+			  'message' => ' Поле обязательно' // изменение стандартного текста подсказок (срабатывает не для всех валидаторов)
+			],
+           	['email', 'email'], // задать полю email тип email адреса
+           	['name', 'string', 'min' => 2, 'toShort' => 'Мало'], // задаем полю тип строка с минимальной длиной в 2 символа. toShort - текст ошибки
+           	['name', 'string', 'max' => 5, 'toLong' => 'Много'], // задаем полю тип строка с максимальной длиной в 5 символов. toLong - текст ошибки
+           	['name', 'string', 'legth' => [2, 5]], // задание типа строки с длиной в одну строку
+           	['name', 'myRule'], // собственный валидатор, должен иметь уник. название
+           	['text', 'trim'], // после потери фокуса значение поля пропускают через trim
+    		['text', 'safe'] // валидатор данные будут доступны без проверки. Лучше использовать trim
+    	];
+	}
     
     public function myRule($attr) // описание собственного валидатора (валидация проходит на сервере)
     {
@@ -351,11 +349,11 @@ class PostController extends AppController
     $model = new TestForm(); // операции INSERT
     
     if ($model->load(Yii::$app->request->post())) {  // если данные POST успешно загружены
-	        if ($model->validate()) { // и данные формы валидны
-	            Yii::$app->session->setFlash('success', 'Данные приняты'); // flash сообщения (данные после их запроса будут удалены из сессии)
-	            return $this->refrash(); // метод перезапрашивает текущую страницу
+	        if (!$model->validate()) { // и данные формы не валидны
+	        	Yii::$app->session->setFlash('error', 'Ошибка'); // flash сообщения (данные после их запроса будут удалены из сессии)
 	        } else {
-	            Yii::$app->session->setFlash('error', 'Ошибка');
+	            Yii::$app->session->setFlash('success', 'Данные приняты'); 
+	            return $this->refrash(); // метод перезапрашивает текущую страницу
 	        }
     	}
     
@@ -483,7 +481,7 @@ class AppAsset extends AssetBundle
     
     public $depends = [ // файл зависимостей (для сооблюдения очередности подключения)
        'yii\web\YiiAsset',
-       'yii\bootstrap\BootstrapPluginAsset',
+       'yii\bootstrap\BootstrapPluginAsset', // подключение css и js файлов от bootstrap
     ];
 }
 
