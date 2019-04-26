@@ -202,6 +202,7 @@ class PostController extends AppController
     public function actionTestTest() // url вида post/test-test
     {
         $this->debug(Yii::$app); // использование функции для debug внутри класса
+        
         return $this->render('test');
     }
 }
@@ -256,8 +257,8 @@ AppAsset::register($this); // регистрация объекта AppAsset
 // file: /config/web:
 $config = [
     // ... code 
-   'layout' => 'basic' // изменение шаблона всего сайта на 'basic'
-   'language' => 'ru', // добавляем строку, для изменения текста подсказок на русском + атрибут lang в head
+   'layout' => 'basic', // изменение шаблона всего сайта на 'basic'
+   'language' => 'ru' // добавляем строку, для изменения текста подсказок на русском + атрибут lang в head
     // ... code 
 ];
 
@@ -285,8 +286,8 @@ class TestForm extends Model
         return [
            'name' => 'Имя',
            'email' => 'Email',
-           'password' => 'Пароль'
-           'text' => 'Текст сообщения',
+           'password' => 'Пароль',
+           'text' => 'Текст сообщения'
     	];
 	}
     
@@ -372,20 +373,27 @@ class PostController extends AppController
            'content' => 'описание страницы// code ...'
         ]);
     
-        $cats = Category::find()->orderBy('id' => SORT_DESC)->all(); // Category - модель, find()->all() <-> выполнение запроса 'SELECT * FROM Category ORDER BY id DESC'
-        $cats = Category::find()->asArray()->where('parent=691')->limit(1)->all(); // asArray - вытаскивает данные в формате массива. (Вместо $cat->title будет $cat['title'])
-        // one() - одномерный массив с одной записью. Рекомендуется перед ним добавлять limit(1)
-        // where['parent' => 691] 2 вариант, limit(2) - первые 2 попавшиеся записи
-        // count() - количество выбраннных записей
+        $cats = Category::find()->orderBy(['id' => SORT_DESC])->all(); // Category - модель, find()->all() <->
+        // выполнение запроса 'SELECT * FROM Category ORDER BY id DESC'
+        $cats = Category::find()->asArray()->where('parent=691')->limit(1)->all(); // asArray - вытаскивает данные в
+        // формате массива (работает быстрее) . Вместо $cat->title будет $cat['title']
+        // where(['parent' => 691]) 2 вариант записи.
+        // where(['like', 'title', 'pp']) записи, которые содержат pp
+        // where(['<=', 'id', 695]) записи с id <= 695
+        // limit(2) - первые 2 попавшиеся записи.
+        // count() - количество выбраннных записей.
         // findOne(['parent' => 691]) - возвращает 1 объект с записью. По умолч. ищет по первичному ключу
         // findAll(['parent' => 691]) - возвращает массив объектов записей
+        // one() - одномерный массив с одной записью. Рекомендуется перед ним добавлять limit(1)
         
-        $query = "SELECT * FROM categories WHERE title LIKE :search"; // от SQL инъекций
+        $query = "SELECT * FROM categories WHERE title LIKE :search"; // :search от SQL инъекций
         $cats = Category::findBySql($query, [':search' => '%pp%'])->all(); // findBySql - метод для выполнения SQL запроса
         
         $cats = Category::findOne(694); // отложенная загрузка *3*. Использование: 1-3 объекта без использование связей
-    
-        $cats = Category::find()->with('products')->all(); // *4* с with - жадная загрузка, объединение с products
+        $cats = Category::find()->all(); // отложенная загрузка
+        
+        $cats = Category::find()->with('products')->all(); // *4* с with - жадная загрузка, объединение с products.
+        // Испольщование массив объектов
         
         return $this->render('show', compact('cats'));
     }
@@ -396,8 +404,7 @@ $this->title = 'Одна статья'; // задание title в views (2 сп
 ?>
 
 <!-- создаем блок (после этого можно вывести в шаблоне, например, basic.php) *1* -->        
-<? $this->beginBlock('head-block'): ?> 
-	
+<? $this->beginBlock('head-block'): ?>
 	<h1>Заголовок страницы</h1>
 <? $this->endBlock(); ?>
 
@@ -568,7 +575,7 @@ class Product extends ActiveRecord
         return 'products';
     }
     
-    public function getProducts()
+    public function getProduct() // приставка get обязательна, остальное должно совпадать с названием таблицы
     {
         return $this->hasMany(Product::className(), ['parent' => 'id']); 
         // 1 параметр возвращает строку с именем класса, с которым связываем,
@@ -578,9 +585,10 @@ class Product extends ActiveRecord
         // возвращает массив объектов
     }
     
-    public function getCategories() // 1 продукту соотвествует 1 категория -> hasOne
+    /* Тогда в модели Products метод был бы таким: */
+    public function getCategories()
     {
-        return $this->hasOne(Category::className(), ['id' => 'parent']);
+        return $this->hasOne(Category::className(), ['id' => 'parent']); // 1 продукту соотвествует 1 категория
         // возвращает объект или null если ничего не найдено
     }
 }
@@ -694,8 +702,7 @@ class PostController extends AppController
 
 	    $cats = Category::find()->with('products')->all();
 	    return $this->render('show', compact('cats'));
-	    }
-	}
+    }
 }
 
 
@@ -704,21 +711,21 @@ class PostController extends AppController
 // ОБНОВЛЕНИЕ И УДАЛЕНИЕ ДАННЫХ ИЗ БД
 
 // file: controllers/PostController.php изменяем:
-    class PostController extends AppController
-    {
-        // code ...
-        // если объект получен из БД (например с помощью find, а значит создает объект Active Record) операция - Update
+class PostController extends AppController
+{
+    // code ...
+    // если объект получен из БД (например с помощью find, а значит создает объект Active Record) операция - Update
     $post = TestForm::findOne(3); // по умолч. поиск по id
     $post->email = 'example@mail.ru';
     $post->save(); // сохраняем для записи с id = 3 email со значением example@mail.ru
-        // если несколько значений используем updateAll
-    
+    // если несколько значений используем updateAll
+
     $post = TestForm::findOne(2);
     $post->delete(); // удаляем запись с id = 2
-    
+
     Test::deleteAll('>', 'id', 3); // удаление нескольких значений. По умолч. удаляет все записи
-        // code ...
-    }
+    // code ...
+}
 
 // Виджет
     
