@@ -302,6 +302,17 @@ URL страницы детального просмотра:
 #SECTION_CODE_PATH#/#ELEMENT_CODE#/
 
 
+
+# Получение данных по метатегам: 
+use \Bitrix\Iblock\InheritedProperty\SectionValues;
+
+$seoData = new SectionValues($arParams['IBLOCK_ID'], $arResult['SECTION_ID']);
+$seoProps = $seoData->getValues();
+$APPLICATION->SetPageProperty("title", $seoProps["SECTION_META_TITLE"]);
+$APPLICATION->SetPageProperty("description", $seoProps["SECTION_META_DESCRIPTION"]);
+
+
+
 #@@@ ВЫВОД АКТИВНЫХ НОВОСТЕЙ С УСТАНОВЛЕННЫМ СВОЙСТВОМ SHOW_MAIN:
 CModule::IncludeModule('block');
 $arSelect = ['ID', 'IBLOCK_ID', 'NAME', 'PREVIEW_TEXT'];
@@ -625,3 +636,94 @@ if ($request->isPost()) {
             ];
         }
     }
+
+
+
+
+ 
+#@@@ bitrix.news -> section.php:    
+    if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) {
+        die();
+    }
+    
+    /*@ Данные о разделе @*/
+    $arFilter = [
+       'IBLOCK_ID' => $arParams['IBLOCK_ID'],
+       'ID' => $arResult["VARIABLES"]["SECTION_ID"],
+       "ACTIVE" => "Y",
+       'GLOBAL_ACTIVE' => 'Y',
+    ];
+    
+    $arSelect = [
+       "NAME",
+       "UF_*",
+    ];
+    
+    $sectionData = CIBlockSection::GetList(["SORT"=>"ASC"], $arFilter, false, $arSelect);
+    
+    if ($props = $sectionData->Fetch()) {
+        $APPLICATION->SetTitle($props['NAME']);
+        
+        $textBeforeSert = $props['UF_TEXT_BEFORE_SERT'];
+    }
+    
+    /*@ Выводим подразделы: @*/
+    
+    $arFilter = [
+       'IBLOCK_ID' => $iBlockID,
+       'SECTION_ID' => $sectionID,
+       "ACTIVE" => "Y",
+       "GLOBAL_ACTIVE" => "Y",
+    ];
+            
+	$rsSect = CIBlockSection::GetList(["SORT"=>"ASC"], $arFilter);
+       
+        
+    <? while ($childSection = $rsSect->GetNext()): ?>
+        <div>
+            <a href="<?= $childSection['SECTION_PAGE_URL'] ?>">
+                    <?= $childSection['NAME'] ?>
+            </a>
+            <?= $childSection['DESCRIPTION'] ?>	
+            
+            <?
+            	/*@ Выводим элементы из подраздела: @*/
+                $arSelect = ["ID", "IBLOCK_ID", "NAME", "DETAIL_PAGE_URL", "PREVIEW_PICTURE", "PROPERTY_PRICE"];
+                $arFilter = ["IBLOCK_ID" => $iBlockID, "SECTION_ID" => $childSection['ID'], "ACTIVE" => "Y"];
+                $elementsData = CIBlockElement::GetList([], $arFilter, false, [], $arSelect);
+            ?>
+
+
+            <? while ($elemData = $elementsData->GetNext()): ?>
+                <? if ($elemData['ID'] === $childSection['ID']) continue; ?>
+                
+                <div class="col-md-4 col-sm-6">
+                	<img src="<?= CFile::GetPath($elemData['PREVIEW_PICTURE']) ?>" alt="<?= $elemData['NAME'] ?>">
+                	<div class="property">Цена: <?= $elemData['PROPERTY_PRICE_VALUE'] ?> руб.</div>
+                </div>
+            <? endwhile; ?>
+        </div>
+    <? endwhile ?>
+<? endif; ?>
+
+
+<? /*@ Или выводим элементы: @*/
+    $arSelect = ["ID", "IBLOCK_ID", "NAME", "DETAIL_PAGE_URL", "PREVIEW_PICTURE", "PROPERTY_PRICE"];
+    $arFilter = ["IBLOCK_ID" => $iBlockID, "SECTION_ID" => $sectionID, "ACTIVE" => "Y"];
+    $elementsData = CIBlockElement::GetList([], $arFilter, false, [], $arSelect);
+?>
+
+<div class="maxwidth-theme">
+    <div class="col-md-12">
+        <div class="row sid-4 items stones">
+            <? while ($elemData = $elementsData->GetNext()): ?>
+                <div class="col-md-4 col-sm-6">
+                	<img src="<?= CFile::GetPath($elemData['PREVIEW_PICTURE']) ?>" width="150px" alt="<?= $elemData['NAME'] ?>">
+                	<div class="property">
+                        Цена: <?= $elemData['PROPERTY_PRICE_VALUE'] ?> руб./м<sup>2</sup>
+                    </div>
+                </div>
+            <? endwhile; ?>
+        </div>
+    </div>
+</div>   
