@@ -276,7 +276,7 @@ require($_SERVER['DOCUMENT_ROOT'] . 'bitrix/footer.php');
 
 
 # Подключение CSS и JS в шаблоне:
-$this->addExternalCss("//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css");
+$this->addExternalCss("https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css");
 $this->addExternalJS("https://code.jquery.com/ui/1.12.1/jquery-ui.js");
 
 
@@ -419,7 +419,7 @@ foreach ($sectionsData as [$IBLOCK_ID, $ID]) {
 		'ACTIVE' => 'Y'
 	];
 	
-	$res = CIBlockElement::GetList([], $arFilter, false, [], $arSelect);
+	$res = CIBlockElement::GetList([], $arFilter, false, false, $arSelect);
 	
 	while ($arFields = $res->GetNext()) {
 		$valSechenie = $arFields['PROPERTY_SECHENIE_VALUE'];
@@ -475,12 +475,12 @@ $res = CIBlockElement::GetList([], $arFilter, false, ['nPageSize' => 3], $arSele
 
 <? if ($res->arResult): ?>
 	<? while ($ob = $res->GetNextElement()): $arFieds = $ob->GetFields(); ?>
-		<? $srcImg = CFile::GetPath($arFieds['PREVIEW_PICTURE']); ?>
+		<? $srcImg = CFile::GetPath($arFields['PREVIEW_PICTURE']); ?>
 
         <div class="col-md-4">
             <div class="card card-blog">
                 <div class="card-img">
-                    <a href="<?= $arFieds['DETAIL_PAGE_URL'] ?>" title="Прочитать новость">
+                    <a href="<?= $arFields['DETAIL_PAGE_URL'] ?>" title="Прочитать новость">
                         <img src="<?= $srcImg ?>" alt="" class="img-fluid">
                     </a>
                 </div>
@@ -626,6 +626,8 @@ if ($request->isPost()) {
         
         $dbList = CIBlockSection::GetList($arSort, $filter, false, $arSelect);
         
+        $dbList->result->num_rows; // количество найденных записей
+        
         while ($row = $dbList->GetNext()) {
             $arResult['ITEMS'][] = [
 				'ID' => $row['ID'],
@@ -636,7 +638,6 @@ if ($request->isPost()) {
             ];
         }
     }
-
 
 
 
@@ -690,7 +691,7 @@ if ($request->isPost()) {
             	/*@ Выводим элементы из подраздела: @*/
                 $arSelect = ["ID", "IBLOCK_ID", "NAME", "DETAIL_PAGE_URL", "PREVIEW_PICTURE", "PROPERTY_PRICE"];
                 $arFilter = ["IBLOCK_ID" => $iBlockID, "SECTION_ID" => $childSection['ID'], "ACTIVE" => "Y"];
-                $elementsData = CIBlockElement::GetList([], $arFilter, false, [], $arSelect);
+                $elementsData = CIBlockElement::GetList([], $arFilter, false, false, $arSelect);
             ?>
 
 
@@ -710,7 +711,7 @@ if ($request->isPost()) {
 <? /*@ Или выводим элементы: @*/
     $arSelect = ["ID", "IBLOCK_ID", "NAME", "DETAIL_PAGE_URL", "PREVIEW_PICTURE", "PROPERTY_PRICE"];
     $arFilter = ["IBLOCK_ID" => $iBlockID, "SECTION_ID" => $sectionID, "ACTIVE" => "Y"];
-    $elementsData = CIBlockElement::GetList([], $arFilter, false, [], $arSelect);
+    $elementsData = CIBlockElement::GetList([], $arFilter, false, false, $arSelect);
 ?>
 
 <div class="maxwidth-theme">
