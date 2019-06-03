@@ -6994,53 +6994,48 @@ $app->get('/', function ($request, $response) {
 	 return $this->renderer->render($response, 'index.phtml');
 });
 
-// BEGIN (write your solution here)
 $app->get('/users', function ($request, $response) use ($users) {
-	 return $this->renderer->render($response, 'users/show.phtml', $users);
+    $params = [
+        'users' => $users
+    ];
+    return $this->renderer->render($response, 'users/index.phtml', $params);
 });
 
-use Illuminate\Support\Collection;
-
-$app->get('/users/{id}', function ($request, $response, array $arg) use ($users) {
-	 $id = $arg['id'];
-	 $userColl = collect($users);
-	 $user = $userColl->firstWhere('id', '==', $id);
-	 $html = $user['id'];
-	 return $this->renderer->render($response, 'users/index.phtml', $users);
-
-	 $page = $request->getQueryParam('page', 1);
-	 $per = $request->getQueryParam('per', 5);
-	 $offset = ($page - 1) * $per;
-
-	 $sliceOfCompanies = array_slice($companies, $offset, $per);
+$app->get('/users/{id}', function ($request, $response, $args) use ($users) {
+    $id = (int) $args['id'];
+    $user = collect($users)->firstWhere('id', $id);
+    $params = ['user' => $user];
+    return $this->renderer->render($response, 'users/show.phtml', $params);
 });
 
 $app->run();
-// END
 
 
 // file: app/templates/users/show.phtml : 
-
-<!-- BEGIN (write your solution here) -->
-
-<!-- END -->
-
-
-// file: app/templates/index.phtml
-
-<a href="/users">Пользователи</a>
+<?php foreach ($user as $key => $value): ?>
+  <div>
+      <?= $key ?>: <?= $value ?>
+  </div>
+<?php endforeach ?>
 
 
 // file: app/templates/users/index.phtml: 
-
 <a href="/users">Пользователи</a>
 
-<!-- BEGIN (write your solution here) -->
-
-<!-- END -->
+<table>
+  <?php foreach ($users as $user): ?>
+    <tr>
+      <td>
+          <?= $user['id'] ?>
+      </td>
+      <td>
+          <a href="/users/<?= $user['id'] ?>"><?= $user['firstName'] ?></a>
+      </td>
+    </tr>
+  <?php endforeach ?>
+</table>
 
 ## TESTS:
-
 namespace App\Tests;
 
 use PHPUnit\Framework\TestCase;
@@ -7205,18 +7200,15 @@ $app->get('/courses', function ($request, $response) {
 Для подобного поля ввода нужно указать аттрибут value и подставить туда текущее значение не забыв его преобразовать в безопасную форму.
 
 
-/**
-
+/*@@
 public/index.php
 Реализуйте обработчик /users, который формирует список пользователей. Обработчик поддерживает фильтрацию через параметр term, в котором передается начало firstName. Список пользователей доступен в переменной $users.
 
 templates/users/index.phtml
 Реализуйте вывод списка пользователей и формы для фильтрации
-
-**/
+*/
 
 // file: app/public/index.php:
-
 namespace App;
 
 require '/composer/vendor/autoload.php';
@@ -7240,25 +7232,34 @@ $app->get('/', function ($request, $response) {
 	 return $this->renderer->render($response, 'index.phtml');
 });
 
-// BEGIN (write your solution here)
-
-// END
+$app->get('/users', function ($request, $response) use ($users) {
+    $term = $request->getQueryParam('term', '');
+    $result = collect($users)->filter(function ($user) use ($term) {
+        return s($user['firstName'])->startsWith($term, false);
+    });
+    $params = [
+        'users' => $result,
+        'term' => $term
+    ];
+    return $this->renderer->render($response, 'users/index.phtml', $params);
+});
 
 $app->run();
 
 
-// file: app/templates/index.phtml
-
-<a href="/users">Пользователи</a>
-
-
 // file: app/templates/users/index.phtml
-
 <a href="/users">Все Пользователи</a>
 
-<!-- BEGIN (write your solution here) -->
+<form action="/users">
+  <input type="search" name="term" value="<?= htmlspecialchars($term) ?>">
+  <input type="submit" value="Search">
+</form>
 
-<!-- END -->
+<?php foreach ($users as $user): ?>
+  <div>
+    <?= htmlspecialchars($user['firstName']) ?>
+  </div>
+<?php endforeach ?>
 
 
 
@@ -7975,30 +7976,59 @@ $app->get('/courses', function ($request, $response) use ($repo) {
 	 return $this->renderer->render($response, 'courses/index.phtml', $params);
 });
 
-// BEGIN (write your solution here)
+$app->get('/courses/new', function ($request, $response) use ($repo) {
+    $params = [
+        'course' => [],
+        'errors' => []
+    ];
+    return $this->renderer->render($response, 'courses/new.phtml', $params);
+});
 
-// END
+$app->post('/courses', function ($request, $response) use ($repo) {
+    $course = $request->getParsedBodyParam('course');
+
+    $validator = new Validator();
+    $errors = $validator->validate($course);
+
+    if (count($errors) === 0) {
+        $repo->save($course);
+        return $response->withRedirect('/courses');
+    }
+
+    $params = [
+        'course' => $course,
+        'errors' => $errors
+    ];
+
+    return $this->renderer->render($response, 'courses/new.phtml', $params);
+});
 
 $app->run();
 
 
 // file: app/src/Validator.php:
-
 namespace App;
 
 class Validator implements ValidatorInterface
 {
 	 public function validate(array $course)
 	 {
-		  // BEGIN (write your solution here)
-		  
-		  // END
+	  	$errors = [];
+
+        if ($course['paid'] == '') {
+            $errors['paid'] = "Can't be blank";
+        }
+
+        if (empty($course['title'])) {
+            $errors['title'] = "Can't be blank";
+        }
+
+        return $errors;
 	 }
 }
 
 
 // file: app/src/ValidatorInterface.php:
-
 namespace App;
 
 interface ValidatorInterface
@@ -8009,11 +8039,31 @@ interface ValidatorInterface
 
 
 // file: app/templates/courses/new.phtml:
-
-<!-- BEGIN (write your solution here) -->
-
-<!-- END -->
-
+<form action="/courses" method="post">
+  <div>
+    <label>
+        Имя *
+      <input type="text" name="course[title]" value="<?= htmlspecialchars($course['title'] ?? '') ?>">
+    </label>
+    <?php if (isset($errors['title'])): ?>
+      <div><?= $errors['title'] ?></div>
+    <?php endif ?>
+    </div>
+  <div>
+    <label>
+      Платность *
+      <select name="course[paid]">
+        <option value="">Select</option>
+        <option <?= isset($course['paid']) && $course['paid'] ? 'selected' : '' ?> value="1">Paid</option>
+        <option <?= isset($course['paid']) && !$course['paid'] ? 'selected' : '' ?> value="0">Free</option>
+      </select>
+    </label>
+    <?php if (isset($errors['paid'])): ?>
+      <div><?= $errors['paid'] ?></div>
+    <?php endif ?>
+  </div>
+  <input type="submit" value="Create">
+</form>
 
 
 >>>>> CRUD: Создание  <<<<<
