@@ -7717,9 +7717,16 @@ $container['flash'] = function () {
 	 return new \Slim\Flash\Messages();
 };
 
-// BEGIN (write your solution here)
+$app->get('/', function ($request, $response) {
+    $flash = $this->flash->getMessages();
+    $params = ['flash' => $flash];
+    return $this->renderer->render($response, 'index.phtml', $params);
+});
 
-// END
+$app->post('/courses', function ($request, $response) {
+    $this->flash->addMessage('success', 'Course Added');
+    return $response->withRedirect('/');
+});
 
 $app->run();
 
@@ -7730,9 +7737,15 @@ $app->run();
   <input type="submit" value="Create Course">
 </form>
 
-<!-- BEGIN (write your solution here) -->
-
-<!-- END -->
+<?php if (count($flash) > 0): ?>
+  <ul>
+  <?php foreach ($flash as $messages): ?>
+      <?php foreach ($messages as $message): ?>
+          <li><?= $message ?></li>
+      <?php endforeach ?>
+  <?php endforeach ?>
+  </ul>
+<?php endif ?>
 
 ## TESTS:
 
@@ -8064,6 +8077,11 @@ interface ValidatorInterface
   </div>
   <input type="submit" value="Create">
 </form>
+
+
+
+
+
 
 
 >>>>> CRUD: Создание  <<<<<
@@ -8605,9 +8623,38 @@ $app->post('/posts', function ($request, $response) use ($repo) {
 	 return $this->renderer->render($response->withStatus(422), 'posts/new.phtml', $params);
 });
 
-// BEGIN (write your solution here)
+$app->get('/posts/{id}/edit', function ($request, $response, array $args) use ($repo) {
+    $post = $repo->find($args['id']);
+    $params = [
+        'post' => $post,
+        'postData' => $post
+    ];
+    return $this->renderer->render($response, 'posts/edit.phtml', $params);
+});
 
-// END
+$app->patch('/posts/{id}', function ($request, $response, array $args) use ($repo) {
+    $post = $repo->find($args['id']);
+    $postData = $request->getParsedBodyParam('post');
+
+    $validator = new Validator();
+    $errors = $validator->validate($postData);
+
+    if (count($errors) === 0) {
+        $post['name'] = $postData['name'];
+        $post['body'] = $postData['body'];
+        $repo->save($post);
+        $this->flash->addMessage('success', 'Post has been updated');
+        return $response->withRedirect($this->router->pathFor('posts'));
+    }
+
+    $params = [
+        'post' => $post,
+        'postData' => $postData,
+        'errors' => $errors
+    ];
+
+    return $this->renderer->render($response->withStatus(422), 'posts/edit.phtml', $params);
+});
 
 $app->run();
 
@@ -8615,12 +8662,14 @@ $app->run();
 
 <a href="/posts">Посты</a>
 
-<!-- BEGIN (write your solution here) -->
+<form action="/posts/<?= $post['id'] ?>" method="post">
+  <input type="hidden" name="_METHOD" value="PATCH">
+  <?php require '_form.phtml' ?>
+  <input type="submit" value="Update">
+</form>
 
-<!-- END -->
 
-
-
+<?
 >>>>>  CRUD: Удаление <<<<<
 
 /*
@@ -8738,22 +8787,42 @@ $app->post('/posts', function ($request, $response) use ($repo) {
 	return $this->renderer->render($response->withStatus(422), 'posts/new.phtml', $params);
 });
 
-// BEGIN (write your solution here)
-
-// END
+$app->delete('/posts/{id}', function ($request, $response, array $args) use ($repo) {
+    $repo->destroy($args['id']);
+    $this->flash->addMessage('success', 'Post has been deleted');
+    return $response->withRedirect($this->router->pathFor('posts'));
+});
 
 $app->run();
 
-// file app/templates/posts/new.phtml:
+// file app/templates/posts/index.phtml:
 
-<a href="/posts">Посты</a>
+<?php if (count($flash) > 0): ?>
+  <ul>
+  <?php foreach ($flash as $messages): ?>
+      <?php foreach ($messages as $message): ?>
+          <li><?= $message ?></li>
+      <?php endforeach ?>
+  <?php endforeach ?>
+  </ul>
+<?php endif ?>
 
-<!-- BEGIN (write your solution here) -->
+<a href="/posts/new">Новый пост</a>
 
-<!-- END -->
+<?php foreach ($posts as $post): ?>
+  <div>
+    <?= htmlspecialchars($post['name']) ?>
+    <form action="/posts/<?= $post['id'] ?>" method="post">
+      <input type="hidden" name="_METHOD" value="DELETE">
+      <input type="submit" value="Delete">
+    </form>
+  </div>
+<?php endforeach ?>
 
 
 
+
+<?
 >>>>>  Model-View-Controller (MVC)   <<<<<<< 
 
 /*

@@ -3205,6 +3205,200 @@ import { cons, car, cdr, toString as pairToString } from 'hexlet-pairs';
 // END
 
 
+/**@@
+Пары неотрицательных целых чисел можно представить числами и арифметическими операциями. Можно считать, что пара чисел a и b – это 2^a * 3^b.
+
+Функции car и cdr при этом будут просто вычислять значения a и b (кратности двойки и тройки, соответственно), раскладывая аргумент на множители.
+
+Например, имея пару 5, 8 в виде числа 209952 (2^5 * 3^8), можно получить первый элемент пары, разложив число на множители и вычислив факторизацию для числа 2, а второй элемент пары – разложив число на множители и вычислив факторизацию для числа 3.
+
+pairs.js
+Реализуйте и экспортируйте следующие функции в соответствии с алгоритмом выше:
+
+cons
+car
+cdr
+Пример:
+*/
+const pair = cons(5, 8); // => 2^5 * 3^8 = 209952
+car(pair); // 5
+cdr(pair); // 8
+
+/*
+Подсказки
+Пара – это число, поэтому, чтобы получить из него исходные значения a и b, нужно раскладывать число на множители.
+*/
+
+/**@@
+Кроме пар можно создавать абстрактные типы данных, которые содержат внутри себя три и более элемента.
+
+В данном испытании необходимо реализовать структуру данных тройка, позволяющую хранить три значения. Как и в случае с парами создаётся конструктор make и селекторы get1, get2, get3, которые будут извлекать соответствующие значения.
+
+triple.js
+Реализуйте и экспортируйте следующие функции:
+
+make
+get1
+get2
+get3
+Пример
+*/
+
+const triple = make(3, 5, 'I am element from triple');
+get1(triple); // 3
+get2(triple); // 5
+get3(triple); // I am element from triple
+
+
+// FILE: /app/triple.js:
+/* eslint default-case: 0, consistent-return: 0 */
+
+// BEGIN (write your solution here)
+export const make = (...args) => 
+// END
+
+
+
+// #TESTS FILE: /app/__tests__/triple.test.js:
+import {
+  make,
+  get1,
+  get2,
+  get3,
+} from '../triple';
+
+test('triple', () => {
+  const triple = make(1, 2, 3);
+  expect(get1(triple)).toBe(1);
+  expect(get2(triple)).toBe(2);
+  expect(get3(triple)).toBe(3);
+});
+
+test('triple in triple', () => {
+  const triple1 = make(14, 22, 32);
+  const triple2 = make(11, 12, triple1);
+  expect(get1(triple2)).toBe(11);
+  expect(get2(triple2)).toBe(12);
+  expect(get3(triple2)).toBe(triple1);
+});
+
+test('triple string', () => {
+  const triple = make('str', 44);
+  expect(get1(triple)).toBe('str');
+  expect(get2(triple)).toBe(44);
+  expect(get3(triple)).toBe(undefined);
+});
+
+
+/**@@
+Пару можно создать на основе строки. Для хранения двух значений применим разделитель. Им может выступить любой символ, однако во избежание совпадений с исходными данными лучше взять редко используемое значение.
+
+Для этого подойдёт так называемая управляющая или escape-последовательность, которая начинается с обратной косой черты. Мы будем использовать специальный символ \0, обозначающий нулевой символ (NUL).
+
+Функции car и cdr должны получить содержимое строки до и после разделителя соответственно.
+
+Управляющая последовательность воспринимается интерпретатором как одиночный символ, т.е. имеет длину, равную 1.
+
+Обязательным условием является отсутсвие данного символа в строках, которые объединяются в пару.
+
+pairs.js
+Реализуйте и экспортируйте следующие функции в соответствии с алгоритмом выше:
+
+cons
+car
+cdr
+Пример
+*/
+
+const pair = cons('computer', 'science');   // => computer\0science
+car(pair); // computer
+cdr(pair); // science
+
+/*
+Подсказки
+Для подсчёта длины строки используйте функцию length() из модуля strings.
+*/
+
+// FILE: /app/pairs.js:
+import length from './strings';
+
+// BEGIN (write your solution here)
+
+// END
+
+
+// #TESTS FILE: /app/__tests__/pairs.test.js:
+import { cons, car, cdr } from '../pairs';
+
+describe('Pairs', () => {
+  it('1 set', () => {
+    const pair = cons(0, 0);
+    expect(pair).toBe(1);
+    expect(car(pair)).toBe(0);
+    expect(cdr(pair)).toBe(0);
+  });
+
+  it('2 set', () => {
+    const pair = cons(1, 2);
+    expect(pair).toBe(18);
+    expect(car(pair)).toBe(1);
+    expect(cdr(pair)).toBe(2);
+  });
+
+  it('3 set', () => {
+    const pair = cons(2, 1);
+    expect(pair).toBe(12);
+    expect(car(pair)).toBe(2);
+    expect(cdr(pair)).toBe(1);
+  });
+
+  it('4 set', () => {
+    const pair = cons(5, 8);
+    expect(pair).toBe(209952);
+    expect(car(pair)).toBe(5);
+    expect(cdr(pair)).toBe(8);
+  });
+
+  it('5 set', () => {
+    const pair = cons(0, 0);
+    const transit = cons(1, 1);
+    expect(pair).toBe(1);
+    expect(car(pair)).toBe(0);
+    expect(cdr(pair)).toBe(0);
+    expect(car(transit)).toBe(1);
+    expect(cdr(transit)).toBe(1);
+  });
+});
+
+
+
+
+
+
+// #TESTS FILE: /app/__tests__/pairs.test.js:
+import { cons, car, cdr } from '../pairs';
+
+describe('Pairs on strings', () => {
+  it('1 set', () => {
+    const pair = cons('hi', 'hexlet');
+    expect(car(pair)).toBe('hi');
+    expect(cdr(pair)).toBe('hexlet');
+  });
+
+  it('2 set', () => {
+    const pair = cons('Hello!', '');
+    expect(car(pair)).toBe('Hello!');
+    expect(cdr(pair)).toBe('');
+  });
+
+  it('3 set', () => {
+    const pair = cons('', 'XXI');
+    expect(car(pair)).toBe('');
+    expect(cdr(pair)).toBe('XXI');
+  });
+});
+
+
 
 ############################### JS: Последовательности ###############################   
 
@@ -3336,6 +3530,74 @@ import { l, cons, head, tail, isEmpty, toString as listToString } from 'hexlet-p
 // BEGIN (write your solution here)
 
 // END
+
+
+
+>>>>>> Разметка <<<<<<
+
+import {
+  make, append, toString, node
+} from 'hexlet-html-tags';
+
+const html1 = make();
+const html2 = append(html1, node('h1', 'hexlet'));
+const p1 = node('p', 'hello, world');
+const html3 = append(html2, p1);
+
+toString(html3);
+// <h1>hexlet</h1>
+// <p>hello, world</p>
+
+
+/**@@
+html-tags.js
+Реализуйте абстракцию для создания html. Она включает в себя следующие функции:
+
+make — конструктор. Уже реализован. Не принимает параметров, и создает html-список.
+node — создает новый тег. Содержит два элемента, имя тега и его содержимое. Дополнительно реализуйте селекторы тега: name и value.
+  const tag = node('div', 'what is love?');
+  getName(tag); // => div
+  getValue(tag); // => what is love?
+append — добавляет элемент (тег), созданный с помощью node, в html-список. Возвращает новый html-список. Новый элемент должен добавляться в начало ("голову") списка.
+toString — возвращает текстовое представление html на основании html-списка.
+Пример использования этого интерфейса:
+*/
+import { make, append, toString, node } from './html-tags';
+
+// Создаем новый html-список
+const dom1 = make();
+
+// Создаем тег и сразу добавляем его в html
+const dom2 = append(dom1, node('h1', 'hello, world'));
+// Еще раз
+const dom3 = append(dom2, node('h2', 'header2'));
+
+// Создаем новый тег
+const tag = node('h3', 'header3');
+// Добавляем созданный тег в html-список
+const dom = append(dom3, tag);
+
+// Преобразуем html-список в строчку
+toString(dom);
+// => <h1>hello, world</h1><h2>header2</h2><h3>header3</h3>
+
+// Пример без создания промежуточных переменных
+toString(append(make(), node('p', 'this is Sparta!')));
+// <p>this is Sparta!</p>
+
+// Экспортируйте все созданные функции.
+
+// FILE: /src/html-tags.js:
+// eslint-disable-next-line
+import { cons, car, cdr, toString as pairToString } from 'hexlet-pairs';
+// eslint-disable-next-line
+import { l, isEmpty, head, tail, cons as consList, toString as listToString } from 'hexlet-pairs-data';
+
+export const make = () => l();
+// BEGIN (write your solution here)
+
+// END
+
 
 
 ############################### JS: DOM API ###############################   
