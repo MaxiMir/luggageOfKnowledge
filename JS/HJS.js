@@ -3600,6 +3600,59 @@ export const make = () => l();
 
 
 
+
+
+
+############################### JS: Программирование, управляемое данными ###############################   
+
+>>>>>> Введение <<<<<<
+/*
+# Адитивность
+расширение функциональности системы без переписывания исходного кода.
+
+# Test Driven Development
+Дизайн кода, чтобы сосредотачиваться на внутреннем представлении, сначала прорабатываются варианты использования этого кода.
+*/
+
+>>>>>> Игровой дизайн: карточный бой <<<<<<
+
+// Тест:
+import { cons } from 'hexlet-pairs';
+import { l, length } from 'hexlet-pairs-data';
+import { make } from 'hexlet-card-game';
+
+const cards = l(
+  cons('Костяная кочерга гробницы', () => 6)
+);
+
+const game = make(cards); // создание игры (принимает колоду карт)
+const log = game('John', 'Ada'); // после автоматической игры -> возвращает лог игры
+
+assert.equal(length(log), 5);
+
+// Шаги:
+
+// step((health1, health2), message)
+
+const step1 = get(0, log);
+assert.equal(toString(car(step1)), '(10, 10)');
+const step2 = get(1, log);
+assert.equal(toString(car(step1)), '(10, 4)');
+const step3 = get(2, log);
+assert.equal(toString(car(step1)), '(4, 4)');
+const step4 = get(3, log);
+assert.equal(toString(car(step1)), '(4, -2)');
+const step5 = get(4 log);
+assert.equal(toString(car(step1)), '(4, -2)');
+
+
+
+
+
+
+
+
+
 ############################### JS: DOM API ###############################   
 
 /*

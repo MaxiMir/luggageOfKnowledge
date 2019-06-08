@@ -7684,7 +7684,7 @@ $app->run();
 
 
 
-/**
+/**@@
 public/index.php
 Реализуйте два обработчика:
 
@@ -8082,6 +8082,98 @@ interface ValidatorInterface
 
 
 
+/**@@
+public/index.php
+Реализуйте следующие обработчики:
+
+Список постов: /posts
+Конкретный пост /posts/my-post-slug
+Список постов находится в переменной $posts. Каждый пост содержит внутри себя четыре поля:
+
+id
+name
+body
+slug
+Каждый пост из списка ведет на страницу конкретного поста, причем в качестве идентифкатора используется slug, а не id. Список нужно вывести с пейджингом. По умолчанию на каждой странице отображается 5 постов. На первой странице первые пять постов, на второй вторые пять и так далее. Переключение между страницами нужно сделать двумя кнопками: назад и вперед. То какая сейчас страница открыта, определяется параметром page. По умолчанию загружается первая страница.
+
+Страница конкретного поста отображает данные поста и позволяет вернуться на список. Если поста не существует, то страница обработчик должен вернуть код ответа 404 и текст Page not found.
+
+templates/posts/index.phtml
+Выведите список добавленных постов. Каждый пост это имя, которое представлено ссылкой ведущей на отображение (show).
+
+templates/posts/show.phtml
+Вывод информации о конкретном посте. Выводить только имя и содержимое поста.
+*/
+
+// FILE: /public/index.php
+
+namespace App;
+
+require '/composer/vendor/autoload.php';
+
+$posts = Generator::generate(100);
+
+$configuration = [
+    'settings' => [
+        'displayErrorDetails' => true,
+    ],
+];
+
+$app = new \Slim\App($configuration);
+
+$container = $app->getContainer();
+$container['renderer'] = new \Slim\Views\PhpRenderer(__DIR__ . '/../templates');
+
+$app->get('/', function ($request, $response) {
+    return $this->renderer->render($response, 'index.phtml');
+});
+
+$app->get('/posts', function ($request, $response) use ($posts) {
+    $page = $request->getQueryParam('page', 1);
+    $per = $request->getQueryParam('per', 5);
+    $offset = ($page - 1) * $per;
+
+    $sliceOfPosts = array_slice($posts, $offset, $per);
+    $params = [
+        'page' => $page,
+        'posts' => $sliceOfPosts
+    ];
+    return $this->renderer->render($response, 'posts/index.phtml', $params);
+})->setName('posts');
+
+$app->get('/posts/{id}', function ($request, $response, array $args) use ($posts) {
+    $id = $args['id'];
+    $post = collect($posts)->firstWhere('slug', $id);
+    if (!$post) {
+        return $response->withStatus(404)->write('Page not found');
+    }
+    $params = [
+        'post' => $post,
+    ];
+    return $this->renderer->render($response, 'posts/show.phtml', $params);
+})->setName('post');
+
+$app->run();
+
+
+// FILE: /templates/posts/index.phtml
+<?php foreach ($posts as $post): ?>
+  <div>
+    <a href="/posts/<?= $post['slug'] ?>"><?= htmlspecialchars($post['name']) ?></a>
+  </div>
+<?php endforeach ?>
+
+<br>
+
+<div>
+<a href="?page=<?= $page < 2 ? 1 : $page - 1 ?>">Prev</a> <a href="?page=<?= $page + 1 ?>">Next</a>
+</div>
+
+// FILE: /templates/posts/show.phtml
+<h1><?= $post['name'] ?></h1>
+<div>
+    <?= $post['body'] ?>
+</div>
 
 
 >>>>> CRUD: Создание  <<<<<
@@ -8308,14 +8400,14 @@ $app->run();
 
 /*
 Какой статус ответа отдается клиенту если данные не прошли валидацию?
-422
+> 422
 
 Какой глагол HTTP отвечает за создание ресурса?
-POST
+> POST
 */
 
 
-/**
+/**@@
 public/index.php
 Реализуйте следующие обработчики:
 
@@ -8332,9 +8424,9 @@ templates/posts/new.phtml
 
 Подсказки
 Для редиректов в обработчиках используйте именованный роутинг
-**/
+*/
 
-// file: app/src/public/index.php:
+// FILE: /app/src/public/index.php:
 
 namespace App;
 
@@ -8372,9 +8464,33 @@ $app->get('/posts', function ($request, $response) use ($repo) {
 	return $this->renderer->render($response, 'posts/index.phtml', $params);
 })->setName('posts');
 
-// BEGIN (write your solution here)
+$app->get('/posts/new', function ($request, $response) use ($repo) {
+    $params = [
+        'postData' => [],
+        'errors' => []
+    ];
+    return $this->renderer->render($response, 'posts/new.phtml', $params);
+});
 
-// END
+$app->post('/posts', function ($request, $response) use ($repo) {
+    $postData = $request->getParsedBodyParam('post');
+
+    $validator = new Validator();
+    $errors = $validator->validate($postData);
+
+    if (count($errors) === 0) {
+        $repo->save($postData);
+        $this->flash->addMessage('success', 'Post has been created');
+        return $response->withRedirect($this->router->pathFor('posts'));
+    }
+
+    $params = [
+        'postData' => $postData,
+        'errors' => $errors
+    ];
+    $response = $response->withStatus(422);
+    return $this->renderer->render($response, 'posts/new.phtml', $params);
+});
 
 $app->run();
 
@@ -8383,9 +8499,27 @@ $app->run();
 
 <a href="/posts">Посты</a>
 
-<!-- BEGIN (write your solution here) -->
-
-<!-- END -->
+<form action="/posts" method="post">
+  <div>
+    <label>
+        Имя *
+      <input type="text" name="post[name]" value="<?= htmlspecialchars($postData['name'] ?? '') ?>">
+    </label>
+    <?php if (isset($errors['name'])): ?>
+      <div><?= $errors['name'] ?></div>
+    <?php endif ?>
+    </div>
+  <div>
+    <label>
+      Содержимое *
+    </label>
+    <textarea type="text" rows="20" cols="80" name="post[body]"><?= htmlspecialchars($postData['body'] ?? '') ?></textarea>
+    <?php if (isset($errors['body'])): ?>
+      <div><?= $errors['body'] ?></div>
+    <?php endif ?>
+  </div>
+  <input type="submit" value="Create">
+</form>
 
 
 // file: app/src/Repository.php:
@@ -8939,9 +9073,27 @@ $app->get('/', function ($request, $response) {
 	return $this->renderer->render($response, 'index.phtml', $params);
 });
 
-// BEGIN (write your solution here)
+$app->post('/cart-items', function ($request, $response) {
+    $item = $request->getParsedBodyParam('item');
+    $cart = json_decode($request->getCookieParam('cart', json_encode([])), true);
 
-// END
+    $id = $item['id'];
+    if (!isset($cart[$id])) {
+        $cart[$id] = ['name' => $item['name'], 'count' => 1];
+    } else {
+        $cart[$id]['count'] += 1;
+    }
+
+    $encodedCart = json_encode($cart);
+    return $response->withHeader('Set-Cookie', "cart={$encodedCart}")
+        ->withRedirect('/');
+});
+
+$app->delete('/cart-items', function ($request, $response) {
+    $encodedCart = json_encode([]);
+    return $response->withHeader('Set-Cookie', "cart={$encodedCart}")
+        ->withRedirect('/');
+});
 
 $app->run();
 
@@ -9073,7 +9225,7 @@ $app->post('/cart-items', function ($request, $response) {
 Сессии можно хранить в куках
 */
 
-/**
+/**@@
 В этой практике необходимо реализовать систему аутентификации. В простейшем случае она состоит из двух маршрутов:
 
 POST /session - создает сессию
@@ -9121,9 +9273,36 @@ $users = [
 	['name' => 'kate', 'passwordDigest' => hash('sha256', 'strongpass')]
 ];
 
-// BEGIN (write your solution here)
+$app->get('/', function ($request, $response) {
+    $flash = $this->flash->getMessages();
+    $params = [
+        'currentUser' => $_SESSION['user'] ?? null,
+        'flash' => $flash
+    ];
+    return $this->renderer->render($response, 'index.phtml', $params);
+});
 
-// END
+$app->post('/session', function ($request, $response) use ($users) {
+    $userData = $request->getParsedBodyParam('user');
+
+    $user = collect($users)->first(function ($user) use ($userData) {
+        return $user['name'] == $userData['name']
+            && hash('sha256', $userData['password']) == $user['passwordDigest'];
+    });
+
+    if ($user) {
+        $_SESSION['user'] = $user;
+    } else {
+        $this->flash->addMessage('error', 'Wrong password or name');
+    }
+        return $response->withRedirect('/');
+});
+
+$app->delete('/session', function ($request, $response) {
+    session_unset();
+    session_destroy();
+    return $response->withRedirect('/');
+});
 
 $app->run();
 
@@ -9140,9 +9319,19 @@ $app->run();
 
 <?php endif ?>
 
-<!-- BEGIN (write your solution here) -->
-
-<!-- END -->
+<?php if ($currentUser): ?>
+    <div><?= $currentUser['name'] ?></div>
+    <form action="/session" method="post">
+        <input type="hidden" name="_METHOD" value="DELETE">
+        <input type="submit" value="Sign Out">
+    </form>
+<?php else: ?>
+    <form action="/session" method="post">
+        <input type="text" required name="user[name] "value="">
+        <input type="password" required name="user[password] "value="">
+        <input type="submit" value="Sign In">
+    </form>
+<?php endif; ?>
 <?
 
 

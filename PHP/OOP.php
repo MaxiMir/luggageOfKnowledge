@@ -4934,13 +4934,26 @@ src\LinkedList.php
 Реализуйте функцию reverse($list), которая принимает на вход односвязный список и переворачивает его.
 https://ru.wikipedia.org/wiki/Связный_список#Односвязный_список_(однонаправленный_связный_список)
 */
+$numbers = new Node(1, new Node(2, new Node(3)));
+$reversedNumbers = reverse($numbers); // (3, 2, 1)
 
+
+// FILE /src\LinkedList.php:
 use App\Node;
 use function App\LinkedList\reverse;
 
-// (1, 2, 3)
-$numbers = new Node(1, new Node(2, new Node(3)));
-$reversedNumbers = reverse($numbers); // (3, 2, 1)
+function reverse(\App\Node $list)
+{
+    $newHead = null;
+    $current = $list;
+
+    while ($current) {
+        $newHead = new Node($current->getValue(), $newHead);
+        $current = $current->getNext();
+    }
+
+    return $newHead;
+}
 
 // FILE /src/Node.php:
 namespace App;
@@ -5065,6 +5078,28 @@ $links = getLinks($tags);
 //     'hexlet.io/assets/style.css'
 // ];
 
+// FILE: /src/HTML.php
+namespace App\HTML;
+
+function getLinks($tags)
+{
+    $mapping = [
+        'a' => 'href',
+        'img' => 'src',
+        'link' => 'href'
+    ];
+
+    $filteredTags = array_filter($tags, function ($tag) use ($mapping) {
+        return in_array($tag['name'], array_keys($mapping));
+    });
+
+    $paths = array_map(function ($tag) use ($mapping) {
+        $attributeName = $mapping[$tag['name']];
+
+        return $tag[$attributeName];
+    }, $filteredTags);
+    return array_values($paths);
+}
 
 
 
@@ -5159,3 +5194,95 @@ body - тело тега, используется для парных тего�
 В этой задаче хорошо работает Collect https://laravel.com/docs/5.8/collections
 */
 
+// FILE: /app/src/HTML.php
+
+namespace App\HTML;
+
+function buildAttrs(array $tag)
+{
+    return collect($tag)
+        ->except(['name', 'tagType', 'body'])
+        ->map(function ($value, $key) {
+            return " {$key}=\"{$value}\"";
+        })->join('');
+}
+
+function stringify($tag)
+{
+    $mapping = [
+        'single' => function ($tag) {
+            $attrs = buildAttrs($tag);
+            return "<{$tag['name']}{$attrs}>";
+        },
+        'pair' => function ($tag) {
+            $attrs = buildAttrs($tag);
+            return "<{$tag['name']}{$attrs}>{$tag['body']}</{$tag['name']}>";
+        }
+    ];
+
+    $build = $mapping[$tag['tagType']];
+    return $build($tag);
+}
+
+
+
+>>>>>> Диспетчеризация по имени файла <<<<<<
+
+/*
+Ещё один интересный приём – диспетчеризация по имени файла.
+
+В некоторых системах принято иметь не один файл с разными ключами для конфигурации, а разные файлы относящиеся к разным средам. Например:
+
+configs/
+  database.development.json
+  database.production.json
+  database.test.json
+
+Где-то в исходниках должен быть код, который выбирает какой файл загружать. Ниже код используя диспетчеризацию по ключу:  
+*/
+
+$configFileNamesByEnv = [
+    'development' => 'database.development.json',
+    'production' => 'database.production.json',
+    'test' => 'database.test.json'
+];
+
+$filename = $configFileNamesByEnv[$env];
+$raw = file_get_contents($filename);
+$config = json_decode($raw);
+
+// Нетрудно заметить, что имея название среды запуска, можно составить подходящее имя файла. Так и сделаем:
+
+$filename = "database.{$env}.json"
+$raw = file_get_contents($filename);
+$config = json_decode($raw);
+
+
+// Код стал намного короче и больше не требует изменения при расширении.
+
+/**@@
+src\DatabaseConfigLoader.php
+Реализуйте класс DatabaseConfigLoader, который отвечает за загрузку конфигурации для базы данных. У класса следующий интерфейс:
+
+Конструктор - принимает на вход путь, по которому нужно искать конфигурацию
+load($env) - метод, который грузит конфигурацию для конкретной среды окружения. Она загружает файл database.{$env}.json, парсит его и возвращает результат наружу.
+*/
+
+$loader = new DatabaseConfigLoader(__DIR__ . '/fixtures');
+$config = $loader->load('production'); // loading database.production.json
+// [
+//     'host' => 'google.com',
+//     'username' => 'postgres'
+// ];
+
+/*
+В этом классе и конфигурации реализована поддержка расширения. Если в загружаемом конфиге есть ключ extend, то нужно загрузить конфигурацию с этим именем (он соответствует $env). Далее конфигурации мержатся между собой так, что приоритет имеет загруженный раньше. Более подробный пример посмотрите в тестах.
+*/
+
+// FILE: /app/src/
+
+namespace App;
+
+// BEGIN (write your solution here)
+
+// END
