@@ -9956,7 +9956,7 @@ function evenSquareSum($array)
 
 
 
->>>>>  Zip  <<<<<<<
+>>>>>  Функция zip  <<<<<<<
 
 namespace Theory;
 
@@ -9996,6 +9996,46 @@ zip(
 	}
 );
 
+/**@@
+Один из способов определения победителя в футболе это пенальти. Процесс идет так: В каждой попытке бьет игрок каждой из команд и определяется команда победитель этой попытки. Процесс продолжается до 5 попыток, хотя победитель может быть выявлен и раньше. Если после пяти попыток победитель не выявлен, то процесс продолжается до первой выигранной попытки.
+
+src/Solution.php
+Реализуйте функцию bestAttempt которая принимает на вход результаты попыток и возвращает массив со списком имен футбольных клубов, которые победили в каждой из попыток. Если результатом попытки была ничья, то в результирующем массиве она не фигурирует (потому что никто не победил).
+
+Пример:
+*/
+
+$firstClubAttempts = [['name' => 'milan', 'scored' => 1], ['name' => 'milan', 'scored' => 0]];
+$secondClubAttempts = [['name' => 'porto', 'scored' => 1], ['name' => 'porto', 'scored' => 1]];
+
+bestAttempt($firstClubAttempts, $secondClubAttempts); // ['porto']
+
+// array_map сохраняет ключи. Чтобы их сбросить, используйте array_values
+
+
+namespace App\Solution;
+
+use function Functional\map;
+use function Functional\zip;
+
+function bestAttempt($first, $second)
+{
+    $result = zip($first, $second, function ($result1, $result2) {
+        if ($result1['scored'] > $result2['scored']) {
+            return $result1['name'];
+        } else if ($result1['scored'] < $result2['scored']) {
+            return $result2['name'];
+        } else if ($result1['scored'] == $result2['scored']) {
+            return null;
+        }
+    });
+
+    $result2 = array_filter($result, function ($var) {
+        return !is_null($var);
+    });
+
+    return array_values($result2);
+}
 
 
 

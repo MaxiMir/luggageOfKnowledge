@@ -4228,7 +4228,7 @@ class DatesTest extends TestCase
 /*
 В этой задаче необходимо реализовать ленивую коллекцию https://ru.wikipedia.org/wiki/Отложенная_инициализация
 
-src\Enumerable.php
+src/Enumerable.php
 Реализуйте класс Enumerable, который работает похожим образом, что и Collect, но предназначен для обработки коллекций ассоциативных массивов. Основная особенность работы данного класса заключается в том, что он использует lazy вариант обработки.
 */
 
@@ -4307,7 +4307,7 @@ class EnumerableTest extends TestCase
 У обоих игроков не осталось карт
 Игра не может закончиться
 Победил один из игроков
-src\Drunkard.php
+src/Drunkard.php
 Реализуйте класс Drunkard с функцией run, которая принимает на вход два списка чисел, которые представляют собой карты для первого и второго игроков.
 
 Если выиграл первый игрок, то метод должен вернуть First player. Round: <номер раунда>.
@@ -4429,7 +4429,7 @@ HEREDOC;
 /**
 Booking — процесс бронирования чего-либо. В интернете существует множество сайтов, предлагающих бронирование машин, квартир, домов, самолётов и многого другого. Несмотря на то, что такие сайты предлагают разные услуги, букинг везде работает почти идентично. Выбираются нужные даты и, если они свободны, производится бронирование.
 
-src\Booking.php
+src/Booking.php
 Реализуйте класс Booking, который позволяет бронировать номер отеля на определённые даты. Единственный интерфейс класса — функция book, которая принимает на вход две даты в текстовом формате. Если бронирование возможно, то метод возвращает true и выполняет бронирование (даты записываются во внутреннее состояние объекта).
 
 Подсказки
@@ -4544,7 +4544,7 @@ class BookingTest extends TestCase
 
 Для отработки fluent interface в задаче используется библиотека Collect. Мы не даем никаких подсказок насчет того, какие функции нужно использовать. Как минимум вы знаете главную тройку map, filter и reduce. Их вполне достаточно, но можно и лучше если внимательно поизучать функции в документации Collect.
 
-src\Normalizer.php
+src/Normalizer.php
 Реализуйте функцию normalize которая принимает на вход список городов, производит внутри некоторые преобразования и возвращает структуру определенного формата.
 
 Входные данные
@@ -4930,7 +4930,7 @@ class Main {
 /**@@ 
 В этой практике вам предстоит поработать с односвязным списком. Для лучшего понимания задачи, прочитайте литературу данную в подсказках и изучите исходники файла src/Node.php, внутри которого находится реализация односвязного списка. И посмотрите тесты, там видно как список создается и используется.
 
-src\LinkedList.php
+src/LinkedList.php
 Реализуйте функцию reverse($list), которая принимает на вход односвязный список и переворачивает его.
 https://ru.wikipedia.org/wiki/Связный_список#Односвязный_список_(однонаправленный_связный_список)
 */
@@ -4938,7 +4938,7 @@ $numbers = new Node(1, new Node(2, new Node(3)));
 $reversedNumbers = reverse($numbers); // (3, 2, 1)
 
 
-// FILE /src\LinkedList.php:
+// FILE /app/src/LinkedList.php:
 use App\Node;
 use function App\LinkedList\reverse;
 
@@ -4955,7 +4955,7 @@ function reverse(\App\Node $list)
     return $newHead;
 }
 
-// FILE /src/Node.php:
+// FILE /app/src/Node.php:
 namespace App;
 
 class Node
@@ -5056,7 +5056,7 @@ production:
 */
 
 /*@@
-src\HTML.php
+src/HTML.php
 Реализуйте функцию getLinks($tags), которая принимает на вход список тегов, находит среди них теги a, link и img, а затем извлекает ссылки и возвращает список ссылок. Теги подаются на вход в виде массива, где каждый элемент это тег. Тег имеет следующую структуру:
 
 name - имя тега.
@@ -5078,7 +5078,7 @@ $links = getLinks($tags);
 //     'hexlet.io/assets/style.css'
 // ];
 
-// FILE: /src/HTML.php
+// FILE: /app/src/HTML.php
 namespace App\HTML;
 
 function getLinks($tags)
@@ -5166,7 +5166,7 @@ function parse($type, $data)
 }
 
 /**@@
-src\HTML.php
+src/HTML.php
 Реализуйте функцию stringify($tag), которая принимает на вход тег и возвращает его текстовое представление. Например:
 */
 
@@ -5212,10 +5212,12 @@ function stringify($tag)
     $mapping = [
         'single' => function ($tag) {
             $attrs = buildAttrs($tag);
+
             return "<{$tag['name']}{$attrs}>";
         },
         'pair' => function ($tag) {
             $attrs = buildAttrs($tag);
+
             return "<{$tag['name']}{$attrs}>{$tag['body']}</{$tag['name']}>";
         }
     ];
@@ -5252,7 +5254,6 @@ $raw = file_get_contents($filename);
 $config = json_decode($raw);
 
 // Нетрудно заметить, что имея название среды запуска, можно составить подходящее имя файла. Так и сделаем:
-
 $filename = "database.{$env}.json"
 $raw = file_get_contents($filename);
 $config = json_decode($raw);
@@ -5261,7 +5262,7 @@ $config = json_decode($raw);
 // Код стал намного короче и больше не требует изменения при расширении.
 
 /**@@
-src\DatabaseConfigLoader.php
+src/DatabaseConfigLoader.php
 Реализуйте класс DatabaseConfigLoader, который отвечает за загрузку конфигурации для базы данных. У класса следующий интерфейс:
 
 Конструктор - принимает на вход путь, по которому нужно искать конфигурацию
@@ -5283,6 +5284,2175 @@ $config = $loader->load('production'); // loading database.production.json
 
 namespace App;
 
-// BEGIN (write your solution here)
+class DatabaseConfigLoader
+{
+    private $path;
 
-// END
+    public function __construct($path)
+    {
+        $this->path = $path;
+    }
+
+    public function load($name)
+    {
+        $filename = "database.{$name}.json";
+
+        $raw = file_get_contents($this->path . '/' . $filename);
+        $config = json_decode($raw, true);
+
+        if (!isset($config['extend'])) {
+            return $config;
+        }
+
+        $newName = $config['extend'];
+        unset($config['extend']);
+
+        return array_merge($this->load($newName), $config);
+    }
+}
+
+
+
+>>>>>> Полиморфизм (утиная типизация) <<<<<<
+
+/*
+Начнём знакомство с полиморфизмом подтипов с задачки. Представьте себе функцию, которая проверяет есть ли комментарии у статьи или топика (вопросы пользователей Хекслета под уроками и проектами).
+*/
+
+function hasComments($commentable)
+{
+    // Если это статья
+    if ($commentable instanceof Article) {
+        return count($commentable->getArticleComments()) > 0;
+    // Если это топик
+    } elseif ($commentable instanceof Topic) {
+        return count($commentable->getTopicComments()) > 0;
+    }
+}
+
+class Article
+{
+    // some code
+
+    public function getArticleComments()
+    {
+        return $this->comments;
+    }
+}
+
+
+class Topic
+{
+    // some code
+
+    public function getTopicsComments()
+    {
+        return $this->comments;
+    }
+}
+
+// Article::first() - статический метод, который возвращает первую статью из базы данных
+$article = Article::first();
+hasComments($article);
+
+/*
+С таким кодом мы уже сталкивались ранее. Каждый новый тип, потребует от нас добавления кода в эту условную конструкцию. Его можно заменить на диспетчеризацию по ключу, но особенно лучше не станет. Всё равно придётся описывать поведение для каждого класса в дополнении к тому, что поведение и так описано внутри каждого класса. Но можно сделать кое-что лучше. Достаточно согласовать интерфейс всех типов и договориться о том, что метод для извлечения комментариев будет называться getComments(). Тогда код станет таким:
+*/
+
+function hasComments($commentable)
+{
+    return count($commentable->getComments()) > 0;
+}
+
+$article = Article::first();
+hasComments($article);
+
+$topic = Topic::first();
+hasComments($topic);
+
+/*
+Теперь, функцию hasComments($commentable) можно вызывать с любым объектом, имеющим метод getComments(), с необходимой сигнатурой. Эта функция не поменяется даже при добавлении нового класса, содержащего такой же метод.
+
+Способность функции, обрабатывать объекты разных типов одинаковым образом, называется полиморфизмом подтипов (почему подтипов, мы разберёмся в следующих уроках, но это не про наследование), а сама функция – полиморфной функцией.
+
+Как видно из кода выше, для реализации такого полиморфизма, в PHP не нужно наследование и интерфейсы. В миру такой подход называют "утиной типизацией". Если что-то ходит как утка и крякает как утка, то это утка. Позже мы рассмотрим полиморфизм подтипов вместе с интерфейсами
+
+Технически, самое простое и понятное что делает полиморфизм подтипов (для клиентского кода) – убирает условные конструкции. Любую условную конструкцию можно заменить полиморфизмом и любую полиморфную функцию можно заменить ифами. Другими словами, полиморфизм подтипов не является неотъемлемой частью разработки, код можно писать и без него. С другой стороны, иногда встречаются ситуации, в которых он здорово помогает, но не сказать что это происходит постоянно.
+
+В чем разница между параметрическим и полиморфизмом подтипов? В первом случае, реализуется общий алгоритм для контейнера (например массива), который, содержит значение или значения типа T. Этот алгоритм не зависит от T и для любых T выполняется идентично. Во втором, алгоритм построен вокруг самого объекта и использует его методы. В полиморфизме подтипов, полиморфная функция работает только с теми объектами, которые имеют необходимые для реализации алгоритма методы.
+*/
+
+
+
+/**@@
+В программировании, для некоторых задач, распространены key-value базы данных. Внешне они работают по принципу ассоциативных массивов, но живут как отдельные программы и умеют много полезных штук, например сохранять данные на диск, переносить данные между машинами в сети и тому подобное.
+
+В этой задаче реализована подобная база данных в виде класса FileKV, который сохраняет свои данные на диске в указанном файле. Она имеет следующий интерфейс:
+*/
+
+$map = new FileKV('/path/to/dbfile');
+// Получение значения по ключу
+$map->get('key'); // key
+$map->get('unkonwnkey'); // null
+// Получение значения и дефолт
+$map->get('unkonwnkey', 'default value'); // default value
+// Установка и обновление ключа
+$map->set('key2', 'value2');
+$map->get('key2'); // value2
+// Удаление ключа
+$map->unset('key2'); // value2
+$map->get('key2'); // null
+$map->set('key', 'value'); // null
+// Возврат всех данных из базы
+$map->toArray(); // ['key' => 'value']
+
+/*
+В целях тестирования, бывает полезно иметь реализацию такой базы данных, которая хранит данные в памяти, а не во внешнем хранилище. Это позволяет легко сбрасывать состояние между тестами и не замедлять их.
+
+src/InMemoryKV.php
+
+Реализуйте класс InMemoryKV, который представляет собой in-memory key-value хранилище. Данные внутри него хранятся в обычном ассоциативном массиве. Интерфейс этого класса совпадает с FileKV за исключением конструктора. Конструктор InMemoryKV принимает на вход массив, который становится начальным значением базы данных.
+*/
+
+use App\InMemoryKV;
+
+$map = new InMemoryKV(['key' => 10]);
+$map->get('key'); // 10
+
+/*
+src/KeyValueFunctions.php
+
+Реализуйте функцию swapKeyValue, которая принимает на вход объект базы данных и меняет в нем ключи и значения местами.
+
+swapKeyValue – полиморфная функция, она может работать с любой реализацией key-value имеющую такой же интерфейс
+*/
+
+$map = new \App\InMemoryKV(['key' => 10]);
+$map->set('key2', 'value2');
+swapKeyValue($map);
+$map->get('key'); // null
+$map->get(10); // key
+$map->get('value2'); // key2
+
+
+// FILE: /app/src/FileKV.php:
+namespace App;
+
+class FileKV
+{
+    private $dbfilepath;
+
+    public function __construct($dbfilepath, $initial = [])
+    {
+        $this->dbfilepath = $dbfilepath;
+
+        foreach ($initial as $key => $value) {
+            $this->set($key, $value);
+        };
+    }
+
+    public function set($key, $value)
+    {
+        $content = file_get_contents($this->dbfilepath);
+        $data = unserialize($content);
+        $data[$key] = $value;
+        file_put_contents(serialize($data));
+    }
+
+    public function unset($key)
+    {
+        $content = file_get_contents($this->dbfilepath);
+        $data = unserialize($content);
+        unset($data[$key]);
+        file_put_contents(serialize($data));
+    }
+
+    public function get($key, $default = null)
+    {
+        $content = file_get_contents($this->dbfilepath);
+        $data = unserialize($content);
+
+        return $data[$key] ?? $default;
+    }
+
+    public function toArray()
+    {
+        $content = file_get_contents($this->dbfilepath);
+        $data = unserialize($content);
+        return $data;
+    }
+}
+
+// FILE: /app/src/KeyValueFunctions.php:
+namespace App\KeyValueFunctions;
+
+use App\InMemoryKV;
+
+function swapKeyValue($map)
+{
+    $data = $map->toArray();
+    
+    foreach ($data as $key => $value) {
+        $map->unset($key);
+        $map->set($value, $key);
+    }
+
+    return $map;
+}
+
+
+
+// FILE: /app/src/InMemoryKV.php:
+namespace App;
+
+class InMemoryKV
+{
+    private $map;
+
+    public function __construct($initial = [])
+    {
+        $this->map = $initial;
+    }
+
+    public function set($key, $value)
+    {
+        $this->map[$key] = $value;
+    }
+
+    public function unset($key)
+    {
+        unset($this->map[$key]);
+    }
+
+    public function get($key, $default = null)
+    {
+        return $this->map[$key] ?? $default;
+    }
+
+    public function toArray()
+    {
+        return $this->map;
+    }
+}
+
+/**@@
+
+file: Repository.php
+Реализуйте динамические методы findAllBy<FieldName>.
+Название MyFieldNameId должно преобразовываться в my_field_name_id.
+Методы должны возвращать sql запрос. Используйте метод where, уже написанный для Repository.
+Бросайте исключение WrongFinderNameException, если название метода не соответствует шаблону /findAllBy([A-Z].*)/.
+*/
+
+namespace App;
+
+require_once "RepositoryInterface.php";
+require_once "WrongFinderNameException.php";
+
+class Repository implements RepositoryInterface
+{
+    
+    private $tableName;
+
+    public function __construct($tableName)
+    {
+        $this->tableName = $tableName;
+    }
+
+    public function __call($finder, $arguments)
+    {
+        preg_match("/findAllBy([A-Z].*)/", $finder, $outputArray);
+
+        if (!$outputArray) {
+            throw new WrongFinderNameException();
+        }
+
+        $fieldUpperName = $outputArray[1];
+        preg_match_all("/([A-Z][^A-Z]+)/", $fieldUpperName, $matches);
+        $fieldName = implode('_', array_map(function ($part) {
+            return mb_strtolower($part);
+        }, $matches[0]));
+
+        return $this->where($fieldName, $arguments[0]);
+    }
+    
+
+    public function where($fieldName, $value)
+    {
+        $format = "select * from %s where %s = '%s'";
+        return sprintf(
+            $format,
+            $this->_escape($this->tableName),
+            $this->_escape($fieldName),
+            $this->_escape($value)
+        );
+    }
+
+    private function _escape($value)
+    {
+        // NOTE: we must to implement escape logic over here in real world
+        return $value;
+    }
+}
+
+
+>>>>>> Null Object Pattern <<<<<<
+
+/*
+На сайтах, у которых есть аутентификация, внутри присутствует понятие "текущий пользователь". Это тот пользователь который аутентифицировался через форму (или вошел через социальную сеть). Текущий пользователь активно используется для вывода различных блоков информации, например отображении блока этого пользователя. Подобный код обычно выглядит так:
+
+-- где-то в воображаемом шаблоне articles/index.phtml
+-- $this - предоставляется фреймворком, это объект View внутри которого лежат данные и полезные методы
+
+<? if ($this->userSignedIn() && $this->currentUser->hasArticles()): ?>
+    <? foreach ($this->currentUser->getArticles() as $article): ?>
+        <!-- тут выводим статьи -->
+    <? endforeach ?>
+<? endif ?>
+*/
+
+if ($this->userSignedIn() && $this->currentUser->hasArticles()): ?>
+    <? foreach ($this->currentUser->getArticles() as $article): ?>
+        <!-- тут выводим статьи -->
+    <? endforeach ?>
+<? endif ?>
+
+/*
+Обратите внимание на проверку существования пользователя. Если её не сделать, то код упадет с ошибкой, потому что вызывается метод hasArticles() у null. Когда этих проверок одна-две, то ничего страшного, но если их десятки и больше, то код быстро захламляется. Кроме того, такую проверку очень легко забыть вставить.
+
+Можно ли решить эту задачу каким-то другим способом? Оказывается можно. Достаточно использовать полиморфизм подтипов. Для этого создаётся класс описывающий пользователя не прошедшего аутентификацию, например, Guest. Затем в него добавляются все необходимые методы, для которых мы хотим получить полиморфное поведение.
+*/
+
+class Guest
+{
+    public function hasArticles()
+    {
+        return false;
+    }
+
+    public function getArticles()
+    {
+        return [];
+    }
+}
+
+/*
+Большинство этих методов возвращает false либо пустые списки, так как у этого пользователя ничего нет. Зачем тогда он нужен? Всё очень просто, теперь клиентский код, всегда рассчитывает на существование пользователя, ему больше не нужно проверять аутентификацию:
+
+-- может быть гостем, а может быть реальным пользователем
+*/
+if ($this->currentUser->hasArticles()): ?>
+    <? foreach ($this->currentUser->getArticles() as $article): ?>
+        <!-- тут выводим статьи -->
+    <? endforeach ?>
+<? endif ?>
+
+/*
+Условные конструкции уйдут по всем шаблонам, но остаётся вопрос. А где и как происходит сам процесс создания нашего пользователя? И вот здесь останется тот единственный if, благодаря которому произойдет создание правильного объекта. Это происходит на этапе обработки входящего запроса, и конкретное место зависит от используемого фреймворка. Код в этом месте выглядит примерно так:
+*/
+
+function fetchCurrentUser()
+{
+    $userId = $_SESSION['user_id'] ?? null;
+    // Если id есть в сессии, то выбираем пользователя из базы, иначе возвращаем гостя
+    return $userId ? User::find($userId) : new Guest();
+}
+
+/*
+У такого способа использования полиморфизма есть особое название: шаблон проектирования "null object". Он часто используется внутри фреймворков и иногда встречается в прикладном коде. На Хекслете таких мест как минимум 3. Например в классе Guest у нас десятки методов.
+*/
+
+/**@@
+На Хекслете доступ к курсам оформляется через подписку. Подписка, это отдельная сущность, которая хранит в себе информацию о самой подписке, когда она началась, сколько продолжается, оплачена ли и так далее. Типичная проверка на наличие подписки (а значит доступ к платному контенту) выглядит так:
+*/
+
+// Эти примеры сильно упрощены, к тому же Хекслет написан на Rails
+// но для демонстрации идеи такая реализация подойдет
+$user->getCurrentSubscription()->hasPremiumAccess();
+$user->getCurrentSubscription()->hasProfessionalAccess();
+
+// Но не у всех пользователей есть подписка, на Хекслете есть и большая бесплатная часть. Так как подписка может отсутствовать, в коде придется делать так:
+
+if ($user->getCurrentSubscription() && $user->getCurrentSubscription()->hasPremiumAccess()) {
+   // есть преимум доступ, показываем что-то особенное
+}
+
+// Чтобы избежать постоянных проверок на существование подписки, мы внедрили Null Object. Теперь подписка есть всегда и достаточно написать:
+
+if ($user->getCurrentSubscription()->hasProfessionalAccess()) {
+   // есть профессиональный доступ, показываем что-то особенное
+}
+
+/*
+src/FakeSubscription.php
+
+Реализуйте класс FakeSubscription, который повторяет интерфейс класса Subscription за исключением конструктора. В конструктор FakeSubscription принимает пользователя. Если пользователь администратор $user->isAdmin(), то все доступы разрешены, если нет – то запрещены.
+
+src/User.php
+Допишите конструктор пользователя, так, чтобы внутри устанавливась реальная подписка если она передана снаружи и создавалась фейковая в ином случае.
+*/
+
+use App\Subscription;
+use App\User;
+
+$user = new User('vasya@email.com', new Subscription('premium'));
+$user->getCurrentSubscription()->hasPremiumAccess(); // true
+$user->getCurrentSubscription()->hasProfessionalAccess(); // false
+
+$user = new User('vasya@email.com', new Subscription('professional'));
+$user->getCurrentSubscription()->hasPremiumAccess(); // false
+$user->getCurrentSubscription()->hasProfessionalAccess(); // true
+
+// Внутри создается фейковая, потому что подписка не передается
+$user = new User('vasya@email.com');
+$user->getCurrentSubscription()->hasPremiumAccess(); // false
+$user->getCurrentSubscription()->hasProfessionalAccess(); // false
+
+$user = new User('rakhim@hexlet.io'); // администратор, проверяется по емейлу
+$user->getCurrentSubscription()->hasPremiumAccess(); // true
+$user->getCurrentSubscription()->hasProfessionalAccess(); // true
+
+
+// FILE: /app/src/FakeSubscription.php
+namespace App;
+
+class FakeSubscription
+{
+    private $user;
+
+    public function __construct($user)
+    {
+        $this->user = $user;
+    }
+
+    public function hasProfessionalAccess()
+    {
+        return $this->user->isAdmin();
+    }
+
+    public function hasPremiumAccess()
+    {
+        return $this->user->isAdmin();
+    }
+}
+
+
+// FILE: /app/src/User.php
+namespace App;
+
+class User
+{
+    private $currentSubscription;
+    private $email;
+
+    public function __construct($email, $currentSubscription = null)
+    {
+        $this->email = $email;
+
+        $this->currentSubscription = $currentSubscription ?? new FakeSubscription($this);
+    }
+
+    public function getCurrentSubscription()
+    {
+        return $this->currentSubscription;
+    }
+
+    public function isAdmin()
+    {
+        return $this->email === 'rakhim@hexlet.io';
+    }
+}
+
+
+// FILE: /app/src/Subscription.php
+namespace App;
+
+class Subscription
+{
+    private $subscriptionPlanName;
+
+    public function __construct($subscriptionPlanName)
+    {
+        $this->subscriptionPlanName = $subscriptionPlanName;
+    }
+    public function hasProfessionalAccess()
+    {
+        return $this->subscriptionPlanName === 'professional';
+    }
+
+    public function hasPremiumAccess()
+    {
+        return $this->subscriptionPlanName === 'premium';
+    }
+}
+
+
+
+>>>>>> Код, который убивает полиморфизм <<<<<<
+
+/*
+# Формирование объектов
+
+Посмотрите на функцию ниже и скажите, является ли она полиморфной?
+*/
+
+function sayHiByEmail($user)
+{
+    $sender = new EmailSender();
+    // Отправляем email пользователю
+    $sender->send($user->getEmail(), 'hi!');
+}
+
+/*
+С одной стороны да, пользователь передается снаружи и у нас есть возможность его подменить, передав туда объект другого класса. С другой стороны, внутри функции явно используется класс EmailSender и его подменить не получится без переписывания самого кода.
+
+Этот код демонстрирует простую, но важную идею. Полиморфизм подтипов возможен тогда, когда объект попадает в функцию снаружи, а не конструируется прямо внутри неё.
+
+Честно говоря, объект можно создавать и внутри функции, но в таком случае имя класса должно формироваться (или получаться) динамически. Этот приём мы рассмотрим позже, в уроке про метапрограммирование
+
+# Проверка типов
+
+Ещё один пример с подвохом. Есть ли полиморфизм в коде ниже?
+*/
+
+function sayHi($user)
+{
+    if ($user instanceof User) {
+      print_r("Hello, {$user}!");
+    } elseif ($user instanceof Guest) {
+      print_r('Hello, guest!');
+    } else {
+      print_r('Who you are?');
+    }
+}
+
+/*
+В данном примере, вроде бы, всё нормально, объект передается снаружи, но есть одна загвоздка. Внутри функции явно проверяется тип, а это значит, что поведение определяется не типом, а сама функция решает как себя вести. Более того, функция жестко связана с теми типами, которые определены внутри неё и её придётся переписывать при их изменении. И как результат – отсутствие полиморфизма подтипов.
+
+Проверка типа иногда встречается и её можно использовать к месту, чтобы не усложнять код, но чаще, она говорит о плохом дизайне. Такой код, можно сказать, не соответствует ООП в современном его понимании.
+
+Для решения задачи выше, есть несколько подходов:
+- Перенос логики внутрь самих классов. Тогда код функции превратится в такой: $user->sayHi(). С этим подходом нужно быть осторожным, так как легко получить божественный объект. Гораздо чаще нужно применять другой подход.
+- Понадобится добавить новый интерфейс в виде методов isUser и isGuest.
+*/
+
+function sayHi($user)
+{
+    if ($user->isUser()) {
+      print_r("Hello, {$user}!");
+    } elseif ($user->isGuest()) {
+      print_r('Hello, guest!');
+    } else {
+      print_r('Who you are?');
+    }
+}
+
+// И хотя кода меньше не стало, всё же это полиморфизм подтипов. Код завязан на методы, а не на типы. Изменение структуры классов не коснется этой функции если сама логика останется той же.
+
+
+/**@@
+src/Helpers.php
+Реализуйте функцию getGreeting($user), которая возвращает приветствие для пользователя. Это приветствие показывается пользователю на сайте. Если пользователь гость, то выводится "Hello Guest!", если не гость, то "Hello, <Имя>", где "<Имя>" это имя реального пользователя.
+
+В этой задаче, способ решения остается на ваше усмотрение. Используйте знания полученные в этом курсе.
+*/
+
+$guest = new \App\Guest();
+getGreeting($guest); // 'Hello Guest!'
+
+$user = new \App\User('Petr');
+getGreeting($user); // 'Hello Petr!'
+
+
+// FILE: /app/src/Guest.php:
+namespace App;
+
+class Guest
+{
+    public function getName()
+    {
+        return 'Guest';
+    }
+
+    public function getTypeName()
+    {
+        return 'guest';
+    }
+}
+
+// FILE: /app/src/Helpers.php:
+namespace App\Helpers;
+
+function getGreeting($user)
+{
+    $mapping = [
+        'guest' => function ($guest) {
+            return 'Hello Guest!';
+        },
+        'user' => function ($user) {
+            return "Hello {$user->getName()}!";
+        }
+    ];
+
+    return $mapping[$user->getTypeName()]($user);
+}
+
+
+// FILE: /app/src/User.php:
+namespace App;
+
+class User
+{
+    private $name;
+
+    public function __construct($name)
+    {
+        $this->name = $name;
+    }
+
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    public function getTypeName()
+    {
+        return 'user';
+    }
+}
+
+
+
+>>>>>> Инверсия зависимостей <<<<<<
+
+/*
+Каждый раз, когда внутри функции создаётся объект, появляется зависимость функции от класса этого объекта. Другими словами функция жестко завязана на работу в паре с конкретным классом. Есть формальный способ, позволяющий легко проверить насколько ваш код завязан в узел. 
+Возьмите любую функцию и мысленно представьте что вы переносите её в другой проект. Сколько за собой она потянет зависимостей (а те в свою очередь свои зависимости)? Если перенос функции потребует переноса большого количества кода, то говорят что в коде высокая связанность.
+
+Для развязки кода придуман даже специальный термин: Принцип Инверсии Зависимостей https://ru.wikipedia.org/wiki/Принцип_инверсии_зависимостей. Ещё он известен как DIP https://en.wikipedia.org/wiki/Dependency_inversion_principle из SOLID. Вот его формулировка:
+
+Модули верхних уровней не должны зависеть от модулей нижних уровней. Оба типа модулей должны зависеть от абстракций.
+Абстракции не должны зависеть от деталей. Детали должны зависеть от абстракций.
+В зависимости от языка, в эти фразы вкладывается немного разный смысл. В общем и целом, они говорят о том, что не нужно завязываться на конкретную реализацию класса. Создание объектов в том месте где они используются, связывает нас с классом этих объектов без возможности его подменить. Правильный подход, с точки зрения этого принципа, инвертировать зависимости, то есть не работать с классами напрямую, а получать объекты нужных классов снаружи, например, через параметры функции.
+
+Кроме того, DIP говорит о завязке на интерфейсы вместо классов в сигнатурах функций. Об этом мы поговорим позже, когда закончим с основными понятиями
+*/
+
+// Было:
+function doSomething()
+{
+    $logger = new Logger();
+    // some code
+}
+
+
+// Стало:
+function doSomething($logger)
+{
+    // some code
+}
+
+/*
+В докладах на тему DIP, докладчики любят, в качестве аналогии, приводить принцип голливуда: Не надо нам звонить, мы сами вас наберем. Имеется ввиду что не пользуйтесь классами напрямую, получайте готовые объекты как внешнюю зависимость.
+
+Нужно ли всегда придерживаться этого принципа? Откровенно говоря, код целиком построенный в таком стиле становится излишне абстрактным и сложным для понимания. В программировании нет серебряных пуль и в каждой конкретной ситуации нужно смотреть на условия и решаемую задачу. Если подмена реализации нужна, то делаем её, если нет – то работаем напрямую.
+
+Почти всегда, когда речь идёт про инверсию зависимостей, рядом появляется термин "инъекция зависимостей". В то время как DIP говорит о модульности, инъекция зависимостей говорит о конкретных способах её достижения. О том каким образом можно передать зависимости в код использующий их. Всего есть три способа инъектировать зависимости:
+*/
+
+// Передать их как аргументы функций или методов. Именно этот способ мы использовали до сих пор.
+$app->get('/', new Logger());
+
+// Через конструктор в тех ситуациях где используются объекты
+$app = new Application(new Logger());
+
+// Через сеттеры. По возможности лучше этот способ не использовать. Он связан с мутацией объектов и нарушением целостности (подробнее было в курсе по объектно-ориентированному дизайну).
+
+$obj->setLogger(new Logger());
+
+/*
+Как видите, за громким термином скрывается очень простая штука – передача параметров. С другой стороны, термины позволяют понять больше смысла без необходимости знать дополнительный контекст. Главное не увлекаться, а то можно превратиться в архитектурных астронавтов.
+
+# Дополнительные материалы
+Dependency Injection https://www.youtube.com/watch?v=IKD2-MAkXyQ
+*/
+
+/**@@
+Создайте полноценное консольное приложение, которое показывает текущую погоду в городе. Оно работает так:
+*/
+$ php bin/weather.php berlin
+
+/*
+Temperature in berlin: 26C
+Это консольное приложение обращается внутри себя к сервису погоды. Сервис погоды расположен на localhost:8080. Информацию по городу можно извлечь сделав GET запрос на урл /api/v2/cities/<имя города>. Данные от сервиса возвращаются в виде json: { "name": "<имя города>", temperature: "<температура>" }.
+
+src/WeatherService.php
+Реализуйте логику работы сервиса. Сделайте так, чтобы http-клиент не был зашит внутри класса, используйте инъекцию зависимостей для проброса клиента во внутрь.
+
+То как выполнять http-запросы через guzzle можно подсмотреть в его документации.
+
+bin/weather.php
+Реализуйте код, вызывающий сервис и печатающий на экран ожидаемую строку. Для извлечения города из аргументов командной строки, воспользуйтесь массивом $argv. Первый аргумент (передаваемое имя города) находится под индексом 1.
+
+Подсказки
+Попробуйте ответить на вопросы:
+
+Сервис погоды это абстракция данных или нет? (пересмотрите начало курса по объектно-ориентированному дизайну).
+Кто отвечает за формирование текста, который мы ожидаем на выходе?
+Что должен вернуть метод lookup($cityName)?
+Может ли bin содержать определения?
+*/
+
+// FILE: /app/WeatherService.php:
+namespace App;
+
+class WeatherService
+{
+    const API_URL = 'http://localhost:8080/api/v2';
+
+    private $httpClient;
+
+    public function __construct($httpClient)
+    {
+        $this->httpClient = $httpClient;
+    }
+
+    public function lookup($cityName)
+    {
+        $url = implode('/', [self::API_URL, "cities/{$cityName}"]);
+        $response = $this->httpClient->get($url);
+
+        return json_decode($response->getBody(), true);
+    }
+}
+
+
+// FILE: /app/bin/weather.php:
+
+require '/composer/vendor/autoload.php';
+
+use App\WeatherService;
+
+$weather = new WeatherService(new \GuzzleHttp\Client());
+$data = $weather->lookup($argv[1]);
+echo "Temperature in {$data['name']}: {$data['temperature']}C";
+
+
+
+>>>>>> Полиморфизм подтипов <<<<<<
+
+/*
+До сих пор мы работали с, так называемой, утиной типизацией: Если что-то ходит как утка и крякает как утка, то это и есть утка. Она проявляется в том, что в сигнатуре функции не указывается ожидаемый класс или интерфейс объекта. Мы просто ждем что вызывающий код отдаст объект, имеющий необходимые методы:
+*/
+
+function doSomething($logger)
+{
+    $logger->info('process starting');
+}
+
+/*
+Утиная типизация автоматически вытекает из динамической типизации. В большинстве динамических языках понятия "интерфейс" даже не существует. PHP, в этом смысле, пошел своим путём. Несмотря на его динамическую природу, классовая модель PHP взята из Java. И в PHP присутствуют почти все соответствующие атрибуты: интерфейсы, абстрактные классы и многое другое. Поэтому в PHP принято указывать интерфейсы ожидаемых объектов в сигнатурах функций.
+*/
+
+function doSomething(Psr\Log\LoggerInterface $logger)
+{
+    $logger->info('process starting');
+}
+
+/*
+Теперь эта функция работает только с объектами тех классов, которые реализуют указанный интерфейс.
+
+Как вы помните, в сигнатуре можно указывать и класс и интерфейс. Что правильнее? Вооружившись принципом инверсии зависимостей, мы можем однозначно сказать что правильнее использовать интерфейсы и завязываться на абстракцию вместо конкретной реализации. Только в этом случае появится возможность подменить реализацию. Ниже пример реального кода из фреймворка Symfony2, в котором активно используется полиморфизм подтипов с инъекцией через конструктор:
+*/
+
+class Psr18Client implements ClientInterface
+{
+    private $client;
+    private $responseFactory;
+    private $streamFactory;
+
+    public function __construct(HttpClientInterface $client = null, ResponseFactoryInterface $responseFactory = null, StreamFactoryInterface $streamFactory = null)
+    {
+        $this->client = $client ?? HttpClient::create();
+        $this->responseFactory = $responseFactory;
+        $this->streamFactory = $streamFactory ?? ($responseFactory instanceof StreamFactoryInterface ? $responseFactory : null);
+        $psr17Factory = new Psr17Factory();
+        $this->responseFactory = $this->responseFactory ?? $psr17Factory;
+        $this->streamFactory = $this->streamFactory ?? $psr17Factory;
+    }
+
+    // another methods
+}
+
+
+/*
+В очередной раз подчеркну что не нужно возводить эту технику в абсолют. Если создавать интерфейсы на всё подряд, то код очень быстро распухнет и станет сложным. Вспомните, в ruby/pyton/js вообще нет интерфейсов и никто не умер. Попробуйте побродить по исходникам популярного микрофреймворка https://github.com/laravel/lumen-framework. Внутри него крайне тяжело найти места, где в сигнатурах методов встречаются явные указания интерфейсов
+
+Для лучшей переносимости кода, в PHP вводятся стандартные интерфейсы для самых частых задач. Они описываются в PSR. В примере выше используется стандартный интерфейс Psr\Log\LoggerInterface. Со временем, всё большая часть библиотек начнет его реализовывать, а это позволит безболезненно подменять логгер без необходимости менять свой код. Кроме логгера в PSR описаны множество других интерфейсов, среди них http-клиент, http-запрос, http-ответ, кеш и другое.
+
+Теперь мы можем ответить на вопрос, почему этот полиморфизм называется полиморфизмом подтипов. Типом в ООП языках принято называть интерфейсы (хотя это не совсем правда) и отношение подтипов определяется отношением интерфейсов.
+
+Интерфейсы можно расширять другими интерфейсами, для этого используется ключевое слово extends. Пример из библиотеки DS (той где описаны структуры данных на PHP в объектном синтаксисе):
+*/
+
+// https://github.com/php-ds/polyfill/blob/master/src/Collection.php
+interface Collection extends \Traversable, \Countable, \JsonSerializable
+{
+    // some code
+}
+
+/*
+Теперь, любой класс реализующий интерфейс Collection, будет обязан реализовать все интерфейсы, которые расширяет Collection. Это касается каждого интерфейса в цепочке.
+
+# Статические методы
+
+Статические методы жестко завязаны на имя класса, поэтому полиморфизм подтипов в них невозможен. Но можно схитрить и использовать вместо класса, переменную с его именем:
+*/
+Foo::aStaticMethod();
+$classname = 'Foo';
+$classname::aStaticMethod(); // As of PHP 5.3.0
+
+/*
+# Дополнительные материалы
+Принцип Лисков https://en.wikipedia.org/wiki/Принцип_подстановки_Барбары_Лисков
+Subtyping https://en.wikipedia.org/wiki/Subtyping
+Принцип открытости/закрытости https://ru.wikipedia.org/wiki/Принцип_открытости/закрытости
+Принцип разделения интерфейса https://ru.wikipedia.org/wiki/Принцип_разделения_интерфейса
+*/
+
+
+/**@@
+В этом задании используется класс InMemoryKV, с которым вы недавно работали. Теперь мы добавим ему интерфейс и дополнительно реализуем сериализацию.
+
+src/KeyValueStorageInterface.php
+Реализуйте интерфейс KeyValueStorageInterface, который расширяет интерфейс \Serializable и имеет следующие методы:
+*/
+
+set($key, $value);
+get($key, $default = null);
+unset($key);
+toArray();
+
+/*
+src/InMemoryKV.php
+Реализуйте в классе InMemoryKV интерфейс \Serializable https://www.php.net/manual/en/class.serializable.php, который встроен в PHP. Этот интерфейс позволяет применять к объектам методы serialize https://www.php.net/manual/en/function.serialize.php и unserialize https://www.php.net/manual/en/function.unserialize.php. 
+
+Функция serialize позволяет представить объект строкой и сохранить его куда-нибудь в файловую систему или передать по сети. Функция unserialize выполняет обратную операцию и восстанавливает сериализованный объект.
+
+Для сериализации используйте json_encode, для десериализации json_decode.
+*/
+
+
+// FILE: /app/src/KeyValueStorageInterface.php:
+namespace App;
+
+interface KeyValueStorageInterface extends \Serializable
+{
+    public function set($key, $value);
+    public function get($key, $default = null);
+    public function unset($key);
+    public function toArray();
+}
+
+
+// FILE: /app/src/InMemoryKV.php:
+namespace App;
+
+class InMemoryKV implements KeyValueStorageInterface
+{
+    private $map;
+
+    public function __construct($initial = [])
+    {
+        $this->map = $initial;
+    }
+
+    public function set($key, $value)
+    {
+        $this->map[$key] = $value;
+    }
+
+    public function unset($key)
+    {
+        unset($this->map[$key]);
+    }
+
+    public function get($key, $default = null)
+    {
+        return $this->map[$key] ?? $default;
+    }
+
+    public function toArray()
+    {
+        return $this->map;
+    }
+
+    public function serialize()
+    {
+        return json_encode($this->map);
+    }
+
+    public function unserialize($data)
+    {
+        $this->map = json_decode($data, true);
+    }
+}
+
+
+>>>>>> Стратегия (Паттерн) <<<<<<
+
+
+/*
+Закрепим пройденную теорию на одном практическом примере, показывающем типичное применение полиморфизма подтипов.
+
+Представьте себе задачу расчёта стоимости туристической страховки. Эта страховка, которую желательно купить при выезде за границу, на случай внезапных болезней или травм.
+
+Сумма страховки зависит от большого числа факторов. Некоторые из факторов могут влиять на сам процесс подсчёта стоимости, то есть они изменяют не значения в формуле подсчёта, а саму формулу.
+
+Конкретно в случае страховок, скорее всего есть одна большая формула, куда подставляются значения и вычисление происходит за один заход. Для нас, сейчас, главное сама концепция, а не точное знание внутренностей страхового бизнеса
+
+Если решать эту задачу в лоб, то она будет выглядеть как большое месиво вычислений со множеством условных конструкций. Со временем такой код становится крайне тяжелым для восприятия из-за большого числа состояний, которые надо удерживать в голове.
+*/
+
+// Примеры с потолка
+if ($age < 18) {
+  $cost = $salary * $age;
+
+  if ($country === 'uganda') { 
+    $cost = $cost / 2;
+  }
+} else if ($age >= 18 && $age < 24) {
+    // ...
+}
+
+/*
+Можно ли как-то сделать код понятнее и проще для восприятия? Иногда да. Из всех факторов участвующих в расчёте, нужно попытаться найти те, которые влияют на вычисление глобально. Они проявляются как глобальный if на верхнем уровне. Предположим что в случае страховки это возраст. То есть считаем что возраст определяет формулу расчёта стоимости страховки. Следующим шагом смотрим на ветки в этой условной конструкции и то какие диапазоны там указаны. Допустим такую картину:
+
+- До 18
+- От 18 до 24
+- От 24 до 65
+- Старше 65
+*/
+
+interface CostInsuranceCalculation
+{
+    public function calculate($params);
+}
+
+class LessThan18 implements CostInsuranceCalculation
+{
+    // Параметры, это те самые факторы, по которым строится вычисление
+
+    public function calculate($params)
+    {
+        // тут считаем и возвращаем результат
+    }
+}
+
+// Имя конечно так себе, в реальном коде стоит придумать что-нибудь говорящее
+class MoreThan18AndLessThan24 implements CostInsuranceCalculation
+{
+    // Структура параметров должна 100% совпадать с остальными классами,
+    // так как только в этом случае возможен полиморфизм
+    public function calculate($params)
+    {
+        // тут считаем и возвращаем результат
+    }
+}
+
+// Остальные классы
+
+
+/*
+Главное что мы получили - разделили процесс вычисления на независимые блоки кода, которые проще для восприятия. Каждый такой класс называется стратегией (вычисления). Очень важно то, что стратегия не является абстракцией, объектом с состоянием и временем жизни. Поэтому данные передаются не в конструктор, а в сам метод (вспомните курс объектно-ориентированный дизайн). По сути, это обычная функция (вычисление), которое упаковано в класс только с одной целью, получить полиморфизм подтипов. Всё тоже самое можно сделать (и код будет проще) используя диспетчеризацию функций по ключам.
+
+Дальше возникает вопрос, а каким образом и где выбрать правильную реализацию, с которой нужно работать? Вариантов здесь несколько. Выбор реализации может быть делегирован внешнему коду, то есть если мы применяем инверсию зависимостей, то работаем уже с готовой стратегией:
+*/
+
+function calculateCost($strategy, $params)
+{
+    $strategy->calculate($params);
+}
+
+/*
+Пока мы только ушли от проблемы, но не решили её. В любом случае, где-то будет код, который содержит либо условную конструкцию, либо реализует один из способов диспетчеризации, которые мы разобрали в предыдущих уроках. В самом простом случае этот код будет выглядеть так:
+*/
+
+function chooseCostInsuranceStrategy($user)
+    if ($user->getAge() < 18) {
+        return new LessThan18();
+    } else if (/* ... */) {
+        // some code
+    }
+}
+
+$strategy = chooseCostInsuranceStrategy($user);
+$strategy->calculate($params);
+
+
+/*
+Как видно по примерам выше, кода с использованием стратегии будет больше (но не так много если используется диспетчеризация функций по ключам в ассоциативном массиве). Это касается фактически всех ситуаций, в которых задействован полиморфизм подтипов в PHP. Это цена, которую придётся заплатить за разделение, упрощающее расширение кода и уменьшающее его сложность. С другой стороны, очень легко попасть в ловушку и, наоборот, сделать сложность кода выше, чем оно было до внедрения полиморфизма подтипов. Этот полиморфизм делает код многословным и излишне абстрактным если применять его налево и направо. А расширение нужно не так часто, как об этом говорят. Более того, инвертировать зависимости можно по ходу действия, когда в этом появляется необходимость.
+
+# Дополнительные материалы
+Expression Problem https://en.wikipedia.org/wiki/Expression_problem
+*/
+
+
+/**@@
+TicTacToe – известная игра в крестики нолики, на поле 3x3. В этом задании, вам предстоит реализовать данную игру. Основной движок игры находится в файле TicTacToe.php. В директории strategies находится код, который отвечает за поведение AI (искуственный интелект!). В зависимости от выбранного уровня игры, включается либо Easy стратегия, либо Normal.
+
+Задание специально построено так, чтобы предоставить вам максимальную свободу в организации кода. Результат будет хорошей лакмусовой бумажкой, по которому можно оценить насколько архитектурная тема была понята.
+
+src/TicTacToe.php
+Реализуйте класс TicTacToe, который представляет собой игру крестики-нолики. Принцип его работы описан в коде ниже:
+*/
+
+// По умолчанию выбран easy уровень. Его можно изменить, передав в конструктор строку 'normal'
+$game = new TicTacToe();
+
+// Если переданы аргументы, то ходит игрок. Первый аргумент – строка, второй – столбец.
+$game->go(2, 2);
+
+// Ход компьютера
+$game->go();
+$game->go(1, 2);
+$game->go();
+// Метод go возвращает true если текущий ход победный и false в ином случае
+$isWinner = $game->go(3, 2); // true
+
+/*
+src/strategies/Easy.php
+Реализуйте стратегию, которая пытается заполнить поля, пробегаясь построчно сверху вниз и слева направо. Как только она встречает свободное поле, то вставляет туда значение.
+
+src/strategies/Normal.php
+Реализуйте стратегию, которая пытается заполнить поля, пробегаясь построчно снизу вверх и слева направо. Как только она встречает свободное поле, то вставляет туда значение.
+
+Подсказки
+Кто отвечает за состояние игры, и где оно должно храниться?
+Не мудрите с проверкой победителя, реализуйте эту логику в лоб.
+*/
+
+
+// FILE /app/src/TicTacToe.php:
+namespace App;
+
+class TicTacToe
+{
+    private $strategy;
+
+    public function __construct($level = 'easy')
+    {
+        switch ($level) {
+            case 'easy':
+                $this->strategy = new strategies\Easy();
+                break;
+            case 'normal':
+                $this->strategy = new strategies\Normal();
+                break;
+        }
+
+        $this->map = [
+            1 => array_fill(1, 3, null),
+            2 => array_fill(1, 3, null),
+            3 => array_fill(1, 3, null)
+        ];
+    }
+
+    public function getMap()
+    {
+        return $this->map;
+    }
+
+    public function go($row = null, $col = null)
+    {
+        if ($row === null || $col === null) {
+            [$autoRow, $autoCol] = $this->strategy->getNextStep($this->map);
+
+            $this->map[$autoRow][$autoCol] = 'AI';
+
+            return $this->isWinner('AI');
+        }
+
+        $this->map[$row][$col] = 'Player';
+
+        return $this->isWinner('Player');
+    }
+
+    private function isWinner($type)
+    {
+        foreach ($this->map as $row) {
+            if ($this->populatedByOnePlayer($row, $type)) {
+                return true;
+            }
+        }
+
+        for ($i = 1; $i <= 3; $i++) {
+            if ($this->populatedByOnePlayer(array_column($this->map, $i), $type)) {
+                return true;
+            }
+        }
+
+        $diagonal1 = [$this->map[1][1], $this->map[2][2], $this->map[3][3]];
+
+        if ($this->populatedByOnePlayer($diagonal1, $type)) {
+            return true;
+        }
+
+        $diagonal2 = [$this->map[3][1], $this->map[2][2], $this->map[1][3]];
+        if ($this->populatedByOnePlayer($diagonal1, $type)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    private function populatedByOnePlayer($row, $type)
+    {
+        foreach ($row as $value) {
+            if ($value !== $type) {
+                return false;
+            }
+        }
+        return true;
+    }
+}
+
+
+// FILE: /app/src/strategies/Easy.php
+namespace App\strategies;
+
+class Easy
+{
+    public function getNextStep($map)
+    {
+        foreach ($map as $i => $row) {
+            foreach ($row as $j => $value) {
+                if ($value === null) {
+                    return [$i, $j];
+                }
+            }
+        }
+    }
+}
+
+
+
+// FILE: /app/src/strategies/Normal.php
+namespace App\strategies;
+
+class Normal
+{
+    public function getNextStep($map)
+    {
+        for ($i = 3; $i >= 1; $i--) {
+            foreach ($map[$i] as $j => $value) {
+                if ($value === null) {
+                    return [$i, $j];
+                }
+            }
+        }
+    }
+}
+
+
+
+
+>>>>>> Фабрика (Паттерн) <<<<<<
+
+/*
+Применение полиморфизма подтипов не убирает условные конструкции полностью (кроме некоторых случаев диспетчеризации, например по ключу или по имени файла). Чаще, условная конструкция остаётся одна, только на уровне выбора подходящей реализации, а вот, затем, эта реализация используется внутри полиморфной функции прямым способом, без условий. В прошлом уроке мы рассмотрели пример функции, которая выбирает необходимую реализацию стратегии на основе возраста пользователя и возвращает её наружу.
+*/
+
+
+function chooseCostInsuranceStrategy($user)
+    if ($user->getAge() < 18) {
+        return new LessThan18();
+    } else if (/* ... */) {
+        // some code
+    }
+}
+
+/*
+Функция, которая: выбирает нужный класс, создаёт объект и возвращает его наружу, называется фабрикой (более точно фабричным методом). Громкое имя для очень простой штуки. Фабрика может быть реализована любым способом включая всё что разбиралось в этом курсе.
+
+В общем случае фабрикой называют всё подряд, что создаёт объект или коллекции объектов. Причём не обязательно разных классов, класс может быть и один, но сам процесс создания, включает в себя какие-то предварительные вычисления. В реальных проектах фабрики могут быть огромными.
+
+Фабрики часто реализуются как классы с одним статическим методом – factory. Сами фабрики объектами не делают (иногда таки делают), так как это не абстракция данных, а подменять их смысла нет, иначе получится подмена подменятора.
+
+# Диспетчеризация класса
+PHP позволяет создавать объекты, используя имя класса как строку:
+*/
+
+$className = 'stdObject';
+$obj = new $className();
+
+/*
+В большинстве других динамических языках, класс и так объект первого рода и им можно пользоваться как обычными данными
+
+Такой синтаксис открывает широкий простор для диспетчеризации. Например в некоторых ситуациях получится уйти от условных конструкций вообще:
+*/
+
+// Policy – обычно это имя используют для авторизации, то есть системы проверки прав доступа
+function getUserPolicy($user)
+{
+    $mapping = [
+      'manager' => 'App\Policies\Manager',
+      'worker' => 'App\Policies\Worker'
+    ];
+
+    $className = $mapping[$user->getType()];
+
+    return new $className();
+}
+
+/*
+В этом коде есть одна небольшая проблема. Она связана с тем, что нужно указывать полное имя класса, включая все неймспейсы, иначе этот код не заработает. От неё можно уйти если использовать специальный синтаксис извлечения полного имени класса:
+*/
+
+use App\Policies\Manager;
+use App\Policies\Worker;
+
+$mapping = [
+  'manager' => Manager::class, // App\Policies\Manager
+  'worker' => Worker::class // App\Policies\Worker
+];
+
+/*
+То есть достаточно после имени любого класса добавить ::class и получится выражение, которое возвращает полное имя класса в виде строки.
+
+Иногда идут ещё дальше и формируют само имя класса динамически. Это можно сделать даже с кодом выше. По нему видно, что имя класса однозначно выводится из типа пользователя. Ниже пример, в котором фабрика вообще не содержит конкретных имён классов, она выводит их на основе соглашения об именовании: type => typePolicy.
+*/
+
+// Policy – обычно это имя используют для авторизации, то есть системы проверки прав доступа
+function getUserPolicy($user)
+{
+    // При таком подходе придётся самостоятельно добавлять все неймспейсы
+    // Но зато код полностью отвязан от имён классов и их количества
+    $className = 'App\Policies\'' . ucfirst($user->getType()) . 'Policy';
+
+    return new $className();
+}
+
+/*
+# Дополнительные материалы
+Фабрика https://github.com/Hexlet/patterns/tree/master/content/factory
+*/
+
+
+/**@@
+src/ConfigFactory.php
+Создайте фабрику, которая принимает на вход путь до файла конфигурации в формате либо json либо yaml и возвращает объект класса Config. Конструктор класса Config принимает на вход массив с данными, полученными из конфигурационных файлов и предоставляет к нему объектный доступ.
+*/
+
+$config = ConfigFactory::build(__DIR__ . '/fixtures/test.yml');
+$config->key; // value
+print_r(get_class($config)); // Config
+
+$config2 = ConfigFactory::build(__DIR__ . '/fixtures/test.json');
+$config2->key; // value
+
+/*
+src/parsers/JsonParser.php
+Реализуйте класс, отвечающий за парсинг json. Используйте внутри json_decode, в котором второй параметр true.
+
+src/parsers/YamlParser.php
+Реализуйте класс, отвечающий за парсинг yaml. Для парсинга используется сторонний компонент со следующим интерфейсом:
+*/
+Yaml::parse($data);
+
+/*
+Подсказки
+- Получить расширение файла можно двумя способами, либо через pathinfo https://php.net/manual/ru/function.pathinfo.php, либо через SplFileInfo https://php.net/manual/ru/class.splfileinfo.php 
+- Чтение файлов делается с помощью функции file_get_contents https://www.php.net/manual/ru/function.file-get-contents.php
+*/
+
+
+// FILE: /app/src/ConfigFactory.php
+
+namespace App;
+
+class ConfigFactory
+{
+    public static function build($filepath)
+    {
+        $mapping = [
+            'yaml' => parsers\YamlParser::class,
+            'yml' => parsers\YamlParser::class,
+            'json' => parsers\JsonParser::class,
+        ];
+
+        $fileInfo = new \SplFileInfo($filepath);
+
+        $parserClass = $mapping[$fileInfo->getExtension()];
+        $parser = new $parserClass();
+        $rawData = file_get_contents($fileInfo->getPathname());
+        $data = $parser->parse($rawData);
+
+        return new Config($data);
+    }
+}
+
+// FILE: /app/src/parsers/JsonParser.php:
+namespace App\parsers;
+
+class JsonParser
+{
+    public function parse($data)
+    {
+        return json_decode($data, true);
+    }
+}
+
+
+// FILE: /app/src/parsers/YamlParser.php:
+namespace App\parsers;
+
+use Symfony\Component\Yaml\Yaml;
+
+class YamlParser
+{
+    public function parse($data)
+    {
+        return Yaml::parse($data);
+    }
+}
+
+
+
+
+>>>>>> Шаблоны проектирования (Паттерны) <<<<<<
+
+
+/*
+Паттерн проектирования – подход к решению какой-то типовой задачи. Ранее мы уже рассмотрели некоторые из них, начиная от разных видов диспетчеризации, заканчивая стратегией и фабрикой. Этих паттернов очень много, каждый день придумываются новые, и даже каждый программист имеет какие-то свои паттерны для своих задач.
+
+Паттерны, в общем, не связаны с понятием ООП, но именно в ООП их любят структурировать и описывать. Поэтому эта тема особенно распространена в языках с классовой структурой, например Java, C# или PHP. И большинство этих паттернов сводится к тому, как правильно применять полиморфизм подтипов в разных ситуациях. Вот только некоторые из широко известных, которые опираются на полиморфизм:
+
+- Адаптер
+- Стратегия
+- Абстрактная фабрика
+- Мост
+- Композит
+- Декоратор
+- Цепочка ответственности
+- Наблюдатель
+- Состояние
+- Шаблонный метод
+- Посетитель
+
+Некоторые из них связаны с абстракцией и имеют внутреннее состояние, другие – обычные функции, упакованные в классы только ради полиморфизма (но могли бы быть реализованы и обычными функциями, которые диспетчеризуются разными способами).
+
+В мире ООП паттернов, их основным источником считается книга Приемы объектно-ориентированного проектирования https://www.ozon.ru/context/detail/id/2457392/. Паттерны проектирования. В ней действительно описано много полезных подходов, но будьте осторожны. Учтите следующие моменты:
+
+ - Примеры в книге описаны на языке C++ и имеют более сложную реализацию, чем это нужно в динамических языках.
+ - Многие паттерны рождаются вследствие ограничений конкретного языка, например паттерн "команда". В JavaScript это естественный способ писать код и для этого не нужны классы.
+ - Не все паттерны описанные в этой книге, так уж важны для веб-разработчиков. Вероятность того, что вам придётся когда-то иметь дело с абстрактной фабрикой, крайне низка.
+ - Самих паттернов намного больше чем указано в этой книге. Паттерны это не догма, всё течет, всё развивается.
+
+ Конкретно в PHP, популярностью пользуется книга Объекты, шаблоны и методики программирования https://www.amazon.com/Objects-Patterns-Practice-MATT-ZANDSTRA/dp/1484219953.
+
+
+# Полиморфизм в паттернах или Паттерн создания Паттернов
+
+Большая часть паттернов, которая связана с полиморфизмом, строится по одному и тому же принципу. Зная его, вы сможете самостоятельно принимать правильные решения, даже не зная про паттерн для данной ситуации. Ключевая идея состоит в том, что берётся всё множество вариантов поведения и на каждый создаётся свой собственный класс.
+
+Например в стратегии, количество классов-стратегий совпадает с количеством разных способов вычисления. Если их будет пять, то придётся создать пять классов. По крайней мере в классовых языках. В языках, где предпочитают функции, будет создано пять разных функций и это всё равно будет стратегия.
+
+
+# Антипаттерны
+
+Раз есть паттерны, значит и существуют антипаттерны, это типовые ошибки, которые совершают программисты. Многие из них имеют вполне конкретные, часто шуточные, названия: "паблик морозов" или "божественный объект". Самое удивительное, что подходы считавшиеся раньше паттернами, иногда перетекают в раздел антипаттернов. Самый яркий пример это паттерн "одиночка (singleton)" – объект который может существовать только в единственном экземпляре. Как показала жизнь, это плохо почти всегда. Кроме того, код с синглтонами крайне сложно тестировать.
+
+# Обучение паттернам
+Новичков, которые начитались статей и наслушались старших товарищей, очень волнует вопрос изучения паттернов. Нужно ли их учить? Сколько их учить? По каким книгам и так далее.
+
+Попробуем разобраться. Как показывает практика, про паттерны все говорят, но мало кто действительно прочитал и понял их и может разумно применять. Причин этому несколько. Во-первых, крайне сложно осознать паттерн не столкнувшись с реальной проблемой, которую он решает. Во-вторых, настоящее понимание паттернов завязано на те вещи, которые мы разбирали на протяжении всей профессии: именование (оно чертовски важно), менеджмент состояния, побочные эффекты, абстракции, расширяемость, полиморфизм подтипов. Без понимания этих вещей, попытка испольовать паттерны, почти наверняка, превратится в культ карго. Причём из всего списка выше, паттерны, по эффекту оказываемому на код, находятся на последнем месте.
+
+Важно понимать что паттерны это не причина, а следствие. Остерегайтесь мышления в стиле "вот есть паттерн, как его натянуть на ситуацию". Сначала нужно понять ситуацию, а потом возникнет паттерн. И совершенно нормально, что первые годы разработки (а у кого-то и больше), задачи будут решаться так как получается. Обучение происходит через ошибки и неправильные решения, этого не надо бояться и избегать. Главное это последовательное улучшение, а здесь помогут книги и наставники (на работе или в сети). 
+
+# Дополнительные материалы
+Design Patterns (PHP The Right Way)  https://phptherightway.com/pages/Design-Patterns.html
+Принцип единственной ответственности https://ru.wikipedia.org/wiki/Принцип_единственной_ответственности
+Вебинар: Что такое паттерны программирования https://www.youtube.com/watch?v=wX6BBaQZpzE
+Паттерны (Редакция Хекслета) https://github.com/Hexlet/patterns
+Антипаттерны https://ru.wikipedia.org/wiki/Антипаттерн
+Архитектура корпоративных приложений https://www.ozon.ru/context/detail/id/1616782/
+*/
+
+
+
+/**@@
+В задании описан интерфейс Tag. Каждый класс, реализующий этот интерфейс, представляет из себя тег HTML. Метод render(), позволяет получить текстовое представление тега:
+*/
+$tag = new InputTag('submit', 'Save');
+$tag->render(); // <input type="submit" value="Save">
+
+/*
+Предположим, что эта система нужна для генерации разных кусков верстки, которая может быть очень разнообразной. Попробуйте ответить на вопрос, сколько понадобится классов для представления всех возможных комбинаций тегов?
+
+Если создавать по классу на каждый возможный вариант верстки, то классов будет бесконечно много и смысла в такой реализации очень мало. Но вместо этого лучше использовать композицию. Создать класс для каджого индивидуального тега (в html5 их около 100 штук), а затем путем комбинирования получить все возможные варианты верстки.
+
+src/LabelTag.php
+Реализуйте класс LabelTag, который реализует интерфейс Tag и умеет оборачивать другие теги:
+*/
+
+
+$inputTag = new InputTag('submit', 'Save');
+$labelTag = new LabelTag('Press Submit', $inputTag);
+$labelTag->render();
+// <label>
+//   Press Submit
+//   <input type="submit" value="Save">
+// </label>
+
+
+/*
+Подскизки
+ - Паттерн Декоратор https://ru.wikipedia.org/wiki/Декоратор_(шаблон_проектирования)
+ - Паттерн Компоновщик https://ru.wikipedia.org/wiki/Компоновщик_(шаблон_проектирования)
+*/
+
+
+// FILE: /app/src/html.php:
+namespace App\html;
+
+function save($tag, $filename)
+{
+    $html = $tag->render();
+    file_put_contents($filename, $html);
+}
+
+
+
+// FILE: /app/src/InputTag.php:
+namespace App\tags;
+
+class InputTag implements Tag
+{
+    private $type;
+    private $value;
+
+    public function __construct($type, $value)
+    {
+        $this->type = $type;
+        $this->value = $value;
+    }
+
+    public function render()
+    {
+        return "<input type=\"{$this->type}\" value=\"{$this->value}\">";
+    }
+
+    public function __toString()
+    {
+        return $this->render();
+    }
+}
+
+
+// FILE: /app/src/LabelTag.php:
+namespace App\tags;
+
+class LabelTag implements Tag
+{
+    private $text;
+    private $child;
+
+    public function __construct($text, $child)
+    {
+        $this->text = $text;
+        $this->child = $child;
+    }
+
+    public function render()
+    {
+        return "<label>{$this->text}{$this->child}</label>";
+    }
+
+    public function __toString()
+    {
+        return $this->render();
+    }
+}
+
+
+
+// FILE: /app/src/Tag.php:
+namespace App\tags;
+
+interface Tag
+{
+    public function render();
+    public function __toString();
+}
+
+
+
+
+>>>>>> Объектная композиция <<<<<<
+
+/*
+В этом уроке, описывается система, которая помогает правильно организовывать код построенный на классах.
+
+В языках, где ООП построено без инкапсуляции, подобные проблемы решаются проще и возникают реже. Если хочется узнать как это бывает, попробуйте пописать код на Clojure или Elixir.
+
+Предположим что мы делаем сайт имеющий механизм аутентификации. После её выполнения, пользователю выводится приветствие, которое строится по разному в зависимости от возвраста пользователя. Если пользователю не исполнилось 18, то пишется одно, всем остальным другое.
+
+В данном случае, реализация в лоб, через if, будет лучшим решением задачи. Но в этом уроке мы отрабатываем использование полиморфизма в рамках классовой модели, поэтому пойдем другим путём. Сама задача специально упрощена, чтобы не тратить время на её анализ
+
+Первый порыв у многих разработчиков, ввести два типа (интерфейса и класса): Under18 и Above18. Дальше в каждом из классов, которые реализуют эти интерфейсы добавить по методу getGreetingMessage(). В итоге мы получили полиморфизм подтипов:
+
+-- Где-то в шаблоне
+-- Правильный класс для пользователя выбирается на момент начала обработки http-запроса
+*/
+<?= $user->getGreetingMessage() ?>
+
+/*
+Это решение хоть и работает, но ведёт не по тому пути. Сегодня у нас до 18 и после, потом появится отдельное поведение для тех кто старше 65. Всё станет ещё хуже, когда кроме этих разделений, появится дополнительное разделение на девушек и парней. В таком случае мы получим большое число комбинаций, под каждую из которых придётся создать отдельный класс пользователя:
+
+девушки старше 18
+девушки младше 18
+парни старше 18
+парни младше 18
+...
+
+В книжках по паттернам любят приводить пример с разделением средств передвижения по типам: плавающие, летающие и ездящие. А потом, внезапно оказывается, что некоторые одновременно и плавают и ездят.
+
+Теперь попробуем ответить на вопрос, почему эту задачу не надо решать подтипами в любом случае. Сам по себе, пользователь, это сущность взятая из нашей предметной области. Предметная область и вывод текста на экран, это совершенно разные вещи. Второе относится к логике приложения, но не бизнес-логике. Если об этом не задумываться, то в конце-концов настанет момент, когда внутри пользователя окажется вообще всё что только происходит на сайте, ведь оно всё так или иначе связано с самим пользователем. И мы получим божественный объект.
+
+Правильное решение основано на композиции, подходе при котором создаются классы под конкретные задачи. Начнём сначала. В нашей задаче есть две ситуации: пользователи до 18 лет и пользователи старше. Создадим интерфейс GreetingMessage с методом getGreetingMessage и реализуем его в двух классах, один GreetingForUnder18 и другой GreetingAbove18. В каждом из них, будет тот вывод, который нужен для конкретного пользователя.
+
+Как пользователь будет взаимодействовать с объектами этих классов? Варианта два, либо мы передаем его в конструктор, либо в сам метод getGreetingMessage. Что правильнее? Всегда пытайтесь понять, имеем ли мы дело с абстракцией данных или нет. С самим пользователем всё понятно. Пользователь это абстракция данных, у него есть уникальность (все пользователи отличаются) и время жизни. А вот вывод сообщения, это операция без состояния. Само наличие класса и объекта для него обусловлено желанием получить полиморфизм подтипов и ничем более. Поэтому в данном примере лучше передавать пользователя через метод:
+*/
+
+<?= $greeting->getGreetingMessage($user) ?>
+
+// За кадром остался вопрос выбора и создания соответствующего объекта. За это отвечает фабрика, которая вызывается где-то до формирования вывода из шаблона.
+
+function buildGreetingObject($user)
+{
+    if ($user->getAge() < 18) {
+        return new GreetingForUnder18();
+    } else {
+        return new GreetingForAbove18();
+    }
+}
+
+/*
+Главное в этой схеме, то что пользователь остался пользователем. Он по прежнему отвечает только за логику ядра приложения. Даже если добавятся новые условия вывода сообщения и наши два класса превратятся в 10 классов (потому что 10 вариантов вывода в зависимости от разных параметров), то это никак не повлияет на пользователя.
+
+Что ещё более важно, при появлении новых задач, не связанных с выводом сообщения, пользователь по прежнему не будет затронут. Например, мы захотим отправлять письма разным пользователям после регистрации. В зависимости от количества видов писем, будет создано такое же количество классов реализующих интерфейс RegistrationEmailText. Принцип работы останется таким же. Фабрика, выбор нужного типа в начале процесса регистрации и полиморфное поведение при отправке письма.
+
+Внимательный читатель заметит, что результат подозрительно похож на стратегию. Как ни странно, это и есть стратегия.
+
+В итоге, в коде появляется большое количество небольших интерфейсов (типов) и множество классов их реализующих. Количество классов реализующих конкретный интерфейс, равно количеству возможных вариантов поведения. Большинство объектов этих классов не имеют своего состояния и нужны для организации полиморфного кода.
+
+Стоит ли так писать код? Иногда да, но чаще нет. Слепое следование ООП, делает код сложнее и тяжелее, там где подходит простая функция или условная конструкция, начинают вырастать параллельные иерархии классов. В примерах выше это хорошо прослеживается. Задача, которая может быть реализована десятью строчками, решается многими десятками строчек и четырьмя файлами (фабрика, классы и интерфейс). А программист знакомый с абстрактными классами и наследованием, наворотит ещё больше файлов.
+
+Обычно, получаемая сложность оправдывается расширяемостью, но это так не работает. Расширяемость нужно добавлять тогда когда нужно и только туда куда нужно. Другой вопрос, что сам способ организации кода через композицию объектов, является краеугольным камнем при организации кода построенного на классах. При этом надо чётко отслеживать, где у нас абстракция данных, а где действия без состояния, представленные объектами.
+
+Дополнительные материалы
+Архитектура и ООП https://ru.hexlet.io/blog/posts/arhitektura-i-oop
+Принцип разделения интерфейса https://ru.wikipedia.org/wiki/Принцип_разделения_интерфейса
+*/
+
+
+/**@@
+Адаптер – популярный шаблон проектирования. Он используется тогда, когда нужно использовать код, не поддерживающий необходимый интерфейс. В такой ситуации, создается "обертка" над необходимым кодом, которая поддерживает нужный интерфейс. Это очень похоже на адаптеры электронных устройств в реальной жизни.
+
+В текущем задании, есть код отвечающий за генерацию паролей, он находится в классе PasswordBuilder. Для генерации паролей, этот класс использует внешний объект, класс которого реализует интерфейс PasswordGenerationInterface.
+
+Суть данного задания, внедрить в эту систему внешнюю библиотеку, которая не поддерживает интерфейс PasswordGenerationInterface.
+
+Обратите внимание на то, что задача решается не через исправление кода самой библиотеки, а за счет создания адаптера, благодаря которому соединяется код задания и код библиотеки.
+
+src/HackzillaPasswordGenerator.php
+Напишите класс HackzillaPasswordGenerator, который представляет собой адаптер к пакету hackzilla/password-generator. Реализуйте внутри него интерфейс PasswordGeneratorInterface.
+*/
+
+// FILE: /app/src/HackzillaPasswordGenerator:
+namespace App;
+
+use Hackzilla\PasswordGenerator\Generator\ComputerPasswordGenerator;
+
+class HackzillaPasswordGeneratorAdapter implements PasswordGeneratorInterface
+{
+    private $options = [
+        'upperCase' => ComputerPasswordGenerator::OPTION_UPPER_CASE,
+        'lowerCase' => ComputerPasswordGenerator::OPTION_LOWER_CASE,
+        'numbers' => ComputerPasswordGenerator::OPTION_NUMBERS,
+        'symbols' => ComputerPasswordGenerator::OPTION_SYMBOLS
+    ];
+
+    public function generatePassword($length, $options = [])
+    {
+        $generator = new ComputerPasswordGenerator();
+        $generator->setLength($length);
+
+        foreach ($options as $optionName) {
+            $generator->setOptionValue($this->options[$optionName], true);
+        }
+
+        return $generator->generatePassword();
+    }
+}
+
+// FILE: /app/src/PasswordBuilder.php:
+namespace App;
+
+class PasswordBuilder
+{
+    private $passwordGenerator;
+
+    public function __construct(PasswordGeneratorInterface $passwordGenerator)
+    {
+        $this->passwordGenerator = $passwordGenerator;
+    }
+
+    public function buildPassword($length = 8, $options = ['numbers', 'symbols'])
+    {
+        $password = $this->passwordGenerator->generatePassword($length, $options);
+        $passwordDigest = sha1($password);
+
+        return ['password' => $password, 'digest' => $passwordDigest];
+    }
+}
+
+// FILE: /app/src/PasswordGeneratorInterface.php:
+namespace App;
+
+interface PasswordGeneratorInterface
+{
+    public function generatePassword($length, $options = ['numbers', 'symbols']);
+}
+
+
+>>>>>> Паттерн Состояние (State) <<<<<<
+
+/*
+Паттерн "Состояние" – яркий пример замены условных конструкций на полиморфизм подтипов. Он довольно широко используется и способен по-настоящему снизить сложность кода. Разберем его на примере будильника.
+
+Пусть у него имеются три кнопки. H - кнопка для увеличения часа на единицу, M - для увеличения минуты на единицу и кнопка Mode, которая переключает часы в режим настройки будильника. В этом режиме на экране отображается время срабатывания будильника, а кнопки H и M устанавливают не текущее время, а время срабатывания будильника. Повторное нажатие кнопки Mode возвращает часы в обычный режим. Кроме того, затяжное нажатие на кнопку Mode приводит к тому, что будильник активируется. Такое же нажатие ещё раз отключает будильник.
+
+После этого, если текущее время совпадает со временем будильника, включается звонок, который отключается либо нажатием кнопки Mode, либо самопроизвольно через минуту. Кнопки H и M в режиме звонка (когда сработал будильник) не активны.
+
+Поведение часов с будильником уже является сложным, поскольку одни и те же входные воздействия (нажатие одних и тех же кнопок) в зависимости от режима инициируют различные действия.
+
+В программных и программно-аппаратных вычислительных системах сущности со сложным поведением встречаются очень часто. Таким свойством обладают устройства управления, сетевые протоколы, диалоговые окна, персонажи компьютерных игр и многие другие объекты и системы.
+
+Подведём итог. У нас есть следующие действия:
+
+ - Установка времени
+ - Установка времени срабатывания будильника
+ - Включение/Выключение будильника
+ - Отключение звонка будильника
+
+# Флаго-ориентированное программирование 
+*/
+
+class AlarmClock 
+{
+    public function clickH()
+    {
+        if (!$this->onBell) {
+            if ($this->mode === 'alarm') {
+                $this->alarmHours += 1;
+            } else {
+                $this->hours += 1;
+            }
+        }
+    }
+}
+
+$clock = new AlarmClock();
+$clock->clickH();
+
+/*
+Выше типичный пример флаго-ориентированного программирования. Примерно так выглядит код большинства программ.
+
+Здесь наблюдается ситуация в которую так и просится полиморфизм. Достаточно очевидно, что диспетчеризация нам нужна по состоянию, другими словами, должен выполняться разный код в зависимости от того, в каком состоянии находится наш объект. Из этого предположения может следовать только одно. Нужно каждое состояние превратить в тип данных. Так появляется на свет паттерн State.
+
+Выделим три управляющих состояния для наших часов:
+ - ClockState
+ - AlarmState
+ - BellState
+
+
+Обратите внимание, что состояние "включен будильник" сюда не входит. Оно не является управляющим. 
+Этот параметр влияет только на то, что произойдет переход в BellState в тот момент, когда время на часах и время на будильнике будет одинаковым.
+
+Теперь давайте посмотрим на реализацию с использованием динамической диспетчеризации:
+*/
+
+class AlarmClock 
+{
+    public function __construct()
+    {
+        $this->hours = 12;
+        $this->alarmHours = 6;
+        $this->setState(ClockState::class);
+    }
+
+    public function setState($className) 
+    {
+        $this->state = new $className($this);
+    }
+
+    public function clickH() 
+    {
+        // Делегирование
+        $this->state->clickH();
+    }
+}
+
+
+/*
+Код, который здесь написан, это всего лишь один из вариантов реализации паттерна State. Не принимайте как догму всё, что вы читаете в книгах "10 лучших паттернов". Главное, это концептуальная идея и решаемая задача, остальное очень сильно варьируется от большого числа параметров. В основном в книгах все примеры даны для статических языков, и эти реализации очень громоздки для такого языка как php.
+
+От чего точно не уйти, так это от того, что в начале наши часы инициализируются неким начальным состоянием. В нашем случае оно statefull (мы передаем туда текущий объект), но так же оно могло бы быть и stateless. А дальше все интерфейсные методы часов, поведение которых зависит от состояния, делегируют все вызовы внутрь объекта состояния. Внутри, без условных конструкций, находится код, который выполняет только то, что нужно делать в текущем состоянии. При необходимости этот код меняет сам объект часов. Это возможно благодаря тому, что мы передали внутрь состояния this.
+
+Если какое-то событие приводит к изменению состояния, то само состояние (в паттерне State) отвечает за то, чтобы поменять себя на другое состояние. Например, при очередном тике часов, если настало время работы будильника, то мы подставляем вместо себя состояние BellState.
+*/
+
+class ClockState
+{
+    public function tick() 
+    {
+        if ($this->clock->isAlarmTime()) {
+            $this->clock->setState(BellState::class);
+        }
+    }
+}
+
+/**@@
+Реализуйте логику работы часов из теории.
+
+В режиме настройки будильника (alarm), часы и минуты изменяются независимо и никак друг на друга не влияют (как и в большинстве реальных будильников). То есть если происходит увеличение минут с 59 до 60 (сброс на 00), то цифра с часами остается неизменной.
+
+Интерфейсными методами часов являются:
+
+
+clickMode() - нажатие на кнопку Mode
+longClickMode() - долгое нажатие на кнопку Mode
+clickH() - нажатие на кнопку H
+clickM() - нажатие на кнопку M
+tick() - при вызове, увеличивает время на одну минуту. Если новое время совпало со временем на будильнике, то часы переключаются в режим срабатывания будильника (bell).
+isAlarmOn() - показывает включен ли режим будильника
+isAlarmTime() - возвращает true, если время на часах совпадает со временем на будильнике
+getMinutes() - возвращает минуты, установленные на часах
+getHours() - возвращает часы, установленные на часах
+getAlarmMinutes() - возвращает минуты, установленные на будильнике
+getAlarmHours() - возвращает часы, установленные на будильнике
+getCurrentMode() - возвращает текущий режим (alarm | clock | bell)
+
+
+Основной спецификацией к данной задачe нужно считать тесты.
+
+AlarmClock.php
+Реализуйте интерфейсные методы и логику работы часов.
+
+states/AlarmState.php, states/BellState.php, states/ClockState.php
+Реализуйте логику состояний.
+*/
+
+// FILE: /app/src/AlarmClock.php:
+class AlarmClock
+{
+    private $clockTime = ['minutes' => 0, 'hours' => 12];
+    private $alarmTime = ['minutes' => 0, 'hours' => 6];
+    private $alarmOn = false;
+
+    public function __construct()
+    {
+        $this->setNextState(states\ClockState::class);
+    }
+
+    public function clickMode()
+    {
+        $this->setNextState($this->state->getNextStateClassName());
+    }
+
+    public function longClickMode()
+    {
+        $this->alarmOn = !$this->alarmOn;
+    }
+
+    public function clickH()
+    {
+        $this->state->incrementH();
+    }
+
+    public function clickM()
+    {
+        $this->state->incrementM();
+    }
+
+    public function tick()
+    {
+        $this->incrementM('clockTime');
+        if ($this->clockTime['minutes'] === 0) {
+            $this->incrementH('clockTime');
+        }
+        $this->state->tick();
+    }
+
+    public function isAlarmOn()
+    {
+        return $this->alarmOn;
+    }
+
+    public function isAlarmTime()
+    {
+        return $this->clockTime['minutes'] === $this->alarmTime['minutes']
+            && $this->clockTime['hours'] === $this->alarmTime['hours'];
+    }
+
+    public function getMinutes()
+    {
+        return $this->clockTime['minutes'];
+    }
+
+    public function getHours()
+    {
+        return $this->clockTime['hours'];
+    }
+
+    public function getAlarmMinutes()
+    {
+        return $this->alarmTime['minutes'];
+    }
+
+    public function getAlarmHours()
+    {
+        return $this->alarmTime['hours'];
+    }
+
+    public function setNextState($className = null)
+    {
+        $className = $className ?? $this->state->getNextStateClassName();
+        $this->state = new $className($this);
+    }
+
+    public function getCurrentMode()
+    {
+        return $this->state->getModeName();
+    }
+
+    public function incrementH($timeType)
+    {
+        $hoursCount = $this->$timeType['hours'];
+        $this->$timeType['hours'] = ($hoursCount + 1) % 24;
+    }
+
+    public function incrementM($timeType)
+    {
+        $minutesCount = $this->$timeType['minutes'];
+        $this->$timeType['minutes'] = ($minutesCount + 1) % 60;
+    }
+}
+
+// FILE: /app/src/states/AlarmState.php:
+class AlarmState implements State
+{
+    private $clock;
+    private $mode = 'alarm';
+    private $timeType = 'alarmTime';
+    private $nextStateClass = ClockState::class;
+
+    public function __construct($clock)
+    {
+        $this->clock = $clock;
+    }
+
+    public function getNextStateClassName()
+    {
+        return $this->nextStateClass;
+    }
+
+    public function getModeName()
+    {
+        return $this->mode;
+    }
+
+    public function incrementH()
+    {
+        $this->clock->incrementH($this->timeType);
+    }
+
+    public function incrementM()
+    {
+        $this->clock->incrementM($this->timeType);
+    }
+
+    public function tick()
+    {
+        if ($this->clock->isAlarmTime()) {
+            $this->clock->setNextState(BellState::class);
+        }
+    }
+}
+
+// FILE: /app/src/states/BellState.php:
+class BellState implements State
+{
+    private $clock;
+    private $mode = 'bell';
+    private $nextStateClass = ClockState::class;
+
+    public function __construct($clock)
+    {
+        $this->clock = $clock;
+    }
+
+    public function getNextStateClassName()
+    {
+        return $this->nextStateClass;
+    }
+
+    public function getModeName()
+    {
+        return $this->mode;
+    }
+
+    public function tick()
+    {
+        $this->clock->setNextState();
+    }
+
+    public function incrementH()
+    {
+        return false;
+    }
+
+    public function incrementM()
+    {
+        return false;
+    }
+}
+
+// FILE: /app/src/states/ClockState.php:
+class ClockState implements State
+{
+    private $clock;
+    private $mode = 'clock';
+    private $timeType = 'clockTime';
+    private $nextStateClass = AlarmState::class;
+
+    public function __construct($clock)
+    {
+        $this->clock = $clock;
+    }
+
+    public function getNextStateClassName()
+    {
+        return $this->nextStateClass;
+    }
+
+    public function getModeName()
+    {
+        return $this->mode;
+    }
+
+    public function incrementH()
+    {
+        $this->clock->incrementH($this->timeType);
+    }
+
+    public function incrementM()
+    {
+        $this->clock->incrementM($this->timeType);
+    }
+
+    public function tick()
+    {
+        if ($this->clock->isAlarmOn() && $this->clock->isAlarmTime()) {
+            $this->clock->setNextState(BellState::class);
+        }
+    }
+}
+
+
+
+>>>>>> Управление зависимостями <<<<<<
+
+/*
+На протяжении всего курса, мы говорили про процесс инициализации, внутри которого создаются необходимые объекты. Затем эти объекты используются в прикладном коде. К таким объектам относятся: соединение с базой данных, логгер, кеш, шаблонизатор, интеграция с внешними сервисами и многое другое.
+
+В простых ситуациях, там где объектов немного и мы сами управляем кодом (а не используем фреймворки, определяющие структуру), зависимости можно внедрять "руками":
+*/
+
+$geolocationService = new GoogleMaps();
+$storeService = new StoreService($geolocationService);
+$app = new App(['storeService' => $storeService]);
+$app->run();
+
+/*
+В коде, который активно использует инверсию зависимостей, инициализация кода выглядит как матрёшка из объектов. Объекты верхнего уровня принимают на вход объекты с нижних слоев, шаг за шагом собирая готовое приложение.
+
+С ростом числа объектов, процесс сборки усложняется и становится утомительным. Появляются ситуации, в которых объекты нужны в самой глубине кода, но прокинуть их можно только пройдя множество уровней. В популярных фреймворках, инициализация может включать в себя создание и внедрение сотен объектов. Страшно даже представить, что придётся писать этот код вручную.
+
+Для решения данной задачи, используется два подхода (шаблона проектирования). Ниже поговорим про каждый из них
+
+
+# Локатор (Service Locator)
+
+Самый простой способ внедрять зависимости в таких системах - сервис локатор. Это объект, который содержит внутри себя все зависимости. 
+Любой объект, которому нужен какой-либо сервис, обращается за ним к сервис локатору.
+
+Возьмём для примера микрофреймворк Slim. У него есть расширение PHP-View, которое добавляет шаблонизатор во фреймворк. Попробуем внедрить это расширение через Service Locator:
+*/
+
+use Slim\Views\PhpRenderer;
+
+include 'vendor/autoload.php';
+
+$app = new Slim\App();
+
+// Для простоты локатор реализован как обычный массив
+// Но, в общем случае, он может быть чем угодно
+$locator = [
+  'renderer' => new PhpRenderer('./templates')
+];
+
+$app->get('/hello/{name}', function ($request, $response, $args) use ($locator) {
+    // Прикладной код _знает_ про локатор и пользуется им для извлечения зависимостей
+    return $locator['renderer']->render($response, 'hello.php', $args);
+});
+
+$app->run();
+
+/* Вот такой нехитрый подход для внедрения зависимостей. По нему написаны сотни статей со всевозможными вариациями его создания и использования. В большинстве из них локатор рассматривается как антипаттерн. Так как прикладной код знает про его существование.
+
+# Контейнер (DI-container)
+
+Вершиной эволюции инверсии зависимостей считается Di-container. Продвинутые контейнеры, это целые фреймворки, которые занимаются инициализацией приложения, собирают необходимые объекты и прокидывают их друг в друга. В некоторых экосистемах, контейнер – центральная часть всей системы, которая занимается её оркестракцией (управлением). В Java, например, это SpringFramework. Он с лёгкостью может собирать и веб-приложение и демонов.
+
+Ключевое отличие контейнера от локатора в том, что зависимости из контейнера попадают внутрь приложения прозрачно. Прикладной код не догадывается о существовании контейнера, он лишь видит объекты которых ждёт. Для инъекции этих зависимостей используются стандартные подходы: либо через конструктор, либо через сеттеры и аргументы методов.
+
+Снова посмотрим на Slim и интеграцию с PHP-View, но уже через встроенный контейнер:
+*/
+
+use Slim\Views\PhpRenderer;
+
+include 'vendor/autoload.php';
+
+$app = new Slim\App();
+
+// Несмотря на название, это всё же локатор, потому что
+$container = $app->getContainer();
+$container['renderer'] = new PhpRenderer('./templates');
+
+$app->get('/hello/{name}', function ($request, $response, $args) {
+    return $this->renderer->render($response, 'hello.php', $args);
+});
+
+$app->run();
+
+/*
+Контейнер в Slim очень простой, но, всё же, это контейнер. Посмотрите на его использование. Обработчик запроса работает напрямую с renderer. Он не знает ничего про контейнер и про то, как зависимость попала внутрь $this.
+
+В PHP, контейнеры имеют настолько важную роль, что их интерфейс был унифицирован через PSR-11 https://www.php-fig.org/psr/psr-11/. Для более подробного погружения в тему, посмотрите на PHP-DI http://php-di.org/.
+*/
+
+
+/**@@
+В этом упражнении мы попробуем воспользоваться библиотекой PHP-DI для сборки приложения.
+
+В самом приложении есть три сущности:
+
+Класс Application. Представим что это и есть само приложение. Через конструктор он принимает логгер (обязательно посмотрите на определение конструктора). Метод run() запускает приложение на выполнение. Для простоты, внутри метода run() логгируется фраза The application has been started!. Именно ее ожидают увидеть тесты.
+LoggerInterface интерфейс с одним методом info($message)
+Logger – конкретный логгер, реализующий интерфейс LoggerInterface
+Приложение можно собрать и запустить на выполнение так:
+*/
+
+$app = new Application(new Logger());
+$app->run();
+
+/*
+Ваша задача состоит в том, чтобы собрать приложение с помощью библиотеки PHP-DI. Для реализации этого кода, вам потребуется провести немного времени в документации.
+
+Что потребуется:
+
+Контейнер – это объект класса \DI\Container
+Контейнер нужно заполнить классами. Для этого используется метод set http://php-di.org/doc/container.html#set
+При добавлении классов в контейнер, испольуйте функцию \DI\autowire http://php-di.org/doc/php-definitions.html#autowired-objects
+Для извлечения готового приложения из контейнера, понадобится метод get http://php-di.org/doc/container.html#get-amp-has
+
+src/Main.php
+Реализуйте функцию buildApplication(), которая собирает приложение и возвращает его наружу.
+*/
+
+// FILE: /app/src/Main.php:
+namespace App\Main;
+
+use App\Logger;
+use App\Application;
+use App\LoggerInterface;
+
+function buildApplication()
+{
+    $container = new \DI\Container();
+    $container->set(LoggerInterface::class, \Di\autowire(Logger::class));
+    $container->set(Application::class, \DI\autowire(Application::class));
+    $app = $container->get(Application::class);
+    
+    return $app;
+}
+
+
+// FILE: /app/src/Logger.php:
+namespace App;
+
+class Logger implements LoggerInterface
+{
+    public function info($message)
+    {
+        echo $message;
+    }
+}
+
+
+// FILE: /app/src/LoggerInterface.php:
+namespace App;
+
+interface LoggerInterface
+{
+    public function info(string $message);
+}
+
+
+// FILE: /app/src/Application.php:
+namespace App;
+
+class Application
+{
+    public $logger;
+
+    public function __construct(LoggerInterface $logger)
+    {
+        $this->logger = $logger;
+    }
+
+    public function run()
+    {
+        $this->logger->info('The application has been started!');
+    }
+}
+
+
+// FILE: /app/tests/MainTest.php:
+namespace App\Tests;
+
+use PHPUnit\Framework\TestCase;
+use function App\Main\buildApplication;
+
+class ApplicationTest extends TestCase
+{
+    public function testMain()
+    {
+        $app = buildApplication();
+        $app->run();
+        $this->expectOutputString('The application has been started!');
+    }
+}

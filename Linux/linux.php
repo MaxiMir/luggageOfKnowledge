@@ -77,3 +77,16 @@ sudo chown :team  .zshrc // смена группы/пользователя // 
 sudo chown -R Cagrant  .zshrc // рекурсивные изменение содержимого папки
 
 sudo chown root:administrators test // сменить владельца файла 'test' на 'root', а группу на 'administrators'
+
+$ls -la /* =>
+total 2 
+drwxr-sr-x 5 docker staff 160 Jun 7 22:55 ./
+-rw-rw-r-- 1 docker staff 60  Jun 7 23:55 ../
+
+drwxr-sr-x	d - директория | rwx - доступ для владельца файла | r-s - доступ для группы | для всех остальных пользователей
+-rw-rw-r	- файл
+
+r - чтение
+w -	запись
+x - исполнение
+*/
