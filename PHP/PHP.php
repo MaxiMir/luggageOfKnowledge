@@ -5616,23 +5616,22 @@ use function App\Pair\listToString;
 
 function reverse($list)
 {
-	$iter = function ($list, $acc) use (&$iter) {
-		if (is_null($list)) {
-			return $acc;
-		}
-		
-		$elem = car($list);
-		
-		if(isPair($elem)) {
-			$newAcc = cons(cons(car($elem), $iter(cdr($elem), null)), $acc);
-		} else {
-			$newAcc = cons($elem, $acc);
-		}
-		
-		return $iter(cdr($list), $newAcc);
-	};
-	
-	return $iter($list, null);
+	$iter = function ($items, $acc) use (&$iter) {
+        if ($items === null) {
+            return $acc;
+        } else {
+            $element = car($items);
+
+            if (isPair($element)) {
+                $result = reverse($element);
+            } else {
+                $result = $element;
+            }
+            return $iter(cdr($items), cons($result, $acc));
+        }
+    };
+
+    return $iter($list, null);
 }
 
 
@@ -5882,23 +5881,27 @@ $seq("reset");
 
 $result == $seq(); // 22
 	 
-function random($seed) // псевдослучайные  числа
+function random($seed)
 {
-	$start = $seed;
-	
-	$reset = function() use (&$start, $seed) {
-		$start = $seed;
-	};
-	
-	
-	return function($func = null) use ($reset, $generate) {
-		switch ($func) {
-			case 'reset':
-				$reset();
-			case null:
-				return $generate();
-		}
-	};
+    $init = $seed;
+
+    return function ($method = null) use (&$seed, $init) {
+        $a = 45;
+        $c = 21;
+        $m = 67;
+
+        switch ($method) {
+            case "reset":
+                $seed = $init;
+                break;
+
+            default:
+                $seed = ($a * $seed + $c) % $m;
+                break;
+        }
+
+        return $seed;
+    };
 }
 
 
@@ -5954,7 +5957,7 @@ function factorial($n) // функция в полуимперативном с�
 }
 
 
-/**
+/**@@
 Реализуйте функцию fib находящую числа Фибоначчи используя рекурсивно-итеративный процесс, но вместо аккумулятора параметров для вложенной функции $iter используйте переменные.
 
 Формула:
@@ -5979,8 +5982,34 @@ f(n) = f(n-1) + f(n-2)
  **/
 
 
+// FILE: /app/src/App/Solution.php:
+namespace App\Solution;
 
-/**
+function fib($num)
+{
+    $tmp;
+    $fib1 = 0;
+    $fib2 = 1;
+    $i = 0;
+
+    $iter = function () use ($num, &$iter, &$fib1, &$fib2, &$i) {
+        if ($i < $num) {
+            $tmp = $fib1;
+            $fib1 = $fib2;
+            $fib2 = $tmp + $fib2;
+            ++$i;
+            $iter();
+        }
+    };
+
+    $iter();
+
+    return $fib1;
+}
+
+
+
+/**@@
 Реализуйте функцию fringe, которая берет в качестве аргумента дерево (представленное в виде списка) и возвращает список, элементы которого - все листья дерева, упорядоченные слева направо.
 
 Пример:
@@ -9692,6 +9721,45 @@ foreach ($linesTenToTwentyIterator as $line) {
 }
 
 
+/**@@
+src/App/FileUtils.php
+Реализуйте функцию grep, принимающую на вход два параметра: подстроку для сопоставления и шаблон в формате glob, по которому будет происходить поиск.
+
+Функция должна вернуть список всех строк файлов, в которых содержится подстрока. Поиск должен производиться по всем файлам переданного шаблона.
+
+Пример:
+*/
+sizeof(grep('test', './*')); // 3
+
+// FILE: /app/src/FileUtils.php:
+namespace App\FileUtils;
+
+function grep($string, $path)
+{
+    if (strpos($move, DIRECTORY_SEPARATOR) === 0) {
+        return $move;
+    }
+
+    $currentParts = explode(DIRECTORY_SEPARATOR, $current);
+    $parts = explode(DIRECTORY_SEPARATOR, $move);
+
+    $updatedParts = array_reduce($parts, function ($acc, $item) {
+        switch ($item) {
+            case '':
+            case '.':
+                return $acc;
+            case '..':
+                return array_slice($acc, 0, -1);
+            default:
+                $acc[] = $item;
+                return $acc;
+        }
+    }, $currentParts);
+
+    return implode(DIRECTORY_SEPARATOR, $updatedParts);
+}
+
+
 
 >>>>> Запись в файл  <<<<<<<  
 
@@ -9716,6 +9784,38 @@ $file = new \SplFileObject($file, 'ab');
 $file->fwrite($data);
 
 
+/**@@
+Сериализация — процесс перевода какой-либо структуры данных в последовательность битов. Обратной к операции сериализации является операция десериализации (структуризации) — восстановление начального состояния структуры данных из битовой последовательности.
+
+Функция serialize в php генерирует пригодное для хранения представление переменной. Это полезно для хранения или передачи значений PHP между скриптами без потери их типа и структуры. Для превращения сериализованной строки обратно в PHP-значение существует функция unserialize.
+
+src/App/Serializer.php
+Реализуйте функцию dump, которая принимает на вход имя файла и структуру данных. После чего она сериализует эту структуру и записывает в файл.
+Реализуйте функцию load, которая принимает на вход имя файла. После этого она читает содержимое файла и проводит десериализацию.
+Пример:
+*/
+Serializer\dump($file, $structure);
+$data = Serializer\load($file);
+
+$structure == $data;
+
+
+// FILE: /app/src/App/Serializer.php:
+namespace App\Serializer;
+
+function load($file)
+{
+    $data = file_get_contents($file);
+    return unserialize($data);
+}
+
+function dump($file, $data)
+{
+    $string = serialize($data);
+    file_put_contents($file, $string);
+}
+
+
 
 >>>>> Манипуляция с файловыми указателями  <<<<<<< 
 
@@ -9729,6 +9829,96 @@ fseek($handle, 0); // rewind($handle); // перемещение указате�
 echo ftell($handle) . PHP_EOL; // => 0
 
 // SplFileObject
+
+/**@@
+Класс Db представляет собой простую реализацию NoSQL базы данных, основанной на файлах. Она обладает очень простым интерфейсом. Метод get принимает на вход ключ (любая строка) и возвращает значение этого ключа. Метод set принимает на вход ключ и значение (любая строка).
+
+Ограничения:
+
+Максимальный размер ключа 8 байт.
+Максимальный размер значения 100 байт.
+Пример:
+*/
+$db = new Db($filepath);
+$db->set('key', 'value');
+$db->get('key'); // value
+
+/*
+Db.php
+Реализуйте логику работы этого класса используя смещения внутри файла.
+
+Если файла базы не существует, то он должен создаваться в конструкторе
+Если ключа не существует, то операция get должна выкидывать исключение Db\NotFoundException
+Если ключ существует, то set перезаписывает значение
+*/
+
+/// FILE: /app/src/App/Db/Db.php:
+namespace App;
+
+class Db
+{
+    const KEY_LENGTH = 8;
+    const VALUE_LENGTH = 100;
+
+
+    const ZERO = "\0";
+
+    private $db;
+
+    public function __construct($file)
+    {
+        if (!file_exists($file)) {
+            touch($file);
+        }
+
+        $this->db = new \SplFileObject($file, 'r+'); // r+ - открывает файл для чтения и записи; помещает указатель в начало файла.
+    }
+
+    public function get($key)
+    {
+        $this->db->rewind(); // сбрасывает курсор файлового указателя
+
+        while (!$this->db->eof()) {
+            $currentKey = rtrim($this->db->fread(self::KEY_LENGTH), self::ZERO);
+            $currentValue = rtrim($this->db->fread(self::VALUE_LENGTH), self::ZERO);
+
+            if ($key === $currentKey) {
+                return $currentValue;
+            }
+        }
+
+        throw new Db\NotFoundException("'$key' is not exists");
+    }
+
+    public function set($key, $value)
+    {
+        $this->db->rewind();
+
+        while (!$this->db->eof()) {
+            $currentKey = rtrim($this->db->fread(self::KEY_LENGTH), self::ZERO);
+
+            if ($key === $currentKey) {
+                $this->write($value, self::VALUE_LENGTH);
+
+                return;
+            }
+
+            $this->db->fread(self::VALUE_LENGTH);
+        }
+
+        $this->write($key, self::KEY_LENGTH);
+        $this->write($value, self::VALUE_LENGTH);
+    }
+
+    private function write($data, $length)
+    {
+        $zeroLength = $length - strlen($data);
+
+        $this->db->fwrite($data);
+        $this->db->fwrite(str_repeat(self::ZERO, $zeroLength));
+    }
+}
+
 
 
 
@@ -10624,3 +10814,6 @@ QueryBuilder::from('photos')->select('author', 'id')
 	 // SELECT author, id FROM photos WHERE views_count IS NULL AND state = 'archived'
 
 
+
+
+###################### PHP: Разработка микрофреймворка ######################
