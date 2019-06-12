@@ -312,6 +312,10 @@ $APPLICATION->SetPageProperty("title", $seoProps["SECTION_META_TITLE"]);
 $APPLICATION->SetPageProperty("description", $seoProps["SECTION_META_DESCRIPTION"]);
 
 
+# Получение id раздела по коду и id элемента по коду
+$iSectionID = CIBlockFindTools::GetSectionID(false,$_REQUEST['SECTION_CODE'], ["IBLOCK_ID" => I_CONTESTS]);
+$iElementID = CIBlockFindTools::GetElementID(false,$_REQUEST['CODE'],false,false, ["IBLOCK_ID" => I_CONTESTS]);
+
 
 #@@@ ВЫВОД АКТИВНЫХ НОВОСТЕЙ С УСТАНОВЛЕННЫМ СВОЙСТВОМ SHOW_MAIN:
 CModule::IncludeModule('block');

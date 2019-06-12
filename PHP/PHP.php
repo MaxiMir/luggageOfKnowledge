@@ -20,7 +20,7 @@
 	
 	
 	
-	>>>>> Введение <<<<<<<
+>>>>> Введение <<<<<<<
 
 /*
 PHP — динамический, слабо-типизированный, интерпретируемый язык программирования. 
@@ -5957,7 +5957,7 @@ function factorial($n) // функция в полуимперативном с�
 }
 
 
-/**@@
+/**@@@
 Реализуйте функцию fib находящую числа Фибоначчи используя рекурсивно-итеративный процесс, но вместо аккумулятора параметров для вложенной функции $iter используйте переменные.
 
 Формула:
@@ -6009,7 +6009,7 @@ function fib($num)
 
 
 
-/**@@
+/**@@@
 Реализуйте функцию fringe, которая берет в качестве аргумента дерево (представленное в виде списка) и возвращает список, элементы которого - все листья дерева, упорядоченные слева направо.
 
 Пример:
@@ -6291,6 +6291,118 @@ app.get('/', (req, res) => {
 Конечно реальные сайты устроены значительно сложнее, но в основе лежит та связка запрос-ответ, которая была описана в этом уроке.
 */
 
+/**@@@
+src\Url.php
+Реализуйте абстракцию для работы с урлами. Она должна извлекать и менять части адреса. Интерфейс:
+
+make($url) - Конструктор. Создает урл.
+setScheme($data, $scheme) - Сеттер. Меняет схему.
+getSchema($data) - Селектор (геттер). Извлекает схему.
+setHost($data, $host) - Сеттер. Меняет хост.
+getHost($data) - Геттер. Извлекает хост.
+setPath($data, $path) - Сеттер. Меняет строку запроса.
+getPath($data) - Геттер. Извлекает строку запроса.
+setQueryParam($data, $key, $value) - Сеттер. Устанавливает значение для параметра запроса.
+getQueryParam($data, $paramName, $default = null) - Геттер. Извлекает значение для параметра запроса. Третьим параметром функция принимает значение по умолчанию, которое возвращается тогда, когда в запросе не было такого параметра
+toString($data) - Геттер. Преобразует урл в строковой вид.
+*/
+$url = Url\make("https://hexlet.io/community?q=low");
+'https://hexlet.io/community?q=low', Url\toString($url));
+
+$url = Url\setScheme($url, 'http');
+Url\toString($url)); // 'http://hexlet.io/community?q=low'
+
+$url = Url\setPath($url, '/404');
+Url\toString($url)); // 'http://hexlet.io/404?q=low'
+
+$url = Url\setQueryParam($url, 'page', 5);
+Url\toString($url)); // 'http://hexlet.io/404?q=low&page=5'
+
+$url = Url\setQueryParam($url, 'q', 'high');
+Url\toString($url)); // 'http://hexlet.io/404?q=high&page=5'
+
+$url = Url\setQueryParam($url, 'q', null);
+Url\toString($url)); // 'http://hexlet.io/404?page=5'
+
+/*
+Подсказки
+ - Парсинг урла - parse_url
+ - Парсинг параметров запроса - parse_str
+ - Формирование строки запроса - http_build_query
+ - Собирать данные в url придется самостоятельно
+*/
+
+ function make($url)
+{
+    $data = parse_url($url);
+    $queryParams = [];
+
+    if (isset($data['query'])) {
+        parse_str($data['query'], $queryParams);
+    }
+
+    $data['queryParams'] = $queryParams;
+
+    return $data;
+}
+
+function setScheme($data, $scheme)
+{
+    $data['scheme'] = $scheme;
+    return $data;
+}
+
+function getSchema($data)
+{
+    return $data['scheme'];
+}
+
+function setHost($data, $host)
+{
+    $data['host'] = $host;
+
+    return $data;
+}
+
+function getHost($data)
+{
+    return $data['host'];
+}
+
+function setPath($data, $path)
+{
+    $data['path'] = $path;
+
+    return $data;
+}
+
+function getPath($data)
+{
+    return $data['path'];
+}
+
+function setQueryParam($data, $key, $value)
+{
+    $data['queryParams'][$key] = $value;
+
+    return $data;
+}
+
+function getQueryParam($data, $paramName, $default = null)
+{
+    return $data['queryParams'][$paramName] ?? $default;
+}
+
+function toString($data)
+{
+    $queryString = http_build_query($data['queryParams']);
+    $fullQueryString = $queryString ? "?{$queryString}" : '';
+    $schema = getSchema($data);
+    $host = getHost($data);
+    $path = getPath($data);
+    
+    return "{$schema}://{$host}{$path}{$fullQueryString}";
+}
 
 
 >>>>> Веб-сервер <<<<<
@@ -6990,7 +7102,7 @@ $app->get('/courses', function ($request, $response) use ($courses) {
 */
 
 
-/**@@
+/**@@@
 Реализуйте обработчики для списка пользователей /users и вывода конкретного пользователя /users/{id}. Список пользователей генерируется в начале скрипта. Используйте пейджинг для вывода пользователей. По-умолчанию показывается 5 пользователей.
 
 templates/users/index.phtml
@@ -7713,7 +7825,7 @@ $app->run();
 
 
 
-/**@@
+/**@@@
 public/index.php
 Реализуйте два обработчика:
 
@@ -8111,7 +8223,7 @@ interface ValidatorInterface
 
 
 
-/**@@
+/**@@@
 public/index.php
 Реализуйте следующие обработчики:
 
@@ -8436,7 +8548,7 @@ $app->run();
 */
 
 
-/**@@
+/**@@@
 public/index.php
 Реализуйте следующие обработчики:
 
@@ -9254,7 +9366,7 @@ $app->post('/cart-items', function ($request, $response) {
 Сессии можно хранить в куках
 */
 
-/**@@
+/**@@@
 В этой практике необходимо реализовать систему аутентификации. В простейшем случае она состоит из двух маршрутов:
 
 POST /session - создает сессию
@@ -9721,7 +9833,7 @@ foreach ($linesTenToTwentyIterator as $line) {
 }
 
 
-/**@@
+/**@@@
 src/App/FileUtils.php
 Реализуйте функцию grep, принимающую на вход два параметра: подстроку для сопоставления и шаблон в формате glob, по которому будет происходить поиск.
 
@@ -9784,7 +9896,7 @@ $file = new \SplFileObject($file, 'ab');
 $file->fwrite($data);
 
 
-/**@@
+/**@@@
 Сериализация — процесс перевода какой-либо структуры данных в последовательность битов. Обратной к операции сериализации является операция десериализации (структуризации) — восстановление начального состояния структуры данных из битовой последовательности.
 
 Функция serialize в php генерирует пригодное для хранения представление переменной. Это полезно для хранения или передачи значений PHP между скриптами без потери их типа и структуры. Для превращения сериализованной строки обратно в PHP-значение существует функция unserialize.
@@ -9830,7 +9942,7 @@ echo ftell($handle) . PHP_EOL; // => 0
 
 // SplFileObject
 
-/**@@
+/**@@@
 Класс Db представляет собой простую реализацию NoSQL базы данных, основанной на файлах. Она обладает очень простым интерфейсом. Метод get принимает на вход ключ (любая строка) и возвращает значение этого ключа. Метод set принимает на вход ключ и значение (любая строка).
 
 Ограничения:
@@ -10186,7 +10298,7 @@ zip(
 	}
 );
 
-/**@@
+/**@@@
 Один из способов определения победителя в футболе это пенальти. Процесс идет так: В каждой попытке бьет игрок каждой из команд и определяется команда победитель этой попытки. Процесс продолжается до 5 попыток, хотя победитель может быть выявлен и раньше. Если после пяти попыток победитель не выявлен, то процесс продолжается до первой выигранной попытки.
 
 src/Solution.php
@@ -10713,8 +10825,9 @@ class TestNode extends \PHPUnit_Framework_TestCase
 	}
 }
 
-/**
+/**@@@
 QueryBuilder это специальный класс для конструирования sql запросов. Подобная функциональность есть практически во всех ORM. Пример использования:
+*/
 
 QueryBuilder::from('members')->toSql();
 // SELECT * FROM members
@@ -10726,9 +10839,9 @@ QueryBuilder::from('photos')->select('author', 'id')
 ->where('views_count', null)->where('state', 'archived')->toSql();
 // SELECT author, id FROM photos WHERE views_count IS NULL AND state = 'archived'
 
-Реализуйте тесты для QueryBuilder основываясь на примере выше.
- **/
+// Реализуйте тесты для QueryBuilder основываясь на примере выше.
 
+// FILE: /app/implementations/query_builder.right.php:
 namespace App;
 
 class QueryBuilder
@@ -10740,6 +10853,7 @@ class QueryBuilder
 	public static function from($table)
 	{
 		$builder = new QueryBuilder($table);
+
 		return $builder;
 	}
 	
@@ -10753,12 +10867,14 @@ class QueryBuilder
 		if (!empty($args)) {
 			$this->selectPart = implode(", ", $args);
 		}
+
 		return $this;
 	}
 	
 	public function where($key, $value)
 	{
 		$this->whereParts[$key] = $value;
+
 		return $this;
 	}
 	
@@ -10784,7 +10900,7 @@ class QueryBuilder
 	}
 }
 
-
+// FILE: /app/tests/QueryBuilderTest.php:
 namespace App\Tests;
 
 use PHPUnit\Framework\TestCase;
@@ -10793,26 +10909,729 @@ class QueryBuilderTest extends TestCase
 {
 	public function testSelect()
 	{
-		// BEGIN (write your solution here)
-		
-		// END
+        $builder = \App\QueryBuilder::from('users');
+        $expected = 'SELECT * FROM users';
+
+        $this->assertEquals($expected, $builder->toSql());
+
+        $builder = \App\QueryBuilder::from('photos')->select('age', 'name');
+        $expected = 'SELECT age, name FROM photos';
+
+        $this->assertEquals($expected, $builder->toSql());
 	}
 	
-	// BEGIN (write your solution here)
-	
-	// END
+	public function testWhere()
+    {
+        $builder = \App\QueryBuilder::from('users')
+            ->where('age', '18')
+            ->where('source', 'facebook');
+        $expected = "SELECT * FROM users WHERE age = '18' AND source = 'facebook'";
+        $this->assertEquals($expected, $builder->toSql());
+    }
+
+    public function testWhereWithNull()
+    {
+        $builder = \App\QueryBuilder::from('users')
+            ->where('email', null);
+        $expected = 'SELECT * FROM users WHERE email IS NULL';
+        $this->assertEquals($expected, $builder->toSql());
+    }
 }
 
-QueryBuilder::from('members')->toSql();
-// SELECT * FROM members
 
-QueryBuilder::from('members')->where('id', 12)->toSql();
-// SELECT * FROM members WHERE id = '12'
 
-QueryBuilder::from('photos')->select('author', 'id')
-	->where('views_count', null)->where('state', 'archived')->toSql();
-	 // SELECT author, id FROM photos WHERE views_count IS NULL AND state = 'archived'
+>>>>> Dataset <<<<<
 
+// FILE: /teory/tests/SolutionTest.php:
+namespace App;
+
+require_once 'Solution.php';
+
+use function App\Solution\cube;
+
+class SolutionTest extends \PHPUnit_Framework_TestCase
+{
+	public function testCube()
+	{
+		$this->assertEquals(1, cube(1));
+		$this->assertEquals(8, cube(2));
+		$this->assertEquals(27, cube(3));
+	}
+}
+
+// <-> Более лакиночный вариант через dataProvider:
+
+// FILE: /teory/tests/Solution2Test.php:
+namespace App;
+
+require_once 'Solution.php';
+
+use function App\Solution\cube;
+
+class Solution2Test extends \PHPUnit_Framework_TestCase
+{
+	// комментарии указываем функцию, которая будет dataProvider:
+
+	/**
+	 * @dataProvider additionProvider
+	 */
+	public function testCubeWithDataSet($expected, $argument)
+	{
+		$this->assertEquals($expected, cube($argument));
+	}
+
+	public function additionalProvider()
+	{
+		return [
+			[1, 1],
+			[8, 2],
+			[27, 3],
+			[-1, -1]
+		];
+	}
+}
+
+
+/*
+Можно ли использовать более одной функции утверждения (assert) в тестовом методе, работающим с dataProvider?
+> Да
+*/
+
+
+/**@@@
+TestSolution.php
+Напишите тесты на функцию hasEqualOnesCount, которая принимает на вход два числа и возвращает true если количество единиц в двоичном представлении у этих чисел совпадает и false если не совпадает.
+*/
+
+// FILE: /app/TestSolution.php:
+namespace App\Tests;
+
+use PHPUnit\Framework\TestCase;
+
+class SolutionTest extends TestCase
+{
+    /**
+     * @dataProvider additionProvider
+     */
+    public function testHasEqualOnesCount($actual, $first, $second)
+    {
+        $this->assertEquals($actual, \App\hasEqualOnesCount($first, $second));
+    }
+
+    public function additionProvider()
+    {
+        return [
+            [true, 1, 1],
+            [false, -1, 1],
+            [false, 5, 2],
+            [true, 5, 3],
+        ];
+    }
+}
+
+// FILE: /app/implementations/has_equal_ones_count.right.php:
+namespace App;
+
+function hasEqualOnesCount($first, $second)
+{
+    $onesCount = function ($number) {
+        $binary = decbin($number);
+        $bitsArray = str_split(strval($binary));
+        return sizeof(array_filter($bitsArray, function ($bit) {
+            return $bit == "1";
+        }));
+    };
+
+    return $onesCount($first) == $onesCount($second);
+}
+
+// FILE: /app/Makefile:
+test: right wrong
+	@echo "\n\nGreat job! \n\n"
+
+right:
+	suppressor pass 'phpunit --bootstrap implementations/has_equal_ones_count.right.php SolutionTest.php'
+
+wrong:
+	suppressor fail 'phpunit --bootstrap implementations/has_equal_ones_count.wrong.1.php SolutionTest.php'
+	suppressor fail 'phpunit --bootstrap implementations/has_equal_ones_count.wrong.2.php SolutionTest.php'
+
+
+
+>>>>>> Тестирование исключений <<<<<<
+
+// FILE: /theory/tests/SolutionTest.php:
+namespace App;
+
+require_once 'Solution.php';
+
+class SolutionTest extends \PHPUnit_Framework_TestCase
+{
+	// #1:
+	/**
+	 * @expectedException \InvalidArgumentException
+	 */
+	public function testExceptionUsingAnnotation()
+	{
+		throw new \InvalidArgumentException('Some Message');
+	} 
+
+	// #2:
+	public function testExceptionUsingTry()
+	{
+		try {
+			throw new \InvalidArgumentException('Some Message');
+			$this->fail('expected exception');
+		} catch (\InvalidArgumentException $e) {
+
+		}
+	} 
+}
+
+
+/**@@@
+ACL (access control list) это механизм проверки доступа определенных ролей к действиям над определенными ресурсами.
+
+Включает понятия:
+
+Роль - кто выполняет действие.
+Ресурс - над чем выполняется действие.
+Привилегия - какое выполняется действие.
+Например, администратор может редактировать карточку пользователя. Здесь роль - это администратор, ресурс - карточка пользователя, привилегия - редактировать.
+
+Принцип работы системы ACL из этого упражнения:
+*/
+
+$data = [
+    'articles' => [
+        'show' => ['editor', 'manager'],
+        'edit' => ['editor']
+    ],
+    'money' => [
+        'create' => ['editor'],
+        'show' => ['editor', 'manager'],
+        'edit' => ['manager'],
+        'remove' => ['manager']
+    ]
+];
+
+$acl = new Acl($data);
+$acl->check('articles', 'show', 'manager')
+
+/*
+file: TestSolution.php
+Напишите тесты на функцию check объекта $acl. Функция принимает на вход ресурс, привилегию и роль. Принцип работы этой функции:
+
+ - Если не найден ресурс - бросаем исключение Acl\ResourceUndefined.
+ - Если не найдена привилегия - бросаем исключение Acl\PrivilegeUndefined.
+ - Если доступ запрещен - Acl\AccessDenied.
+*/
+
+// FILE: /app/tests/App/Tests/SolutionTest.php
+ namespace App\Tests;
+
+use PHPUnit\Framework\TestCase;
+use App\Acl\Acl;
+
+require_once 'src/App/Acl/AccessDenied.php';
+require_once 'src/App/Acl/ResourceUndefined.php';
+require_once 'src/App/Acl/PrivilegeUndefined.php';
+
+class SolutionTest extends TestCase
+{
+    private static $data = [
+        'articles' => [
+            'show' => ['editor', 'manager'],
+            'edit' => ['editor']
+        ],
+        'money' => [
+            'create' => ['editor'],
+            'show' => ['editor', 'manager'],
+            'edit' => ['manager'],
+            'remove' => ['manager']
+        ]
+    ];
+
+    public function testAccessDenied()
+    {
+        $acl = new Acl(static::$data);
+
+        try {
+            $acl->check('articles', 'edit', 'manager');
+            $this->fail('expected exception');
+        } catch (\App\Acl\AccessDenied $e) {
+
+        }
+    }
+
+    public function testResourceUndefined()
+    {
+        $acl = new Acl(static::$data);
+
+        try {
+            $acl->check('undefined resources', 'edit', 'manager');
+            $this->fail('expected exception');
+        } catch (\App\Acl\ResourceUndefined $e) {
+        }
+    }
+
+    public function testPrivilegeUndefined()
+    {
+        $acl = new Acl(static::$data);
+
+        try {
+            $acl->check('articles', 'move', 'manager');
+            $this->fail('expected exception');
+        } catch (\App\Acl\PrivilegeUndefined $e) {
+        }
+    }
+}
+
+
+/**@@@
+SolutionTest.php
+ - Напишите тесты на класс Config, который принимает на вход вложенный массив и рекурсивно строит цепочку вложенных конфигов.
+ - Напишите тесты на метод toArray класса Config, который возвращает массив значений для текущего уровня вложенности конфига.
+Пример:
+*/
+$data = [
+    'key' => 'value',
+    'deep' => [
+        'key' => [],
+        'deep' => 3,
+        'another' => 7
+    ]
+];
+
+$config = new Config($data);
+
+// how it works
+
+$config->key; // 'value'
+$config->deep->another; // => 7
+
+$config->deep->toArray();
+// => ['key' => [], 'deep' => 3, 'another' => 7]
+
+/*
+Другими словами из массива строится дерево объектов (на основе этого же массива), которое позволяет заменить обращение с $data['deep']['key'] на $config->deep->key. Соответственно нужно проанализировать массив использующийся в тестах для создания объекта Config и проверить то что он правильно построился сравнив значения по соответствующему пути в массиве и объекте.
+*/
+
+// FILE: /app/SolutionTest.php:
+namespace App;
+
+use PHPUnit\Framework\TestCase;
+
+class SolutionTest extends TestCase
+{
+    private $config;
+    private $data;
+
+    public function setUp()
+    {
+        $this->data = [
+            'key' => 'value',
+            'deep' => [
+                'key' => [],
+                'deep' => 3,
+                'another' => 7
+            ]
+        ];
+
+        $this->config = new Config($this->data);
+    }
+    public function testSimpleKey()
+    {
+        $this->assertEquals('value', $this->config->key);
+    }
+
+    public function testDeepKey()
+    {
+        $this->assertEquals(7, $this->config->deep->another);
+        $this->assertEquals([], $this->config->deep->key);
+    }
+
+    public function testToArray()
+    {
+        $this->assertEquals($this->data['deep'], $this->config->deep->toArray());
+    }
+}
+
+
+
+>>>>>> Stub <<<<<<
+
+
+// FILE: /theory/Sender:
+/*
+	$sender = new Sender();
+	$worker = new Worker($sender);
+	$worker->perform($data);
+*/
+
+namespace Theory;
+
+class Sender
+{
+	public function send()
+	{
+		// Do something
+		return false;
+	}
+}
+
+// FILE: /theory/tests/WorketTest.php:
+namespace Theory;
+
+require_once 'Sender.php';
+
+class WorkerTest extends \PHPUnit_Framework_TestCase
+{
+	private $stub;
+
+	public function setUp() // перед выполнением тестового метода будет вызван 
+	{
+		// Limitation: final, private, and static methods
+		$this->stub = $this->getMockBuilder('Theory\Sender') // getMockBuilder - возвращает класс 'дублер' переданного класса
+			->setMethods(['send']) // список методов для подмены
+			->getMock(); // генерирует конкретный объект
+	}
+
+	public function testFreshStub()
+	{
+		$this->assertEquals(null, $this->stub->send());
+	}
+
+	public function testStub()
+	{
+		// Configure the stub.
+		$this->stub->method('send')
+			->willReturn(true);
+
+		$this->assertTrue($this->stub->send());
+	}
+
+	public function testStub2()
+	{
+		// Configure the stub.
+		$this->stub->method('send')
+			->will($this->returnArgument(0)); // returnArgument(n1, n2...nn) - функция вернет nn - переданный аргумент
+
+		// $stub->send('foo') return 'foo'
+		$this->assertEquals('foo', $this->stub->send('foo'));
+
+		// $stub->send('bar') return 'bar'
+		$this->assertEquals('bar', $this->stub->send('bar'));
+	}
+}
+
+/*
+В каких случаях стоит использовать stub?
+> Для кода с побочными эффектами
+> Для изоляции кода от внешнего сервиса
+*/
+
+
+
+>>>>>> Mock <<<<<<
+
+
+// FILE: /theory/Http.php:
+namespace Theory;
+
+class Http
+{
+	public function post($msg)
+	{
+		return true;
+	}
+}
+
+// FILE: /theory/Sender.php:
+namespace Theory;
+
+class Sender
+{
+	public $http;
+
+	public function __construct($http)
+	{
+		$this->http = $http;
+	}
+
+	public function send($msg)
+	{
+		return $this->http->post($msg, []);
+	}
+}
+
+
+
+
+// FILE: /theory/tests/SenderTest.php:
+/*
+	$http = new Http();
+	$sender = new Sender($http);
+	$sender->send($msg);
+*/
+
+namespace Theory;
+
+require_once 'Http.php';
+require_once 'Sender.php';
+
+class SenderTest extends \PHPUnit_Framework_TestCase
+{
+	public function testSend()
+	{
+		$msg = 'hello, world';
+
+		$http = $this->getMockBuilder('Http')
+			->setMethods(['post'])
+			->getMock();
+
+		$http->expects($this->once()) // $this->once() - вызывается 1 раз
+			->method('post') // что вызывается 1 раз
+			->with( // параметры для метода
+				$this->equalTo($msg),
+				$this->anything()					
+			);
+
+		$sender = new Sender($http);
+		$sender->send($msg);
+	}
+}
+
+/*
+Почему интерфейс создания моков и стабов одинаковый?
+> Технически моки получаются из стабов путем добавления ожиданий
+*/
+
+
+/**@@@
+Существует подход для работы с базой данных, в котором сама сущность отвечает за свое сохранение в базу. Этот подход называется ActiveRecord. С точки зрения грамотной архитектуры это решение не очень хорошее, но благодаря простой реализации является весьма популярным среди программистов. Да и большинство фреймворков внутри себя содержат orm, реализованную именно как ActiveRecord.
+
+tests/SolutionTest.php
+Напишите тесты на то, что внутри класса User правильно вызывается метод query объекта, отвечающего за соединение с базой данных. Правила работы метода query такие:
+
+Вызов save на свежесозданном объекте приводит к однократному вызову query.
+Повторный вызов (без изменения объекта) не выполняет запроса к базе.
+Вызов методов setFirstName или setLastName приводит к тому что сохранение снова выполнит запрос.
+Пример:
+*/
+$connection = new Db();
+$user = new User($connection);
+
+$user->save(); // true
+$user->setFirstName("John");
+$user->save(); // true
+$user->save(); // false
+
+// FILE: /app/tests/SolutionTest.php
+namespace App\Tests;
+use Variant\User;
+use PHPUnit\Framework\TestCase;
+
+class SolutionTest extends TestCase
+{
+    private $user;
+
+    private $connection;
+
+    public function setUp()
+    {
+        $this->connection = $this->getMockBuilder('App\DbInterface')
+            ->setMethods(['query', 'transaction'])
+            ->getMock();
+
+        $this->user = new User($this->connection);
+    }
+
+    public function testSaveNew()
+    {
+        $this->connection->expects($this->once())
+            ->method('query');
+
+        $this->user->save();
+    }
+
+    public function testTrySaveTwice()
+    {
+        $this->connection->expects($this->once())
+            ->method('query');
+
+        $this->user->save();
+        $this->user->save();
+    }
+
+    public function testSaveTwice()
+    {
+        $this->connection->expects($this->once())
+            ->method('query');
+
+        $this->user->setFirstName('John');
+        $this->user->save();
+
+        $this->user->save();
+    }
+}
+
+
+// FILE: /app/src/ActiveRecord.php:
+namespace App;
+
+interface ActiveRecord
+{
+    public function __construct(DbInterface $connection);
+    public function save();
+}
+
+
+// FILE: /app/src/Db.php:
+namespace App;
+
+class Db implements DbInterface
+{
+    public function transaction($func)
+    {
+        // NOTE: start transaction
+        try {
+            return $func($db);
+        } finally {
+            // NOTE: rollback transaction
+        }
+        // NOTE: commit transaction
+    }
+
+    public function query($sql)
+    {
+        return true;
+    }
+}
+
+
+// FILE: /app/src/DbInterface.php:
+namespace App;
+
+interface DbInterface
+{
+    public function transaction($func);
+    public function query($sql);
+}
+
+
+
+
+>>>>>> Файловая система <<<<<<
+
+// FILE: /theory/Solution.php:
+namespace Theory\Solution;
+
+function makeFolderForUser($userId, $rootDir = null)
+{
+	$directory = ($rootDir ? $rootDir : sys_get_temp_dir()) . DIRECTORY_SEPARATOR . $userId; // sys_get_temp_dir() - временная директория
+
+	if(!file_exists($directory)) {
+		mkdir($directory, 0700, true);
+	}
+}
+
+
+// FILE: /theory/tests/SolutionTest.php:
+namespace Theory;
+
+require_once 'Solution.php';
+
+use function Theory\Solution\makeFolderForUser;
+
+// #1:
+class SolutionTest extends \PHPUnit_Framework_TestCase
+{
+	private $directory;
+	private $userId;
+
+	protected function setUp()
+	{
+		if (file_exists($this->directory)) {
+			rmdir($this->directory);
+		}
+
+		$this->userId = 5;
+		$this->tmpdir = sys_get_temp_dir();
+		$this->directory = $this->tmpdir . DIRECTORY_SEPARATOR . $this->userId;
+	}
+
+	public function testDirectoryIsCreated()
+	{
+		$this->assertFalse(file_exists($this->directory));
+
+		makeFolderForUser($this->userId);
+		$this->assertTrue(file_exists($this->directory));
+	}
+
+	protected function tearDown() // side effects -> чистим за собой
+	{
+		if (file_exists($this->directory)) {
+			rmdir($this->directory);
+		}
+	}
+}
+
+// #2 через библиотеку (mikey179/vfsStream) виртуальной файловой система:
+use org\bovigo\vfs\vfsStream;
+
+class SolutionVirtualFsTest extends \PHPUnit_Framework_TestCase
+{
+	private $directory;
+	private $userId;
+	private $root;
+
+	protected function setUp()
+	{
+		$this->root = vfsStream::setup('dir'); // задаем корневую директорию
+
+		$this->userId = 10;
+		$this->directory = vfsStream::url('dir') . DIRECTORY_SEPARATOR . $this->userId;  // получаем путь до директории
+	}
+
+	public function testDirectoryIsCreated()
+	{
+		$folder = (string) $this->userId; // библиотека не со строками не работает
+		$this->assertFalse($this->root->hasChild($folder));
+
+		makeFolderForUser($this->userId, vfsStream::url('dir'));
+		$this->assertTrue($this->root->hasChild($folder));
+	}
+
+}
+
+
+/**@@
+SolutionTest.php
+Напишите тесты на функцию mkdirs, которая рекурсивно создает директории для переданного пути
+*/
+
+// FILE: /app/SolutionTest.php:
+namespace App;
+
+require getenv('COMPOSER_HOME') . '/vendor/autoload.php';
+
+use PHPUnit\Framework\TestCase;
+use org\bovigo\vfs\vfsStream;
+
+class TestSolution extends TestCase
+{
+    public function testMkdirs()
+    {
+        $root = vfsStream::setup('root');
+
+        mkdirs(implode(DIRECTORY_SEPARATOR, [vfsStream::url('root'), 'test']));
+        $this->assertTrue($root->hasChild('test'));
+
+        mkdirs(implode(DIRECTORY_SEPARATOR, [vfsStream::url('root'), 'test', 'inner']));
+        $this->assertTrue($root->hasChild(implode(DIRECTORY_SEPARATOR, ['test', 'inner'])));
+    }
+}
 
 
 

@@ -3669,17 +3669,1167 @@ toString(append(make(), node('p', 'this is Sparta!')));
 // Экспортируйте все созданные функции.
 
 // FILE: /src/html-tags.js:
-// eslint-disable-next-line
 import { cons, car, cdr, toString as pairToString } from 'hexlet-pairs';
-// eslint-disable-next-line
+
 import { l, isEmpty, head, tail, cons as consList, toString as listToString } from 'hexlet-pairs-data';
 
 export const make = () => l();
-// BEGIN (write your solution here)
 
-// END
+export const append = (dom, element) => consList(element, dom);
+
+export const node = (tag, content) => cons(tag, content);
+
+export const getName = element => car(element);
+export const getValue = element => cdr(element);
+
+export const toString = (elements) => {
+  if (isEmpty(elements)) {
+    return '';
+  }
+
+  const element = head(elements);
+  const tag = getName(element);
+
+  return `${toString(tail(elements))}<${tag}>${getValue(element)}</${tag}>`;
+};
 
 
+
+
+>>>>>> Отображение списков <<<<<<
+
+/*
+map — функция для преобразования списков. Это функция высшего порядка. У неё два аргумента:
+1. Функция, преобразующая элемент
+2. Список (набор элементов)
+
+С функцией map мы добились следующих преимуществ:
+
+- Код стал универсальным: не нужно делать кучу отдельных функций для каждого вида преобразования
+- Код абстрагирован от структуры информации
+- Код декларативный, и как результат — решение менее хрупкое, без изменяемого состояния
+*/
+[1, 2, 3].map(x => 10 * x);
+
+// Сравните с императивным решением:
+const result = [];
+
+for (let i of [1,2,3]) {
+  result.push(i * 10);
+}
+
+/*
+В императивном подходе описан набор шагов для достижения результата. В декларативном стиле описан сам результат. Такая запись по сути является спецификацией.
+
+Мы выходим на новый уровень абстракции: map создал новый барьер абстракции, отделяющий нас от деталей и особенностей реализации.
+
+Map (отображение) — универсальная абстракция. В каждом языке есть перечислимые типы данных: например, массивы или списки, и для них почти наверняка есть встроенная функция map. Она работает всегда одинаково. Принимает на вход коллекцию и функцию-трансформер, которая берет элемент и возвращает его преобразование (конкретное действие зависит от конкретной ситуации). Различается только способ вызова и иногда порядок аргументов. То же самое касается и любой абстракции, построенной поверх коллекций. Все, что может быть перечислено, может быть отображено. Неизменным в этих отображениях всегда остается количество элементов. Отображенная коллекция элементов всегда такого же размера, как и исходная.
+
+# Пример
+*/
+import { l, map, toString } from 'hexlet-pairs-data';
+
+const list = l(4, 16, 64);
+const list2 = map(Math.sqrt, list);
+console.log(toString(list2));
+
+const list3 = map(item => item + 5, list);
+console.log(toString(list3));
+
+/**@@
+html-tags.js
+Реализуйте и экспортируйте функцию map для библиотеки html-tags. Реализация должна быть построена с использованием итеративного процесса (без циклов, на основе рекурсии). Эта функция подобна той что описывалась в теории для списков, только текущая реализация работает с html-списком. Параметры и их порядок у функций аналогичный. Первый — функция-трансформер, второй — коллекция (в нашем случае список html-тегов).
+*/
+import { make, append, node, value, is } from 'hexlet-html-tags';
+
+const dom1 = make();
+const dom2 = append(dom1, node('h1', 'scheme'));
+const dom3 = append(dom2, node('p', 'is a lisp'));
+
+// Отображение в результате которого в html-списке заменяются теги h1 на теги h2
+const processedDom = map((element) => {
+  if (is('h1', element)) {
+    return node('h2', value(element));
+  }
+  return element;
+}, dom3);
+
+
+// Реализуйте и экспортируйте функцию mirror, которая переворачивает содержимое тегов, так чтобы читать его нужно было справа налево, а не слева направо.
+
+import { make, append, node, value, is, toString as htmlToString } from 'hexlet-html-tags';
+
+const dom1 = make();
+const dom2 = append(dom1, node('h1', 'scheme'));
+const dom3 = append(dom2, node('p', 'is a lisp'));
+
+// <h1>emehcs</h1>
+// <p>psil a si</p>
+htmlToString(mirror(dom3));
+
+/*
+Экспортируйте все созданные функции.
+
+Примечание
+Функцию b2p можно использовать для наглядного сопоставления частного варианта операции отображения с обобщённой реализацией операции отображения (собственно, map).
+
+Подсказки
+Функция reverseStr (псевдоним функции reverse из модуля по работе со строками strings) делает переворот строки.
+При необходимости вы можете самостоятельно импортировать функцию toString из библиотеки hexlet-pairs-data и использовать её для отладки решений. Эта функция возвращает строковое представление списка
+При необходимости вы можете самостоятельно импортировать функцию toString из библиотеки hexlet-html-tags и использовать её для отладки решений. Эта функция возвращает строковое представление html-списка
+Для разрешения противоречий в случае импорта нескольких функций с одинаковыми именами используйте псевдонимы (aliases)
+*/
+
+// FILE: /app/html-tags.js:
+import {
+  l, isEmpty, head, tail, cons, reverse,
+} from 'hexlet-pairs-data';
+
+import {
+  getName, getValue, node, is,
+} from 'hexlet-html-tags';
+
+import { reverse as reverseStr } from './strings';
+
+// Рекурсивный процесс
+// export const map = (func, elements) => {
+//   if (isEmpty(elements)) {
+//     return l();
+//   }
+
+//   return cons(func(head(elements)), map(func, tail(elements)));
+// };
+
+// Итеративный процесс (рекурсивно)
+export const map = (func, elements) => {
+  const iter = (items, acc) => {
+    if (isEmpty(items)) {
+      return reverse(acc);
+    }
+
+    return iter(tail(items), cons(func(head(items)), acc));
+  };
+
+  return iter(elements, l());
+};
+
+export const mirror = elements => (
+  map(element => node(getName(element), reverseStr(getValue(element))), elements)
+);
+
+export const b2p = (elements) => {
+  if (isEmpty(elements)) {
+    return l();
+  }
+
+  let newElement;
+  const element = head(elements);
+  if (is('blockquote', element)) {
+    newElement = node('p', getValue(element));
+  } else {
+    newElement = element;
+  }
+
+  return cons(newElement, b2p(tail(elements)));
+};
+
+
+
+>>>>>> Фильтрация списков <<<<<<
+
+/*
+filter — функция для фильтрации списков. Например, её можно использовать для удаления из списка HTML-элементов всех элементов-заголовков. Фильтр не делает никаких преобразований самих элементов.
+
+Аналогично функции map, функция filter принимает два аргумента:
+1. Функция-предикат
+2. Список (набор элементов)
+
+Функция-предикат принимает элемент и возвращает true или false в зависимости от того, следует ли сохранять элемент в итоговом списке или нет.
+
+# Пример
+*/
+import { l, filter, toString } from 'hexlet-pairs-data';
+
+const list = l('', 0, 10, 'go go', -5, 'string');
+const list2 = filter(Number.isInteger, list);
+console.log(toString(list2));
+
+const list3 = filter(item => typeof item === 'string', list);
+console.log(toString(list3));
+
+
+
+/**@@@
+html-tags.js
+Реализуйте и экспортируйте функцию filter для библиотеки html-tags, используя итеративный процесс:
+*/
+import { node, append, make, filter, toString as htmlToString } from 'hexlet-html-tags';
+
+const html1 = append(make(), node('h1', 'header1'));
+const html2 = append(html1, node('h1', 'header2'));
+const html3 = append(html2, node('p', 'content'));
+
+const processedHtml = filter((element) =>
+  !is('h1', element), html3);
+
+//<p>content</p>
+htmlToString(processedHtml);
+
+// Реализуйте и экспортируйте функцию quotes, которая извлекает из html тексты цитат и возвращает список цитат.
+
+import { toString as pairToString } from 'hexlet-pairs-data';
+import { make, append, node } from 'hexlet-html-tags';
+
+const dom1 = make();
+const dom2 = append(dom1, node('h1', 'scheme'));
+const dom3 = append(dom2, node('p', 'is a lisp'));
+const dom4 = append(dom3, node('blockquote', 'live is life'));
+const dom5 = append(dom4, node('blockquote', 'i am sexy, and i know it'));
+
+listToString(quotes(dom5)); // ('i am sexy, and i know it', 'live is life');
+
+/*
+Примечание
+Функцию removeHeaders можно использовать для наглядного сопоставления частного варианта операции фильтрации с обобщённой реализацией операции отображения (собственно, filter).
+
+Подсказки
+- При необходимости вы можете самостоятельно импортировать функцию toString из библиотеки hexlet-pairs-data и использовать её для отладки решений. Эта функция возвращает строковое представление списка
+- При необходимости вы можете самостоятельно импортировать функцию toString из библиотеки hexlet-html-tags и использовать её для отладки решений. Эта функция возвращает строковое представление html-списка
+- Для разрешения противоречий в случае импорта нескольких функций с одинаковыми именами используйте псевдонимы (aliases)
+*/
+
+// FILE: /app/html-tags.js:
+import {
+  l, isEmpty, head, tail, cons, reverse,
+} from 'hexlet-pairs-data';
+
+import { getValue, is, map } from 'hexlet-html-tags';
+
+
+export const filter = (func, elements) => {
+  const iter = (items, acc) => {
+    if (isEmpty(items)) {
+      return reverse(acc);
+    }
+
+    const item = head(items);
+    const newAcc = func(item) ? cons(item, acc) : acc;
+
+    return iter(tail(items), newAcc);
+  };
+
+  return iter(elements, l());
+};
+
+export const quotes = (elements) => {
+  const filtered = filter(element => is('blockquote', element), elements);
+  const result = map(getValue, filtered);
+
+  return result;
+};
+
+
+export const removeHeaders = (elements) => {
+  if (isEmpty(elements)) {
+    return l();
+  }
+
+  const element = head(elements);
+  const tailElements = tail(elements);
+
+  if (is('h1', element)) {
+    return removeHeaders(tailElements);
+  }
+
+  return cons(element, removeHeaders(tailElements));
+};
+
+
+
+>>>>>> Свертка <<<<<<
+import { l, cons, reduce, toString, head } from 'hexlet-pairs-data';
+
+const list = l(0, -10, 2, 38, 2, -2);
+const list2 = reduce(Math.max, head(list), list);
+console.log(toString(list2));
+
+const list3 = reduce((item, acc) => item + acc, 0, list);
+console.log(toString(list3));
+
+
+/**@@@
+html-tags.js
+Реализуйте и экспортируйте функцию reduce для библиотеки html-tags:
+*/
+import { node, append, make, reduce } from 'hexlet-html-tags';
+
+const html1 = append(make(), node('h1', 'header1'));
+const html2 = append(html1, node('h1', 'header2'));
+const html3 = append(html2, node('p', 'content'));
+
+reduce((element, acc) => {
+  return is('h1', element) ? acc + 1 : acc;
+}, 0, html3); // 2
+
+// Реализуйте и экспортируйте функцию emptyTagsCount, которая считает количество пустых тегов. Тип тега задается первым параметром функции.
+
+import { make, append, node } from 'hexlet-html-tags';
+
+const html1 = make();
+const html2 = append(html1, node('h1', 'scheme'));
+const html3 = append(html2, node('p', 'is a lisp'));
+const html4 = append(html3, node('blockquote', ''));
+const html5 = append(html4, node('blockquote', ''));
+const html6 = append(html5, node('blockquote', 'quote'));
+
+emptyTagsCount('blockquote', html6); // 2
+
+/*
+Примечания
+Функцию headersCount можно использовать для наглядного сопоставления частного варианта свёртки с обобщённой реализацией операции отображения (собственно, reduce).
+
+Подсказки
+- При необходимости вы можете самостоятельно импортировать функцию toString из библиотеки hexlet-pairs-data и использовать её для отладки решений. Эта функция возвращает строковое представление списка
+- При необходимости вы можете самостоятельно импортировать функцию toString из библиотеки hexlet-html-tags и использовать её для отладки решений. Эта функция возвращает строковое представление html-списка
+- Для разрешения противоречий в случае импорта нескольких функций с одинаковыми именами используйте псевдонимы (aliases)
+*/
+
+// FILE: /app/html-tags.js:
+import { isEmpty, head, tail } from 'hexlet-pairs-data';
+import { getValue, is } from 'hexlet-html-tags';
+
+export const reduce = (func, acc, elements) => {
+  if (isEmpty(elements)) {
+    return acc;
+  }
+
+  return reduce(func, func(head(elements), acc), tail(elements));
+};
+
+export const emptyTagsCount = (tagName, elements) => {
+  const predicate = element => is(tagName, element) && getValue(element) === '';
+  const func = (element, acc) => (predicate(element) ? acc + 1 : acc);
+
+  return reduce(func, 0, elements);
+};
+
+export const headersCount = (tagName, elements) => {
+  const iter = (items, acc) => {
+    if (isEmpty(items)) {
+      return acc;
+    }
+
+    const item = head(items);
+    const newAcc = is(tagName, item) ? acc + 1 : acc;
+
+    return iter(tail(items), newAcc);
+  };
+
+  return iter(elements, 0);
+};
+
+
+/**@@@
+html-tags.js
+Реализуйте и экспортируйте функцию extractHeaders, которая извлекает тексты всех заголовков h2 из переданного html и возвращает html в котором каждый из этих текстов обернут в p.
+
+Например такой html в строковом представлении <h2>header1</h2><h2>header2</h2><p>content</p> превратится в такой <p>header1</p><p>header2</p>. Ниже развернутый пример.
+*/
+import { node, append, make, reduce, toString as htmlToString } from 'hexlet-html-tags';
+
+const html1 = append(make(), node('h2', 'header1'));
+const html2 = append(html1, node('h2', 'header2'));
+const html3 = append(html2, node('p', 'content'));
+// => <h2>header1</h2><h2>header2</h2><p>content</p>
+
+htmlToString(extractHeaders(html3));
+// => <p>header1</p><p>header2</p>
+
+
+// Реализуйте и экспортируйте функцию wordsCount, которая считает вхождения слова в определенный тег. Для подсчета слов в тексте одного тега воспользуйтесь вспомогательной функцией wc, которая уже импортирована в модуль html-tags.
+
+import { make, append, node } from 'hexlet-html-tags';
+
+const html1 = append(make(), node('h2', 'header1 lisp'));
+const html2 = append(html1, node('p', 'content'));
+const html3 = append(html2, node('h2', 'lisp header2 lisp'));
+const html4 = append(html3, node('p', 'content lisp'));
+
+wordsCount('h2', 'lisp', html4); // 3
+
+/*
+Подсказки
+Подсчет слов в тексте: wc(word, text), где word искомое слово, а text это текст, в котором ведется поиск.
+*/
+wc('what', 'what, what, who, what'); // 3
+wc('la', 'loli'); // 0
+
+/*
+ - При необходимости вы можете самостоятельно импортировать функцию toString из библиотеки hexlet-pairs-data и использовать её для отладки решений. Эта функция возвращает строковое представление списка
+ - При необходимости вы можете самостоятельно импортировать функцию toString из библиотеки hexlet-html-tags и использовать её для отладки решений. Эта функция возвращает строковое представление html-списка
+ - Для разрешения противоречий в случае импорта нескольких функций с одинаковыми именами используйте псевдонимы (aliases)
+*/
+
+// FILE: /app/html-tags.js:
+import {
+  node, getValue, is, map, filter, reduce,
+} from 'hexlet-html-tags';
+
+import { wc } from './utils';
+
+export const extractHeaders = (elements) => {
+  const filtered = filter(element => is('h2', element), elements);
+
+  return map(element => node('p', getValue(element)), filtered);
+};
+
+export const wordsCount = (tagName, word, elements) => {
+  const filtered = filter(element => is(tagName, element), elements);
+  const values = map(element => getValue(element), filtered);
+
+  return reduce((text, acc) => wc(word, text) + acc, 0, values);
+};
+
+
+
+>>>>>> Иерархические структуры <<<<<<
+
+/*
+Обход деревьев — крайне важная тема. Иерархические структуры встречаются на каждом шагу: это и файловая система, и html и даже исходный код большинства языков программирования. Если вы научитесь решать задачи по обходу таких структур, то сможете справиться с большинством стандартных вычислительных задач на своей работе. Это мое мнение, которое подтверждается богатым опытом, но, конечно же, не является истиной в последней инстанции.
+
+В будущих курсах работа с деревьями будет более плотной, а здесь мы лишь немного познакомимся с ними.
+
+Начнем с самого простого примера, в котором не требуется накапливать результат. Предположим, что у нас есть список списков любой вложенности, который содержит числа. Все что нужно сделать — узнать, есть ли среди этих чисел хотя бы один ноль. Пример входных данных для подобной функции выглядит так: l(1, l(5, 0), 10, l(l(8), 3)).
+
+Прежде чем разбирать код, опишем алгоритм, по которому работает функция hasZero:
+
+- Рекурсивно обходим список:
+ -- Если список закончился, а 0 не найден, то возвращаем false (guard expression).
+ -- Если текущий элемент — не список, то проверяем, равен ли он нулю.
+    -- Если равен нулю, то возвращаем true.
+ -- Если текущий элемент — список, то запускаем hasZero рекурсивно, передав туда текущий элемент.
+    -- Если результат этого вызова true, то возвращаем true.
+ -- Если не сработали предыдущие терминальные условия, проверяем следующий элемент списка.
+
+Такой обход дерева называется обход в глубину. Сначала мы опускаемся до самого дна самой левой ветки, затем ветки чуть правее и так далее пока не дойдем до конца.
+*/
+
+import { l, cons, head, tail, isEmpty, isList, toString } from 'hexlet-pairs-data';
+
+const hasZero = (list) => {
+  if (isEmpty(list)) {
+    return false;
+  }
+  
+  const current = head(list);
+  const rest = tail(list);
+
+  if (!isList(current)) {
+     if (current === 0) {
+       return true;
+     }
+  } else if (hasZero(current)) {
+    return true;
+  }
+  
+  return hasZero(rest);
+};
+
+console.log(hasZero(l(1, 3, l(5, l(9), 3), 10)));
+console.log(hasZero(l(1, l(l(5, 100), 0), 10)));
+
+/*
+В отличие от плоской рекурсии, древовидная рекурсия требует запуска сразу нескольких веток на исполнение в рамках одного вызова.
+
+Более интересный и сложный пример связан с агрегацией: посчитать количество чего-либо в дереве или собрать список узлов, соответствующий какому-либо критерию. Общий механизм обхода в этих случаях останется абсолютно тем же, но к нему добавится аккумулятор, который нужно прокидывать до самой глубины. По сути, вся задача сводится к реализации рекурсивного reduce. Ниже код функции searchZeros, которая, в отличие от предыдущей реализации, возвращает число нулей в дереве:
+*/
+import { l, cons, head, tail, isEmpty, isList, toString } from 'hexlet-pairs-data';
+
+const searchZeros = (tree) => {
+  const iter = (list, acc) => {
+    if (isEmpty(list)) {
+      return acc;
+    }
+    
+    const current = head(list);
+    const rest = tail(list);
+
+    if (!isList(current)) {
+       const newAcc = current === 0 ? acc + 1 : acc;
+       return iter(rest, newAcc);
+    } else {
+      return iter(rest, iter(current, acc));
+    }
+  };
+  
+  return iter(tree, 0);
+};
+
+console.log(searchZeros(l(1, 3, l(5, l(9), 3), 10)));
+console.log(searchZeros(l(0, l(l(0, 100), 0), 10)));
+
+/*
+Главное в этом коде находится тут: return iter(rest, iter(current, acc));. Если current список, то прежде чем продолжать проверять список, по которому идет алгоритм, нужно выполнить поиск в найденном поддереве и так далее до самого дна. Соответственно, сначала отработает код iter(current, acc), который вернет acc для поддерева, сложенный с текущим значением аккумулятора. В итоге, на выходе получится новый аккумулятор, который передается дальше.
+*/
+
+/**@@@
+Работа с древовидными структурами в промышленном программировании достаточно частая ситуация. Например, вывод файловой структуры в нашем редакторе — типичный пример работы с деревьями.
+
+select.js
+Реализуйте и экспортируйте по умолчанию функцию select, которая принимает на вход имя тега и html список, а возвращает список всех нод, соответствующих имени. Ноды возвращаются в том виде, в котором они представлены в дереве. Порядок, в котором ноды возвращаются — не важен.
+
+Предположим, что у нас есть такой html:
+
+<h1>scheme</h1>
+<p>is a lisp</p>
+<ul>
+    <li>item 1</li>
+    <li>item 2</li>
+</ul>
+<ol>
+    <li>item 1</li>
+    <li>item 2</li>
+</ol>
+<p>
+    is a functional lang
+</p>
+<ul>
+    <li>item</li>
+</ul>
+<div>
+    <p>text</p>
+</div>
+<div>
+    <div>
+        <p>text</p>
+    </div>
+</div>
+<h1>prolog</h1>
+<p>is about logic</p>
+
+Тогда:
+*/
+
+const dom1 = make(); // Список нод, то есть это лес, а не дерево
+const dom2 = append(dom1, node('h1', 'scheme'));
+const dom3 = append(dom2, node('p', 'is a lisp'));
+
+const children1 = l(node('li', 'item 1'), node('li', 'item 2'));
+const dom4 = append(dom3, node('ul', children1));
+const children2 = l(node('li', 'item 1'), node('li', 'item 2'));
+const dom5 = append(dom4, node('ol', children2));
+const dom6 = append(dom5, node('p', 'is a functional language'));
+const children3 = l(node('li', 'item'));
+const dom7 = append(dom6, node('ul', children3));
+const dom8 = append(dom7, node('div', l(node('p', 'text'))));
+const dom9 = append(dom8, node('div', l(node('div', l(node('p', 'text'))))));
+
+const dom10 = append(dom9, node('h1', 'prolog'));
+const dom = append(dom10, node('p', 'is about logic'));
+
+select('li', dom);
+// [('li', 'item 1'), ('li', 'item 2'), ('li', 'item 1'), ('li', 'item 2'), ('li', 'item')]
+
+select('p', dom);
+// [('p', 'is a lisp'), ('p', 'text'), ('p', 'text'), ('p', 'is about logic'), ('p', 'is a functional language')]
+
+/*
+Подсказки
+Посмотрите в документации примеры использования функций описанных ниже.
+
+ - hasChildren — функция, которая проверяет, есть ли потомки у элемента
+ - children — функция, которая возвращает список потомков
+ - is - функция, которая проверяет соответствие ноды переданному имени
+
+Эту задачу можно решить разными способами, алгоритм самого простого выглядит так:
+1. Проходимся по списку нод редьюсом, который собирает результирующий список.
+2. Если текущая нода содержит детей, то запускаем select рекурсивно для детей, а результат вызова добавляем в аккумулятор.
+3. Если текущая нода соответствует тому, что мы ищем, добавляем её в аккумулятор.
+*/
+
+// FILE: /app/select.js:
+import { 
+  l, cons as consList, isList, isEmpty, head, tail, concat, toString as listToString,
+} from 'hexlet-pairs-data';
+
+import {
+  is, hasChildren, children, filter, reduce, toString as htmlToString,
+} from 'hexlet-html-tags'; /* eslint-enable */
+
+const select = (tagName, html) => reduce((element, acc) => {
+  const acc2 = hasChildren(element) ? concat(select(tagName, children(element)), acc) : acc;
+
+  return is(tagName, element) ? consList(element, acc2) : acc2;
+}, l(), html);
+
+export default select;
+
+/**@@@
+calculatePolygonPerimeter.js
+Реализуйте и экспортируйте функцию по умолчанию, которая принимает на вход упорядоченный список точек, являющихся вершинами многоугольника, вычисляет и возвращает периметр многоугольника.
+
+Примечания
+ - Список реализован с помощью абстракции из библиотеки hexlet-pairs-data
+ - Точка реализована с помощью абстракции из библиотеки hexlet-points
+ - Многоугольник имеет не менее трёх вершин, поэтому, если на вход передан список, содержащий менее трёх точек, то функция должна вернуть null
+ - Порядок точек, определяющих многоугольник, имеет значение (разный порядок может определять разные (неконгруэнтные) многоугольники). Поэтому при вычислении периметра надо придерживаться порядка, заданного во входном списке точек
+ - В остальном считаем, что передан корректный многоугольник, то есть дополнительных проверок делать не надо
+
+Примеры
+За примерами работы обращайтесь в модуль с тестами: __tests__/calculatePolygonPerimeter.test.js
+
+Подсказки
+ - При необходимости вы можете самостоятельно импортировать функцию toString из библиотеки hexlet-pairs-data и использовать её для отладки решений. Эта функция возвращает строковое представление списка
+ - При необходимости вы можете самостоятельно импортировать функцию toString из библиотеки hexlet-points и использовать её для отладки решений. Эта функция возвращает строковое представление точки
+ - Для разрешения противоречий в случае импорта нескольких функций с одинаковыми именами используйте псевдонимы (aliases)
+*/
+
+import { getX, getY } from 'hexlet-points';
+import { isEmpty, head, tail } from 'hexlet-pairs-data';
+
+
+const areThereLessThenThreePoints = (points) => {
+  const iter = (list, acc) => {
+    if (acc > 2) {
+      return false;
+    }
+
+    if (isEmpty(list)) {
+      return true;
+    }
+
+    return iter(tail(list), acc + 1);
+  };
+
+  return iter(points, 0);
+};
+
+const getSegmentLength = (point1, point2) => {
+  const x1 = getX(point1);
+  const x2 = getX(point2);
+  const y1 = getY(point1);
+  const y2 = getY(point2);
+
+  return Math.sqrt(((x2 - x1) ** 2) + ((y2 - y1) ** 2));
+};
+
+export default (points) => {
+  if (areThereLessThenThreePoints(points)) {
+    return null;
+  }
+
+  const startPoint = head(points);
+  const iter = (list) => {
+    const currentPoint = head(list);
+    const rest = tail(list);
+    if (isEmpty(rest)) {
+      return getSegmentLength(currentPoint, startPoint);
+    }
+
+    const nextPoint = head(rest);
+    return getSegmentLength(currentPoint, nextPoint) + iter(rest);
+  };
+
+  return iter(points);
+};
+
+
+
+/**@@@
+take.js
+Реализуйте и экспортируйте по умолчанию функцию take, которая возвращает список, состоящий из первых n (значение передается первым параметром) элементов исходного (переданного вторым параметром) списка. Остальные детали работы функции демонстрирует нижеприведённый код:
+*/
+
+take(3, l()); // ()
+take(3, l(1, 2)); // (1, 2)
+take(1, l(7, 2)); // (7)
+
+/*
+Подсказки
+Используйте рекурсивный процесс
+*/
+const take = (count, list) => {
+  if (isEmpty(list) || count === 0) {
+    return l();
+  }
+
+  return cons(head(list), take(count - 1, tail(list)));
+};
+
+export default take;
+
+
+/**@@@
+Частой задачей при работе с деревьями (особенно html), является необходимость выбрать список узлов по определенному критерию.
+
+Пара примеров из реальной жизни:
+
+XPath
+
+/bookstore/book/price[text()]
+price/@exchange/total
+book[excerpt]/author[degree]
+JQuery
+
+$("ul > li:first-child")
+$("p.class1, #p1")
+solution.js
+Реализуйте и экспортируйте по умолчанию функцию select, которая возвращает список нод в соответствии с запросом. Запрос это список из имен тегов, в котором каждый следующий тег это тег, вложенный в предыдущий. Порядок, в котором ноды возвращаются - не важен.
+
+У нас есть такой html:
+
+<h1>scheme</h1>
+<p>is a lisp</p>
+<p>
+  <ul>
+    <li>item 2</li>
+    <li>item 1</li>
+  </ul>
+</p>
+<ol>
+  <li>item 2</li>
+  <li>item 1</li>
+</ol>
+<p>is a functional language</p>
+<ul>
+  <li>item</li>
+</ul>
+<div>
+  <p>another text</p>
+</div>
+<div>
+  <div>
+    <p>
+      <span>text</span>
+    </p>
+  </div>
+</div>
+<div>
+  <a>
+    <div>
+      <p>
+        <span>text</span>
+      </p>
+    </div>
+  </a>
+</div>
+<h1>prolog</h1>
+<p>is about logic</p>
+Строим html следующим образом:
+*/
+const dom1 = make();
+const dom2 = append(dom1, node('h1', 'scheme'));
+const dom3 = append(dom2, node('p', 'is a lisp'));
+const children1 = l(node('li', 'item 1'), node('li', 'item 2'));
+const dom4 = append(dom3, node('p', l(node('ul', children1))));
+const children2 = l(node('li', 'item 1'), node('li', 'item 2'));
+const dom5 = append(dom4, node('ol', children2));
+const dom6 = append(dom5, node('p', 'is a functional language'));
+const children3 = l(node('li', 'item'));
+const dom7 = append(dom6, node('ul', children3));
+const dom8 = append(dom7, node('div', l(node('p', 'another text'))));
+const dom9 = append(dom8, node('div', l(node('div', l(node('p', l(node('span', 'text'))))))));
+const dom10 = append(dom9, node('div', l(node('a', l(node('div', l(node('p', l(node('span', 'text'))))))))));
+const dom11 = append(dom10, node('h1', 'prolog'));
+dom = append(dom11, node('p', 'is about logic'));
+
+// Пример работы функции, где для наглядности показано какой она будет возвращать результат если выводить его на экран (htmlToString):
+select(l('p', 'ul', 'li'), dom);
+// <li>item 1</li><li>item 2</li>
+
+select(l('div', 'div', 'p'), dom);
+// <p><span>text</span></p>
+
+select(l('div', 'p'), dom);
+// <p>another text</p><p><span>text</span></p><p><span>text</span></p>
+
+select(l('div'), dom));
+// <div><a><div><p><span>text</span></p></div></a></div><div><p><span>text</span></p></div><div><div><p><span>text</span></p></div></div><div><p><span>text</span></p></div><div><p>another text</p></div>
+
+/*
+Алгоритм работы функции
+
+Список тегов для поиска будем называть словом query.
+query ищется с любого уровня дерева, а не только с верхнего. Например, если наш query это p, то будут найдены все p на всех уровнях.
+Производится поиск только подряд идущих тегов, например, если запрос l('ul', 'li'), то будут найдены только те li, которые идут сразу за ul.
+
+
+Подсказки
+hasChildren - функция, которая проверяет, есть ли потомки у элемента
+children - функция, которая возвращает список потомков
+*/
+import { l, isEmpty, head, tail, concat, toString as listToString } from 'hexlet-pairs-data'; // eslint-disable-line
+import { is, toString as htmlToString, hasChildren, children, reduce, filter, map } from 'hexlet-html-tags'; // eslint-disable-line
+
+
+const getChildrenFromElements = (elements) => {
+  const mapped = map(element => (hasChildren(element) ? children(element) : l()), elements);
+  const result = reduce((elementChildren, acc) => concat(elementChildren, acc), l(), mapped);
+
+  return result;
+};
+
+const getSatisfiedChildren = (query, elements) => {
+  const first = head(query);
+  const rest = tail(query);
+  const filtered = filter(element => is(first, element), elements);
+  if (isEmpty(rest)) {
+    return filtered;
+  }
+
+  return getSatisfiedChildren(rest, getChildrenFromElements(filtered));
+};
+
+const select = (query, dom) => {
+  const iter = (restOfDom, result) => {
+    if (isEmpty(restOfDom)) {
+      return result;
+    }
+    const elements = getSatisfiedChildren(query, restOfDom);
+
+    return iter(getChildrenFromElements(restOfDom), concat(elements, result));
+  };
+
+  return iter(dom, l());
+};
+
+export default select;
+
+
+
+/**@@@
+Задача о восьми ферзях — широко известная задача по расстановке фигур на шахматной доске. Исходная формулировка: "Расставить на стандартной 64-клеточной шахматной доске 8 ферзей так, чтобы ни один из них не находился под боем другого". Подразумевается, что ферзь бьёт все клетки, расположенные по вертикалям, горизонталям и обеим диагоналям.
+
+// из материалов Википедии
+
+Задачу можно обобщить следующим образом: "На шахматной доске со стороной N, расставить N ферзей так, чтобы ни один из них не находился под боем другого".
+
+isSafeQueens.js
+Реализуйте и экспортируйте по умолчанию isSafeQueens, которая принимает комбинацию ферзей в виде списка и проверяет, является ли данная расстановка решением задачи.
+
+Комбинации формируются следующим образом:
+
+(2, 4, 1, 3)
+
+где каждое число — это позиция ферзя по вертикали, а порядок числа в списке — позиция ферзя по горизонтали.
+
+Для примера выше, доска будет выглядеть так:
+
+     1   2   3   4
+    ___ ___ ___ ___
+1  |___|___|_*_|___|
+2  |_*_|___|___|___|
+3  |___|___|___|_*_|
+4  |___|_*_|___|___|
+Пример работы:
+*/
+const queens = l(2, 4, 1, 3);
+
+isSafeQueens(queens); // true
+
+
+// FILE: /app/isSafeQueens.js:
+import { cons, car, cdr, toString as pairToString } from 'hexlet-pairs'; // eslint-disable-line
+import { l, isEmpty, reverse, toString as listToString, isList, head, tail, cons as consList, reduce } from 'hexlet-pairs-data'; // eslint-disable-line
+
+
+const isSafeQueens = (list) => {
+  if (isEmpty(list)) {
+    return true;
+  }
+
+  const y1 = head(list);
+  const checkSafe = reduce(
+    (y2, x) => (!x || y1 === y2 || Math.abs(y1 - y2) === x ? false : x + 1),
+    1,
+    tail(list),
+  );
+
+  return checkSafe ? isSafeQueens(tail(list)) : false;
+};
+
+export default isSafeQueens;
+
+
+/**@@@
+zip.js
+Напишите и экспортируйте по умолчанию функцию zip, которая принимает на вход два списка и возвращает третий, в котором каждый элемент это список элементов исходных списков, стоящих на тех же позициях.
+
+const list1 = l(1, 5, 3, 8, 9);
+const list2 = l(2, 3, 2, 1);
+
+//  ((1, 2), (5, 3), (3, 2), (8, 1))
+const result = zip(list1, list2);
+Как видно из примера, если списки различаются по длине, то длина результирующего списка равна длине короткого списка.
+*/
+
+// FILE: /app/zip.js:
+import { l, isEmpty, head, tail, cons, reverse, toString as listToString } from 'hexlet-pairs-data'; // eslint-disable-line
+
+const zip = (list1, list2) => {
+  const iter = (first, last, acc) => {
+    if (isEmpty(first) || isEmpty(last)) {
+      return acc;
+    }
+
+    const newAcc = cons(l(head(first), head(last)), acc);
+    return iter(tail(first), tail(last), newAcc);
+  };
+
+  return reverse(iter(list1, list2, l()));
+};
+
+export default zip;
+
+
+
+/**@@@
+flatten.js
+Реализуйте и экспортируйте по умолчанию функцию flatten, которая делает плоским вложенный список.
+
+const list = l(1, 2, l(3, 5), l(l(4, 3), 2));
+
+// (1, 2, 3, 5, 4, 3, 2)
+flatten(list);
+*/
+
+// FILE: /app/flatten.js:
+import { l, reverse, toString as listToString, isList, cons, reduce } from 'hexlet-pairs-data'; // eslint-disable-line
+
+const flatten = (list) => {
+  const iter = (elements, accumulator) =>
+    reduce((element, acc) =>
+      (!isList(element) ? cons(element, acc) : iter(element, acc)), accumulator, elements);
+
+  return reverse(iter(list, l()));
+};
+
+export default flatten;
+
+
+
+/**@@@
+Необходимо реализовать набор функций для работы со списками, построенными на базе строк. Данный вид списка представляет собой текст, где каждая строчка — это элемент списка, например:
+
+hello
+world
+
+Это пример списка с двумя элементами hello и world.
+
+Подразумевается, что интерфейс работы этой абстракции абсолютно точно такой же, как и тот, что использовался в курсе. Другими словами, можно безболезненно переписать реализацию тех функций, которые делались в курсе, и весь код, использующий списки, будет работать как ни в чем не бывало.
+
+list.js
+Реализуйте и экспортируйте следующие функции:
+
+l(...items) — функция-конструктор. Уже реализована.
+*/
+const list = l('foo', 'bar', 'baz');
+
+// toString(list) — возвращает строковое представление списка
+
+const list = l('foo', 'bar', 'baz');
+toString(list); // (foo, bar, baz)
+
+// head(list) — возвращает первый элемент списка
+
+const list = l('foo', 'bar', 'baz');
+const first = head(list); // 'foo'
+
+// tail(list) — возвращает "хвост" списка (все элементы, кроме первого)
+
+const list = l('foo', 'bar', 'baz');
+const rest = tail(list); // l('bar', 'baz')
+
+// isEmpty(list) — проверяет, является ли список пустым
+
+const list = l('foo', 'bar', 'baz');
+
+console.log(isEmpty(list)); // false
+console.log(isEmpty(l()));  // true
+
+// cons(item, list) — добавляет элемент в начало списка и возвращает новый список
+
+const list = l('foo', 'bar', 'baz');
+const newList = cons('bas', list); // l('bas', 'foo', 'bar', 'baz')
+
+// filter(predicate, list) — фильтрует список, используя предикат
+
+const list = l('foo', 'bar', 'baz');
+const filteredList = filter(item => item[0] === 'b', list); // l('bar', 'baz')
+
+// map(callback, list) — преобразует список, используя callback-функцию
+
+const list = l('foo', 'bar', 'baz');
+const mappedList = map(item => item[0], list); // l('f', 'b', 'b')
+
+// reduce(callback, init, list) — производит свертывание списка
+
+const list = l('foo', 'bar', 'baz');
+const result = reduce((item, acc) => acc ? `${acc},${item}` : item, '', list);
+console.log(result); // foo,bar,baz
+
+/*
+Подсказки
+Решение учителя на 100% функциональное
+Длина строки str находится так: str.length
+Чтобы получить подстроку из строки, используйте метод substr:
+*/
+
+'foo'.substr(1, 2); // 'oo';
+// Чтобы получить индекс, по которому находится отдельный символ в строке, используйте метод indexOf
+
+'bar'.indexOf('a'); // 1;
+
+// FILE: /app/list.js:
+const delimiter = '\n';
+
+export const l = (...items) => items.join(delimiter);
+
+export const head = (list) => {
+  const index = list.indexOf(delimiter);
+
+  return list.substr(0, index > -1 ? index : list.length);
+};
+
+export const tail = (list) => {
+  const index = list.indexOf(delimiter);
+
+  return index > -1 ? list.substr(index + delimiter.length) : l();
+};
+
+export const isEmpty = list => list.length === 0;
+
+export const cons = (item, list) => (isEmpty(list) ? item : `${item}${delimiter}${list}`);
+
+export const reverse = list => reduce((item, acc) => cons(item, acc), l(), list);
+
+export const reduce = (func, init, list) => {
+  const iter = (rest, acc) => {
+    if (isEmpty(rest)) {
+      return acc;
+    }
+
+    return iter(tail(rest), func(head(rest), acc));
+  };
+
+  return iter(list, init);
+};
+
+export const filter = (predicate, list) => {
+  const reversedResult = reduce((item, acc) => (predicate(item) ? cons(item, acc) : acc), l(), list);
+
+  return reverse(reversedResult);
+};
+
+export const map = (func, list) => {
+  const reversedResult = reduce((item, acc) => cons(func(item), acc), l(), list);
+
+  return reverse(reversedResult);
+};
+
+export const toString = (list) => {
+  const str = reduce((item, acc) => `${acc}, ${item}`, head(list), tail(list));
+
+  return `(${str})`;
+};
+
+
+/**@@@
+union.js
+Напишите и экспортируйте по умолчанию функцию union, которая принимает на вход два списка и возвращает третий, являющийся объединением уникальных значений двух исходных списков.
+
+const list1 = l(2, 3, 2, 1, 7);
+const list2 = l(1, 5, 3, 5, 8, 9);
+
+const result = union(list1, list2);
+// (2, 3, 1, 7, 5, 8, 9)
+Подсказки
+Порядок уникальных значений в итоговом списке должен соответствовать порядку появления этих значений в исходных списках (сначала в первом переданном списке, потом - во втором).
+*/
+
+// FILE: /app/union.js:
+import { l, isEmpty, cons, reduce, has, reverse, toString as listToString } from 'hexlet-pairs-data';
+
+const appendUniq = (base, list) => {
+  const result = reduce(
+    (value, acc) => (has(acc, value) ? acc : cons(value, acc)),
+    reverse(base),
+    list,
+  );
+  return reverse(result);
+};
+
+export default (list1, list2) => appendUniq(appendUniq(l(), list1), list2);
+
+
+/**@@@
+sort.js
+Реализуйте и экспортируйте по умолчанию функцию sort, которая принимает на вход список и сортирует его по возрастанию.
+
+Примеры
+*/
+sort(l(3, 3, 0, -1, 0, 4, -5));
+// (-5, -1, 0, 0, 3, 3, 4)
+
+sort(l(5, -3, 2, 10, 4, 4, 5));
+// (-3, 2, 4, 4, 5, 5, 10)
+/*
+Алгоритм
+Быстрая сортировка, сортировка Хоара (англ. quicksort), часто называемая qsort (по имени в стандартной библиотеке языка Си) — широко известный алгоритм сортировки, разработанный английским информатиком Чарльзом Хоаром во время его работы в МГУ в 1960 году.
+
+Общая идея алгоритма состоит в следующем:
+
+Выбрать из списка элемент, называемый опорным. Это может быть любой из элементов списка или же число, вычисленное на основе значений элементов.
+Сравнить все остальные элементы с опорным и переставить их в списке так, чтобы разбить список на три непрерывных отрезка, следующих друг за другом: «меньшие опорного», «равные» и «большие».
+Для отрезков «меньших» и «больших» значений выполнить рекурсивно ту же последовательность операций, если длина отрезка больше единицы.
+На практике список обычно делят не на три, а на две части: например, «меньшие опорного» и «равные и большие»; такой подход в общем случае эффективнее, так как упрощает алгоритм разделения.
+*/
+
+import { l, isEmpty, head, tail, cons, concat, filter, toString as listToString } from 'hexlet-pairs-data';
+
+const sort = (list) => {
+  if (isEmpty(list)) {
+    return l();
+  }
+
+  const divisor = head(list);
+  const rest = tail(list);
+
+  const left = filter(value => value <= divisor, rest);
+  const right = filter(value => value > divisor, rest);
+
+  return concat(sort(left), cons(divisor, sort(right)));
+};
+
+export default sort;
+
+/**@@@
+sameParityFilter.js
+Реализуйте и экспортируйте по умолчанию функцию, которая принимает на вход список и возвращает новый, состоящий из элементов, у которых такая же чётность, как и у первого элемента входного списка.
+
+Примеры
+*/
+sameParity(l(-1, 0, 1, -3, 10, -2)); // (-1, 1, -3)
+
+sameParity(l(2, 0, 1, -3, 10, -2)); // (2, 0, 10, -2)
+
+sameParity(l()); // ()
+
+// FILE /app/sameParityFilter.js:
+import { l, isEmpty, head, tail, filter, toString as listToString } from 'hexlet-pairs-data';
+
+const isEven = num => num % 2 === 0;
+
+export default (list) => {
+  if (isEmpty(list)) {
+    return l();
+  }
+
+  const firstItem = head(list);
+  const firstItemParity = isEven(firstItem);
+
+  return filter(value => isEven(value) === firstItemParity, list);
+};
 
 
 
@@ -3712,9 +4862,7 @@ const log = game('John', 'Ada'); // после автоматической иг
 assert.equal(length(log), 5);
 
 // Шаги:
-
 // step((health1, health2), message)
-
 const step1 = get(0, log);
 assert.equal(toString(car(step1)), '(10, 10)');
 const step2 = get(1, log);
@@ -3727,7 +4875,64 @@ const step5 = get(4 log);
 assert.equal(toString(car(step1)), '(4, -2)');
 
 
+/**@@@
+game.js
+Допишите функцию iter, которая является частью ядра игрового движка и описывает в себе логику одного хода
 
+Алгоритм
+1. Если здоровье игрока, которого атаковали на предыдущем шаге (в примерах этого и следующего пунктов мы предполагаем, что это первый игрок с именем name1), меньше или равно 0, то добавляем в лог элемент с сообщением вида ${name1} был убит и возвращаем лог. Игра закончена.
+
+2. В ином случае, берём рандомную карту, вычисляем урон, записываем новое здоровье, формируем сообщение формата:
+
+const message = `Игрок '${name1}' применил '${cardName}'
+против '${name2}' и нанес урон '${damage}'`;
+
+Формируем элемент лога формата cons(cons(health1, health2), message) и добавляем его в лог.
+
+3. Повторяем.
+
+Подсказки
+ - Параметр order в функции iter нужен для определения того, какой игрок сейчас атакует.
+ - Используйте функцию random для выбора карты из колоды.
+ - Колода карт передаётся в игру через параметр cards.
+*/
+
+import { cons, car, cdr, toString as pairToString } from 'hexlet-pairs'; // eslint-disable-line
+import { cons as consList, l, random, head, reverse, toString as listToString } from 'hexlet-pairs-data'; // eslint-disable-line
+
+const run = (player1, player2, cards) => {
+  const iter = (health1, name1, health2, name2, order, log) => {
+    if (health1 <= 0) {
+      return consList(cons(car(head(log)), `${name1} был убит`), log);
+    }
+    
+    const card = random(cards);
+    const cardName = car(card);
+    const damage = cdr(card)();
+    const newHealth = health2 - damage;
+
+    const message = `Игрок '${name1}' применил '${cardName}'
+      против '${name2}' и нанес урон '${damage}'`;
+    let stats;
+    // В логе игроки всегда должны быть на своих местах. Первый игрок слева, второй - справа
+    if (order === 1) {
+      stats = cons(cons(health1, newHealth), message);
+    } else if (order === 2) {
+      stats = cons(cons(newHealth, health1), message);
+    }
+    const newLog = consList(stats, log);
+    // Хитрость решения учителя состоит в том, что данные игроков всегда меняются местами. Это видно
+    // по вызову ниже. Параметры первого игрока становятся параметрами второго и наоборот.
+    // Такой подход позволяет упростить логику и всегда считать что атакует игрок номер 1.
+    return iter(newHealth, name2, health1, name1, order === 1 ? 2 : 1, newLog);
+  };
+
+  const startHealth = 10;
+  const logItem = cons(cons(startHealth, startHealth), 'Начинаем бой!');
+  return reverse(iter(startHealth, player1, startHealth, player2, 1, l(logItem)));
+};
+
+export default cards => (name1, name2) => run(name1, name2, cards);
 
 
 
@@ -5440,6 +6645,7 @@ export default () => {
       const countries = await response.json();
       const list = document.createElement('ul');
       list.dataset.autocompleteName = dataAutocompleteName;
+
       if (countries.length === 0) {
         countries.push('Nothing');
       }
@@ -5448,6 +6654,7 @@ export default () => {
         li.textContent = country;
         list.append(li);
       });
+
       oldList.replaceWith(list);
     });
   }); 
@@ -5588,4 +6795,517 @@ $('#clickme').click(() => {
 
 С другой стороны, на JQuery уже столько понаписано, что его требуют знать в любой вакансии, связанной с фронтендом. Как вы могли убедиться исходя из примеров выше, ничего сложного и фантастического в JQuery нет. Более того, в первую очередь надо знать DOM, а остальное — это просто внимательное чтение документации и примеров использования.
 */
+
+/**@@
+В Bootstrap есть компонент Carousel.
+
+Этот слайдер устроен также как и все остальное в бутстрапе. В верстке определяются data аттрибуты, по которым бутстрап понимает что это карусель и оживляет ее.
+
+На слайдере отображаются две стрелки, одна влево другая вправо. Клики по этим стрелкам приводят к перемотке слайдов по кругу. С точки зрения DOM происходит следующее:
+- Класс active снимается с текущего элемента .carousel-item
+- Активный элемент получает класс active
+
+application.js
+Реализуйте логику слайдера в функции экспортированной по умолчанию.
+
+Постройте свою логику так, чтобы она позволила использовать на одной странице любое количество компонентов carousel с любым количеством картинок внутри.
+*/
+
+import _ from 'lodash';
+import $ from 'jquery';
+
+export default () => {
+  const carousels = $('[data-ride="carousel"]');
+
+  carousels.each((index, carousel) => {
+    const root = $(carousel);
+    const slides = root.find('.carousel-item');
+    const maxIndex = slides.length - 1;
+    let currentIndex = _.findIndex(slides, slide => $(slide).hasClass('active'));
+
+    const handlerGenerator = next => () => {
+      const newCurrentIndex = next(currentIndex);
+      slides.removeClass('active');
+      slides.filter(id => id === newCurrentIndex).addClass('active');
+      currentIndex = newCurrentIndex;
+    };
+
+    const prev = root.find('[data-slide="prev"]');
+    prev.click(handlerGenerator(i => (i === 0 ? maxIndex : i - 1)));
+
+    const next = root.find('[data-slide="next"]');
+    next.click(handlerGenerator(i => (maxIndex === i ? 0 : i + 1)));
+  });
+};
+
+
+>>>>>> Состояние приложения <<<<<<
+
+/*
+Манипулирование домом — задача простая только в самых примитивных ситуациях. Как только понадобится реализовать полноценное, пусть и небольшое, приложение, код моментально превращается в тыкву. Десятка обработчиков достаточно для того чтобы потеряться. С каждым новым событием сложность кода растет еще быстрее, а, ведь, в реальных приложениях событий сотни. Почему так происходит?
+
+Хотя подобная проблема касается не только фронтенда, именно в нем, она достигает своего апогея. Событийная архитектура и дом, без должного внимания, порождают запутанный код буквально сразу. Понятно что где-то здесь появляется Архитектура, но где конкретно и как, это вопрос.
+
+Подойдем к правильной архитектуре со стороны бекенда. Как вы уже знаете или догадываетесь, в бекенде приложения состоят минимум из двух частей - базы данных и собственно самого кода. Формы отправляемые на сервер, изменяют состояние приложения, которое хранится в базе, далее, на основе этого состояния формируется ответ в виде HTML страницы.
+
+По сути, в типичных веб проектах, приложение занимается двумя вещами, либо обновляет данные в базе, либо извлекает эти данные и на основе них формирует HTML. Необходимость базы данных довольно очевидна и понятна для всех, но тоже самое не очевидно во фронтенде, DOM позволяет хранить состояние внутри себя и более того, провоцирует так делать. На протяжении курса мы встречались с этой ситуацией не раз, когда нужно выполнить некоторое действие, а оно зависит от того что сейчас на экране. Для анализа приходилось лезть в DOM и смотреть что же там происходит. Первый шаг в построении правильной архитектуры, состоит в выделении состояния из дома, в некое подобие базы данных, основанной на обычном объекте js. При такой организации кода, вырисовывается следующая схема работы:
+
+- Возникает событие
+- Меняется состояние
+- Обновляется DOM
+
+<div id="result">0</div>
+<button id="increment">+</button>
+<button id="decrement">-</button>
+*/
+
+const app = () => {
+  let counterValue = 0
+
+  const result = document.getElementById('result');
+  
+  const incHandler = () => {
+    counterValue += 1;
+    result.textContent = counterValue;
+  };
+  
+  const decHandler = () => {
+    counterValue -= 1;
+    result.textContent = counterValue;
+  };
+
+  const inc = document.getElementById('increment');
+  inc.addEventListener('click', incHandler);
+
+  const dec = document.getElementById('decrement');
+  dec.addEventListener('click', decHandler);
+};
+
+app();
+
+
+/*
+Главная особенность кода выше, в том как идет работа с состоянием. Здесь нет никаких обращений к дому для извлечения текущего значения, оно хранится в переменной и доступно для всех обработчиков. Обратите внимание на структуру кода. Состояние и навешивание колбеков находятся внутри функции. Это важно, как минимум, по двум причинам. Во-первых, такой подход позволяет использовать данный файл как модуль, импортировать из него другие функции (если они там есть) и, например, тестировать их. Если код вызывается на уровне модуля, то импорт привел бы к его немедленному исполнению. Во-вторых, состояние локально (оно определено внутри функции), а значит мы можем запустить несколько версий приложения, это особенно актуально при написании тестов. Напротив, определение состояния на уровне модуля, сделало бы его "синглотоном" (что-то существующее в единственном экземпляре), другими словами, состояние было бы всегда одним и общим для всего кода, который его использует. Не было бы возможности начать с чистого листа.
+
+Перед тем как смотреть более сложный пример, в котором состояние представлено объектом, давайте разберемся с тем, что включает в себя понятие состояние. Если коротко, то состояние это данные нашего приложения в любой момент времени, например, открытые вкладки в редакторе или браузере. Их количество и содержимое меняются в зависимости от того, какие кнопки мы нажимаем и что пытаемся загрузить. В общем случае, любое визуальное изменение в приложении или на странице, это всегда изменение состояния и никак иначе. Невозможна ситуация при которой на странице сайта меняется какая-то деталь, но состояние при этом остается тем же. Изменение представления возможно только на основе изменения состояния. Вы можете возразить, что анимация через CSS не меняет ничего в нашем приложении и будете правы лишь на половину. Да, анимация в css не связана с нашим приложением, но внутри браузера это состояние есть и оно меняется.
+
+Отличным примером неочевидного, для начинающего фронтенд специалиста, состояния, служит состояние формы. Представьте себе поле для ввода телефона, которое отслеживает ошибки при вводе и сразу их показывает. Если ошибок нет, то оно позволяет выполнить сабмит формы, иначе кнопка заблокирована. Что в данном случае является состоянием? Однозначно состояние валидности данных формы: "валидно" и "не валидно". На основе этого состояния определяется обводить красной рамкой поле для ввода или нет. Ну, и, конечно, состоянием является заблокированность кнопки.
+
+<form>
+  <input type="text" class="phone" name="phone" value="">
+  <input type="submit" class="submit" disabled value="Save">
+</form>
+*/
+
+const app = () => {
+  const state = {
+    registrationProcess: {
+      valid: true,
+      submitDisabled: true,
+    }
+  };
+
+  const input = document.querySelector('.phone');
+  input.addEventListener('keyup', () => {
+    if (input.value === '') {
+      state.registrationProcess.valid = true;
+      state.registrationProcess.submitDisabled = true;
+    } else if (!input.value.match(/^\d+$/)) {
+      state.registrationProcess.valid = false;
+      state.registrationProcess.submitDisabled = true;
+    } else {
+      state.registrat ionProcess.valid = true;
+      state.registrationProcess.submitDisabled = false;
+    }
+    
+    render(state);
+  });
+};
+
+const render = (state) => {
+  const input = document.querySelector('.phone');
+  const submit = document.querySelector('.submit');
+
+  submit.disabled = state.registrationProcess.submitDisabled;
+  
+  if (state.registrationProcess.valid) {
+    input.style.border = null;
+  } else {
+    input.style.border = "thick solid red";
+  }
+}
+
+app();
+
+// Как видно из примера, состояние описывается обычным js объектом, который создается при старте приложения:
+const state = {
+  registrationProcess: {
+    valid: true,
+    submitDisabled: true,
+  }
+};
+
+
+// Нет никаких правил по формированию его структуры, как удобно так и делайте. Главное не привязывайте структуру состояния к визуальному оформлению, оформление зависит от состояния, но никак не наоборот. Пример того как делать не стоит ниже:
+
+const state = {
+  centralBlock: {
+    valid: true,
+    submitDisabled: true,
+  },
+  sideBar: {
+    formValue: 'value'
+  },
+};
+
+/*
+Проблема такой структуры в том, что если поменяется дизайн (даже небольшое расположение элементов), то объект состояния перестанет отражать реальность и его придется править.
+
+Далее обработчики событий. Они должны иметь доступ к состоянию, так как оно меняется именно в обработчиках. Поэтому обработчики определяются в той же функции где и создается состояние (главное не делать это на уровне модуля, состояние должно быть локально относительно приложения). Кроме того, обработчики это то место, где выполняются ajax запросы. В нашем примере их нет, но на будущее не забывайте.
+*/
+
+input.addEventListener('keyup', () => {
+  if (input.value === '') {
+    state.registrationProcess.valid = true;
+    state.registrationProcess.submitDisabled = true;
+  } else if (!input.value.match(/^\d+$/)) {
+    state.registrationProcess.valid = false;
+    state.registrationProcess.submitDisabled = true;
+  } else {
+    state.registrationProcess.valid = true;
+    state.registrationProcess.submitDisabled = false;
+  }
+
+  render(state);
+});
+
+
+/*
+Последнее, что делается в обработчиках, в нашем примере, вызывается функция render, которая принимает на вход состояние и меняет DOM на его основе. Этот момент ключевой. Изменение DOM может происходить только внутри функции render. Весь остальной код может менять только состояние.
+
+Теперь наше приложение разделено на три независимых части: состояние, обработчики и рендеринг. Эта модель работы на тривиальных приложениях (в пару тройку обработчиков) смотрится избыточной, но если обработчиков станет хотя бы 10, то вы увидите, что с приложением достаточно удобно работать. Виден поток данных, всегда можно отследить, что изменилось и как одни части приложения зависят от других. К тому же сокращается дублирование. Например, изменение состояния может идти из разных частей приложения, но логика отрисовки при этом остается неизменной. В такой ситуации достаточно описать новый способ изменения уже существующего состояния, а рендеринг сделает все остальное.
+*/
+
+const render = (state) => {
+  const input = document.querySelector('.phone');
+  const submit = document.querySelector('.submit');
+
+  submit.disabled = state.registrationProcess.submitDisabled;
+  if (state.registrationProcess.valid) {
+    input.style.border = null;
+  } else {
+    input.style.border = "thick solid red";
+  }
+}
+
+/*
+Кроме наличия разделения на три части, не менее важно то, как они друг с другом взаимодействуют, более того, это основа модульности:
+
+- Состояние не знает ничего про остальные части системы, оно ядро.
+- Рендеринг ничего не знает про существование обработчиков, но пользуется состоянием для отрисовки
+- Обработчики знают про состояние, так как обновляют его и инициируют рендеринг
+
+Этот способ разделения по прежнему обладает одним важным недостатком, который мы устраним в следующем уроке, когда поговорим про MVC.
+*/
+
+
+/**@@
+src/application.js
+Реализуйте фильтр ноутбуков на основе формы доступной в public/index.html. Изменение любого параметра должно сразу приводить к фильтрации. Ноутбуки подходящие под фильтр выводятся внутри <div class="result"></div> как список ul/li моделей (свойство model внутри объекта представляющего ноутбук). Полный список ноутбуков доступен в файле src/application.js.
+
+Условия:
+ - Если фильтр пустой, то выводится все.
+ - Если под фильтр ничего не подходит, то список не выводится.
+
+Подсказки
+Для отслеживания изменений текстовых инпутов используйте событие input. Для select - change.
+*/
+
+// FILE: /app/src/application.js:
+const notebooks = [
+  {
+    model: 'v1', processor: 'intel', frequency: 1.7, memory: 16,
+  },
+  {
+    model: 'd3', processor: 'intel', frequency: 3.5, memory: 8,
+  },
+  {
+    model: 'd2', processor: 'amd', frequency: 2.5, memory: 16,
+  },
+];
+
+const predicates = {
+  eq: value => el => String(el) === String(value),
+  gt: value => el => el >= Number(value),
+  lt: value => el => el <= Number(value),
+};
+
+const filterNotebooks = (query, items) => {
+  const fields = Object.keys(query);
+  const activeFields = fields.filter(field => query[field]);
+  const result = activeFields.reduce((acc, field) => {
+    const [name, predicateName] = field.split('_');
+    const match = predicates[predicateName];
+
+    return acc.filter(item => match(query[field])(item[name]));
+  }, items);
+
+  return result;
+};
+
+const render = (state) => {
+  const resultElement = document.querySelector('.result');
+  const filteredNotebooks = filterNotebooks(state.filter, notebooks);
+  if (filteredNotebooks.length === 0) {
+    resultElement.innerHTML = '';
+    return;
+  }
+
+  const html = `<ul>${filteredNotebooks.map(n => `<li>${n.model}</li>`).join('')}</ul>`;
+  resultElement.innerHTML = html;
+};
+
+export default () => {
+  const state = {
+    filter: {
+      processor_eq: null,
+      memory_eq: null,
+      frequency_gt: null,
+      frequency_lt: null,
+    },
+  };
+
+  const items = [
+    { name: 'processor_eq', eventType: 'change' },
+    { name: 'memory_eq', eventType: 'change' },
+    { name: 'frequency_gt', eventType: 'input' },
+    { name: 'frequency_lt', eventType: 'input' },
+  ];
+
+  items.forEach(({ name, eventType }) => {
+    const element = document.querySelector(`[name="${name}"]`);
+
+    element.addEventListener(eventType, ({ target }) => {
+      state.filter[target.name] = target.value === '' ? null : target.value;
+
+      render(state);
+    });
+  });
+
+  render(state);
+};
+
+// FILE: /app/public/index.html:
+/*
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+  </head>
+  <body>
+    <div class="container m-3">
+      <div class="row">
+      <div class="col-6">
+        <form>
+          <div>
+            <label>Processor</label>
+            <select name="processor_eq">
+              <option value="">Select</option>
+              <option value="intel">Intel</option>
+              <option value="amd">AMD</option>
+            </select>
+          </div>
+          <div>
+          <label>Memory</label>
+            <select name="memory_eq">
+              <option value="">Select</option>
+              <option value="8">8</option>
+              <option value="16">16</option>
+              <option value="32">32</option>
+            </select>
+          </div>
+          <div>
+            <label>Frequency Min</label>
+            <input type="number" name="frequency_gt" min="1" max="5" value=""></input>
+          </div>
+          <div>
+            <label>Frequency Max</label>
+            <input type="number" name="frequency_lt" min="1" max="5" value=""></input>
+          </div>
+        </form>
+      </div>
+      <div class="col-6">
+        <div class="result"></div>
+      </div>
+      </div>
+    </div>
+    <script src="/vendors~main.js" ></script>
+    <script src="/main.js" ></script>
+  </body>
+</html>
+*/
+
+
+
+>>>>>> MVC <<<<<<
+/*
+Как я говорил в прошлом уроке, наша схема работы с состоянием имеет один существенный недостаток - за вызов отрисовки отвечают обработчики. Ниже приведен, уже знакомый нам, пример демонстрирующий вызов render.
+*/
+
+input.addEventListener('keyup', () => {
+  if (input.value === '') {
+    state.registrationProcess.valid = true;
+    state.registrationProcess.submitDisabled = true;
+  } else if (!input.value.match(/^\d+$/)) {
+    state.registrationProcess.valid = false;
+    state.registrationProcess.submitDisabled = true;
+  } else {
+    state.registrationProcess.valid = true;
+    state.registrationProcess.submitDisabled = false;
+  }
+
+  render(state);
+});
+
+/*
+Какие проблемы могут возникнуть при таком подходе?
+
+Здесь стоит сказать, что на бекенде такой подход, как раз, оправдан. Бекенд работает в рамках другой парадигмы, а именно клиент-серверной архитектуры. Обработчик на бекенде, по своей сути, это функция которая либо меняет состояние (что не приводит ни к каким перерисовкам, так как выполняется редирект), либо извлекает данные из базы для формирования ответа, например, в виде HTML. Во фронтенде изменение данных тут же влияет на экран.
+
+Пример который мы видим выше очень упрощен, в нем вызывается только одна функция render принимающая на вход все состояние. Теперь представьте что у нас в приложении десятки обработчиков (что немного) и большое состояние (что типично). В такой ситуации перерисовывать все на каждое изменение довольно затратная операция. С другой стороны, можно вставить проверку внутри render на каждый кусок стейта и отслеживать изменился ли он. Такой подход очень быстро станет проблемой сам по себе. Можно легко забыть что-то проверить, можно ошибиться в проверке, можно, просто, забыть поправить проверку после изменения структуры состояния.
+
+Существует другой способ выполнить эту задачу. Он основан на такой концепции (говорят шаблон проектирования), как Наблюдатель (Observer). Его идея очень проста, одна часть системы наблюдает за изменением другой части системы. Если наблюдаемый изменился, то наблюдатель может сделать что-то полезное.
+
+В JS подобный механизм можно реализовать через Proxy https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy, но это довольно муторно. Более простым решением будет использование готовой библиотеки Watch.js https://github.com/melanke/Watch.JS/.
+*/
+
+import { watch } from 'melanke-watchjs';
+
+const app = () => {
+  const state = {
+    value: "hello",
+  };
+
+  watch(state, 'value', () => alert('value changed!'));
+
+  // После изменения атрибута возникнет алерт
+  const el = document.querySelector('<selector>');
+  el.addEventListener('change', () => {
+    state.value = 'other value';
+  });
+}
+
+// Где-то в другом файле (обычно в index.js)
+app();
+
+/*
+Watch.js позволяет "слушать" нужные части состояния и вызывать функции рендеринга при их изменении.
+
+<div id="result">0</div>
+<button id="increment">+</button>
+<button id="decrement">-</button>
+*/
+
+const { watch } = WatchJS;
+
+const app = () => {
+  const state = {
+    value: 0
+  }
+  const result = document.getElementById('result');
+  
+  watch(state, 'value', () => {
+    result.textContent = state.value;
+  });
+  
+  const incHandler = () => {
+    state.value += 1
+  };
+  
+  const decHandler = () => {
+    state.value -= 1
+  };
+
+  const inc = document.getElementById('increment');
+  inc.addEventListener('click', incHandler);
+
+  const dec = document.getElementById('decrement');
+  dec.addEventListener('click', decHandler);
+};
+
+app();
+
+/*
+Теперь, обработчики ничего не знают про рендеринг и отвечают только за взаимодействие с состоянием. В свою очередь рендеринг следит за состоянием и меняет дом только там где нужно и так как нужно. Этот способ организации приложения считается уже классическим и носит имя MVC (Model View Controller). Каждое слово обозначает слой приложения со своей зоной ответственности. Model - состояние приложения и бизнес-логика, View - слой отвечающий за взаимодействие с DOM, Controller - обработчики.
+
+Обратите внимание на то что Model, Controller или View это не файлы, не классы, ни что-либо еще конкретное. Это логические слои, которые выполняют свою задачу и определенным образом взаимодействуют друг с другом.
+
+Понимание MVC дает ответ на то как структурировать приложение, но самостоятельно его реализуют редко. Современные фреймворки построены на различных модификациях MVC и за нас определили правила взаимодействия. Остается только разобраться и следовать им.
+*/
+
+
+/**@@
+src/application.js
+Реализуйте js часть компонента list-group бутстрапа. Посмотреть пример работы можно здесь https://getbootstrap.com/docs/4.1/components/list-group/#javascript-behavior
+
+Задача в том чтобы добавить js код, который оживляет переключение.
+
+Реализуйте задание используя архитектуру MVC.
+*/
+
+// FILE: /app/src/application.js:
+import { watch } from 'melanke-watchjs';
+
+// BEGIN (write your solution here)
+
+// END
+
+
+// FILE: /app/src/index.js:
+import app from './application';
+
+app();
+
+
+// FILE: /app/public/index.html:
+/*
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+  </head>
+  <body>
+    <div class="container m-3">
+      <div class="row">
+        <div class="col-4">
+          <div class="list-group" id="list-tab" role="tablist">
+            <a class="list-group-item list-group-item-action active" id="list-home-list" data-toggle="list" href="#list-home" role="tab" aria-controls="home">Home</a>
+            <a class="list-group-item list-group-item-action" id="list-profile-list" data-toggle="list" href="#list-profile" role="tab" aria-controls="profile">Profile</a>
+            <a class="list-group-item list-group-item-action" id="list-messages-list" data-toggle="list" href="#list-messages" role="tab" aria-controls="messages">Messages</a>
+            <a class="list-group-item list-group-item-action" id="list-settings-list" data-toggle="list" href="#list-settings" role="tab" aria-controls="settings">Settings</a>
+          </div>
+        </div>
+        <div class="col-8">
+          <div class="tab-content" id="nav-tabContent">
+            <div class="tab-pane fade active show" id="list-home" role="tabpanel" aria-labelledby="list-home-list">Home Content</div>
+            <div class="tab-pane fade" id="list-profile" role="tabpanel" aria-labelledby="list-profile-list">Profile Content</div>
+            <div class="tab-pane fade" id="list-messages" role="tabpanel" aria-labelledby="list-messages-list">Messages Content</div>
+            <div class="tab-pane fade" id="list-settings" role="tabpanel" aria-labelledby="list-settings-list">Settings Content</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="/vendors~main.js" ></script>
+    <script src="/main.js" ></script>
+  </body>
+</html>
+
+*/
+
 
