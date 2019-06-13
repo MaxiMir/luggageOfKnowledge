@@ -4937,6 +4937,676 @@ export default cards => (name1, name2) => run(name1, name2, cards);
 
 
 
+>>>>>> Инверсия <<<<<<
+
+/*
+Проблема: код не поддаётся тестированию
+Наша игра работает, но обладает ограничением — мы не можем её полноценно тестировать.
+*/
+
+const cards = l(
+  cons('Алчный натиск скорости', () => 4),
+  cons('Демонов маршрут воздаяния', health => Math.round(health * 0.3)),
+);
+
+const game = make(cards);
+const log = game('John', 'Ada');
+
+// Если колода содержит две и более карты, то ход игры и её результат заранее определить и протестировать НЕ получится.
+assert.equal(length(log), ?); // неизвестно
+
+// Ведь в процессе игры карта выбирается случайным образом:
+const card = random(cards); // эта строчка делает игру недетерминированной
+
+const cardName = car(card);
+const damage = cdr(card)(health2);
+
+const newHealth = health2 - damage;
+
+
+/*
+Вызов random(cards) возвращает случайную карту. Этот код располжен внутри функции с игрой, поэтому делает недетерминированной всю игру.
+
+# Решение: инвертирование
+
+Сейчас выбор карты осуществляется внутри игры, и мы не можем на это никак повлиять. Но ситуация изменится, если сделать так, чтобы алгоритм выбора карты игра получала "снаружи". Это легко реализовать с помощью передачи параметра.
+
+Рассмотрим простой пример: функция принимает на вход колоду карт cards, внутри происходит случайный выбор карты и какие-то другие дальнейшие манипуляции. Это принципиальная схема, если отвлечься от несущественных деталей.
+*/
+
+(cards) => {
+  const card = random(cards);
+  // to do something with card
+};
+
+/*
+Эта функция НЕ является чистой, она недетерминирована. И это нормально для игры, но не для тестов.
+
+Применим к функции технику инвертирования, реализовав передачу процесса выбора карты снаружи, через параметры:
+*/
+
+(cards, customRandom) => {
+  const card = customRandom(cards);
+  // to do something with card
+}
+
+/*
+Теперь мы можем управлять процессом выбора карты, передавая (в зависимости от ситуации и наших целей) ту или иную функцию в параметр customRandom.
+
+# Тесты
+Для тестирования нам не подойдёт обычный random. Поэтому определим и передадим в функцию игры специальную функцию выбора карты, обеспечивающую предсказуемое поведение:
+*/
+
+const cards = l(
+  cons('Тусклый маниту диспута', () => 7),
+  cons('Мыслительный рубитель ограды', health => Math.round(health * 0.8))
+);
+
+let cardIndex = 1;
+const game = make(cards, (pack) => {
+  cardIndex = cardIndex === 0 ? 1 : 0;
+
+  return get(cardIndex, pack);
+});
+
+const log = game('John', 'Ada');
+
+// Мы передали в игру (вторым параметром) анонимную функцию:
+(pack) => {
+  cardIndex = cardIndex === 0 ? 1 : 0;
+
+  return get(cardIndex, pack);
+};
+
+// Её ядро заключается в строчке кода, определяющей текущий индекс:
+cardIndex = cardIndex === 0 ? 1 : 0;
+
+// Значение переменной cardIndex функция берёт из переменной, определённой во внешнем окружении:
+let cardIndex = 1;
+
+/*
+Это важно, так мы можем смоделировать нужное нам предсказуемое поведение. При каждом новом вызове значение cardIndex циклически меняется с нуля на единицу и наоборот (индексирование в списке карт начинается с нуля!). Это как раз то, что нужно для ситуации колоды, состоящей из двух карт.
+
+Обязательно проанализируйте процесс выбора карт в модуле с тестами в практике к этому уроку!
+
+На примере простой функции продемонстрируем принцип определения циклического (а значит предсказуемого!) изменения величины:
+*/
+let cardIndex = 1;
+
+const getIndex = () => {
+  cardIndex = cardIndex === 0 ? 1 : 0;
+
+  return cardIndex;
+};
+
+for (let i = 0; i < 10; i += 1) {
+  console.log(getIndex());
+}
+
+
+// Для колоды из трёх или какого-нибудь другого количества карт надо будет модифицировать функцию. Можно сразу написать более универсальный вариант:
+const customRandom = (cardIndex, minIndex, maxIndex) => {
+  return () => {
+    if (cardIndex > maxIndex) {
+      cardIndex = minIndex;
+    }
+
+    const currentIndex = cardIndex;
+    cardIndex += 1;
+
+    return currentIndex;
+  };
+};
+
+console.log('Выводим индексы с 0 до 2. Начинаем с 0');
+
+const getIndex = customRandom(0, 0, 2);
+
+for (let i = 0; i < 6; i += 1) {
+  console.log(getIndex());
+}
+
+console.log('Выводим индексы с 1 до 5. Начинаем с 2');
+
+const getIndex2 = customRandom(2, 1, 5);
+
+for (let i = 0; i < 10; i += 1) {
+  console.log(getIndex2());
+}
+
+/*
+Выводы
+С помощью техники инвертирования мы добились следующих преимуществ:
+
+1. Предсказуемого поведения — код стало возможным тестировать. Теперь можем управлять процессом выбора в зависимости от целей: для игр передавать обычный random, для тестов — кастомный.
+2. В целом, добились расширения возможностей программы посредством делегирования части функциональности внешнему коду. Программа стала более гибкой в использовании.
+
+Для чего можно использовать инверсию?
+> Для замены недетерминированного поведения на детерминированное
+> Для устранения побочных эффектов в целях тестирования
+> Для изменения поведения системы, без переписывания исходного кода (особенно актуально для чужих библиотек)
+*/
+
+
+/**@@@
+Инверсия зависимостей всегда связана с изменением интерфейса (сигнатуры функции). Если ранее функция для запуска игры принимала на вход колоду карт и имена игроков, а возвращала лог игры, то теперь процесс игры разбился на два этапа: инициализация и сама игра.
+
+Во время инициализации в функцию, создающую игру, передается колода карт и пользовательская функция random (та, которая выбирает случайную карту из колоды). Результатом этого вызова будет функция, которая, в свою очередь, запускает игру на выполнение. Она принимает на вход имена игроков и возвращает лог. Задача этого упражнения - делегировать вызывающему коду формирование функции random. Другими словами, функция random должна передаваться при инициализации игры. Выглядит это так:
+*/
+
+// инициализация
+const customRandom = (c) => {
+  cardIndex = cardIndex === 0 ? 1 : 0;
+  return get(cardIndex, c);
+};
+const game = make(cards, customRandom);
+
+// игра
+const log = game('John', 'Ada');
+
+
+/*
+Такая инверсия позволит нам из недетерминированного кода сделать детерминированный. В примере выше как раз описывается алгоритм выбора карты, который всегда работает одинаковым способом.
+
+game.js
+ - Создайте и экспортируйте по умолчанию функцию, которая принимает на вход колоду карт и функцию выбора случайного элемента из списка (списка карт). Второй аргумент — опциональный, его значение по умолчанию — функция random из hexlet-pairs-data. Ваша функция будет возвращать другую функцию. При этом возвращаемая функция работает следующим образом:
+1. принимает на вход имена игроков
+2. запускает игру
+3. возвращет лог игры
+Допишите вызов пользовательской функции random в функции run.
+*/
+
+import { cons, car, cdr, toString as pairToString } from 'hexlet-pairs'; // eslint-disable-line
+import { cons as consList, l, random, head, reverse, toString as listToString } from 'hexlet-pairs-data'; // eslint-disable-line
+
+const run = (player1, player2, cards, customRandom) => {
+  const iter = (health1, name1, health2, name2, order, log) => {
+    if (health1 <= 0) {
+      return consList(cons(car(head(log)), `${name1} был убит`), log);
+    }
+
+    const card = customRandom(cards);
+    const cardName = car(card);
+    const damage = cdr(card)(health2);
+    const newHealth = health2 - damage;
+
+    const message = `Игрок '${name1}' применил '${cardName}'
+      против '${name2}' и нанес урон '${damage}'`;
+    let stats;
+
+    if (order === 1) {
+      stats = cons(cons(health1, newHealth), message);
+    } else if (order === 2) {
+      stats = cons(cons(newHealth, health1), message);
+    }
+
+    const newLog = consList(stats, log);
+
+    return iter(newHealth, name2, health1, name1, order === 1 ? 2 : 1, newLog);
+  };
+
+  const startHealth = 10;
+  const logItem = cons(cons(startHealth, startHealth), 'Начинаем бой!');
+
+  return reverse(iter(startHealth, player1, startHealth, player2, 1, l(logItem)));
+};
+
+export default (cards, customRandom = random) => (
+  (name1, name2) => run(name1, name2, cards, customRandom)
+);
+
+
+
+>>>>>> Помеченные данные <<<<<<
+
+// Недостатки имплементации:
+const cards = l(cons('Костяная кочерга гробницы', ()  => 6)
+  );
+const game = make(cards);
+
+// inside...
+const card = random(cards);
+const cardName = pairs.car(card);
+const damage = pairs.cdr(card)();
+const newHealth = health2 - damage;
+
+
+// Прячем реализацию:
+
+// FILE: percentCard.js
+import { cons, car, cdr } from 'hexlet-pairs';
+
+export const make = (name, percent) => cons(name, percent);
+
+export const getName = card => car(card);
+
+export const damage = (card, health) => Math.round(health * (cdr(car) / 100));
+
+
+// Используем
+simpleCard.make('Ошарашивающие шорты равновесия', 7);
+const cardName = simpleCard.getName(card);
+const damage = simpleCard.damage(card);
+
+// or
+
+percentCard.make('Фаланговая знатность утешения', 80);
+const cardName = percentCard.getName(card);
+const damage = percentCard.damage(card, health2);
+
+
+// С какой картой мы работаем?
+const iter = (...) => {
+  // some code ...
+
+  const card = random(cards);
+  const cardName = ?.getName(card);
+  const damage = ?.damage(card, health2);
+}
+
+// Помеченные данные
+import { cons, car, cdr } from 'hexlet-pairs';
+import { cons, car, cdr } from './type';
+
+export const make = (name, percent) => attach('PercentCard', cons(name, percent));
+
+export const getName = self => car(contents(self)); // self - карта
+
+
+// Реализация
+import { cons, car, cdr } from 'hexlet-pairs';
+
+export const attach = (tag, data) => cons(tag, data); // tag - метка типа
+
+export const typetag = taggedData => car(taggedData);
+
+export const contents = taggedData => cdr(taggedData);
+
+
+// Тесты
+import * as simpleCard from './simpleCard.js';
+import * as percentCard from './percentCard';
+
+let cardIndex = 2;
+const cards = l(
+  simpleCard.make('Ошарашивающие шорты', 7),
+  percentCard.make('Фаланговая знатность', 80)
+);
+
+const game = make(cardsm (c) => {
+  cardIndex = cardIndex === 1 ? 2 : 1;
+
+  return get(cardIndex, c);
+})
+
+const log = game('John', 'Ada');
+
+assert.equal(length(log), 5);
+
+
+/**@@@
+simpleCard.js
+Реализуйте интерфейс работы карты с типом SimpleCard по аналогии с типом PercentCard. Второй параметр у конструктора - урон.
+
+simpleCard.make('Жесткий ломатель мироздания', 6);
+solution.js
+Реализуйте логику работы функции run.
+
+Подсказки
+Для определения типа карты воспользуйтесь функциями isSimpleCard и/или isPercentCard.
+*/
+
+// FILE: /app/simpleCard.js
+import { cons, car, cdr, toString as pairToString } from 'hexlet-pairs'; // eslint-disable-line
+import { attach, contents } from '@hexlet/tagged-types';
+
+export const make = (name, damagePoints) => attach('SimpleCard', cons(name, damagePoints));
+
+export const getName = self => car(contents(self));
+
+export const damage = self => cdr(contents(self));
+
+
+// FILE /app/percentCard.js
+import { cons, car, cdr } from 'hexlet-pairs';
+import { attach, contents } from '@hexlet/tagged-types';
+
+export const make = (name, percent) => attach('PercentCard', cons(name, percent));
+
+export const getName = self => car(contents(self));
+
+export const damage = (self, health) => Math.round(health * (cdr(contents(self)) / 100));
+
+
+// FILE: /app/solution.js:
+import { cons, car, toString as pairToString } from 'hexlet-pairs'; // eslint-disable-line
+import { cons as consList, l, random, head, reverse, toString as listToString } from 'hexlet-pairs-data'; // eslint-disable-line
+import { typeTag } from '@hexlet/tagged-types';
+import { getName as getSimpleCardName, damage as simpleCardDamage } from './simpleCard';
+import { getName as getPercentCardName, damage as percentCardDamage } from './percentCard';
+
+const isSimpleCard = card => typeTag(card) === 'SimpleCard';
+const isPercentCard = card => typeTag(card) === 'PercentCard';
+
+const run = (player1, player2, cards, customRandom) => {
+  const iter = (health1, name1, health2, name2, order, log) => {
+    if (health1 <= 0) {
+      return consList(cons(car(head(log)), `${name1} был убит`), log);
+    }
+    const card = customRandom(cards);
+
+    let cardName;
+    let damage;
+
+    // Populate cardName and damage using suitable card
+    // use imports from  percentCard.js and simpleCard.js
+    if (isSimpleCard(card)) {
+      cardName = getSimpleCardName(card);
+      damage = simpleCardDamage(card);
+    } else if (isPercentCard(card)) {
+      cardName = getPercentCardName(card);
+      damage = percentCardDamage(card, health2);
+    }
+
+    const newHealth = health2 - damage;
+
+    const message = `Игрок '${name1}' применил '${cardName}'
+      против '${name2}' и нанес урон '${damage}'`;
+    let stats;
+    if (order === 1) {
+      stats = cons(cons(health1, newHealth), message);
+    } else if (order === 2) {
+      stats = cons(cons(newHealth, health1), message);
+    }
+    const newLog = consList(stats, log);
+    return iter(newHealth, name2, health1, name1, order === 1 ? 2 : 1, newLog);
+  };
+
+  const startHealth = 10;
+  const logItem = cons(cons(startHealth, startHealth), 'Начинаем бой!');
+  return reverse(iter(startHealth, player1, startHealth, player2, 1, l(logItem)));
+};
+
+export default (cards, customRandom = random) => {
+  const inner = (name1, name2) => run(name1, name2, cards, customRandom);
+  return inner;
+};
+
+
+
+>>>>>> Диспетчеризация по типу. Аддитивность. <<<<<<
+
+/*
+Решаемая задача: реализовать диспетчеризацию по типу своими руками.
+
+Разложим весь процесс на примере библиотеки для работы с геометрическими фигурами. Предположим, что мы можем создавать разные фигуры, такие как треугольник, круг или квадрат. Кроме специфических свойств, у фигур есть и общие, например, периметр или площадь. А так как мы, гипотетически, хотим работать с фигурами единообразно, то реализуем диспетчеризацию по типу на примере функции, вычисляющей общую площадь фигур, размещенных на воображаемом холсте (так обычно называется область, на которой происходит рисование в графических редакторах)
+
+При отсутствии готовой диспетчеризации нам придется делать ее руками в том месте, где требуется обобщенное поведение:
+*/
+import { reduce } from 'js-pairs-data';
+import * as circle from './circle';
+import * as square from './square';
+import * as triangle from './triangle';
+import { typeTag } from './type';
+
+const getTotalArea = figures => reduce((figure, total) => {
+    let area;
+    switch (typeTag(figure)) {
+      case 'square':
+        area = square.getArea(figure);
+        break;
+      case 'circle':
+        area = circle.getArea(figure);
+        break;
+      case 'triangle':
+        area = triangle.getArea(figure);
+        break;
+    };
+    return area + total;
+  }, 0, figures);
+
+
+// С наличием автоматического механизма диспетчеризации (не важно реализован он в самом языке или нами самостоятельно) код сокращается до следующего:
+import * as circle from './circle';
+import * as square from './square';
+import { reduce, l } from 'js-pairs-data';
+import { getArea } from './figures';
+
+const getTotalArea = figures => reduce((figure, total) => getArea(figure) + total, 0, figures);
+
+const figures = l(circle.make(2), square.make(3));
+getTotalArea(figures);
+// => 12.57 + 9
+// => 21,57
+
+/*
+В примере выше функция getArea сама по себе не занимается вычислением площади. Это вычисление реализовано для каждой фигуры совершенно независимо. Все, что делает getArea, это перенаправляет запрос на расчет площади в соответствующую функцию.
+
+Алгоритм диспетчеризации в примере выше следующий:
+1. getArea извлекает тип (его название) из фигуры. 
+2. getArea обращается к глобальному хранилищу (виртуальная таблица) для поиска нужной реализации настоящей функции вычисления площади.
+3. Если реализация найдена, то getArea ее вызывает с нужными аргументами и возвращает результат наружу.
+
+Важное следствие этого алгоритма в том, что для работы автоматической диспетчеризации необходимо, чтобы реальные функции getArea были занесены в виртуальную таблицу, иначе до них невозможно будет достучаться.
+
+# Виртуальная таблица
+Выполняет две задачи, которые мы рассмотрим ниже.
+
+
+# Регистрация
+Первая — это регистрация функций тех типов, по которым мы планируем делать диспетчеризацию:
+*/
+export const definer = type => (methodName, f) => { /* ... */ };
+
+// Тогда модуль, реализующий наш тип, будет выглядеть так:
+
+// FILE: circle.js
+import { definer } from './generic';
+import { attach, contents } from './type';
+
+const defmethod = definer('Circle');
+
+export const make = radius => attach('Circle', radius)
+
+// Так как для определения круга не нужно ничего кроме радиуса, сам круг и есть радиус,
+// Код снаружи об этом не знает!
+export const getRadius = circle => contents(circle);
+
+export const getArea = circle => (getRadius(circle) ** 2) * Math.PI;
+defmethod('getArea', getArea);
+
+export const getPerimeter = circle => 2 * getRadius(circle) * Math.PI;
+defmethod('getPerimeter', getPerimeter);
+
+
+/*
+Как видно из примера выше, по большей части Circle является типичной абстракцией, за исключением пары моментов:
+1. Внутри создается привязка к типу. Соответственно все селекторы должны сначала извлечь данные и потом уже работать.
+2. С помощью definer происходит регистрация нужных (радиус специфичен для круга, по нему диспетчеризация не нужна) функций в нашей виртуальной таблице.
+
+Наш модуль generic ничего не знает про Circle, да и вообще ничего не знает про тех, кто его использует. В общем случае, для регистрации функции ему нужно знать три значения: имя типа, имя функции и само тело функции, или, другими словами, мы имеем такой интерфейс: register('TypeName', 'funcName', funcBody). А код регистрации выглядел бы так:
+*/
+
+register('Circle', 'getArea', getArea);
+register('Circle', 'getPerimeter', getPerimeter);
+
+/*
+Обратите внимание на то, что мы находимся внутри модуля Circle и нам приходится в каждом вызове register передавать его название. Это единственная причина, по которой существует функция defmethod. То есть мы сначала специфицируем имя типа для которого будем заполнять функции, а потом делаем это без повторений.
+
+С точки зрения теории мы использовали так называемое частичное применение функции:
+*/
+const defmethod = partial(register, 'Circle');
+
+// Что эквивалентно:
+const defmethod = (funcName, funcBody) => register('Circle', funcName, funcBody);
+
+/*
+Ну и самое главное, а где же происходит регистрация? Куда записываются все эти данные о типах? Ответ достаточно простой. Фактически в наш прекрасный чистый код мы вводим внешнее изменяемое состояние и заполняем его функцией с побочными эффектами (definer). Если открыть модуль generic то можно увидеть:
+*/
+
+let methods = l();
+
+/*
+В свою очередь, все функции, которым нужен доступ к таблице, получают его посредством замыкания. Причем только definer изменяет ее, а все остальные - читают.
+Получается, что methods наполняется в тот момент, когда загружаются типы (выполняется import), использующие модуль generic для регистрации своих функций. Например:
+*/
+
+// Первый встреченный импорт модуля `circle` приведет к тому, что внутри него выполнятся все определения.
+import * as circle from './circle';
+
+
+/*
+# Поиск
+
+Вторая задача это, собственно, поиск этих функций:
+*/
+
+// извлечение типа объекта происходит внутри с помощью typeTag
+export const getMethod = (obj, funcName) => { /* ... */ };
+
+// Для поиска подходящей функции достаточно знать два параметра: имя типа и имя функции. Если функция найдена, то getMethod возвращает ее вызывающему коду, который, в свою очередь, уже делает вызов найденной функции.
+
+// figures.js
+import { getMethod } from './generic';
+import { contents } from './type';
+
+export const getArea = figure => {
+  const realGetArea = getMethod(figure, 'getArea');
+  // В случае с кругом эквивалентно:
+  // circle.getArea(figure)
+  return realGetArea(figure);
+}
+
+
+
+/**@@@
+card.js
+Реализуйте и экспортируйте обобщенную функцию damage.
+
+generic.js
+Реализуйте функцию getMethod, которая производит поиск конкретной реализации функции для переданного типа.
+
+simpleCard.js
+Реализуйте интерфейс типа simpleCard.
+
+Подсказки
+В percentCard.js можно подсмотреть пример использования.
+Обратите внимание в модуле generic.js на следующую строчку: let methods = l();. Именно здесь определяется та самая виртуальная таблица, механизм работы с которой подробно описан в текстовой части этого урока.
+*/
+
+// FILE: /app/card.js:
+import { contents } from '@hexlet/tagged-types';
+import { getMethod } from './generic';
+
+export const getName = self => getMethod(self, 'getName')(contents(self));
+
+export const damage = (self, health) => getMethod(self, 'damage')(contents(self), health);
+
+
+// FILE: /app/generic.js
+import { cons, car, cdr, toString as pairToString } from 'hexlet-pairs'; // eslint-disable-line
+import {
+  l, cons as consList, isEmpty, head, tail,
+} from 'hexlet-pairs-data';
+import { attach, typeTag, contents } from '@hexlet/tagged-types';
+
+let methods = l();
+
+export const getMethod = (obj, methodName) => {
+  const currentType = typeTag(obj);
+  const iter = (elements) => {
+    if (isEmpty(elements)) {
+      return null;
+    }
+    const element = head(elements);
+    if (currentType === typeTag(element)) {
+      const method = contents(element);
+      if (methodName === car(method)) {
+        return cdr(method);
+      }
+    }
+
+    return iter(tail(elements));
+  };
+
+  return iter(methods);
+};
+
+export const definer = type => (methodName, f) => {
+  methods = consList(attach(type, cons(methodName, f)), methods);
+};
+
+
+// FILE: /app/simpleCard.js
+import { cons, car, cdr, toString as pairToString } from 'hexlet-pairs'; // eslint-disable-line
+import { attach } from '@hexlet/tagged-types';
+import { definer } from './generic';
+
+const defmethod = definer('SimpleCard');
+
+const make = (name, damagePoints) => attach('SimpleCard', cons(name, damagePoints));
+
+export default make;
+
+defmethod('getName', self => car(self));
+
+defmethod('damage', self => cdr(self));
+
+
+// FILE: /app/solution.js:
+import { cons, car, toString as pairToString } from 'hexlet-pairs'; // eslint-disable-line no-unused-vars
+import { // eslint-disable-next-line no-unused-vars
+  cons as consList, l, random, head, reverse, toString as listToString,
+} from 'hexlet-pairs-data';
+import { getName, damage } from './card';
+
+const run = (player1, player2, cards, customRandom) => {
+  const iter = (health1, name1, health2, name2, order, log) => {
+    if (health1 <= 0) {
+      return consList(cons(car(head(log)), `${name1} был убит`), log);
+    }
+    const card = customRandom(cards);
+    const cardName = getName(card);
+    const points = damage(card, health2);
+    const newHealth = health2 - points;
+
+    const message = `Игрок '${name1}' применил '${cardName}'
+      против '${name2}' и нанес урон '${points}'`;
+    let stats;
+    if (order === 1) {
+      stats = cons(cons(health1, newHealth), message);
+    } else if (order === 2) {
+      stats = cons(cons(newHealth, health1), message);
+    }
+    const newLog = consList(stats, log);
+    return iter(newHealth, name2, health1, name1, order === 1 ? 2 : 1, newLog);
+  };
+
+  const startHealth = 10;
+  const logItem = cons(cons(startHealth, startHealth), 'Начинаем бой!');
+  return reverse(iter(startHealth, player1, startHealth, player2, 1, l(logItem)));
+};
+
+export default (cards, customRandom = random) => (
+  (name1, name2) => run(name1, name2, cards, customRandom)
+);
+
+
+
+>>>>>> Объекты <<<<<<
+/*
+
+*/
+
+
+/*
+# Рекомендуем к прочтению
+https://habrahabr.ru/company/hexlet/blog/303754/
+*/
+
+
+############################### JS: Программирование, управляемое данными ###############################
+
 
 
 ############################### JS: DOM API ###############################   
