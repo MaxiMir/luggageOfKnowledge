@@ -5591,21 +5591,1787 @@ export default (cards, customRandom = random) => (
   (name1, name2) => run(name1, name2, cards, customRandom)
 );
 
-
-
->>>>>> Объекты <<<<<<
-/*
-
-*/
-
-
 /*
 # Рекомендуем к прочтению
 https://habrahabr.ru/company/hexlet/blog/303754/
 */
 
+/**@@@
+simpleCard.js
+Реализуйте интерфейс типа simpleCard.
 
-############################### JS: Программирование, управляемое данными ###############################
+solution.js
+Допишите логику работы функции run.
+
+Подсказки
+При необходимости вы можете самостоятельно импортировать функцию toString из библиотеки hexlet-pairs и использовать её для отладки решений. Эта функция возвращает строковое представление пары
+При необходимости вы можете самостоятельно импортировать функцию toString из библиотеки hexlet-pairs-data и использовать её для отладки решений. Эта функция возвращает строковое представление списка
+Для разрешения противоречий в случае импорта нескольких функций с одинаковыми именами используйте псевдонимы (aliases)
+*/
+
+
+// FILE: /app/simpleCard.js:
+const make = (name, damagePoints) => (message) => {
+  switch (message) {
+    case 'getName':
+      return name;
+    case 'damage':
+      return damagePoints;
+    default:
+      return 'undefined method';
+  }
+};
+
+export default make;
+
+
+// FILE: /app/solution.js:
+import { cons, car } from 'hexlet-pairs';
+import {
+  cons as consList, l, random, head, reverse,
+} from 'hexlet-pairs-data'; // eslint-enable
+
+const run = (player1, player2, cards, customRandom) => {
+  const iter = (health1, name1, health2, name2, order, log) => {
+    if (health1 <= 0) {
+      return consList(cons(car(head(log)), `${name1} был убит`), log);
+    }
+
+    const card = customRandom(cards);
+    const cardName = card('getName');
+    const damage = card('damage', health2);
+    const newHealth = health2 - damage;
+
+    const message = `Игрок '${name1}' применил '${cardName}' против '${name2}' и нанес урон '${damage}'`;
+    let stats;
+    if (order === 1) {
+      stats = cons(cons(health1, newHealth), message);
+    } else if (order === 2) {
+      stats = cons(cons(newHealth, health1), message);
+    }
+    const newLog = consList(stats, log);
+    return iter(newHealth, name2, health1, name1, order === 1 ? 2 : 1, newLog);
+  };
+
+  const startHealth = 10;
+  const logItem = cons(cons(startHealth, startHealth), 'Начинаем бой!');
+  return reverse(iter(startHealth, player1, startHealth, player2, 1, l(logItem)));
+};
+
+export default (cards, customRandom = random) => (name1, name2) => (
+  run(name1, name2, cards, customRandom)
+);
+
+
+
+>>>>>> Нативные объекты <<<<<<
+
+// # Объекты в JS:
+const str = 'hello, world';
+
+// property
+str.length; // 12
+
+// method
+str.toUpperCase(); // HELLO, WORLD
+
+// actually, just property
+str.toUpperCase; // [Function: toUpperCase]
+
+
+// # Тип данных объект:
+сonst card = {
+  name: 'percent card',
+  key: 'value',
+};
+
+card.key; // value
+card.wrongKey; // unfined
+
+// map syntax
+card['key']; // value
+card['wrongKey']; // undefined
+
+
+// # Константа:
+сonst card = {
+  name: 'percent card',
+  key: 'value',
+};
+
+card.wrongKey; // unfined
+card.wrongKey = 'something'; 
+card.wrongKey; // something
+
+// ТуpeError: Assignment to constant variable
+card = {};
+
+
+// # Объект с Функциями:
+сonst card = {
+  name: 'percent card',
+  damage: health => Math.round(health * (80 / 100)),
+};
+
+card.name; // percent card
+card.damage(10); // 8
+
+
+// # Cоздание объекта:
+
+// FILE: /percentCard.js:
+export const make = (name, percent) => {
+  return {
+    name: name,
+    damage: health => Math.round(health * (percent / 100)),
+  }
+};
+
+
+// # Динамическая диспетчиризация:
+
+const card = percentCard.make('percent card', 60)
+// const card = simpleCard.make('simple card', 3)
+card.name; // percent card
+card.damage(10); // 6
+
+
+// # Изменение объекта:
+
+// Обычно, изменение объекта происходит так:
+const obj = { key: 'value' };
+obj.key = 'another value';
+
+// Но что делать, если свойство заранее неизвестно? Тогда можно воспользоваться таким способом:
+
+const name = 'key';
+const obj = { key: 'value' };
+obj[name] = 'another value';
+
+/*
+Вычислимые свойства встречаются достаточно часто на этапе создания объекта, по этой причине появился специальный синтаксис, позволяющий задавать подобные свойства в литерале. Дополнительный бонус в том, что при таком подходе в коде пропадают лишние мутации и код становится более функциональным:
+*/
+const name = 'key2';
+const obj = { key: 'value', [name]: 'another value' };
+// => { key: 'value', key2: 'another value' }
+
+/*
+Единственное отличие от стандартного синтаксиса в том, что ключ это переменная (а не имя) взятая в квадратные скобки.
+Еще одна интересная возможность объектов в JS - сокращенный синтаксис создания объектов при использовании переменных или констант. Обычное создание выглядит так:
+*/
+const name = 'Mike';
+const user = { name: name };
+
+// В примере выше, имя свойства совпадает с именем переменной, в которой хранится нужное значение. JS позволяет написать этот код лаконичнее. Можно просто опустить часть name:. И получится:
+const name = 'Mike';
+const user = { name };
+
+// Тоже самое работает и для нескольких переменных:
+const name = 'Mike';
+const surname = 'Smith';
+
+const user = { name, surname };
+
+// Можно даже мешать разные стили в рамках одного объекта:
+const name = 'Mike';
+const user = { name, surname: 'Smith' };
+
+/*
+const name = 'age';
+const user = { [name]: 19 };
+console.log(user); 
+> => {age: 19}
+*/
+
+/**@@@
+simpleCard.js
+Реализуйте интерфейс simpleCard, основываясь на реализации percentCard.
+
+solution.js
+Реализуйте функцию run, используя тип данных object для хранения элементов внутри списка log.
+*/
+
+
+// FILE: /app/simpleCard.js:
+const make = (name, damagePoints) => ({
+  name,
+  damage: () => damagePoints,
+});
+
+export default make;
+
+// FILE: /app/percentCard.js:
+const make = (name, percent) => ({
+  name,
+  damage: health => Math.round(health * (percent / 100)),
+});
+
+export default make;
+
+// FILE: /app/solution.js:
+import { cons as consList, l, random, head, reverse, toString as listToString } from 'hexlet-pairs-data'; // eslint-disable-line
+
+const run = (player1, player2, cards, customRandom) => {
+  const iter = (health1, name1, health2, name2, order, log) => {
+    if (health1 <= 0) {
+      const prevLog = head(log);
+      const newLog = {
+        message: `${name1} был убит`,
+        health1: prevLog.health1,
+        health2: prevLog.health2,
+      };
+      return consList(newLog, log);
+    }
+    const card = customRandom(cards);
+    const cardName = card.name;
+    const points = card.damage(health2);
+    const newHealth = health2 - points;
+
+    const message = `Игрок '${name1}' применил '${cardName}'
+      против '${name2}' и нанес урон '${points}'`;
+    const stats = { message };
+    if (order === 1) {
+      stats.health1 = health1;
+      stats.health2 = newHealth;
+    } else if (order === 2) {
+      stats.health1 = newHealth;
+      stats.health2 = health1;
+    }
+    const newLog = consList(stats, log);
+    return iter(newHealth, name2, health1, name1, order === 1 ? 2 : 1, newLog);
+  };
+
+  const startHealth = 10;
+  const logItem = {
+    health1: startHealth,
+    health2: startHealth,
+    message: 'Начинаем бой!',
+  };
+  return reverse(iter(startHealth, player1, startHealth, player2, 1, l(logItem)));
+};
+
+export default (cards, customRandom = random) => (
+  (name1, name2) => run(name1, name2, cards, customRandom)
+);
+
+
+
+>>>>>> Классы <<<<<<
+
+// CamelCase
+export default class PercentCard {
+  constructor(name, percent) {
+    this.name = name;
+    this.percent = percent;
+  }
+
+  damage(health) {
+    return Math.round(health * (this.percent / 100));
+  }
+}
+
+
+// # this как пара:
+import { cons, car, cdr } from 'hexlet-pairs';
+
+export const make = (name, percent) => cons(name, percent);
+
+export const getName = (self) => car(self);
+
+export const damage = (self, health) => Math.round(health * (cdr(self) / 100));
+
+// using
+ const card = make('name', 80);
+ getName(card); // name
+
+// # this как объект:
+
+export const make = (name, percent) => {
+  return { name: name, percent: percent };
+};
+
+export const getName = (self) => self.name;
+
+export const damage = (self, health) => Math.round(health * (self.percent / 100));
+
+// using
+
+const card = make('name', 80);
+getName(card); // name
+
+
+// # Экземляр класса (инстанс)
+typeof PercentCard; // function
+
+const card = new PercentCard('card name', 90);
+
+
+card.name; // card name
+card.percent; // 90
+card.damage(10); // 9
+
+card.wrongKey; // undefined
+
+
+/**@@@
+SimpleCard.js
+Реализуйте класс SimpleCard по аналогии с PercentCard.
+*/
+
+// FILE: /app/PercentCard.js:
+export default class PercentCard {
+  constructor(name, percent) {
+    this.name = name;
+    this.percent = percent;
+  }
+
+  damage(health) {
+    return Math.round(health * (this.percent / 100));
+  }
+}
+
+// FILE: /app/SimpleCard.js:
+export default class SimpleCard {
+  constructor(name, damagePoints) {
+    this.name = name;
+    this.damagePoints = damagePoints;
+  }
+
+  damage() {
+    return this.damagePoints;
+  }
+}
+
+
+>>>>>> Полиморфизм <<<<<<<
+
+/*
+Виды:
+> Ad-Hoс(Специальный)
+> Параметрический
+> Подтипов (Включения)
+
+
+
+# Параметрический Полиморфизм:
+Вызов ОДНОГО и того же кода для ВСЕХ допустимых типов (полиморфных аргументов)
+*/
+const numbers1 = l(3, 4, 5, 8);
+const numbers2 = l(3, 2, 9);
+append(numbers1, numbers2); // (3, 4, 5, 8, 3, 2, 9)
+
+const strings1 = l('cat', 'dog');
+const strings2 = l('table', 'milk', 'phone');
+append(strings1, strings2); // (cat, dog, table, milk, phone)
+
+
+// # Ad-Hoс:
+// В зависимости от типов аргументов применяется разная разная реализация какой-либо операции
+1 + 1; // 2 
+'cat' + 'dog'; // catdog
+
+console.log(1034.98);
+console.log('hello');
+
+
+// # Ad-Hoс:
+// Вызов РАЗНОГО кода для Разных иерархий типов:
+const obj = new simpleCard(); // or PercentCard()
+obj.damage(health);
+
+
+/**@@@
+В HTML некоторые элементы хранят ссылку в атрибуте href, а некоторые — в src. Например:
+
+<img src="/logo.jpg">
+<link href="/style.css">
+<a href="/">
+
+Абстракция Tags содержит интерфейс для представления тега HTML:
+*/
+const hr = make('hr');
+const a = make('a', { href: '/' });
+
+getName(a); // => a
+getAttribute('href', a); // => /
+getAttribute('notexist', a); // => undefined
+
+/*
+make — принимает на вход два параметра: название тега и объект, в котором содержатся атрибуты и их значения.
+getName — принимает на вход тег, полученный вызовом make, и возвращает его имя.
+getAttribute — принимает на вход имя атрибута и тег, полученный вызовом make. Возвращает значение атрибута.
+
+
+extract.js
+Реализуйте и экспортируйте по умолчанию функцию extract, которая принимает на вход список тегов (только <a>, <link> и <img>) и возвращает список ссылок, извлеченных из этих тегов.
+*/
+
+const tags = l(
+  make('a', { href: '/about' }),
+  make('img', { src: '/avatar.jpeg' }),
+  make('link', { href: '/favicon.ico' }),
+);
+
+extract(tags); // => ('/about', '/avatar.jpeg', '/favicon.ico')
+
+/*
+Подсказки
+Воспользуйтесь функцией map для обхода коллекции.
+В коде не должно быть условных конструкций и, в целом, любых логических выражений. Используйте полиморфизм на основе ключей в объекте.
+Проанализируйте код файла tags.js, чтобы окончательно разобраться с устройством абстракции для тегов.
+При необходимости вы можете самостоятельно импортировать функцию toString из библиотеки hexlet-pairs-data и использовать её для отладки решений.
+*/
+
+// FILE: /app/extract.js:
+import { map } from 'hexlet-pairs-data';
+import { getAttribute, getName } from './tags';
+
+const mapping = {
+  img: t => getAttribute('src', t),
+  a: t => getAttribute('href', t),
+  link: t => getAttribute('href', t),
+
+};
+export default tags => map(tag => mapping[getName(tag)](tag), tags);
+
+
+
+
+
+############################### JS: Коллекции ###############################
+
+
+/*
+Domain-specific language (DSL)
+Язык специализированный для конкретной области применения
+
+# Внешний:
+- Язык запросов (SQL, XPath)
+- Языки разметки (HTML, Markdown)
+- Регулярные выражения
+
+# Внутренний:
+- Fluent Interface
+*/
+
+import Hexletlinq from 'hexlet-linq';
+
+const cars = [
+  { brand: 'bmw', model: 'm5', year: 2014 },
+  { brand: 'bmw', model: 'm4', year: 2013 },
+  { brand: 'kia', model: 'sorento', year: 2014 },
+  { brand: 'kia', model: 'sportage', year: 2012 },
+];
+
+const coll = Hexlet.from(cars);
+
+const result = coll.orderBy(car => car.year, 'desc')
+  .where(car => car.brand === 'kia')
+  .select(car => car.model)
+  .toArray();
+
+// ['sorento', 'sportage']  
+
+
+
+>>>>>> Массив <<<<<<
+
+// инициализируем демонстрационный массив
+const planets = ['Mercury', 'Venus', 'Earth', 'Mars'];
+// [] - cинтаксический сахар для new Array. <-> new Array ('Mercury', 'Venus', 'Earth', 'Mars');
+type of planets; // object
+
+
+/*
+# Очередь
+Очередь является упорядоченным набором данных, организованным по принципу FIFO ('first in - first out'), т.е. добавление элементов всегда происходит в конец очереди, а извлечение (удаление) элементов - из её начала:
+
+push добавляет один или несколько элементов в конец массива и возвращает длину изменённого (мутированного) массива
+(если точнее, то метод возвращает обновлённое свойство length массива, являющееся значением самого последнего индекса, увеличенным на единицу)
+*/
+planets.push('Jupiter'); // возвращаемое значение: 5
+planets.push('Saturn', 'Uranus'); // возвращаемое значение: 7
+console.log(planets); // [ 'Mercury', 'Venus', 'Earth', 'Mars', 'Jupiter', 'Saturn', 'Uranus' ]
+
+// shift удаляет первый элемент массива и возвращает его значение
+planets.shift(); // удалили элемент из начала массива, возвращаемое значение: 'Mercury'
+planets.shift(); // ещё раз удалили элемент из начала массива, возвращаемое значение: 'Venus'
+console.log(planets); // [ 'Earth', 'Mars', 'Jupiter', 'Saturn', 'Uranus' ]
+
+/*
+# Стек
+Стек является упорядоченным набором данных, организованным по принципу LIFO ('last in - first out'), т.е. добавление и удаление элементов всегда происходит из конца такой коллекции:
+
+Добавим элемент в конец массива уже известным нам способом
+*/
+planets.push('Neptune'); // возвращаемое значение: 6
+console.log(planets); // [ 'Earth', 'Mars', 'Jupiter', 'Saturn', 'Uranus', 'Neptune' ]
+
+// pop удаляет последний элемент массива и возвращает его значение
+planets.pop(); // возвращаемое значение: 'Neptune'
+planets.pop(); // возвращаемое значение: 'Uranus'
+console.log(planets); // [ 'Earth', 'Mars', 'Jupiter', 'Saturn' ]
+
+
+// reduceRight - зеркальное отражение reduce, осуществляет свёртку, обрабатывая элементы справа налево
+const planets = ['Меркурий', 'Венера', 'Земля', 'Марс'];
+const closer = planets.reduceRight((acc, planet) => `${acc} ${planet}`, 'всё ближе к Солнцу:'); // 'всё ближе к Солнцу: Марс   Земля Венера Меркурий'
+const further = planets.reduce((acc, planet) => `${acc} ${planet}`, 'всё дальше от Солнца:'); // 'всё дальше от Солнца: Меркурий   Венера Земля Марс'
+
+
+// за "превращение" строки в массив, а так же за обратное действие отвечают, соответственно, split и join
+const planets = 'Mercury,Venus,Earth,Mars';
+console.log(planets.split(',')); // [ 'Mercury', 'Venus', 'Earth', 'Mars' ]
+console.log(planets.split(',').join('-')); // 'Mercury-Venus-Earth-Mars'
+
+// поиск в массиве и проверка соблюдения условий элементами массива (find, findIndex, indexOf, lastIndexOf, some, every, includes...)
+// includes определяет наличие элемента в массиве, возвращая true/false
+const planets = ['Mercury', 'Venus', 'Earth', 'Mars'];
+planets.includes('Earth'); // true
+planets.includes('Earth', 3); // ищет, начиная с 3-й индексной позиции, поэтому false
+planets.includes('Saturn'); // false
+
+// Сортировка массива (sort, reverse...) и др. более или менее распространённые операции с массивами.
+
+// Удаление (! никогда так не делать)
+const arr = [1, 'string', {}];
+delete arr[1];
+arr.length; // 3
+arr[1]; // undefined
+console.log(arr); // [1,,{}]
+
+// Итерация (Императивная)
+const iterable = [10, 20, 30];
+for (let value of iterable) {
+  console.log(value);
+}
+
+/*
+К последнему утверждению следует добавить, что, как правило, существуют сторонние библиотеки, позволяющие не "изобретая велосипед" пользоваться множеством готовых функций "на все случаи жизни". Одной из наиболее актуальных на текущей момент javascript-библиотек является lodash, в которой реализованы различные функции по работе с массивами, коллекциями, строками и другими объектами языка. Не менее важно, что эта библиотека предоставляет множество иммутабельных функций высшего порядка, поддерживающих функциональный стиль программирования. Подробнее ознакомиться со всеми возможностями lodash можно на сайте библиотеки https://lodash.com/docs/, а здесь мы в качестве примера приведём весьма часто используюмую на практике функцию flatten, которая содержимое вложенных элементов-массивов исходного массива делает элементами самого исходного массива (т.е. как бы "выравнивает" его). :) Звучит непонятно, но давайте просто посмотрим на код:
+*/
+
+
+// обратите внимание, что далее рассматриваемые функции являются иммутабельными,
+// поэтому они, не изменяя передаваемый им в качестве аргумента массив 'arr', будут возвращать новый массив
+const arr = [1, 2, [1.1, 1.2, [2.1, [3.1, 3.2]]], 3];
+
+// '_' - переменная, задаваемая при подключении lodash, через которую мы можем обращаться к разным функциям библиотеки
+const flattenArr = _.flatten(arr);
+console.log(flattenArr); // [1, 2, 1.1, 1.2, [2.1, [3.1, 3.2]], 3]
+
+// как видно из предыдущего примера, нам удалось 'выровнять' все элементы на один уровень ниже лежащих массивов.
+// Однако элементы более глубоко лежащих массивов остались невыровненными.
+// Для полного выравнивания существует метод 'flattenDeep'
+const flattenDeepArr = _.flattenDeep(arr);
+console.log(flattenDeepArr); // [1, 2, 1.1, 1.2, 2.1, 3.1, 3.2, 3]
+
+// с помощью 'flattenDepth(array, depth)' можно управлять уровнем 'глубины выравнивания',
+// который указывается во втором параметре depth
+console.log( _.flattenDepth(arr, 1)); // [1, 2, 1.1, 1.2, [2.1, [3.1, 3.2]], 3]
+console.log( _.flattenDepth(arr, 2)); // [1, 2, 1.1, 1.2, 2.1, [3.1, 3.2], 3]
+console.log( _.flattenDepth(arr, 3)); // [1, 2, 1.1, 1.2, 2.1, 3.1, 3.2, 3]
+
+/*
+# Мутабельность VS Иммутабельность
+Модификация массива (мутация объекта в императивном стиле), когда есть возможность писать код в функциональном, иммутабельном, стиле - очень часто является не самым удачным решением, потому что это ведёт к изменению состояния программы, излишне усложняя её. Поэтому, при изучении методов всегда обращайте внимание, изменяют ли они исходный массив или нет. Например, большинство функций высшего порядка, будучи применёнными к массиву, результатом возвращают новый массив, оставляя исходный нетронутым. А вот sort, как сказано в документации, сортирует элементы массива на месте, возвращая необратимым образом модифицированный исходный массив (поэтому такую сортировку лучше сделать на копии массива, полученной с помощью slice). Возьмём для примера типичную ситуацию, когда необходимо добавить новый элемент в массив, и рассмотрим как справиться с этой задачей на примeре мутабельного метода push и иммутабельного concat:
+*/
+
+// # push
+// push мутирует массив, добавляя один (или более) элементов в его конец,
+// и возвращает новую длину массива
+const colours = ['red', 'orange', 'yellow'];
+colours.push('green'); // возвращаемое значение: 4
+console.log(colours); // теперь colours - [ 'red', 'orange', 'yellow', 'green' ]
+
+
+// # concat
+// concat возвращает новый массив, содержащий элементы исходного массива + элементы,
+// переданные в качестве аргументов
+const colours = ['red', 'orange', 'yellow'];
+const myFavColours = colours.concat('green');
+
+console.log(colours);
+// colours остался неизменен - [ 'red', 'orange', 'yellow' ]
+
+console.log(myFavColours);
+// новый массив myFavColours - [ 'red', 'orange', 'yellow', 'green' ]
+
+// аргументом можно передать и массив значений
+console.log(myFavColours.concat(myFavColours));
+// [ 'red', 'orange', 'yellow', 'green', 'red', 'orange', 'yellow', 'green' ]
+
+
+
+// # Функции высшего порядка:
+сonst numbers = [1, 4, 9];
+
+const roots = numbers.map(Math.sqrt);
+// numbers.map(value => Math.sqrt(value));
+console.log(roots); // [1, 2, 3]
+
+
+const filtered = numbers.filter(n => n > 3);
+console.log(roots); // [4, 9]
+
+const sum = numbers.reduce(
+  (acc, value, index, arr) => acc + value, 0
+);
+console.log(sum); // 14
+
+
+/**@@@
+uniq.js
+Реализуйте и экспортируйте по умолчанию функцию, которая принимает на вход массив и возвращает новый массив, полученный из исходного удалением повторяющихся элементов.
+*/
+uniq([2, 1, 2, 3]); // [2, 1, 3]
+
+// Взаимный порядок оставшихся элементов в новом массиве должен сохраняться.
+uniq([2, 1, 2, 3]); // [2, 1, 3], a не [1, 2, 3] или не [3, 1, 2]
+
+/*
+Подсказки
+ - Для формирования новой коллекции (другой конфигурации) из старой подходит reduce.
+ - Метод arr.includes(value) проверяет, входит ли элемент в коллекцию.
+ - Метод arr.concat(value) объединяет исходный массив (на котором вызван метод) с другими массивами и/или значениями (переданными в качестве аргументов). Метод иммутабелен, возвращает новый массив. Примеры и подробности использования см. в документации: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/concat
+*/
+
+// FILE: /app/uniq.js:
+export default coll => coll.reduce(
+  (acc, value) => (
+    acc.includes(value) ? acc : acc.concat(value)
+  ), 
+  [], 
+);
+
+// FILE: /app/__tests__/uniq.test.js:
+import uniq from '../uniq';
+
+test('uniq', () => {
+  expect(uniq([])).toEqual([]);
+  expect(uniq([2, 1])).toEqual([2, 1]);
+  expect(uniq([2, 1, 2, 3])).toEqual([2, 1, 3]);
+  expect(uniq([-2, 20, 0, 4, 20, 0])).toEqual([-2, 20, 0, 4]);
+});
+
+
+
+>>>>>> Map <<<<<<
+
+/*
+Ассоциативный массив - абстрактный тип данных (интерфейс к хранилищу данных), позволяющий хранить пары вида "(ключ, значение)" и поддерживающий операции добавления пары, а так же поиска и удаления пары по ключу.
+
+# Javascript объект:
+*/
+сonst pirson = {
+  firstName: 'Alan',
+  lastName: 'Kay',
+}
+
+person.firstName; // Alan
+person.lastName; // Kay
+
+const propName = 'lastName';
+person[propName]; // Kay
+
+person[propName] = 'King'; 
+person[propName]; // King
+
+// Итерации:
+Object.keys(person).forEach(propName => console.log(person[propName]));
+Object.values(person).forEach(value => console.log(value);
+
+
+// # Недостатки как Map:
+// > Дополнительные свойства:
+сonst obj = {};
+console.log(obj.valueOf);
+// [Function: valueOf]
+
+// > Ключи только строки и символы:
+const obj = { 3: 'value' };
+// { '3': 'value' }
+
+// > Определение размера:
+Object.keys(obj).length;
+
+
+// # Создание объекта типа Map:
+const map = new Map(); // создание пустого объекта
+// new Map([key, value], [key2, value2])
+map.set('key','value');
+map.set(10, 'another value');
+map.set('key', 'value').set('anotherKey', 'anotherValue'); // Map поддерживает fluent интерфейс. Функция set возвращает сам Map. Таким образом можно строить цепочки
+
+map.size; // 4
+
+map.get('key'); // value
+map.get(10); // another value'
+
+/*
+Для удаления из Map служит функция delete, которая принимает на вход имя ключа. Функция clear поступает более радикально: удаляет все элементы из Map-объекта. Крайне не рекомендую строить свои алгоритмы таким образом, чтобы пришлось мутировать объекты удалением ключей. Такой код сложен в отладке и понимании.
+*/
+
+// При этом сам map является обычным объектом:
+map instanceof Object // true
+map instanceof Map // true
+
+/*
+Но пользоваться им как обычным объектом категорически нельзя, последствия непредсказуемы, и вы точно получите не то, что ожидаете. Ниже будут описаны функции, которые вам понадобятся при работе с Map, все манипуляции должны происходить именно с ними.
+
+Иногда бывает нужно создать Map для уже существующих данных. Такой способ работы также предусмотрен через конструктор. Правда в этом случае придется подготовить данные определенным способом:
+*/
+
+// # Цикл for...of
+const person = new Map([['name', 'John'], ['surname', 'Doe'], ['age', 50]]);
+
+// создание итератора по ключам
+// имя константы может быть любым, мы выбрали 'keys'
+const keys = person.keys();
+
+// перебор ключей
+for (const key of keys) {
+  console.log(key);
+}
+
+// name
+// surname
+// age
+
+// создание итератора по значениям
+const values = person.values();
+
+// перебор значений
+for (const value of values) {
+  console.log(value);
+}
+
+// John
+// Doe
+// 50
+
+
+// создание итератора по записям
+const entries = person.entries();
+
+// перебор записей
+for (const entry of entries) {
+  console.log(entry);
+}
+
+// [ 'name', 'John' ]
+// [ 'surname', 'Doe' ]
+// [ 'age', 50 ]
+
+
+// # Map как коллекция:
+
+/*
+У Map-объектов также есть метод forEach, который позволяет удобно сделать перебор ключей и значений. Этот метод вызывается на объекте и принимает на вход callback-функцию. На каждой итерации эта callback-функция принимает ключ и значение очередной записи объекта, поэтому надо предусмотреть для них в сигнатуре функции соответствующие параметры (в примере ниже, это параметры value и key):
+*/
+map.keys();
+map.values();
+map.etries(); // [[key, value], [key2, value2]];
+
+map.forEach((key, value) => console.log(key, value));
+
+/*
+В качестве ключей для Map-объектов могут быть значения любых типов в js, даже другие объекты типа Map
+
+# Отличие от объекта
+Может возникнуть вопрос, зачем нужен Map если есть объект? И, в реальности, действительно так. Map используется редко. Основная причина его использования в JS заключается в том, что обычный объект имеет множество служебных свойств, которые содержат важную информацию и функции. Если эти функции случайно перезапишут, то программа может просто сломаться.
+*/
+
+/**@@@
+wordsCount.js
+Реализуйте и экспортируйте по умолчанию функцию, которая принимает на вход два параметра: список слов и список стоп-слов. Задача функции вернуть объект типа Map, содержащий в себе частоту переданных слов. То есть, ключами являются сами слова, а значениями число повторений.
+
+ - Слова могут быть в разных регистрах, а подсчет должен работать без учета регистра. Соответственно в результирующем наборе слова должны быть представлены в нижнем регистре.
+ - Порядок слов в выходе должен совпадать с порядком появления новых слов во входном наборе.
+ - stopWords – это список стоп-слов, которые не должны попадать в результирующую структуру. Стоп-слова указываются в нижнем регистре.
+*/
+const stopWords = ['and', 'or', 'a', 'the', ''];
+const words = ['HellO', 'h', 'And', 'heLlo', '', 'AND', 'DOG', 'oR', 'cat', 'HELLO', 'caT'];
+wordsCount(words, stopWords); // [['hello', 3], ['h', 1], ['dog', 1], ['cat', 2]]
+
+/*
+Подсказки
+ - Воспользуйтесь тройкой map/filter/reduce.
+ - Функция has типа Map проверяет наличие ключа в мапе
+ - Проверка должна быть регистро-независимой
+*/
+
+// FILE: /app/wordsCount.js:
+export default (words, stopWords) => words
+  .map(word => word.toLowerCase())
+  .filter(word => !stopWords.includes(word))
+  .reduce((acc, word) => {
+    const count = acc.get(word) || 0;
+
+    return acc.set(word, count + 1);
+  }, new Map());
+
+
+
+>>>>>> Set <<<<<<
+
+// Задача по стоп-словам:
+сonst stopWords = ['one', 'two', 'four'];
+const words = [
+  'one', 'five', 'six', 'seven',
+  'two', 'four', 'nine',
+];
+
+const result = words.filter(word => !stopWords.includes(word));
+concole.log(result); // ['five', 'six', 'seven', 'nine']
+
+/*
+includes - проверяет наличие значения полным перебором массива
+ПРОБЛЕМЫ будут при больших объемах данных и длинном процессинге:
+
+#1: Решение с использованием Map:
+*/
+сonst stopWords = { // or new Map()
+  one: true,
+  two: true,
+  four: true
+};
+const words = [
+  'one', 'five', 'six', 'seven',
+  'two', 'four', 'nine',
+];
+
+const result = words.filter(word => !stopWords.[word]);
+
+
+// #2: Решение с использованием Set (cамый правильный, поскольку поиск без перебора):
+сonst stopWords = new Set(['one', 'two', 'four']);
+const words = [
+  'one', 'five', 'six', 'seven',
+  'two', 'four', 'nine',
+];
+
+const result = words.filter(word => !stopWords.has(word));
+
+
+// # Интерфейс Set:
+const set = new Set();
+set.add(5);
+set.add('some text');
+
+set.size; // 2
+
+set.has(5); // true
+set.has('some text'); // true
+
+set.delete(5);
+set.has(5); // false
+
+
+// # Обход:
+const set = new Set([1, 2, 10, 10]);
+
+Array.from(set); // [1, 2, 10] оставит только уникальные элементы
+
+set.keys();
+set.values();
+
+set.forEach(value => console.log(value));
+
+/**@@@
+difference.js
+Реализуйте и экспортируйте функцию по умолчанию, которая принимает на вход два множества и возвращает множество, составленное из таких элементов, которые есть в первом множестве, но нет во втором.
+*/
+
+difference(new Set([2, 1]), new Set([2, 3])); // → [1]
+
+// FILE: /app/difference.js:
+export default (set1, set2) =>
+  new Set(Array.from(set1).filter(value => !set2.has(value)));
+
+
+
+>>>>>> Fluent interface <<<<<<
+
+// TDD:
+const cars = [
+  { brand: 'bmw', model: 'm5', year: 2014 },
+  { brand: 'bmw', model: 'm4', year: 2013 },
+  { brand: 'kia', model: 'sorento', year: 2014 },
+  { brand: 'kia', model: 'rio', year: 2010 },
+];
+
+const coll = new Enumerable(cars);
+
+const result = coll.orderBy(car => car.year)
+  .where(car => car.brand === 'kia')
+  .where(car => car.year > 2011);
+
+assert.deepEqual(resul.toArray(), [cars[2], cars[4]]);
+
+// Fluent interface - cпособ реализации объектно-ориентированного API, нацеленный на повышение читабельности исходного кода программы
+
+$(this).find('img').stop().animate({opacity: 0.8}, 300).end();
+
+// # Реализация:
+
+class Enumerable {
+  constructor (collection) {
+    this.collection = collection;
+  }
+
+  where (fn) {
+    this.collection = this.collection.filter(fn);
+
+    return this;
+  }
+
+  toArray() {
+    return this.collection;
+  }
+}
+
+
+/**@@@
+Enumerable.js
+Select
+Реализуйте метод select, который отображает (принцип работы как у функции map) коллекцию, другими словами, извлекает из элементов коллекции нужные данные и возвращает объект с новой (отображенной) коллекцией из этих данных.
+*/
+
+const cars = [
+  { brand: 'bmw', model: 'm5', year: 2014 },
+  { brand: 'bmw', model: 'm4', year: 2013 },
+  { brand: 'kia', model: 'sorento', year: 2014 },
+  { brand: 'kia', model: 'rio', year: 2010 },
+  { brand: 'kia', model: 'sportage', year: 2012 },
+];
+coll = new Enumerable(cars);
+
+// [car] => [model]
+const result = coll.select(car => car.model);
+
+assert.deepEqual(result.toArray(), ['m5', 'm4', 'sorento', 'rio', 'sportage']);
+
+/*
+OrderBy
+Реализуйте метод orderBy, который сортирует коллекцию на основе переданных данных.
+
+Принимаемые параметры:
+
+Функция, возвращающая значение, по которому будет происходить сортировка.
+Направление сортировки: asc - по возрастанию, desc - по убыванию (по умолчанию - asc).
+*/
+const cars = [
+  { brand: 'bmw', model: 'm5', year: 2014 },
+  { brand: 'bmw', model: 'm4', year: 2013 },
+  { brand: 'kia', model: 'sorento', year: 2014 },
+  { brand: 'kia', model: 'rio', year: 2010 },
+  { brand: 'kia', model: 'sportage', year: 2012 },
+];
+coll = new Enumerable(cars);
+
+const result = coll.orderBy(car => car.year, 'desc')
+  .where(car => car.brand === 'bmw')
+  .select(car => car.model);
+
+assert.deepEqual(result.toArray(), ['m5', 'm4']);
+
+/*
+Подсказки
+Для выполнения сортировки воспользуйтесь встроенной функцией: sort. https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Array/sort
+*/
+
+// FILE: /app/Enumerable.js:
+class Enumerable {
+  constructor(collection) {
+    this.collection = collection;
+  }
+
+  select(fn) {
+    this.collection = this.collection.map(fn);
+
+    return this;
+  }
+
+  orderBy(fn, direction = 'asc') {
+    const compareResult = direction === 'asc' ? 1 : -1;
+    const comparator = (a, b) => {
+      const a1 = fn(a);
+      const b1 = fn(b);
+
+      if (a1 > b1) {
+        return compareResult;
+      }
+      if (a1 < b1) {
+        return -compareResult;
+      }
+
+      return 0;
+    };
+
+    this.collection.sort(comparator);
+
+    return this;
+  }
+
+  where(fn) {
+    this.collection = this.collection.filter(fn);
+    return this;
+  }
+
+  toArray() {
+    return this.collection.slice();
+  }
+}
+
+export default Enumerable;
+
+
+
+>>>>>> Неизменяемость <<<<<<
+
+/*
+Императивный подход -> Возвращается измененная структура данных
+Функциональный подход -> Возвращается новая структура, являющаяся преобразованием старой
+*/
+
+сlass Enumerable {
+  constructor(collection) {
+    this.collection = collection;
+  }
+
+  where(fn) {
+    const filtered = this.collection.filter(fn);
+
+    return new Enumerable(filtered);
+  }
+}
+
+// In-Place замена
+const arr = [5, 1, 3];
+arr.sort();
+console.log(arr); // [1, 3, 5]
+
+const arr2 = [5, 1, 3];
+arr2.slice().sort(); // обход изменения исходного массива через slice()
+
+console.log(arr2); // [5, 1, 3]
+
+
+/**@@@
+Enumerable.js
+Реализуйте функции select, orderBy используя подход без мутации состояния.
+*/
+
+// FILE: /app/Enumerable.js:
+class Enumerable {
+  constructor(collection) {
+    this.collection = collection;
+  }
+
+  select(fn) {
+    const mapped = this.collection.map(fn);
+
+    return new Enumerable(mapped);
+  }
+
+  orderBy(fn, direction = 'asc') {
+    const comparator = (a, b) => {
+      const a1 = fn(a);
+      const b1 = fn(b);
+
+      const compareResult = direction === 'asc' ? 1 : -1;
+
+      if (a1 > b1) {
+        return compareResult;
+      } else if (a1 < b1) {
+        return -compareResult;
+      }
+
+      return 0;
+    };
+
+    const clone = this.collection.slice();
+    clone.sort(comparator);
+
+    return new Enumerable(clone);
+  }
+
+  where(fn) {
+    const filtered = this.collection.filter(fn);
+    return new Enumerable(filtered);
+  }
+
+  toArray() {
+    return this.collection;
+  }
+}
+
+export default Enumerable;
+
+
+
+>>>>>> Ленивые вычисления <<<<<<
+
+/*
+# Lazy Evaluation
+Ленивые вычисления (отложенные) - применяемая в некоторых языках программирования стратегия вычисления, согласно которой вычисления следует откладывать до тех пор, пока не понадобится их результат
+*/
+
+// # Ленивость в JS
+true || console.log('message'); // true
+false && console.log('message'); // false
+
+// # Ленивые коллекции
+сonst numbers = Lazy.generate(Math.random) // библиотека с Git Hub
+  .map(e => Math.floor(e * 1000) + 1)
+  .uniq()
+  .take(300); 
+
+numbers.each(e => console.log(e)); // выполение здесь
+
+/*
+Ленивые коллекции позволяют работать с:
+ - Бесконечные списки
+ - Эффективная обработка при проходе
+*/  
+
+// LINQ
+  constructor(collection, operations) {
+    this.collection = collectionl;
+    this.operations = operations || [];
+  }
+
+  select (fn) {
+    const newOps = this.operations.slice();
+    newOps.push(coll => coll.map(fn)); // откложенные вычисления
+
+    return new Enumerable(this.collection.slice(), newOps); // в newOps - новые операции
+  }
+
+// # Cравнение объектов:
+[] === []; // false
+['cat', 'dog'] === ['cat', 'dog']; // false
+
+const a = {}; // в a ссылка на объект
+const b = {};
+
+a === b; // false
+
+// Тесты:
+asset.equal(a, b); // false
+assert.deepEqual(a, b); // true
+
+
+// # Передача по ссылке:
+const numbers = [10, 8, 1, 7, 4];
+const mySort = coll => coll.sort(); // side effect
+mySort(numbers); // [1, 10, 4, 7, 8]
+
+// side-effect
+console.log(numbers); // [1, 10, 4, 7, 8]
+
+
+// # Общий пример:
+const f = (a, b, c) => {
+  a = a * 10;
+  b.item = 'changed';
+  c = { item: 'changed' };
+};
+
+const num = 10;
+const obj1 = { item: 'unchanged' };
+const obj2 = { item: 'unchanged' };
+
+f(num, obj1, obj2);
+
+console.log(num); // 10
+console.log(obj1.item); // changed
+console.log(obj2.item); // unchanged
+
+
+/**@@@
+Enumerable.js
+Реализуйте ленивую версию Enumerable. Интерфейс включает в себя следующие методы: select, where, orderBy, toArray.
+
+Подсказки
+ - Так как коллекция ленивая, не нужно выполнять вычислений до вызова toArray, вместо этого необходимо формировать коллекцию из отложенных вычислений.
+*/
+
+
+// FILE: /app/Enumerable.js:
+class Enumerable {
+  constructor(collection, operations) {
+    this.collection = collection;
+    this.operations = operations || [];
+  }
+
+  build(fn) {
+    return new Enumerable(this.collection.slice(), this.operations.concat(fn));
+  }
+
+  select(fn) {
+    return this.build(coll => coll.map(fn));
+  }
+
+  orderBy(fn, direction = 'asc') {
+    const compareResult = direction === 'asc' ? 1 : -1;
+    const comparator = (a, b) => {
+      const a1 = fn(a);
+      const b1 = fn(b);
+
+      if (a1 > b1) {
+        return compareResult;
+      } else if (a1 < b1) {
+        return -compareResult;
+      }
+
+      return 0;
+    };
+
+    return this.build(coll => coll.sort(comparator));
+  }
+
+  where(fn) {
+    return this.build(coll => coll.filter(fn));
+  }
+
+  toArray() {
+    return this.operations.reduce((acc, func) => func(acc), this.collection);
+  }
+}
+
+export default Enumerable;
+
+
+
+>>>>>> getter и мемоизация <<<<<<
+
+// ...
+coll = new Enumerable(cars);
+
+const result = coll.where(car => car.brand === 'kia')
+  .where(car => car.year > 2011);
+
+result.length; // ???  
+
+// # Обновление во время вычисления
+toArray() {
+  const result = 'some code here...';
+  this.length = result.length;
+  return result;
+}
+
+// # Getter:
+class Enumerable {
+  get length() { // не имеет права принимать параметры
+    return 'some code here...';
+  }
+}
+
+const result = coll
+  .where(car => car.brand === 'kia')
+  .where(car => car.year > 2011);
+
+result.length; // использование => 2  
+
+
+// # Повторные вычисления:
+result.length;
+result.toArray();
+
+/*
+# Мемоизация
+Сохранение результатов выполнения функций для предотвращения повторных действий.
+Мемоизация выполняется всегда по одному и тому же шаблону. Создаётся переменная, которая заполняется, если она была пустая, а затем используется для отдачи значения без выполнения вычислений. Её можно сделать с помощью одних лишь функций, на замыканиях (а значит придётся генерировать функцию). Ниже пример с мемоизацией факториала:
+*/
+
+// #1:
+methodName() {
+  if (!this.memo) { // если свойство memo не установлено
+    this.memo = 'some code here...'; // то устанавливаем его значение
+  }
+
+  return this.memo;
+}
+
+methodName(); // вычисление => memo
+methodName(); // => memo
+
+
+// Это просто функция вычисляющая факториал без мемоизации
+const factorial = (num) => {
+  if (num === 0) {
+    return 1;
+  }
+  return num * factorial(num - 1);
+}
+
+// #2:
+// Эта функция выполняет мемоизацию факториала
+const generateFactorialWithMemo = () => {
+  // Здесь будут храниться вычисленные значения
+  // Так как функция факториала применяется к разным аргументам, то для хранения результатов
+  // понадобится объект. В более простых случаях достаточно обычного значения (как в практике к этому уроку)
+  let memo = {};
+
+  // Эта функция возвращается наружу и именно она будет заниматься вычислением факториала
+  const f = (num) => {
+    // Если значение не мемоизированно, то мемоизируем
+    if (!memo[num]) {
+      memo[num] = factorial(num);
+    }
+    // Возвращаем значение из мемо
+    return memo[num];
+  }
+
+  return f;
+};
+
+const f = generateFactorialWithMemo();
+// Значение вычисляется
+f(3); // => 6
+
+// Значение не вычисляется
+f(3); // => 6
+
+/*
+Отличительная черта мемоизации, которая отделяет её от кеширования — отсутствие устаревания. Данные внутри мемо устареть не могут по определению — ведь, если наша функция чистая, то для одного входа она всегда даёт один и тот же выход. А мемоизируют только чистые функции, иначе всегда есть риск сохранить результат, который впоследствии может поменяться.
+*/
+
+
+/**@@@
+Enumerable.js
+Реализуйте метод toArray, возвращающий массив обработанных элементов коллекции. Мемоизируйте этот массив во внутреннем свойстве memo.
+*/
+
+const coll = new Enumerable([1, 2, 3, 4, 5, 6]);
+const filteredColl = coll.where(n => n > 3);
+
+// В этот момент запускаются отложенные операции и результат возвращается.
+filteredColl.toArray(); // [4, 5, 6]
+
+// Повторный запуск извлекает массив из `memo`. Вычисления больше не производятся.
+filteredColl.toArray(); // [4, 5, 6]
+
+
+/*
+Реализуйте свойство length, которое возвращает количество элементов в коллекции. Так как для вычисления её длины, нужно получить результирующий массив (применив все отложенные операции), логично реализовать это свойство как getter, который вызывает внутри себя toArray.
+*/
+
+const coll = new Enumerable([1, 2, 3, 4, 5, 6]);
+filteredColl = coll.where(n => n > 3);
+
+// В этот момент запускаются отложенные операции и результат возвращается.
+filteredColl.length; // 3
+
+// Так как toArray мемоизирован, то повторный вызов не приводит к вычислениям, массив берется из memo
+filteredColl.length; // 3
+
+
+// FILE: /app/Enumerable.js:
+class Enumerable {
+  constructor(collection, operations) {
+    this.collection = collection;
+    this.operations = operations || [];
+  }
+
+  build(fn) {
+    return new Enumerable(this.collection.slice(), this.operations.concat(fn));
+  }
+
+  select(fn) {
+    return this.build(coll => coll.map(fn));
+  }
+
+  orderBy(fn, direction = 'asc') {
+    const comparator = (a, b) => {
+      const a1 = fn(a);
+      const b1 = fn(b);
+
+      const compareResult = direction === 'asc' ? 1 : -1;
+
+      if (a1 > b1) {
+        return compareResult;
+      }
+
+      if (a1 < b1) {
+        return -compareResult;
+      }
+
+      return 0;
+    };
+    return this.build(coll => coll.sort(comparator));
+  }
+
+  where(fn) {
+    return this.build(coll => coll.filter(fn));
+  }
+
+  getProcessedCollection() {
+    if (!this.memo) {
+      this.memo = this.operations.reduce((acc, func) => func(acc), this.collection);
+    }
+
+    return this.memo;
+  }
+
+  get length() {
+    return this.getProcessedCollection().length;
+  }
+
+  toArray() {
+    return this.getProcessedCollection().slice();
+  }
+  
+}
+
+export default Enumerable;
+
+
+
+>>>>>> Операция rest <<<<<<
+
+// Разоблачение списков:
+const numbers = l(1, 10, 23, 234);
+
+export const l = (...elements) => 
+  // elements = [1, 10, 23, 234]
+  elements.reverse().reduce((acc, item) => cons(item, acc), null);
+
+
+// # Общая форма:
+const fn = (a, b, ...theArgs) => {
+  console.log(a);
+  console.log(b);
+  console.log(theArgs);
+}
+
+fn('first');
+// first
+// undefined
+// []
+
+
+/**@@@
+Enumerable.js
+Реализуйте метод where, основываясь на следующем интерфейсе:
+
+Функция может принимать любое количество параметров, каждый из которых может быть либо функцией, либо объектом. Для функций должна осуществляться простая фильтрация, для объектов нужно проверять соответствие элемента коллекции значениям по тем же ключам, что и в переданном объекте.
+*/
+
+const cars = [
+  { brand: 'bmw', model: 'm5', year: 2014 },
+  { brand: 'bmw', model: 'm4', year: 2013 },
+  { brand: 'kia', model: 'sorento', year: 2014 },
+  { brand: 'kia', model: 'rio', year: 2010 },
+  { brand: 'kia', model: 'sportage', year: 2012 },
+];
+coll = new Enumerable(cars);
+
+const result = coll
+  .where(car => car.brand === 'kia')
+  .where(car => car.year > 2011);
+
+result.toArray();
+// [
+//   { brand: 'kia', model: 'sorento', year: 2014 },
+//   { brand: 'kia', model: 'sportage', year: 2012 },
+// ]
+
+const result2 = coll.where({ brand: 'bmw' });
+result2.toArray();
+// [
+//   { brand: 'bmw', model: 'm5', year: 2014 },
+//   { brand: 'bmw', model: 'm4', year: 2013 },
+// ]
+
+const result3 = coll.where({ brand: 'kia', model: 'sorento' });
+result3.toArray();
+// [
+//   { brand: 'kia', model: 'sorento', year: 2014 },
+// ]
+
+const result3 = coll.where({ brand: 'kia' }, {  model: 'sorento' });
+result3.toArray();
+// [
+//   { brand: 'kia', model: 'sorento', year: 2014 },
+// ]
+
+const result4 = coll.where({ brand: 'kia' }, car => car.year < 2013);
+result4.toArray();
+// [
+//   { brand: 'kia', model: 'rio', year: 2010 },
+//   { brand: 'kia', model: 'sportage', year: 2012 },
+// ]
+
+/*
+Подсказки
+ - Извлечь ключи из объекта можно функцией Object.keys.
+ - Проверка на функцию: typeof <value> === 'function'.
+ - Метод every проверяет, удовлетворяют ли все элементы массива условию, заданному в передаваемой функции. Подробнее в документации.
+*/
+
+// FILE: /app/Enumerable.js:
+class Enumerable {
+  constructor(collection, operations) {
+    this.collection = collection;
+    this.operations = operations || [];
+  }
+
+  build(fn) {
+    return new Enumerable(this.collection.slice(), this.operations.concat(fn));
+  }
+
+  where(...predicates) {
+    const fns = predicates.map((predicate) => {
+      if (typeof predicate === 'function') {
+        return coll => coll.filter(predicate);
+      }
+
+      const keys = Object.keys(predicate);
+
+      return coll => coll.filter(element =>
+        keys.every(key => predicate[key] === element[key]));
+    });
+
+    return this.build(fns);
+  }
+
+  getProcessedCollection() {
+    if (!this.memo) {
+      this.memo = this.operations.reduce((acc, func) => func(acc), this.collection);
+    }
+
+    return this.memo;
+  }
+
+  get length() {
+    return this.getProcessedCollection().length;
+  }
+
+  toArray() {
+    return this.getProcessedCollection().slice();
+  }
+}
+
+export default Enumerable;
+
+
+
+>>>>>> Операция spread <<<<<<
+
+// # Базовое использование:
+// const numbers = l(1, 10, 23, 234);
+const numbers = l(...[1, 10, 23, 234]);
+
+myFunction(...iterableObj);
+
+
+// # Аргументы:
+const fn = (v, w, x, y, z) => {}
+const args = [0, 1];
+
+fn(-1, ...args, 2, ...[3]);
+
+// # Пример:
+сonst arr1 = [0, 1, 2];
+const arr2 = [3, 4, 5];
+arr1.push(...arr2);
+
+// [0, 1, 2, 3, 4, 5]
+console.log(arr1);
+
+
+// # Immutable way
+[...iterableObj, 4, 5, 6];
+
+const parts = ['shoulders', 'knees'];
+const lyrics = ['head', ...parts, 'and', 'toes'];
+
+// ['head', 'shoulders', 'knees', 'and', 'toes']
+console.log(lyrics);
+
+
+// # Immutable Reduce:
+
+// Reverse:
+const arr = [1, 2, 3, 4, 5];
+arr.reduce((acc, value) => [value, ...acc], []);
+// [5, 4, 3, 2, 1]
+
+// Repeat:
+const arr = [1, 2, 3, 4, 5];
+arr.reduce((acc, value) => [...acc, value, value]);
+// [1, 1, 2, 2, 3, 3, 4, 4, 5, 5]
+
+
+/**@@@
+objectify.js
+Реализуйте и экспортируйте по умолчанию функцию, которая работает следующим образом:
+
+Принимает на вход список (в виде обычного js массива с объектами внутри) и функцию-селектор, выбирающую из каждого объекта определенное значение.
+Возвращает объект, в котором ключ - это результат применения функции селектора к каждому объекту в массиве, а значение - это сам объект.
+Обратите внимание на то, что эта функция высшего порядка является универсальной и работает с любыми наборами данных.
+*/
+
+const cars = [
+  { brand: 'bmw', model: 'm3', year: 2013 },
+  { brand: 'opel', model: 'astra', year: 2014 },
+  { brand: 'hyundai', model: 'accent', year: 2014 },
+  { brand: 'kia', model: 'rio', year: 2013 },
+  { brand: 'kia', model: 'sportage', year: 2015 },
+];
+
+console.log(objectify(cars, car => car.model));
+
+// {
+//   accent: { brand: 'hyundai', model: 'accent', year: 2014 },
+//   astra: { brand: 'opel', model: 'astra', year: 2014 },
+//   m3: { brand: 'bmw', model: 'm3', year: 2013 },
+//   rio: { brand: 'kia', model: 'rio', year: 2013 },
+//   sportage: { brand: 'kia', model: 'sportage', year: 2015 },
+// };
+
+/*
+Подсказки
+{ ...acc, [propertyName]: value }
+Решите эту задачу используя reduce
+Порядок ключей в объекте при выводе - не важен
+*/
+
+// FILE: /app/objectify.js:
+export default (coll, select) => coll.reduce((acc, item) => ({ ...acc, [select(item)]: item }), {});
+
+
+
+
+>>>>>> Дестракчеринг <<<<<<
+
+// Определение функции:
+const animals = [
+  { age: 5, type: 'cat' },
+  { age: 10, type: 'dog' },
+];
+
+const result = animals.filter(({ age }) => age > 7);
+
+// [ { age: 10, type: 'dog'}]
+console.log(result);
+
+// # Извлечение:
+const animals = ['Dog Name', 'Cat Name'];
+const [myDog, myCat] = animals;
+
+// # Rest
+const x = [1, 2, 3, 4, 5];
+const [a, b, ...rest] = x;
+console.log(a); // 1
+console.log(b); // 2
+console.log(rest); // [3, 4, 5]
+
+// # Объекты:
+const {a, b} = { a: 1, b: 2 };
+console.log(a); // 1
+console.log(b); // 2
+
+
+// # Значение по умолчанию:
+сonst [a = 5, b = 7] = [1];
+console.log(a); // 1
+console.log(b); // 7
+
+// # Обмен переменных местами:
+let a = 1;
+let b = 3;
+
+[a, b] = [b, a];
+console.log(a); // 3
+console.log(b); // 1
+
+
+// # Определение функций:
+const animals = [
+  { age: 5, type: 'cat' },
+  { age: 10, type: 'dog' },
+];
+
+const result = animals.filter(({ age }) => age > 7); // по ключу age
+console.log(result); // [ { age: 10, tyle: 'dog' } ] 
+
+
+// # Составной объект:
+const metadata = {
+  title: 'Scratchpad',
+  translations: [
+    { locale: 'de', title: 'JavaScript-Umgebung' }
+  ],
+  url: '/en-US/docs/Tools/Scratchpad'
+};
+
+const { title: englishTitle, 
+        translations: [{ title: localTitle }]
+      } = metadata;
+
+console.log(englishTitle); // Scratchpad
+console.log(blocalTitle); // JavaScript-Umgebung      
+
+
+/**@@@
+getCarsCountByYear.js
+Это упражнение рассчитано на максимальное использование знаний последних уроков. К сожалению, невозможно тестами убедиться в том, что ваше решение будет содержать деструктивное присваивание или rest оператор, поэтому вам нужно самостоятельно прикладывать усилия для их использования.
+
+Реализуйте и экспортируйте по умолчанию функцию, которая принимает на вход список машин (в виде обычного js массива с объектами), а возвращает объект, в котором свойство - это год выпуска, а значение - это количество машин для соответствующего года.
+
+Порядок свойств в результирующем объекте не важен.
+*/
+const cars = [
+  { brand: 'bmw', model: 'm5', year: 2014 },
+  { brand: 'bmw', model: 'm4', year: 2013 },
+  { brand: 'kia', model: 'sorento', year: 2014 },
+  { brand: 'kia', model: 'rio', year: 2010 },
+  { brand: 'kia', model: 'sportage', year: 2012 },
+];
+
+console.log(getCarsCountByYear(cars));
+//  {
+//    2010: 1,
+//    2012: 1,
+//    2013: 1,
+//    2014: 2,
+//  };
+
+/*
+Решите эту задачу, используя итеративный процесс. Он хорош тем, что позволяeт задействовать сразу все, что нужно.
+
+Подсказки
+Вам понадобятся:
+*/
+const [first, ...rest] = arr
+const { propertyName } = obj
+{ ...acc, [propertyName]: value }
+
+// FILE: /app/
+import { has } from 'lodash';
+
+export default (cars) => {
+  const iter = (items, acc) => {
+    if (items.length === 0) {
+      return acc;
+    }
+
+    const [{ year }, ...rest] = items;
+    const newValue = has(acc, year) ? acc[year] + 1 : 1;
+
+    return iter(rest, { ...acc, [year]: newValue });
+  };
+
+  return iter(cars, {});
+};
+
+
+
+############################### JS: Деревья ###############################  
+
 
 
 
