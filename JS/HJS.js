@@ -8450,7 +8450,19 @@ assert.equal(actual, expected);
 [] instanceof Object; // true
 
 
+'hello' instanceof String; // false
+(new String('hello')) instanceof String; // true;
+typeof 'hello' === 'string'; // true
 
+// Результат:
+const data = ['html', [
+  ['head', [
+    ['title', 'hello, world'],
+  ]],
+  ['body', { 'class': 'container' }, [
+    ['h1', {'class' : 'header' }, 'html builder'],
+  ]],
+]];
 
 /*
 Формат, подобный тому что мы реализуем, крайне популярен в лисп подобных языках. Это связано с тем, что в Лиспах наиболее естественный способ представления данных — списковые структуры. Один из самых популярных шаблонизаторов на языке Clojure — hiccup. Типичный пример HTML на нём выглядит так:
@@ -8475,7 +8487,374 @@ user=> (html [:div#foo.bar.baz "bang"])
 Лайвкодинг по проектированию данной библиотеки: https://www.youtube.com/watch?v=us8AMJKEzZg&ab_channel=Hexlet                       
 */
 
+/**@@@
+solution.js
+Реализуйте и экспортируйте по умолчанию функцию buildHtml, которая возвращает строковое представление html.
 
+import buildHtml from './solution';
+
+const data = ['html', [
+  ['meta', [
+    ['title', 'hello, hexlet!'],
+  ]],
+  ['body', { class: 'container' }, [
+    ['h1', { class: 'header' }, 'html builder example'],
+    ['div', [
+      ['span', 'span text2'],
+      ['span', 'span text3'],
+    ]],
+  ]],
+]];
+
+buildHtml(data);
+<html>
+  <meta><title>hello, hexlet!</title></meta>
+  <body class="container">
+    <h1 class="header">html builder example</h1>
+    <div>
+      <span>span text2</span>
+      <span>span text3</span>
+    </div>
+  </body>
+</html>
+
+Подсказки
+Для объединения массива в строку, используйте метод join(separator).
+Эту задачу можно решить практически без единой условной конструкции используя полиморфизм на основе объекта (ключ, значения).
+Решение учителя может повергнуть вас в шок. Оно не содержит ничего нового по сравнению с тем что вы проходили, но по максимуму использует пройденные идеи, функции высшего порядка, неизменяемость, полиморфизм. Потратьте время, разберитесь с ним.
+*/
+
+// FILE: /app/solution.js
+const propertyActions = [
+  {
+    name: 'body',
+    check: arg => typeof arg === 'string',
+  },
+  {
+    name: 'children',
+    check: arg => arg instanceof Array,
+  },
+  {
+    name: 'attributes',
+    check: arg => arg instanceof Object,
+  },
+];
+
+const getPropertyAction = arg => propertyActions.find(({ check }) => check(arg));
+
+const buildAttrString = attrs =>
+  Object.keys(attrs).map(key => ` ${key}="${attrs[key]}"`).join('');
+
+const buildHtml = (data) => {
+  const [first, ...rest] = data;
+  const root = {
+    name: first,
+    attributes: {},
+    body: '',
+    children: [],
+  };
+
+  const tag = rest.reduce((acc, arg) => {
+    const { name } = getPropertyAction(arg);
+
+    return { ...acc, [name]: arg };
+  }, root);
+
+  return [`<${tag.name}${buildAttrString(tag.attributes)}>`,
+    `${tag.body}${tag.children.map(buildHtml).join('')}`,
+    `</${tag.name}>`,
+  ].join('');
+};
+
+export default buildHtml;
+
+
+
+>>>>>> Абстрактное синтаксическое дерево <<<<<<
+
+/* 
+Дерево использующееся в парсерах для промежуточного представления исходных данных (например, программы)
+
+# JS API
+*/
+let x; // =>
+
+{
+  "type": "VariableDeclaration",
+  "declarations": [
+    {
+        "type": "VariableDeclaration",
+        "id": {
+          "type": "Identfier",
+          "name": "x"
+        },
+        "init": null
+    }
+  ],
+  "kind": "let"
+}
+
+/*
+Преимущества:
+- Проще представлять новые представления
+- Проще анализировать
+- Разделяй и властвуй
+
+> ast
+{ name: 'html',
+  attributes: {},
+  body: '',
+  children:
+    [ { name: 'meta', attributes: {},
+        body: '', children: [Object] },
+        name: 'body', attributes: {},
+        body: '', children: [Object] } ] }
+
+> ast.children[0].children
+[ { name: 'title',
+    attributes: {},
+    body: 'hello, hexlet',
+    children: [] } ]        
+
+# HtmlBuilder API
+*/
+
+import { render, parse } from './solution';
+
+const actual = render(parse(data));
+
+
+/**@@@
+Текущая версия htmlBuilder должна уметь работать с одиночными тегами. Список тегов, которые являются одиночными, находится в singleTagsList.
+
+Пример:
+*/
+// <br>
+['br'];
+
+// <img src="/path">
+['img', { src: '/path' }];
+
+/*
+solution.js
+Реализуйте и экспортируйте функции parse и render.
+
+Функция render принимает на вход ast и возвращает строковое представление.
+Функция parse принимает на вход исходную структуру и возвращает представление в виде ast.
+*/
+
+// FILE: /app/solution.js:
+const data = ['html', [
+  ['meta', { id: 'uniq-key' }, [
+    ['title', 'hello, hexlet!'],
+  ]],
+  ['body', [
+    ['br'],
+  ]],
+]];
+
+const ast = parse(data);
+
+{ name: 'html', attributes: {}, body: '', children: [
+  { name: 'meta', attributes: { id: 'uniq-key' }, body: '', children: [
+    { name: 'title', attributes: {}, body: 'hello, hexlet!', children: [] },
+  ]},
+  { name: 'body', attributes: {}, body: '', children: [
+    { name: 'br', attributes: {}, body: '', children: [] },
+  ]},
+]}
+
+
+// FILE: /app/solution.js:
+import { identity } from 'lodash';
+
+const singleTagsList = new Set(['hr', 'img', 'br']);
+
+export const render = (data) => {
+  const {
+    name,
+    attributes,
+    body,
+    children,
+  } = data;
+
+  const attrsLine = Object.keys(attributes).map(key => ` ${key}="${attributes[key]}"`).join('');
+  const content = children.length > 0 ? children.map(render).join('') : body;
+
+  if (singleTagsList.has(name)) { // одиночный тег
+    return `<${name}${attrsLine}>`;
+  }
+
+  return `<${name}${attrsLine}>${content}</${name}>`; // парный тег
+};
+
+const propertyActions = [
+  {
+    name: 'body',
+    check: arg => typeof arg === 'string',
+    process: identity,
+  },
+  {
+    name: 'children',
+    check: arg => arg instanceof Array,
+    process: (children, f) => children.map(f),
+  },
+  {
+    name: 'attributes',
+    check: arg => arg instanceof Object,
+    process: identity,
+  },
+];
+
+const getPropertyAction = arg => propertyActions.find(({ check }) => check(arg));
+
+export const parse = (data) => {
+  const [first, ...rest] = data;
+  const root = {
+    name: first,
+    attributes: {},
+    body: '',
+    children: [],
+  };
+  return rest.reduce((acc, arg) => {
+    const { name, process } = getPropertyAction(arg);
+
+    return { ...acc, [name]: process(arg, parse) };
+  }, root);
+};
+
+
+
+
+>>>>>>> Полиморфизм подтипов <<<<<<<
+
+/*
+# Типы 
+- SingleTag
+- PairedTag
+*/
+
+const tag = new ...;
+tag.tpString();
+
+
+// # AST
+const data = ['div', [
+  ['hr']
+]];
+const ast = parse(data);
+
+ast instanceof PairedTag; // true
+ast.children[0] instanceof SingleTag; // true
+
+ast.toString(); // <div><hr></div>
+
+
+// # Конструктор:
+buildNode(name, attributes, body, children);
+
+const expected = buildNode('html', {}, '', [
+  buildNode('meta', {}, '', [
+    buildNode('title', {}, 'hello, world'),
+  ]),
+  buildNode('body',  {}. '', [
+    buildNode('h1', { 'class': 'header' }, body),
+    buildNode('div', {}, '', [
+      buildNode('span', {}, 'span text'),
+      buildNode('hr'),
+    ]),
+  ])
+]);
+
+// # Полиморфизм (подтипов)
+const tag1 = buildNode('h1', { 'class': 'header' }, 'body');
+console.log(tag1.toString()); // <h1 class="header">body</h1>
+
+const tag2 = buildNode('img', { 'src': '/path/to/img.jpg' });
+console.log(tag2.toString()); // <img src="/path/to/image.jpg">
+
+
+/**@@@
+buildNode.js
+Реализуйте и экспортируйте функцию по умолчанию, задача которой, создавать объект подходящего типа. Типы: SingleTag и PairedTag. 
+Список имен тегов, которые относятся к SingleTag: hr, br, img.
+
+PairedTag.js
+Реализуйте тип PairedTag со следующим интерфейсом:
+
+Конструктор, который принимает на вход: name, attributes, body, children.
+Метод toString, который возвращает текстовое представление узла (html) на всю глубину.
+
+SingleTag.js
+Реализуйте тип SingleTag со следующим интерфейсом:
+
+Конструктор, который принимает на вход: name, attributes
+Метод toString, который возвращает текстовое представление узла (html) на всю глубину.
+Обратите внимание на то что у SingleTag нет body и children
+*/
+
+// FILE: /app/buildNode.js:
+import PairedTag from './PairedTag';
+import SingleTag from './SingleTag';
+
+const singleTagsList = new Set(['hr', 'br', 'img']);
+
+export default (name, ...args) => {
+  const C = singleTagsList.has(name) ? SingleTag : PairedTag;
+
+  return new C(name, ...args);
+};
+
+// FILE: /app/PairedTag.js:
+export default class {
+  constructor(name, attributes = {}, body = '', children = []) {
+    this.name = name;
+    this.attributes = attributes;
+    this.body = body;
+    this.children = children;
+  }
+
+  toString() {
+    const value = this.children.length > 0 ? this.children.join('') : this.body;
+
+    return `<${this.name}${this.getAttributesAsLine()}>${value}</${this.name}>`;
+  }
+
+  getAttributesAsLine() {
+    return Object.entries(this.attributes)
+      .map(([key, value]) => ` ${key}="${value}"`)
+      .join('');
+  }
+}
+
+// FILE: /app/SingleTag.js:
+export default class {
+  constructor(name, attributes = {}) {
+    this.name = name;
+    this.attributes = attributes;
+  }
+
+  toString() {
+    return `<${this.name}${this.getAttributesAsLine()}>`;
+  }
+
+  getAttributesAsLine() {
+    return Object.entries(this.attributes)
+      .map(([key, value]) => ` ${key}="${value}"`)
+      .join('');
+  }
+}
+
+
+
+>>>>>> По фаулеру <<<<<<
+
+/*
+Функции, которые используют базовый тип, должны иметь возможность использовать подтипы базового типа, не зная об этом
+
+- Предусловия не могут быть усилены в подклассе.
+- Постусловия не могут быть ослаблены в подклассе.
+*/
 
 ############################### JS: DOM API ###############################   
 
