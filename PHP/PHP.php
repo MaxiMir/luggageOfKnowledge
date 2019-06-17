@@ -2,22 +2,22 @@
 
 ############## PHP Basics ##############
 	
-	/** Код-гайд:
-	 * https://www.php-fig.org/psr/psr-1/
-	 * http://www.php-fig.org/psr/psr-2/
-	 *
-	 ** Проверка кода:
-	 * https://github.com/squizlabs/PHP_CodeSniffer
-	 *
-	 * Тестовые задания:
-	 * https://github.com/Hexlet/ru-test-assignments
-	 *
-	 * Гайды:
-	 * https://guides.hexlet.io
-	 * Книги:
-	 * https://ru.hexlet.io/pages/recommended-books
-	 */
-	
+/** Код-гайд:
+ * https://www.php-fig.org/psr/psr-1/
+ * http://www.php-fig.org/psr/psr-2/
+ *
+ ** Проверка кода:
+ * https://github.com/squizlabs/PHP_CodeSniffer
+ *
+ * Тестовые задания:
+ * https://github.com/Hexlet/ru-test-assignments
+ *
+ * Гайды:
+ * https://guides.hexlet.io
+ * Книги:
+ * https://ru.hexlet.io/pages/recommended-books
+ */
+
 	
 	
 >>>>> Введение <<<<<<<

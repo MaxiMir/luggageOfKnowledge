@@ -8847,14 +8847,405 @@ export default class {
 
 
 
->>>>>> По фаулеру <<<<<<
+>>>>>> Иерархия типов <<<<<<
 
 /*
-Функции, которые используют базовый тип, должны иметь возможность использовать подтипы базового типа, не зная об этом
+# Принцип Лисков (SOLID):
+Пусть q(x) является свойством, верным относительно объектов x некоторого типа Т.
+Тогда q(y) так же должно быть верным для объектов y типа S, где S является подтипом типа Т
+
+# По фаулеру:
+Функции, которые используют базовый тип, должны иметь возможность использовать подтипы базового типа, не зная об этом.
 
 - Предусловия не могут быть усилены в подклассе.
-- Постусловия не могут быть ослаблены в подклассе.
+- Посусловия не могут быть ослаблены в подклассе.
+
+# Зачем?
+- Системы типов не могут гарантировать корректность иерархии.
+- Некорректное использование наследования может приводить к ошибкам.
+- Снижается модульность (текут абстракции).
+
+# Реальность:
+- Множественные надтипы - боль.
+- Очень легко ошибиться.
+- Композиция вместо наследования.
 */
+
+>>>>>> Подтип <<<<<<
+
+/*
+# Наследование:
+- Способ строить иерархии типов.
+- Не зависит от существования классов.
+- Чаще используются для сокращения дублирования.
+
+# Надтип:
+*/
+class Node {
+    constructor(name) {
+        this.name = name;
+    }
+    
+    getName() {
+        return this.name;
+    }
+}
+
+// # Подтипы:
+import Node from './Node';
+
+class PairedTag extends Node {
+    constructor (name, body = '') {
+        super(name); // вызываем конструктор базового класса
+        this.body = body;
+    }
+    
+    toString() {
+        return `<${this.getName()}>${this.body}</${$this.getName()}>`;
+    }
+}
+
+
+// # Использование:
+const tag = new Pairedtag('h1', 'text');
+console.log(tag.getName()); // h1
+console.log(tag.toString()); // <h1>text</h1>
+
+tag.name = 'h2';
+console.log(tag.toString()); // <h2>text</h2>
+
+
+/**@@@
+Node.js
+Реализуйте базовый класс Node таким чтобы он содержал в себе общую логику
+
+PairedTag.js, SingleTag.js
+Реализуйте типы тегов как подтипы типа Node.
+*/
+
+// FILE: /app/Node.js:
+export default class {
+  constructor(name, attributes = {}) {
+    this.name = name;
+    this.attributes = attributes;
+  }
+
+  getAttributesAsLine() {
+    return Object.keys(this.attributes)
+      .reduce((acc, key) => `${acc} ${key}="${this.attributes[key]}"`, '');
+  }
+}
+
+// FILE: /app/PairedTag.js:
+import Node from './Node';
+
+export default class extends Node {
+  constructor(name, attributes, body = '', children = []) {
+    super(name, attributes);
+    this.body = body;
+    this.children = children;
+  }
+
+  toString() {
+    const value = this.children.length > 0
+      ? this.children.join('')
+      : this.body;
+
+    return `<${this.name}${this.getAttributesAsLine()}>${value}</${this.name}>`;
+  }
+}
+
+// FILE: /app/SingleTag.js:
+import Node from './Node';
+
+export default class extends Node {
+  toString() {
+    return `<${this.name}${this.getAttributesAsLine()}>`;
+  }
+}
+
+
+
+>>>>>> Функции как объекты <<<<<<
+
+const f = name => `hello, ${name}`;
+typeof f; // function
+f instanceof Object; // true
+f.length; // количество аргументов, которая принимает функция => 1 
+f.toString(); // возвращает тело функции => name => `hello, ${name}`
+f.wrongProperty; // undefined
+
+// # Класс это функция
+class Node {
+    constructor (name) {
+        this.name = name;
+    }
+}
+
+console.log(typeof Node); // function
+
+
+// # Конструктор (до ES6):
+function Node(name) { // принято называть с большой буквы
+    this.name = name;
+}
+
+node = new Node('table');
+node.name; // table
+
+// Arrow function:
+new ((name) => { this.name = name; })
+// Type Error: (name) => { this.name = name; })
+// is not constructor
+
+
+// # function !== this
+function Node(name) { // принято называть с большой буквы
+    this.name = name;
+}
+
+const obj = new Node('table');
+obj.Name; // table
+
+Node.name; // возвращает имя функции => Node
+Node.length; // 1
+obj.length; // свойство не определено => undefined
+
+// # Контекст (this):
+function Node(name) {
+  this.name = name;
+}
+
+function New(Constructor, args) {
+  const obj = {};
+  Constructor.apply(obj, args); // obj - контекст, args - аргументы
+
+  return obj;
+}
+
+const node = New(Node, ['table']);
+node.name; // table
+
+
+
+// # apply vs call:
+const sum = (a, b) => a + b;
+
+sum.apply(null, [5, 9]); // 14
+sum.call(null, 5, 9); // 14
+
+Math.sqrt.apply(null, [16]); // 4
+Math.pow.apply(null, [2, 3]); // 8
+
+Math.sqrt.call(null, 16) // 4
+Math.pow.call(null, 2, 3); // 8
+
+
+/**@@@
+magic.js
+Реализуйте и экспортируйте по умолчанию функцию, которая работает следующим образом:
+
+Принимает на вход любое число аргументов и возвращает функцию, которая, в свою очередь, принимает на вход любое количество аргументов и так до бесконечности (привет, рекурсия ;)).
+Результат вызова этой функции при проверке на равенство должен быть равен сумме всех аргументов всех подфункций.
+*/
+magic() == 0; // true
+magic(5, 2, -8) == -1; // true
+magic(1, 2)(3, 4, 5)(6)(7, 10) == 38; // true
+magic(4, 8, 1, -1, -8)(3)(-3)(7, 2) == 13; // true
+
+/*
+Подсказки
+Объекты в js по умолчанию имеют метод valueOf, который вызывается автоматически в тех местах, где требуется преобразование к числовому значению (контекст арифметических операций и операций нестрогого сравнения). В ситуации выше, во время сравнения, js вызовет valueOf для нашей функции. Этим можно воспользоваться для того, чтобы возвращать сумму через valueOf.
+*/
+
+const obj = {}
+obj + 3; // '[object Object]3'
+obj.valueOf = () => 3;
+obj + 7; // 10
+
+// FILE: /app/magic.js:
+const f = (...numbers) => {
+  const sum = numbers.reduce((acc, x) => x + acc, 0);
+  const inner = (...rest) => f(sum, ...rest);
+  inner.valueOf = () => sum;
+
+  return inner;
+};
+
+export default f;
+
+
+// FILE: /app/magic.test.js:
+import magic from '../magic';
+
+test('magic', () => {
+  expect(magic() + 0).toBe(0);
+  expect(magic() + 1).toBe(1);
+
+  magic(4, 5);
+
+  expect(magic(5, 2, -8) + 2).toBe(1);
+  expect(magic(1, 2)(3, 4, 5)(6)(7, 10) - 8).toBe(30);
+  expect(magic(4, 8, 1, -1, -8)(3)(-3)(7, 2) + 7).toBe(20);
+
+  magic(1, 3, 4);
+  expect(magic(5) + 1).toBe(6);
+});
+
+
+
+>>>>>> Позднее связывание <<<<<<
+
+const makeNode = name => {
+  return {
+    name, // name: name
+    getName() { // getName: function getName{...}
+      return this.name;
+    },
+  }
+};
+
+const obj = makeNode('table');
+// # this:
+obj.name; // table
+obj.getName(); // table
+
+// Контекст:
+const func = obj.getName;
+func(); // вызываем функцию вне контекста
+// TypeError: Cannot read property
+// 'name' of undefined
+
+// # Позднее связывание:
+function f(name) {
+  this.name = name;
+}
+
+const obj1 = { setName: f }; // объекты передаются по ссылке
+const obj2 = { setName: f };
+
+obj1.setName === obj2.setName; // одна и та же функция => true
+
+obj1.setName('martin');
+obj2.setName('mike');
+
+// { setName: [Function f], name: 'martin'}
+// { setName: [Function f], name: 'mike'}
+
+// # Стрелочные функции:
+// this в стрелочной функции относится к внешнему окружению функции:
+const makeNode = (name) => { 
+
+  return {
+    name,
+    getName: () => { // раннее связывание
+      return this.name;
+    },
+  }
+};
+
+const node = makeNode('table');
+node.getName();
+// TypeError: Cannot read property 'name'
+// of undefined at Object.getName
+
+// # Почти класс:
+function Node(name) {
+  this.name = name;
+  this.getNAme = function getName() { // позднее связывание
+    return this.name;
+  }
+}
+
+node = new Node('div');
+node.getName(); // div
+
+
+// # Наследование:
+function PairedNode(name, body) {
+  Node.apply(this, [name]); // super
+  this.body = body;
+}
+
+node = new PairedNode('div', 'body');
+// PairedNode { name: 'div',
+// getName: [Function: getName],
+// body: 'body' }
+
+node.getName(); // div
+node.body; // body
+
+
+/*
+# Дополнительные материалы
+Объяснение раннего и позднего связывания https://softwareengineering.stackexchange.com/questions/200115/what-is-early-and-late-binding
+*/
+
+/**@@@
+В этом упражнении реализация наших типов (Node и ее подтипов) будет опираться на следующие свойства js:
+
+Функция это объект
+Позднее связывание
+Побочные эффекты (apply)
+Node.js
+Реализуйте базовый тип Node используя подход описанный в видео.
+
+PairedTag.js, SingleTag.js
+Реализуйте типы тегов как подтипы типа Node.
+
+Подсказки
+При определении функции внутри конструктора есть одна деталь. Функция создается каждый раз заново, а это ведет к двум проблемам:
+
+1. Лишний расход памяти. Ведь достаточно создать одну функцию и использовать ее повторно.
+2. Сравнение объектов даже в случае deepEqual будет давать false. Ведь функция это объект, а объекты друг другу не равны (даже если структура одинаковая), если это не один и тот же объект. А это сильно затрудняет проверки на равенство деревьев (или поддеревьев), а также делает крайне сложным тестирование.
+По этим причинам функцию нужно описывать вне конструктора (выше в файле), а внутри присваивать ее соответствующему свойству.
+*/
+
+// FILE: /app/Node.js:
+function getAttributesAsLine() {
+  return Object.keys(this.attributes).reduce(
+    (acc, key) => `${acc} ${key}="${this.attributes[key]}"`,
+    '',
+  );
+}
+
+export default function Node(name, attributes = {}) {
+  this.name = name;
+  this.attributes = attributes;
+
+  this.getAttributesAsLine = getAttributesAsLine;
+}
+
+// FILE: /app/PairedTag.js:
+import Node from './Node';
+
+function toString() {
+  const value = this.children.length > 0
+    ? this.children.join('') : this.body;
+
+  return `<${this.name}${this.getAttributesAsLine()}>${value}</${this.name}>`;
+}
+
+export default function PairedTag(name, attributes = {}, body = '', children = []) {
+  Node.apply(this, [name, attributes]);
+  this.body = body;
+  this.children = children;
+  this.toString = toString;
+}
+
+// FILE: /app/SingleTag.js:
+import Node from './Node';
+
+function toString() {
+  return `<${this.name}${this.getAttributesAsLine()}>`;
+}
+
+export default function SingleTag(name, attributes = {}) {
+  Node.apply(this, [name, attributes]);
+  this.toString = toString;
+}
+
+
 
 ############################### JS: DOM API ###############################   
 
