@@ -9247,6 +9247,356 @@ export default function SingleTag(name, attributes = {}) {
 
 
 
+
+>>>>>> Прототипы <<<<<<
+/*
+Прототипы - это механизм, с помощью которого объекты JavaScript наследуют свойства друг от друга.
+*/
+
+// # Наследство:
+const obj = { key: 'value' };
+obj.toString(); // текстовое представление => [object Object]
+
+obj.valueOf(); // знаечние объекта => { key: 'value' }
+
+Object.getOwnPropertyNames(obj); // возвращает все ключи, которые определены => ['key']
+
+
+// # Прототип:
+const obj = { key: 'value' };
+
+// [[Prototype]] - закрытое свойство внутри объекта
+const proto = Object.getPrototypeOf(obj);
+
+Object.getOwnPropertyNames(proto); // =>
+// [ 'contructor', 'toString',
+// 'toLocaleString', 'valueOf',
+// 'hasOwnProperty', 'isPrototypeOf',
+// 'propertyIsEnumetable', '__defineGetter__',
+// '__lokupGetter__', '__defineSetter__',
+// '__lokupSetter__', '__proto__' ]
+
+
+// # операция [[Get]]:
+obj.name; // or obj['name']
+
+/*
+1. Есть ли у текущего объекта свойство name?
+2. Есть ли у прототипа свойства name?
+3. Если прототип null, возвращаем undefined.
+*/
+
+const get = (obj, property) => { // имитация Get
+  if (obj.hasOwnProperty(property)) { // есть ли у объекта собственное свойство
+    return obj[property];
+  } else if (Object.getPropertyOf(obj) === null) { // У вверхнего прототипа протототип null
+    return undefined;
+  } else {
+    return get(Object.getPropertyOf(obj), property) // рекурсивно перебираем прототипы
+  }
+}
+
+// # Создание объектов:
+const obj = new Object(); // {}
+typeof Object; // function
+const proto = Object.getPropertyOf(obj); // извлекаем прототип
+proto === Object.prototype; // в proto cсылка на объект Object.prototype => true
+obj.prototype; // обращение через объект не работает => undefined
+
+
+// # Cоздание прототипа:
+function F() // {}
+F.prototype; // {}
+
+Object.getOwnPropertyNames(F);
+// [ 'length', 'name', 'argument',
+// 'caller', 'prototype' ]
+
+Object.getOwnPropertyNames(F.prototype);
+// [ 'constructor' ]
+
+const obj = new F();
+obj.constructor === F; // ссылка => true
+obj.name; // undefined
+
+// ! Cвойство самой функции никак не связано с объектом, а с прототипом связано.
+
+// # Изменение прототипа:
+function F() {}
+const obj1 = new F();
+F.prototype.color = 'green';
+const obj2 = new F();
+
+console.log(obj1.color); // green
+console.log(obj2.color); // green
+
+
+// # Определение класса (до ES6):
+function Node(name) { // описываем конструктор
+  this.name = name;
+}
+
+Node.prototype.getName = function getName() {
+  return this.name; // позднее связывание
+}
+
+const obj = new Node('span');
+obj.getName(); // span
+
+
+// # Перекрытие:
+function F() {}
+F.prototype.color = 'green';
+
+const obj1 = new F();
+const obj2 = new F();
+obj2.color = 'red'; 
+
+console.log(obj1.color); // green
+console.log(obj2.color); // red
+
+console.log(F.prototype.color) // green
+
+
+/**@@@
+PairedTag.js, SingleTag.js
+Реализуйте типы тегов как подтипы типа Node. Добавьте необходимые функции в прототипы типов.
+*/
+
+// FILE: /app/Node.js:
+function getAttributesAsLine() {
+  const attrs = Object.entries(this.attributes).map(([key, value]) => `${key}="${value}"`);
+  return attrs.length > 0 ? ` ${attrs.join(' ')}` : '';
+}
+
+export default function Node(name, attributes = {}) {
+  this.name = name;
+  this.attributes = attributes;
+  this.getAttributesAsLine = getAttributesAsLine;
+}
+
+// FILE: /app/PairedTag.js:
+import Node from './Node';
+
+export default function PairedTag(name, attributes, body = '', children = []) {
+  Node.apply(this, [name, attributes]);
+  this.body = body;
+  this.children = children;
+}
+
+PairedTag.prototype.toString = function toString() {
+  const value = this.children.length > 0 ? this.children.join('') : this.body;
+
+  return `<${this.name}${this.getAttributesAsLine()}>${value}</${this.name}>`;
+};
+
+// FILE: /app/SingleTag.js:
+import Node from './Node';
+
+export default function SingleTag(name, attributes) {
+  Node.apply(this, [name, attributes]);
+}
+
+SingleTag.prototype.toString = function toString() {
+  return `<${this.name}${this.getAttributesAsLine()}>`;
+};
+
+
+
+>>>>>> Цепочки прототипов <<<<<<
+
+// # Прототип моего прототипа:
+function F() {}
+const obj = new F();
+
+const proto1 = Object.getPrototypeOf(obj);
+proto1 === F.prototype; // true
+
+const proto2 = Object.getPropertyOf(proto1); // прототип прототипа
+proto2 === Object.prototype; // true
+
+// Object -> F.prototype -> Object.prototype -> null
+
+
+// # Построение цепочки:
+function A() {}
+function B() {}
+
+// wrong way:
+B.prototype = A.prototype;
+
+B.prototype.color = 'green';
+A.prototype.color; // green !!!
+
+const obj = new B();
+
+Object.getPrototypeOf(obj) === A.prototype; // true
+
+
+// right way:
+B.prototype = Object.create(A.prototype);
+
+B.prototype.color = 'green';
+A.prototype.color; // undefined
+
+const obj = new B();
+
+const proto1 = Object.getPrototypeOf(obj);
+// B.prototype
+
+const proto2 = Object.getPrototypeOf(proto1);
+// A.prototype
+
+// # Объект на основе прототипа:
+Object.create = function create(protoObj) {
+  function F() {}; // фейковый конструктор без side effects
+  F.prototype = protoObj;
+
+  return new F();
+}
+
+function A() {}
+function B() {}
+
+B.prototype = Object.create(A.prototype);
+
+// wrong way
+B.prototype = new A(); // из-за side effects
+
+
+// # Линковка:
+function F() {}
+
+const obj1 = new F();
+const obj2 = new F();
+
+const proto1 = Object.getPrototypeOf(obj1);
+const proto2 = Object.getPrototypeOf(obj2);
+
+proto1 === proto2; // true
+
+/*
+ - В js нет классов, но есть конструкторы
+ - Цепочка прототипов - основа наследования в js
+ - new не создает "инстанс" класса/функции
+ - new создает обычный объект и линкует его с прототипом функции
+ - instanceof проверяет наличие прототипа в цепочке
+ - Прототип объекта Object.prototype равен тull
+
+*/
+
+/*
+# Дополнительные материалы
+Прототипы
+*/
+
+/**@@@
+Node.js
+Реализуйте тип Node.js используя прототип.
+
+PairedTag.js, SingleTag.js
+Реализуйте прототипное наследование от типа Node.
+*/
+
+// FILE: /app/Node.js:
+export default function Node(name, attributes = {}) {
+  this.name = name;
+  this.attributes = attributes;
+}
+
+Node.prototype.getAttributesAsLine = function getAttributesAsLine() {
+  return Object.keys(this.attributes).reduce((acc, key) => `${acc} ${key}="${this.attributes[key]}"`, '');
+};
+
+// FILE: /app/PairedTag.js:
+import Node from './Node';
+
+export default function PairedTag(name, attributes, body = '', children = []) {
+  Node.apply(this, [name, attributes]);
+  this.body = body;
+  this.children = children;
+}
+
+PairedTag.prototype = Object.create(Node.prototype);
+
+PairedTag.prototype.toString = function toString() {
+  const value = this.children.length > 0 ? this.children.map(child => child.toString()).join('') : this.body;
+  return `<${this.name}${this.getAttributesAsLine()}>${value}</${this.name}>`;
+};
+
+
+// FILE: /app/SingleTag.js:
+import Node from './Node';
+
+export default function SingleTag(name, attributes) {
+  Node.apply(this, [name, attributes]);
+}
+
+SingleTag.prototype = Object.create(Node.prototype);
+
+SingleTag.prototype.toString = function toString() {
+  return `<${this.name}${this.getAttributesAsLine()}>`;
+};
+
+/**@@@
+solution.js
+Добавьте в Object.prototype функцию hash, которая позволяет извлекать вложенные значения из объекта.
+*/
+const obj = {
+  person: {
+    name: 'joe',
+    history: {
+      hometown: 'bratislava',
+      bio: {
+        funFact: 'I like fishing.',
+      },
+    },
+  },
+};
+
+obj.hash('car'); // undefined
+obj.hash('person.history.bio'); // { funFact: 'I like fishing.' }
+obj.hash('person.history.homeStreet'); // undefined
+obj.hash('person.animal.pet.needNoseAntEater'); // undefined
+
+
+// FILE: /app/
+Object.prototype.hash = function hash(path) {
+  const keys = path.split('.');
+
+  return keys.reduce((acc, item) =>
+    (acc === undefined ? acc : acc[item]), this);
+};
+
+
+
+/**@@@
+solution.js
+Добавьте в Function.prototype функцию wrap, которая работает согласно примеру:
+*/
+function speak(name) {
+   return `Hello ${name}`;
+}
+
+const newSpeak = speak.wrap((original, yourName, myName) => {
+  const greeting = original(yourName);
+  return `${greeting}, my name is ${myName}`;
+});
+
+newSpeak('Mary', 'Kate'); // Hello Mary, my name is Kate
+
+
+// FILE: /app/solution.js:
+Function.prototype.wrap = function wrap(func) {
+  return (...args) => func(this, ...args);
+};
+
+
+
+############################### Обработка ошибок ############################
+
+>>>>>> Деревья <<<<<<
+
 ############################### JS: DOM API ###############################   
 
 /*
