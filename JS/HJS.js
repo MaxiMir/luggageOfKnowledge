@@ -9597,6 +9597,458 @@ Function.prototype.wrap = function wrap(func) {
 
 >>>>>> Деревья <<<<<<
 
+/*
+|- home /
+    |- config
+|-  etc/
+*/
+
+tree = new Tree('/');
+const child = tree.addChild('home')
+    .addChild('config', 'data');
+tree.addChild('etc');
+
+assert.ok(tree.hasChildren());
+assert.ok(tree.hasChildren('home'));
+
+// # Дизайн:
+const node = tree.getChild('home')
+    .getChild('config');
+    
+assert.equal(node.getKey(), 'config');
+assert.equal(node.getMeta(), 'data');
+
+// # Реализация:
+class Tree {
+    constructor(key, meta, parent) {
+        this.parent = parent;
+        this.key = key;
+        this.meta = meta;
+        this.children = new Map();
+    }
+    
+    addChild(key, meta) {
+        const child = new Tree(key, meta, this);
+        this.children.set(key, child);
+        
+        return child;
+    }
+}
+
+// # Ошибки:
+tree = new Tree('animals');
+tree.addChild('cats');
+const dogs = tree.getChild('dogs');
+
+
+// # Поиск в глубину:
+const path = '/etc/nginx/conf.d/hexlet.conf';
+
+const keys = ['etc', 'nginx', 'conf.d'];
+const subtree = tree.getDeepChild(keys);
+assert.equal(subtree.getParent().getkey(), 'nginx');
+
+const keys = ['etc', 'init', 'nginx.conf'];
+const subtree = tree.getDeepChild(keys);
+assert.equal(subtree, undefinded);
+
+
+/**@@@
+Реализуйте недостающие части интерфейса типа Tree.
+    hasChildren()
+    hasChild(key)
+    getParent()
+    removeChild(key)
+    getDeepChild(keys). Функция возвращает undefined если узел не найден или был передан пустой массив.
+    getChildren()
+*/
+
+tree = new Tree('/');
+tree.addChild('var')
+  .addChild('lib')
+  .addChild('run');
+tree.addChild('etc');
+tree.addChild('home');
+
+// example: getDeepChild
+const subtree = tree.getDeepChild(['var', 'lib']);
+subtree.getKey(); // lib
+
+tree.getDeepChild(['var', 'nobody']); // undefined
+
+const parent = subtree.getParent();
+parent.getKey(); // var
+
+tree.removeChild('home'); // true
+tree.removeChild('nonexistentNode'); // false
+
+/*
+Подсказки
+метод getChildren возвращает массив нод
+*/
+
+// FILE: /app/Tree.js:
+class Tree {
+  constructor(key, meta, parent) {
+    this.parent = parent;
+    this.key = key;
+    this.meta = meta;
+    this.children = new Map();
+  }
+
+  getKey() {
+    return this.key;
+  }
+
+  getMeta() {
+    return this.meta;
+  }
+
+  addChild(key, meta) {
+    const child = new Tree(key, meta, this);
+    this.children.set(key, child);
+
+    return child;
+  }
+
+  getChild(key) {
+    return this.children.get(key);
+  }
+
+  hasChild(key) {
+    return this.children.has(key);
+  }
+
+  getParent() {
+    return this.parent;
+  }
+
+  removeChild(key) {
+    return this.children.delete(key);
+  }
+
+  hasChildren() {
+    return this.children.size > 0;
+  }
+
+  getDeepChild(keys) {
+    const [key, ...rest] = keys;
+    const node = this.getChild(key);
+    
+    if (!node || rest.length === 0) {
+      return node;
+    }
+    
+    return node.getDeepChild(rest);
+  }
+
+  getChildren() {
+    return [...this.children.values()];
+  }
+}
+
+export default Tree;
+
+
+
+>>>>>> Файловая система <<<<<<
+
+// # TDD:
+const files = new HexletFs();
+
+assert.ok(!files.isDirectory('/etc'));
+
+files.mkdirSync('/etc');
+assert.ok(files.isDirectory('/etc'));
+
+files.mkdirSync('/etc/nginx');
+assert.ok(files.isDirectory('/etc/nginx'));
+
+
+// # hexlet-trees:
+// FILE: HexletFs.js:
+export default class {
+    constructor() {
+        this.tree = new Tree('/');
+    }
+}
+
+// mkdir
+subtree.addChild(name, { type: 'dir' });
+
+
+// # Порядок действий:
+const path = '/etc/nginx/conf.d';
+
+/*
+1. Разбиваем путь на массив имен
+2. Используя getDeepChild извлекаем предпоследний элемент
+3. Добавляем новый элемент в дерево.
+*/
+
+// # Особенности работы путей:
+assert.ok(!files.isDirectory('/var//'));
+
+files.mkDirSync('/var/');
+assert.ok(files.isDirectory('/var'));
+assert.ok(files.isDirectory('/var////'));
+
+files.mkdirSync('/var//log//////');
+assert.ok(files.isDirectory('/var/log'));
+assert.ok(files.isDirectory('/var///log'));
+
+
+// # touch:
+assert.ok(!file.isFile('/file.txt'));
+
+files.touchSync('/file.txt');
+assert.ok(files.isFile('/file.txt'));
+
+files.mkdirSync('/etc');
+files.touchSync('/etc/bashrc');
+assert.ok(files.isFile('/etc/bashrc'));
+
+
+/**@@@
+Файловая система должна корректно обрабатывать пустые пути, делая внутри нормализацию. То есть, если ей передать путь ///etc/config//my///, то он транслируется в /etc/config/my.
+
+HexletFs.js
+Реализуйте следующие части интерфейса типа HexletFs.
+
+isDirectory(path)
+isFile(path)
+mkdirSync(path) - поведение этой функции должно соответствовать поведению утилиты mkdir в баше. Для ее работы должны существовать все родительские директории. Она не создает директории рекурсивно.
+touchSync(path) - создает пустой файл. На самом деле, в реальной файловой системе, команда touch меняет время последнего обращения к файлу, а побочным эффектом этой команды является создание файла в случае его отсутствия. По этой причине данной командой часто пользуются для создания файлов.
+Пример:
+*/ 
+
+files.isDirectory('/etc'); // false
+
+files.mkdirSync('/etc');
+files.isDirectory('/etc'); // true
+
+files.mkdirSync('/etc/nginx');
+files.isDirectory('/etc/nginx'); // true
+
+files.isFile('/file.txt'); // false
+
+files.touchSync('/file.txt');
+files.isFile('/file.txt'); // true
+
+/*
+Подсказки
+Реализуйте функцию getPathParts, которая разбивает путь на массив имен. Без этой функции не будет работать метод findNode, осуществляющий глубокий поиск файла (каталога) внутри текущего каталога.
+Для работы с путями используйте возможности встроенного в Node.js модуля Path. Конкретно вам понадобятся parse и sep
+*/
+
+import path from 'path';
+import Tree from 'hexlet-trees';
+
+const getPathParts = filepath => filepath.split(path.sep).filter(part => part !== '');
+
+export default class {
+  constructor() {
+    this.tree = new Tree('/', { type: 'dir' });
+  }
+
+  touchSync(filepath) {
+    const { dir, base } = path.parse(filepath);
+
+    if (!this.isDirectory(dir)) {
+      return false;
+    }
+
+    const current = this.findNode(dir);
+
+    return current.addChild(base, { type: 'file' });
+  }
+
+  isFile(filepath) {
+    const current = this.findNode(filepath);
+
+    return !!current && current.getMeta().type === 'file';
+  }
+
+  mkdirSync(filepath) {
+    const { dir, base } = path.parse(filepath);
+
+    if (!this.isDirectory(dir)) {
+      return false;
+    }
+
+    const parent = this.findNode(dir);
+
+    return parent.addChild(base, { type: 'dir' });
+  }
+
+  isDirectory(filepath) {
+    const current = this.findNode(filepath);
+
+    return !!current && current.getMeta().type === 'dir';
+  }
+
+  findNode(filepath) {
+    const parts = getPathParts(filepath);
+
+    return parts.length === 0 ? this.tree : this.tree.getDeepChild(parts);
+  }
+}
+
+
+
+>>>>>> Информация о файле <<<<<<
+
+// # Информация о файле:
+// isFile(path)
+const parts = getPathParts(path);
+const current = this.getDeepChild(parts);
+
+return current & current.getMeta().type === 'file';
+
+// isDirectory, isSocket, isSymbolicLink
+
+ 
+// # Объект со статистикой:
+// state.isFile()
+// stats.isDirectory()
+
+// util.inspect(stats) =>
+{
+  dev: 2114,
+  ino: 48064969,
+  mode: 33188,
+  nlink: 1,
+  uid: 85,
+  gid: 100,
+  size: 527,
+  blocks: 8,
+  atime: 'Mon, 10 Oct 2011 23:24:11 GMT',
+  birthtime: 'Mon, 10 Oct 2011 23:24:11 GMT',
+  // ...
+}
+
+// # Интерфейс:
+files.mkdirSync('/etc');
+files.statSync('/etc').isDirectory(); // true
+files.isDirectory('/etc'); // true
+
+files.touchSync('/file.txt');
+files.statSync('/file.txt').isFile(); // true
+files.isFile('/file.txt'); // true
+
+
+// # Полиморфизм:
+// touchSync(path)
+return parent.addChild(name, new File(name));
+// file.getStats().isFile();
+
+// mkdirSync(path)
+return parent.addChild(name, new Dir(name));
+// file.getStats().isDirectory();
+
+statSync(path) {
+  const keys = getPathParts(path);
+  const current = this.tree.getDeepChild(keys);
+
+  return current.getMeta().getStats();
+}
+
+
+
+/**@@@
+Задача состоит в том, чтобы реализовать тип Stats и его формирование посредством динамической диспетчеризации благодаря подтипам Node.
+
+Stats.js
+Реализуйте тип Stats со следующим интерфейсом:
+
+constructor
+isFile()
+isDirectory()
+Node.js
+Реализуйте надтип Node, интерфейсом которого являются функции:
+
+getStats()
+getName()
+Dir.js, File.js
+Реализуйте подтипы Dir и File (надтип Node). Варианты использования этих типов можно увидеть в файле HexletFs.js.
+*/
+
+// FILE: /app/Dir.js:
+import Node from './Node';
+
+export default class extends Node {
+  isDirectory() {
+    return true;
+  }
+
+  isFile() {
+    return false;
+  }
+}
+
+// FILE: /app/File.js:
+import Node from './Node';
+
+export default class extends Node {
+  constructor(name, body) {
+    super(name);
+    this.body = body;
+  }
+
+  getBody() {
+    return this.body;
+  }
+
+  isDirectory() {
+    return false;
+  }
+
+  isFile() {
+    return true;
+  }
+}
+
+// FILE: /app/Node.js:
+import Stats from './Stats';
+
+export default class {
+  constructor(name) {
+    this.name = name;
+  }
+
+  getStats() {
+    return new Stats(this.isFile(), this.isDirectory());
+  }
+
+  getName() {
+    return this.name;
+  }
+}
+
+// FILE: /app/Stats.js:
+export default class {
+  constructor(file, directory) {
+    this.file = file;
+    this.directory = directory;
+  }
+
+  isFile() {
+    return this.file;
+  }
+
+  isDirectory() {
+    return this.directory;
+  }
+}
+
+
+
+
+/*
+# Дополнительные материалы
+Stats в стандартной библиотеке Node.js https://nodejs.org/api/fs.html#fs_class_fs_stats
+*/
+
 ############################### JS: DOM API ###############################   
 
 /*
