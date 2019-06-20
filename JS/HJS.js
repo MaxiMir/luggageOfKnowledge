@@ -10041,13 +10041,921 @@ export default class {
   }
 }
 
-
-
-
 /*
 # Дополнительные материалы
 Stats в стандартной библиотеке Node.js https://nodejs.org/api/fs.html#fs_class_fs_stats
 */
+
+
+
+>>>>>> Обработка ошибок <<<<<<
+
+// # Ошибка:
+'Blue Whale'.indexOf('Blue'); // 0
+'Blue Whale'.indexOf('Blute'); // -1
+
+const pos = 'Blue Whale'.indexOf('Whale');
+
+if (pos !== -1) {
+  // ...
+}
+
+
+// # Возможные ошибки:
+files.rmdirSync(path);
+
+/**
+  * Директория не существует
+  * Передан файл
+  * Директория не существует
+
+  * Передана не строка
+
+
+# Типы ошибок:
+- Эксплуатационные ошибки:
+Ошибки времени выполнения возникающие в корректных программах
+
+- Ошибки программирования
+Баги в программе  
+
+
+# Обработка ошибок:
+- Значительная часть кода
+- Сложно предусмотреть заранее
+- Сильная система типов может помочь
+- Необходимы тесты
+*/
+
+// # StatSync:
+statSync(path) {
+  const parts = getPathParts(path);
+  const current = this.tree.getDeepChild(parts);
+
+  if (!current) {
+    return false;
+  }
+
+  return current.getMeta().getStats();
+}
+
+
+
+/**@@@
+HexletFs.js
+Реализуйте следующие возможности файловой системы HexletFs:
+
+mkdirpSync(path)
+Создает директории рекурсивно (в отличие от mkdir).
+
+Если в пути встречается файл, то возвращает false, т.к. нельзя создать директорию внутри файла.
+Если все отработало корректно, то возвращается true
+readdirSync(path)
+Возвращает список файлов (и папок) указанной директории.
+
+Если директории не существует, то возвращает false
+Если передан файл, то возвращает false
+*/
+
+
+// FILE: //app/
+import path from 'path';
+import Tree from 'hexlet-trees';
+import { Dir, File } from 'hexlet-fs';
+
+
+const getPathParts = filepath => filepath.split(path.sep).filter(part => part !== '');
+
+export default class {
+  constructor() {
+    this.tree = new Tree('/', new Dir('/'));
+  }
+
+  statSync(filepath) {
+    const current = this.findNode(filepath);
+
+    if (!current) {
+      return null;
+    }
+
+    return current.getMeta().getStats();
+  }
+
+  mkdirSync(filepath) {
+    const current = this.findNode(filepath);
+
+    if (current) {
+      return false;
+    }
+
+    const { base, dir } = path.parse(filepath);
+    const parent = this.findNode(dir);
+
+    if (!parent || parent.getMeta().isFile()) {
+      return false;
+    }
+
+    parent.addChild(base, new Dir(base));
+
+    return true;
+  }
+
+  mkdirpSync(filepath) {
+    const result = getPathParts(filepath).reduce((subtree, part) => {
+      if (!subtree) {
+        return false;
+      }
+      const current = subtree.getChild(part);
+      if (!current) {
+        return subtree.addChild(part, new Dir(part));
+      }
+      if (current.getMeta().isFile()) {
+        return false;
+      }
+
+      return current;
+    }, this.tree);
+
+    return !!result;
+  }
+
+  readdirSync(filepath) {
+    const current = this.findNode(filepath);
+    if (!current || current.getMeta().isFile()) {
+      return false;
+    }
+    return current.getChildren()
+      .map(child => child.getKey());
+  }
+
+  touchSync(filepath) {
+    const { base, dir } = path.parse(filepath);
+    const parent = this.findNode(dir);
+
+    if (!parent) {
+      return false;
+    }
+
+    if (parent.getMeta().isFile()) {
+      return false;
+    }
+
+    parent.addChild(base, new File(base, ''));
+
+    return true;
+  }
+
+  rmdirSync(filepath) {
+    const { base } = path.parse(filepath);
+    const current = this.findNode(filepath);
+
+    if (!current) {
+      return false;
+    }
+
+    if (current.getMeta().isFile() || current.hasChildren()) {
+      return false;
+    }
+
+    current.getParent().removeChild(base);
+
+    return true;
+  }
+
+  findNode(filepath) {
+    const parts = getPathParts(filepath);
+
+    return parts.length === 0 ? this.tree : this.tree.getDeepChild(parts);
+  }
+}
+
+
+
+>>>>>> Коды ошибок <<<<<<
+
+// # Как возвращать?
+const result = files.rmdir(path);
+
+if ([/* errors list */].includes(result)) { // код ошибки может совпадать с результатом
+  // error
+} else {
+  // success
+}
+
+// # C style:
+#include <stdio.h>
+#include <errno.h>
+
+extern int errno;
+
+int main () {
+  FILE * fp;
+  fp = fopen("filedoesnotexist.txt", "rb");
+  if (fp === NULL) { // Value of errno is: 2
+    fprint (stderr, "Value of errno: %d'n", errno);
+  } else {
+    fclose(fp);
+  }
+
+  return 0;
+}
+
+// # Golang style:
+package main
+import (
+  "fmt"
+  "io"
+  "io/ioutil"
+)
+
+func main() {
+  dat, err := ioutil.ReadFile("/tmp/dat") // чтение файла
+  if e != nil {
+    fmt.Println(err.Error())
+  }
+  fmt.Print(string(dat))
+}
+
+
+// # Destructuring:
+const [data, err] = files.readFileSync('/unknow');
+
+if (err === null) {
+  // do something with data
+} else {
+  // fandle error
+}
+
+// return [null, errors.code.ENOENT];
+
+/**@@@
+Ошибок, связанных с файловой системой, очень много, и для их ручной генерации существуют удобные библиотеки. Например, errno. Пример использования:
+*/
+
+import errors from 'errno';
+
+errors.code.ENOTEMPTY;
+// → {
+//     "errno": 53,
+//     "code": "ENOTEMPTY",
+//     "description": "directory not empty"
+//   }
+
+
+/*
+Список ошибок можно подсмотреть тут: https://github.com/rvagg/node-errno/blob/master/errno.js
+
+HexletFs.js
+Реализуйте следующие возможности файловой системы HexletFs:
+
+unlinkSync(path)
+Удаляет файл (в реальной фс все чуть сложнее, см. hard link).
+
+Возможные ошибки:
+
+ENOENT - файл не найден
+EPERM - операция не разрешена. Такая ошибка возникает в случае, если path это директория
+writeFileSync(path, content)
+Записывает content в файл по пути path.
+
+Возможные ошибки:
+
+ENOENT - родительская директория, в которой нужно создать файл, не существует
+EISDIR - path является директорией
+ENOTDIR - родительский элемент не является директорией
+readFileSync(path)
+Читает содержимое файла по пути path.
+
+ENOENT - файл не найден
+EISDIR - path является директорией
+Подсказки
+Тип File содержит метод getBody, который возвращает содержимое файла.
+*/
+
+// FILE: /app/HexletFs.js:
+import path from 'path';
+import errors from 'errno';
+import Tree from 'hexlet-trees';
+import { Dir, File } from 'hexlet-fs';
+
+const getPathParts = filepath => filepath.split(path.sep).filter(part => part !== '');
+
+export default class {
+  constructor() {
+    this.tree = new Tree('/', new Dir('/'));
+  }
+
+  statSync(filepath) {
+    const current = this.findNode(filepath);
+
+    if (!current) {
+      return [null, errors.code.ENOENT];
+    }
+
+    return [current.getMeta().getStats(), null];
+  }
+
+  unlinkSync(filepath) {
+    const current = this.findNode(filepath);
+
+    if (!current) {
+      return [null, errors.code.ENOENT];
+    }
+
+    if (current.getMeta().isDirectory()) {
+      return [null, errors.code.EPERM];
+    }
+
+    return [current.getParent().removeChild(current.getKey()), null];
+  }
+
+  writeFileSync(filepath, body) {
+    const { base, dir } = path.parse(filepath);
+    const parent = this.findNode(dir);
+
+    if (!parent) {
+      return [null, errors.code.ENOENT];
+    }
+
+    if (parent.getMeta().isFile()) {
+      return [null, errors.code.ENOTDIR];
+    }
+
+    const current = parent.getChild(base);
+
+    if (current && current.getMeta().isDirectory()) {
+      return [null, errors.code.EISDIR];
+    }
+
+    return [parent.addChild(base, new File(base, body)), null];
+  }
+
+  readFileSync(filepath) {
+    const current = this.findNode(filepath);
+
+    if (!current) {
+      return [null, errors.code.ENOENT];
+    }
+
+    if (current.getMeta().isDirectory()) {
+      return [null, errors.code.EISDIR];
+    }
+
+    return [current.getMeta().getBody(), null];
+  }
+
+  mkdirpSync(filepath) {
+    const result = getPathParts(filepath).reduce((subtree, part) => {
+      if (!subtree) {
+        return false;
+      }
+
+      const current = subtree.getChild(part);
+
+      if (!current) {
+        return subtree.addChild(part, new Dir(part));
+      }
+
+      if (current.getMeta().isFile()) {
+        return false;
+      }
+
+      return current;
+    }, this.tree);
+
+    return !!result;
+  }
+
+  touchSync(filepath) {
+    const { base, dir } = path.parse(filepath);
+    const parent = this.findNode(dir);
+
+    if (!parent) {
+      return [null, errors.code.ENOENT];
+    }
+
+    if (parent.getMeta().isFile()) {
+      return [null, errors.code.ENOTDIR];
+    }
+
+    return [parent.addChild(base, new File(base, '')), null];
+  }
+
+  readdirSync(filepath) {
+    const dir = this.findNode(filepath);
+
+    if (!dir) {
+      return [null, errors.code.ENOENT];
+    }
+
+    if (dir.getMeta().isFile()) {
+      return [null, errors.code.ENOTDIR];
+    }
+
+    return [dir.getChildren().map(child => child.getKey()), null];
+  }
+
+  findNode(filepath) {
+    const parts = getPathParts(filepath);
+
+    return parts.length === 0 ? this.tree : this.tree.getDeepChild(parts);
+  }
+}
+
+
+
+>>>>>> Исключения <<<<<<
+
+// # Глубоко в стеке:
+const [data, err] = files.readFileSync(path);
+
+if (err) {
+  return err;
+} else {
+  // process
+}
+
+/*
+# Исключительная ситуация:
+ * Критическая ошибка, после которой невозможно восставновление (до какой-то точки стека)
+ * Всегда приводит к раскрутке стека вызовов.
+*/
+
+// # Синтаксис:
+сonst g = () => undefinedFunc();
+const f = () => g();
+
+try {
+  f();
+} catch (e) {
+  console.log(e);
+}
+
+// ReferenceError: undefinedFunc is not defined
+// at g (main.js:60:17)
+// at f (main.js:61:17)
+// at Object.<anonymous> (main.js:64:3)
+
+// # Возбуждение исключения:
+// const obj = new Error(message);
+// throw obj;
+
+statSync(path) {
+  const parts = getPathParts(path);
+  const current = this.tree.getDeepChild(parts);
+
+  if (!current) {
+    const error = errors.code.ENOENT;
+    throw new HexletFsError(error, path);
+  }
+
+  return current.getMeta().getStats();
+}
+
+/* 
+# Эмпирическое правило:
+You throw an exception when your method is unable to do what it promises to - Jeff Richter
+"Нужно бросать эсключчение, тогда, когда функция не способна выполнить то, что обещает"
+*/
+
+
+/**@@@
+Реализуйте функцию copySync(src, dest), которая копирует файл из src в dest.
+
+Если dest это путь до папки, то имя файла берется из src
+Если dest это путь до файла (существующего или нет), то его содержимое становится равным src
+Возможные ошибки:
+
+EISDIR - возникает в случае, если src это директория, а не файл
+ENOENT - возникает в случае, если src не существует, а так же возникает в случае, если не существует директорий по пути dest (копирование не создает директорий)
+*/
+
+// FILE: /app/
+import path from 'path';
+import errors from 'errno'; // eslint-disable-line
+import Tree from 'hexlet-trees'; // eslint-disable-line
+import { Dir, File } from 'hexlet-fs'; // eslint-disable-line
+
+import HexletFsError from './HexletFsError';
+
+const getPathParts = filepath =>
+  filepath.split(path.sep).filter(part => part !== '');
+
+export default class {
+  constructor() {
+    this.tree = new Tree('/', new Dir('/'));
+  }
+
+  statSync(filepath) {
+    const current = this.findNode(filepath);
+    if (!current) {
+      throw new HexletFsError(errors.code.ENOENT, filepath);
+    }
+    return current.getMeta().getStats();
+  }
+
+  copySync(src, dest) {
+    const data = this.readFileSync(src);
+    const destNode = this.findNode(dest);
+    if (destNode && destNode.getMeta().isDirectory()) {
+      const { base } = path.parse(src);
+      const fullDest = path.join(dest, base);
+      return this.writeFileSync(fullDest, data);
+    }
+    return this.writeFileSync(dest, data);
+  }
+
+  writeFileSync(filepath, body) {
+    const { dir, base } = path.parse(filepath);
+    const parent = this.findNode(dir);
+    if (!parent || parent.getMeta().isFile()) {
+      throw new HexletFsError(errors.code.ENOENT, filepath);
+    }
+    const current = parent.getChild(base);
+    if (current && current.getMeta().isDirectory()) {
+      throw new HexletFsError(errors.code.EISDIR, filepath);
+    }
+    parent.addChild(base, new File(base, body));
+  }
+
+  touchSync(filepath) {
+    const { dir, base } = path.parse(filepath);
+    const parent = this.findNode(dir);
+    if (!parent) {
+      throw new HexletFsError(errors.code.ENOENT, filepath);
+    }
+    if (parent.getMeta().isFile()) {
+      throw new HexletFsError(errors.code.ENOTDIR, filepath);
+    }
+    return parent.addChild(base, new File(base, ''));
+  }
+
+  mkdirpSync(filepath) {
+    getPathParts(filepath).reduce((subtree, part) => {
+      const current = subtree.getChild(part);
+      if (!current) {
+        return subtree.addChild(part, new Dir(part));
+      }
+      if (current.getMeta().isFile()) {
+        throw new HexletFsError(errors.code.ENOTDIR, filepath);
+      }
+
+      return current;
+    }, this.tree);
+  }
+
+  readFileSync(filepath) {
+    const current = this.findNode(filepath);
+    if (!current) {
+      throw new HexletFsError(errors.code.ENOENT, filepath);
+    }
+    if (current.getMeta().isDirectory()) {
+      throw new HexletFsError(errors.code.EISDIR, filepath);
+    }
+    return current.getMeta().getBody();
+  }
+
+  findNode(filepath) {
+    const parts = getPathParts(filepath);
+    return parts.length === 0 ? this.tree : this.tree.getDeepChild(parts);
+  }
+}
+
+// FILE: /app/HexletFsError.js:
+export default class extends Error {
+  constructor({ code, errno, description }, path) {
+    super(`${code}: ${description}, ${path}`);
+
+    this.name = this.constructor.name;
+    this.stack = (new Error()).stack;
+    this.code = code;
+    this.errno = errno;
+    this.path = path;
+  }
+}                                                                                                                      
+
+
+############################### JS: Асинхронное программирование ###############################
+
+>>>>>>>> Введение <<<<<<
+
+/*
+JavaScript – язык, созданный для выполнения на клиентской стороне. Это сильно повлияло не только на устройство самого языка, но и на то, как устроены его среды исполнения: браузеры, Node.js и другие. Браузер заточен под так называемую событийную модель, когда код не исполняется непрерывно, а ожидает пользовательских событий: нажатий на кнопки, кликов мышкой или скроллинга. Каждое из этих (и десятка других) событий запускает нужный обработчик, причём к нему предъявляются особые требования: он не должен блокировать работу, так как на одно событие может выполняться много задач (практически параллельно), и при этом пользователь должен иметь возможность продолжать взаимодействовать с интерфейсом.
+
+По этим причинам все движки (исполнители js-кода) построены по асинхронной модели. Любые операции ввода/вывода (например, выполнение Ajax-запросов) выполняются асинхронно. Асинхронный код устроен совершенно отлично от синхронного и требует времени на привыкание. Кроме того, он сложен, у него другой способ обработки ошибок и, в целом, другие подходы при написании. Добавляя одни возможности, он создаёт множество проблем в других местах: то, что легко делалось в синхронном коде, становится крайне сложным в асинхронном.
+
+Асинхронное программирование в JavaScript прошло несколько стадий: от колбеков, через промисы и до концепции async/await. Все эти подходы по-своему важны и рассматриваются в данном курсе.
+*/
+
+
+>>>>>> Стек вызовов (Call Stack) <<<<<<
+
+/*
+Перед тем, как погружаться в асинхронное программирование, разберём один важный момент, связанный с исполнением кода. Тот код, который мы писали ранее, называется синхронным, так как он последовательно выполняется прямо здесь и сейчас.
+*/
+const data = [16, 64, 4];
+const data2 = data.map(Math.sqrt); // => [4, 8, 2]
+const predicate = v => v > 2
+const data3 = data2.filter(predicate); // => [4, 8]
+
+/*
+Каждая строчка в коде выше выполняется только тогда, когда выполнится предыдущая. Причём выполнение каждой конкретной строчки может быть сколь угодно сложным. Если посмотреть на вторую строку, то видно, что вызывается функция map, которая внутри себя вызывает функцию Math.sqrt. В реальных приложениях глубина такого погружения может быть просто огромной, на сотни функций внутрь. Такая цепочка функций, вызывающих друг друга, называется стеком вызовов (call stack). Почему именно стеком? Потому что именно так происходит процесс исполнения кода. Каждый внутренний вызов добавляет текущую функцию внутрь стека — и так до самой глубокой функции. Затем, когда происходит возврат, начинается раскрутка стека — из него по очереди (в обратном порядке, ведь это стек) извлекаются функции и продолжают своё выполнение с того места, где внутренняя функция вернула результат.
+
+Рассмотрим ещё один пример:
+*/
+const multiply = (a, b) => a * b;
+
+const square = n => multiply(n, n);
+
+const printSquare = (n) => {
+  const squared = square(n)
+  console.log(squared);
+};
+
+printSquared(5);
+
+/*
+Вот, какой стек построит интерпретатор:
+const multiply = (a, b) => a * b;
+const square = n => multiply(n, n);
+
+const printSquare = (n) => {
+  const squared = square(n)
+  console.log(squared);
+};
+
+printSquared(5);
+
+Стек вызовов:
+multiply(n, n)
+square(n)
+printSquare(5)
+main()
+
+Мы, как разработчики, видим стек вызовов каждый день в выводе ошибок. Backtrace (обратная трассировка) — ни что иное, как стек вызовов, записанный в обратном порядке. Для демонстрации я допустил ошибку в третьей строке нашего кода:
+*/
+
+const data = [16, 64, 4];
+const data2 = data.map(Math.sqrt); // => [4, 8, 2]
+const predicate = v => unkonwn > 2;
+const data3 = data2.filter(predicate); // => [4, 8]
+
+// Запуск (код расположен в файле index.js) и вывод:
+$ nodejs index.js
+
+index.js:3
+const predicate = v => unkonwn > 2;
+                               ^
+
+ReferenceError: unkonwn is not defined
+    at predicate (index.js:3:32)
+    at Array.filter (<anonymous>)
+    at Object.<anonymous> (index.js:4:21)
+
+/*
+Важно понимать, что стек вызовов растёт только тогда, когда вызовы идут в глубину. Это видно по выводу: в бектрейсе не фигурирует первая и вторая строчки, в нём описана последовательность, начиная от вызова фильтра и дальше.
+
+Механизм исключений в js, как и в других языках, полностью опирается на наличие стека вызовов. Более того, он создан для того, чтобы удобно "раскручивать" этот стек. Любое возникающее исключение поднимается вверху по стеку вызовов, до тех пор пока не наткнется на конструкцию try/catch либо до тех пор пока стек вызовов не закончится.
+*/
+
+const data = [16, 64, 4];
+const data2 = data.map(Math.sqrt); // => [4, 8, 2]
+const predicate = v => unkonwn > 2;
+
+try {
+  const data3 = data2.filter(predicate); // => [4, 8]
+} catch (e) {
+  console.log('Catch it');
+  console.log(e.stack);
+}
+
+
+/*
+И хотя функция predicate, содержащая ошибку, находится вне блока try/catch, он всё равно поймает ошибку внутри этой функции, так как predicate вызывается внутри по цепочке.
+*/
+$ node index.js
+Catch it
+ReferenceError: unkonwn is not defined
+    at predicate (index.js:3:32)
+    at Array.filter (<anonymous>)
+
+/*
+Существуют специальные инструменты, которые позволяют визуализировать стек вызовов. Обычно их используют во время профайлинга — процесса поиска узких мест для ускорения приложения.
+
+# Дополнительные материалы
+Стек https://ru.wikipedia.org/wiki/Стек
+Стек вызовов https://ru.wikipedia.org/wiki/Стек_вызовов
+
+
+В каком случае стек вызовов растет?
+> Во время вызова функции
+
+В каком случае стек вызовов уменьшается?
+> При возврате из функции
+
+Какая информация содержится в стеке вызовов?
+> Имя функции
+> Номер строчки, на которой находится функция
+> Имя файла в котором была определена функция
+*/
+
+
+
+>>>>>> Асинхронный код <<<<<<
+
+/*
+Примеры в этом уроке даются на основе работы с файловой системой, потому что именно они лучше всего раскрывают суть асинхронного программирования. Принципы работы асинхронного кода абсолютно идентичны и для фронтенда, и для бекенда.
+
+В синхронном коде выполнение функций происходит в том же месте, где они были вызваны, и в тот момент, когда происходит вызов. В асинхронном коде всё по-другому. Вызов функции не означает, что она отработает прямо здесь и сейчас. Более того, мы не знаем, когда она отработает. Разберём пример с копированием файла через чтение и повторную запись в другой файл:
+*/
+
+import fs from 'fs';
+
+const content = fs.readFileSync('./myfile', 'utf-8');
+fs.writeFileSync('./myfile-copy', content);
+
+/*
+Пример кода написан для Node.js: здесь используется модуль fs и его синхронные функции для чтения и записи файла (их особенность в том, что имена оканчиваются на Sync). Такой код работает как ожидается: сначала читается содержимое файла в константу content, затем оно же записывается в другой файл. Каждая строчка приводит к блокировке, то есть выполнение программы ждёт, пока операционная система прочитает файл (а это делает именно она) и отдаст его содержимое программе, и только затем выполняется следующая строчка. Соответственно, там, где происходит запись, программа ожидает, пока операционная система запишет файл на диск (это не совсем правда, но данная тема выходит за рамки урока, подробнее в книгах по операционным системам), и только затем продолжает работу.
+
+В принципе, здесь можно было бы и остановится — зачем что-то делать с этим кодом? Дело в том, что любые файловые операции занимают много времени (они в тысячи раз медленнее, чем вызов обычной функции), в течение которого процесс ничего не делает: он висит в ожидании ответа от ядра о результате операции. Поэтому синхронный подход в случае файловых операций очень неэффективно утилизирует ресурсы. Асинхронный же код продолжает выполняться во время любых файловых операций. Другими словами, код никогда не блокируется на IO операциях, но может узнать об их завершении. Правильно написанные асинхронные программы (в тех ситуациях, где это нужно) значительно эффективнее синхронных. Иногда это настолько критично, что синхронная версия просто не справится с задачей.
+
+Небольшая ремарка. IO — это ввод/вывод. К нему относится не только работа с файлами, но и любое сетевое взаимодействие (которое, в конечном итоге, сводится к работе с файлами). Даже печать на экран — это тоже запись в файл.
+
+Теперь попробуем прийти к асинхронному коду через понимание принципов его работы. Представим, что функция readFile в примере ниже асинхронная. Это значит, что она читает файл не прямо в том месте, где её вызвали, а где-то в другом месте на фоне:
+*/
+
+import fs from 'fs';
+
+// пустая функция, чуть позже разберём её смысл,
+// но асинхронная версия readFile требует передачи функции третьим параметром
+const noop = () => {};
+const content = fs.readFile('./myfile', 'utf-8', noop);
+console.log(content);
+
+// Возможно ли появление такого асинхронного кода? Ответ сразу — нет. Неважно, какую конкретно задачу выполняет эта функция, важно лишь одно — она не выполняет её сразу, а значит у неё невозможен возврат. Если запустить подобный код, то мы увидим такой вывод:
+
+$ node index.js
+undefined
+
+/*
+Это фундаментальная особенность асинхронных функций, которую нужно запомнить раз и навсегда. Приходится подчёркивать этот момент, потому что новички постоянно спотыкаются на нём, пытаясь работать с асинхронными функциями как с синхронными.
+
+Тогда возникает вопрос: как получить результат выполнения этой функции? А вот для этого используется ещё одна функция, которая передаётся в асинхронную. В этом качестве она называется функцией обратного вызова или просто коллбек (callback). Эта функция будет вызвана в тот момент, когда операция закончится (возможно, с ошибкой). Она имеет следующую сигнатуру: callback(error, result). Первым параметром в неё передаётся ошибка, если всё было плохо, вторым — результат операции, если всё было хорошо. Про ошибки мы поговорим чуть позже, а сейчас разберём общие принципы работы.
+*/
+
+import fs from 'fs';
+
+const callback = (_error, data) => console.log(data);
+fs.readFile('./myfile', 'utf-8', callback);
+
+// Запуск и вывод:
+$ node index.js
+content of file
+
+// Как только операция завершилась, интерпретатор Node.js внутри себя вызвал колбек, передав ему параметром содержимое файла. Осталось убедиться в том, что этот код действительно асинхронный:
+
+import fs from 'fs';
+
+const callback = (_error, data) => console.log(data);
+console.log('before read');
+fs.readFile('./myfile', 'utf-8', callback);
+console.log('after read?');
+
+// Запуск и вывод:
+$ node index.js
+before read
+after read?
+content of file
+
+/*
+Несмотря на то, что after read? выводится последней инструкцией, реальный вывод отличается от порядка инструкций в коде. Асинхронная функция хоть и запустилась на выполнение сразу, но колбек вызывается только в тот момент, когда в текущем стеке вызовов не останется ни одной функции. В нашем случае это означает, что она запускается только после отработки всего файла. И этот запуск породит свой собственный стек вызовов.
+
+В асинхронном коде каждый колбек асинхронной функции порождает свой собственный стек вызовов, который, в свою очередь, может выполнять новые асинхронные вызовы и так далее до бесконечности.
+
+Node.js дожидается завершения всех асинхронных вызовов, которые были сделаны в процессе работы программы:
+*/
+
+import fs from 'fs';
+
+fs.readFile('./myfile', 'utf-8', (_error, data) => console.log('First!'));
+fs.readFile('./myfile', 'utf-8', (_error, data) => console.log('Second!'));
+
+/*
+В примере выше мы видим запуск двух асинхронных операций. Теперь мы знаем, что второе чтение файла запустится практически одновременно с первым, так как операции асинхронные и их выполнение не блокирует поток выполнения программы. Попробуйте ответить на вопрос, в каком порядке появится результат?
+
+Запуск и вывод:
+*/
+$ node index.js
+Second!
+First!
+$ node index.js
+First!
+Second!
+
+/*
+Как видите, на этот вопрос нельзя дать однозначный ответ. Асинхронные операции могут выполниться в любом порядке, если они запускаются одновременно. И единственный способ упорядочить их — делать последовательный запуск, и об этом мы поговорим далее.
+
+Асинхронное программирование значительно сложнее синхронного. Видеть линейный код (последовательно записанный) и думать о нём нелинейно — очень тяжело. Дальше вы увидите, что с ростом числа асинхронных функций в рамках одной программы сложность увеличивается экспоненциально, и в какой-то момент перестаёшь понимать, что происходит. Для борьбы с ней придумано множество выходов, некоторые из которых оказались очень удачными и рассматриваются в более поздних уроках курса.
+
+# Дополнительные материалы
+синхронная функция readFileSync из модуля fs https://nodejs.org/api/fs.html#fs_fs_readfilesync_path_options
+асинхронная функция readFile из модуля fs https://nodejs.org/api/fs.html#fs_fs_readfile_path_options_callback
+*/
+
+
+/**@@@
+printer.js
+Реализуйте асинхронную функцию, которая читает данные файла по указанному пути и печатает их на экран.
+*/
+import print from './printer';
+print('./myfile');
+
+
+// FILE: /app/printer.js:
+import fs from 'fs';
+
+export default filepath => 
+  fs.readFile(
+    filepath,
+    'utf-8',
+    (error, data) => console.log(data),
+  );
+
+
+>>>>>> Возврат в асинхронном коде <<<<<<
+
+/*
+Остановимся чуть подробнее на возврате значений из асинхронных функций. В прошлом уроке мы выяснили, что асинхронные функции никогда не возвращают результат:
+*/
+import fs from 'fs';
+
+const noop = () => {};
+const content = fs.readFile('./myfile', 'utf-8', noop);
+console.log(content); // undefined
+
+// И единственный способ получить результат — описать логику в коллбеке. Тогда возникает вопрос: а что, если сделать return внутри коллбека? К чему это приведёт?
+
+import fs from 'fs';
+
+const noop = () => {};
+const content = fs.readFile('./myfile', 'utf-8', (_error, data) => {
+  // что-нибудь делаем
+  return data;
+});
+console.log(content); // undefined
+
+// В результате ничего не меняется, так как этот возврат никем не используется. Это не означает, что сама инструкция return бесполезна в асинхронном коде. Напротив, она часто бывает полезна, но лишь как способ прервать выполнение кода, а не вернуть результат.
+
+import fs from 'fs';
+
+const noop = () => {};
+const content = fs.readFile('./myfile', 'utf-8', (_error, data) => {
+  if (data === '') {
+    return;
+  }
+  // делаем что-нибудь с данными
+});
+console.log(content); // undefined
+
+/*
+Этот паттерн называется guard expression.
+
+Всё тоже самое распространяется и на асинхронные функции, которые мы пишем сами. Асинхронной является любая функция, внутри которой есть хоть одна асинхронная операция. Без исключения. Даже если помимо асинхронной операции, она выполняет и синхронные, например, производит манипуляции с текстом. В свою очередь, каждая асинхронная функция обязана принимать на вход колбек, так как это единственный способ упорядочивать события и отслеживать завершение.
+
+Напишем асинхронную функцию-обёртку для чтения файла, которая, кроме самого чтения, выполняет небольшую чистку, удаляя начальные и концевые пробелы из содержимого. Сразу вспоминаем, что, раз наша функция асинхронная, то она обязана принимать на вход функцию-колбек, которая будет вызвана по окончании операции. Эта функция должна иметь общепринятую сигнатуру, то есть принимать первым параметром ошибку и вторым — сами данные. Возврата данных через return в нашей асинхронной функции быть не может.
+*/
+import fs from 'fs';
+
+const readFileWithTrim = (filepath, cb) => {
+  fs.readFile(filepath, 'utf-8', (_error, data) => {
+    cb(null, data.trim());
+  })
+}
+
+readFileWithTrim('./', (_error, data) => console.log(data));
+
+/*
+Этот процесс рекурсивен по своей природе, любая функция, которая внутри работает с асинхронной функцией, становится асинхронной и начинает принимать на вход колбек. Почему так происходит? Почему нельзя просто выполнить асинхронную операцию внутри, никак не сообщая об этом наружу? Дело в том, что в такой ситуации вы не можете ни воспользоваться результатом работы асинхронной функции (ведь данные приходят в колбек в другом стеке вызовов), ни узнать о том, закончилась ли операция вообще и закончилась ли она успешно. Всё это рассмотрим в следующих уроках.
+*/
+
+
+/**@@@
+writer.js
+Реализуйте асинхронную функцию, которая записывает данные по указанному пути и оповещает о завершении работы через переданный колбек.
+*/
+import write from './writer';
+
+write('./myfile', 'data', () => {
+  console.log('success');
+});
+
+
+// FILE: /app/writer.js:
+import fs from 'fs';
+
+export default (filepath, data, cb) => {
+  fs.writeFile(filepath, data, cb);
+};
 
 ############################### JS: DOM API ###############################   
 

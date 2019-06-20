@@ -1,6 +1,5 @@
 // ############### ES6 ###############
 
-
 /*@ var и let @*/
 var elems = document.querySelectorAll('p');
 
@@ -26,12 +25,12 @@ console.log(i); // => Ошибка
 
 /*@ Деструктуризация @*/
 
-// 1:
-var nums = [1, 20, 7, 6, 5];
-Math.max(...nums); // нахождение максимального числа через Spread Operator => 20
+// #1 нахождение максимального числа через Spread Operator:
+const nums = [1, 20, 7, 6, 5];
+Math.max(...nums); //  => 20
 
 
-// 2:
+// #2 меняем значения a,b местами:
 let a = 1;
 let b = 2;
 
@@ -40,7 +39,7 @@ let b = 2;
 console.log(a); // => 2
 console.log(b); // => 1
 
-// 3:
+// #3:
 let arr = [1, 2, 3, 4, 5, 6]; 
 let [num1, num2, ...nums] = arr; 
 
@@ -49,7 +48,7 @@ console.log(num2); // => 2
 console.log(nums); // => [3, 4, 5, 6]
 
 
-// 4:
+// #4:
 function func(a, ...arrs) {
 	console.log(a); // => [1, 2, 3]
 	console.log(arrs); // => [[4, 5, 6], [7, 8, 9]]
@@ -58,16 +57,15 @@ function func(a, ...arrs) {
 func([1, 2, 3], [4, 5, 6], [7, 8, 9]);
 
 
-// 5:
-function concatArrs(...arrs) // Конкатенация произвольного количества массивов:
+// #5 конкатенация произвольного количества массивов:
+function concatArrs(...arrs) // 
 {
 	return [].concat(...arrs);
 }
 
-// 6:
+// #6:
 function createElem(tag, parent, options) {
-	let {border = '1px solid black', width = 100, height = 100} = options; // со значениями по умолчанию
-
+	let { border = '1px solid black', width = 100, height = 100 } = options; // со значениями по умолчанию
 	let elem = document.createElement(tag);
 
 	elem.style.border = border;
@@ -77,12 +75,10 @@ function createElem(tag, parent, options) {
 	parent.appendChild(elem);
 }
 
-createElem('div', document.body, {width: 400, height: 300})
-
+createElem('div', document.body, { width: 400, height: 300 })
 
 
 /*@ Создание свойств: @*/
-
 let width = 100;
 let height = 200;
 let border = '1px solid red';
@@ -96,12 +92,10 @@ let options = {
 console.log(options);
 
 
-
 /*@ Слайдер: @*/
 setInterval(() => {
 	[img[0].src, img[1].src, img[2].src] = [img[1].src, img[2].src, img[0].src];
 }, 1000); 
-
 
 
 /*@ Цикл для перебора массива: @*/ 
@@ -112,10 +106,8 @@ for (let elem of arr) {
 // При этом цикл для перебора объекта: for (let key in obj) {}, в key - будет значение ключа
 
 
-
 /*@ Проверка на существование элемента в массиве: @*/ 
-arr.find(e => e === 'что ищем'); 
-
+arr.find(e => e === 'что ищем');
 
 
 /*@ Копирование массива: @*/ 
@@ -123,11 +115,9 @@ let arr = [1, 2, 3];
 let [...clone] = arr;
 
 
-
 /*@ Сортировка: @*/ 
 let arr = [1, 2, 3];
 arr = arr.sort((a, b) => a - b);
-
 
 
 /*@ Удаление дублей из массива: @*/ 
@@ -139,10 +129,8 @@ function uniq(arr) {
 console.log(uniq([1, 2, 1, 3, 4, 2, 5])); // => [1, 2, 3, 4, 5]
 
 
-
 /*@ Запомнить элементы на которые был клик (Set): @*/
 let set = new Set;
-
 let elems = document.querySelectorAll('p');
 
 for (let elem of elems) {
@@ -169,12 +157,12 @@ let inputs = document.querySelectorAll('input');
 let map = new Map; // создаем новую коллекцию
 
 for (let input in inputs) {
-    map.set(input, {values: [], index: -1}); // для каждого перебираемого input создаем пустой объект
+    map.set(input, { values: [], index: -1 }); // для каждого перебираемого input создаем пустой объект
     
     input.addEventListener('blur', function () {
-       let {values, index} = map.get(this); // получаем предыдущие значения
+       let { values, index } = map.get(this); // получаем предыдущие значения
        values.push(this.value); // добавляем текущее значение
-       map.set(this, {values: values, index: index + 1}); //  переопределяем
+       map.set(this, { values: values, index: index + 1 }); //  переопределяем
        
        this.value = ''; // удаляем данные из input
        
@@ -182,7 +170,7 @@ for (let input in inputs) {
     });
     
     input.addEventListener('keydown', function (event) { // по нажатию кнопки влево - в input выводим предыдущие введенные значения
-        let {values, index} = map.get(this);
+        let { values, index } = map.get(this);
         
         if (event.key === 'ArrowLeft' && index > -1)  {
             event.preventDefault();
@@ -201,11 +189,9 @@ for (let input in inputs) {
 }
 
 
-
 /*@ Преобразуем строку в массив: @*/ 
 let str = 'abcde'; 
 let letters = [...str];
-
 
 
 /*@ Преобразуем число в массив цифр: @*/ 
@@ -213,18 +199,15 @@ let num = 12345;
 let nums = [...String(num)];
 
 
-
 /*@ Применение деструктуризации для свойств DOM элементов при переборе циклом for: @*/ 
-
 let elems = document.querySelectorAll('p');
 
-for (let {id, innerHTML: content} of elems) { // получаем ID элемента и его содержимое
+for (let { id, innerHTML: content } of elems) { // получаем ID элемента и его содержимое
     console.log(id, content);
 }
 
 
 /*@ Применение итераторов, деструктуризации и for of для получение порядкового номера DOM элемента: @*/ 
-
 let elems = document.querySelectorAll('p');
 let entries = elems.entries(); // итератор entries => [ключ, элемент]
 
@@ -233,18 +216,14 @@ for (let [num, {id, innerHTML}] of entries) {
 }
 
 
-
 /*@ Использование метода reduce для преобразования двухмерного массива в одномерный @*/
-
 let array = [[1, 2, 3], [4, 5], [6]]; 
 
 console.log(array.reduce((flat, current) => flat.concat(current), [])); // => [1, 2, 3, 4, 5, 6]
 
 
 
-
 /*@ Promise @*/
-
 // предоставляет удобный способ организации асинхронного кода.
 
 /** СТАТУСЫ:
