@@ -11458,7 +11458,6 @@ export const getDirectorySize = (dirpath, cb) => {
 */
 const f = () => console.log('hey!');
 setTimeout(f, 1000);
-
 /*
 В коде выше функция f выполнится не раньше, чем через секунду. Об этом нам говорит второй параметр, в который передаётся время, указанное в миллисекундах, после которого запустится функция, указанная первым параметром. По историческим причинам у таймеров есть минимальная задержка, которую они соблюдают всегда, и она равна четырём миллисекундам. Другими словами, нет разницы между вызовами setTimeout(f, 1), setTimeout(f, 3) и setTimeout(f, 4) — во всех этих случаях минимальная задержка равна 4.
 
@@ -11475,6 +11474,8 @@ setTimeout(f, 1000);
 console.log('after timeout');
 
 // скрипт не заканчивается, а дожидается выполнения таймеров
+
+// Запуск:
 $ node index.js
 
 before timeout
@@ -11500,7 +11501,6 @@ console.log('after timeout');
 clearTimeout(timerId);
 
 // Запуск:
-
 $ node index.js
 
 before timeout
@@ -11512,6 +11512,1956 @@ const f = message => console.log(message);
 console.log('before timeout');
 setTimeout(f('hey!'), 1000);
 console.log('after timeout');
+
+//
+$ node index.js
+
+before timeout
+hey!
+timers.js:390
+    throw new ERR_INVALID_CALLBACK();
+    ^
+
+TypeError [ERR_INVALID_CALLBACK]: Callback must be a function
+
+/*
+До последнего лога дело не дошло, потому что скрипт упал на вызове setTimeout, так как он ожидал на вход функцию, а пришла не функция (вызов в примере вернул значение undefined).
+
+
+Запомнить данные внутри функции можно тремя способами:
+
+# Дополнительные параметры в setTimeout:
+Все аргументы, переданные в setTimeout после второго аргумента (времени), автоматически становятся аргументами функции, которую вызовет таймер.
+*/
+const f = (a, b) => console.log(a + b);
+setTimeout(f, 1000, 5, 8);
+// =>  13
+
+/*
+# Функция-обёртка
+
+Наиболее распространённый способ — создание функции-обёртки. Такой способ лучше предыдущего из-за его прозрачности: сразу видно, что происходит.
+*/
+const f = (a, b) => console.log(a + b);
+setTimeout(() => f(5, 8), 1000);
+// =>  13
+
+/*
+# bind
+
+Последний способ — использовать функцию bind. Основное предназначение этой функции — смена контекста функции. Но как побочный эффект она может использоваться для частичного применения:
+*/
+const f = (a, b) => console.log(a + b);
+// Первый параметр null потому что контекст не меняется
+setTimeout(f.bind(null, 5, 8), 1000);
+// =>  13
+
+/*
+Вызов этой функции возвращает новую функцию с применёнными аргументами.
+
+Важно понимать, что таймер не делает операцию (та, что выполняется при вызове функции, переданной в setTimeout) асинхронной — таймер лишь откладывает время её выполнения. Если сама операция синхронная, то после запуска она заблокирует основной поток выполнения программы, и все остальные будут ждать её завершения.
+
+# setInterval:
+
+Функция setInterval имеет точно такую же сигнатуру, как и setTimeout. Смысл аргументов — тот же самый. Разница в том, что setInterval автоматически запускает функцию не один раз, а до тех пор, пока её явно не остановят через clearInterval. Время между запусками равно переданному второму параметру.
+*/
+
+const id = setInterval(() => console.log(new Date()), 5000);
+setTimeout(() => clearInterval(id), 16000);
+
+// $ node index.js
+// 2019-06-05T19:05:28.149Z
+// 2019-06-05T19:05:33.172Z
+// 2019-06-05T19:05:38.177Z
+
+// Таймер можно остановить изнутри, передав в колбек его id.
+let counter = 0;
+const id = setInterval(() => {
+  counter += 1;
+
+  if (counter == 4) {
+    return;
+  }
+
+  console.log(new Date());
+}, 5000);
+
+
+/*
+Дополнительные материалы
+setTimeout https://developer.mozilla.org/ru/docs/Web/API/WindowTimers/setTimeout
+setInterval https://developer.mozilla.org/ru/docs/Web/API/WindowOrWorkerGlobalScope/setInterval
+*/
+
+/**@@@
+watcher.js
+Реализуйте и экспортируйте по умолчанию асинхронную функцию, которая следит за изменением файла. Если файл был изменён со времени предыдущей проверки, то необходимо вызвать колбек. Параметры функции:
+
+ * Путь до файла, который нужно отслеживать
+ * Период отслеживания
+ * Колбек, который принимает на вход только ошибку
+*/
+import watch from './watcher';
+
+const id = watch(filepath, 500, (err) => {
+  console.log('Wow!');
+});
+
+setTimeout(() => fs.appendFileSync(filepath, 'ehu'), 700);
+
+/*
+Реализуйте эту логику используя функцию setInterval. Функция должна возвращать наружу идентификатор таймера. Если во время анализа файла (через fs.stat) произошла ошибка, то нужно остановить таймер и вызвать колбек, передав туда ошибку.
+
+Подсказки
+stats.mtimeMs — время последнего изменения
+Date.now() — текущая дата
+*/
+
+// FILE: /app/watcher.js:
+import fs from 'fs';
+
+const check = (timerId, filepath, period, cb) => {
+  fs.stat(filepath, (err, stat) => {
+    if (err) {
+      clearInterval(timerId);
+      cb(err);
+
+      return;
+    }
+
+    if ((Date.now() - stat.mtimeMs) < period) {
+      cb(null);
+    }
+  });
+};
+
+export default (filepath, period, cb) => {
+  const timerId = setInterval(() => check(timerId, filepath, period, cb), period);
+
+  return timerId;
+};
+
+
+
+>>>>>> Event Loop <<<<<
+
+/*
+Для лучшего понимания асинхронности неплохо разобраться с тем, как устроен рантайм (браузер или Node.js) JavaScript. JavaScript изначально появился в браузерах, и к нему предъявлялись особые требования, из-за которых он кардинально отличается от остальных языков программирования. Браузер работает по так называемой событийной модели. Он загружает страницу и ждёт действий от пользователя: клики, набор текста или движение мышкой. А код, загруженный на страницу, реагирует на эти события.
+
+Такая организация взаимодействия невозможна в синхронном коде, у которого есть понятия "запуск" и "завершение" работы. Код в браузере не может завершиться совсем, он проходит стадию инициализации, а затем ждёт событий для реакции на них. Технически это выглядит, как колбек, который соединён с определённым типом события. Когда событие срабатывает, то колбек вызывается.
+
+Организация асинхронного взаимодействия требует наличия событийного цикла (Event Loop). Он может быть реализован как на уровне языка в виде библиотеки, так и на уровне рантайма, как в случае с JavaScript. Упрощённо цикл событий можно представить себе так:
+*/
+// Ждем событие
+while (queue.waitForMessage()) {
+  // Обрабатываем
+  queue.processNextMessage();
+}
+// Возвращаемся к первому шагу
+
+
+/*
+Как только появляется новое событие, оно начинает обрабатываться (тем самым обработчиком, который мы повесили на это событие). Время обработки события может быть довольно большим, но это не значит, что в этот момент браузер зависает и не даёт пользователю работать. Нет, напротив, благодаря тому, что код асинхронный, события могут (и будут) накапливаться в очереди (queue). Именно поэтому в коде выше сообщение проверяется в переменной с именем queue.
+
+Событийный цикл всегда работает в однопоточном режиме (понимание этой темы кроется в операционных системах). Это значит, что события обрабатываются строго последовательно. Причём, запуск одного события может приводить к выполнению довольно тяжёлого кода, который работает достаточно долго. Такое периодически встречается, когда страницы сайта вдруг начинают подвисать. Проверьте себя, как вы поняли предыдущие темы. В какой момент начнёт обрабатываться следующее событие?
+
+Правильный ответ: В тот момент, когда текущий стек вызовов опустеет. Пока текущий стек не пуст, все остальные ждут его завершения. Исключение составляют Workers https://developer.mozilla.org/ru/docs/DOM/Using_web_workers, но это отдельная тема.
+
+# Дополнительные материалы
+Как на самом деле работает асинхронность? https://www.youtube.com/watch?v=8cV4ZvHXQL4
+*/
+
+
+/**@@@
+Это задание напрямую не связано с теорией урока, но позволяет еще больше прокачаться в работе с асинхронным кодом.
+
+В библиотеке async https://caolan.github.io/async/v3/docs.html#waterfall есть функция waterfall, которая позволяет строить цепочки асинхронных функций без необходимости вкладывать их друг в друга. Подробнее о том как она работает, посмотрите в документации. Попробуйте решить данное упражнение с применением этой функции.
+
+file.js
+Реализуйте и экспортируйте асинхронную функцию unionFiles, которую мы рассматривали в предыдущих уроках. Вот её обычное решение на колбеках:
+*/
+
+import fs from 'fs';
+
+const unionFiles = (inputPath1, inputPath2, outputPath, cb) => {
+  fs.readFile(inputPath1, 'utf-8', (error1, data1) => {
+    if (error1) {
+      cb(error1);
+      return;
+    }
+    fs.readFile(inputPath2, 'utf-8', (error2, data2) => {
+      if (error2) {
+        cb(error2);
+        return;
+      }
+      fs.writeFile(outputPath, `${data1}${data2}`, (error3) => {
+        if (error3) {
+          cb(error3);
+          return;
+        }
+        cb(null); // не забываем последний успешный вызов
+      });
+    });
+  });
+}
+
+// Попробуйте написать её, используя указанную выше функцию waterfall.
+
+
+// FILE: /app/file.js:
+import fs from 'fs';
+import { waterfall } from 'async';
+
+export const unionFiles = (inputPath1, inputPath2, outputPath, cb) => {
+  waterfall([
+    callback => fs.readFile(inputPath1, callback),
+    (data1, callback) => fs.readFile(inputPath2, (err, data2) => callback(err, data1, data2)),
+    (data1, data2, callback) => fs.writeFile(outputPath, `${data1}${data2}`, callback),
+  ], cb);
+};
+
+
+// FILE: /app/__tests__/test.js:
+import path from 'path';
+import os from 'os';
+import fs from 'fs';
+import { unionFiles } from '../file';
+
+let output;
+let filepath1;
+let filepath2;
+
+beforeAll(() => {
+  const tmpDir = fs.mkdtempSync(`${os.tmpdir()}/`);
+  output = path.join(tmpDir, 'output');
+  filepath1 = path.join(tmpDir, 'source1');
+  fs.writeFileSync(filepath1, 'data1');
+  filepath2 = path.join(tmpDir, 'source12');
+  fs.writeFileSync(filepath2, 'data2');
+});
+
+test('unionFiles 1', (done) => {
+  unionFiles('/undefined', filepath2, output, (err) => {
+    expect(err).not.toBeNull();
+    done();
+  });
+});
+
+test('unionFiles 2', (done) => {
+  unionFiles(filepath1, '/undefined', output, (err) => {
+    expect(err).not.toBeNull();
+    done();
+  });
+});
+
+test('unionFiles 3', (done) => {
+  unionFiles(filepath1, filepath2, '/a/b/c/', (err) => {
+    expect(err).not.toBeNull();
+    done();
+  });
+});
+
+test('unionFiles 4', (done) => {
+  unionFiles(filepath1, filepath2, output, (err) => {
+    expect(err).toBeNull();
+
+    fs.readFile(output, 'utf-8', (err2, data2) => {
+      expect(err2).toBeNull();
+      expect(data2).toBe('data1data2');
+      done();
+    });
+  });
+});
+
+
+
+
+>>>>>> Промисы (Promise) <<<<<<
+
+/*
+Писать асинхронный код — не самое приятное удовольствие в жизни, и вообще непонятно, как можно создавать достаточно большие асинхронные программы на колбеках. Оказывается, их можно создавать вполне успешно, если использовать не колбеки, а другие механизмы, позволяющие писать асинхронный код без "лесенки". К таким механизмам относятся промисы (Promise). Промисы входят в стандарт EcmaScript и реализованы практически во всех рантаймах. Node.js постепенно интегрирует их во все свои модули: например, в модуле fs промисы доступны как свойство promises. У промисов довольно много особенностей, и к ним нужно привыкнуть. Промисы это удобная абстракция для написания асинхронного кода.
+*/
+
+import { promises as fs } from 'fs';
+
+export const copy = (src, dest) => {
+  return fs.readFile(src, 'utf-8')
+    .then(content => fs.writeFile(dest, content));
+};
+// Тот же код но короче
+// const copy = (src, dest) =>
+//   fs.readFile(src, 'utf-8').then(content => fs.writeFile(dest, content));
+
+/*
+Первое, на что стоит обратить внимание, промисы не добавляют нового синтаксиса, вся работа с ними сводится к вызову функций. Технически промис — это объект, который возвращается из функции, выполняющей асинхронную операцию:
+*/
+
+const promise = fs.readFile(src, 'utf-8');
+
+// Очень важно понимать, что промис — это не результат асинхронной операции. Это объект, который отслеживает выполнение операции. Операция по-прежнему асинхронна и выполнится когда-нибудь потом.
+
+const promise = fs.readFile(src, 'utf-8');
+console.log(promise);
+// Promise { <pending> }
+
+/*
+Теперь самое интересное: как получить результат выполнения асинхронной операции? Снаружи — никак, это просто невозможно. Но промис можно "продолжить", используя метод then, в который нужно передать функцию обработчик — такой же колбек, который мы использовали ранее. Отличие этого колбека в том, что он принимает на вход только данные, а не ошибки. Обработка ошибок в промисах рассматривается в следующем уроке.
+*/
+
+fs.readFile(src, 'utf-8').then(content => console.log(content));
+// Или проще, ведь функции — уже функции, их не надо оборачивать в функции
+// fs.readFile(src, 'utf-8').then(console.log);
+
+/*
+В свою очередь then тоже возвращает промис. Причём ему неважно, какая операция выполнялась внутри колбека — асинхронная или нет. То, что вернётся из этого колбека, пойдёт значением в следующий then. Эта идея крайне важна, поэтому я её особо подчеркну. То, что возвращается из колбека в then, не является результатом возврата самой функции then. Эта функция всегда возвращает промис, внутри которого оказывается результат из колбека.
+*/
+
+const promise = fs.readFile(src, 'utf-8') // результат цепочки ВСЕГДА промис
+  .then(() => 'go to the next then') // игнорируем результат операции
+  .then(console.log); // в этот колбек, роль которого играет лог, передается значение с предыдущего then
+// => go to the next then
+
+/*
+Вопрос на самопроверку. Что выведется на экран, если добавить к промису выше then(console.log)?
+
+Если в коде начали применяться промисы, то весь асинхронный код должен строиться с их использованием. Иногда бывает такое, что нужная библиотека умеет работать только с колбеками, и тогда её оборачивают в промис. То, как это сделать, мы рассмотрим позже, когда научимся использовать промисы.
+
+В нашем первом примере демонстрировался код, в котором из then возвращается промис.
+*/
+fs.readFile(src, 'utf-8').then(content => fs.writeFile(dest, content));
+
+// В этом случае промис ведёт себя немного отлично от возврата обычного значения. Дальнейшая цепочка начинает строиться от того промиса, который вернулся из колбека.
+
+fs.readFile(src, 'utf-8')
+  .then(content => fs.writeFile(dest, content));
+  // Следующий then берется от writeFile. То есть этот код равносилен fs.writeFile(dest, content).then(...)
+  .then(() => console.log('writing has been finished!'));
+
+/*
+Благодаря такому поведению можно строить цепочки вызовов, в которых каждая следующая операция ждёт окончания предыдущей. С другой стороны, любая функция, которая использует внутри себя промис, автоматически становится промисом и обязана вернуть промис наружу. Именно поэтому в нашей функции copy есть возврат. Только в этом случае вызывающий код сможет встроить эту функцию и контролировать ход выполнения асинхронной операции.
+*/
+
+export const copy = (src, dest) => {
+  return fs.readFile(src, 'utf-8')
+    .then(content => fs.writeFile(dest, content));
+};
+
+/*
+Если бы возврата не было, то было бы непонятно, как получить результат копирования или хотя бы дождаться его завершения.
+
+Дополнительные материалы
+promisejs.org https://www.promisejs.org/
+*/
+
+
+/**@@@
+file.js
+Реализуйте и экспортируйте асинхронную функцию reverse, которая меняет строчки в файле в обратом порядке
+*/
+
+import { reverse } from './file';
+
+// До
+// one
+// two
+reverse(filepath);
+
+// После
+// two
+// one
+
+// FILE: /app/__tests__/test.js:
+import { promises as fs, readFileSync } from 'fs';
+import { reverse } from '../file';
+
+const reverseLines = data => data.split('\n').reverse().join('\n');
+
+test('reverse 1', () => {
+  const content = 'one\ntwo';
+  const filepath = '/tmp/example';
+  const promise = fs.writeFile(filepath, content)
+    .then(() => reverse(filepath))
+    .then(() => readFileSync(filepath, 'utf-8'));
+  return expect(promise).resolves.toBe(reverseLines(content));
+});
+
+// FILE: /app/file.js:
+import { promises as fs } from 'fs';
+
+export const reverse = filepath => fs.readFile(filepath, 'utf-8')
+  .then(data => fs.writeFile(filepath, data.split('\n').reverse().join('\n')));
+
+
+>>>>>> Обработка ошибок в промисах <<<<<<
+
+/*
+Ошибки внутри промисов обрабатываются крайне просто. Для перехвата достаточно вызвать метод catch и передать туда колбек, принимающий на вход саму ошибку:
+*/
+
+import { promises as fs } from 'fs';
+
+const promise = fs.readFile('unkownfile');
+promise.catch(e => console.log('error!!!', e));
+// => error!!! { [Error: ENOENT: no such file or directory, open 'unkownfile']
+// errno: -2, code: 'ENOENT', syscall: 'open', path: 'unkownfile' }
+
+// catch, в свою очередь, возвращает promise, что позволяет коду восстанавливать работу после ошибок и продолжать цепочку. Вполне нормально писать код в стиле цепочки, в которой чередуются then и catch:
+
+
+import { promises as fs } from 'fs';
+
+const promise = fs.readFile('unkownfile')
+  .catch(console.log)
+  .then( () => fs.readFile('anotherUnknownFile'))
+  .catch(console.log);
+
+/*
+В большинстве ситуаций не имеет значения, на какой из операций упало. Любое падение должно прерывать текущее выполнение и уходить в блок обработки ошибки. Именно так работает код с try/catch, и такое же поведение эмулируется промисами. Дело в том, что, если возникла ошибка, то она передаётся по цепочке первому встреченному catch, а все встреченные на пути then игнорируются. Поэтому код выше можно упростить так:
+*/
+
+import { promises as fs } from 'fs';
+
+const promise = fs.readFile('unkownfile')
+  .then(() => fs.readFile('anotherUnknownFile'))
+  .catch(console.log);
+
+/*
+Семантически эти версии кода не эквивалентны. В первом случае вторая операция чтения начнёт выполняться обязательно, независимо от того, как закончилась предыдущая. В последнем — если упадёт первое чтение файла, то второе не будет выполнено.
+
+Иногда ошибку нужно генерировать самостоятельно. Самый простой способ сделать это — бросить исключение. К этому тоже надо привыкнуть. try/catch использовать нельзя (потому что бесполезно), а вот бросать исключения можно. Промис сам их преобразует, как надо, и отправит по цепочке в поиске вызова catch:
+*/
+
+import { promises as fs } from 'fs';
+
+const promise = fs.readFile('unkownfile')
+  .then((data) => {
+    // делаем что нибудь
+    throw new Error('boom!');
+  })
+  .then(() => {
+    // Этот then не будет вызван, из—за исключения на предыдущем шаге
+  })
+  .catch(console.log);
+
+// Другой способ вернуть результат вызова функции — Promise.reject, внутрь которой передаётся сама ошибка:
+
+import { promises as fs } from 'fs';
+
+const promise = fs.readFile('unkownfile')
+  .then((data) => {
+    // делаем что нибудь
+    return Promise.reject(new Error('boom!'));
+  })
+  .catch(console.log);
+
+// Помимо чисто технических моментов в обработке ошибок есть и архитектурно-организационные. Если вам приходится реализовывать асинхронные функции, которыми будут пользоваться другие люди, то никогда не подавляйте ошибок:
+
+import { promises as fs } from 'fs';
+
+const readFileEasily = (filepath) => fs.readFile(filepath).catch(console.log);
+
+// Перехватив ошибку, вы не оставляете шансов узнать о ней вызывающему коду. Тот, кто использует эту функцию, не сможет отреагировать на ошибочную ситуацию. Если обработка ошибки всё же нужна — обрабатывайте, но не забывайте генерировать её снова:
+
+import { promises as fs } from 'fs';
+
+const readFileEasily = (filepath) => fs.readFile(filepath)
+  .catch((e) => {
+    console.log(e); // В библиотеках так делать нельзя, только в своем коде
+    throw e;
+  });
+
+// Теперь вызывающий код может обработать ошибку:
+readFileEasily('path/to/file').catch(/* ... */);
+
+
+/*
+Что происходит после того как отработал catch?
+> Промис продолжает выполнять то что было добавлено в then уже после catch
+*/
+
+/**@@@
+file.js
+Реализуйте и экспортируйте асинхронную функцию touch, которая создает файл если его не существует.
+*/
+
+import { touch } from './file';
+
+touch('/myfile').then(() => console.log('created!'));
+
+/*
+Подсказка
+fs.access - проверка сущестования файла
+*/
+
+// FILE: /app/tests.js:
+import { promises as fs } from 'fs';
+
+export const touch = filepath => fs.access(filepath)
+  .catch(() => fs.writeFile(filepath));
+
+
+// FILE: /app/__tests__/test.js:
+import os from 'os';
+import { promises as fs } from 'fs';
+import _ from 'lodash';
+import { touch } from '../file';
+
+test('touch 1', () => {
+  const filepath = `${os.tmpdir()}/example`;
+  const promise = fs.unlink(filepath)
+    .catch(_.noop)
+    .then(() => touch(filepath))
+    .then(() => fs.access(filepath, 'utf-8'));
+  return expect(promise).resolves.toBe();
+});
+
+test('touch 2', () => {
+  const filepath = `${os.tmpdir()}/example`;
+  const promise = fs.unlink(filepath)
+    .catch(_.noop)
+    .then(() => fs.writeFile(filepath, 'content'))
+    .then(() => touch(filepath))
+    .then(() => fs.readFile(filepath, 'utf-8'));
+  return expect(promise).resolves.toBe('content');
+});
+
+
+
+>>>>>> Цепочка промисов <<<<<<
+
+/*
+Даже при использовании промисов не всегда понятно, как структурировать асинхронный код. В этом уроке мы разберём некоторые полезные практики, делающие его проще для написания и анализа. Возьмём уже знакомую нам задачку по объединению двух файлов.
+*/
+
+import fs from 'fs';
+
+const unionFiles = (inputPath1, inputPath2, outputPath, cb) => {
+  fs.readFile(inputPath1, 'utf-8', (error1, data1) => {
+    if (error1) {
+      cb(error1);
+      return;
+    }
+    fs.readFile(inputPath2, 'utf-8', (error2, data2) => {
+      if (error2) {
+        cb(error2);
+        return;
+      }
+      fs.writeFile(outputPath, `${data1}${data2}`, cb);
+    });
+  });
+}
+
+
+// Запомните этот код — таким вы больше никогда его не увидите ;) Сейчас мы проведём серию рефакторингов и получим в результате код, который является каноническим при работе с промисами. Итак, первая версия:
+
+import { promises as fs } from 'fs';
+
+const unionFiles = (inputPath1, inputPath2, outputPath) => {
+  // Промисы всегда должны возвращаться и строиться в цепочку!
+  return fs.readFile(inputPath1, 'utf-8')
+    .then((data1) => {
+      return fs.readFile(inputPath2, 'utf-8')
+        .then((data2) => fs.writeFile(outputPath, `${data1}${data2}`));
+    });
+};
+
+/*
+Хорошая новость — код стал понятнее и уменьшился в объёме. К тому же, из него целиком ушла обработка ошибок, так как промисы обрабатывают их автоматически и, если вызывающий код захочет их перехватывать, то сделает это самостоятельно через метод catch. Но есть и плохая новость — код всё ещё структурирован, как колбеки, "лесенкой". В этом коде не учитывается свойство промисов, связанное с возвратом из then. Напомню, что, если из колбека возвращается промис, то дальнейшая цепочка then/catch продолжается от него.
+*/
+
+import { promises as fs } from 'fs';
+
+const unionFiles = (inputPath1, inputPath2, outputPath) => {
+  return fs.readFile(inputPath1, 'utf-8')
+    .then(data1 => fs.readFile(inputPath2, 'utf-8'))
+    // then ниже берется от промиса readFile
+    .then(data2 => fs.writeFile(outputPath, `${<как сюда попадет data1?>}${data2}`));
+};
+
+/*
+Эта версия совсем плоская, именно к такому коду нужно стремиться в промисах. Но она таит в себе одну проблему. Если где-то в цепочке ниже нужны данные, которые были получены сверху, то придется протаскивать их сквозь всю цепочку. В примере выше это результат чтения первого файла. Переменная data1 недоступна в том месте, где происходит запись в файл. Основной выход из данной ситуации — создание переменных, через которые данные будут прокинуты дальше:
+*/
+
+import { promises as fs } from 'fs';
+
+const unionFiles = (inputPath1, inputPath2, outputPath) => {
+  let data1;
+
+  return fs.readFile(inputPath1, 'utf-8')
+    .then(content => {
+      data1 = content;
+    })
+    .then(() => fs.readFile(inputPath2, 'utf-8'))
+    .then(data2 => fs.writeFile(outputPath, `${data1}${data2}`));
+};
+
+/*
+Уже не так красиво, но всё ещё плоско. Преимущество такого подхода становится всё более и более очевидным с увеличением количества промисов. Тем более, далеко не всегда нужно передавать данные дальше.
+
+Выберите правильные ответы
+> Нужно стремиться делать цепочки промисов максимально плоскими. Иначе получатся те же колбеки, но через then.
+> Промисы стоит использовать только с асинхронным кодом
+*/
+
+/**@@@
+file.js
+Реализуйте и экспортируйте асинхронную функцию getTypes, которая анализирует список переданных путей и возвращает массив (в промисе), с описанием того, что находится по каждому из путей:
+*/
+
+import { getTypes } from './file';
+
+getTypes(['/etc', '/etc/hosts', '/undefined']).then(console.log);
+// ['directory', 'file', null]
+
+/*
+Эта функция должна отрабатывать успешно в любом случае. Если во время выполнения асинхронной операции возникла ошибка, то значением для этого пути будет null. Для простоты считаем, что в эту функцию всегда передается как минимум один путь для обработки (иначе придется задействовать механизм, который проходится в курсах далее).
+
+Подсказки
+fs.stat - информация о файле или директории. Для проверки на директорию используйте метод isDirectory.
+Методы then и catch не меняют сам промис, а возвращают новый
+*/
+
+// FILE: /app/__tests__/file.js:
+import { getTypes } from '../file';
+
+test('getTypes 1', () => {
+  const actual = getTypes(['undefined']);
+  return expect(actual).resolves.toEqual([null]);
+});
+
+test('getTypes 2', () => {
+  const actual = getTypes(['/etc']);
+  return expect(actual).resolves.toEqual(['directory']);
+});
+
+test('getTypes 3', () => {
+  const actual = getTypes(['/etc/hosts']);
+  return expect(actual).resolves.toEqual(['file']);
+});
+
+test('getTypes 4', () => {
+  const actual = getTypes(['/etc/hosts', '/undefined', '/etc/bashrc', '/etc']);
+  return expect(actual).resolves.toEqual(['file', null, null, 'directory']);
+});
+
+test('getTypes 5', () => {
+  const actual = getTypes(['/undefined', '/etc/hosts', '/et', '/etc/bashrc']);
+  return expect(actual).resolves.toEqual([null, 'file', null, null]);
+});
+
+
+// FILE: /app/file.js:
+import { promises as fs } from 'fs';
+
+const getTypeName = stat => (stat.isDirectory() ? 'directory' : 'file');
+
+export const getTypes = (paths) => {
+  const [first, ...rest] = paths;
+  const result = [];
+
+  let promise = fs.stat(first)
+    .then(data => result.push(getTypeName(data)))
+    .catch(() => result.push(null));
+
+  rest.forEach((path) => {
+    promise = promise.then(() => fs.stat(path))
+      .then(data => result.push(getTypeName(data)))
+      .catch(() => result.push(null));
+  });
+
+  return promise.then(() => result);
+};
+
+
+
+>>>>>> Promise.all <<<<<<
+
+/*
+Промисы, как и колбеки, позволяют выполнять асинхронные операции параллельно. Причём умеют делать это в автоматическом режиме, без ручного отслеживания окончания одной из операций. Для этого достаточно собрать массив из промисов и передать их в функцию Promise.all. В результате вернётся обычный промис, на основе которого можно строить дальнейшую цепочку. Данными в первом then будет массив с данными всех выполненных операций.
+*/
+
+import { promises as fs } from 'fs';
+
+const unionFiles = (inputPath1, inputPath2, outputPath) => {
+  const promise1 = fs.readFile(inputPath1, 'utf-8');
+  const promise2 = fs.readFile(inputPath2, 'utf-8');
+  // На вход идет МАССИВ из промисов
+  const promise = Promise.all([promise1, promise2]);
+  // Обязательно делать возврат!
+  return promise.then(([data1, data2]) => fs.writeFile(outputPath, `${data1}${data2}`))
+};
+
+
+/*
+Промисы, как и колбеки, позволяют выполнять асинхронные операции параллельно. Причём умеют делать это в автоматическом режиме, без ручного отслеживания окончания одной из операций. Для этого достаточно собрать массив из промисов и передать их в функцию Promise.all. В результате вернётся обычный промис, на основе которого можно строить дальнейшую цепочку. Данными в первом then будет массив с данными всех выполненных операций.
+*/
+
+import { promises as fs } from 'fs';
+
+const unionFiles = (inputPath1, inputPath2, outputPath) => {
+  const promise1 = fs.readFile(inputPath1, 'utf-8');
+  const promise2 = fs.readFile(inputPath2, 'utf-8');
+  // На вход идет МАССИВ из промисов
+  const promise = Promise.all([promise1, promise2]);
+  // Обязательно делать возврат!
+  return promise.then(([data1, data2]) => fs.writeFile(outputPath, `${data1}${data2}`))
+};
+
+/*
+Получился эффективный код, который ещё и легко понять. К тому же здесь нет дополнительных переменных. Promise.all хоть и возвращает данные в том же порядке, в котором в него были переданы промисы, он не гарантирует последовательность выполнения операций. Не рассчитывайте на это никогда, все операции запускаются одновременно, и какая из них выполнится раньше или позже — неизвестно.
+
+Функции Promise.all не важно каким образом была получена коллекция промисов. Единственное что ей нужно – получить на вход массив этих промисов. Поэтому Promise.all легко комбинируется с любыми функциями, возвращающими коллекции. В примере ниже дается массив путей до файлов, которые нужно прочитать и вывести на экран их содержимое. Первым делом в коде формируется массив из промисов, затем он передается в Promise.all и, наконец, содержимое файлов выводится на экран:
+*/
+
+// promises – массив промисов
+const promises = filepaths.map(filepath => fs.readFile(filepath, 'utf-8'));
+const promise = Promise.all(promises);
+// Выводим на экран содержимое каждого файла
+promise.then(contents => contents.map(console.log))
+
+// map проходится по каждому файлу, и отдает его в нашу функцию, которая выполняет вызов fs.readFile. Каждый такой вызов возвращает промис. Если попробовать распечатать этот массив, то он будет выглядеть так:
+
+const promises = filepaths.map(filepath => fs.readFile(filepath, 'utf-8'));
+console.log(promises);
+[
+  Promise { <pending> },
+  Promise { <pending> },
+  Promise { <pending> },
+  Promise { <pending> },
+  ...
+]
+
+/*
+Ещё одна особенность Promise.all связана с ошибками. Если хотя бы одна операция вернёт ошибку, то весь промис будет отмечен, как выполненный с ошибкой, а значит управление попадёт в ближайший catch. Чтобы этого избежать, можно передавать в Promise.all не просто промисы, а промисы с повешенными на них обработчиками ошибок catch, из которых уже возвращаются данные с пометкой об успешности.
+*/
+
+const promises = filepaths.map(filepath => fs.readFile(filepath, 'utf-8')
+  .then(v => ({ result: 'success', value: v }))
+  .catch(e => ({ result: 'error', error: e })));
+const promise = Promise.all(promises);
+
+/*
+# Дополнительные материалы
+Promise.all https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Promise/all
+*/
+
+/**@@@
+file.js
+Реализуйте и экспортируйте асинхронную функцию getDirectorySize, которая считает размер переданной директории (не включая поддиректории).
+
+import { getDirectorySize } from './file';
+
+getDirectorySize('/usr/local/bin').then(console.log);
+Подсказка
+fs.readdir - чтение содержимого директории
+path.join - конструирует пути
+fs.stat - информация о файле
+_.sumBy - нахождение суммы в массиве
+*/
+
+// FILE: /app/__tests__/file.js:
+import { getDirectorySize } from '../file';
+
+test('getDirectorySize 1', () => {
+  const promise = getDirectorySize('/undefined');
+  return expect(promise).rejects.toThrow();
+});
+
+test('getDirectorySize 2', () => {
+  const promise = getDirectorySize('/opt');
+  return expect(promise).resolves.toBe(0);
+});
+
+test('getDirectorySize 3', () => {
+  const promise = getDirectorySize('/usr/local/bin');
+  return expect(promise).resolves.toBe(1224);
+});
+
+// FILE: /app/file.js:
+import path from 'path';
+import _ from 'lodash';
+import { promises as fs } from 'fs';
+
+export const getDirectorySize = (dirpath) => {
+  const promise = fs.readdir(dirpath).then((filenames) => {
+    const filepaths = filenames.map(name => path.join(dirpath, name));
+    const promises = filepaths.map(fs.stat);
+
+    return Promise.all(promises);
+  });
+
+  return promise.then(stats => _.sumBy(stats, 'size'));
+};
+
+
+
+>>>>>> new Promise <<<<<<
+
+/*
+Если в проекте появились промисы, то, по-хорошему, весь код должен работать только через них. К сожалению, далеко не все библиотеки имеют интерфейс с промисами и работают по-старинке, на колбеках. В таких случаях нужно "обернуть" или, как говорят, "промисифицировать". Создание промиса происходит с помощью конструктора Promise:
+*/
+
+import fs from 'fs';
+
+const promise = new Promise((resolve, reject) => {
+  fs.readFile('/etc/passwd', (err, data) => {
+    if (err) {
+      reject(err);
+    }
+    resolve(data);
+  });
+});
+
+/*
+Промис ожидает на вход функцию, которая будет вызвана в момент создания. Именно внутри этой функции и нужно выполнять асинхронную операцию (на колбеках), которую мы хотим превратить в промис. Промис прокидывает в эту функцию два колбека:
+
+ - resolve — должна быть вызвана в случае успешного завершения асинхронной операции. Ей на вход отдаётся результат этой операции.
+ - reject — должна быть вызвана в случае ошибки. На вход, соответственно, отдаётся ошибка.
+
+Эти функции принимают на вход ровно один аргумент, который затем передаётся либо в then (как данные), либо в catch (как ошибка). Причём достаточно, чтобы вызывалась хотя бы одна из этих функций. Вполне возможно, что понадобится создать промис, который всегда завершается успешно — и это легко сделать, никогда не вызывая reject.
+
+В конечном итоге конструкция new Promise() возвращает самый настоящий промис, с которым можно работать уже привычным для нас способом: 
+*/
+
+promise
+  .then(console.log)
+  .catch(console.log)
+
+/*
+А что, если нужно обернуть две асинхронных операции, или три, или даже больше? Придётся оборачивать каждую из них независимо. Другими словами, одна асинхронная операция — один конструктор new Promise. Кстати, эту задачу можно автоматизировать, и в ноду встроена специальная функция, которая делает промисы из асинхронных функций:
+*/
+
+import util from 'util';
+import fs from 'fs';
+
+const stat = util.promisify(fs.stat);
+stat('.').then((stats) => {
+  // Do something with `stats`
+}).catch((error) => {
+  // Handle the error.
+});
+
+/*
+Во фронтенде такое тоже возможно, достаточно "загуглить" пакет, предоставляющий функцию promisify.
+
+В реальной жизни, встречаются задачи, когда асинхронного кода нет, но нужен промис чтобы построить цепочку. Такой промис можно создать самостоятельно:
+*/
+
+const promise = new Promise(resolve => resolve());
+// promise.then ...
+
+// Тоже самое для промиса, который завершается неуспешно:
+const promise = new Promise((resolve, reject) => reject());
+// promise.catch ...
+
+
+// Для этих задач добавили специальные сокращения, с которыми код становится чище:
+const promise1 = Promise.resolve();
+// promise1.then
+
+const promise2 = Promise.reject();
+// promise2.catch ...
+
+
+/*
+С технической точки зрения, промис — это объект, имеющий три состояния (см. конечные автоматы и автоматное программирование): pending, fulfilled и rejected. Промис начинается в состоянии pending, а затем, с помощью функций ("событий", как говорят в теории автоматов) resolve и reject переводится в одно из конечных (терминальных) состояний fulfilled или rejected. Перейдя однажды в эти состояния, промис уже не может откатиться назад или уйти в другое терминальное состояние. То есть после вызова resolve, нет способа привести промис в состояние rejected, вызывая функцию reject.
+
+# Дополнительные материалы
+util.promisify https://nodejs.org/api/util.html#util_util_promisify_original
+
+Что возвращает вызов метода Promise.resolve()?
+> Промис, который вызовет then если его добавить
+
+Что возвращает вызов метода Promise.reject()?
+> Промис, который вызовет catch если его добавить
+*/
+
+
+/**@@@
+timer.js
+Реализуйте таймер в виде промиса.
+Экспортируйте функцию по умолчанию.
+*/
+import wait from './timer';
+
+wait(100).then(() => console.log('time is over!'));
+
+// FILE:/app/__tests__/test.js:
+import wait from '../timer';
+
+test('wait', () => {
+  const before = new Date();
+  const startTime = before.getTime();
+  const duration = 150;
+
+  return wait(duration).then(() => {
+    const after = new Date();
+    const endTime = after.getTime();
+    const difference = endTime - startTime;
+    expect(difference).toBeGreaterThanOrEqual(duration);
+    expect(difference).toBeLessThan(duration + 30);
+  });
+});
+
+
+// FILE: /app/test.js:
+export default ms => new Promise(resolve => setTimeout(resolve, ms));
+
+
+
+>>>>>> Async/Await <<<<<<
+
+/*
+Несмотря на все удобства, промисы не являются вершиной эволюции. Вспомним минусы, которые они добавляют:
+
+Своя собственная обработка ошибок, которая идёт в обход try/catch. Это значит, что в коде будут появляться оба способа обработки, комбинирующихся в причудливых формах.
+Иногда бывает нужно передавать данные вниз по цепочке с самых верхних уровней, и с промисами делать это неудобно. Придётся создавать переменные вне промиса.
+С промисами по-прежнему легко начать создавать вложенность, если специально за этим не следить.
+
+Все эти сложности убираются механизмом async/await, делающим код с промисами ещё более похожим на синхронный! Вспомним нашу задачу по объединению двух файлов. Вот её код:
+*/
+
+import { promises as fs } from 'fs';
+
+const unionFiles = (inputPath1, inputPath2, outputPath) => {
+  let data1;
+
+  return fs.readFile(inputPath1, 'utf-8')
+    .then(content => {
+      data1 = content;
+    })
+    .then(() => fs.readFile(inputPath2, 'utf-8'))
+    .then(data2 => fs.writeFile(outputPath, `${data1}${data2}`));
+};
+
+// А теперь посмотрим на этот же код с использованием async/await. Подчеркну, что async/await работает с промисами:
+
+import { promises as fs } from 'fs';
+
+const unionFiles = async (inputPath1, inputPath2, outputPath) => {
+  const data1 = await fs.readFile(inputPath1, 'utf-8');
+  const data2 = await fs.readFile(inputPath2, 'utf-8');
+  await fs.writeFile(outputPath, `${data1}${data2}`);
+};
+
+
+/*
+Эта версия практически не отличается от её синхронной версии. Код настолько простой, что даже не верится, что он асинхронный. Разберём его по порядку.
+
+Первое, что мы видим, — это ключевое слово async перед определением функции. Оно означает, что данная функция всегда возвращает промис: const promise = unionFiles(...). Причём, теперь не обязательно возвращать результат из этой функции, она всё равно станет промисом.
+
+Внутри функции используется ключевое слово await, которое ставится перед вызовом функций, которые, в свою очередь, тоже возвращают промисы. Если результат этого вызова присваивается переменной или константе, то в них записывается результат вызова. Если присвоения нет, как в последнем вызове await, то происходит ожидание выполнения операции без использования её результата.
+
+А что с обработкой ошибок? Теперь достаточно поставить обычные try/catch и ошибки будут отловлены!
+*/
+
+import { promises as fs } from 'fs';
+
+const unionFiles = async (inputPath1, inputPath2, outputPath) => {
+  try {
+    const data1 = await fs.readFile(inputPath1, 'utf-8');
+    const data2 = await fs.readFile(inputPath2, 'utf-8');
+
+    await fs.writeFile(outputPath, `${data1}${data2}`);
+  } catch (e) {
+    console.log(e);
+    throw e; // снова бросаем, потому что вызывающий код должен иметь возможность отловить ошибку
+  }
+};
+
+// Однако, при параллельном выполнении промисов не обойтись без функции Promise.all:
+const unionFiles = async (inputPath1, inputPath2, outputPath) => {
+  const promise1 = fs.readFile(inputPath1, 'utf-8');
+  const promise2 = fs.readFile(inputPath2, 'utf-8');
+
+  // сразу можно разложить данные с помощью дестракчеринга
+  const [data1, data2] = await Promise.all([promise1, promise2]);
+
+  await fs.writeFile(outputPath, `${data1}${data2}`);
+};
+
+
+// Подводя итог, механизм async/await делает код максимально плоским и похожим на синхронный. Благодаря нему появляется возможность использовать try/catch и с ним легко манипулировать данными полученными в результате асинхронных операций.
+
+// Код на колбеках
+import fs from 'fs';
+
+fs.readFile('./first', 'utf-8', (error1, data1) => {
+  if (error1) {
+    console.log('boom!');
+    return;
+  }
+
+  fs.readFile('./second', 'utf-8', (error2, data2) => {
+    if (error2) {
+      console.log('boom!');
+      return;
+    }
+
+    fs.writeFile('./new-file', `${data1}${data2}`, (error3) => {
+      if (error3) {
+        console.log('boom!');
+      }
+    });
+  });
+});
+
+// Код на промисах
+import { promises as fs } from 'fs';
+
+let data1;
+fs.readFile('./first', 'utf-8')
+  .then((d1) => {
+    data1 = d1;
+
+    return fs.readFile('./second', 'utf-8');
+  })
+  .then((data2) => fs.writeFile('./new-file', `${data1}${data2}`))
+  .catch(() => console.log('boom!'));
+
+// Код на async/await
+import { promises as fs } from 'fs';
+
+const data1 = await fs.readFile('./first', 'utf-8');
+const data2 = await fs.readFile('./second', 'utf-8');
+await fs.writeFile('./new-file', `${data1}${data2}`);
+
+/*
+Дополнительные материалы
+Пример реального кода из проектов Хекслета https://github.com/Hexlet/hexlet-exercise-kit/blob/master/import-documentation/src/index.js
+*/
+
+/**@@@
+file.js
+Реализуйте и экспортируйте асинхронную функцию exchange, которая обменивает содержимое двух файлов.
+*/
+import { exchange } from './file';
+
+exchange('/myfile1', '/myfile2');
+
+
+// FILE: /app/__tests__/file.js:
+import os from 'os';
+import { promises as fs } from 'fs';
+import { exchange } from '../file';
+
+test('exchange 1', async () => {
+  const firstPath = `${os.tmpdir()}/first`;
+  const secondPath = `${os.tmpdir()}/second`;
+  const firstContent = 'content1';
+  const secondContent = 'content2';
+  await fs.writeFile(firstPath, firstContent);
+  await fs.writeFile(secondPath, secondContent);
+  await exchange(firstPath, secondPath);
+
+  const result1 = await fs.readFile(firstPath, 'utf-8');
+  expect(result1).toBe(secondContent);
+  const result2 = await fs.readFile(secondPath, 'utf-8');
+  expect(result2).toBe(firstContent);
+});
+
+// FILE: /app/file.js:
+import { promises as fs } from 'fs';
+
+export const exchange = async (filepath1, filepath2) => {
+  const data1 = await fs.readFile(filepath1);
+  const data2 = await fs.readFile(filepath2);
+
+  await fs.writeFile(filepath1, data2);
+  await fs.writeFile(filepath2, data1);
+};
+
+
+/**@@@
+promisify.js
+
+Реализуйте и экспортируйте по умолчанию функцию, которая "промисифицирует" асинхронные функции с колбеками.
+*/
+
+import promisify from '../promisify';
+
+const readFile = promisify(fs.readFile);
+const writeFile = promisify(fs.writeFile);
+
+const filepath = '/tmp/myfile';
+
+writeFile(filepath, 'content')
+  .then(() => readFile(filepath));
+  .then(console.log);
+
+/*
+Реализация этой функции опирается на тот факт, что колбек в асинхронных функциях всегда передается последним параметром.
+
+Подсказка
+Вам понадобятся rest и spread операторы
+*/
+
+// FILE: /app/__tests/promisify.js:
+import path from 'path';
+import fs from 'fs';
+import os from 'os';
+import promisify from '../promisify';
+
+const readFile = promisify(fs.readFile);
+const writeFile = promisify(fs.writeFile);
+const access = promisify(fs.access);
+const mkdtemp = promisify(fs.mkdtemp);
+
+test('promisify', async () => {
+  const directory = await mkdtemp(path.join(os.tmpdir(), 'foo-'));
+  const filepath = path.join(directory, 'file');
+  await writeFile(filepath, 'content');
+  await access(filepath);
+  await readFile(filepath);
+});
+
+
+// FILE: /app/promisify.js:
+export default asyncFn => (...args) => {
+  const promise = new Promise((resolve, reject) => {
+    asyncFn(...args, (err, data) => (err ? reject(err) : resolve(data)));
+  });
+
+  return promise;
+};
+
+/**@@@
+ls.js
+Реализуйте и экспортируйте по умолчанию функцию, которая принимает на вход путь и возвращает информацию о файлах и директориях расположенных по этому пути. Данные возвращаются в виде массива объектов, где каждый элемент это информация о конкретном файле: его путь и описание доступов (stat.mode). Объекты в массиве должны быть отсортированы по имени файла.
+*/
+
+import ls from '../ls';
+
+await ls('/var');
+// [
+//   { filepath: '/var/local', mode: 17917 },
+//   { filepath: '/var/lock', mode: 17407 },
+//   { filepath: '/var/log', mode: 16877 },
+// ];
+
+await ls('/etc/passwd');
+// [{ filepath: '/etc/passwd', mode: 33188 }];
+
+/*
+Эта функция должна уметь обрабатывать не только директории, но и файлы. В таком случае отдается массив с одним объектом - информацией по текущему файлу.
+
+Подсказка
+readdir() - чтение директории
+stat() - информация о файле. isFile() - является ли файлом, mode - описание доступа.
+*/
+
+// FILE: /app/
+import ls from '../ls';
+
+test('ls dir', async () => {
+  const expected = [
+    { filepath: '/var/backups', mode: 16877 },
+    { filepath: '/var/cache', mode: 16877 },
+    { filepath: '/var/lib', mode: 16877 },
+    { filepath: '/var/local', mode: 17917 },
+    { filepath: '/var/lock', mode: 17407 },
+    { filepath: '/var/log', mode: 16877 },
+    { filepath: '/var/mail', mode: 17917 },
+    { filepath: '/var/opt', mode: 16877 },
+    { filepath: '/var/run', mode: 16877 },
+    { filepath: '/var/spool', mode: 16877 },
+    { filepath: '/var/tmp', mode: 17407 },
+  ];
+  const actual = await ls('/var');
+  expect(actual).toEqual(expected);
+});
+
+test('ls file', async () => {
+  const expected = [
+    { filepath: '/etc/passwd', mode: 33188 },
+  ];
+  const actual = await ls('/etc/passwd');
+  expect(actual).toEqual(expected);
+});
+
+// FILE: /app/
+import _ from 'lodash';
+import path from 'path';
+import { promises as fs } from 'fs';
+
+export default async (pathForInspect) => {
+  const absolutePath = path.resolve(__dirname, pathForInspect);
+  const stat = await fs.stat(absolutePath);
+
+  if (stat.isFile()) { // guard expression
+    return [{ filepath: absolutePath, mode: stat.mode }];
+  }
+
+  const filenames = await fs.readdir(absolutePath);
+  const filepaths = filenames.sort().map(n => path.join(absolutePath, n));
+  const stats = await Promise.all(filepaths.map(fs.stat));
+  return _.zipWith(filepaths, stats, (filepath, { mode }) => ({ filepath, mode }));
+};
+
+
+
+
+################## JS: Автоматное программирование ##################
+
+/*
+Конечный автомат — удобная модель представления процессов, обладающих несколькими явными состояниями. Этот курс посвящен автоматам и конечным автоматам, а также соответствующим шаблонам проектирования (State, State Machine).
+
+«Компьютер — это конечный автомат. Потоковое программирование нужно тем, кто не умеет программировать конечные автоматы». Алан Кокс, прим. Википедия
+
+Как вы уже заметили, одну и ту же программу можно написать множеством различных способов. Если не брать во внимание случаи, когда программа написана просто плохо, то остаются подходы, которые имеют как преимущества, так и недостатки относительно друг друга. Иными словами, вся наша жизнь состоит из компромиссов.
+
+# Парадигма программирования
+Это совокупность идей и понятий, определяющих стиль написания компьютерных программ (подход к программированию)
+
+Подходы к написанию программ принято называть парадигмами. И эти парадигмы резко отличаются от того, чем они являются в науке.
+
+Своим современным значением в научно-технической области термин «парадигма» обязан, по-видимому, Томасу Куну и его книге «Структура научных революций». Кун называл парадигмами устоявшиеся системы научных взглядов, в рамках которых ведутся исследования. Согласно Куну, в процессе развития научной дисциплины может произойти замена одной парадигмы на другую (как, например, геоцентрическая небесная механика Птолемея сменилась гелиоцентрической системой Коперника), при этом старая парадигма ещё продолжает некоторое время существовать и даже развиваться благодаря тому, что многие её сторонники оказываются по тем или иным причинам неспособны перестроиться для работы в другой парадигме.
+
+Термин «парадигма программирования» впервые применил в 1978 году Роберт Флойд в своей лекции лауреата премии Тьюринга.
+
+Флойд отмечает, что в программировании можно наблюдать явление, подобное парадигмам Куна, но, в отличие от них, парадигмы программирования не являются взаимоисключающими:
+
+Если прогресс искусства программирования в целом требует постоянного изобретения и усовершенствования парадигм, то совершенствование искусства отдельного программиста требует, чтобы он расширял свой репертуар парадигм.
+
+Таким образом, по мнению Роберта Флойда, в отличие от парадигм в научном мире, описанных Куном, парадигмы программирования могут сочетаться, обогащая инструментарий программиста.
+
+А по нашему мнению, каждая новая парадигма в арсенале разработчика делает его профессионалом качественно нового уровня.
+
+Например, владение декларативной парадигмой помогает программисту применять в нужных местах функции высшего порядка, элементы логического программирования, а так же помогает избегать ненужных мутаций состояния. И всё это с лёгкостью можно использовать почти в любом современном императивном языке.
+
+# Примеры парадигм
+Императивное программирование
+Функциональное программирование
+Логическое программирование
+Программирование, управляемое данными (ООП)
+Событийно-ориентированное программирование
+Автоматное программирование
+Actor-based программирование
+
+Этот курс посвящён одной из самых важных парадигм программирования. Эта парадигма не требует поддержки со стороны языка и применима в бесчисленном количестве ситуаций для управления системами со сложным поведением. То есть поведением, в котором результат операции зависит не только от входных данных, но и от предыдущего состояния системы.
+
+# Автоматное программирование
+
+Этот курс посвящён одной из самых важных парадигм программирования. Эта парадигма не требует поддержки со стороны языка и применима в бесчисленном количестве ситуаций для управления системами со сложным поведением. То есть поведением, в котором результат операции зависит не только от входных данных, но и от предыдущего состояния системы.
+
+Автоматное программирование
+Парадигма программирования, основанная на применении конечных автоматов для описания поведения программ
+
+Автоматное программирование имеет под собой серьёзную математическую базу. Сразу предупрежу, что в этом курсе математики не будет. Основная задача курса — дать интуитивное понимание автоматов и научиться их видеть и применять в реальной жизни.
+
+Те, кто хотят узнать про эту тему чуть глубже и стать немного ближе к чистому Computer Science, я рекомендую почитать про машину Тьюринга.
+*/
+
+
+>>>>>> Лёгкость и виды сложности <<<<<<
+
+/*
+# Необходимая сложность
+Определяется сложностью решаемой проблемы/предметной области.
+
+Если перед вами стоит задача реализовать программу, которая выполняет 20 действий, то вы не можете (с точки зрения программирования, а не бизнеса) реализовать меньше и при этом выполнить задачу. Если у вас есть 5 бизнес-правил, касающихся оформления заказа (например, у вас должно быть достаточно денег на счету), то вам нужно будет их все реализовать.
+
+Очень важно уметь выделять главное и видеть, где у вас та самая, необходимая, сложность.
+
+# Случайная сложность
+Определяется проблемами, которые создают сами программисты. Например, используют неправильные инструменты для данной задачи.
+
+Именно этот тип сложности является опасным и ведущим к краху. Неправильные процессы, подходы, библиотеки, языки — всё это, как минимум, вас сильно замедляет, удорожает разработку. И, в конце концов, может стать причиной неудачи проекта.
+
+От этой сложности нужно избавляться всеми способами. Главное, что я хотел бы донести до вас в этом уроке: понимание того, где у вас случайная сложность, приходит только с обогащением вас как профессионала. Многие разработчики смотрят на это так: я выучу ещё 10 новых библиотек и пару новых языков и стану круче. Да, вы станете чуть лучше, но это будет совсем чуть-чуть. Потому что эти библиотеки и языки будут использовать подходы, к которым вы привыкли, и вам будет легко, а значит роста почти не будет. Единственный способ расти по-настоящему быстро и качественно — это изучать то, что даётся тяжело: языки с новыми парадигмами, другие области программирования, такие как мобильные приложения, фронтэнд вместо бэкэнда и наоборот.
+
+Автоматное программирование, как раз, относится к одному из таких пунктов. Эта парадигма изменит вас (если вы позволите этому случиться) невероятно сильно и даст возможность лучше определять и искоренять случайную сложность в вашем коде.
+
+P.S. Основные языки для роста: haskell, clojure, prolog, erlang, kotlin, c.
+*/
+
+
+
+>>>>>> Конечный автомат <<<<<<
+
+/*
+По большей части автоматное программирование связано с понятием "конечный автомат". Не вдаваясь в математические дебри, конечный автомат можно определить следующим образом:
+
+Модель, с помощью которой удобно представлять процесс, имеющий конечное число дискретных управляющих состояний.
+
+В первую очередь необходимо обратить внимание на то, что finite-state machine появляется только там, где есть процесс. Возьмём пример с Хекслета. Сущность "курс" участвует в процессе публикации на сайте. Сначала курс не виден, но потом мы его публикуем, и он становится доступным на сайте. При этом, у нас есть возможность произвести обратное действие. Этот же курс участвует и в другом процессе, который можно назвать "завершённость". Наши курсы могут появляться на сайте до того, как мы их запишем до конца. В какой-то момент курс наполняется всеми уроками, и мы переводим конечный автомат в положение "завершён". Получается, что одна и та же сущность участвует, как минимум, в двух процессах. И каждый обладает своим собственным конечным автоматом.
+
+Второе, что мы видим в этом определении: слово "состояние". Состояние — основа любого конечного автомата, и по жизни мы периодически пользуемся этим понятием. Тот смысл, который закладывается в него на интуитивном уровне, идентичен смыслу, который закладывается в него при работе с конечными автоматами. Например, человек бывает сытым или голодным, спящим, болеющим и даже, прости господи, мертвым. А вода бывает жидкой, твёрдой (лёд) и газообразной. Это всё состояния разных процессов.
+
+В определении уточняется, что состояния должны быть дискретными. Другими словами, мы должны иметь возможность проводить чёткие различия между разными состояниями процесса. Процесс нагрева воды нельзя представить как конечный автомат, если мы не выделим в нём конкретные точки (состояния): например, тёплая вода (50 градусов), горячая вода (80 градусов) и холодная вода (10 градусов).
+
+И последнее. Что значит "управляющие состояния"? Понятие состояния не является чужеродным для мира программирования. В одной из первых лекций я рассказывал о том, что состояние программы это, грубо говоря, слепок её памяти. Другими словами, значение всех переменных в конкретный момент времени. Это действительно так, но можно пойти ещё дальше и заметить, что состояние можно поделить на два типа. Первый тип — это состояние, отвечающее за все возможные пути движения данных сквозь программу. Второй — это данные сами по себе или так называемое вычислительное состояние.
+
+Если взять тот же пример с курсом, то мы увидим, что в нём, с одной стороны, присутствует управляющее состояние, отвечающее за видимость курса на сайте, с другой стороны, курс наполнен количественными переменными состояниями, такими как количество уроков, ссылки на видео, тексты и квизы.
+
+
+Управляющие состояния
+> Их число не очень велико
+> Каждое из них имеет вполне определённый смысл и качественно отличается от других
+> Они определяют действия, которые совершает сущность 
+
+Вычислительные состояния
+> Их число либо бесконечно, либо конечно, но очень велико
+> Большинство из них не имеет смысла и отличается от остальных лишь количественно
+> Они непосредственно определяют лишь результаты действий
+
+Что может быть описано конечным автоматом?
+
+Состояние заказа
+Светофор
+Активация симки
+Запуск практики на Хекслете
+Пользовательские интерфейсы (UI)
+Лично мне кажется, что проще перечислить то, что не описывается конечным автоматом, чем наоборот.
+
+
+# Вывод
+Реальный мир полон процессов, которые описываются конечными автоматами. Другими словами, конечные автоматы всегда присутствуют независимо от того, знаем мы про них или нет.
+
+Акцентирую на этом ваше внимание. В моей практике часто встречается убеждение у уже опытных программистов, что конечные автоматы усложняют жизнь и/или они нужны только для написания компиляторов. Это большое заблуждение, вызванное отсутствием должной базовой подготовки. Если в вашей программе есть сущность со сложным поведением, то по определению самым простым способом описания её процессов является конечный автомат.
+
+Распознать сущность со сложным поведением в исходном коде программы можно следующим образом: при традиционной реализации таких сущностей используются логические переменные, называемые флагами, и многочисленные запутанные конструкции ветвления, условиями в которых выступают различные комбинации значений флагов. Такой способ описания логики сложного поведения плохо структурирован, труден для понимания и модификации, подвержен ошибкам.
+
+Одна из центральных идей автоматного программирования состоит в отделении описания логики поведения (при каких условиях необходимо выполнить те или иные действия) от описания его семантики (собственно смысла каждого из действий). Кроме того, описание логики при автоматном подходе жестко структурировано. Эти свойства делают автоматное описание сложного поведения наглядным и ясным.
+*/
+
+
+>>>>>> Лексический анализ <<<<<<
+
+/*
+Перед тем, как окунуться в высокоприкладное автоматное программирование, попробуем немного использовать его в более классической теме, а именно в лексическом анализе.
+
+Лексический анализ — процесс распознавания и выделения лексем из входного потока символов.
+
+Перейдём сразу к примеру. Необходимо во входящем тексте сделать заглавной первую букву каждого слова. Задача тривиально решается путём применения цепочки split/map(capitalize)/join. Но герои всегда идут в обход, поэтому мы попробуем решить эту задачу так, как сделал бы это настоящий лексер. Главное условие состоит в том, что данные в лексер попадают посимвольно. В нашей задаче мы будем это имитировать простым перебором строки.
+
+Эту задачу я уже использовал в "Основах программирования". И вот, как её решает "обычный программист":
+*/
+
+export default (str) => {
+  let result = '';
+  for (let i = 0; i < str.length; i += 1) {
+    const symbol = str[i];
+    const shouldBeBig = symbol !== ' ' && (i === 0 || str[i - 1] === ' ');
+    result += shouldBeBig ? symbol.toUpperCase() : symbol;
+  }
+
+  return result;
+};
+
+/*
+А вот, как её решил бы "автоматный программист":
+
+Сначала определяем значимые состояния управления. Для текущей задачи это будут "внутри слова" и "снаружи слова". Почему именно так? Первое, на что нужно ориентироваться при выделении состояний, это переходы. Именно во время переходов из одного состояния в другое происходят необходимые действия. Перевод буквы в верхний регистр осуществляется во время перехода между состояниями "вне слова" и "в слове".
+*/
+
+export default (str) => {
+  let result = '';
+  let state = 'outside'; // outside, inside
+
+  for (let i = 0; i < str.length; i += 1) {
+    const symbol = str[i];
+
+
+    switch (state) {
+      case 'inside':
+        if (symbol === ' ') {
+          state = 'outside';
+        }
+        result += symbol;
+        break;
+      case 'outside':
+        if (symbol !== ' ') {
+          state = 'inside';
+          result += symbol.toUpperCase();
+        } else {
+          result += symbol;
+        }
+        break;
+    }
+  }
+
+  return result;
+};
+
+/*
+Первое, на что можно обратить внимание, это размер. Действительно, ввод нового понятия приводит к увеличению программы. И в данном случае может показаться, что оно того не стоит. Возможно, для такой задачи это правда, но с ростом количества состояний и переходов (рост обычно не линейный, и программа резко скатывается в "невозможно разобраться") подход без автоматов сделает программу вообще не поддающейся анализу. Вы не раз ещё в этом убедитесь в своей профессиональной карьере.
+
+Следующим пунктом будет наличие большого switch по состояниям. Это отличительная черта алгоритмов, реализованных в автоматном стиле. Такой взгляд на программу помогает разбить её на независимые куски, которые легко анализировать. То есть в целом программа больше, но она четко структурирована и может рассматриваться независимыми частями, внутри которых довольно простая логика. Отлаживать такие программы тоже легче, потому что достаточно следить за небольшим количеством управляющих состояний.
+
+Более того, часто оказывается, что именно так мы себе задачу раскладываем в голове. Другими словами, такой подход также позволяет избегать семантического разрыва.
+*/
+
+
+/**@@@
+В unix существует такая утилита как awk, она позволяет проводить различные манипуляции с входным потоком (текстом) и получать на выходе новый текст. Например иногда, бывает нужно взять вывод одной программы и оставить от него только первый столбец. Пример:
+
+ls -la
+
+drwxr-xr-x  14 mokevnin  staff  476 Dec  9 20:31 .
+drwxr-xr-x   3 mokevnin  staff  102 Dec  9 20:29 ..
+-rw-r--r--   1 mokevnin  staff    0 Dec  9 20:31 .bash_history
+-rw-r--r--   1 mokevnin  staff  117 Dec  9 20:29 .eslintrc.yml
+ls -la | awk '{print $1}'
+
+drwxr-xr-x
+drwxr-xr-x
+-rw-r--r--
+-rw-r--r--
+
+
+solution.js
+Реализуйте и экспортируйте функцию по умолчанию, которая принимает на вход текст и возвращает массив состоящий из первых слов каждой строки текста. Пустые строчки должны игнорироваться.
+
+Строки разделяются переводом строки
+В любом месте строки может быть сколько угодно пробелов
+Текст должен перебираться посимвольно (мы пишем лексер)
+*/
+
+const text = '  what who   \nhellomy\n hello who are you\n';
+const result = solution(text);
+// [
+//   'what',
+//   'hellomy',
+//   'hello',
+// ];
+
+/*
+Решение должно быть автоматным
+
+Подсказки
+Управляющие символы, такие как \t, \n называются словом символы, потому что это одиночные символы. А запись \n всего лишь представление.
+*/
+
+
+
+// FILE:
+export default (text) => {
+  const result = [];
+  // before, inside, after
+  let state = 'before';
+  let word = [];
+
+  Array.from(text).forEach((symbol) => {
+    if (symbol === '\n' && word.length > 0) {
+      result.push(word.join(''));
+      word = [];
+      state = 'before';
+    }
+
+    switch (state) {
+      case 'before':
+        if (symbol !== ' ' && symbol !== '\n') {
+          state = 'inside';
+          word.push(symbol);
+        }
+        break;
+      case 'inside':
+        if (symbol !== ' ') {
+          word.push(symbol);
+        } else {
+          state = 'after';
+        }
+        break;
+      case 'after':
+        break;
+      default:
+        throw new Error(`Unexpected state '${state}'`);
+    }
+  });
+
+  if (word.length > 0) {
+    result.push(word.join(''));
+  }
+
+  return result;
+};
+
+// export default (text) => {
+//   let result = [];
+//
+//   for (const line of text.split('\n')) {
+//     let startIndex = 0;
+//
+//     let currentSymbol = line[startIndex];
+//     while (currentSymbol === ' ') {
+//       startIndex++;
+//       currentSymbol = line[startIndex];
+//     }
+//
+//     let endIndex = startIndex;
+//     while (currentSymbol !== ' ' && endIndex !== line.length) {
+//       endIndex++;
+//       currentSymbol = line[endIndex];
+//     }
+//
+//     const word = [];
+//     for (let i = startIndex; i < endIndex; i++) {
+//       word.push(line[i]);
+//     }
+//
+//     if (word.length > 0) {
+//       result.push(word.join(''));
+//     }
+//   }
+//
+//   return result;
+// };
+
+
+
+
+>>>>>> Паттерн State <<<<<<
+
+/*
+В соответствии с классификацией, введенной Д. Харелом, любую программную систему можно отнести к одному из следующих классов.
+
+ * Трансформирующие системы осуществляют некоторое преобразование входных данных и после этого завершают свою работу. В таких системах, как правило, входные данные полностью известны и доступны на момент запуска системы, а выходные – только после завершения её работы. К трансформирующим системам относятся, например, архиваторы и компиляторы.
+
+ * Интерактивные системы взаимодействуют с окружающей средой в режиме диалога (например, текстовый редактор). Характерной особенностью таких систем является то, что они могут контролировать скорость взаимодействия с окружающей средой – заставлять среду «ждать».
+
+ * Реактивные системы взаимодействуют с окружающей средой путем обмена сообщениями в темпе, задаваемом средой. К этому классу можно отнести большинство телекоммуникационных систем, а также системы контроля и управления физическими устройствами.
+
+
+Известно, что конечные автоматы в программировании традиционно применяются при создании компиляторов, которые относятся к классу трансформирующих систем. Автомат здесь понимается как некое вычислительное устройство, имеющее входную и выходную ленты. Перед началом работы на входной ленте записана строка, которую автомат далее посимвольно считывает и обрабатывает. В результате обработки автомат последовательно записывает некоторые символы на выходную ленту.
+
+Другая традиционная область использования автоматов – задачи логического управления – является подклассом реактивных систем. Здесь автомат – это, на первый взгляд, совсем другое устройство. У него несколько параллельных входов (чаще всего двоичных), на которые в режиме реального времени поступают сигналы от окружающей среды. Обрабатывая эти сигналы, автомат формирует значения нескольких параллельных выходов.
+
+Таким образом даже традиционные области применения конечных автоматов охватывают принципиально различные классы программных систем.
+
+В качестве примера реактивной системы рассмотрим электронные часы с будильником.
+
+
+Пусть у них имеются три кнопки. H – кнопка для увеличения часа на единицу, M – для увеличения минуты на единицу и кнопка Mode, которая переключает часы в режим настройки будильника. В этом режиме на экране отображается время срабатывания будильника, а кнопки H и M устанавливают не текущее время, а время срабатывания будильника. Повторное нажатие кнопки Mode возвращает часы в обычный режим. Кроме того, затяжное нажатие на кнопку Mode приводит к тому, что будильник активируется. Такое же нажатие ещё раз отключает будильник.
+
+После этого, если текущее время совпадает со временем будильника, включается звонок, который отключается либо нажатием кнопки Mode, либо самопроизвольно через минуту. Кнопки H и M в режиме звонка (когда сработал будильник) не активны.
+
+Поведение часов с будильником уже является сложным, поскольку одни и те же входные воздействия (нажатие одних и тех же кнопок) в зависимости от режима инициируют различные действия.
+
+В программных и программно-аппаратных вычислительных системах сущности со сложным поведением встречаются очень часто. Таким свойством обладают устройства управления, сетевые протоколы, диалоговые окна, персонажи компьютерных игр и многие другие объекты и системы.
+
+Подведём итог. У нас есть следующие действия:
+
+ - Установка времени
+ - Установка времени срабатывания будильника
+ - Включение/Выключение будильника
+ - Отключение звонка будильника
+
+# Флаго-ориентированное программирование 
+*/
+class AlarmClock {
+  clickH() {
+    if (!this.onBell) {
+      if (this.mode === 'alarm') {
+        this.alarmHours += 1;
+      } else {
+        this.hours += 1;
+      }
+    }
+  }
+}
+
+const clock = new AlarmClock();
+clock.clickH();
+
+
+/*
+Выше типичный пример флаго-ориентированного программирования. Примерно так выглядит код большинства программ.
+
+Давайте немного вспомним курс "Программирование, управляемое данными". В рамках этого курса мы делали диспетчеризацию по интересующему нас параметру (типу), что приводило к устранению условных конструкций и давало возможность расширять поведение программы без её постоянного переписывания. Здесь наблюдается точно такая же ситуация, в которую так и просится полиморфизм включения. Достаточно очевидно, что диспетчеризация нам нужна по состоянию, другими словами, должен выполняться разный код в зависимости от того, в каком состоянии находится наш объект. Из этого предположения может следовать только одно. Нужно каждое состояние превратить в тип данных. Так появляется на свет паттерн State.
+
+Выделим три управляющих состояния для наших часов:
+
+ClockState
+AlarmState
+BellState
+
+
+Обратите внимание, что состояние "включен будильник" сюда не входит. Оно не является управляющим. Этот параметр влияет только на то, что произойдет переход в BellState в тот момент, когда время на часах и время на будильнике будет одинаковым.
+
+Теперь давайте посмотрим на реализацию с использованием динамической диспетчеризации:
+*/
+
+class AlarmClock {
+  constructor() {
+    this.hours = 12;
+    this.alarmHours = 6;
+    this.setState(ClockState);
+  }
+
+  setState(Klass) {
+    this.state = new Klass(this);
+  }
+
+  clickH() {
+    // Делегирование
+    this.state.clickH();
+  }
+}
+
+/*
+Код, который здесь написан, это всего лишь один из вариантов реализации паттерна State. Не принимайте как догму всё, что вы читаете в книгах "10 лучших паттернов". Главное, это концептуальная идея и решаемая задача, остальное очень сильно варьируется от большого числа параметров. В основном в книгах все примеры даны для статических языков, и эти реализации очень громоздки для такого языка как javascript.
+
+От чего точно не уйти, так это от того, что в начале наши часы инициализируются неким начальным состоянием. В нашем случае оно statefull (мы передаем туда текущий объект), но так же оно могло бы быть и stateless. А дальше все интерфейсные методы часов, поведение которых зависит от состояния, делегируют все вызовы внутрь объекта состояния. Внутри, без условных конструкций, находится код, который выполняет только то, что нужно делать в текущем состоянии. При необходимости этот код меняет сам объект часов. Это возможно благодаря тому, что мы передали внутрь состояния this.
+
+Если какое-то событие приводит к изменению состояния, то само состояние (в паттерне State) отвечает за то, чтобы поменять себя на другое состояние. Например, при очередном тике часов, если настало время работы будильника, то мы подставляем вместо себя состояние BellState.
+*/
+
+export default class ClockState {
+  tick() {
+    if (this.clock.isAlarmTime()) {
+      this.clock.setState(BellState);
+    }
+  }
+}
+
+
+/*
+# Дополнение
+Материал этого урока во многом основан и использует материал из книги: "Автоматное программирование" (Надежда Поликарпова, Анатолий Шалыто).
+*/
+
+
+/**@@@
+Реализуйте логику работы часов из теории.
+
+В режиме настройки будильника (alarm), часы и минуты изменяются независимо и никак друг на друга не влияют (как и в большинстве реальных будильников). То есть если происходит увеличение минут с 59 до 60 (сброс на 00), то цифра с часами остается неизменной.
+
+Интерфейсными методами часов являются:
+
+clickMode() - нажатие на кнопку Mode
+longClickMode() - долгое нажатие на кнопку Mode
+clickH() - нажатие на кнопку H
+clickM() - нажатие на кнопку M
+tick() - при вызове, увеличивает время на одну минуту. Если новое время совпало со временем на будильнике, то часы переключаются в режим срабатывания будильника (bell).
+isAlarmOn() - показывает включен ли режим будильника
+isAlarmTime() - возвращает true, если время на часах совпадает со временем на будильнике
+minutes() - возвращает минуты, установленные на часах
+hours() - возвращает часы, установленные на часах
+alarmMinutes() - возвращает минуты, установленные на будильнике
+alarmHours() - возвращает часы, установленные на будильнике
+getCurrentMode() - возвращает текущий режим (alarm | clock | bell)
+Основной спецификацией к данной задачe нужно считать тесты.
+
+AlarmClock.js
+Реализуйте интерфейсные методы и логику работы часов.
+
+State.js, AlarmState.js, BellState.js, ClockState.js
+Реализуйте иерархию состояний, в корне которой находится State.
+*/
+
+// FILE: /app/AlarmClock.js:
+import ClockState from './ClockState';
+
+export default class AlarmClock {
+  clockTime = { minutes: 0, hours: 12 };
+  alarmTime = { minutes: 0, hours: 6 };
+  alarmOn = false;
+
+  constructor() {
+    this.setState(ClockState);
+  }
+
+  clickMode() {
+    this.state.nextState();
+  }
+
+  longClickMode() {
+    this.alarmOn = !this.alarmOn;
+  }
+
+  clickH() {
+    this.state.incrementH();
+  }
+
+  clickM() {
+    this.state.incrementM();
+  }
+
+  tick() {
+    this.incrementM('clockTime');
+    if (this.clockTime.minutes === 0) {
+      this.incrementH('clockTime');
+    }
+    this.state.tick();
+  }
+
+  isAlarmOn() {
+    return this.alarmOn;
+  }
+
+  isAlarmTime() {
+    return this.clockTime.minutes === this.alarmTime.minutes
+      && this.clockTime.hours === this.alarmTime.hours;
+  }
+
+  minutes() {
+    return this.clockTime.minutes;
+  }
+
+  hours() {
+    return this.clockTime.hours;
+  }
+
+  alarmMinutes() {
+    return this.alarmTime.minutes;
+  }
+
+  alarmHours() {
+    return this.alarmTime.hours;
+  }
+
+  setState(Klass) {
+    this.state = new Klass(this);
+  }
+
+  getCurrentMode() {
+    return this.state.getModeName();
+  }
+
+  incrementH(timeType) {
+    const data = this[timeType];
+    data.hours = (data.hours + 1) % 24;
+  }
+
+  incrementM(timeType) {
+    const data = this[timeType];
+    data.minutes = (data.minutes + 1) % 60;
+  }
+}
+
+// FILE: /app/AlarmState.js:
+import State from './State';
+import ClockState from './ClockState';
+import BellState from './BellState';
+
+export default class AlarmState extends State {
+  mode = 'alarm';
+  timeType = 'alarmTime';
+  NextStateClass = ClockState;
+
+  incrementH() {
+    this.clock.incrementH(this.timeType);
+  }
+
+  incrementM() {
+    this.clock.incrementM(this.timeType);
+  }
+
+  tick() {
+    if (this.clock.isAlarmTime()) {
+      this.nextState(BellState);
+    }
+  }
+}
+// FILE: /app/BellState.js:
+import ClockState from './ClockState';
+import State from './State';
+
+export default class BellState extends State {
+  mode = 'bell';
+  NextStateClass = ClockState;
+
+  tick() {
+    this.nextState();
+  }
+
+  incrementH() {
+    return false;
+  }
+
+  incrementM() {
+    return false;
+  }
+}
+
+// FILE: /app/ClockState.js:
+import State from './State';
+import AlarmState from './AlarmState';
+import BellState from './BellState';
+
+export default class ClockState extends State {
+  mode = 'clock';
+  timeType = 'clockTime';
+  NextStateClass = AlarmState;
+
+  incrementH() {
+    this.clock.incrementH(this.timeType);
+  }
+
+  incrementM() {
+    this.clock.incrementM(this.timeType);
+  }
+
+  tick() {
+    if (this.clock.isAlarmOn() && this.clock.isAlarmTime()) {
+      this.nextState(BellState);
+    }
+  }
+}
+
+// FILE: /app/State.js:
+export default class State {
+  constructor(clock) {
+    this.clock = clock;
+  }
+
+  nextState(StateKlass) {
+    this.clock.setState(StateKlass || this.NextStateClass);
+  }
+
+  getModeName() {
+    return this.mode;
+  }
+}
+
+
+
+
+>>>>>> Паттерн State Machine <<<<<<
+
+/*
+Паттерн State настоящее спасение во многих ситуациях, но и он не совершенен. Главная проблема этого подхода в том, что логика переходов разбросана по всему коду, и сами состояния знают о том, когда и в какое состояние нужно перевести автомат. При достаточно большом автомате это становится проблемой.
+
+Решением является выделение таблицы переходов. Делать это можно как и в рамках паттерна State, плавно доводя его до паттерна State Machine, либо с использованием специальных библиотек, которые водятся в изобилии для каждого языка программирования.
+*/
+
+const fsm = {
+  initial: 'draft',
+  transitions: [
+    { name: 'sendToModerate', from: ['draft', 'declined'], to: 'moderating' },
+    { name: 'accept', from: 'moderating', to: 'published' },
+    { name: 'decline', from: ['moderating', 'published'], to: 'declined' },
+  ],
+};
+
+
+/*
+Я надеюсь, что такая форма (декларативная) говорит сама за себя. Описанный здесь процесс похож на то, как работает публикация статей на Хабре.
+
+Переходы в fsm осуществляются только посредством порождения событий. Это настолько важно, что я вынужден повторить. При использовании конечных автоматов состояния не могут меняться напрямую, такой подход уничтожает весь смысл использования автоматов. Именно переходы между состояниями являются значимыми в таких системах и программируются разработчиком.
+
+# javascript-state-machine
+Рассмотрим самую популярную https://github.com/jakesgordon/javascript-state-machine на гитхабе библиотеку для работы с автоматами в js.
+*/
+
+import StateMachine from 'javascript-state-machine';
+
+const fsm = new StateMachine({
+  initial: 'green',
+  transitions: [
+    { name: 'warn',  from: 'green',  to: 'yellow' },
+    { name: 'panic', from: 'yellow', to: 'red'    },
+    { name: 'calm',  from: 'red',    to: 'yellow' },
+    { name: 'clear', from: 'yellow', to: 'green'  },
+]});
+
+fsm.current; // green
+fsm.warn();
+fsm.is('yellow'); // true
+fsm.can('calm'); // false
+
+fsm.calm(); // throw error
+
+/*
+1. Таблица отражает логику процесса. В своей повседневной практике, первое, на что я смотрю в коде, это автоматы, реализованные в сущностях. По ним можно понять, какие основные процессы происходят в программе и как они концептуально работают.
+2. Подобные библиотеки, обычно, автоматически генерируют код для работы автомата и самостоятельно проверяют его корректность, не позволяя случаться неправильным переходам. 3. Это огромный плюс перед ручным кодированием.
+Также эти библиотеки предоставляют возможность реагировать на события и переходы.
+
+
+# Коллбеки
+*/
+
+const fsm = new StateMachine({
+  initial: 'green',
+  transitions: [/* ... */],
+  methods: {
+    onGreen({ transition, from, to }) { /*...*/ },
+    onBeforeWarn(lifecycle) { /*...*/ },
+    onLeaveRed({ transition, from, to }) { /*...*/ },
+  }
+});
+
+fsm.calm('message');
+
+/*
+Обратите внимание на то, что автомат не всегда подразумевает разное поведение всех подсистем в зависимости от того, в каком он состоянии. Часто, в реальном коде, важен сам факт того, что сущность находится в каком-то состоянии и может переходить в другое. Даже в этом случае имеет смысл явно выделять автомат и пользоваться всей прелестью автоматической генерации и верификации. Набрав определенный опыт, вы будете использовать автоматы повсеместно, даже в случаях когда состояний всего два и, казалось бы, можно просто использовать флаг. На самом деле даже с флагом у вас появится логика, которую мог бы обеспечить автомат. К слову, в Хекслете используется около 80 явных автоматов (на момент написания урока).
+*/
+
+
+/**@@@
+Order.js
+Реализуйте и экспортируйте по умолчанию тип Order. Сделайте так, чтобы на каждое изменение состояния в массив history добавлялась запись об этом в виде { state: <name>, createdAt: new Date() }. Используйте для этого событие onEnterState библиотеки javascript-state-machine.
+
+(Эта библиотека неявно проставляет состояние 'none' и делает переход в начальный стейт (в нашем случае -'init'). Нас эти состояния не интересуют, поэтому в 'history' их нужно избегать.)
+
+Реализуйте конечный автомат процесса заказа товаров в магазине:
+
+Начальное состояние: init. Событие accept переводит автомат в pending (только из init). Событие ship переводит в состояние shipped (только из pending). Событие complete переводит в состояние completed (только из shipped). Событие cancel переводит в состояние canceled (только из состояний init и pending) Событие refund переводит в состояние refunded (только из состояний shipped и completed)
+
+Немного пояснения. Отменить заказ можно только до тех пор пока он не был отправлен клиенту. Если заказ уже был отправлен или доставлен, то клиент может сделать возврат. В реальной жизни на эти переходы будут происходить дополнительные действия связанные с обработкой платежа, отправки почты и тому подобное.
+
+solution.js
+Реализуйте функцию tryCancel которая выполняет отмену заказа только в том случае, если это возможно сделать.
+*/
+
+import cancel from './solution';
+
+const order = new Order([]);
+order.is('canceled'); // false
+tryCancel(order);
+order.is('canceled'); // true
+
+/*
+Это задание подразумевает то, что хорошо изучите документацию библиотеки. Все как в реальной жизни ;)
+
+Подсказки
+State Machine Factory https://github.com/jakesgordon/javascript-state-machine/blob/master/docs/state-machine-factory.md
+Lifecycle Events https://github.com/jakesgordon/javascript-state-machine/blob/master/docs/lifecycle-events.md
+*/
+
+// FILE: /app/:
+import StateMachine from 'javascript-state-machine';
+
+export default class Order {
+  constructor(items) {
+    this.items = items;
+    this.history = [];
+
+    this._fsm(); // eslint-disable-line
+  }
+}
+
+StateMachine.factory(Order, {
+  init: 'init',
+  transitions: [
+    { name: 'accept', from: 'init', to: 'pending' },
+    { name: 'ship', from: 'pending', to: 'shipped' },
+    { name: 'complete', from: 'shipped', to: 'completed' },
+    { name: 'cancel', from: ['init', 'pending'], to: 'canceled' },
+    { name: 'refund', from: ['shipped', 'completed'], to: 'refunded' },
+  ],
+  methods: {
+    onEnterState({ from, to }) {
+      if (from !== 'none') {
+        this.history.push({ state: to, createdAt: new Date() });
+      }
+    },
+  },
+});
+
+
+// FILE: /app/solution.js:
+import Order from './Order';
+
+export const init = items => new Order(items);
+
+export const tryCancel = (order) => {
+  if (order.can('cancel')) {
+    order.cancel();
+  }
+};
+
 
 ############################### JS: DOM API ###############################   
 
