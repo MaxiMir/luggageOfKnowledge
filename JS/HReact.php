@@ -1681,3 +1681,533 @@ export default class Carousel extends React.Component {
     );
   }
 }
+
+
+
+
+>>>>>> Автоматное программирование <<<<<<
+
+/*
+Тема конечных автоматов занимает центральную роль во фронтенд разработке. Интерактивные элементы всегда вовлечены в процессы, связанные с изменением состояний. Модальные окна бывают открытые и скрытые, кнопка нажата, отжата или заблокирована (например, во время ajax-запроса). Примеров бесконечное множество. Нередко эти автоматы зависят друг от друга, что порождает иерархию автоматов. Например, возможность взаимодействовать с элементом на экране может появляться только после нажатия кнопки "редактировать".
+
+В Реакте работа с автоматами проста до безобразия и в большинстве случаев не требует использования специальных библиотек. Возьмем, к примеру, кнопку, которая отвечает за показ куска текста. Ее состояния можно описать так:
+
+1. По умолчанию текст скрыт (состояние hidden).
+2. Клик по кнопке отображает текст (состояние shown).
+3. Повторный клик прячет текст (hidden).
+
+В данном случае у кнопки два состояния, поэтому можно упростить задачу и использовать флаг как индикатор состояния. Назовем его как isShown.
+
+Я очень не рекомендую так делать в бекенде, когда состояние хранится в базе. Цена изменения автомата слишком высока (изменение типа колонки с boolean на string), поэтому даже в случае бинарной логики лучше делать полноценный автомат с именованными состояниями. Другими словами, для хранения состояния используйте не булево поле (с true/false), а текстовое поле, в котором будет содержаться полное название состояния. Например, если статья может находиться в двух состояниях, Опубликована или Не опубликована, то нужно делать не поле 'published: bool' со значениями true и false, а поле 'publishing_state' со значениями 'published' и 'unpublished'`
+*/
+
+class Help extends React.Component {
+  state = { isShown: false };
+
+  toggleText = () => {
+    this.setState({ isShown: !this.state.isShown });
+  };
+
+  render() {
+    const isShown = this.state.isShown;
+    
+    return <div>
+      <button onClick={this.toggleText}>{ isShown ? 'hide' : 'show' }</button>
+      {isShown ? <p>help me!</p> : null }
+      </div>;
+  }
+}
+
+ReactDOM.render(
+  <Help />,
+  document.getElementById('react-root'),
+);
+
+/*
+Большая часть кода в Реакте (как и во всем фронтенде) выглядит именно так, как в примере выше. События порождают изменения состояния в данных, на основе которых, в свою очередь, меняется представление. Количество конечных автоматов во фронтенд приложениях растет с астрономической скоростью, главное их видеть и выделять явно.
+
+# Структура состояния
+
+Данные, с которыми работает Реакт, как правило, приходят из бекенда. И эти данные тоже участвуют в разных процессах и находятся в разных состояниях. Например, статья может быть опубликована, а может быть и нет. И в зависимости от того, в каком она состоянии, рисуется UI. И здесь начинается самое интересное. Конкретно состояние опубликованности статьи не является частью UI, но UI использует это состояние, а при изменениях оно синхронизируется на фронтенде и бекенде. Но в UI часто появляются состояния, которые отвечают исключительно за внешний вид, но не являются частью данных.
+
+Если предположить, что данные, пришедшие с бекенда, внутри нашего объекта-состояния хранятся как список под ключом items, то возникает вопрос: куда записывать данные, отвечающие за состояние UI? То есть те самые стейты, которые появляются только при взаимодействии с пользователем и не используются на серверной стороне?
+
+Поясню на примере. К нам приходит статья такой структуры: { id: 3, name: 'How to programm', state: 'published' }. Мы отправляем ее в items. А в UI есть возможность зайти в ее редактирование и для этого используется флаг (состояние) isEditing, который существует только на экране. Вопрос: где хранить эту переменную?
+
+Самый простой вариант: изменить саму статью внутри items так, чтобы она имела такой вид: { id: 3, name: 'How to programm', state: 'published', isEditing: true }. Хотя, на первый взгляд, он и кажется разумным, проблем он привносит больше, чем пользы. В основном эти проблемы связаны с задачами синхронизации. Иногда бывает нужно отправить всю статью на сервер (после изменений), а иногда перечитать ее заново с бекенда. В такой ситуации нужно будет либо извлекать только нужные данные, либо постоянно делать мердж (слияние), чтобы не потерять состояние UI. Практика показала, что гораздо проще добавлять отдельный список исключительно под задачи хранения состояния UI. То есть в нашем стейте появится список под названием itemUIStates, и для нашей статьи в него добавится элемент { articleId: 3, isEditing: true }.
+*/
+
+/**@@@
+src/Collapse.jsx
+Реализуйте компонент <Collapse>, который по клику на ссылке отображает свое содержимое и при повторном - прячет. Содержимое передается в компонент через свойство text. За начальное состояние открытости, отвечает свойство opened, которое по умолчанию равно true.
+*/
+
+const text = 'collapse me';
+<Collapse text={text} opened={false} />;
+<div>
+  <p>
+    <a class="btn btn-primary" href="#">Link with href</a>
+  </p>
+  <div class="collapse">
+    <div class="card card-body">
+      collapse me
+    </div>
+  </div>
+</div>
+
+/*
+Единственное что меняется в HTML после клика, к классу collapse элемента <div> добавляется класс show.
+
+Подсказки
+Collapse
+*/
+
+// FILE: /app/src/index.jsx:
+import ReactDOM from 'react-dom';
+import React from 'react';
+
+import Collapse from './Collapse';
+
+const text = 'collapse me';
+
+ReactDOM.render(
+  <Collapse text={text} />,
+  document.getElementById('container'),
+);
+
+
+// FILE: /app/src/Collapse.jsx:
+import React from 'react';
+import cn from 'classnames';
+
+export default class Collapse extends React.Component {
+  static defaultProps = {
+    opened: true,
+  };
+
+  constructor(props) {
+    super(props);
+    const { opened } = props;
+    this.state = { opened };
+  }
+
+  handleToggle = (e) => {
+    e.preventDefault();
+    const { opened } = this.state;
+    this.setState({ opened: !opened });
+  }
+
+  render() {
+    const { opened } = this.state;
+    const { text } = this.props;
+    const classes = cn({
+      collapse: true,
+      show: opened,
+    });
+
+    return (
+      <div>
+        <p>
+          <a className="btn btn-primary" onClick={this.handleToggle} href="#">
+            Link with href
+          </a>
+        </p>
+        <div className={classes}>
+          <div className="card card-body">
+            {text}
+          </div>
+        </div>
+      </div>
+    );
+  }
+}
+
+
+
+
+>>>>>> Формы <<<<<<
+
+/*
+Формы в HTML работают немного не так, как формы в Реакте. Это связано с тем, что в HTML они имеют свое внутреннее состояние - место, в котором хранятся значения форм, тексты, выбранные опции и тому подобное.
+*/
+
+<form action="">
+  <label>
+    Name:
+    <input type="text" name="name" />
+  </label>
+  <input type="submit" value="Submit" />
+</form>
+
+/*
+Форма выше при каждом изменении поля name изменяет свое внутреннее состояние, которое будет отправлено по нужному адресу при сабмите.
+
+В отличие от прямой работы с DOM (даже через jQuery), в Реакте источником правды является состояние, а не DOM. Формы не являются исключением. Любое изменение в форме, посимвольно, если это ввод, должно быть перенесено в состояние. А элементы форм, чьи данные хранятся в стейте Реакта, называются "controlled components".
+*/
+
+class TextInput extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { text: this.props.text };
+  }
+  
+  handleSubmit = (e) => {
+    e.preventDefault();
+    alert(`A name was submitted: ${this.state.text}`);
+  };
+  
+  handleChange = (e) => {
+    this.setState({ text: e.target.value });
+  };
+  
+  render() {
+    return <form onSubmit={this.handleSubmit}>
+      <input onChange={this.handleChange} value={this.state.text} />
+      <input type='submit' value='Submit' />
+    </form>;
+  }
+}
+
+ReactDOM.render(
+  <TextInput text="initial text" />,
+  document.getElementById('react-root'),
+);
+
+/*
+В коде выше на каждое изменение в элементе input происходит извлечение содержимого через e.target.value и запись его в Реакт. Последующий сабмит не нуждается в самой форме, так как все данные в стейте. Поэтому при отправке формы достаточно взять нужный стейт и отправить его, например, на сервер. Обратите внимание: наш элемент формы становится контролируемым (controlled components) только когда происходит подстановка его значения из Реакта: <input value={this.state.text} />.
+
+Один из множества плюсов контролируемых компонентов в том, что становится крайне легко проводить фильтрацию или валидацию. Например, если мы хотим, чтобы данные вводились в верхнем регистре (например, при вводе данных карты), то сделать это можно так:
+*/
+
+handleChange = (e) => {
+  this.setState({ value: e.target.value.toUpperCase() });
+}
+
+# Textarea
+// В HTML значение <textarea> устанавливается как его содержимое:
+<textarea>
+  Like this
+</textarea>
+
+// В Реакте для этого используется атрибут value:
+class Editor extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { text: this.props.text };
+  }
+  
+  onChange = (e) => {
+    this.setState({ text: e.target.value });
+  };
+  
+  render() {
+    return <textarea onChange={this.onChange} value={this.state.text} />;
+  }
+}
+
+ReactDOM.render(
+  <Editor text="initial text" />,
+  document.getElementById('react-root'),
+);
+
+/*
+Стоит отметить, что событие onChange в Реакте работает так, как ожидается, в отличие от onChange в HTML, который срабатывает только когда элемент теряет фокус. Поэтому мы гарантировано получаем срабатывание события на каждое изменение. При этом данные из элемента формы извлекаются обычным способом через e.target.value. Ну а дальше все по старой схеме — данные обновляются в стейте.
+*/
+
+# Select
+
+// В HTML текущий элемент выбирается с помощью атрибута selected, проставленного на нужном option.
+
+<select>
+  <option value="grapefruit">Grapefruit</option>
+  <option value="lime">Lime</option>
+  <option selected value="coconut">Coconut</option>
+  <option value="mango">Mango</option>
+</select>
+
+// Реакт предлагает другой, более простой и удобный способ. Достаточно проставить атрибут value компонента select в нужное значение.
+class FlavorForm extends React.Component {
+  state = { value: '' };
+
+  handleChange = (e) => {
+    this.setState({ value: e.target.value });
+  };
+
+  handleSubmit = (e) => {
+    e.preventDefault();
+    alert(`Your favorite flavor is: ${this.state.value}`);
+  };
+
+  render() {
+    return (
+      <form onSubmit={this.handleSubmit}>
+        <label>
+          Pick your favorite La Croix flavor:
+          <select value={this.state.value} onChange={this.handleChange}>
+            <option value="grapefruit">Grapefruit</option>
+            <option value="lime">Lime</option>
+            <option value="coconut">Coconut</option>
+            <option value="mango">Mango</option>
+          </select>
+        </label>
+        <input type="submit" value="Submit" />
+      </form>
+    );
+  }
+}
+
+ReactDOM.render(
+  <FlavorForm />,
+  document.getElementById('react-root'),
+);
+
+
+# checkbox & radio
+// Оба этих типа поддерживают атрибут checked. Если он выставлен, то элемент отмечается выбранным.
+<input name="isGoing" type="checkbox" checked={this.state.isGoing} onChange={this.handleInputChange} />
+
+
+# Шаблонный код
+
+/*
+Работа с формами в Реакте — довольно трудоемкая задача. С одной стороны все крайне просто, с другой — появляется много однотипного кода. Поэтому для Реакта создано множество библиотек, позволяющих автоматизировать сохранение состояния формы. В основном эти библиотеки нацелены на работу через redux. Подробнее — в соответствующем курсе.
+
+# Дополнительные материалы
+Формы https://reactjs.org/docs/forms.html
+*/
+
+/**@@@
+src/MyForm.jsx
+Реализуйте компонент <MyForm> отображающий форму из шести элементов:
+
+ - email - текстовый инпут
+ - password - инпут типа password
+ - address - textarea
+ - city - текстовый инпут
+ - country - select со следующими значениями: argentina, russia, china.
+ - Accept Rules - checkbox
+После сабмита формы, появляется таблица в которой показываются значения всех полей. Из этой формы можно вернуться в редактирование по кнопке Back. При этом все данные должны оказаться на своих местах.
+
+# Форма
+*/
+
+<form>
+  <div class="form-row">
+    <div class="form-group col-md-6">
+      <label for="inputEmail4" class="col-form-label">Email</label>
+      <input type="email" name="email" class="form-control" id="inputEmail4" placeholder="Email">
+    </div>
+    <div class="form-group col-md-6">
+      <label for="inputPassword4" class="col-form-label">Password</label>
+      <input type="password" name="password" class="form-control" id="inputPassword4" placeholder="Password">
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="inputAddress" class="col-form-label">Address</label>
+    <textarea type="text" class="form-control" name="address" id="inputAddress" placeholder="1234 Main St"></textarea>
+  </div>
+  <div class="form-row">
+    <div class="form-group col-md-6">
+      <label for="inputCity" class="col-form-label">City</label>
+      <input type="text" class="form-control" name="city" id="inputCity">
+    </div>
+    <div class="form-group col-md-6">
+      <label for="inputCountry" class="col-form-label">Country</label>
+      <select id="inputCountry" name="country" class="form-control">
+        <option>Choose</option>
+        <option value="argentina">Argentina</option>
+        <option value="russia">Russia</option>
+        <option value="china">China</option>
+      </select>
+    </div>
+  </div>
+  <div class="form-group">
+    <div class="form-check">
+      <label class="form-check-label" for="rules">
+        <input id="rules" type="checkbox" name="acceptRules" class="form-check-input">
+        Accept Rules
+      </label>
+    </div>
+  </div>
+  <button type="submit" class="btn btn-primary">Sign in</button>
+</form>
+
+// После отправки формы:
+
+<div>
+  <button type="button">Back</button>
+  <table class="table">
+    <tbody>
+      <tr>
+        <td>acceptRules</td>
+        <td>true</td>
+      </tr>
+      <tr>
+        <td>address</td>
+        <td>lenina street</td>
+      </tr>
+      <tr>
+        <td>city</td>
+        <td>moscow</td>
+      </tr>
+      <tr>
+        <td>country</td>
+        <td>russia</td>
+      </tr>
+      <tr>
+        <td>email</td>
+        <td>my@email.com</td>
+      </tr>
+      <tr>
+        <td>password</td>
+        <td>qwerty</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+// Строки сортируются в алфавитном порядке по именам в первом столбце. В вашем случае результирующая таблица может отличаться, все зависит от того какие данные выбраны.
+
+// FILE: /app/src/index.jsx:
+import ReactDOM from 'react-dom';
+import React from 'react';
+
+import MyForm from './MyForm';
+
+ReactDOM.render(
+  <MyForm />,
+  document.getElementById('container'),
+);
+
+
+
+// FILE: /app/src/MyForm.jsx:
+import React from 'react';
+
+export default class MyForm extends React.Component {
+  state = {
+    form: {
+      email: '',
+      password: '',
+      city: '',
+      country: '',
+      address: '',
+      acceptRules: false,
+    },
+    submittingState: 'fillingForm',
+  };
+
+  handleChangeField = ({ target }) => {
+    const { form } = this.state;
+    const value = target.type === 'checkbox' ? target.checked : target.value;
+    this.setState({ form: { ...form, [target.name]: value } });
+  }
+
+  handleBackToForm = () => {
+    this.setState({ submittingState: 'fillingForm' });
+  }
+
+  handleSubmitForm = () => {
+    this.setState({ submittingState: 'submitted' });
+  }
+
+  renderRow = (key) => {
+    const { form } = this.state;
+    return (
+      <tr key={key}>
+        <td>{key}</td>
+        <td>{form[key].toString()}</td>
+      </tr>
+    );
+  };
+
+  renderResult() {
+    const { form } = this.state;
+    const keys = Object.keys(form).sort();
+    return (
+      <div>
+        <button type="button" onClick={this.handleBackToForm}>Back</button>
+        <table key="fieldsValues" className="table">
+          <tbody>
+            {keys.map(this.renderRow)}
+          </tbody>
+        </table>
+      </div>
+    );
+  }
+
+  renderForm() {
+    const { form } = this.state;
+
+    return (
+      <form onSubmit={this.handleSubmitForm}>
+        <div className="form-row">
+          <div className="form-group col-md-6">
+            <label htmlFor="inputEmail4" className="col-form-label">Email</label>
+            <input
+              type="email"
+              name="email"
+              onChange={this.handleChangeField}
+              value={form.email}
+              className="form-control"
+              id="inputEmail4"
+              placeholder="Email"
+            />
+          </div>
+          <div className="form-group col-md-6">
+            <label htmlFor="inputPassword4" className="col-form-label">Password</label>
+            <input
+              type="password"
+              onChange={this.handleChangeField}
+              value={form.password}
+              name="password"
+              className="form-control"
+              id="inputPassword4"
+              placeholder="Password"
+            />
+          </div>
+        </div>
+        <div className="form-group">
+          <label htmlFor="inputAddress" className="col-form-label">Address</label>
+          <textarea type="text" name="address" value={form.address} onChange={this.handleChangeField} className="form-control" id="inputAddress" placeholder="1234 Main St" />
+        </div>
+        <div className="form-row">
+          <div className="form-group col-md-6">
+            <label htmlFor="inputCity" className="col-form-label">City</label>
+            <input type="text" name="city" onChange={this.handleChangeField} value={form.city} className="form-control" id="inputCity" />
+          </div>
+          <div className="form-group col-md-6">
+            <label htmlFor="inputCountry" className="col-form-label">Country</label>
+            <select id="inputCountry" name="country" onChange={this.handleChangeField} className="form-control" value={form.country}>
+              <option>Choose</option>
+              <option value="argentina">Argentina</option>
+              <option value="russia">Russia</option>
+              <option value="china">China</option>
+            </select>
+          </div>
+        </div>
+        <div className="form-group">
+          <div className="form-check">
+            <label className="form-check-label" htmlFor="rules">
+              <input id="rules" name="acceptRules" className="form-check-input" onChange={this.handleChangeField} type="checkbox" checked={form.acceptRules} />
+              Accept Rules
+            </label>
+          </div>
+        </div>
+        <button type="submit" className="btn btn-primary">Sign in</button>
+      </form>
+    );
+  }
+
+  render() {
+    const { submittingState } = this.state;
+    switch (submittingState) {
+      case 'fillingForm':
+        return this.renderForm();
+      case 'submitted':
+        return this.renderResult();
+      default:
+        throw new Error(`'${submittingState}' - unknown state`);
+    }
+  }
+}
