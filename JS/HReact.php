@@ -1,4 +1,6 @@
 <?
+
+#################### JS: React ####################
 /*
 React is a javascript library for building user interfaces
 
@@ -2211,3 +2213,2694 @@ export default class MyForm extends React.Component {
     }
   }
 }
+
+
+
+
+>>>>>> Неизменяемость <<<<<<
+
+/*
+Неизменяемость состояния - одна из ключевых тем в Реакте. Ее легко придерживаться, работая с примитивными типами данных, но с составными, такими как объекты и массивы, у неподготовленного пользователя могут возникнуть сложности. В этом уроке мы пробежимся по основным способам частичного обновления объектов и массивов.
+
+Кроме примеров на чистом js, я буду демонстрировать примеры с использованием библиотеки immutability-helper, которая создана для облегчения выполнения подобных операций. Она особенно актуальна при выполнении обновлений там, где код на js получается слишком сложным.
+*/
+
+### Массивы ###
+
+# Массив: добавление
+
+// Самое простое это добавление в массив:
+const items = ['one', 'two', 'three'];
+const item = 'four';
+const newItems = [...items, item];
+// => ['one', 'two', 'three', 'four'];
+
+// Если необходимо добавить элемент в начало, то нужно всего лишь поменять местами элементы массива:
+const newItems = [item, ...items];
+// => ['four', 'one', 'two', 'three'];
+
+
+# immutability-helper
+import update from 'immutability-helper';
+
+const state1 = ['x'];
+const state2 = update(state1, { $push: ['y'] }); // => ['x', 'y']
+
+
+# Массив: удаление
+
+// Более интересный пример. Чтобы успешно выполнить удаление, нужно знать, что удалять. Это значит, что каждый элемент в коллекции должен иметь идентификатор. Для удаления используется старая добрая фильтрация.
+
+const newItems = items.filter(item => item.id !== id);
+
+// Может возникнуть вопрос: откуда взялся идентификатор внутри обработчика? И здесь нам на помощь приходят замыкания.
+class List extends React.Component {
+  removeItem = (id) => (e) => {
+    e.preventDefault();
+    const newItems = this.state.items.filter(item => item.id !== id);
+    this.setState({ items: newItems });
+  };
+
+  constructor(props) {
+    super(props);
+    const items = [1, 2, 3, 4, 5].map(i => ({ id: i }));
+    this.state = { items };
+  }
+  
+  render() {
+    return <ul>
+      {this.state.items.map(item => this.renderItem(item))}
+    </ul>;
+  }
+
+  renderItem({ id }) {
+    return <li><a href="#" onClick={this.removeItem(id)}>{id}</a></li>;
+  }
+}
+
+ReactDOM.render(
+  <List />,
+  document.getElementById('react-root'),
+);
+
+
+// Обратите внимание на способ задания обработчика: removeItem = (id) => (e) => { и его использование onClick={this.removeItem(id)}.
+
+# immutability-helper
+const index = 5;
+const newItems = update(items, {$splice: [[index, 1]]});
+
+// Удаление на чистом js через фильтр - самый оптимальный способ. С использованием immutabiliy-helper получается сложно.
+
+# Массив: изменение
+// К сожалению, без дополнительных инструментов код решения будет слишком громоздким. Я приведу его ниже для ознакомления, но в реальном коде так делать не надо.
+
+const index = items.findIndex((item) => item.id === id);
+const newItem = { ...items[index], value: 'another value' };
+const newItems = [...items.slice(0, index), newItem, ...items.slice(index + 1)];
+
+// Думаю, мне не придется вас убеждать в том, что это перебор :)
+
+# immutability-helper
+const collection = { children: ['zero', 'one', 'two'] };
+const index = 1;
+const newCollection = update(collection, { children: { [index]: { $set: 1 } } });
+// => { children: ['zero', 1, 'two'] }
+
+// Как видно, этот способ значительно проще и чище. Рекомендуется к использованию.
+
+
+### Объекты ###
+
+# Объект: добавление
+// Так же просто, как и с массивом.
+const items = { a: 1, b: 2 };
+const newItems = { ...items, c: 3 };
+// => { a: 1, b: 2, c: 3 }
+
+// Либо, если ключ вычисляется динамически, нужно делать так:
+const items = { a: 1, b: 2 };
+const key = 'c';
+const newItems = { ...items, [key]: 3 };
+// => { a: 1, b: 2, c: 3 }
+
+# Объект: удаление
+// Решение ниже привожу только для ознакомления. На чистом js нет простого способа удалить ключ в неизменяемом стиле:
+Object.keys(myObj)
+  .filter(key => key !== deleteKey)
+  .reduce((acc, current) => ({ ...acc, [current]: myObj[current] }), {});
+
+# immutability-helper
+import update from 'immutability-helper';
+
+const state = { a: 1, c: 3 };
+const updatedState = update(state, {
+  $unset: ['c'],
+});
+// => { a: 1 }
+
+# Объект: изменение
+// Абсолютно то же самое, что и добавление.
+const items = { a: 1, b: 2 };
+const newItems = { ...items, a: 3 };
+// => { a: 3, b: 2 }
+
+# immutability-helper
+const data = { a: 1, b: 2 };
+const key = 'a';
+const newData = update(data, { [key]: { $set: 3 } });
+// => { a: 3, b: 2 }
+
+
+# Глубокая вложенность
+
+/*
+В примерах выше в основном можно обходиться стандартными средствами js, и только в некоторых ситуациях удобнее пользоваться сторонними решениями. В реальном коде все будет также, особенно если учитывать рекомендацию Реакта и держать свой стейт максимально плоским. Но в некоторых ситуациях данные, которые нужно изменить, находятся не на поверхности, а в глубине структур. К сожалению, в этих ситуациях обычный js код будет раздуваться. И тут уже точно не обойтись без дополнительных библиотек.
+*/
+
+/*
+Аналоги
+ - immutability-helper — не единственная библиотека для подобных задач. Вот еще несколько популярных:
+ - immutable-js - основана на персистентных данных;
+ - updeep - активно использует каррирование.
+*/
+
+
+/**@@@
+src/Component.jsx
+Реализуйте компонент, который представляет из себя две кнопки и лог событий:
+
+Лог это список значений, каждое из которых получается после нажатия на одну из двух кнопок
+Левая кнопка + добавляет в лог строчку с новым значением равным старое + 1
+Правая кнопка - добавляет в лог строчку с новым значением равным старое - 1
+При клике на запись в логе, она удаляется.
+
+Начальный HTML:
+*/ 
+
+<div>
+  <div class="btn-group" role="group">
+    <button type="button" class="btn hexlet-inc">+</button>
+    <button type="button" class="btn hexlet-dec">-</button>
+  </div>
+</div>
+
+
+// После нажатия последовательности +, +, -, +:
+
+<div>
+  <div class="btn-group" role="group">
+    <button type="button" class="btn hexlet-inc">+</button>
+    <button type="button" class="btn hexlet-dec">-</button>
+  </div>
+  <div class="list-group">
+    <button type="button" class="list-group-item list-group-item-action">2</button>
+    <button type="button" class="list-group-item list-group-item-action">1</button>
+    <button type="button" class="list-group-item list-group-item-action">2</button>
+    <button type="button" class="list-group-item list-group-item-action">1</button>
+  </div>
+</div>
+
+// Каждое нажатие кнопки добавляет в лог новую строчку сверху.
+
+
+// FILE: /app/src/Component.jsx:
+import _ from 'lodash';
+import React from 'react';
+
+export default class Component extends React.Component {
+  state = { items: [] };
+
+  handleCount = (value) => {
+    const { items } = this.state;
+    const currentValue = _.get(items, [0, 'value'], 0) + value;
+    const current = { id: _.uniqueId(), value: currentValue };
+    this.setState({ items: [current, ...items] });
+  }
+
+  handleDec = () => this.handleCount(-1);
+
+  handleInc = () => this.handleCount(1);
+
+  handleRemove = currentId => () => {
+    const { items } = this.state;
+    this.setState({ items: items.filter(({ id }) => id !== currentId) });
+  }
+
+  renderLog() {
+    const { items } = this.state;
+    if (items.length === 0) {
+      return null;
+    }
+
+    return (
+      <div className="list-group">
+        {items.map(({ id, value }) => (
+          <button type="button" className="list-group-item list-group-item-action" key={id} onClick={this.handleRemove(id)}>
+            {value}
+          </button>
+        ))}
+      </div>
+    );
+  }
+
+  render() {
+    return (
+      <div>
+        <div className="btn-group" role="group">
+          <button type="button" className="btn hexlet-inc" onClick={this.handleInc}>+</button>
+          <button type="button" className="btn hexlet-dec" onClick={this.handleDec}>-</button>
+        </div>
+        {this.renderLog()}
+      </div>
+    );
+  }
+}
+
+
+
+
+>>>>>> Вложенные компоненты <<<<<<
+
+/*
+В реальных приложениях на Реакте компонентов значительно больше. Часть из них — самостоятельные, часть используется только в составе других.
+
+Один из способов компоновки компонентов мы уже знаем - children. Причем, нет никакой разницы являются ли потомки встроенными в Реакт компонентами, или это отдельно написанные компоненты.
+*/
+
+class Alert extends React.Component {
+  render() {
+    const { children } = this.props;
+    return (
+      <div className="alert alert-primary">
+        {children}
+      </div>
+    );
+  }
+}
+
+const vdom = (
+  <Alert>
+    <p>Paragraph 1</p>
+    <hr />
+    <p class="mb-0">Paragraph 2</p>
+  </Alert>
+);
+
+ReactDOM.render(
+  vdom,
+  document.getElementById('react-root'),
+);
+
+/*
+В некоторых ситуациях внутрь компонента нужно передавать только определенные, специально созданные под него компоненты. Например, компонент Card до текущего момента мы реализовывали так, что он принимал на вход только свойства. В реальности это решение так себе. Кастомизация отсутствует полностью, можно передать только то, что изначально задумано и то в формате строк. Ни о каком сложном содержимом не может быть и речи. Правильный подход выглядел бы так:
+*/
+
+<Card>
+  <CardImgTop src="path/to/image" />
+  <CardBody>
+    <CardTitle>Body</CardTitle>
+  </CardBody>
+</Card>
+
+// В тех ситуациях, когда композиция не требуется, можно просто брать и использовать любые сторонние компоненты внутри своих.
+class Item extends React.Component {
+  render() {
+    const { value } = this.props;
+    return <li><b>{value}</b></li>;
+  }
+}
+
+class List extends React.Component {
+  render() {
+    const { items } = this.props;
+    return <ul>
+      { items.map(i => <Item value={i} />) }
+    </ul>;
+  }
+}
+
+ReactDOM.render(
+  <List items={[1, 2, 3, 4, 5]} />,
+  document.getElementById('react-root'),
+);
+
+/*
+Вкладывать можно сколько угодно раз и какие угодно компоненты. Но здесь кроется одна опасность. Желание построить "идеальную архитектуру" толкает разработчиков заранее планировать то, как разбить приложение на компоненты и сразу их реализовать. Важно понимать, что вложенность сама по себе — это усложнение понимания, так как придется постоянно прыгать туда сюда. Кроме того, жесткая структура свяжет вас по рукам и ногам, рефакторинг просто так не сделаешь, и желание его делать сильно поубавится из-за любви к своему решению. Будьте прагматичны. Оптимальный путь добавлять новые компоненты — это следить за моментом, когда вам становится сложно в текущем компоненте из-за объемов и количества переменных, с которыми приходится иметь дело одномоментно. И даже в этом случае часто достаточно выделить дополнительные функции рендеринга внутри самого компонента, например так: renderItem.
+
+# Состояние
+Один из самых частых вопросов у тех, кто только начинает знакомиться с Реактом, связан с тем, как распределять состояние по компонентам. Короткий ответ: никак. Почти во всех ситуациях разделение состояния усложнит код и работу с ним. Правильный подход — создать корневой компонент, который содержит все состояние внутри себя, а все нижележащие компоненты получают свои данные как свойства. Само состояние должно быть максимально плоским, как реляционная база данных. Тогда можно спокойно применять нормализацию и безболезненно выполнять обновления.
+
+Иногда могут возникать ситуации, когда необходимые в глубине свойства приходится протаскивать сквозь множество промежуточных компонентов, которые сами эти свойства не используют. Это еще одна причина стараться не увлекаться глубокой вложенностью. С другой стороны, в следующем курсе мы познакомимся с Redux, который во многом решает эту проблему (и много других).
+
+# Колбеки
+Из сказанного выше возникает еще одна сложность: что, если событие возникает в глубинном компоненте, у которого нет своего состояния? Без использования Redux выход, по сути, только один. Корневой компонент должен пробрасывать колбеки во внутренние компоненты, а те, в свою очередь, пробрасывают их дальше по необходимости.
+*/
+
+class Item extends React.Component {
+  render() {
+    const { value, onRemove } = this.props;
+    return (
+      <li>
+        <a href="#" onClick={onRemove(value)}>{value}</a>
+      </li>
+    );
+  }
+}
+
+class List extends React.Component {
+  constructor(props) {
+    super(props);
+    const { items } = this.props;
+    this.state = { items };
+  }
+  
+  handleRemove = (value) => (e) => {
+    e.preventDefault();
+    const newItems = this.state.items.filter(item => item !== value);
+    this.setState({ items: newItems });
+  };
+
+  render() {
+    const { items } = this.state;
+    
+    return (
+      <ul>
+        {items.map(i =>
+          <Item onRemove={this.handleRemove} value={i} />
+        )}
+      </ul>
+    );
+  }
+}
+
+ReactDOM.render(
+  <List items={[1, 2, 3, 4, 5]} />,
+  document.getElementById('react-root'),
+);
+
+
+/**@@@
+Реализуйте простой Todo, с возможностью добавлять и удалять заметки.
+
+src/TodoBox.js
+Основной компонент, который выводит форму для добавления новой записи и выводит список заметок на экран.
+
+Начальный HTML:
+*/ 
+
+<div>
+  <div class="mb-3">
+    <form class="todo-form form-inline mx-3">
+      <div class="form-group">
+        <input type="text" value="" required="" class="form-control mr-3" placeholder="I am going...">
+      </div>
+      <button type="submit" class="btn btn-primary">add</button>
+    </form>
+  </div>
+</div>
+
+/*
+src/Item.jsx
+Отрисовывает конкретный элемент списка. Принимает на вход свойства:
+
+task
+onRemove
+HTML с добавленными заметками:
+*/
+
+<div>
+  <div class="mb-3">
+    <form class="todo-form form-inline mx-3">
+      <div class="form-group">
+        <input type="text" value="" required="" class="form-control mr-3" placeholder="I am going...">
+      </div>
+      <button type="submit" class="btn btn-primary">add</button>
+    </form>
+  </div>
+  <div>
+    <div class="row">
+      <div>
+        <form class="todo-remove-item-form" action="">
+          <button type="submit" class="btn btn-primary btn-sm">-</button>
+        </form>
+      </div>
+      <div class="col-10">second</div>
+    </div>
+    <hr>
+  </div>
+  <div>
+    <div class="row">
+      <div>
+        <form class="todo-remove-item-form" action="">
+          <button type="submit" class="btn btn-primary btn-sm">-</button>
+        </form>
+      </div>
+      <div class="col-10">first</div>
+    </div>
+    <hr>
+  </div>
+</div>
+
+/*
+Добавление элементов происходит в обратном порядке. Новые всегда сверху.
+
+Подсказки
+Для получения нового id используйте функцию uniqueId.
+*/
+
+// FILE: /app/src/Item.jsx:
+import React from 'react';
+
+export default class Item extends React.Component {
+  render() {
+    const { task, onRemove } = this.props;
+
+    return (
+      <div className="row">
+        <div>
+          <form className="todo-remove-item-form" action="" onSubmit={onRemove}>
+            <button type="submit" className="btn btn-primary btn-sm">-</button>
+          </form>
+        </div>
+        <div className="col-10">
+          {task.text}
+        </div>
+      </div>
+    );
+  }
+}
+
+// FILE: /app/src/TodoBox.jsx:
+import { uniqueId } from 'lodash';
+import React from 'react';
+import Item from './Item';
+
+export default class TodoBox extends React.Component {
+  state = { newTaskText: '', tasks: [] };
+
+  onChangeTask = ({ target: { value } }) => {
+    this.setState({ newTaskText: value });
+  }
+
+  onRemoveTask = removingId => (e) => {
+    e.preventDefault();
+    const { tasks } = this.state;
+    
+    this.setState({ tasks: tasks.filter(({ id }) => id !== removingId) });
+  }
+
+  onSubmitForm = (e) => {
+    e.preventDefault();
+    const { tasks, newTaskText } = this.state;
+    const newTask = { id: uniqueId(), text: newTaskText };
+    
+    this.setState({ newTaskText: '', tasks: [newTask, ...tasks] });
+  }
+
+  renderForm() {
+    const { newTaskText } = this.state;
+    return (
+      <form onSubmit={this.onSubmitForm} className="todo-form form-inline mx-3">
+        <div className="form-group">
+          <input
+            type="text"
+            onChange={this.onChangeTask}
+            value={newTaskText}
+            required
+            className="form-control mr-3"
+            placeholder="I am going..."
+          />
+        </div>
+        <button type="submit" className="btn btn-primary">add</button>
+      </form>
+    );
+  }
+
+  render() {
+    const { tasks } = this.state;
+    return (
+      <div>
+        <div className="mb-3">
+          {this.renderForm()}
+        </div>
+        {tasks.map(task => (
+          <div key={task.id}>
+            <Item task={task} onRemove={this.onRemoveTask(task.id)} />
+            <hr />
+          </div>
+        ))}
+      </div>
+    );
+  }
+}
+
+
+
+
+>>>>>> Функциональные компоненты <<<<<<
+
+// Для создания компонентов Реакта не обязательно использовать классы. В тех случаях, когда у компонента нет состояния, гораздо проще использовать альтернативный способ.
+
+const List = (props) => {
+  return (<ul>
+    {props.items.map(v => <li>{v}</li>)}
+  </ul>);
+}
+
+ReactDOM.render(
+  <List items={[1, 2, 3]} />,
+  document.getElementById('react-root'),
+);
+
+/*
+Компоненты, созданные как функции, называются функциональными. Они принимают объект со свойствами как первый аргумент, и так же начинаются с большой буквы.
+
+На вопрос "когда их стоит использовать?" ответ очень простой. Всегда, когда компонент не хранит в себе состояние. Другими словами, большинство компонентов в проекте должно быть именно функциональными.
+
+В остальном они ведут себя точно так же, как и компоненты на классах.
+*/
+
+# Неймспейсы
+
+// Вспомним пример из прошлого урока, связанный с использованием компонентов-потомков, созданных специально для родительского компонента.
+
+<Card>
+  <CardTitle>Title</CardTitle>
+  <CardBody>
+    <b>Body</b>
+  </CardBody>
+</Card>
+
+/*
+Следуя сказанному выше компоненты <CardTitle> и <CardBody> должны быть реализованы как функциональные.
+
+Но это еще не все, можно пойти дальше и реализовать такую структуру:
+*/
+import Card from './Card.jsx';
+
+<Card>
+  <Card.Body>
+    <Card.Title>Title</Card.Title>
+  </Card.Body>
+</Card>
+
+/*
+JSX поддерживает механизм неймспейсов. Не сказать, что без него нельзя жить, но он довольно удобен. Во-первых, достаточно импортировать только компонент верхнего уровня, а остальное доступно уже через него, что довольно логично, если смотреть на JSX как на js код. Во-вторых, так лучше задается семантика.
+
+Реализуется подобный механизм через статические свойства.
+*/
+
+const Title = (props) => <div className="card-title">{props.children}</div>;
+const Body = (props) => <div className="card-body">{props.children}</div>;
+
+class Card extends React.Component {
+  static Body = Body;
+  static Title = Title;
+
+  render() {
+    return <div className="card card-block">{this.props.children}</div>;
+  }
+}
+
+const vdom = (<Card>
+  <Card.Body>
+    <Card.Title>What is love?</Card.Title>
+  </Card.Body>
+</Card>);
+
+ReactDOM.render(
+  vdom,
+  document.getElementById('react-root'),
+);
+
+// Такой способ компоновки не требует того, чтобы все компоненты были созданы в одном файле. Структура может быть любой, для остального есть импорты.
+
+/**@@@
+src/Card.jsx
+Реализуйте компонент <Card> так чтобы можно составлять такую структуру:
+*/
+
+<Card>
+  <Card.Body>
+    <Card.Title>Title</Card.Title>
+    <Card.Text>Text</Card.Text>
+  </Card.Body>
+</Card>
+
+// Получившийся HTML:
+<div class="card">
+  <div class="card-body">
+    <h4 class="card-title">Title</h4>
+    <p class="card-text">Text</p>
+  </div>
+</div>
+
+
+// FILE: /app/src/Card.jsx:
+import React from 'react';
+
+const Body = ({ children }) => <div className="card-body">{children}</div>;
+const Title = ({ children }) => <h4 className="card-title">{children}</h4>;
+const Text = ({ children }) => <p className="card-text">{children}</p>;
+
+export default class Card extends React.Component {
+  static Body = Body;
+
+  static Title = Title;
+
+  static Text = Text;
+
+  render() {
+    const { children } = this.props;
+    return <div className="card">{children}</div>;
+  }
+}
+
+
+
+
+>>>>>> Virtual Dom <<<<<<
+
+/*
+
+В предыдущем курсе мы впервые столкнулись c изменением DOM в процессе взаимодействия со страницей. Этот способ резко отличается от того, который мы использовали в курсе JS: DOM API. Важнейшее отличие связано с тем, как происходит изменение состояния отрисованного экрана. Напомню вкратце, что при прямом манипулировании DOM нам нужно сделать следующее:
+
+1. Удалить из DOM то, что стало неактуально для следующего состояния.
+2. Изменить, если надо, те элементы, которые присутствуют на экране и должны остаться в новом.
+3. Добавить новые элементы на страницу (точечно).
+Другими словами, чтобы перейти в новое состояние, нужно изменить старое. Значит про него надо знать.
+
+В Реакте все совсем по-другому. После любого изменения и вызова setState Реакт создает новое состояние и отрисовывает все компоненты так, как будто это происходит с нуля. На самом деле отрисовка действительно происходит с нуля. Нам не важно, что было до этого момента на экране и как оно располагалось. Любое изменение в Реакте приводит к тому что приложение отрисовывается заново.
+
+Создатели React называют этот подход one-way data flow:
+1. Действия пользователя приводят к изменению состояния приложения (через setState).
+2. Реакт запускает цикл отрисовки. Начиная от того компонента, в котором было изменено состояние (как правило, корневой компонент), через props данные постепенно распространяются от компонентов более высокого уровня до самых глубинных компонентов.
+3. Получившийся html интегрируется в страницу.
+
+Те, кто хорошо знаком с функциональным подходом, могут увидеть прямую связь. Реакт действительно делает мир неизменяемым (immutable). Самый простой способ реализовать подобное поведение - использовать mountElement.innerHTML, который заменяет html целиком после вызова setState. Хотя на практике этот подход сопряжен с кучей сложностей (я реализовывал подобную схему), он позволяет в 200 строк построить библиотеку, которая будет работать как React.
+
+Главная проблема при использовании innerHTML связана с производительностью. Сказать что это медленно — ничего не сказать. Поэтому создатели React пошли другим путем.
+*/
+
+# Virtual Dom Tree
+
+/*
+Когда я говорил, что компоненты отрисовываются, то немного лукавил. В реальности после того, как отработает их рендеринг (вызов функции render для всего дерева компонентов), создается так называемый виртуальный DOM. Это просто js-объект определенной структуры, который отражает состояние экрана. Далее React сравнивает новый virtual dom tree со старым и строит дифф (объект, описывающий разницу между старым и новым состоянием). И только в этот момент начинается отрисовка нового состояния в реальный DOM. Здесь уже должно быть понятно, что Реакт умнее, чем кажется на первый взгляд, и вносит изменения в реальный DOM настолько эффективно, насколько это возможно, ведь он знает КАК его надо изменить.
+
+Из описанного выше есть важное следствие. Тот реальный DOM, который находится под контролем Реакта (это все потомки элемента, в который мы рендерим корневой компонент), не может изменяться никем снаружи Реакта. Если подобное произойдет, то Реакт не сможет нормально функционировать, ведь ему приходится трекать (отслеживать) текущее состояние DOM для того, чтобы производить вычисления диффа. Когда подобное происходит, Реакт ругается и говорит, что ему мешают работать.
+
+Обращаю ваше внимание на то, что виртуальный DOM — не самоцель Реакта, как многие думают. Это просто эффективный способ реализовать идею one-way data flow. Если бы работал вариант с innerHTML, то никто бы не делал виртуальный DOM.
+
+И хотя построение js объекта — это гораздо более дешевая операция, чем работа с реальным DOM, все равно могут возникать ситуации, когда процесс вычисления занимает много времени, и это тормозит приложение. Об этом мы поговорим в одном из следующих уроков.
+
+Выберите верное утверждение
+> React хранит предыдущую версию Virtual Dom для того, чтобы сравнивать его с новым
+
+С какого компонента начинается перерисовка дерева компонента после вызова setState?
+> С того, в котором был вызван setState, так как это изменение может повлиять только на потомков и никогда на предков
+
+Что означает фраза "one-way data flow"?
+> Распространение изменений идет в одну сторону. Меняются данные в стейте, перерисовывается приложение
+*/
+
+/**@@@
+src/Modal.jsx
+Реализуйте компонент <Modal> (Модальное окно)
+
+Использование:
+*/
+
+export default class Component extends React.Component {
+  state = { modal: false };
+
+  toggle = (e) => {
+    e.preventDefault();
+
+    this.setState({
+      modal: !this.state.modal,
+    });
+  }
+
+  render() {
+    return (
+      <div>
+        <button type="button" className="modal-open-button btn btn-danger" onClick={this.toggle}>Open</button>
+        <Modal isOpen={this.state.modal}>
+          <Modal.Header toggle={this.toggle}>Modal title</Modal.Header>
+          <Modal.Body>
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit
+          </Modal.Body>
+          <Modal.Footer>
+            <button type="button" className="modal-close-button btn btn-default" onClick={this.toggle}>Cancel</button>
+          </Modal.Footer>
+        </Modal>
+      </div>
+    );
+  }
+}
+
+// HTML закрытого состояния:
+
+<div>
+  <button type="button" class="modal-open-button btn btn-danger">Open</button>
+  <div class="modal" style="display: none;">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div class="modal-title">Modal title</div>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>
+        <p class="modal-body">Lorem ipsum dolor sit amet, consectetur adipisicing elit</p>
+        <p class="modal-footer">
+          <button type="button" class="modal-close-button btn btn-default">Cancel</button>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+/*
+В открытом состоянии строчка: <div class="modal" style="display: none;"> заменяется на <div class="modal fade show" style="display: block;">
+
+У открытого модального окна две кнопки закрывающие его: крестик справа вверху и кнопка Cancel справа внизу.
+*/
+
+// FILE: /app/src/Component.jsx:
+import React from 'react';
+import Modal from './Modal';
+
+export default class Component extends React.Component {
+  state = { modal: false };
+
+  toggle = () => {
+    const { modal } = this.state;
+    this.setState({
+      modal: !modal,
+    });
+  }
+
+  render() {
+    const { modal } = this.state;
+    return (
+      <div>
+        <button type="button" className="modal-open-button btn btn-danger" onClick={this.toggle}>Open</button>
+        <Modal isOpen={modal}>
+          <Modal.Header toggle={this.toggle}>Modal title</Modal.Header>
+          <Modal.Body>
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit
+          </Modal.Body>
+          <Modal.Footer>
+            <button type="button" className="modal-close-button btn btn-default" onClick={this.toggle}>Cancel</button>
+          </Modal.Footer>
+        </Modal>
+      </div>
+    );
+  }
+}
+
+
+// FILE: /app/src/index.jsx:
+import ReactDOM from 'react-dom';
+import React from 'react';
+
+import Component from './Component.jsx';
+
+ReactDOM.render(
+  <Component />,
+  document.getElementById('container'),
+);
+
+
+
+// FILE /app/src/Modal.jsx:
+import cn from 'classnames';
+import React from 'react';
+
+const Header = ({ children, toggle }) => (
+  <div className="modal-header">
+    <div className="modal-title">
+      {children}
+    </div>
+    <button type="button" className="close" data-dismiss="modal" aria-label="Close" onClick={toggle}>
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+);
+const Body = ({ children }) => <p className="modal-body">{children}</p>;
+const Footer = ({ children }) => <p className="modal-footer">{children}</p>;
+
+export default class Modal extends React.Component {
+  static defaultProps = {
+    isOpen: false,
+  };
+
+  static Header = Header;
+
+  static Body = Body;
+
+  static Footer = Footer;
+
+  render() {
+    const { isOpen, children } = this.props;
+
+    const classes = cn({
+      modal: true,
+      fade: isOpen,
+      show: isOpen,
+    });
+
+    const style = {
+      display: isOpen ? 'block' : 'none',
+    };
+
+    return (
+      <div className={classes} style={style}>
+        <div className="modal-dialog" role="document">
+          <div className="modal-content">
+            {children}
+          </div>
+        </div>
+      </div>
+    );
+  }
+}
+
+
+
+>>>>>> Тестирование <<<<<<
+
+/*
+Тестирование фронтенда — сложная задача, и создатели фреймворков всячески пытаются ее упростить. Реакт в этом плане, как мне кажется, продвинулся дальше всех, и не последнюю роль здесь сыграло то, что тестовый фреймворк jest также разрабатывается Фейсбуком. Соответственно, уровень поддержки фронтенд тестирования и конкретно Реакта крайне высок.
+*/
+
+# JSDOM
+
+/*
+jsdom - реализация DOM API на чистом js для использования в Node.js. Основной целью библиотеки является эмуляция подмножества функций браузера, достаточных для тестирования и парсинга сайтов. jsdom встроен в jest и не требует абсолютно никакой настройки. В этом легко убедиться, если открыть тесты Хекслета в любой практике, работающей с браузером. С точки зрения использования это выглядит так, что прямо в тесте у нас доступен document и window.
+*/
+
+test('normalize', () => {
+  const expected = '<p class="row">Text</p>';
+  document.documentElement.innerHTML = expected;
+  normalize(document);
+  expect(document.body.innerHTML).toEqual(expected);
+});
+
+/*
+Возникает вопрос: зачем использовать jsdom, когда есть драйверы, работающие с настоящими браузерами. Ответов несколько:
+
+1. Скорость работы jsdom значительно выше, что не удивительно, ведь это просто библиотека на js (к тому же, headless), в отличие от браузера.
+2. jsdom потребляет значительно меньше памяти для работы.
+3. Самое главное: jsdom и код нашего приложения работают в рамках одного интерпретатора Node.js. На практике это приводит к тому, что любые ошибки внутри кода приложения будут проявляться так, как мы бы этого и хотели, с возникновением исключения и отображением стектрейса.
+
+Единственный серьезный недостаток (он же и плюс) заключается в том, что jsdom — это не браузер. Другими словами, тесты на jsdom могут вполне работать, а код в браузере нет, и наоборот. Кроме того, jsdom сильно отстает в развитии от тех же браузеров. Новые фичи в нем появляются сильно позже, да и старые работают не все. Во многом эта проблема нивелируется использованием полифиллов, но если вы используете что-то уж совсем экзотическое, то, возможно, придется отказаться. По своей практике скажу, что с этим всем можно жить и полифиллы действительно спасают.
+*/
+
+# react-test-renderer
+
+/*
+Так как Реакт генерирует виртуальный DOM, этим можно воспользоваться. Пакет react-test-renderer предоставляет возможность отрендерить компонент Реакта без необходимости взаимодействия с браузером.
+*/
+
+import reactTestRenderer from 'react-test-renderer';
+
+const renderer = reactTestRenderer.create(
+  <a href="https://www.facebook.com/">Facebook</a>
+);
+
+console.log(renderer.toJSON());
+// { type: 'a',
+//   props: { href: 'https://www.facebook.com/' },
+//   children: [ 'Facebook' ] }
+
+// С этим пакетом легко использовать снепшот-тестирование в jest. Достаточно передать в expect результат вызова функции toJSON.
+
+
+# Enzyme
+
+// Библиотека, разработанная программистами Airbnb для полноценного тестирования приложений на Реакте.
+
+
+
+>>>>>> Асинхронная обработка <<<<<<
+
+// Работа с асинхронным кодом в Реакт не отличается ничем особо примечательным по сравнению с тем, что мы уже проходили, но для проформы стоит пробежаться.
+
+class Loader extends React.Component {
+  state = { url: null };
+
+  handleClick = async () => {
+    const res = await axios.get('/images/random');
+    this.setState({ url: res.data });
+  }
+
+  render() {
+    const { url } = this.state;
+    return (
+      <div>
+        <button onClick={this.handleClick}>Load Random Image</button>
+        {url && <img src={url} />}
+      </div>
+    );
+  }
+}
+
+/*
+Выше видно, что мы легко можем делать обработчик асинхронным, а дальше все как обычно.
+
+Единственный момент, выделяющий Реакт - это обработка событий в асинхронном коде. Как я уже упоминал, объект события в Реакте постоянно переиспользуется. Попытка работать с ним в асинхронном коде к хорошему не приведет:
+*/
+
+onClick = (event) => {
+  console.log(event); // => nullified object.
+  console.log(event.type); // => "click"
+  const eventType = event.type; // => "click"
+
+  setTimeout(() => {
+    console.log(event.type); // => null
+    console.log(eventType); // => "click"
+  }, 0);
+
+  // Won't work. this.state.clickEvent will only contain null values.
+  this.setState({clickEvent: event});
+
+  // You can still export event properties.
+  this.setState({eventType: event.type});
+}
+
+// Выходов из этой ситуации два: предпочтительный - взять из объекта события только то, что нужно, и использовать, другой - вызывать event.persist(), тогда Реакт не будет его больше трогать.
+
+/**@@@
+src/Autocomplete.jsx
+Реализуйте компонент <Autocomplete />, который представляет собой текстовое поле с автодополнением списка стран.
+
+Список стран можно получить сделав запрос:
+*/
+
+const res = await axios.get('/countries', { params: { term: 'al' } });
+console.log(res.data); // => ["Albania","Algeria"]
+
+/*
+Где term это начало слова (любое количество символов введенное пользователем)
+Начальный HTML:
+*/
+
+<div>
+  <form>
+    <div class="form-group">
+      <input type="text" class="form-control" placeholder="Enter Country">
+    </div>
+  </form>
+</div>
+
+// HTML после выбора "al":
+
+<div>
+  <form>
+    <div class="form-group">
+      <input type="text" class="form-control" placeholder="Enter Country">
+    </div>
+  </form>
+  <ul>
+    <li>Albania</li>
+    <li>Algeria</li>
+  </ul>
+</div>
+
+// В качестве key для элементов списка используйте название страны.
+
+// FILE: /app/src/index.jsx:
+import '@babel/polyfill';
+import ReactDOM from 'react-dom';
+import React from 'react';
+
+import Autocomplete from './Autocomplete';
+
+ReactDOM.render(
+  <Autocomplete />,
+  document.getElementById('container'),
+);
+
+
+// FILE: /app/src/Autocomplete.jsx
+import axios from 'axios';
+import React from 'react';
+
+
+export default class Autocomplete extends React.Component {
+  state = { countries: [], text: '' };
+
+  handleChangeText = async ({ target: { value } }) => {
+    if (value === '') {
+      this.setState({ text: '', countries: [] });
+      return;
+    }
+    this.setState({ text: value });
+    const res = await axios.get('/countries', { params: { term: value } });
+    this.setState({ countries: res.data });
+  }
+
+  renderCountries() {
+    const { countries } = this.state;
+    return (
+      <ul>
+        {countries.map(c => <li key={c}>{c}</li>)}
+      </ul>
+    );
+  }
+
+  render() {
+    const { countries, text } = this.state;
+
+    return (
+      <div>
+        <form>
+          <div className="form-group">
+            <input type="text" onChange={this.handleChangeText} value={text} className="form-control" placeholder="Enter Country" />
+          </div>
+        </form>
+        { countries.length > 0 && this.renderCountries() }
+      </div>
+    );
+  }
+}
+
+
+
+>>>>>> Component Lifecycle <<<<<<
+
+// При правильном использовании реакта, большая часть компонентов состоит из метода render и обработчиков событий:
+
+class ArticleItem extends React.Component {
+  handleClick = (e) => {
+    e.preventDefault();
+    const { onClick } = this.props.onClick;
+    onClick();
+  }
+  render() {
+    const { name, description, link } = this.props;
+    return (
+      <div>
+        <a href="{link}" onClick={this.handleClick}>{name}</a><br />
+        <div>{description}</div>
+      </div>
+    );
+  }
+}
+
+
+// Но не все задачи решаются так просто. Представьте себе компонент <Clock />, имитирующий цифровые часы в формате чч:мм:сс. Создадим каркас:
+
+class Clock extends React.Component {
+  render() {
+    const currentTime = new Date();
+    return (
+      <div>{currentTime.toLocaleTimeString()}</div>
+    );
+  }
+}
+
+/*
+Этот компонент отображает текущее время. Теперь подумаем как его обновлять. Часы, в отличие от обычных компонентов, не ожидают действий от пользователя. Они обновляются каждую секунду самостоятельно. Возникает цепочка: возникает событие => меняется текущее время => реакт вызывает render и меняет DOM. Начнем с состояния, добавим туда текущее время:
+*/
+
+class Clock extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { date: new Date() };
+  }
+  render() {
+    const { date } = this.state;
+    return (
+      <div>{date.toLocaleTimeString()}</div>
+    );
+  }
+}
+
+/*
+Компонент, по прежнему, показывает лишь текущее время, но теперь он готов к изменению. Время относится к периодическим событиям, для которых используются таймеры. Для <Clock /> подойдет setInterval. Мы должны установить таймер сразу после отрисовки часов и очистить таймер при удалении компонента из дерева элементов.
+*/
+
+setInterval(() => this.setState({ date: new Date() }), 1000);
+
+/*
+Где запускать таймер? render вызывается на каждое изменение состояния, а значит он не подходит. Ведь тогда, <Clock /> будет запускать новый таймер каждую секунду. Конструктор, кажется, более подходящим местом, но здесь нас ожидает сюрприз. Вызов конструктора и отрисовка часов в DOM дереве, в общем случае, два независимых события. Посмотрите на код:
+*/
+
+// Вызывается конструктор
+const clock = <Clock />;
+
+// Что-то долго делаем еще
+
+// Отрисовываем
+reactDOM.render(
+  clock,
+  document.getElementById('root')
+);
+
+/*
+Эти часы еще не находятся в DOM дереве, но уже во всю работают и обновляются. Стоит ли об этом беспокоиться? Да, такое поведение крайне неожиданно, оно мешает тестированию и расходует процессорное время. Кроме того, конструктор никак не помогает с удалением таймера.
+
+Каждый компонент Реакта, проходит несколько стадий в процессе своей жизни: он создается, затем добавляется в DOM, получает пропсы, и, наконец, удаляется из дерева. Этот процесс называют жизненным циклом компонента (Component Lifecycle). Реакт предоставляет набор методов, которые позволяют встроиться в этот процесс. Например, запуск часов логичнее всего сделать сразу после их отрисовки. В этом нам поможет метод componentDidMount. Он вызывается сразу после отрисовки компонента. Происходит это ровно один раз.
+*/
+
+class Clock extends React.Component {
+  constructor() {
+    super(props);
+    this.state = { date: new Date() };
+  }
+
+  componentDidMount() {
+    // Сохраняем идентификатор таймера
+    this.timerId = setInterval(() => this.setState({ date: new Date() }), 1000);
+  }
+
+  render() {
+    const { date } = this.state;
+    return (
+      <div>{date.toLocaleTimeString()}</div>
+    );
+  }
+}
+
+/*
+Обратите внимание на то, как мы сохраняем таймер внутри объекта. Он не участвует в представлении, поэтому нет необходимости использовать состояние.
+
+Теперь выполним очистку таймера. Для этого подойдет метод componentWillUnmount, который выполняется прямо перед удалением компонента из DOM.
+*/
+
+class Clock extends React.Component {
+  constructor() {
+    super(props);
+    this.state = { date: new Date() };
+  }
+
+  componentDidMount() {
+    this.timerId = setInterval(() => this.setState({ date: new Date() }), 1000);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.timerId);
+  }
+
+  render() {
+    const { date } = this.state;
+    return (
+      <div>{date.toLocaleTimeString()}</div>
+    );
+  }
+}
+
+/*
+Часы приобрели законченный вид.
+
+Мы рассмотрели два метода, позволяющих встраиваться в жизненный цикл компонента, но их значительно больше. Они делятся на три независимые группы:
+
+# Монтирование (Mounting)
+
+Эти методы вызываются во время создания объекта и вставки его в DOM.
+
+ - constructor()
+ - static getDerivedStateFromProps()
+ - render()
+ - componentDidMount()
+
+
+# Обновление (Updating)
+
+Обновление может происходить при изменении свойств или состояния. Эти методы вызываются во время перерисовки.
+
+ - static getDerivedStateFromProps()
+ - shouldComponentUpdate()
+ - render()
+ - getSnapshotBeforeUpdate()
+ - componentDidUpdate()
+
+# Удаление или Демонтирование (Unmount)
+
+В эту группу входит один метод. Он вызывается во время удаления компонента из DOM.
+
+ - componentWillUnmount()
+
+Такое количество методов, объясняется сложностью реальной разработки. Но, на практике, лишь некоторые используются регулярно. К таким методам относится componentDidMount. С его помощью устанавливают таймеры, выполняют AJAX запросы, меняется DOM в обход реакта. Последнее бывает нужно при интеграции со сторонними библиотеками.
+
+# Дополнительные материалы
+Lifecycle Methods https://reactjs.org/docs/react-component.html
+*/
+
+/**@@@
+В этом упражнении необходимо реализовать записную книжку, которая взаимодействует с бекендом по следующим урлам:
+
+ * GET /tasks - получить список задач.
+ 	- Формат ответа - [{"id":1,"text":"asdf","state":"finished"},{"id":2,"text":"asdasd","state":"active"}]
+ * POST /tasks - создать новую задачу.
+ 	- Формат запроса - {"text": "new task"}
+ 	- Формат ответа - {"id":4,"text":"new task","state":"active"}
+ * PATCH /tasks/:id/finish - завершить задачу.
+	- Формат ответа - {"id":1,"text":"asdf","state":"finished"}
+ * PATCH /tasks/:id/activate - переоткрыть завершенную задачу - {"id":1,"text":"asdf","state":"active"}	
+
+Начальный HTML: 
+*/
+<div>
+  <div class="mb-3">
+    <form class="todo-form form-inline mx-3">
+      <div class="form-group">
+        <input type="text" value="" required="" class="form-control mr-3" placeholder="I am going...">
+      </div>
+      <button type="submit" class="btn btn-primary">add</button>
+    </form>
+  </div>
+</div>
+
+// HTML после того как добавлены последовательно три задачи "first task", "second task" и "another task". На последнюю был совершен клик, который перевел задачу в выполненные:
+
+<div>
+  <div class="mb-3">
+    <form class="todo-form form-inline mx-3">
+      <div class="form-group">
+        <input type="text" value="" required="" class="form-control mr-3" placeholder="I am going...">
+      </div>
+      <button type="submit" class="btn btn-primary">add</button>
+    </form>
+  </div>
+  <div class="todo-active-tasks">
+    <div class="row">
+      <div class="col-1">2</div>
+      <div class="col">
+        <a href="#" class="todo-task">second task</a>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-1">1</div>
+      <div class="col">
+        <a href="#" class="todo-task">first task</a>
+      </div>
+    </div>
+  </div>
+  <div class="todo-finished-tasks">
+    <div class="row">
+      <div class="col-1">3</div>
+      <div class="col">
+        <s><a href="#" class="todo-task">another task</a></s>
+      </div>
+    </div>
+  </div>
+</div>
+
+/*
+src/TodoBox.jsx
+Реализуйте компонент <TodoBox>.
+
+Первоначальная подгрузка задач с сервера, должна происходит сразу после монтирования компонента в DOM.
+
+src/Item.jsx
+Реализуйте компонент <Item> отвечающий за вывод конкретной записи.
+
+Подсказки
+Для генерации урлов в файле routes.js созданы специальные хелперы
+*/
+
+// FILE: /app/src/index.jsx:
+import '@babel/polyfill';
+import ReactDOM from 'react-dom';
+import React from 'react';
+
+import TodoBox from './TodoBox';
+
+ReactDOM.render(
+  <TodoBox />,
+  document.getElementById('container'),
+);
+
+// FILE: /app/src/routes.js:
+const host = '';
+
+export default {
+  tasksPath: () => [host, 'tasks'].join('/'), // get tasks list
+  taskPath: id => [host, 'tasks', id].join('/'),
+  finishTaskPath: id => [host, 'tasks', id, 'finish'].join('/'),
+  activateTaskPath: id => [host, 'tasks', id, 'activate'].join('/'),
+};
+
+
+// FILE: /app/src/Item.jsx:
+import React from 'react';
+
+export default ({ task, onClick }) => {
+  const link = <a href="#" className="todo-task" onClick={onClick}>{task.text}</a>;
+
+  return (
+    <div className="row">
+      <div className="col-1">
+        {task.id}
+      </div>
+      <div className="col">
+        {task.state === 'finished' ? <s>{link}</s> : link}
+      </div>
+    </div>
+  );
+};
+
+
+// FILE: /app/src/TodoBox.jsx:
+import axios from 'axios';
+import React from 'react';
+import update from 'immutability-helper';
+import Item from './Item';
+import routes from './routes';
+
+export default class TodoBox extends React.Component {
+  state = { newTaskText: '', tasks: [] };
+
+  componentDidMount() {
+    this.resetTasks();
+  }
+
+  handleChangeText = ({ target: { value } }) => {
+    this.setState({ newTaskText: value });
+  }
+
+  handleFinishTask = id => async () => {
+    await axios.patch(routes.finishTaskPath(id));
+    const { tasks } = this.state;
+    const index = tasks.findIndex(t => t.id === id);
+    const updatedTasks = update(tasks, { [index]: { $merge: { state: 'finished' } } });
+    this.setState({ tasks: updatedTasks });
+  }
+
+  handleActivateTask = id => async () => {
+    await axios.patch(routes.activateTaskPath(id));
+    const { tasks } = this.state;
+    const index = tasks.findIndex(t => t.id === id);
+    const updatedTasks = update(tasks, { [index]: { $merge: { state: 'active' } } });
+    this.setState({ tasks: updatedTasks });
+  }
+
+  handleSubmitForm = async (e) => {
+    e.preventDefault();
+    const { newTaskText } = this.state;
+    const response = await axios.post(routes.tasksPath(), { text: newTaskText });
+    const { tasks } = this.state;
+    this.setState({ newTaskText: '', tasks: [response.data, ...tasks] });
+  }
+
+  resetTasks = async () => {
+    const response = await axios.get(routes.tasksPath());
+    this.setState({ tasks: response.data });
+  }
+
+  renderFinishedTasks(tasks) {
+    return (
+      <div className="todo-finished-tasks">
+        {tasks.map(task => <Item key={task.id} task={task} onClick={this.handleActivateTask(task.id)} />)}
+      </div>
+    );
+  }
+
+  renderActiveTasks(tasks) {
+    return (
+      <div className="todo-active-tasks">
+        {tasks.map(task => <Item key={task.id} task={task} onClick={this.handleFinishTask(task.id)} />)}
+      </div>
+    );
+  }
+
+  renderForm() {
+    const { newTaskText } = this.state;
+    return (
+      <form onSubmit={this.handleSubmitForm} className="todo-form form-inline mx-3">
+        <div className="form-group">
+          <input
+            type="text"
+            onChange={this.handleChangeText}
+            value={newTaskText}
+            required
+            className="form-control mr-3"
+            placeholder="I am going..."
+          />
+        </div>
+        <button type="submit" className="btn btn-primary">add</button>
+      </form>
+    );
+  }
+
+  render() {
+    const { tasks } = this.state;
+    const activeTasks = tasks.filter(t => t.state === 'active');
+    const finishedTasks = tasks.filter(t => t.state === 'finished');
+
+    return (
+      <div>
+        <div className="mb-3">
+          {this.renderForm()}
+        </div>
+        {activeTasks.length > 0 && this.renderActiveTasks(activeTasks)}
+        {finishedTasks.length > 0 && this.renderFinishedTasks(finishedTasks)}
+      </div>
+    );
+  }
+}
+
+
+// FILE: /app/__tests__/test.jsx:
+import nock from 'nock';
+import React from 'react';
+import Enzyme, { mount } from 'enzyme';
+import Adapter from 'enzyme-adapter-react-16';
+import axios from 'axios';
+import httpAdapter from 'axios/lib/adapters/http';
+import timeout from 'timeout-then';
+import TodoBox from '../src/TodoBox';
+
+Enzyme.configure({ adapter: new Adapter() });
+axios.defaults.adapter = httpAdapter;
+nock.disableNetConnect();
+
+const host = 'http://localhost';
+
+test('TodoBox 1', async () => {
+  nock(host)
+    .get('/tasks')
+    .reply(200, []);
+
+  const wrapper = mount(<TodoBox />);
+  const input = wrapper.find('input');
+  const form = wrapper.find('form');
+
+  await timeout(100);
+
+  expect(wrapper.render()).toMatchSnapshot();
+  input.simulate('change', { target: { value: 'new task' } });
+
+  nock(host)
+    .post('/tasks', {
+      text: 'new task',
+    })
+    .reply(200, { id: 1, state: 'active', text: 'new task' });
+  form.simulate('submit');
+
+  await timeout(100);
+
+  expect(wrapper.render()).toMatchSnapshot();
+});
+
+test('TodoBox 2', async () => {
+  const tasks = [
+    { id: 2, text: 'task 2', state: 'finished' },
+    { id: 1, text: 'task 1', state: 'active' },
+  ];
+  nock(host)
+    .get('/tasks')
+    .reply(200, tasks);
+
+  const wrapper = mount(<TodoBox />);
+
+  await timeout(100);
+
+  expect(wrapper.render()).toMatchSnapshot();
+
+  wrapper.update();
+
+  const activeTask = wrapper.find('.todo-active-tasks .todo-task');
+  nock(host)
+    .patch(`/tasks/${tasks[1].id}/finish`)
+    .reply(200, { ...tasks[1], state: 'finished' });
+  activeTask.simulate('click');
+
+  await timeout(100);
+
+  wrapper.update();
+
+  expect(wrapper.render()).toMatchSnapshot();
+
+  const finishedTask = wrapper.find('.todo-task').at(0);
+  nock(host)
+    .patch(`/tasks/${tasks[0].id}/activate`)
+    .reply(200, { ...tasks[0], state: 'active' });
+  finishedTask.simulate('click');
+
+  await timeout(100);
+
+  wrapper.update();
+
+  expect(wrapper.render()).toMatchSnapshot();
+});
+
+
+
+
+>>>>>> Производительность <<<<<<
+
+/*
+Преждевременная оптимизация - корень всех зол.
+
+Перед тем, как рассуждать о производительности, я настоятельно рекомендую прочитать Optimization.guide.
+
+Для начала вспомним, что Virtual Dom — это уже оптимизация, которая позволяет Реакту из коробки работать достаточно быстро, чтобы мы могли вообще не задумываться о производительности долгое время. Многим проектам этого хватает за глаза на протяжении всей жизни.
+
+Напомню, что Реакт работает так:
+
+1. Маунт вызывает рендеринг приложения.
+2. Получившийся DOM вставляется в реальный DOM целиком, так как там еще ничего нет. А виртуальный DOM, в свою очередь, сохраняется внутри Реакта для последующего обновления.
+3. Изменение состояния приводит к вычислению нового виртуального DOM.
+4. Вычисляется разница между старым виртуальным DOM и новым.
+5. Разница применяется к реальному DOM.
+*/
+
+# Reconciliation
+
+/*
+Каждый раз, когда происходит изменение в состоянии компонента, запускается механизм, вычисляющий дифф между прошлым состоянием и новым. С алгоритмической точки зрения происходит поиск отличий в двух деревьях. В общем случае алгоритм, выполняющий это вычисление, работает со сложностью O(n3).
+
+Если события генерируются часто, а виртуальное дерево стало большим, то можно начать замечать лаги невооруженным глазом.
+
+Для решения этой проблемы Реакт настоятельно просит для всех элементов списков использовать аттрибут key, который не меняется для конкретного элемента списка. Подобное требование позволяет оптимизировать работу алгоритма, уменьшив сложность до О(n).
+
+Требование проставлять ключи проверяется самим Реактом. Он сам будет выдавать варнинги (предупреждения), если увидит, что вы их не используете.
+*/
+
+# Rendering
+
+/*
+На практике рендеринг всего приложения (виртуального дома) на любое изменение — дорогое удовольствие. Представьте, что в приложении используется поле для текстового ввода. Это означает, что во время набора на любое нажатие происходит генерация виртуального дома целиком и с нуля. Хорошим примером является вопросы и ответы на Хекслете, где мы столкнулись именно с этой проблемой. В форуме достаточно большое виртуальное дерево, и его полный рендеринг занимает определенное время.
+
+В ReactDevTools есть специальная галочка, нажав на которую можно увидеть те компоненты, которые рендерятся во время событий. Отображается все визуально, то есть после каждого события отрендеренные компоненты подсвечиваются рамочкой.
+
+Легко заметить, что для приложения, в котором ничего специально не делалось, на любое событие будет рендерится вообще все. Но события, как правило, меняют только небольшую часть DOM. Ввод текста часто вообще не приводит к изменению в DOM.
+
+Реакт позволяет избежать перерисовки тех компонентов, которые не изменились. Из условий — нужно соблюдать чистоту, другими словами, компонент должен, по сути, представлять из себя чистую функцию.
+
+Напомню, что обновление компонентов запускает следующую цепочку функций:
+
+1. componentWillReceiveProps(nextProps)
+2. shouldComponentUpdate(nextProps, nextState)
+3. componentWillUpdate(nextProps, nextState)
+4. render()
+5. componentDidUpdate(prevProps, prevState)
+
+Остановить перерисовку можно благодаря наличию коллбек-функции shouldComponentUpdate(). Если эта функция вернет false, то компонент не будет рендерится вообще. А так как мы подразумеваем, что компонент ведет себя как чистая функция, то достаточно внутри этой функции проверить, что не изменился props и state. Выглядит это примерно так:
+*/
+
+shouldComponentUpdate(nextProps, nextState) {
+  return !shallowEqual(this.props, nextProps)
+    || !shallowEqual(this.state, nextState);
+}
+
+/*
+Shallow означает, что сравнивается только верхний уровень объектов. Иначе эта операция была бы слишком дорогой. Кстати, здесь становится видно, почему изменения состояния нельзя делать in-place: this.state.mydata.key = 'value'. Так как объекты сравниваются по ссылкам, то изменение объекта будет показывать, что объект тот же самый, хотя его содержимое поменялось.
+
+Поскольку большинство компонентов в типичных приложениях действительно ведут себя как чистые функции, а состояние хранится в общем корневом компоненте, подобную технику можно применять повсеместно, и Реакт нам в этом активно помогает. До сих пор в классах мы наследовались только от React.Component, но можно наследоваться и от React.PureComponent, в котором за нас правильно реализовали shouldComponentUpdate.
+*/
+
+class App extends React.Component {
+  state = { number: Math.random() };
+
+  handleClick = () => {
+    this.setState({ number: Math.random() });
+  };
+
+  render() {
+    return <div>
+      <button onClick={this.handleClick}>Click</button>
+      <div>app {this.state.number}</div>
+      <Nested />
+    </div>;
+  }
+}
+
+class Nested extends React.PureComponent {
+  render() {
+    return <div>nested {Math.random()}</div>;
+  }
+}
+
+ReactDOM.render(
+  <App />,
+  document.getElementById('react-root'),
+);
+
+/*
+Если нажимать кнопку, то видно, что корневой компонент перерендеривается, а вложенный нет.
+
+Но не все так просто. Очень легко незаметно для самого себя сломать работу PureComponent.
+*/
+
+# Default Props
+// Первая засада ожидает нас при неправильной работе со свойствами по умолчанию:
+
+class Table extends React.Component {
+  render() {
+    const { options } = this.props;
+    return (
+      <div>
+        {this.props.items.map(i =>
+          <Cell data={i} options={options || []} />
+         )}
+       </div>
+     );
+  }
+}
+
+/*
+Казалось бы, безобидный код, но вызов [] каждый раз генерирует новый объект (при условии что options false). Проверяется это легко: [] === [] ложно. То есть данные не поменялись, но <Cell> будет отрисован заново.
+
+Вывод: используйте встроенный механизм для свойств по умолчанию.
+*/
+
+# Callbacks
+
+class App extends React.PureComponent {
+  render() {
+    return <MyInput
+      onChange={e => this.props.update(e.target.value)} />;
+  }
+}
+
+/*
+Проблема в коде выше точно такая же: на каждый вызов функции render генерируется новая функция-обработчик, что ломает эффективное обновление. Выход мы уже знаем: определять обработчики как свойства на уровне класса.
+*/
+
+# Immutable.js
+
+/*
+Еще один интересный способ решить проблему перерендеринга приложения - использовать персистентные структуры данных, а конкретно библиотеку immutable.js. Это отдельная тема, рассмотрение которой находится за рамками текущего курса.
+
+# Дополнительные материалы
+Продуманная оптимизация http://optimization.guide/
+*/
+
+
+>>>>>> Refs <<<<<<
+
+/*
+Реакт по своей природе изолирует нас от прямой работы с DOM на 100%. Но нередко при интеграции сторонних не-Реакт компонентов возникает задача по прямому доступу к DOM. Также подобный механизм нужен для выделения текста, фокусов и проигрывания медиа.
+
+Реакт позволяет сделать это с помощью ref. Перед тем, как мы начнем его разбирать, хочу предупредить, что в нормальной ситуации он не нужен и следует максимально избегать его использования.
+
+Рассмотрим задачу по фокусировке на поле ввода:
+*/
+
+class CustomTextInput extends React.Component {
+  handleFocusTextInput = () => {
+    // Explicitly focus the text input using the raw DOM API
+    console.log(this.textInput);
+    this.textInput.current.focus();
+  };
+
+  constructor(props) {
+    super(props);
+    this.textInput = React.createRef();
+  }
+
+  render() {
+    return (
+      <div>
+        <input
+          type="text"
+          ref={this.textInput} />
+        <input
+          type="button"
+          value="Focus the text input"
+          onClick={this.handleFocusTextInput}
+        />
+      </div>
+    );
+  }
+}
+
+ReactDOM.render(
+  <CustomTextInput />,
+  document.getElementById('react-root'),
+);
+
+/*
+ref — это свойство компонента, значением которого должен быть объект, созданный в конструкторе через функцию React.createRef(). Этот объект, в отличие от остальных данных, которые находятся в props или state, хранится как обычное свойство объекта. Имя свойства можно выбрать произвольно. Свойство current этого объекта дает доступ к элементу DOM, именно его можно использовать в componentDidMount или componentDidUpdate.
+
+this.<имя свойства>.current хранит внутри себя DOM элемент того компонента, для которого был установлен ref. В примере выше это input: <input ref={this.textInput} />. DOM элемент попадает туда (внутрь current) уже после того, как текущий компонент будет встроен в реальный DOM, а значит воспользоваться им можно только в указанных выше колбеках componentDidUpdate и componentDidMount.
+
+Ниже приведен пример создания компонента обертки над популярным JQuery плагином Chosen https://harvesthq.github.io/chosen/.
+*/
+
+class Chosen extends React.Component {
+  constructor(props) {
+    super(props);
+    this.selectRef = React.createRef();
+  }
+  componentDidMount() {
+    $(this.selectRef.current).chosen();
+  }
+  
+  render() {
+    return <select ref={this.selectRef}>
+      {this.props.items.map(i => <option>{i}</option>)}
+    </select>;
+  }
+}
+
+const items = ['Document', 'Window', 'Body'];
+
+ReactDOM.render(
+  <Chosen items={items} />,
+  document.getElementById('react-root'),
+);
+
+/*
+ref так же может использоваться и на самописных компонентах, реализованных как классы.
+
+Функциональные компоненты не поддерживают аттрибут ref, так как у них нет инстанса. Если вам нужна работа с DOM, то придется конвертировать такой компонент в класс.
+*/
+
+# Использование в реальном мире
+
+/*
+С Реактом удобно и легко работать до тех пор, пока мы остаемся в рамках самого Реакта, но большая часть существующих js библиотек взаимодействует с домом напрямую, что фактически нивелирует преимущества реакта при их использовании напрямую. Например:
+*/
+
+// https://github.com/kylefox/jquery-modal
+$('#login-form').modal();
+
+/*
+Включение в проект таких библиотек неизбежно приведет к активному использованию lifecycle методов и сделает код сложным. По этой причине принято создавать так называемые врапперы, компоненты-обертки, которые скрывают внутри себя все взаимодействие с домом и наружу выставляют стандартный интерфейс реакта, а именно пропсы. Одной из таких задач является ресайз контейнера. Один из вариантов решения — компонент react-resizable. Посмотрите на работу этого компонента:
+*/
+
+const Resizable = require('react-resizable').Resizable; // or,
+const ResizableBox = require('react-resizable').ResizableBox;
+
+// ES6
+import { ResizableBox } from 'react-resizable';
+
+// ...
+render() {
+  return (
+    <ResizableBox width={200} height={200} minConstraints={[100, 100]} maxConstraints={[300, 300]}>
+      <span>Contents</span>
+    </ResizableBox>
+  );
+}
+
+/*
+Ничего в этом коде не напоминает о реальном доме. Все сводится к тому, что мы оборачиваем наш компонент в ResizableBox, который скрывает всю работу внутри себя. По такому же принципу устроены сотни и, может быть, тысячи других компонентов, которые доступны на гитхабе. Вот некоторые из них:
+
+react-hotkeys https://github.com/greena13/react-hotkeys
+react-stripe-elements (платежный шлюз) https://github.com/stripe/react-stripe-elements
+*/
+
+/**@@@
+src/MarkdownEditor.jsx
+Реализуйте компонент <MarkdownEditor />, который является React оберткой jquery-плагина bootstrap-markdown https://github.com/toopay/bootstrap-markdown. Этот плагин позволяет встроить в страницу Markdown-редактор.
+*/
+
+$(element).markdown({
+  iconlibrary: 'fa', // правильная библиотека иконок
+  onChange: (e) => {
+    const content = e.getContent();
+    // код который вызовется при изменении содержимого редактора
+  },
+});
+
+/*
+Компонент принимает на вход функцию как свойство onContentChange, которая вызывается при каждом изменении в редакторе. Функция принимает на вход содержимое редактора. Его использование видно в файле src/index.jsx.
+
+Посмотреть пример работы редактора можно на Хекслете. Когда вы пишете топик в обсуждениях или комментариях к нему, то там используется именно этот редактор.
+*/
+
+// FILE: /app/src/MarkdownEditor.jsx:
+import $ from 'jquery';
+import React from 'react';
+
+export default class MarkdownEditor extends React.Component {
+  constructor(props) {
+    super(props);
+    this.rootElement = React.createRef();
+  }
+
+  componentDidMount() {
+    $(this.rootElement.current).markdown({
+      iconlibrary: 'fa',
+      onChange: this.onChange,
+    });
+  }
+
+  onChange = (e) => {
+    this.props.onContentChange(e.getContent());
+  }
+
+  render() {
+    return <div data-provide="markdown-editable" ref={this.rootElement} />;
+  }
+}
+
+
+// FILE: /app/src/index.jsx:
+import 'bootstrap-markdown/js/bootstrap-markdown';
+import 'bootstrap-markdown/css/bootstrap-markdown.min.css';
+
+import ReactDOM from 'react-dom';
+import React from 'react';
+
+import MarkdownEditor from './MarkdownEditor.jsx';
+
+ReactDOM.render(
+  <MarkdownEditor onContentChange={console.log} />,
+  document.getElementById('container'),
+);
+
+
+
+#################### JS: Redux (React) ####################
+/*
+Redux — это официальный способ управлять состоянием в нетривиальных React приложениях. Несмотря на свою простоту и элегантность, он требует время на вникание. Кроме того, вокруг Redux огромная экосистема библиотек, автоматизирующих разные задачи. Этот курс посвящен в том числе самым популярным библиотекам.
+*/
+
+>>>>>> Введение <<<<<<
+
+/*
+Несмотря на всю мощь реакта, с ростом приложения довольно быстро появляются некоторые неудобства. Одно из самых раздражающих — подъем состояния наверх через коллбеки, которые нужно прокидывать в самый низ с того самого верхнего уровня. Прокидывать приходится не только коллбеки, но и любые данные. Получается, что множество промежуточных компонентов выступают в качестве прокси, то есть пропускают сквозь себя данные, которыми не пользуются. Второе — рендеринг и логика мешаются в одном месте, быстро раздувая компоненты и усложняя их понимание. Сюда добавляются неконтролируемые побочные эффекты вперемешку с обновлением данных.
+
+Для решения в том числе этих проблем разработчики фейсбука придумали архитектуру Flux:
+
+Flux архитектура вводит ряд новых понятий, таких как:
+
+- Stores — хранилища, место, в которое загружаются данные и в котором они обновляются. Хотя во Flux хранилища мутабельные, взаимодействовать с внешним миром внутри них нельзя. Никаких AJAX запросов, взаимодействия с DOM и подобных вещей. Менять данные напрямую тоже не получится, только посредством действий. Как видите, во Flux архитектуре менеджмент состояния приложения был вынесен наружу.
+- Actions — действия с помощью Dispatcher передаются в хранилища, которые на основе типа действия и данных, пришедших с ним, сами себя обновляют.
+- Dispatcher — раскидывает действия по хранилищам.
+
+Flux архитектура позволила разгрузить React и ввела недостающие абстракции. В свое время появилось множество различных реализаций этой архитектуры. Одна из них была официальная и десяток неофициальных.
+
+С тех пор утекло много воды и мир шагнул вперед. В 2015 году Dan Abramov создал библиотеку под названием Redux, заимствовав идеи из Flux и функционального языка Elm http://elm-lang.org/.
+
+Несмотря на всю мощь реакта, с ростом приложения довольно быстро появляются некоторые неудобства. Одно из самых раздражающих — подъем состояния наверх через коллбеки, которые нужно прокидывать в самый низ с того самого верхнего уровня. Прокидывать приходится не только коллбеки, но и любые данные. Получается, что множество промежуточных компонентов выступают в качестве прокси, то есть пропускают сквозь себя данные, которыми не пользуются. Второе — рендеринг и логика мешаются в одном месте, быстро раздувая компоненты и усложняя их понимание. Сюда добавляются неконтролируемые побочные эффекты вперемешку с обновлением данных.
+
+Для решения в том числе этих проблем разработчики фейсбука придумали архитектуру Flux.
+
+Flux архитектура вводит ряд новых понятий, таких как:
+
+- Stores — хранилища, место, в которое загружаются данные и в котором они обновляются. Хотя во Flux хранилища мутабельные, взаимодействовать с внешним миром внутри них нельзя. Никаких AJAX запросов, взаимодействия с DOM и подобных вещей. Менять данные напрямую тоже не получится, только посредством действий. Как видите, во Flux архитектуре менеджмент состояния приложения был вынесен наружу.
+- Actions — действия с помощью Dispatcher передаются в хранилища, которые на основе типа действия и данных, пришедших с ним, сами себя обновляют.
+- Dispatcher — раскидывает действия по хранилищам.
+
+Flux архитектура позволила разгрузить React и ввела недостающие абстракции. В свое время появилось множество различных реализаций этой архитектуры. Одна из них была официальная и десяток неофициальных.
+
+С тех пор утекло много воды и мир шагнул вперед. В 2015 году Dan Abramov создал библиотеку под названием Redux, заимствовав идеи из Flux и функционального языка Elm.
+
+Сама по себе Redux очень простая библиотека, предназначенная исключительно для менеджемента состояния. Она хоть и была разработана для использования в реакте, но от него не зависит и может использоваться с чем угодно. Для ее связи с реактом понадобится библиотека react-redux, с помощью которой производится необходимая интеграция. В итоге получается структура, крайне напоминающая Flux архитектуру, но со значительными упрощениями и улучшениями.
+
+Кроме тех преимуществ, которые дает Flux, Redux привносит еще кое-что:
+
+- Time traveling. Возможность путешествовать по изменению состояния назад и вперед. Очень полезно при отладке, всегда можно отмотать (это не фигуральное выражение, а действительность) назад.
+
+- Удобная отладка и визуализация. Посредством Middlewares, Redux расширяется инструментарием, который предоставляет крайне удобные средства для отладки и визуализации происходящих внутри процессов. С ними мы познакомимся в ближайшее время, чтобы сразу начать использовать всю мощь Redux.
+
+- Благодаря стандартизации работы с состоянием, которую привнес Redux, стало возможным автоматизировать практически все аспекты работы в React. Работа с формами, роутинг, асинхронность, история и многое другое.
+
+В этом курсе мы пройдем по основным возможностям редакса и интегрируем в создаваемое приложение множество разных библиотек. Мы не сможем копнуть в них глубоко, так как объем документации каждой библиотеки тянет на целую книгу, но разберем базовые варианты использования.
+
+Основные темы:
+Redux.
+Middlewares.
+Containers.
+Actions (Async).
+Redux & React.
+
+Библиотеки:
+reselect.
+redux-actions.
+redux-forms.
+redux-thunk.
+
+По ходу курса мы создадим приложение для работы с задачами и в конце интегрируем его с бекендом.
+*/
+
+
+
+>>>>>> Redux <<<<<<
+
+/*
+Redux - Predictable state container for JavaScript apps
+
+Redux маленькая и простая библиотека. Первые несколько уроков мы набьем руку по работе с ним, а уже после начнем интегрироваться с React.
+
+Redux - это такая база данных в памяти. Она хранит внутри себя состояние приложения, аналогично тому, как React хранит состояние внутри себя. Ключевых отличия два:
+
+1. Redux, с точки зрения кода, это объект внутри которого находится состояние приложения. Он, как правило, один на все приложение, независимо от используемого фреймворка для UI.
+2. Обновление состояния внутри Redux выполняется не прямым изменением данных (как в React: $this->setState({ key: 'value' })), а через указание "действий". Сам же способ обновления данных описывается внутри объекта Redux.
+
+Пример использования Redux:
+*/
+
+import { createStore } from 'redux';
+
+const reducer = (state = 0, action) => {
+  switch (action.type) {
+    case 'INCREMENT':
+      return state + 1;
+    case 'DECREMENT':
+      return state - 1;
+    default:
+      return state;
+  }
+};
+
+const store = createStore(reducer);
+
+/*
+По шагам:
+
+1. Импортируется функция createStore, которая создает контейнер. Контейнер это и есть наша база данных.
+2. Далее определяется reducer. Функция, которая принимает на вход state и action. На выходе из функции возвращается новый state. Именно из-за сходства работы этой функции с тем как работает reduce, она имеет название reducer.
+3. Редьюсер передается в функцию createStore и на выходе мы имеем готовый к использованию контейнер.
+
+Во время вызова createStore(reducer), происходит вызов самого редьюсера. Вызов выглядит так:
+*/
+
+// благодаря тому, что первым параметром передается undefined, внутри редьюсера значение state
+// становится равно своему дефолтному значению, то есть 0
+// затем, внутри switch, отрабатывает default ветка, которая возвращает этот state наружу
+reducer(undefined, { type: '@@INIT' }); // 0
+
+/*
+Результат этого вызова запоминается внутри store и считается начальным состоянием. Все дальнейшие изменения идут относительно него.
+
+Теперь использование:
+*/
+
+// Функция `subscribe` является частью реализации паттерна Observer.
+// Каждый ее вызов, добавляет в список наблюдателей новую функцию.
+// Затем, как только меняются данные в хранилище, вызываются, по очереди, все наблюдатели.
+store.subscribe(() =>
+  console.log(store.getState());
+);
+const increment = () => ({ type: 'INCREMENT' });
+store.dispatch(increment());
+// => 1
+
+store.dispatch(increment());
+// => 2
+
+const decrement = () => ({ type: 'DECREMENT' });
+store.dispatch(decrement());
+// => 1
+
+/*
+Единственный способ произвести изменения состояния в хранилище — это передать Action в функцию dispatch. Action является обычным js объектом, в котором присутствует минимум одно свойство — type. Никаких ограничений на содержимое этого свойства не накладывается, главное, чтобы внутри контейнера был подходящий ему обработчик.
+
+Получается, что сам процесс изменения состояния, описан внутри контейнера, а снаружи мы лишь говорим, какое изменение необходимо выполнить. Этот подход резко отличается от того как мы делали в React, где чтение состояния и его обновление находится снаружи.
+
+Посмотрим еще один пример, с использованием массива и передачей данных через Action:
+*/
+
+// payload - свойство внутри которого хранятся данные
+const addUser = (user) => ({ type: 'USER_ADD', payload: { user } });
+
+const user = /* ... */;
+store.dispatch(addUser(user));
+
+const reducer = (state = [], action) => { // инициализация состояния
+  switch (action.type) {
+    case 'USER_ADD': {
+      const user = action.payload.user; // данные
+      return [...state, user]; // Immutability
+    }
+    case 'USER_REMOVE': {
+      const id = action.payload.id; // данные
+      return state.filter(u => u.id !== id); // Immutability
+    }
+    default:
+      return state;
+  }
+};
+
+/*
+Несмотря на то, что ключ payload не обязательный и можно все данные складывать прямо в сам Action, я крайне рекомендую так не делать. Мешать в одном объекте статически заданные ключи с динамическими плохая идея. Кроме того, в будущем мы будем использовать библиотеки, которые требуют именно такого способа работы.
+*/
+
+# Устройство Redux
+
+// Для написания самой простой версии Redux, нужно всего 7 строчек. Вот они:
+
+const createStore = (reducer, initialState) {
+  let state = initialState
+  return {
+    dispatch: action => { state = reducer(state, action) },
+    getState: () => state,
+  }
+}
+
+# Three Principles
+
+/*
+Подведем итог. Что главное в redux:
+
+- Single source of truth — используя редакс, мы работаем только с одним контейнером на приложение. Это одно из ключевых отличий от Flux архитектуры. Все состояние в одном месте.
+- State is read-only — данные меняются только косвенно, используя функциональный стиль.
+- Changes are made with pure functions — внутри хранилища можно использовать только чистые функции. Тут правила даже строже чем во Flux, так как не позволяется использовать даже Date.now() и ему подобные функции, которые хотя и не обладают побочными эффектами, но все же являются недетерминированными. Все подобные вызовы должны делаться до вызова dispatch (подробнее об этом далее).
+*/
+
+# Начальное состояние
+// Я говорил про то, что начальное состояние задается в определении редьюсера:
+const reducer = (state = 0, action) { /* ... */ }
+
+// Но часто этого недостаточно. Данные могут прийти из бекенда и их нужно прогрузить в контейнер перед началом работы. Для этого случая в Redux есть особый путь:
+const store = createStore(reducer, initState);
+// @@redux/INIT
+
+// Redux посылает специальный Action, который нельзя перехватывать. Если редьюсер реализован правильно и содержит default секцию в switch, то контейнер заполнится данными из initState. Пример:
+
+// const reducer = (state = 0, action) => {
+//   switch (action.type) {
+//     case 'INCREMENT':
+//       return state + 1;
+//     case 'DECREMENT':
+//       return state - 1;
+//     default:
+//       return state;
+//   }
+// };
+const store = createStore(reducer, 100);
+
+// В коде выше, функция createStore вызовет редьюсер так: reducer(100, '@@redux/INIT'). Затем выполнится ветка default и состоянием контейнера станет число 100.
+
+/**@@@
+store.js
+Реализуйте и экспортируйте по умолчанию функцию, которая принимает на вход начальное состояние, а возвращает store. Store должен обрабатывать действия перечисленные в actions.js.
+
+Структура состояния в store: { [task.id]: task, [task2.id]: task2 }.
+
+Подсказки
+Обязательно изучите файл actions.js и тесты. Отследите весь путь движения данных.
+Для удаления из объекта воспользуйтесь функцией omit, взятой из библиотеки lodash.
+*/
+
+
+// FILE: /app/store.js:
+import { omit } from 'lodash';
+import { createStore } from 'redux';
+
+const tasks = (state = {}, action) => {
+  switch (action.type) {
+    case 'TASK_ADD': {
+      const { task } = action.payload;
+      return { ...state, [task.id]: task };
+    }
+    case 'TASK_REMOVE': {
+      const { id } = action.payload;
+      return omit(state, id);
+    }
+    default:
+      return state;
+  }
+};
+
+export default initState => createStore(tasks, initState);
+
+
+// FILE: /app/actions.js:
+export const addTask = task => ({
+  type: 'TASK_ADD',
+  payload: {
+    task,
+  },
+});
+
+export const removeTask = id => ({
+  type: 'TASK_REMOVE',
+  payload: {
+    id,
+  },
+});
+
+
+// FILE: /app/__tests__/test.js:
+import generateStore from '../store';
+import { addTask, removeTask } from '../actions';
+
+
+test('Store 1', () => {
+  const store = generateStore();
+  store.dispatch({ type: 'unknown' });
+  expect(store.getState()).toEqual({});
+});
+
+test('Store 2', () => {
+  const task0 = { id: 0 };
+  const store = generateStore({ [task0.id]: task0 });
+  store.dispatch({ type: 'unknown' });
+  expect(store.getState()).toEqual({ [task0.id]: task0 });
+
+  const task1 = { id: 1 };
+  store.dispatch(addTask(task1));
+  expect(store.getState()).toEqual({ [task0.id]: task0, [task1.id]: task1 });
+
+  const task2 = { id: 2 };
+  store.dispatch(addTask(task2));
+  expect(store.getState()).toEqual({ [task0.id]: task0, [task1.id]: task1, [task2.id]: task2 });
+
+  const task3 = { id: 3 };
+  store.dispatch(addTask(task3));
+  const result = {
+    [task0.id]: task0,
+    [task1.id]: task1,
+    [task2.id]: task2,
+    [task3.id]: task3,
+  };
+  expect(store.getState()).toEqual(result);
+
+  store.dispatch(removeTask(2));
+  expect(store.getState()).toEqual({ [task0.id]: task0, [task1.id]: task1, [task3.id]: task3 });
+
+  store.dispatch(removeTask(10));
+  expect(store.getState()).toEqual({ [task0.id]: task0, [task1.id]: task1, [task3.id]: task3 });
+
+  store.dispatch(removeTask(3));
+  expect(store.getState()).toEqual({ [task0.id]: task0, [task1.id]: task1 });
+
+  store.dispatch({ type: 'TASK_REMOVE', payload: { id: 1 } });
+  expect(store.getState()).toEqual({ [task0.id]: task0 });
+
+  store.dispatch({ type: 'TASK_REMOVE', payload: { id: 0 } });
+  expect(store.getState()).toEqual({});
+});
+
+
+
+
+>>>>>> Reducers <<<<<<
+
+/*
+Все, что хранится в контейнере, мы называем состоянием, но не все состояния одинаково полезны. Вот какую классификацию вводит документация Redux:
+
+- Domain data — данные приложения, которые нужно отображать, использовать и модифицировать. Например, список пользователей, загруженный с сервера.
+- App state — данные, определяющие поведение приложения. Например, текущий открытый URL.
+- UI state — данные, определяющие то, как выглядит UI. Например, вывод списка в плиточном виде.
+
+Так как контейнер представляет собой ядро приложения, данные внутри него, должны описываться в терминах domain data и app state, но не как дерево компонентов UI. Например, такой способ формирования состояния state.leftPane.todoList.todos — плохая идея. Крайне редко дерево компонентов отражается напрямую на структуру состояния и это нормально. Представление зависит от данных, а не данные от представления.
+
+Типичная структура состояния выглядит так:
+*/
+{
+    domainData1 : {}, // todos
+    domainData2 : {}, // comments
+    appState1 : {},
+    appState2 : {},
+    uiState1 : {}
+    uiState2 : {},
+}
+
+/*
+Подробнее про работу с состоянием UI будет рассказано в соответствующем уроке.
+
+Как уже говорилось в курсе "JS: React", структура состояния должна напоминать базу данных. Все максимально плоско и нормализованно.
+*/
+
+{
+  todos: [
+    { id: 1, name: 'why?' },
+    { id: 3, name: 'who?' },
+  ],
+  comments: [
+    { id: 23, todoId: 3, text: 'great!' },
+  ],
+}
+
+/*
+С такой структурой крайне легко писать реакцию на действия, обновлять данные, добавлять новые и удалять старые. Вложенность небольшая, все просто. Но появляется другая проблема (появляется она в любом случае). С ростом количества сущностей редьюсер становится очень тяжелым. Огромный кусок кода, который делает все.
+
+Redux имеет встроенный механизм, позволяющий создавать множественные редьюсеры и комбинировать их друг с другом. Работает это так: для каждого свойства верхнего уровня пишется свой собственный редьюсер, а затем они с помощью функции combineReducers объединяются в корневой (root) редьюсер, который уже используется для создания контейнера.
+*/
+
+import { combineReducers, createStore } from 'redux';
+
+const todos = (state = {}, action) => {
+  // state is todos part
+};
+
+const comments = (state = {}, action) => {
+  // state is comments
+};
+
+const rootReducer = combineReducers({ todos, comments });
+const store = createStore(rootReducer);
+
+/*
+Обратите внимание на то, что если редьюсер именовать так же, как и свойство, то можно написать так: { todos, comments }. В каждый редьюсер приходит state, но это не все состояние контейнера, а только та часть, которая лежит в соответствующем свойстве. Не забудьте про это.
+
+Редьюсеры могут быть даже вложенными и для этого не нужны никакие специальные средства, обычные функции, принимающие на вход данные и возвращающие новые данные.
+
+С таким подходом появляется одна особенность, которая, по началу, может испугать. Так как каждый редьюсер имеет доступ только к своей части состояния, действия, порождающие изменения сразу в нескольких местах, будут повторяться в разных редьюсерах:
+*/
+
+const todos = (state = {}, action) => {
+  switch (action.type) {
+    case 'TODO_REMOVE':
+      // ...
+  }
+};
+
+const comments = (state = {}, action) => {
+  switch (action.type) {
+    // При удалении ToDo нужно удалить все его комментарии
+    case 'TODO_REMOVE':
+      // ...
+  }
+};
+
+/*
+То есть правильный подход состоит в том, чтобы повторять case часть в нужных редьюсерах, а не в том, чтобы пытаться получить недостающие части состояния.
+
+# Дополнительные материалы
+Normalizing State Shape https://redux.js.org/recipes/structuringreducers/normalizingstateshape
+*/
+
+/**@@@
+reducers.js
+Реализуйте в Store следующую структуру состояния:
+*/
+{
+  comments: {
+    1: { id: 1, taskId: 1, body: 'comment 1' },
+    2: { id: 2, taskId: 1, body: 'comment 2' },
+    5: { id: 5, taskId: 2, body: 'another comment' },
+  },
+  tasks: {
+    1: { id: 1, name: 'first task' },
+    2: { id: 2, name: 'second task' },
+  },
+}
+
+// Store должен уметь обрабатывать перечисленные в файле actions.js действия.
+
+
+// FILE: /app/actions.js:
+export const addTask = task => ({
+  type: 'TASK_ADD',
+  payload: {
+    task,
+  },
+});
+
+export const removeTask = id => ({
+  type: 'TASK_REMOVE',
+  payload: {
+    id,
+  },
+});
+
+export const addTaskComment = comment => ({
+  type: 'TASK_COMMENT_ADD',
+  payload: {
+    comment,
+  },
+});
+
+export const removeTaskComment = id => ({
+  type: 'TASK_COMMENT_REMOVE',
+  payload: {
+    id,
+  },
+});
+
+
+// FILE /app/reducers.js:
+import _ from 'lodash';
+import { combineReducers } from 'redux';
+
+const comments = (state = {}, action) => {
+  switch (action.type) {
+    case 'TASK_COMMENT_ADD': {
+      const { comment } = action.payload;
+      return { ...state, [comment.id]: comment };
+    }
+    case 'TASK_COMMENT_REMOVE': {
+      return _.omit(state, action.payload.id);
+    }
+    case 'TASK_REMOVE': {
+      const { id } = action.payload;
+      return _.omitBy(state, c => c.taskId === id);
+    }
+    default:
+      return state;
+  }
+};
+
+const tasks = (state = {}, action) => {
+  switch (action.type) {
+    case 'TASK_ADD': {
+      const { task } = action.payload;
+      return { ...state, [task.id]: task };
+    }
+    case 'TASK_REMOVE': {
+      const { id } = action.payload;
+      return _.omit(state, id);
+    }
+    default:
+      return state;
+  }
+};
+
+
+export default combineReducers({
+  comments,
+  tasks,
+});
+
+
+
+
+
+>>>>>> Ручная интеграция с реактом <<<<<<
+
+/*
+Внедрение Redux в приложение, делает его центральной, корневой частью всего приложения. Причём не имеет значения, используем мы реакт или нет. Структура контейнера и принцип работы с ним останется неизменным в любой ситуации. Общая схема работы приложения становится такой:
+
+1. Возникает событие. Например, пользователь кликнул по кнопке.
+2. Обработчик события выполняет какую-то логику и, в конце, обновляет контейнер через store.dispatch.
+3. Контейнер по очереди вызывает все функции добавленные, через store.subscribe. Эти функции меняют представление на основе нового состояния внутри контейнера. И так по кругу. Событие -> Изменение состояния -> Отрисовка нового состояния.
+
+Реализуем эту логику в связке с реактом. Для примера возьмем простой компонент счетчик с одной кнопкой, которая отображает текущее количество кликов. Связку с реактом сделаем в ручном режиме без использования готовой библиотеки. Тогда процесс работы не покажется магическим. Начнем с контейнера:
+*/
+import { createStore } from 'redux';
+
+const reducer = (state = 0, action) => {
+  switch (action.type) {
+    case 'INCREMENT':
+      return state + 1;
+    default:
+      return state;
+  }
+};
+
+const store = createStore(reducer);
+
+/*
+Контейнер ничего не знает про существование DOM, его задача - хранить данные и модифицировать их. Эта мысль очень важна, ее нужно прочувствовать. Воспринимайте контейнер как базу данных.
+
+Следующим шагом сделаем компонент в реакте. Вторая важная мысль, раз мы начинаем использовать внешнее хранилище для данных, то внутренний setState нам больше не нужен. Компоненты получают все необходимые данные через props.
+
+В будущих уроках мы рассмотрим ситуации, когда внутренний менеджмент состояния все же нужен, несмотря на использование редакса
+*/
+
+import React from 'react';
+
+export default class Increment extends React.Component {
+  static defaultProps = {
+    count: 0,
+  };
+
+  render() {
+    const { count } = this.props;
+    return (
+      <div>
+        <button>{count}</button>
+      </div>
+    )
+  }
+}
+
+/*
+Компонент Increment работает со свойством count. Его имя выбрано произвольно, нам не нужно опираться на структуру контейнера.
+
+Теперь добавим обработчики. Напомню, что каждый обработчик в конце своей работы должен обновить состояние контейнера. С технической точки зрения произойдёт вызов функции store.dispatch и нужного действия. Откуда нам их взять внутри компонента? Все просто, мы их прокинем как свойства в наш компонент.
+*/
+import React from 'react';
+
+export default class Increment extends React.Component {
+  handleClick = (e) => {
+    const { dispatch, increment } = this.props;
+    dispatch(increment());
+  }
+
+  render() {
+    const { count } = this.props;
+    return (
+      <div>
+        <button onClick={this.handleClick}>{count}</button>
+      </div>
+    )
+  }
+}
+
+// Остался последний шаг, нужно вызывать перерисовку компонента после изменения содержимого контейнера. В этом нам поможет функция store.subscribe:
+
+import ReactDOM from 'react-dom';
+import React from 'react';
+import { createStore } from 'redux';
+
+// Импортируем компонент
+import App from './components/App';
+// Импортируем редьюсеры
+import reducers from './reducers';
+
+// Создаем контейнер. Редьюсеры описаны в отдельном файле
+const store = createStore(reducers);
+
+// Создаем Action и оборачиваем его в функцию
+export const increment = () => ({
+  type: 'INCREMENT',
+  payload: {},
+});
+
+// Элемент для подключения реакта
+const containerElement = document.getElementById('container'),
+
+// Подписываемся на изменения состояния внутри контейнера
+// На каждое изменение отрисовываем наш компонент заново
+store.subscribe(() => {
+  const state = store.getState();
+  ReactDOM.render(
+    <App dispatch={store.dispatch} count={state} increment={increment} />,
+    containerElement,
+  );
+});
+
+
+// Первый раз нужно отрисовать руками
+ReactDOM.render(
+  <App dispatch={store.dispatch} increment={increment} />,
+  containerElement,
+);
+
+/*
+Когда все необходимые объекты созданы, происходит первоначальная отрисовка компонента в DOM. В компонент передаются необходимые данные, в нашем случае функция store.dispatch и функция increment. Последняя создает действие при своем вызове. Дальше начинает работать последовательность шагов, описанная в начале урока:
+
+1. Пользователь нажимает на кнопку
+2. Срабатывает обработчик handleClick, который вызывает dispatch(increment()).
+3. Выполняется редьюсер и его ветка INCREMENT. Она увеличивает счетчик на единицу.
+4. Контейнер вызывает функции добавленные через subscribe. В нашем случае это одна функция.
+5. Эта функция извлекает состояние из контейнера через функцию store.getState.
+6. Затем эта же функция перерисовывает компонент в DOM передавая ей новое состояние.
+
+На каждом этапе этого процесса можно вносить различные изменения. Например нам может понадобится передавать несколько функций создающих действия. Достаточно просто их передать. Некоторые из этих функций могут принимать данные, которые store.dispatch передаст внутрь контейнера:
+*/
+
+export const increment = (step = 1) => ({
+  type: 'INCREMENT',
+  payload: { step },
+});
+
+// Такой инкремент позволяет менять шаг приращения. Внутри контейнера код поменяется на такой:
+
+case 'INCREMENT':
+  return state + action.payload.step;
+
+// Само состояние внутри контейнера может стать структурой, например объектом.
+
+
+/**@@@
+src/components/App.jsx
+Реализуйте компонент, который показывает форму и хранит ее состояние в Redux. Форма состоит из двух элементов: текстового поля и кнопки "сброс". При вводе текста, он отображается под полем ввода. Если нажать на сброс, то текст очищается.
+
+Интерфейс компонента:
+*/
+<App dispatch={store.dispatch} text="text from store" {...actionCreators} />
+
+// Начальное состояние:
+<div>
+  <form>
+    <input type="text" value="">
+    <button type="button">Reset</button>
+  </form>
+</div>
+
+// После ввода текста:
+
+<div>
+  <form>
+    <input type="text" value="hello">
+    <button type="button">Reset</button>
+  </form>
+  <div>hello</div>
+</div>
+
+/*
+src/index.jsx
+Реализуйте интеграцию контейнера с реактом.
+
+src/reducers.js
+Добавьте необходимый редьюсер.
+
+src/actions.js
+Добавьте необходимые действия.
+*/
+
+// FILE: /app/src/actions.js:
+export const updateText = text => ({
+  type: 'TEXT_UPDATE',
+  payload: {
+    text,
+  },
+});
+
+export const resetText = () => ({
+  type: 'TEXT_RESET',
+  payload: {},
+});
+
+
+// FILE: /app/src/components/App.jsx:
+import React from 'react';
+
+export default class App extends React.Component {
+  static defaultProps = {
+    text: '',
+  };
+
+  handleChange = (e) => {
+    e.preventDefault();
+    const { dispatch, updateText } = this.props;
+    dispatch(updateText(e.target.value));
+  }
+
+  handleReset = (e) => {
+    e.preventDefault();
+    const { dispatch, resetText } = this.props;
+    dispatch(resetText());
+  }
+
+  render() {
+    const { text } = this.props;
+
+    return (
+      <div>
+        <form>
+          <input type="text" value={text} onChange={this.handleChange} />
+          <button type="button" onClick={this.handleReset}>Reset</button>
+        </form>
+        {text && <div>{text}</div>}
+      </div>
+    );
+  }
+}
+
+// FILE: /app/src/index.jsx:
+import ReactDOM from 'react-dom';
+import React from 'react';
+import { createStore } from 'redux';
+
+import App from './components/App';
+import reducers from './reducers';
+import * as actionCreators from './actions';
+
+const store = createStore(
+  reducers,
+  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
+);
+
+const render = (text) => {
+  ReactDOM.render(
+    <App dispatch={store.dispatch} text={text} {...actionCreators} />,
+    document.getElementById('container'),
+  );
+};
+
+store.subscribe(() => {
+  const { text } = store.getState();
+  render(text);
+});
+
+render();
+
+
+// FILE: /app/src/reducers.js:
+import { combineReducers } from 'redux';
+
+const text = (state = '', action) => {
+  switch (action.type) {
+  case 'TEXT_UPDATE': {
+    return action.payload.text;
+  }
+  case 'TEXT_RESET': {
+    return '';
+  }
+  default:
+    return state;
+  }  
+};
+
+export default combineReducers({
+  text,
+});
+
+
+
+>>>>>> Middlewares <<<<<<
+
+/*
+Middlewares относятся к продвинутым техникам использования Redux. В данном уроке мы посмотрим на них не с точки зрения написания, а исключительно с точки зрения использования. Нам они потребуются для подключения различных библиотек буквально с первого момента использования совместно с React.
+
+Мидлвары - функции, которые последовательно вызываются в процессе обновления контейнера.
+
+Общий принцип работы таков:
+
+1. Мидлвары встраиваются в хранилище при его создании.
+2. Во время диспатчинга данные проходят через них и только затем попадают в редьюсер.
+
+Такая организация библиотеки позволяет ее крайне легко расширять новой функциональностью без необходимости переписывать исходный код redux под конкретную задачу.
+
+Типичные примеры использования включают:
+
+- Логирование.
+- Оповещение об ошибках.
+- Работа с асинхронным API.
+- Роутинг.
+
+Посмотрим как их подключить:
+*/
+import { createStore, applyMiddleware } from 'redux';
+import thunk from 'redux-thunk';
+
+const store = createStore(
+  reducer,
+  /* preloadedState, */
+  applyMiddleware(thunk)
+)
+
+
+/*
+thunk — это мидлвара, но перед тем как передать ее в функцию createStore, нужно применить к ней функцию applyMiddleware. Также обратите внимание на то, что мидлвару мы передаем вторым параметром, хотя в предыдущем уроке вторым параметром шел initState. Объясняется это просто, функция createStore проверяет тип второго параметра и в зависимости от этого понимает, что перед ней. В общем случае она принимает три параметра: редьюсер, начальный стейт и мидлвары.
+
+В случае если мидлвар несколько, придется воспользоваться еще одной функцией:
+*/
+import { createStore, applyMiddleware, compose } from 'redux';
+import thunk from 'redux-thunk';
+import logger from 'redux-logger';
+
+const store = createStore(
+  reducer,
+  /* preloadedState, */
+  compose(
+    applyMiddleware(thunk),
+    applyMiddleware(logger)
+  ),
+)
+
+/*
+В такой ситуации в контейнер передается результат функции compose. Последняя, в свою очередь, принимает на вход мидлвары.
+
+Теперь мы подобрались к главному. Для редакса написано специальное браузерное расширение Redux DevTools. Установите его в свой браузер.
+*/
+
+// Ниже код подключения этого экстеншена к хранилищу:
+const reduxDevtools = window.__REDUX_DEVTOOLS_EXTENSION__;
+const store = createStore(
+   reducer,
+   /* preloadedState, */
+    reduxDevtools && reduxDevtools(),
+);
+
+/*
+Обратите внимание на то, что он не требует использования функции applyMiddleware.
+
+В будущих уроках вам не придется подключать его руками. Мы уже сделали это за вас. Все что нужно — установить расширение и не забывать туда смотреть. Это ваш главный помощник в отладке на протяжении всего курса.
+
+# Дополнительные материалы
+Официальная документация ReduxDevTools https://github.com/zalmoxisus/redux-devtools-extension
+*/
+
+
+
+>>>>>> React Redux <<<<<<
+
