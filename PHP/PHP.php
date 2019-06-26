@@ -11635,4 +11635,1813 @@ class TestSolution extends TestCase
 
 
 
-###################### PHP: Разработка микрофреймворка ######################
+############## PHP: Разработка микрофреймворка ##############
+
+/**@@@
+public/index.php
+Реализуйте маршрут /about, по которому будет отдаваться строка <h1>about company</h1>. Выполните сопоставление с REQUEST_URI используя регулярные выражения, так чтобы один маршрут обрабатывал и концевой слеш (/about/ тоже самое что /about), и различный регистр (/abOuT, /ABout, /about).
+
+Подсказка
+Для регулярных выражений используйте preg_match.
+*/
+
+// FILE: /app/public/index.php:
+namespace App;
+
+require_once '/composer/vendor/autoload.php';
+
+function server($url)
+{
+    if (preg_match('/^\/about\/?$/i', $url)) {
+        return "<h1>about company</h1>";
+    }
+}
+
+echo server($_SERVER['REQUEST_URI']);
+
+
+
+
+>>>>>> Роутер <<<<<<<
+
+// FILE: /theory/index.php:
+namespace Theory;
+
+require_once 'Application.php';
+
+$routers = [
+	['/', function () {
+		return '<p>main page</p>';
+	}],
+	['/sign_in', function () {
+		return 'you sign in';
+	}],	
+];
+
+$app = new Application($routers);
+$app->run();
+
+
+// FILE: /theory/Application.php:
+namespace Application;
+
+class Application {
+	private $routers;
+
+	public function __construct ($routers) 
+	{
+		$this->routers = $routers;
+	}
+
+	public function run()
+	{
+		$uri = $_SERVER['REQUEST_URI'];
+		foreach ($this->routers as $item) {
+			list($route, $handler) = $item;
+			$preparedRoute = preg_quote($route, '/');
+
+			if (preg_match("/^$preparedRoute$/i", $uri)) {
+				echo $handler();
+				return;
+			}
+		}
+	}
+}
+
+/*
+В реальных приложениях/фреймоворках по роутам так не ходят (долгий способ).
+Для них используют префиксные деревья
+*/
+
+
+
+/**@@@
+Другой способ добавлять обработчики маршрутов в App это использовать методы, названные по именам глаголов http. Например $app->get($path, $func).
+
+src/App/Application.php
+Реализуйте интерфейс ApplicationInterface в классе Application.
+
+Пример:
+*/
+
+// FILE: /app/public/index.php:
+namespace App;
+
+require_once '/composer/vendor/autoload.php';
+
+$app = new Application();
+
+$app->get('/companies', function () {
+    return 'companies list';
+});
+
+$app->post('/companies', function () {
+    return 'company was created';
+});
+
+$app->run();
+
+
+// FILE /app/src/App/ApplicationInterface.php:
+namespace App;
+
+interface ApplicationInterface
+{
+    public function get($path, $func);
+    public function post($path, $func);
+    public function run();
+}
+
+
+// FILE: /app/src/App/Application.php:
+namespace App;
+
+class Application implements ApplicationInterface
+{
+    private $handlers = [];
+
+    public function get($route, $handler)
+    {
+        $this->append('GET', $route, $handler);
+    }
+
+    public function post($route, $handler)
+    {
+        $this->append('POST', $route, $handler);
+    }
+
+    public function run()
+    {
+        $uri = $_SERVER['REQUEST_URI'];
+        $method = $_SERVER['REQUEST_METHOD'];
+
+        foreach ($this->handlers as $item) {
+            [$route, $handlerMethod, $handler] = $item;
+            $preparedRoute = preg_quote($route, '/');
+
+            if ($method == $handlerMethod && preg_match("/^$preparedRoute$/i", $uri)) {
+                echo $handler();
+                return;
+            }
+        }
+    }
+
+    private function append($method, $route, $handler)
+    {
+        $this->handlers[] = [$route, $method, $handler];
+    }	
+}
+
+
+
+>>>>>> Шаблонизация <<<<<<
+
+// FILE: /theory/index.php:
+namespace Theory;
+
+require_once "Template.php";
+
+use function Theory\Template\render;
+
+$html = render('index.phtml', [
+	'site' => 'hexlet.io',
+	'subprojects' => ['map.hexlet.io', 'battle.hexlet.io']
+]);
+
+print_r($html);
+
+
+
+// FILE: /theory/index.phtml: ?>
+<h1><?= $site ?></h1>
+
+<? if (!empty($subprojects)): ?>
+	<ul>
+		<? foreach ($subprojects as $project): ?>
+			<li><?= $project ?></li>	
+		<? endforeach; ?>
+	</ul>
+<? endif; ?>
+<?
+
+
+
+// FILE: /theory/Template.php:
+namespace Theory\Template;
+
+function render($template, $variables)
+{
+	extract($variables); 
+	ob_start(); // буферизация вывода
+	include $template; 
+
+	return ob_get_clean(); // достает данные из буфера + очищает буфер
+}
+
+
+/**@@@
+В нашем фреймворке шаблоны лежат в папке resources/views.
+
+src/App/Template.php
+Реализуйте функцию render, которая принимает абсолютный путь до шаблона и массив параметров, а возвращает готовый html.
+
+src/App/Renderer.php
+Реализуйте функцию render в нейсмпейсе App\Renderer. Она принимает на вход относительный путь до шаблона и параметры. Эта функция должна вычислять абсолютный путь к шаблону и вызывать функцию render шаблонизатора App\Template.
+
+Пример использования:
+*/
+
+use function App\Renderer\render;
+
+$app = new Application();
+
+$app->get('/', function () {
+    return render('index');
+});
+
+$app->get('/about', function () {
+    return render('about', [
+        'site' => 'hexlet.io',
+        'subprojects' => ['battle.hexlet.io', 'map.hexlet.io']
+    ]);
+});
+
+$app->run();
+
+
+// FILE: /app/index.php:
+namespace App;
+
+require '/composer/vendor/autoload.php';
+
+use function App\Renderer\render;
+
+$app = new Application();
+
+$app->get('/', function () {
+    return render('index');
+});
+
+$app->get('/about', function () {
+    return render('about', ['site' => 'hexlet.io']);
+});
+
+$app->run();
+
+
+// FILE: /app/src/Renderer.php:
+namespace App\Renderer;
+
+function render($filepath, $params = [])
+{
+    $parts = [getcwd(), 'resources', 'views', $filepath]; // getcwd()- имя текущего рабочего каталога.
+    $templatepath = implode(DIRECTORY_SEPARATOR, $parts) . '.phtml';
+
+    return \App\Template\render($templatepath, $params);
+}
+
+
+// FILE: /app/src/Template.php:
+namespace App\Template;
+
+function render($template, $variables)
+{
+    extract($variables);
+    ob_start();
+    include $template;
+
+    return ob_get_clean();
+}
+
+
+
+>>>>>> Параметры <<<<<<<
+
+// FILE: /app/theory/index.php:
+namespace App;
+
+require_once 'Application.php';
+
+$app = new Application();
+
+$app->get('/', function () {
+	/* $_REQUEST не рекомендуется к использованию */
+	return json_encode($_GET);
+});
+
+$app->post('/', function () {
+	return json_encode($_GET);
+});
+
+$app->run();
+
+/*
+Такого понятния как "get параметры" нет в принципе. 
+С какими глаголами http можно отправлять query params?
+> Параметры не связаны с глаголом и могут отправляться всегда
+
+post, get а так же head, path, put и многие другие http глаголы это не способы передачи параметров, это глаголы http у которых есть определенная семантика. Например семантика get в том что он извлекает информацию, поэтому может кешироваться и обладает еще некоторым набором свойств (должен обладать по стандарту, ответственность лежит на вас как на разработчике). Семантика post это создание/модификация. Параметры в query string это функциональность, которая с глаголами вообще никак не связана. Все что касается http и того как это работает "по настоящему", вы всегда можете узнать в стандарте (и должны там узнавать как разработчик) ссылки на соответствующие документы есть в этой статье https://www.mnot.net/blog/2014/06/07/rfc2616_is_dead. Просто открываете и читаете как оно должно работать.
+
+Путаница идет во многом из-за особенностей форм в html. По умолчанию формы отправляются с глаголом get и передают параметры через query string, если мы напишем method="post", то будет глагол post и параметры уйдут в body.
+*/
+
+/**@@@
+public/index.php
+Реализуйте маршрут /, который может принимать параметр sort и выполнять сортировку $data в соответствии с содержимым этого параметра. Формат sort: field direction. field - название поля, direction - либо asc либо desc. Пример: id desc.
+
+Отдаваемые данные должны кодироваться в json с помощью функции json_encode.
+Пример:
+*/
+$data = [
+    ['id' => 4, 'age' => 15],
+    ['id' => 3, 'age' => 28],
+    ['id' => 8, 'age' => 3],
+    ['id' => 1, 'age' => 23]
+];
+
+$actual = file_get_contents('http://localhost:8080?sort=age+desc');
+
+$expected = [
+    ['id' => 3, 'age' => 28],
+    ['id' => 1, 'age' => 23],
+    ['id' => 4, 'age' => 15],
+    ['id' => 8, 'age' => 3]
+];
+
+json_encode($expected) == $actual
+
+// FILE: /app/src/Application.php:
+namespace App;
+
+class Application
+{
+    private $handlers = [];
+
+    public function get($route, $handler)
+    {
+        $this->append('GET', $route, $handler);
+    }
+
+    public function post($route, $handler)
+    {
+        $this->append('POST', $route, $handler);
+    }
+
+    public function run()
+    {
+        $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+        $method = $_SERVER['REQUEST_METHOD'];
+
+        foreach ($this->handlers as $item) {
+            [$route, $handlerMethod, $handler] = $item;
+            $preparedRoute = preg_quote($route, '/');
+
+            if ($method == $handlerMethod && preg_match("/^$preparedRoute$/i", $uri)) {
+                echo $handler($_GET);
+            }
+        }
+    }
+
+    private function append($method, $route, $handler)
+    {
+        $this->handlers[] = [$route, $method, $handler];
+    }
+}
+
+
+
+// FILE: /app/public/index.php:
+namespace App;
+
+require_once '/composer/vendor/autoload.php';
+
+$app = new Application();
+
+$data = [
+    ['id' => 4, 'age' => 15],
+    ['id' => 3, 'age' => 28],
+    ['id' => 8, 'age' => 3],
+    ['id' => 1, 'age' => 23]
+];
+
+$app->get('/', function ($params) use ($data) {
+    if (array_key_exists('sort', $params)) {
+        list($key, $order) = explode(' ', $params['sort']);
+
+        usort($data, function ($prev, $next) use ($key, $order) {
+            $prevValue = $prev[$key];
+            $nextValue = $next[$key];
+
+            if ($prevValue == $nextValue) {
+                return 0;
+            }
+
+            if ($order == 'desc') {
+                return $prevValue < $nextValue ? 1 : -1;
+            } else if ($order == 'asc') {
+                return $prevValue > $nextValue ? 1 : -1;
+            }
+        });
+    }
+
+    return json_encode($data);
+});
+
+$app->run();
+
+
+
+>>>>>> Динамические маршруты <<<<<<<
+
+// FILE: /app/public/index.php:
+namespace App;
+
+require_once 'Application.php';
+
+$app = new Application();
+
+$app->get('/users/(?P<id>\d+)', function ($params, $arguments) { // именованная группа - id 
+	return json_encode($arguments);
+});
+
+$app->get('/users/(?p<userId>\d+)/articles/(?P<id>[\w-]+)', function ($params, $arguments) { // именованная группа - userId и id
+	return json_encode($arguments); // например: {'userId':'100', 'id':'cars'}
+});
+
+
+
+// FILE: /app/src/Application.php:
+namespace App;
+
+class Application
+{
+    private $handlers = [];
+
+    public function get($route, $handler)
+    {
+        $this->append('GET', $route, $handler);
+    }
+
+    public function post($route, $handler)
+    {
+        $this->append('POST', $route, $handler);
+    }
+
+    public function run()
+    {
+        $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+        $method = $_SERVER['REQUEST_METHOD'];
+
+        foreach ($this->handlers as $item) {
+            [$route, $handlerMethod, $handler] = $item;
+            $preparedRoute = str_replace('/', '\/', $route);
+            $matches = [];
+
+            if ($method == $handlerMethod && preg_match("/^$preparedRoute$/i", $uri, $matches)) {
+            	$arguments = array_filter($matches, function ($key) {
+            		return !is_numeric($key); // из-за особенностей работы preg_match
+            	}, ARRAY_FILTER_USE_KEY);	
+
+                echo $handler($_GET, $arguments);
+            }
+        }
+    }
+
+    private function append($method, $route, $handler)
+    {
+        $this->handlers[] = [$route, $method, $handler];
+    }
+}
+
+/**@@@
+Другой способ работы с роутингом это плейсхолдеры. Пример: /users/:id. Плейсхолдеры это такие "заполнители", которые используются вместо написания регулярного выражения напрямую. Удобство заключается в том что их гораздо проще использовать и понимать.
+
+Пример:
+*/
+$app = new Application();
+
+$app->get('/users/:id', function ($params, $arguments) {
+    // $params['id'] будет содержать часть uri из :id
+    return json_encode($arguments);
+});
+
+// Пример обращения к этому маршруту:
+$ curl localhost:8080/users/3
+{id: 3}
+$ curl localhost:8080/users/5
+{id: 3}
+
+/*
+То есть вместо :id можно подставить любое значение.
+
+Плейсхолдеры могут появляться внутри uri в любом месте. Например мы можем определить такой маршрут: /users/:userId/photos/:id.
+
+src/App/Application.php
+Реализуйте работу с плейсхолдерами в src/app/Application.php.
+
+Алгоритм работы с плейсхолдерами достаточно прост. Все работает практически так же как и с регулярными выражениями + один шаг. На этом шаге плейсхолдеры заменяются на регулярные выражения. По умолчанию регулярное выражение, на которое заменяются плейсхолдеры, это [\w-]+, при этом не забывайте что группа должна быть именованной.
+*/
+
+namespace App;
+
+class Application
+{
+    private $handlers = [];
+
+    public function get($route, $handler)
+    {
+        $this->append('GET', $route, $handler);
+    }
+
+    public function post($route, $handler)
+    {
+        $this->append('POST', $route, $handler);
+    }
+
+    private function append($method, $route, $handler)
+    {
+        $updatedRoute = $route;
+        $matches = [];
+        
+        if (preg_match_all('/:([^\/]+)/', $route, $matches)) {
+            $updatedRoute = array_reduce($matches[1], function ($acc, $value) {
+                $group = "(?P<$value>[\w-]+)";
+
+                return str_replace(":{$value}", $group, $acc);
+            }, $route);
+        }
+
+        $this->handlers[] = [$updatedRoute, $method, $handler];
+    }
+
+    public function run()
+    {
+        $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+        $method = $_SERVER['REQUEST_METHOD'];
+
+        foreach ($this->handlers as $item) {
+            list($route, $handlerMethod, $handler) = $item;
+            $preparedRoute = str_replace('/', '\/', $route);
+            $matches = [];
+            if ($method == $handlerMethod && preg_match("/^$preparedRoute$/i", $uri, $matches)) {
+                $arguments = array_filter($matches, function ($key) {
+                    return !is_numeric($key);
+                }, ARRAY_FILTER_USE_KEY);
+
+                echo $handler($_GET, $arguments);
+            }
+        }
+    }
+}
+
+
+
+>>>>>> Заголовки HTTP <<<<<<
+
+// FILE: /app/public/index.php:
+namespace App;
+
+require_once 'Application.php';
+
+$app = new Application();
+
+$app->get('/', function ($params, $arguments) { 
+	return 'hello, world';
+});
+
+$app->post('/sign_in', function ($params, $arguments) { 
+	$headers = getallheaders(); // получаем заголовки
+
+	error_log(print_r($_SERVER, true));
+	http_response_code(302); // выставляем код ответа (здесь редирект)
+	header('Location: http://localhost:8080');
+
+	return print_r($headers, true);
+});
+
+$app->run();
+
+
+/**@@@
+Для формирования ответа очень часто использую специальный Response Builder, который накапливает в себе данные, которые должны быть отправлены клиенту. Это такие данные, как статус, различные заголовки и тело ответа.
+
+В данном упражнении необходимо реализовать интерфейс ResponseInterface в классе Response, описав логику накопления данных ответа, а так же реализовать логику разбора и отправки этих данных клиенту в классе Application.
+
+Пример использования Response Builder:
+*/
+
+$app->get('/', function () {
+    return response(render('index'));
+});
+
+$app->post('/users', function ($meta, $params, $attributes) use ($users) {
+    if (!isset($params['email'])) {
+        return response('Expected email')->withStatus(400);
+    }
+    return response()->redirect('/');
+});
+
+/*
+src/App/Response.php
+Реализуйте интерфейс ResponseInterface в классе Response.
+
+src/App/Application.php
+Реализуйте логику отправки ответа клиенту. Сначала необходимо извлечь и отправить статус, затем отправить все заголовки и в конце тело ответа, если оно есть.
+*/
+
+// FILE: /app/public/index.php:
+<?php
+
+namespace App;
+
+require_once '/composer/vendor/autoload.php';
+
+use function App\response;
+use function App\Renderer\render;
+
+$users = [
+    1 => [
+        ['id' => 3, 'name' => 'john'],
+        ['id' => 4, 'name' => 'ada']
+    ]
+];
+
+$app = new Application();
+
+$app->get('/', function () use ($users) {
+    return response(render('index', ['friends' => $users[1]]));
+});
+
+$app->post('/users', function ($meta, $params, $attributes) {
+    if (!isset($params['email'])) {
+        return response('Expected email')->withStatus(400);
+    }
+    return response()->redirect('/');
+});
+
+$app->get('/users/:id/friends', function ($meta, $params, $attributes) use ($users) {
+    if (!isset($users[$attributes['id']])) {
+        return response(['error' => 'message not found'])->withStatus(404)->format('json');
+    }
+    $response = response($users[$attributes['id']])->format('json');
+    return $response;
+});
+
+$app->run();
+
+ 
+// FILE: /app/src/Application.php:
+namespace App;
+
+class Application
+{
+    private $handlers = [];
+
+    public function get($route, $handler)
+    {
+        $this->append('GET', $route, $handler);
+    }
+
+    public function post($route, $handler)
+    {
+        $this->append('POST', $route, $handler);
+    }
+
+    private function append($method, $route, $handler)
+    {
+        $updatedRoute = $route;
+        if (preg_match_all('/:([^\/]+)/', $route, $matches)) {
+            $updatedRoute = array_reduce($matches[1], function ($acc, $value) {
+                $group = "(?P<$value>[\w-]+)";
+                return str_replace(":{$value}", $group, $acc);
+            }, $route);
+        }
+        $this->handlers[] = [$updatedRoute, $method, $handler];
+    }
+
+    public function run()
+    {
+        $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+        $method = $_SERVER['REQUEST_METHOD'];
+        foreach ($this->handlers as $item) {
+            [$route, $handlerMethod, $handler] = $item;
+            $preparedRoute = str_replace('/', '\/', $route);
+            $matches = [];
+            if ($method == $handlerMethod && preg_match("/^$preparedRoute$/i", $uri, $matches)) {
+                $attributes = array_filter($matches, function ($key) {
+                    return !is_numeric($key);
+                }, ARRAY_FILTER_USE_KEY);
+
+                $meta = [
+                    'method' => $method,
+                    'uri' => $uri,
+                    'headers' => getallheaders()
+                ];
+
+                $response = $handler($meta, array_merge($_GET, $_POST), $attributes);
+                http_response_code($response->getStatusCode());
+
+                foreach ($response->getHeaderLines() as $header) {
+                    header($header);
+                }
+                echo $response->getBody();
+
+                return;
+            }
+        }
+    }
+}
+
+// FILE: /app/src/Renderer.php:
+namespace App\Renderer;
+
+function render($filepath, $params = [])
+{
+    $templatepath = 'resources/views' . DIRECTORY_SEPARATOR . $filepath . '.phtml';
+    return \App\Template\Render($templatepath, $params);
+}
+
+
+// FILE: /app/src/ResponseInterface.php:
+namespace App;
+
+interface ResponseInterface
+{
+    public function __construct($body);
+    public function redirect($url);
+
+    public function withStatus($status);
+    public function format($format);
+    public function getStatusCode();
+    public function getBody();
+    public function getHeaderLines();
+}
+
+
+// FILE: /app/src/Response.php:
+namespace App;
+
+function response($body = null)
+{
+    return new Response($body);
+}
+
+class Response implements ResponseInterface
+{
+    protected $headers = [];
+    protected $status = 200;
+    protected $body;
+
+    public function __construct($body)
+    {
+        if (is_string($body)) {
+            $this->headers['Content-Length'] = mb_strlen($body);
+        }
+        $this->body = $body;
+    }
+
+    public function redirect($url)
+    {
+        $this->status = 302;
+        $this->headers['Location'] = $url;
+
+        return $this;
+    }
+
+    public function withStatus($status)
+    {
+        $this->status = $status;
+        return $this;
+    }
+
+    public function format($format)
+    {
+        switch ($format) {
+            case 'json':
+                $this->headers['Content-Type'] = 'application/json';
+                $this->body = json_encode($this->body);
+                $this->headers['Content-Length'] = mb_strlen($this->body);
+        }
+
+        return $this;
+    }
+
+    public function getStatusCode()
+    {
+        return $this->status;
+    }
+
+    public function getBody()
+    {
+        return $this->body;
+    }
+
+    public function getHeaderLines()
+    {
+        return array_map(function ($key, $value) {
+            return "$key: $value";
+        }, array_keys($this->headers), $this->headers);
+    }
+}
+
+
+
+// FILE: /app/src/Template.php:
+namespace App\Template;
+
+function render($template, $variables)
+{
+    extract($variables);
+    ob_start();
+    include $template;
+    return ob_get_clean();
+}
+
+
+
+>>>>>> Формы <<<<<<
+
+$pdo = new \PDO('sqlite:db.sqlite', null, null, $opt);
+$repository = new UserRepositiry($pdo);
+
+$newUser = [
+	'email' => '',
+	'first_name' => ''
+];
+
+$app->get('/users', function () use ($repository) {
+	$users = $repository->all();
+
+	return response(render('users/index', ['users' => $users]));
+});
+
+$app->get('/users/new', function ($meta, $params, $attributes) use ($newUser) {
+	return response(render('users/new', ['errors' => [], 'user' => $newUser]));
+});
+
+$app->post('/users', function ($meta, $params, $attributes) use ($repository) {
+	$user = $params['user'];
+	$errors = [];
+
+	if (!trim($user['email'])) {
+		$errors['email'] = "Email can`t be blank";
+	} else if (!filter_var($user['email'], FILTER_VALIDATE_EMAIL)) {
+		$errors['email'] = "Email is not valid";
+	}
+
+	if (!empty($errors)) {
+		return response(render('users/new', ['user' => $user, 'errors' => $errors]))->withStatus(422); // 422 - не обрабатываемая сущность
+	} else {
+		$repository->insert($user);
+
+		return response()->redirect('/users');
+	}
+});
+
+$app->run();
+
+
+
+/**@@@
+Кроме get и post в http определено множество других глаголов. Например, для удаления — DELETE, а для частичного обновления — PATCH. Их поддерживают все распространенные веб-сервера, но, к сожалению, формы в html умеют делать отправку только get или post.
+
+Фреймворки нашли выход из этой ситуации: при генерации форм (а их обычно не руками выводят) добавляют специальное hidden поле с именем _method и со значением, которое определяет глагол, например, delete. Дальше фреймворк внутри себя проверяет, если текущий метод POST и существует значение для _method то используем его как имя глагола. Таким образом у нас начинают работать такие конструкции:
+*/
+
+$app->delete('/users/:id', function ($meta, $params, $attributes) {
+    // тут удаляем пользователя
+    return response()->redirect('/');
+});
+
+
+/*
+src/App/Application.php
+Реализуйте логику определения $method на основе значения ключа _method из $_POST
+
+public/index.php
+Реализуйте следующие обработчики:
+
+ - Форма создания машины: get -> /cars/new
+ - Создание машины: post -> /cars
+ - Удаление машины: delete -> /cars/:id
+resources/views/cars/new.phtml
+Реализуйте форму для создания машины
+*/
+
+// FILE: /app/public/index.php:
+namespace App;
+
+use function App\response;
+use function App\Renderer\render;
+
+require_once '/composer/vendor/autoload.php';
+
+$opt = array(
+    \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION,
+    \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_ASSOC,
+);
+
+$pdo = new \PDO('sqlite:/var/tmp/db.sqlite', null, null, $opt);
+$repository = new CarRepository($pdo);
+
+$app = new Application();
+
+$app->get('/', function () use ($repository) {
+    $cars = $repository->all();
+    return response(render('index', ['cars' => $cars]));
+});
+
+$app->get('/cars/new', function ($meta, $params, $attributes) {
+    return response(render('cars/new', ['errors' => []]));
+});
+
+$app->delete('/cars/:id', function ($meta, $params, $attributes) use ($repository) {
+    $repository->delete($attributes['id']);
+    return response()->redirect('/');
+});
+
+$app->post('/cars', function ($meta, $params, $attributes) use ($repository) {
+    $car = $params['car'];
+    $errors = [];
+
+    if (!$car['model']) {
+        $errors['model'] = "Model can't be blank";
+    }
+
+    if (empty($errors)) {
+        $repository->insert($car);
+        return response()->redirect('/');
+    } else {
+        return response(render('cars/new', ['car' => $car, 'errors' => $errors]))
+            ->withStatus(422);
+    }
+});
+
+$app->run();
+
+
+// FILE: /app/resources/views/cars/new.phtml: ?>
+<!DOCTYPE html>
+<html>
+    <body>
+        <h1>New Car</h1>
+
+        <div>
+            <a href="/">cars list</a>
+        </div>
+
+        <br>
+
+        <form action="/cars" method="post">
+            <div>
+                <b>Model</b>
+                <input type="text" name="car[model]">
+                <?php if (isset($errors['model'])) : ?>
+                    <div style="color: red"><?= $errors['model'] ?></div>
+                <?php endif ?>
+            </div>
+
+            <br>
+
+            <div>
+                Year
+                <input type="number" name="car[year]">
+            </div><br>
+            <div>
+                <input type="submit">
+            </div>
+        </form>
+
+    </body>
+</html>
+
+
+<?
+
+
+// FILE: /app/App/Renderer/Renderer.php:
+namespace App\Renderer;
+
+function render($filepath, $params = [])
+{
+    $templatepath = 'resources/views'. DIRECTORY_SEPARATOR . $filepath . '.phtml';
+    return \App\Template\Render($templatepath, $params);
+}
+
+
+// FILE: /app/App/Template/Template.php:
+namespace App\Template;
+
+function render($template, $variables)
+{
+    extract($variables);
+    ob_start();
+    include $template;
+    return ob_get_clean();
+}
+
+
+// FILE: /app/App/Application.php:
+namespace App;
+
+class Application
+{
+    private $handlers = [];
+
+    public function get($route, $handler)
+    {
+        $this->append('GET', $route, $handler);
+    }
+
+    public function delete($route, $handler)
+    {
+        $this->append('DELETE', $route, $handler);
+    }
+
+    public function post($route, $handler)
+    {
+        $this->append('POST', $route, $handler);
+    }
+
+    private function append($method, $route, $handler)
+    {
+        $updatedRoute = $route;
+        if (preg_match_all('/:([^\/]+)/', $route, $matches)) {
+            $updatedRoute = array_reduce($matches[1], function ($acc, $value) {
+                $group = "(?P<$value>[\w-]+)";
+                return str_replace(":{$value}", $group, $acc);
+            }, $route);
+        }
+        $this->handlers[] = [$updatedRoute, $method, $handler];
+    }
+
+    public function run()
+    {
+        $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+
+
+        if ($_SERVER['REQUEST_METHOD'] == 'POST' && array_key_exists('_method', $_POST)) {
+            $method = strtoupper($_POST['_method']);
+        } else {
+            $method = $_SERVER['REQUEST_METHOD'];
+        }
+
+        foreach ($this->handlers as $item) {
+            list($route, $handlerMethod, $handler) = $item;
+            $preparedRoute = str_replace('/', '\/', $route);
+            $matches = [];
+            if ($method == $handlerMethod && preg_match("/^$preparedRoute$/i", $uri, $matches)) {
+                $attributes = array_filter($matches, function ($key) {
+                    return !is_numeric($key);
+                }, ARRAY_FILTER_USE_KEY);
+
+                $meta = [
+                    'method' => $method,
+                    'uri' => $uri,
+                    'headers' => getallheaders()
+                ];
+
+                $response = $handler($meta, array_merge($_GET, $_POST), $attributes);
+                http_response_code($response->getStatusCode());
+                foreach ($response->getHeaderLines() as $header) {
+                    header($header);
+                }
+                echo $response->getBody();
+                return;
+            }
+        }
+    }
+}
+
+
+
+// FILE: /app/src/App/CarRepository.php:
+namespace App;
+
+class CarRepository
+{
+    protected $pdo;
+
+    public function __construct($pdo)
+    {
+        $this->pdo = $pdo;
+    }
+
+    public function find($id)
+    {
+        $stmt = $this->pdo->prepare('select * from cars where id = ?');
+        $stmt->execute([$id]);
+
+        return $stmt->fetch();
+    }
+
+    public function delete($id)
+    {
+        $stmt = $this->pdo->prepare('delete from cars where id = ?');
+
+        return $stmt->execute([$id]);
+    }
+
+    public function all()
+    {
+        return $this->pdo->query('select * from cars')->fetchAll();
+    }
+
+    public function insert($params)
+    {
+        $pdo = $this->pdo;
+
+        $fields = implode(', ', array_keys($params));
+        $values = implode(', ', array_map(function ($v) use ($pdo) {
+            return $pdo->quote($v);
+        }, array_values($params)));
+
+        return $pdo->exec("insert into cars ($fields) values ($values)");
+    }
+}
+
+
+
+// FILE: /app/src/App/Response.php:
+namespace App;
+
+require_once 'ResponseInterface.php';
+
+function response($body = null)
+{
+    return new Response($body);
+}
+
+class Response implements ResponseInterface
+{
+    protected $headers = [];
+    protected $status = 200;
+    protected $body;
+
+    public function __construct($body)
+    {
+        if (is_string($body)) {
+            $this->headers['Content-Length'] = mb_strlen($body);
+        }
+        $this->body = $body;
+    }
+
+    public function redirect($url)
+    {
+        $this->status = 302;
+        $this->headers['Location'] = $url;
+
+        return $this;
+    }
+
+    public function withStatus($status)
+    {
+        $this->status = $status;
+        return $this;
+    }
+
+    public function format($format)
+    {
+        switch ($format) {
+            case 'json':
+                $this->headers['Content-Type'] = 'json';
+                $this->body = json_encode($this->body);
+                $this->headers['Content-Length'] = mb_strlen($this->body);
+        }
+
+        return $this;
+    }
+
+    public function getStatusCode()
+    {
+        return $this->status;
+    }
+
+    public function getBody()
+    {
+        return $this->body;
+    }
+
+    public function getHeaderLines()
+    {
+        return array_map(function ($key, $value) {
+            return "$key: $value";
+        }, array_keys($this->headers), $this->headers);
+    }
+}
+
+
+// FILE: /app/src/App/ResponseInterface.php:
+namespace App;
+
+interface ResponseInterface
+{
+    public function __construct($body);
+    public function redirect($url);
+
+    public function withStatus($status);
+    public function format($format);
+    public function getStatusCode();
+    public function getBody();
+    public function getHeaderLines();
+}
+
+
+
+>>>>>> Файлы <<<<<<
+
+// FILE: /app/public/index.php:
+$app->post('/user', function ($meta, $params, $attributes) use ($repository) {
+	$user = $params['user'];
+	$errors = [];
+
+	if (array_key_exists('user', $_FILES)) {
+		error_log(print_r($_FILES, true));
+		$key = 'avatar';
+		$errorCode = $_FILES['user']['error'][$key]; // код ошибки
+
+		if ($errorCode !== UPLOAD_ERR_NO_FILE) { // файл не был загружен
+			if ($errorCode !== UPLOAD_ERR_OK) { // загрузка с ошибкой
+				$errors['avatar'] = codeToMessage($errorCode);
+			} else {
+				$tmpName = $_FILES['user']['tmp_name'][$key];
+				$name = $_FILES['user']['name'][$key];
+				$newName = 'images' . DIRECTORY_SEPARATOR . $name; 
+
+				if (!move_uploaded_file($tmpName, $newName)) {
+					$errors['avatar'] = 'Something wrong';
+				} else {
+					$user['avatar'] = $name;
+				}
+			}
+		}
+	}
+
+	error_log($_FILES, true);
+
+	if(!empty($errors)) {
+		return response(render('users/new', ['user' => $user, 'errors' => $errors]))->withStatus(422);
+	} else {
+		$repository->insert($user);
+
+		return response()->redirect('/');
+	}
+
+});
+
+
+
+/**@@@
+В форме создания новой машины есть два поля для загрузки файлов.
+*/
+<input class="file" type="file" name="car[pictures][]">
+<input class="file" type="file" name="car[pictures][]">
+
+// После загрузки на сервер (обработчик POST /cars) происходит проверка на ошибки и готовится массив, содержащий список загруженных файлов:
+
+$pictures = [
+    ['name' => basename($tmpFileName)],
+    ...
+];
+
+// При этом сами файлы должны быть перемещены в папку:
+$newName = __DIR__ . DIRECTORY_SEPARATOR . 'images' . DIRECTORY_SEPARATOR . basename($tmpFileName);
+
+/*
+public/index.php
+Допишите логику загрузки файлов в соответствующем обработчике. Она включает в себя формирование массива ошибок $errors (при условии что они были), а так же формирование массива $pictures, который уже будет использоваться для сохранения загруженных картинок.
+*/
+
+// FILE: /app/public/index.php:
+namespace App;
+
+use function App\response;
+use function App\Renderer\render;
+
+require_once '/composer/vendor/autoload.php';
+
+$opt = array(
+    \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION,
+    \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_ASSOC,
+);
+
+$newCar = [
+    'pictures' => [],
+    'model' => ''
+];
+
+$pdo = new \PDO('sqlite:/var/tmp/db.sqlite', null, null, $opt);
+$repository = new CarRepository($pdo);
+
+$app = new Application();
+
+$app->get('/', function () use ($repository) {
+    $cars = $repository->all();
+    return response(render('index', ['cars' => $cars]));
+});
+
+$app->get('/cars/new', function ($meta, $params, $attributes) use ($newCar) {
+    return response(render('cars/new', ['car' => $newCar, 'errors' => []]));
+});
+
+$app->post('/cars', function ($meta, $params, $attributes) use ($repository) {
+    $car = $params['car'];
+    $pictures = [];
+    $errors = [];
+
+    if (!$car['model']) {
+        $errors['model'] = "Model can't be blank";
+    }
+
+    if (array_key_exists('car', $_FILES)) {
+        $key = 'pictures';
+        $files = $_FILES['car'];
+        foreach ($files['error'][$key] as $errorCode) {
+            if ($errorCode !== UPLOAD_ERR_OK && $errorCode !== UPLOAD_ERR_NO_FILE) {
+                $errors[$key] = 'Something was wrong';
+            }
+        }
+
+        if (!array_key_exists($key, $errors)) {
+            foreach ($files['tmp_name'][$key] as $index => $tmpName) {
+                if ($files['error'][$key][$index] === UPLOAD_ERR_NO_FILE) {
+                    continue;
+                }
+                $newName = __DIR__ . DIRECTORY_SEPARATOR . 'images' . DIRECTORY_SEPARATOR . basename($tmpName);
+                if (move_uploaded_file($tmpName, $newName)) {
+                    $pictures[] = ['name' => basename($tmpName)];
+                } else {
+                    $errors[$key] = 'Something was wrong';
+                }
+            }
+        }
+    }
+
+    if (empty($errors)) {
+        $repository->insert($car, $pictures);
+        return response()->redirect('/');
+    } else {
+        return response(render('cars/new', ['car' => $car, 'errors' => $errors]))
+            ->withStatus(422);
+    }
+});
+
+$app->run();
+
+
+
+>>>>>> Куки <<<<<<
+
+namespace Theory;
+
+require_once '../exercise/Application.php';
+require_once '../exercise/Response.php';
+require_once '../exercise/Renderer.php';
+require_once 'UserRepositiry.php';
+
+use function App\response;
+use function App\Renderer\render;
+
+$app = new \App\Application();
+
+$app->get('/', function () {
+	return response(render('index', ['cookies' => print_r($_COOKIE, true)]));
+});
+
+$app->get('/cookie', function () {
+	setcookie('session-cookie', uniqid()); // живет до закрытия браузера
+	setcookie('persistent-cookie', uniqid(), time() + 10000); // персисентная куки
+	setcookie('session-cookie-with-path', uniqid(), 0, '/about');
+	setcookie('session-cookie-for-domain', uniqid(), 0, '', 'www.localhost');
+	setcookie('session-cookie-with-httponly', uniqid(), 0, '', '', false, true);
+
+	return response()->redirect('/');
+});
+
+$app->run();
+
+
+/**@@@
+Корзина товаров это стандартный механизм для магазинов в интернете. Один из способов ее организации это хранение в куках массива со списком добавленных туда товаров.
+
+Пример установки куки:
+*/
+$app->post('/', function ($meta, $params, $attributes, $cookies) {
+    $cart = ...
+    return response()->redirect('/')->withCookie('cart', json_encode($cart));
+});
+
+/*
+src/app/Application.php
+Реализуйте логику отправки cookies
+public/index.php
+Реализуйте следующие обработчики:
+
+Вывод списка товаров из корзины: get -> /cart.
+Добавление товара в корзину: post -> /cart. Каждое добавление одного и того же товара, увеличивает количество единиц на одну. После добавления должен происходить редирект /cart.
+Удаление товара из корзины: delete -> /cart. Товар удаляется полностью, независимо от количества единиц в корзине. После удаления должен происходить редирект /cart.
+*/
+
+// FILE: /app/public/index.php:
+namespace App;
+
+use function App\response;
+use function App\Renderer\render;
+
+require_once '/composer/vendor/autoload.php';
+
+$app = new Application();
+
+$goods = ['milk', 'salt', 'beef', 'chiken', 'butter'];
+
+$app->get('/', function ($meta, $params, $attributes, $cookies) use ($goods) {
+    return response(render('index', ['goods' => $goods]));
+});
+
+
+$app->get('/cart', function ($meta, $params, $attributes, $cookies) use ($goods) {
+    $cart = array_key_exists('cart', $cookies) ? $cookies['cart'] : [];
+    return response(render('cart', ['goods' => json_decode($cart, true)]));
+});
+
+$app->post('/cart', function ($meta, $params, $attributes, $cookies) use ($goods) {
+    $cart = array_key_exists('cart', $cookies) ? json_decode($cookies['cart'], true) : [];
+    $good = $params['good'];
+    if (array_key_exists($good, $cart)) {
+        $cart[$good]++;
+    } else {
+        $cart[$good] = 1;
+    }
+    return response()->redirect('/cart')->withCookie('cart', json_encode($cart));
+});
+
+$app->delete('/cart', function ($meta, $params, $attributes, $cookies) use ($goods) {
+    $cart = array_key_exists('cart', $cookies) ? json_decode($cookies['cart'], true) : [];
+    $good = $params['good'];
+    unset($cart[$good]);
+    return response()->redirect('/cart')->withCookie('cart', json_encode($cart));
+});
+
+$app->run();
+
+
+// FILE: /app/src/Application.php:
+namespace App;
+
+class Application
+{
+    private $handlers = [];
+
+    public function get($route, $handler)
+    {
+        $this->append('GET', $route, $handler);
+    }
+
+    public function delete($route, $handler)
+    {
+        $this->append('DELETE', $route, $handler);
+    }
+
+    public function post($route, $handler)
+    {
+        $this->append('POST', $route, $handler);
+    }
+
+    private function append($method, $route, $handler)
+    {
+        $updatedRoute = $route;
+        if (preg_match_all('/:([^\/]+)/', $route, $matches)) {
+            $updatedRoute = array_reduce($matches[1], function ($acc, $value) {
+                $group = "(?P<$value>[\w-]+)";
+                return str_replace(":{$value}", $group, $acc);
+            }, $route);
+        }
+        $this->handlers[] = [$updatedRoute, $method, $handler];
+    }
+
+    public function run()
+    {
+        $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+        
+        if ($_SERVER['REQUEST_METHOD'] == 'POST' && array_key_exists('_method', $_POST)) {
+            $method = strtoupper($_POST['_method']);
+        } else {
+            $method = $_SERVER['REQUEST_METHOD'];
+        }
+
+        foreach ($this->handlers as $item) {
+            [$route, $handlerMethod, $handler] = $item;
+            $preparedRoute = str_replace('/', '\/', $route);
+            $matches = [];
+            if ($method == $handlerMethod && preg_match("/^$preparedRoute$/i", $uri, $matches)) {
+                error_log(json_encode([$method, $route]));
+                $attributes = array_filter($matches, function ($key) {
+                    return !is_numeric($key);
+                }, ARRAY_FILTER_USE_KEY);
+
+                $meta = [
+                    'method' => $method,
+                    'uri' => $uri,
+                    'headers' => getallheaders()
+                ];
+
+                $response = $handler($meta, array_merge($_GET, $_POST), $attributes, $_COOKIE);
+                http_response_code($response->getStatusCode());
+
+                foreach ($response->getHeaderLines() as $header) {
+                    header($header);
+                }
+
+                foreach ($response->getCookies() as $key => $value) {
+                    setcookie($key, $value);
+                }
+
+                echo $response->getBody();
+                return;
+            }
+        }
+    }
+}
+
+
+
+
+>>>>>> Сессия <<<<<<
+
+namespace Theory;
+
+require_once '../exercise/Application.php';
+require_once '../exercise/Response.php';
+
+use function App\response;
+
+$app = new \App\Application();
+
+$app->get('/', function() {
+	session_start();
+	return response(print_r($_SESSION, true));
+});
+
+$app->get('/sessin/new', function ($meta, $params) {
+	session_start();
+	$_SESSION = $params;
+
+	return response()->redirect('/');
+});
+
+$app->get('/session/destroy', function ($meta, $params) {
+	session_start();
+	session_destroy();
+
+	return response()->redirect('/');
+});
+
+$app->run();
+
+
+/*
+Время жизни сессии по умолчанию?
+> совпадает с браузерной сессией
+
+Где хранятся данные сессии по умолчанию для php?
+> В файлах
+*/
+
+
+/**@@@
+Реализуйте аутентификацию на сайте на основе nickname.
+
+src/App/Session.php
+Реализуйте класс Session в соответствии с интерфейсом SessionInterface;
+
+public/index.php
+Реализуйте следующие обработчики:
+
+Форма для входа: get -> /session/new
+Обработка формы: post -> /session.
+Выход: delete -> /session.
+Если обработка успешна, то делаем перенаправление на /.
+*/
+
+// FILE: app/public/index.php:
+namespace App;
+
+require_once '/composer/vendor/autoload.php';
+
+use function App\response;
+use function App\Renderer\render;
+
+$app = new Application();
+
+$app->get('/', function ($meta, $params, $attributes, $cookies, $session) {
+    $session->start();
+    $nickname = $session->get('nickname');
+    return response(render('index', ['nickname' => $nickname]));
+});
+
+$app->get('/session/new', function ($meta, $params, $attributes, $cookies, $session) {
+    return response(render('session/new'));
+});
+
+$app->post('/session', function ($meta, $params, $attributes, $cookies, $session) {
+    $session->start();
+    $session->set('nickname', $params['nickname']);
+    return response()->redirect('/');
+});
+
+$app->delete('/session', function ($meta, $params, $attribute, $cookies, $session) {
+    $session->start();
+    $session->destroy();
+    return response()->redirect('/');
+});
+
+$app->run();
+
+
+// FILE: /app/src/Application.php:
+namespace App;
+
+class Application
+{
+    private $handlers = [];
+
+    public function get($route, $handler)
+    {
+        $this->append('GET', $route, $handler);
+    }
+
+    public function delete($route, $handler)
+    {
+        $this->append('DELETE', $route, $handler);
+    }
+
+    public function post($route, $handler)
+    {
+        $this->append('POST', $route, $handler);
+    }
+
+    private function append($method, $route, $handler)
+    {
+        $updatedRoute = $route;
+        if (preg_match_all('/:([^\/]+)/', $route, $matches)) {
+            $updatedRoute = array_reduce($matches[1], function ($acc, $value) {
+                $group = "(?P<$value>[\w-]+)";
+                return str_replace(":{$value}", $group, $acc);
+            }, $route);
+        }
+        $this->handlers[] = [$updatedRoute, $method, $handler];
+    }
+
+    public function run()
+    {
+        $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+        if ($_SERVER['REQUEST_METHOD'] == 'POST' && array_key_exists('_method', $_POST)) {
+            $method = strtoupper($_POST['_method']);
+        } else {
+            $method = $_SERVER['REQUEST_METHOD'];
+        }
+        foreach ($this->handlers as $item) {
+            list($route, $handlerMethod, $handler) = $item;
+            $preparedRoute = str_replace('/', '\/', $route);
+            $matches = [];
+            if ($method == $handlerMethod && preg_match("/^$preparedRoute$/i", $uri, $matches)) {
+                error_log($route);
+                $attributes = array_filter($matches, function ($key) {
+                    return !is_numeric($key);
+                }, ARRAY_FILTER_USE_KEY);
+
+                $meta = [
+                    'method' => $method,
+                    'uri' => $uri,
+                    'headers' => getallheaders()
+                ];
+
+                $session = new Session();
+                $response = $handler($meta, array_merge($_GET, $_POST), $attributes, $_COOKIE, $session);
+                http_response_code($response->getStatusCode());
+                foreach ($response->getHeaderLines() as $header) {
+                    header($header);
+                }
+                echo $response->getBody();
+                return;
+            }
+        }
+    }
+}
+
+
+// FILE: /app/src/Renderer.php:
+namespace App\Renderer;
+
+function render($filepath, $params = [])
+{
+    $templatepath = 'resources' . DIRECTORY_SEPARATOR . 'views' . DIRECTORY_SEPARATOR . $filepath . '.phtml';
+    return \App\Template\Render($templatepath, $params);
+}
+
+
+// FILE: /app/src/Response.php:
+namespace App;
+
+function response($body = null)
+{
+    return new Response($body);
+}
+
+class Response implements ResponseInterface
+{
+    protected $headers = [];
+    protected $status = 200;
+    protected $body;
+
+    public function __construct($body)
+    {
+        if (is_string($body)) {
+            $this->headers['Content-Length'] = mb_strlen($body);
+        }
+        $this->body = $body;
+    }
+
+    public function redirect($url)
+    {
+        $this->status = 302;
+        $this->headers['Location'] = $url;
+
+        return $this;
+    }
+
+    public function withStatus($status)
+    {
+        $this->status = $status;
+        return $this;
+    }
+
+    public function format($format)
+    {
+        switch ($format) {
+            case 'json':
+                $this->headers['Content-Type'] = 'json';
+                $this->body = json_encode($this->body);
+                $this->headers['Content-Length'] = mb_strlen($this->body);
+        }
+
+        return $this;
+    }
+
+    public function getStatusCode()
+    {
+        return $this->status;
+    }
+
+    public function getBody()
+    {
+        return $this->body;
+    }
+
+    public function getHeaderLines()
+    {
+        return array_map(function ($key, $value) {
+            return "$key: $value";
+        }, array_keys($this->headers), $this->headers);
+    }
+}
+
+
+
+// FILE: /app/src/Session.php:
+namespace App;
+
+class Session implements SessionInterface
+{
+    public function start()
+    {
+        session_start();
+    }
+
+    public function set($key, $value)
+    {
+        $_SESSION[$key] = $value;
+    }
+
+    public function get($key, $default = null)
+    {
+        return array_key_exists($key, $_SESSION) ? $_SESSION[$key] : $default;
+    }
+
+    public function destroy()
+    {
+        session_destroy();
+    }
+}
+
+
+// FILE: /app/src/Template.php:
+namespace App\Template;
+
+function render($template, $variables)
+{
+    extract($variables);
+    ob_start();
+    include $template;
+    return ob_get_clean();
+}
