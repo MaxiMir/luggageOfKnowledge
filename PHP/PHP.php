@@ -13445,3 +13445,1800 @@ function render($template, $variables)
     include $template;
     return ob_get_clean();
 }
+
+
+
+
+######################### PHP: Погружаясь в классы #########################
+
+/*
+PHP как и любой другой классовый язык, уделяет очень много внимания организации классов. Все это делается ради возможности лучше переиспользовать код (в рамках классового подхода, без классов эти ухищрения не нужны) и допускать меньше ошибок.
+
+С одной стороны это хорошо, но с другой, текущих возможностей настолько много, что одну и ту же задачу можно реализовать десятками способов. Количество комбинаций разных подходов порождает целые школы и направления по тому как надо писать код. Как часто нужно использовать наследование? Где применяются абстрактные классы? А анонимные? Зачем нужны трейты? Как совмещать подтипы и иерархии?
+
+В этом курсе, мы глубоко окунемся в организацию классов, познакомимся с концепций наследования. Научимся строить иерархии классов правильно, с учетом принципа подстановки Лисков. В конце концов узнаем о том, почему наследование почти всегда плохой способ организации кода (но популярный потому что легко сделать) и лучше предпочитать композицию наследованию.
+
+Наследование тянет за собой много нового. Здесь появляются абстрактные классы, финальные классы, возможность переопределять поведение. Возникают шаблоны проектирования, специфичные только для наследования. Наследование влияет на то как работает полиморфный код (но не необходимо для него). Все это требует отдельного рассмотрения.
+
+В конце концов, мы познакомимся с действительно интересной концепций – трейтами (их иногда называют миксинами). Трейты предлагают гораздо более жизнеспособный механизм расширения функциональности лишенный недостатков наследования.
+
+# Дополнительные материалы
+Джо Армстронг об Elixir, Erlang, ФП и ООП https://habr.com/ru/post/450508/
+*/
+
+
+>>>>>>> Наследование <<<<<<
+
+/*
+Наследование классов – механизм позволяющий создавать классы (говорят подклассы) на основе других классов (называемых базовыми или суперклассами). Подклассы, в таком случае, "наследуют" структуру базовых классов, то есть получают возможность использовать все, что определено в базовом классе.
+
+Механизм наследования – сложная система, со множеством элементов, дополнительных сущностей и особенностей поведения. Поэтому изучаться он будет в несколько приемов, на протяжении всего курса.
+
+Рассмотрим наследование на примере структуры HTML. Каждый тег в HTML по своему уникален. С другой стороны, все они имеют общие аттрибуты и некоторые другие характеристики. Попробуем отобразить это с помощью иерархии классов.
+*/
+
+// Базовый класс для всех тегов. Умеет работать с аттрибутами.
+class HTMLElement
+{
+    public $body;
+    public $attributes = [];
+
+    public function __construct($attributes = [])
+    {
+        $this->attributes = $attributes;
+    }
+
+    public function setAttribute(string $key, $value)
+    {
+        $this->attributes[$key] = $value;
+    }
+
+    public function getAttribute(string $key)
+    {
+        return $this->attributes[$key];
+    }
+
+    public function getTextContent(string $key)
+    {
+        return $this->body;
+    }
+
+    public function setTextContent($body)
+    {
+        $this->body = $body;
+    }
+
+
+    protected function stringifyAttributes()
+    {
+        // build: key="value" key2="value2"
+    }
+}
+
+// Конкретные элементы, представленные тегами в HTML, наследуются от этого класса:
+// Anchor – это ссылка. Класс HTMLAnchorElement описывает тег "a".
+// Наследование выполняется через ключевое слово extends
+class HTMLAnchorElement extends HTMLElement
+{
+    public function __toString()
+    {
+        // Родительский метод
+        $attrLine = $this->stringifyAttributes();
+        // Родительский метод
+        $body = $this->getTextContent();
+        return "<a{$attrLine}>{$body}</a>"
+    }
+}
+
+// Наследование записывается так: A extends B. Эта запись означает, что класс A наследуется от класса B. Теперь посмотрим как работает наследование:
+
+// Конструктор родителя
+$anchor = new HTMLAnchorElement(['href' => 'https://ru.hexlet.io']);
+$anchor->setTextContent('Hexlet');
+echo "Anchor: {$anchor}"; // __toString вызывается автоматически
+// Anchor: <a href="https://ru.hexlet.io">Hexlet</a>
+
+
+/*
+Внутри HTMLAnchorElement нет определения конструктора, но благодаря наследованию, этот класс имеет доступ ко всем публичным методам и свойствам суперкласса. PHP вызывает их автоматически при обращении к ним. В свою очередь, внутри __toString() вызываются методы, которых нет в текущих классах, поэтому они также берутся из родительского класса.
+
+# Цепочка наследования
+В отличие от интерфейсов, наследование классов в PHP – одиночное. Другими словами, наследоваться можно только от одного класса. Точно так же как и в Java. Множественное наследование в этих языках было убрано специально, из-за его высокой сложности и проблем, которые оно добавляет (например коллизии методов и свойств). С другой стороны, сама по себе цепочка наследования может быть сколь угодно глубокой:
+*/
+
+class D {}
+class C extends D {}
+class B extends C {}
+class A extends B {}
+
+# Instance Of
+// Оператор instanceof учитывает классы из цепочки наследования:
+
+$anchor = new HTMLAnchorElement();
+if ($anchor instanceof HTMLElement) {
+    echo '!!!';
+}
+// !!!
+
+
+// Если нужно проверить точный класс, то это можно сделать по другому:
+$anchor = new HTMLAnchorElement();
+get_class($anchor); // 'HTMLAnchorElement'
+
+// Не забывайте, что подобные проверки закрывают возможность использовать полиморфизм. Иногда без них не обойтись, но в подавляющем большинстве случаев лучше завязываться на интерфейс объекта.
+
+/*
+# Дополнительные материалы
+https://en.wikipedia.org/wiki/Inheritance_(object-oriented_programming)
+*/
+
+/**@@@
+src\HTMLHrElement.php
+Реализуйте класс HTMLHrElement (наследуется от HTMLElement), который отвечает за представление тега <hr>. Внутри класса определите функцию __toString(), которая возвращает текстовое представление тега.
+*/
+$hr = new HTMLHrElement();
+echo $hr; // <hr>
+
+$hr = new HTMLHrElement(['class' => 'w-75', 'id' => 'wop']);
+echo $hr; // '<hr class="w-75" id="wop">';
+
+/*
+src\HTMLElement.php
+Реализуйте метод stringifyAttributes(), который формирует строчку для аттрибутов. Используйте этот метод в наследнике для формирования тега.
+
+Подсказки
+В практике доступен collect https://github.com/tightenco/collect
+*/
+
+// FILE /app/src/HTMLElement.php:
+namespace App;
+
+class HTMLElement
+{
+    private $attributes = [];
+
+    public function __construct($attributes = [])
+    {
+        $this->attributes = $attributes;
+    }
+
+    protected function stringifyAttributes()
+    {
+        if (count($this->attributes) == 0) {
+            return '';
+        }
+        $line = collect($this->attributes)
+            ->map(function ($item, $key) {
+                return "{$key}=\"{$item}\"";
+            })
+            ->join(' ');
+        return " {$line}";
+    }
+}
+
+
+// FILE /app/src/HTMLElement.php:
+namespace App;
+
+class HtmlHrElement extends HTMLElement
+{
+    public function __toString()
+    {
+        $attrLine = $this->stringifyAttributes();
+        return "<hr{$attrLine}>";
+    }
+}
+
+
+
+>>>>>> Модификаторы доступа <<<<<<
+
+/*
+Видимость свойств влияет не только на внешнее поведение объектов, но и на отношения между наследуемыми классами. Публичные свойства и методы доступны всем наследникам. К ним можно обращаться внутри объекта, так и снаружи:
+*/
+
+class HTMLElement
+{
+    public $visible = true;
+
+    public function isVisible()
+    {
+        return $this->visible;
+    }
+}
+
+class DivElement extends HTMLElement
+{
+    public function isVisiblePropertyFromParent()
+    {
+        return $this->visible;
+    }
+    public function isVisibleMethodFromParent()
+    {
+        return $this->isVisible();
+    }
+}
+
+$div = new DivElement();
+
+// Вызов родительского свойства напрямую
+echo $div->visible; // true
+// Вызов родительского метода напрямую
+echo $div->isVisible(); // true
+
+// Вызов родительского свойства изнутри объекта
+echo $div->isVisiblePropertyFromParent(); // true
+
+// Вызов родительского метода изнутри объекта
+echo $div->isVisibleMethodFromParent(); // true
+
+// Количество классов в цепочке наследования никак не влияет на это поведение. Любой подкласс DivElement, точно так же получит доступ к публичным частям HTMLElement:
+
+class DivElementWithEmptyBody extends DivElement
+{
+
+}
+
+$div = new DivElementWithEmptyBody();
+
+// Вызов родительского свойства напрямую
+echo $div->visible; // true
+// Вызов родительского метода напрямую
+echo $div->isVisible(); // true
+
+// Наследование не влияет на поведение свойств внутри объектов. Значение visible в каждом конкретном объекте связано только с этим объектом:
+
+$div1 = new DivElementWithEmptyBody();
+$div2 = new DivElement();
+
+echo $div1->visible; // true
+echo $div2->visible; // true
+
+$div1->visible = false; // true
+echo $div1->visible; // false
+echo $div2->visible; // true
+
+
+# Приватные свойства и методы
+
+/*
+Приватные свойства и методы, доступны только внутри того класса, где они были определены. Наследники не могут получить к ним доступ. Подразумевается, что приватные вещи это нечто персональное для класса, его внутренняя реализация, которую нельзя выставлять наружу. Однако, это не отменяет возможности взаимодействоать с приватными данными через публичный интерфейс.
+*/
+
+class HTMLElement
+{
+    private $visible = true;
+
+    public function isVisible()
+    {
+        return $this->visible;
+    }
+}
+
+$div = new DivElement();
+$div->isVisible(); // true
+$div->visible; // Error
+
+
+/*
+# Защищенные свойства и методы
+Они имеют самое необычное поведение, некий микс между публичными и приватными. Ключевое слово protected используется тогда, когда разработчик хочет запретить доступ снаружи объекта, но дать возможность работать с ними внутри объекта класса-наследника или суперкласса. Звучит довольно хитро, посмотрим на практике:
+*/
+
+class HTMLElement
+{
+    protected $visible = true;
+
+    public function isVisible()
+    {
+        return $this->visible;
+    }
+}
+
+class DivElement extends HTMLElement
+{
+    public function isVisiblePropertyFromParent()
+    {
+        return $this->visible;
+    }
+}
+
+$div = new DivElement();
+
+// Доступно внутри через родительский метод
+$div->isVisible(); // true
+// Доступно внутри напрямую
+$div->isVisiblePropertyFromParent(); // true
+
+// Недоступно снаружи
+$div->visible; // Error
+
+# Выбор
+
+/*
+Мы только начали знакомиться с наследованием, но уже сейчас видно что все не просто. Одну и ту же задачу можно сделать множеством способов. Какой предпочесть?
+
+Универсальная стратегия, которой стоит придерживаться в большинстве случаев – всегда работать через абстракцию пока это не мешает. Это значит что все свойства делаются приватными, а наружу выставляется публичный интерфейс (методы). Если из задачи очевидно что публичный интерфейс нужен только наследникам и не должен использоваться снаружи объекта, то для этих методов ставится модификатор protected.
+*/
+
+
+/**@@@
+src\HTMLElement.php
+Реализуйте набор методов для работы с классами:
+
+addClass($className) – добавляет класс
+removeClass($className) – удаляет класс
+toggleClass($className) – ставит класс если его не было и убирает если он был
+Эти методы должны обрабатывать свойство 'class' (внутри строка) массива $this->attributes. В процессе реализации вам понадобится постоянно преобразовывать строку классов в массив и обратно. Вынесите эту операцию в отдельные функции и установите им правильный модификатор доступа.
+*/
+
+$div = new HTMLDivElement(['class' => 'one two']);
+$div->getAttribute('class'); // 'one two'
+
+$div->addClass('small');
+$div->getAttribute('class'); // 'one two small'
+
+$div->addClass('small');
+$div->getAttribute('class'); // 'one two small'
+
+$div->removeClass('two');
+$div->getAttribute('class'); // 'one small'
+
+$div->toggleClass('small');
+$div->getAttribute('class'); // 'one'
+
+$div->toggleClass('small');
+$div->getAttribute('class')); // 'one small'
+
+
+// FILE /app/src/HTMLElement.php:
+namespace App;
+
+class HTMLElement
+{
+    private $attributes = [];
+
+    public function __construct($attributes = [])
+    {
+        $this->attributes = $attributes;
+    }
+
+    public function getAttribute($key)
+    {
+        return $this->attributes[$key];
+    }
+
+    
+    public function addClass($className)
+    {
+        $classes = $this->getClasses();
+        $newClasses = array_unique(array_merge($classes, [$className]));
+        $this->attributes['class'] = $this->stringifyClasses($newClasses);
+    }
+
+    public function removeClass($className)
+    {
+        $classes = $this->getClasses();
+        $newClasses = array_diff($classes, [$className]);
+        $this->attributes['class'] = $this->stringifyClasses($newClasses);
+    }
+
+    public function toggleClass($className)
+    {
+        if (in_array($className, $this->getClasses())) {
+            $this->removeClass($className);
+            return;
+        }
+
+        $this->addClass($className);
+    }
+
+    private function getClasses()
+    {
+        return explode(' ', $this->attributes['class'] ?? []);
+    }
+
+    private function stringifyClasses($classes)
+    {
+        return implode(' ', $classes);
+    }
+}
+
+
+
+>>>>>>> Позднее связывание <<<<<<
+
+/*
+Для понимания того, как соотносятся друг с другом внутренности классов которые связаны наследованием, нужно разобраться с таким понятием как позднее связывание (late binding).
+
+Вспомним базовый класс HTMLElement из прошлого урока. Внутри него активно используется $this для обращения к свойствам:
+*/
+
+// Базовый класс для всех тегов. Умеет работать с аттрибутами.
+class HTMLElement
+{
+    public $attributes = [];
+
+    public function __construct($attributes = [])
+    {
+        $this->attributes = $attributes;
+    }
+
+    public function getAttribute(string $key)
+    {
+        return $this->attributes[$key];
+    }
+}
+
+
+/*
+Предположим, что мы создаем объект класса HTMLAnchorElement (который наследуется от HTMLElement). Тогда объектом какого класса будет $this внутри методов родительского класса? Правильный ответ: HTMLAnchorElement, то есть того класса, объект которого мы прямо сейчас создаем.
+*/
+
+class A
+{
+    private $name = 'From A';
+    public function getName()
+    {
+        echo get_class($this);
+        echo "\n";
+        return $this->name;
+    }
+}
+
+class B extends A {}
+
+$b = new B();
+echo $b->getName();
+echo "\n";
+
+
+/*
+Эта особенность $this называется поздним связыванием. Оно означает, что на момент определения класса, тип $this не известен. В качестве текущего объекта может выступать объект любого класса, наследуемого от текущего. Все выглядит так, как будто весь код внутри базового класса, скопировали и перенесли в каждый класс наследник. Для позднего связывания не важно насколько глубокая иерархия наследования. $this всегда будет объектом того класса, который конструируется в коде.
+
+Позднее связывание – важный элемент в работе наследования. Без него, взаимодействие классов стало бы значительно сложнее и ограниченнее. Каждый объект должен был бы наверняка знать, к какому классу конкретно относятся свойства и методы в цепочке наследования. Понадобился бы специальный синтаксис для доступа к ним.
+
+С другой стороны, в некоторых ситуациях позднее связывание не нужно. Например константа CLASS всегда ссылается на тот класс, внутри которого она вызвана. В некоторых ситуациях такое поведение может быть полезно как минимум для отладки.
+*/
+
+class B
+{
+    public function whereiam()
+    {
+        echo __CLASS__;
+    }
+}
+
+class A extends B {}
+
+new $obj = new A();
+$obj->whereiam(); // B
+
+/*
+Дополнительные материалы
+Позднее связывание (Wiki) https://en.wikipedia.org/wiki/Late_binding
+*/
+
+
+/**@@@
+src\Base.php
+Реализуйте метод isInstanceOf($className), который проверяет что объект принадлежит одному из классов в цепочке наследования.
+*/
+// ChildOfChild extends FirstChild extends Base
+
+$obj = new \App\ChildOfChild();
+$obj->isInstanceOf('App\Base'); // true
+$obj->isInstanceOf('Base'); // false
+$obj->isInstanceOf('App\Base'); // true
+$obj->isInstanceOf('App\FirstChild'); // true
+$obj->isInstanceOf('SomeClass'); // false
+
+/*
+Подсказки
+get_class – возвращает название класса текущего объекта
+parent_classes – возвращает список всех классов родителей
+*/
+
+// FILE: /app/src/Base.php:
+namespace App;
+
+class Base
+{
+    public function isInstanceOf($className)
+    {
+        $classes = class_parents($this);
+        $currentClass = get_class($this);
+        $classes[$currentClass] = $currentClass;
+        return in_array($className, $classes);
+    }
+}
+
+
+>>>>>> Шаблонный метод <<<<<<
+
+/*
+Позднее связывание приводит к одному интересному следствию. Из базового класса, можно вызывать методы и свойства, определенные в наследниках. Причем самих наследников может даже не существовать. Позднее связывание на то и позднее, что проверка происходит только в тот момент, когда этот код используется.
+
+Эту особенность используют в паттерне "шаблонный метод". Он применяется тогда, когда у подклассов есть общая логика, которая частично опирается на поведение подклассов. Такая логика реализуется в методе базового класса, а та часть которая различается (для каждого подкласса), делегируется наследникам.
+
+Возьмем для примера наши теги. Посмотрите на метод __toString(). Видно, что его код, останется идентичным для большинства тегов. Единственное что меняется – название самого тега.
+*/
+
+class HTMLAnchorElement extends HTMLElement
+{
+    public function __toString()
+    {
+        // Родительский метод
+        $attrLine = $this->stringifyAttributes();
+        // Родительский метод
+        $body = $this->getTextContent();
+        return "<a{$attrLine}>{$body}</a>";
+    }
+}
+
+// Мы можем модифицировать код так, что метод __toString() переместится в HTMLElement. И единственная вещь, которая останется за подклассами – имя тега:
+
+class HTMLElement
+{
+    public function __toString()
+    {
+        $attrLine = $this->stringifyAttributes();
+        $body = $this->getTextContent();
+        // getTagName – метод, который должны реализовать все подклассы
+        $tagName = $this->getTagName();
+        return "<{$tagName}{$attrLine}>{$body}</{$tagName}>";
+    }
+}
+
+/*
+Получившийся код лучше исходного варианта, так как он значительно сокращает дублирование (тегов около 100 штук!). Но есть одна загвоздка. Теги бывают одиночные, а значит текущий вариант __toString не подойдет для них. Из этой ситуации можно выйти разными способами, например, с помощью наследования.
+
+Создадим у HTMLElement два подкласса: один HTMLSingleElement и HTMLPairElement. Теперь классы конкретных тегов, должны наследоваться от одного из указанных классов. В каждом из этих классов будет своя реализация метода __toString().
+*/
+
+class HTMLSingleElement extends HTMLElement
+{
+    public function __toString()
+    {
+        $attrLine = $this->stringifyAttributes();
+        // getTagName – метод, который должны реализовать все подклассы
+        $tagName = $this->getTagName(); // <== метод, который должны реализовывать наследники
+        // Создается одиночный тег
+        return "<{$tagName}{$attrLine}>"
+    }
+}
+
+class HTMLPairElement extends HTMLElement
+{
+    public function __toString()
+    {
+        $attrLine = $this->stringifyAttributes();
+        $body = $this->getTextContent();
+        // getTagName – метод, который должны реализовать все подклассы
+        $tagName = $this->getTagName(); // <== метод, который должны реализовывать наследники
+        return "<{$tagName}{$attrLine}>{$body}</{$tagName}>";
+    }
+}
+
+
+// Несмотря на различия в реализации __toString(), оба этих подкласса требуют от своих наследников реализации одного и того же метода getTagName().
+
+/**@@@
+src\HTMLPairElement.php
+Реализуйте класс HTMLPairElement (наследуется от HTMLElement), который отвечает за генерацию представления парных элементов и работу с телом. Реализуйте следующий интерфейс:
+*/
+
+public function __toString();
+public function getTextContent();
+public function setTextContent(string $body);
+
+/*
+src\HTMLDivElement.php
+Реализуйте класс HTMLDivElement, который описывает собой парный тег
+*/
+div = new HTMLDivElement(['name' => 'div', 'data-toggle' => 'true']);
+$div->setTextContent('Body');
+echo $div; // '<div name="div" data-toggle="true">Body</div>'
+
+
+// app/src/HTMLDivElement.php:
+namespace App;
+
+class HTMLDivElement extends HTMLPairElement
+{
+    public function getTagName()
+    {
+        return 'div';
+    }
+}
+
+
+// app/src/HTMLElement.php:
+namespace App;
+
+class HTMLElement
+{
+    public $attributes = [];
+
+    public function __construct($attributes = [])
+    {
+        $this->attributes = $attributes;
+    }
+
+    protected function stringifyAttributes()
+    {
+        if (count($this->attributes) == 0) {
+            return '';
+        }
+        $line = collect($this->attributes)
+            ->map(function ($item, $key) {
+                return "{$key}=\"{$item}\"";
+            })
+            ->join(' ');
+        return " {$line}";
+    }
+}
+
+
+// app/src/HTMLPairElement.php:
+namespace App;
+
+class HTMLPairElement extends HTMLElement
+{
+    private $body;
+
+    public function __toString()
+    {
+        $attrLine = $this->stringifyAttributes();
+        $name = $this->getTagName();
+        $body = $this->getTextContent();
+        return "<{$name}{$attrLine}>{$body}</{$name}>";
+    }
+
+    public function getTextContent()
+    {
+        return $this->body;
+    }
+
+    public function setTextContent(string $body)
+    {
+        $this->body = $body;
+    }
+}
+
+
+
+>>>>>> Переопределение методов <<<<<<
+
+/*
+Устранение дублирование кода, не единственная задача наследования классов. Иногда оно применяется для изменения существующего поведения базового класса.
+
+Тег <select>, в DOM представлен классом HTMLSelectElement. У него есть дополнительные методы, которые нужны для работы со списком элементов. Один из таких методов: item(index). С его помощью можно извлекать конкретный вариант из списка.
+
+<form>
+  <select name="variants">
+    <option>Opt 1</option>
+    <option>Opt 2</option>
+    <option>Opt 3</option>
+  </select>
+</form>
+*/
+
+// Гипотетический код, который возвращает форму выше в виде элемента HTMLSelectElement.
+$element = $document->querySelector('select');
+
+$element->item(0); // HTMLOptionElement(textContent="Opt 1")
+$element->item(1); // HTMLOptionElement(textContent="Opt 2")
+
+// Представим себе, что нам нужно часто обращаться к элементам этого списка с конца. Для этого постоянно придется выполнять подобный код:
+
+// свойство length описывает число option элементов внутри select
+$element->item($element->length - 1);
+
+/*
+В этом коде нет ничего криминального, но можно лучше. Один из возможных вариантов решения этой задачи состоит в том, чтобы расширить поведение метода и научить его работать с отрицательными числами. Возможность обращаться к индексам в обратном порядке – распространенная практика во многих языках.
+*/
+
+// Последний элемент
+$element->item(-1); // HTMLOptionElement(textContent="Opt 3")
+// Трети с конца
+$element->item(-3); // HTMLOptionElement(textContent="Opt 1")
+
+// Как это сделать? Наследование дает возможность переопределять методы суперклассов. Посмотрите на пример:
+
+class HTMLCustomSelectElement extends HTMLSelectElement
+{
+    public function item($possibleIndex)
+    {
+        $realIndex = $possibleIndex > 0 ? $possibleIndex : $this->length + $possibleIndex;
+        // parent указыавет на родительский класс
+        return parent::item($realIndex);
+    }
+}
+
+/*
+Выше создан подкласс HTMLCustomSelectElement, который переопределяет метод item($index). Переопределение означает, что в подклассе создается метод с тем же именем, что и в родительском классе. Наш новый метод выполняет дополнительную работу по вычислению индекса, но ему все еще нужен исходный метод item($index), для выборки нужного элемента. Для этого применяется специальный синтаксис, который указывает явно что нужно взять метод из родительского класса: parent::item($readIndex).
+
+Почему понадобился специальный синтаксис? Представьте что вместо него там был бы такой код:
+*/
+
+public function item($possibleIndex)
+{
+    $this->item($possibleIndex);
+}
+
+
+/*
+Какой, в этом случае, метод item нужно брать, в определении которого мы находимся прямо сейчас или родительский? Наследование так устроено, что всегда выбирается тот метод, который находится ближе в в цепочке наследования. Поэтому вызов через $this породит рекурсию, но родительский метод никогда не будет вызван.
+
+По этой же причине, снаружи объекта невозможно вызвать методы, которые были переопределены в наследниках:
+*/
+
+$select = new HTMLCustomSelectElement();
+
+// Этот вызов всегда относится к методу item переопределенному внутри HTMLCustomSelectElement
+// Вызвать напрямую item из HTMLSelectElement невозможно
+$select->item(3);
+
+/*
+Методы как и свойства имеют модификаторы доступа. Причем они работают идентично: публичные методы доступны для всех, приватные только для текущего класса и защищенные доступны всем наследникам как для вызова так и переопределения.
+
+Переопределение не ограничивается одним уровнем наследования. Любой переопределенный метод можно снова переопределить в наследниках текущего класса. Главное соблюдать два условия:
+
+У обоих методов должны совпадать имена
+Они должны иметь одинаковое количество аргументов
+*/
+
+# Использование наследников
+
+/*
+Создать класс наследник и начать его использовать – это две большие разницы. В ситуациях, где эти классы создаются вами, все просто. Достаточно заменить вызовы старого класса на новый. Но если объекты этого класса создаются чужим кодом, то задача усложняется. Для подмены такого класса, от чужого кода требуется поддержка полиморфного поведения.
+
+Например при работе с DOM, объекты этих классов иногда порождаются самим программистом, а иногда системой. Например:
+*/
+
+// Создаем сами
+$element1 = new HTMLSelectElement();
+
+// Где-то внутри создается объект HTMLSelectElement
+$element2 = $document->querySelector('select');
+
+/*
+Можно ли подменить класс в примере с querySelector? Зависит от реализации библиотеки по работе с DOM. В тех библиотеках что мне известны, это сделать невозможно. Это значит что единственный выход использовать класс, конвертировать вернувшийся объект в объект нужного нам класса. Стоит ли оно того? Почти наверняка нет.
+
+Другими словами, наследование для переопределения поведения хоть и кажется логичным шагом, но в действительности имеет серьезные ограничения по использованию.
+
+# Дополнительные материалы
+Принцип подстановки Лисков https://ru.wikipedia.org/wiki/Принцип_подстановки_Барбары_Лисков#Проектирование_по_контракту
+*/
+
+/**@@@
+В стандартной библиотеке PHP есть класс SplFileInfo. Объекты этого класса описывают собой файлы. С их помощью можно получать любую метаинформацию о файле.
+*/
+$file = new SplFileInfo('/etc/hosts');
+echo $file->getSize();
+
+/*
+src\SmartSplFileInfo.php
+Реализуйте класс SmartSplFileInfo наследующийся от SplFileInfo. Этот класс должен расширять поведение метода getSize. В новом классе этот метод принимает на вход аргумент, который обозначает единицу измерения возвращаемых данных. По умолчанию это b, то есть байты, но можно передать и mb это мегабайты. В случае мегабайтов, переопределенный метод делит байты на 1024 и получившиеся значение возвращает наружу.
+
+Метод должен обрабатывать ситуацию, когда на вход поступает что то кроме указанных значений. Обработка сводится к возбуждению исключения Exception.
+*/
+
+$file = new SmartSplFileInfo(__DIR__ . '/../Makefile');
+$file->getSize();
+$file->getSize('b');
+$file->getSize('mb');
+
+
+// FILE: /app/src/SmartSplFileInfo.php:
+namespace App;
+
+class SmartSplFileInfo extends \SplFileInfo
+{
+    public function getSize($unit = 'b')
+    {
+        $size = parent::getSize();
+        switch ($unit) {
+            case 'b':
+                return $size;
+            case 'mb':
+                return $size / 1024;
+            default:
+                throw new \Exception("Unkown unit name: {$unit}");
+        }
+    }
+}
+
+
+
+>>>>>> Принцип подстановки Лисков <<<<<<<
+
+/*
+Переопределение методов на техническом уровне ни чем не ограничено. Класс наследник может изменить поведние любого метода настолько, насколько это вообще возможно. С одной стороны, может показаться что это здорово, так как открывается большая свобода действий, но с другой, некоторые изменения, могут повлечь за собой серьезные архитектурные проблемы. Самая главная из них – сломанный полиморфизм.
+
+Рассмотрим пример. Допустим мы решили написать свой собственный логгер (объект, который записывает в журнал произвольные сообщения), базирующийся на PSR3.
+*/
+
+// Определение
+class MyLogger implements LoggerInterface {
+   // код
+}
+
+// Использование
+$logger = new MyLogger();
+$logger->log('debug', 'Doing work');
+$logger->log('info', 'Usefull for debugging');
+
+/*
+Логгер позволяет записывать сообщения с разным уровнем важности, начиная от debug и до emergency. Сигнатура метода log устроена таким образом, что первым параметром всегда передается уровень сообщения, а сообщение вторым. Само сообщение это строка произвольного формата.
+
+Предположим, что нам это не понравилось, и мы решили изменить сигнатуру так, чтобы уровень передавался вторым параметром. Это позволит задать нам дефолтное значение для того уровня, который чаще всего встречается в приложении. Для этого создадим подтип MyLoggerInterface, с переопределенной сигнатурой метода log, а затем реализуем его в классе MyLogger
+*/
+
+// PHP позволяет так сделать
+
+interface MyLoggerInterface extends LoggerInterface
+{
+    // В LoggerInterface: public function log($level, $message, array $context = []);
+    public function log($message, $level = 'info', array $context = []);
+}
+
+class MyLogger implements MyLoggerInterface {
+   // Тут реализуем новую сигнатуру log
+}
+
+// Использование
+
+$logger->log('Doing work'); // По умолчанию debug
+$logger->log('Usefull for debugging', 'info');
+
+/*
+Что не так с этим кодом? Если вы прошли курс по полиморфизму, то ответ должен быть очевиден. Так как наш класс реализует интерфейс MyLoggerInterface, то он реализует и LoggerInterface. Это значит, что в любом месте где требуется последний, мы можем передать объект класса MyLogger:
+*/
+
+// Предположим что какой-то компонент системы хочет работать с логгером соответствующим стандарту PSR3
+$logger = new MyLogger();
+$database->setLogger($logger);
+// Тут делаем что то с этим объектом, а он, в свою очередь, пишет в лог
+
+/*
+Этот код завершиться с ошибкой, так как объект $database будет использовать логгер в соответствии с требованиями LoggerInterface, что противоречит интерфейсу MyLoggerInterface. Фактически, это означает что структура типов построена неверно, даже не смотря на то, что PHP его пропустил.
+
+В 1987 году, Барбара Лисков, сформулировала принцип подстановки (Liskov Substitution Principle – LSP), следование которому позволяет правильно строить иерархии типов:
+
+Пусть q(x) является свойством, верным относительно объектов x некоторого типа T. Тогда q(y) также должно быть верным для объектов y типа S, где S является подтипом типа T.
+
+Звучит математично. Многие разработчики пытались переформулировать это правило так, чтобы оно было интуитивно понятным. Самое простая формулировка звучит так:
+
+Функции, которые используют базовый тип, должны иметь возможность использовать подтипы базового типа, не зная об этом.
+
+То что нужно. В примере выше функция setLogger($logger) ожидает на вход тип LoggerInterface, а мы передали ей подтип MyLoggerInterface. Согласно принципу, код должен продолжать работать как ни в чем не бывало, но этого не происходит из-за нарушения интерфейса.
+
+Для любознательных. Этот принцип любят показывать на иерархиях наследования классов, но как вы видите из текста выше, этот принцип относится к интерфейсам, а не классам. Иерархии классов не обязаны следовать ему, хотя было бы неплохо.
+
+Для еще более любознательных. Почему вообще понадобился этот принцип? Почему бы не поручить эту работу языку? К сожалению, технически невозможно убедиться в соблюдении принципа Лисков. Поэтому его выполнение ложится на плечи разработчиков
+*/
+
+# Правила проектирования иерархий типов
+
+/*
+Существует несколько правил, которые надо учитывать при работе с типами:
+
+Предусловия не могут быть усилены в подклассе
+Постусловия не могут быть ослаблены в подклассе
+Исторические ограничения
+Предусловия – это ограничения на входные данные, а постусловия – на выходные. Причем в силу ограничений систем типов, многие из таких условий невозможно описать на уровне интерфейсов. Их либо придется описывать просто текстом, как это сделано в документации PSR, либо добавлять проверки в код (проектирование по контракту).
+
+Например в нашем логере (в интерфейсе LoggerInterface) предусловием является то, что метод log первым параметром принимает один из 8 уровней сообщений. Принцип Лисков утвержает, что мы не можем создать класс реализующий этот интерфейс, который может обрабатывать меньшее число уровней. Это и называется усилением предусловий, то есть требования становятся жестче. Вместо 8 уровней, например 5. Попытка использовать объект такого класса, закончится ошибкой, когда какая-то из систем попробует передать ему уровень, который не поддерживается. Причем не важно, приведет это к ошибке (исключению) или логгер молча проглотит это сообщение не записав его в журнал. Главное что поведение стало отличаться.
+
+Встречаются ситуации, когда разработчики не видя причину такого поведения, начинают лечить следствия. В местах где используются подобные объекты добавляются проверки на типы. А это убивает полиморфизм
+
+С постусловиями ситуация аналогичная, но наоборот. Допустимо если метод возвращает урезанный набор значений, так как этот набор все равно укладывается в требования интерфейса. А вот расширять возврат нельзя, так как появляются значения, которые не были предусмотрены интерфесом. Это относится и к исключениям.
+
+И последнее, исторические ограничения. Подтипы не могут добавлять новые методы для изменения (мутации) данных базового типа. Способы изменения свойств определенных в базовом типе определяется этим типом.
+
+# Дополнительные материалы
+Circle-ellipse problem https://en.wikipedia.org/wiki/Circle-ellipse_problem
+*/
+
+/**@@@
+В этом задании вам придется написать код, который нарушает принцип Лисков. Запомните его и никогда так больше не делайте :D
+
+Представьте себе библиотеку, которая предоставляет абстракции для работы с хранилищами ключ-значение. Все они расширяют интерфейс StorageInterface состоящий из трех методов:
+
+set($key, $value) – устанавливает значение
+get($key) – возвращает значение
+count() – возвращает количество ключей в хранилище
+В директории src три таких хранилища: Redis, InMemory, GoogleStorage. Первые два умеют возвращать число ключей внутри них, а последней – нет.
+
+Для простоты реализации, каждое хранилище складывает значения во внутренний массив. В реальности, они бы выполняли запросы по сети, но для текущего задания это ненужное усложнение.
+
+src\GoolgeStorage.php
+Реализуйте интерфейс StorageInterface в классе GoogleStorage.
+
+Так как GoogleStorage не поддерживает подсчет количества элементов, то сделайте так, чтобы этот метод кидал исключение Exception если его вызывают.
+*/
+
+$storage = new GoogleStorage();
+$storage->set('one', 'two');
+$storage->get('one'); // 'two'
+$storage->count(); // Exception
+
+// Подумайте как было бы правильно реализовать эту задачу. Ответ напишите в комментариях к уроку.
+
+// FILE: 
+namespace App;
+
+class GoogleStorage implements StorageInterface
+{
+    private $elements = [];
+
+    public function get($key)
+    {
+        return $this->elements[$key];
+    }
+
+    public function set($key, $value)
+    {
+        return $this->elements[$key] = $value;
+    }
+
+    public function count()
+    {
+        throw new \Exception('Cant be calculated');
+    }
+}
+
+
+
+>>>>>> Исключения <<<<<<
+
+/*
+Исключения – один из немногих примеров удачного использования наследования. В этом уроке мы научимся создавать свои исключения и перехватывать их.
+
+Обычно исключения используются так. Ближе к началу программы стоит конструкция try/catch, которая ловит исключения и показывает пользователю адекватное сообщение:
+*/
+
+try {
+  doSomethingDangerous();
+} catch (\Exception $e) {
+  echo 'Something happens';
+}
+
+/*
+Но как понять что случилось? Иногда это важно. Разные ошибки могут приводить к разному поведению программы. Кроме того, не все ошибки требуют обработки в текущем месте программы.
+
+Разделять ошибки можно с помощью разных классов (или интерфейсов) наследующихся от класса Exception, который в свою очередь реализует интерфейс Throwable https://www.php.net/manual/ru/class.throwable.php. По техническим причинам, реализовать этот интерфейс напрямую нельзя, поэтому остается только один путь – наследование.
+*/
+
+namespace App;
+
+class MyException extend \Exception {}
+
+/*
+Причём в отличие от других примеров наследования, в исключениях редко нужно добавлять или изменять поведение. Основная цель использования наследования – описание всех возможных типов ошибок.
+
+Теперь посмотрим как этим можно воспользоваться:
+*/
+try {
+    // какой-то код
+} catch (MyException $e) { // Проверка instanceof
+    // делаем что-нибудь одно
+} catch (\Exception $e) {
+    // делаем что-нибудь другое
+}
+
+/*
+Конструкция try/catch работает очень похоже на switch, но только для исключений. С ее помощью можно описать обработку каждого типа исключений добавив новый блок catch. Во время срабатывания исключения, PHP проверяет каждый блок catch на instanceof начиная с верхнего. Поэтому порядок блоков catch имеет важное значение.
+
+В самом PHP уже есть иерархия исключений, которая позволяет разделять реакцию на разные типы ошибок:
+
+interface Throwable
+  |- Error implements Throwable
+      |- ArithmeticError extends Error
+          |- DivisionByZeroError extends ArithmeticError
+      |- AssertionError extends Error
+      |- ParseError extends Error
+      |- TypeError extends Error
+          |- ArgumentCountError extends TypeError
+  |- Exception implements Throwable
+      |- ClosedGeneratorException extends Exception
+      |- DOMException extends Exception
+      |- ErrorException extends Exception
+      |- IntlException extends Exception
+      |- LogicException extends Exception
+          |- BadFunctionCallException extends LogicException
+              |- BadMethodCallException extends BadFunctionCallException
+          |- DomainException extends LogicException
+          |- InvalidArgumentException extends LogicException
+          |- LengthException extends LogicException
+          |- OutOfRangeException extends LogicException
+      |- PharException extends Exception
+      |- ReflectionException extends Exception
+      |- RuntimeException extends Exception
+          |- OutOfBoundsException extends RuntimeException
+          |- OverflowException extends RuntimeException
+          |- PDOException extends RuntimeException
+          |- RangeException extends RuntimeException
+          |- UnderflowException extends RuntimeException
+          |- UnexpectedValueException extends RuntimeException
+
+Перехват любого базового исключения, автоматически влечет за собой перехват всех наследников текущего класса. Например если использовать в catch RuntimeException, то этот блок catch поймает все ошибки, входящие в иерархию RuntimeException.
+
+В PHP есть негласное правило о том, как работать с иерархиями исключений. Любая программа, должна определять свое собственное высокоуровневое исключение, которое наследуется от RuntimeException. Все остальные исключения библиотеки наследуются от него. Такой подход позволяет изолировать обработку ошибок конкретной библиотеки буквально одним блоком catch. Например в http-клиенте guzzle https://github.com/guzzle/guzzle, базовое исключение TransferException https://github.com/guzzle/guzzle/blob/master/src/Exception/TransferException.php. Это значит что мы можем вычленить среди всех ошибок, ошибки этого клиента:
+*/
+
+try {
+    $client = new \GuzzleHttp\Client();
+    $response = $client->get('https://ru.hexlet.io');
+} catch (Guzzle\TransferException) {
+    // Сюда попадут все ошибки библиотеки guzzle
+}
+
+# Finally
+
+/*
+В некоторых ситуациях бывает нужно выполнять обработку независимо от того, возникло исключение или нет. Используя только try/catch, эту задачу нельзя выполнить без дублирования. Придётся размещать код как после всей конструкции try/catch, так и в каждом блоке catch.
+
+Это привело к тому, что саму конструкцию расширили добавив в нее блок finally. Этот блок вызывается в самом конце и в любом случае:
+*/
+
+try {
+    // какой-то код
+} catch (MyException $e) {
+    // делаем что-нибудь одно
+} finally {
+    // вызовется в любом случае
+}
+
+/**@@@
+src/File.php
+Создайте класс File, который представляет собой абстракцию над файлом (упрощенная версия SplFileInfo). Реализуйте в этом классе метод read(). Этот метод проверяет можно ли прочитать файл и если да, то читает его, если нет, то бросает исключения двух видов:
+
+Если файла не существует – App\Exceptions\NotExistsException
+Если файла нельзя прочитать (но он существует) – App\Exceptions\NotReadableException
+*/
+
+$file = new File('/etc/fstab');
+$file->read();
+
+/*
+src/Exceptions/FileException
+Реализуйте класс FileException, который наследуется от Exception. Это базовое исключение для данной библиотеки.
+
+src/Exceptions/NotReadableException, src/Exceptions/NotExistsException
+Реализуйте классы исключения. Они должны наследоваться от базового класса исключений для данной библиотеки.
+*/
+
+// FILE /app/src/Exceptions/NotExistsException.php: 
+namespace App\Exceptions;
+
+class NotExistsException extends FileException
+{
+
+}
+
+
+// FILE /app/src/Exceptions/NotReadableException.php: 
+namespace App\Exceptions;
+
+class NotReadableException extends FileException
+{
+
+}
+
+
+// FILE /app/src/File.php: 
+namespace App;
+
+class File
+{
+    protected $filepath;
+
+    public function __construct($filepath)
+    {
+        $this->filepath = $filepath;
+    }
+
+    public function read()
+    {
+        $filepath = $this->filepath;
+
+        if (!file_exists($filepath)) {
+            throw new Exceptions\NotExistsException();
+        }
+        if (!is_readable($filepath)) {
+            throw new Exceptions\NotReadableException();
+        }
+
+        return file_get_contents($filepath);
+    }
+}
+
+
+
+>>>>>> Динамическая диспетчеризация <<<<<<
+
+/*
+В курсе "php: полиморфизм", мы разбирали как работает полиморфизм изнутри. Но тогда, мы еще не знали про наследование достаточно, чтобы раскрыть этот вопрос полностью. Теперь время пришло.
+
+Перед тем как начать, нужно вспомнить что для полиморфизма наследование не нужно. С другой стороны, наследование участвует в процессе выбора метода и об этом тоже нужно знать. Посмотрите на код, который был в курсе посвященному полиморфизму:
+*/
+
+// Что происходит во время вызова: $obj->getName() => callMethod($obj, 'getName')
+function callMethod($data, $methodName, $args) // функция диспетчер
+{
+    $className = $data['className']
+    // Специальная функция, которая хранит список классов и связанных с ними методов
+    $methods = getClassMethods($className);
+    // Берем нужный метод и вызываем его
+    $method = $methods[$methodName]
+    if ($method) {
+      $method($data, ...$args);
+    } else if (!$method && isset($methods['__call'])) {
+      // Если метод $method не найден, но определен метод __call, то вызываем его
+      $methods['__call']($data, ...$args);
+    }
+
+    throw new \Exception('No method error');
+}
+
+/*
+В этом коде, проверка останавливается если ничего не было найдено. Так было бы без наследования, но с наследованием поиск продолжается. Сначала выбирается базовый класс для текущего и метод ищется там. Если он не найден, то снова проверяется наличие __call. Затем процесс повторяется для родительского класса родителя текущего класса и далее до конца цепочки наследования.
+
+# Late Binding vs Dynamic Dispatch
+Программисты часто путают позднее связывание и динамическую диспетчеризацию. Ситуация усугубляется тем, что в некоторых языках (например Java), принято на уровне документации и сообщества подменять одно понятие другим.
+
+Связывание, говорит нам о том, чем является идентификатор, какой у него тип. Если связывание раннее, то мы это знаем сразу, в случае позднего, только в момент вызова кода. Во многих языках можно определить функцию, после того, как где-то описано ее использование. Это тоже пример связывания (позднего). В случае $this в PHP, мы знаем что это объект текущей иерархии, но не знаем точно какой класс до момента срабатывания этого кода.
+
+Диспетчеризация же, это процесс поиска и вызова необходимой функции (или метода, в зависимости от языка) для уже известного типа данных.
+
+# Дополнительные материалы
+What is early and late binding?
+*/
+
+
+>>>>>> Абстрактные классы <<<<<<
+
+/*
+Может ли нам понадобится когда-нибудь создавать объекты класса HTMLElement? Наверняка нет. Вся работа строится на базе конкретных элементов, а значит, на практике, всегда используются его наследники.
+
+В PHP, классы, объекты которых не имеют смысла, принято помечать специальным ключевым словом abstract. Тогда никто не сможет создать объект этого класса напрямую. Только через наследников. В остальном, абстрактный класс такой же класс, со своими методами и свойствами.
+*/
+
+abstract class HTMLElement
+{
+    public $attributes = [];
+
+    public function __construct($attributes = [])
+    {
+        $this->attributes = $attributes;
+    }
+
+    public function getAttribute(string $key)
+    {
+        return $this->attributes[$key];
+    }
+}
+
+/*
+Абстрактные классы имеют смысл только в связке с наследованием. В большинстве ситуаций, базовый класс не нуждается в объектах и его логично пометить как абстрактный.
+
+Еще одна особенность абстрактных классов, связана с использованием интерфейсов. Абстрактный класс, в отличие от конкретного, не обязан реализовывать интерфейсы полностью. Все что не реализовывает абстрактный класс, должно быть реализовано в его наследнике. Например в нашей ситуации, можно добавить интерфейс Showable в абстрактный класс, но не реализовывать его. В таком случае PHP сам проверит что все наследники HTMLElement реализуют метод __toString().
+*/
+
+abstract class HTMLElement implements Showable // __toString
+{
+    // ...
+}
+
+// Абстрактные классы могут иметь абстрактные методы, фактически это сигнатуры методов, а не сами методы. В этом смысле они становятся похожи на интерфейсы.
+
+abstract class HTMLElement
+{
+    abstract public function __toString();
+}
+
+/*
+С появлением абстрактных классов возникает множество новых вопросов: когда они нужны а когда нет, можно ли использовать абстрактные классы вместо интерфейсов, как совмещать их с интерфейсами и так далее?
+
+Абстрактные классы не фундаментальная концепция и не обязательная часть ООП. Более того, в большинстве ООП языках абстрактных классов нет. Однако нельзя сказать что код на них пишется хуже, скорее наоборот. Например в Ruby, JavaScript и Python абстрактных классов нет, но есть наследование и есть классы, которые можно было отметить как абстрактные, однако создатели этих языков не стали вводить это понятие в язык. Никогда нельзя забывать, что любые новые сущности, упрощая в одном месте, увеличивают общую сложность из-за возрастающего числа комбинаций этих сущностей друг с другом.
+
+Общая рекомендация, не придавайте слишком много значения абстрактным классам. Используйте их тогда, когда класс имеет смысл пометить абстрактным, но не более того. Как вы увидите позже, абстрактные классы, вместе с наследованием, успешно заменяются трейтами. Причем последние гораздо более гибкий инструмент.
+*/
+
+
+/**@@@
+src\HTMLElement.php
+Определите абстрактный метод getTagName()
+
+src\HTMLPairElement.php
+Реализуйте абстрактный класс HTMLPairElement с пустым содержимым.
+*/
+
+
+// FILE: /app/src/HTMLElement.php:
+namespace App;
+
+abstract class HTMLElement
+{
+    public $attributes = [];
+
+    public function __construct($attributes = [])
+    {
+        $this->attributes = $attributes;
+    }
+
+    abstract public function getTagName();
+}
+
+// FILE: /app/src/HTMLPairElement.php:
+namespace App;
+
+abstract class HTMLPairElement extends HTMLElement
+{
+}
+
+
+
+>>>>>> Позднее статическое связывание <<<<<<
+
+/*
+В отличие от $this, обращение к статическим свойствам и метода через self работает по принципу раннего связывания (обратное позднему). Другими словами, self указыавет на тот класс, в котором идет обращение:
+*/
+
+class A {
+    public static function who() {
+        echo 'A';
+    }
+    public static function test() {
+        self::who();
+    }
+}
+
+class B extends A {
+    public static function who() {
+        echo 'B';
+    }
+}
+
+B::test();
+// 'A'
+
+/*
+В этом примере, статический метод test(), вызывает self::who(), который находится внутри класса A. Поэтому self указывает на сам A. Никакая иерархия наследования не может изменить это поведение. Такой код равносилен прямому укзанию класса:
+*/
+
+A::who(); // 'A'
+
+/*
+Подобное поведение можно рассматривать как ограничение. Оно, фактически, игнорирует факт наследования. Позднее связывание же, открывает доступ к некоторым возможностям, которые широко эксплуатируются в некоторых других языках, таких как ruby. Прежде чем вдаваться в технические детали, нужно немного разобраться с тем, какую роль играют статические свойства и методы в классах.
+
+Данные в статических свойствах относится к классу в целом. Они "описывают" его. Самый рапространенный пример из веба это связь сущности с таблицей в базе данных, где она хранится:
+*/
+
+class User
+{
+    // Очень важно делать их неизменяемыми!
+    // protected чтобы было доступно из родителя
+    protected static $table = 'users';
+}
+
+/*
+Почему эту информацию нужно хранить в статическом свойстве? Потому что она не принадлежит конкретному объекту. Представьте что вы просто хотите узнать из кода, в какую таблицу будут сохранятся пользователи. Если бы эта информация не была статической, то пришлось бы создавать объект только ради того, чтобы узнать ответ на наш вопрос. Это бесмысленно.
+
+Для сохранения сущности в базу данных, обычно, используются ORM (Object-Relationship Mapping), это библиотеки которые, в том числе, знают как сохранять сущности в базу и как извлечь их. Большинство из них построено на наследовании. Любая сущность должна наследоваться от специального базового класса, который содержит в себе общую логику для работы с базой данных:
+*/
+
+class User extends BaseEntity
+{
+    // Код
+}
+
+$user = new User();
+// Сохранение в базу
+$user->save();
+
+// Для сохранения пользователя в базу, недостаточно знать что сохранять, нужно знать и куда сохранять. И эта информация записана в статическое свойство.
+
+class User extends BaseEntity
+{
+    protected static $table = 'users';
+}
+
+// Возникает вопрос, можно ли добраться до нее из базового класса BaseEntity ? Гипотетический код:
+
+class BaseEntity
+{
+
+    public static function getTable()
+    {
+        return self::$table;
+    }
+
+    public function save()
+    {
+        // Валидация данных
+
+        // Подготовка запроса
+        // сработает ли этот код?
+        self::getTable();
+    }
+}
+
+User::getTable(); // Error
+
+/*
+Проблема в том что такой код не сработает. self сошлется на BaseEntity и вызов save() завершиться с ошибкой, так как в этом классе нет статического свойства $table. Из этой ситуации есть два выхода. Первый, отказаться от статического свойства. Это не правильно с точки зрения семантики, но хотя бы будет работать. Второй, добавить в язык позднее связывание и для статики.
+
+Позднее статическое связывание было добавлено в PHP с версии 5.3.0. Но как это часто бывает, разработчикам языка пришлось найти компромисс. Просто так поменять self было нельзя, слишком много кода могло сломаться, поэтому они добавили новое ключевое слово static. Его поведение идентично self за исключением связывания.
+*/
+
+class BaseEntity
+{
+    public static function getTable()
+    {
+        return static::$table;
+    }
+
+    public function save()
+    {
+        // Какой-то код
+        self::getTable();
+        // Дальнейшая обработка
+    }
+}
+
+// Теперь вызов self::getTable() вернет значение статического свойства $table определенного в том классе, с объектом которого идет работа прямо сейчас.
+
+User::getTable(); // 'users'
+
+/*
+Обратите внимание на то, что сам вызов self::getTable() остался старым. В данном случае static не обязателен, так как сам метод определен в базовом классе. Но если бы мы хотели дать возможность переопределять его в подклассах, то было бы логично поменять вызов на static::getTable().
+
+# Дополнительные материалы
+Позднее связывание (Wiki) https://en.wikipedia.org/wiki/Late_binding
+*/
+
+
+/**@@@
+В DOM библиотеке, каждый класс наследник HTMLElement имеет определенный набор атрибутов, которые относятся ко всему типу в целом. Например имя тега, парность и другое. Эта информация хорошо ложится на статические свойства, а использоваться они будут в суперклассе для построения текстового представления тега.
+
+src\HTMLDivElement.php
+Создайте класс HTMLDivElement и добавьте в него статическое свойство params с правильными значениями. Пример класса HTMLBrElement:
+*/
+
+class HTMLBrElement extends HTMLElement
+{
+    protected static $params = [
+        'name' => 'br',
+        'pair' => false
+    ];
+}
+
+
+/*
+src\HTMLElement.php
+Реализуйте метод __toString(), который возвращает текстовое представление тега. Для этого он использует данные из статического свойства $params определенного в подклассах. Атрибуты в этой практике не предусмотрены. Если у объекта есть тело $this->body, то оно должно устанавливаться в между открывающим и закрывающим тегом.
+*/
+
+$element = new HTMLBrElement();
+echo $element; // => '<br>'
+
+$element = new HTMLDivElement();
+$element->setTextContent('hello!');
+echo $element // => '<div>hello!</div>'
+
+
+// FILE: /app/HTMLBrElement.php:
+namespace App;
+
+class HTMLBrElement extends HTMLElement
+{
+    protected static $params = [
+        'name' => 'br',
+        'pair' => false
+    ];
+}
+
+
+// FILE: /app/src/HTMLDivElement.php
+namespace App;
+
+// BEGIN (write your solution here)
+class HTMLDivElement extends HTMLElement
+{
+    protected static $params = [
+        'name' => 'div',
+        'pair' => true
+    ];
+}
+
+
+// FILE /app/src/HTMLElement.php: 
+namespace App;
+
+class HTMLElement
+{
+    private $body;
+
+    public function setTextContent($body)
+    {
+        $this->body = $body;
+    }
+
+    public function __toString()
+    {
+        $params = static::$params;
+        $openTag = "<{$params['name']}>";
+        if (!$params['pair']) {
+            return $openTag;
+        }
+        $closeTag = "</{$params['name']}>";
+
+        return "{$openTag}{$this->body}{$closeTag}";
+    }
+}
+
+
+
+>>>>>> Композиция вместо наследования <<<<<<
+
+/*
+Наследование – одна из самых противоречивых вещей в ООП. Чем больше мы узнаем о нем, тем больше подводных камней встречается. Мало того, что оно добавляет в код невероятное количество новых понятий и особенностей поведения, так оно еще имеет фундаментальные изъяны. И если с первым все более менее понятно. На протяжении всех предыдущих уроков мы только и занимались тем, что переосмысливали работу с классами. То со вторым нужно разобраться.
+
+Ключевая проблема с иерархиями в том что наш мир не иерархичен. Любая классификация всегда опирается на конкретный признак, который интересует нас в конкретный момент времени. И эта же классификация становится бесполезной, если берется другой признак. Это хорошо видно в интернет-магазинах, у которых навороченные фильтры для выбора товара: группировка по производителю, по применимости, по безопасности для детей и так далее. В каждой конкретной ситуации будет своя структура.
+
+Возьмем понятие User. Статьи по наследованию часто любят показывать иерархии пользователей вызывая у разработчиков уверенность что мир так и устроен. Давайте попробуем прикинуть, по каким признакам можно построить иерархию пользователей:
+
+По полу (MaleUser, FemaleUser)
+На основе аутентиикации (User, Guest)
+По роли (Admin, Member)
+По типу должности (Marketer, SalesManager, Programmer, Tester, Player)
+По принадлежности к какой-либо группе (UserFromRussia, UserWhoLikesSpartak)
+По источнику (UserFromFacebook, UserFromGithub)
+...
+Все это может и будет встречаться в рамках даже одной программы. В зависимости от того, какую задачу мы решаем, может понадобитсья разное представление. Наследование не дает такой свободы, наоборот, оно гвоздями приколачивает нас к конкретной структуре, которую уже не поменять. Единственным выходом в рамках этой парадигмы становится еще большее число наследований. В итоге у нас будет комбинация всех возможных поведений, которые встречатся в программе, а это иерархии с десятками и сотнями классов. Не забудьте что все это какими-то образом должно согласовываться с интерфейсами, которые тоже могут расширять друг друга.
+
+Выходом могло бы быть множественное наследование, но как показала жизнь некоторых языков (c++), множественное наследование делает все еще сложнее. Поэтому от него отказались все кто только могли.
+
+В конечном итоге, у разработчиков сформировалась общая позиция по отношению к наследованию, которая звучит так: Композиция вместо наследования. Если попробовать загуглить эту фразу, то поисковик покажет невероятное количество статей по этой теме. Как ни странно, этот подход мы уже изучали в курсе PHP полиморфизм. Он сводится к более грамотному разделению зон ответственностей в приложении, делегированию функциональности другим объектам, нужным в конкретных ситуациях.
+
+С этого момента начинаются сложности. В большинстве статей посвященных этому вопросу, приводятся либо ошибочные, либо слишком искусственные примеры, которые не дают особого понимания. Для начала отделим две разные причины использования наследования. Одна из них связана с прямым назначением, другая вытекает из неверного понимания принципов организации кода.
+
+# Использование не по назначению
+
+Необходимость наследования классов возникает там, где классы связаны общим кодом (это не отношение подтипов). В такой ситуации нужна какая-то альтернатива наследованию. И здесь появляются варианты.
+
+В самом простом случае, общий код не публичный. Тогда хватит обычной функции, которую эти классы будут использовать внутри себя. А если общий код был публичным? Большинство руководств рекомендуют создать соответствующий интерфейс и реализовать его в каждом из классов. Основной недостаток такого подхода – дублирование кода в каждом классе. То есть мы пришли к тому, от чего пытались уйти.
+
+Решение этой проблемы известно довольно давно и называется миксины. Миксины – настоящая альтернатива правильному использованию наследования. С ними пропадает любая необходимость использовать наследование включая абстрактные классы. В PHP концепция миксинов нашла отражение в виде конструкции Trait. Трейтам посвящен следующий урок.
+*/
+
+
+/**@@@
+В программировании часто встречается задача очистки текста от мусора или потенциально опасных частей, например HTML тегов. В PHP для такой очистки подходят функции trim (отрезает концевые пробелы), strip_tags (удаляет теги) и другие.
+
+Представьте себе объекто-ориентированный интерфейс для очистки текста:
+*/
+$sanitizer = new Sanitizer();
+$sanitizer->sanitize('text   '); // 'text' 
+$sanitizer->sanitize(' boom '); // 'boom' 
+
+/*
+Это санитайзер очень простой, единственное что он умеет – удалять концевые пробелы. Представьте что появилась задача добавить в этот процесс очистку текста от тегов. Эту задачу можно решить несколькими путями:
+
+Через прямое изменение класса сантизайзера. Такой способ иногда может сработать, но он не сработает если это чужая библиотека или она используется где-то, где нужно удалять только концевые пробелы.
+Через наследование. Тут все понятно, создаем класс наследник в котором переопределяем метод sanitize. В этом методе делаем strip_tags($text) и передаем результат дальше в родительскую функцию. Результат возвращаем наружу.
+Через композицию.
+В этом задании нужно реализовать последний вариант. Он сводится к использованию полиморфизма через объект-обертку. Такой подход называется "шаблон проектирования декоратор".
+*/
+
+$baseSanitizer = new Sanitizer();
+$sanitizer = new SanitizerStripTagsDecorator($baseSanitizer);
+$sanitizer->sanitize('text   '); // 'text' 
+$sanitizer->sanitize(' boom '); // 'boom' 
+
+/*
+src\Sanitizer.php
+Создайте класс Sanitizer и реализуйте интерфейс SanitizerInteface. Метод sanitize($text) должен отрезать концевые пробелы и возвращать результат наружу.
+
+src\SanitizerStripTagsDecorator.php
+Создайте класс (декоратор) SanitizerStripTagsDecorator, который также реализует интерфейс SanitizerInteface. Он принимает в конструктор исходный санитайзер и дополнительно к его логике, выполняет очистку текста от тегов. Очистка текста от тегов должна идти раньше чем отрезание концевых пробелов.
+*/
+
+// FILE /app/src/Application.php:
+namespace App;
+
+class Application
+{
+    private $sanitizer;
+
+    public function __construct($santizer)
+    {
+        $this->sanitizer = $santizer;
+    }
+
+    public function run($text)
+    {
+        return $this->sanitizer->sanitize($text);
+    }
+}
+
+
+// FILE: /app/src/SanitizerStripTagsDecorator.php:
+namespace App;
+
+class SanitizerStripTagsDecorator implements SanitizerInterface
+{
+    private $sanitizer;
+
+    public function __construct($sanitizer)
+    {
+        $this->sanitizer = $sanitizer;
+    }
+
+    public function sanitize(string $text)
+    {
+        $strippedText = strip_tags($text);
+        return $this->sanitizer->sanitize($strippedText);
+    }
+}
+
+
+
+
+
+// FILE /app/src/Sanitizer.php:
+namespace App;
+
+class Sanitizer implements SanitizerInterface
+{
+    public function sanitize(string $text)
+    {
+        return trim($text);
+    }
+}
+
+
+>>>>>> Трейты <<<<<<
+
+/*
+Трейты, альтренативный механизм переиспользования общего кода в разных классах. Он устраняет ограничения, которыми обладает наследование и заменяет его.
+
+Трейты похожи на абстрактные классы. Они реализуют какую-то общую функциональность и с ними нельзя работать напрямую. Единственный способ использовать их – включение в другие классы.
+*/
+// Magic.php
+
+trait Magic
+{
+    // Доступно только внутри трейта
+    private $properties;
+
+    public function __get($key)
+    {
+        return $this->properties[$key] ?? null;
+    }
+
+    public function __set($key, $value)
+    {
+        $this->properties[$key] = $value;
+    }
+}
+
+
+/*
+Трейт, по большей части, выглядит как (абстрактный) класс и устроен как класс. Он подчиняется тем же правилам именования и расположения в иерархии неймспейсов (а следовательно и файловой структуре) что и классы. Отличия начинаются в момент использования:
+*/
+
+// Config.php
+
+class Config
+{
+    // Включение трейта в класс
+    use Magic;
+}
+
+$config = new Config();
+$config->key = 'value';
+echo $config->key;
+
+/*
+Трейт включается в другой класс с помощью инструкции use. С этого момента, в классе становится доступна вся функциональность определенная в трейте. По поведению трейты похожи на наследование, например приватные части трейта доступны только внутри методов самого трейта. Но, при этом, трейт не встраивается в цепочку наследования, это легко проверить:
+*/
+$config instanceof Magic; // false
+
+/*
+Из этого есть пара важных следствий:
+
+Внутри класса, к методам трейта нельзя обратиться через parent, только через $this. При условии что эти методы не приватные.
+Трейт не может реализовывать интерфейс. Это могут делать только классы, в том числе с помощью трейтов.
+
+# Зачем?
+Трейты в отличие от наследования, не фиксируют структуру классов. Любой класс может включать в себя любое количество трейтов:
+*/
+
+class MySuperClass
+{
+    use FirstTrait;
+    // При включении возможны конфликты имен. Подробнее про их разрешение:
+    // https://www.php.net/manual/ru/language.oop5.traits.php#language.oop5.traits.conflict
+    use SecondTrait;
+}
+
+/*
+Эта структура располагает к выделению общих признаков из совершенно разнообразных классов. Пример с Magic, как раз хорошо демонстрирует такой подход. Многие классы одинаково работают с магическими методами и нет, смысла дублировать их код. И точно не стоит использовать наследование, так как оно свяжет совершенно несвязанные классы в общую (и жёсткую) иерархию.
+
+Трейты позволяют реализовать многие интерфейсы PHP универсальным образом, например, ArrayAccess или Iterator
+
+Пример: Итератор
+Рассмотрим готовый пример трейта итератора. Ниже код самого трейта. Он реализует общую логику итерации по коллекции.
+*/
+
+trait IteratorTrait
+{
+    protected $offset = 0;
+
+    public function current()
+    {
+        return $this->getCollection()[$this->offset] ?? null;
+    }
+
+    public function next()
+    {
+        $this->offset++;
+    }
+
+    public function key()
+    {
+        return $this->offset;
+    }
+
+    public function valid()
+    {
+        return \array_key_exists($this->offset, $this->getCollection());
+    }
+
+    public function rewind()
+    {
+        $this->offset = 0;
+    }
+
+    abstract public function getCollection();
+}
+
+
+/*
+Обратите внимание на важную деталь, то каким образом трейт получает саму коллекцию. Трейт требует от класса, который его включает реализации метода getCollection() (помните что трейт похож на абстрактный класс, он может определять абстрактные методы). Этот метод используется внутри трейта для доступа к элементам коллекции по которой он итерирует.
+
+Это очень важная концепция. Трейту нужны данные от класса, в который его включают. И трейт строит связь с этими классами через интерфейсный метод, а не через обращение к свойству с конкретным именем. А вот класс от трейта ничего не требует. Благодаря тому что связь строится в одну сторону (трейт зависит от метода класса, но класс не зависит от методов и свойств трейта), код остается модульным. Если бы и трейт требовал что-то от класса и класс от трейта, то почти наверняка в коде проблемы с архитектурой.
+*/
+
+// Обязательно расширять интерфейс Iterator, только тогда PHP поймет что это итератор
+class Course implements Iterator
+{
+    // для простоты свойство наполнено строками
+    private $lessons = ['one', 'two', 'three'];
+    use Enumerable;
+}
+
+// Использование
+
+$course = new Course();
+foreach ($course as $lesson) {
+    echo $lesson . "\n";
+}
+// 'one'
+// 'two'
+// 'three'
+
+/**@@@
+Один из самых красивых примеров использования трейтов – Enumerable. Он крайне популярен в языках с поддержкой миксинов (а трейты это разновидность миксинов).
+*/
+public function maxBy(callable $fn);
+public function sortBy(callable $fn);
+public function select(callable $fn);
+public function map(callable $fn);
+// и еще несколько десятков полезных методов
+
+// Трейт требует от класса реализации функции getIterator.
+// Это все что ему нужно для реализации своих методов.
+abstract public function getIterator(): iterable;
+
+/*
+Представьте себе любой класс, который описывает собой коллекцию элементов. Как правило этой коллекции требуются разнообразные методы для работы, например сортировка или фильтрация. До трейтов, эта задача превращалась в бесконечную копипасту кода. Трейты же, позволяют выделить всю необходимую логику в одно место.
+*/
+
+$lessons = [
+    // Второй параметр это продолжительность урока в минутах
+    new Lesson('react start', 3),
+    new Lesson('react component', 9),
+    new Lesson('react lifecycle', 2),
+    new Lesson('redux', 4),
+];
+
+// use Enumerable;
+$course = new Course($lessons);
+$lesson = $course->maxBy(function ($l1, $l2) {
+    return $l1->getDuration() <=> $l2->getDuration();
+});
+
+print_r($lesson); // ('react component', 9)
+
+
+/*
+src/Course.php
+Подключите трейт Enumerable
+
+src/Enumerable.php
+Реализуйте трейт, добавьте в него метод maxBy, работающий по примеру выше. Этот метод принимает на вход анонимную функцию, которая выполняет сравнение двух элементов коллекции по нужному признаку. Результатом этой функции будет элемент соответствующий критерию максимальности. Принцип работы такой же как и у usort
+*/
+
+// FILE: /app/src/Enumerable.php:
+namespace App;
+
+trait Enumerable
+{
+    abstract public function getIterator(): iterable;
+
+    public function maxBy(callable $fn)
+    {
+        $items = $this->getIterator();
+        if (!count($items)) {
+            return null;
+        }
+        $result = array_reduce($items, function ($acc, $item) use ($fn) {
+             $value = $fn($acc, $item);
+             return $value >= 0 ? $acc : $item;
+        }, $items[0]);
+        return $result;
+    }
+}
+
+
+// FILE: /app/src/Course.php:
+namespace App;
+
+class Course
+{
+    use Enumerable;
+
+    private $lessons;
+
+    public function __construct($lessons)
+    {
+        $this->lessons = $lessons;
+    }
+
+    public function getIterator(): iterable
+    {
+        // Для простоты возвращает массив, вместо итератора
+        return $this->lessons;
+    }
+}
+
+// FILE /app/src/Lesson.php:
+namespace App;
+
+class Lesson
+{
+    private $name;
+    private $duration;
+
+    public function __construct($name, $duration)
+    {
+        $this->name = $name;
+        $this->duration = $duration;
+    }
+
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    public function getDuration()
+    {
+        return $this->duration;
+    }
+}
