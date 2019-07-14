@@ -14,6 +14,196 @@ repl.it
 
 
 
+<<<<< Cтроки >>>>>
+
+const longString = "This is a very long \
+string which needs \
+to wrap across multiple lines because \
+otherwise my code is unreadable.";
+
+// # Интерполяция
+const a = 5;
+const b = 10;
+
+console.log(`Fifteen is ${a + b} and not $(2 * a + b).`);
+
+// # Сравнение строк:
+// Лексикографический порядок
+'a' < 'b'; // true
+'a ' > 'a'; // true
+
+'7' > '3'; // true
+'5' > '10'; // true
+
+/*
+В javascript строки являются неизменяемыми, так же говорят immutable. Это означает, что какие бы вы к ним не применяли функции, они не производят in-place замены (то есть не производят изменения самой строки). Любые строковые функции, примененные к строкам, возвращают новую строку. Это верно и в том случае, когда мы обращаемся к конкретному символу в строке.
+*/
+
+
+/**@@@
+Функции lessThan, greaterThan и isEqual в модуле comparers сравнивают две строки и возвращают true/false.
+
+Сравнение идет по количеству заглавных символов в строке (больше заглавных — больше строка).
+
+Специальные символы (например, пробел) не имеют заглавных эквивалентов и в данном задании считаются заглавными.
+
+Примеры:
+*/
+greaterThan('AD', 'ad sd'); // true, сравнение на > (больше)
+greaterThan('AD', '   Ad sd'); // false, сравнение на > (больше)
+lessThan('ghe df', 'dfwe r D'); // true, сравнение на < (меньше)
+isEqual('liSp', 'lisP'); // true
+
+
+/*
+comparers.js
+Допишите необходимые части функций bigLettersCount и compare для того, чтобы заработали функции lessThan, greaterThan и isEqual.
+
+Функция compare, принимающая две строки first и second, работает по следующему алгоритму:
+
+Если в первой строке больше заглавных символов, то возвращается 1.
+Если во второй строке больше заглавных символов, то возвращается -1.
+Иначе возвращается 0.
+Подсказки
+Функция bigLettersCount должна принимать на вход строку str и высчитывать количество заглавных символов в ней.
+Вычисление длины строки: length(str).
+Перевод строки в верхний регистр: toUpperCase(str).
+Проверка на то, что символ в верхнем регистре: toUpperCase(char) === char;
+*/
+
+// FILE: /app/
+import { length, toUpperCase } from './strings';
+
+const bigLettersCount = (str) => {
+  let result = 0;
+
+  for (let i = 0; i < length(str); i += 1) {
+    if (toUpperCase(str[i]) === str[i]) {
+      result += 1;
+    }
+  }
+
+  return result;
+};
+
+
+const compare = (first, second) => {
+  const firstCount = bigLettersCount(first);
+  const secondCount = bigLettersCount(second);
+
+  if (firstCount > secondCount) {
+    return 1;
+  } else if (firstCount < secondCount) {
+    return -1;
+  }
+
+  return 0;
+};
+
+export const greaterThan = (first, second) => (
+  compare(first, second) === 1);
+
+export const lessThan = (first, second) => (
+  compare(first, second) === -1);
+
+export const isEqual = (first, second) => (
+  compare(first, second) === 0);
+
+
+
+/**@@@
+solution.js
+Реализуйте и экспортируйте по умолчанию функцию, которая делает заглавной первую букву каждого слова в предложении.
+*/
+solution('hello, world!'); // Hello, World!
+
+// FILE: /app/solution.js:
+
+import { length, toUpperCase } from './strings';
+
+export default (str) => {
+  let result = '';
+  for (let i = 0; i < length(str); i += 1) {
+    const shouldBeBig = (i === 0 || str[i - 1] === ' ');
+    result += shouldBeBig ? toUpperCase(str[i]) : str[i];
+  }
+
+  return result;
+};
+
+
+
+/**@@@
+addDigits.js
+Реализуйте и экспортируйте по умолчанию функцию addDigits, которая работает следующим образом:
+
+Дано неотрицательное целое число num. Складывать все входящие в него цифры до тех пор, пока не останется одна цифра.
+
+Для числа 38 процесс будет выглядеть так:
+
+3 + 8 = 11
+1 + 1 = 2
+Результат: 2
+
+Пример:
+*/
+ddDigits(10); // 1
+addDigits(19); // 1
+addDigits(38); // 2
+addDigits(1259); // 8
+
+
+// FILE: /app/addDigits.js:
+import { length } from './strings'; 
+
+const sum = (str) => {
+  let result = 0;
+
+  for (let i = 0; i < length(str); i += 1) {
+    result += Number(str[i]);
+  }
+
+  return result;
+};
+
+const addDigits = (num) => {
+  let result = num;
+
+  while (result >= 10) {
+    result = sum(String(result));
+  }
+
+  return result;
+};
+
+export default addDigits;
+
+
+
+<<<<< Типы данных >>>>>
+
+// # Примитивные типы:
+typeof 10; // number
+typeof 10.12; // number
+typeof NaN; // number
+
+typeof 'name'; // string
+typeof true; // boolean
+
+typeof undefined; // undefined
+
+// В динамической типизации ошибки типизации отслеживаются в момент выполнения программы (в рантайме)
+i = 0;
+
+// В статической типизации код проходит проверку до выполнения:
+int i = 0;
+
+<<<<< null >>>>>
+
+null; // значение отсуствует
+undefined; // значение не определено
+
+
 <<<<< Числа >>>>>
 
 0.3 - 0.2; // 0.09999999999999998
@@ -289,6 +479,110 @@ import { default as nameOfDefault, getFirstWeekday, getSecondWeekday } from './d
 nameOfDefault(); // 'Friday'
 getFirstWeekday(); // 'Monday'
 getSecondWeekday(); // 'Tuesday'
+
+
+
+<<<<< Итеративный и рекурсивный процесс >>>>>
+
+const factorial = n => {
+  const iter = (current, acc) =>  
+    current === 0 ? acc : iter(current - 1, acc * current);
+
+  return iter(n, 1);
+};
+
+/**@@@
+sequenceSum.js
+Реализуйте (с использованием рекурсивного процесса) функцию sequenceSum, которая находит сумму последовательности целых чисел. Последовательность задается двумя значениями: begin - начало последовательности, end - конец последовательности. Например: begin = 2 и end = 6 дают нам такую последовательность 2, 3, 4, 5, 6. Сумма такой последовательности будет: 20.
+
+Подсказки
+Последовательность, в которой begin > end, не содержит ни одного числа, т.е. является "пустой". Вычислить сумму чисел такой последовательности не представляется возможным, в этом случае возвращаем NaN
+Сумма чисел последовательности, в которой begin === end, равна begin (или end)
+*/
+
+const sequenceSum = (begin, end) => {
+  if (begin > end) {
+    return NaN;
+  }
+  if (begin === end) {
+    return begin;
+  }
+  return begin + sequenceSum(begin + 1, end);
+};
+
+export default sequenceSum;
+
+/**@@@
+smallestDivisor.js
+Реализуйте и экспортируйте по умолчанию функцию smallestDivisor, используя итеративный процесс. Функция должна находить минимальный делитель переданного числа.
+
+Для этого достаточно последовательно проверять делимость, начиная с двойки. Если делитель не найден, значит число простое и делителем является само число.
+
+Доп. условия: число, передаваемое в функцию, больше нуля (т.е. соответсвующую проверку делать не надо); делитель должен быть больше единицы, за исключением случая, когда аргументом является единица (наименьшим делителем которой является также единица).
+*/
+smallestDivisor(15); // 3
+smallestDivisor(17); // 17
+
+const smallestDivisor = (num) => {
+  const iter = (acc) => {
+    if (acc > num / 2) {
+      return num;
+    }
+
+    if (num % acc === 0) {
+      return acc;
+    }
+
+    return iter(acc + 1);
+  };
+
+  return iter(2);
+};
+
+export default smallestDivisor;
+
+
+/**@@@
+Наибольшим общим делителем (НОД) для двух целых чисел m и n называется наибольший из их общих делителей. Пример: для чисел 70 и 105 наибольший общий делитель равен 35. Наибольший общий делитель существует и однозначно определён, если хотя бы одно из чисел m или n не равно нулю.
+
+gcd.js
+Экспортируйте функцию по умолчанию, которая находит наибольший общий делитель двух целых положительных чисел.
+*/
+
+const gcd = (a, b) => {
+  if (b === 0) {
+    return a;
+  }
+
+  return gcd(b, a % b);
+};
+
+export default gcd;
+
+
+/**@@@
+sum.js
+Реализуйте и экспортируйте функцию по умолчанию, которая считает сумму всех натуральных чисел, меньших чем n (первый аргумент), которые делятся на числа a или b (второй и третий аргументы) без остатка. n - может быть только натуральным числом.
+*/
+
+// 1 % 2 || 1 % 4
+// 2 % 2 || 2 % 4
+// ...
+// 9 % 2 || 9 % 4
+sum(10, 2, 4); // 20
+
+// FILE: /app/sum.js:
+export default (num, divisor1, divisor2) => {
+  let sum = 0;
+
+  for (let i = 1; i < num; i += 1) {
+    if (i % divisor1 === 0 || i % divisor2 === 0) {
+      sum += i;
+    }
+  }
+
+  return sum;
+};
 
 
 

@@ -5636,7 +5636,9 @@ function reverse($list)
 
 
 
-	 
+
+
+
 >>>>>  Стандартные интерфейсы  <<<<<<<
 	 
 	 
@@ -10651,6 +10653,35 @@ function flatten($value)
 }
 
 
+/**@@@
+Solution.php
+Реализуйте функцию arrangeBiggestNumber, которая составляет самое большое число из переданного массива чисел и возвращает его строковое представление. Например из чисел [3, 24, 4] мы можем составить такие: 3244, 3424, 2434, 2443, 4324, 4243 и самое больше из них это 4324.
+
+Пример:
+*/
+998764543431 == arrangeBiggestNumber([1, 34, 3, 98, 9, 76, 45, 4]);
+
+function arrangeBiggestNumber($numbers)
+{
+    if (empty($numbers)) {
+        return;
+    }
+
+    usort($numbers, function ($prev, $next) {
+        $number1 = (int) ($next . $prev);
+        $number2 = (int) ($prev . $next);
+
+        if ($number1 == $number2) {
+            return 0;
+        }
+
+        return ($number1 < $number2) ? -1 : 1;
+    });
+
+    return implode('', $numbers);
+}
+
+
 ############## PHP: Автоматическое тестирование ##############
 
 /*
@@ -13447,6 +13478,77 @@ function render($template, $variables)
 }
 
 
+
+/**@@@
+Пусть f и g — две одноаргументные функции. По определению, композиция (composition) f и g есть функция x → f ( g (x) ).
+
+Solution.php
+Определите функцию compose которая реализует композицию.
+
+Пример:
+*/
+
+$square = function ($num) {
+    return $num ** 2;
+};
+
+$half = function ($num) {
+    return $num / 2;
+};
+
+$func1 = compose([$square, $half]);
+$func1(10); // 25
+
+$func2 = compose([]);
+$func2(3); // 3
+
+
+// FILE: /app/Solution.php:
+function compose($functions)
+{
+    return function ($arg) use ($functions) {
+        $iter = function ($functions, $acc) use (&$iter) {
+            if (empty($functions)) {
+                return $acc;
+            }
+
+            $newAcc = $functions[0]($acc);
+
+            return $iter(array_slice($functions, 1), $newAcc);
+        };
+
+        return $iter(array_reverse($functions), $arg);
+    };
+}
+
+
+/**@@@
+Solution.php
+Реализуйте функцию fringe, которая берет в качестве аргумента дерево (представленное в виде списка) и возвращает список, элементы которого - все листья дерева, упорядоченные слева направо.
+
+Пример:
+*/
+l(4, 3, 2, 1) == fringe(l(l(4, 3), l(2, 1)));
+
+// FILE: /app/Solution.php:
+function fringe($list)
+{
+    $iter = function ($list, $acc) use (&$iter) {
+        if (empty($list)) {
+            return reverse($acc);
+        }
+        $element = car($list);
+        if (isPair($element)) {
+            $newAcc = reverse($iter($element, $acc));
+        } else {
+            $newAcc = cons($element, $acc);
+        }
+
+        return $iter(cdr($list), $newAcc);
+    };
+
+    return $iter($list, l());
+}
 
 
 ######################### PHP: Погружаясь в классы #########################
