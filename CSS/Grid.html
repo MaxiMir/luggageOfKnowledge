@@ -175,7 +175,6 @@
     /* ### 6 ### */
     .grid {
         display: grid;
-
         grid-template-columns: [a] 1fr [b] 1fr [c] 1fr [a b] 1fr [e] 1 fr [c f]; /* задаем имена горизонтальным линиям */
         grid-template-rows: [a] 100px [b] 100px [c] 100px; /* задаем имена вертикальным линиям */
 
@@ -230,11 +229,13 @@
 
     .grid {
         display: grid;
-        grid-template: repeat(5, 100px) / repeat(3, 100px);
+        grid-template-columns: repeat(3, 100px);
+        grid-template-rows: repeat(5, 100px);
         grid-gap: 20px;
 
-        grid-auto-flow: row; /* по умолчанию или column */
+        grid-auto-flow: row; /* по умолчанию */
         /*
+            column // разместить по столбцам
             column densel; // разместить по столбцам,
             а затем переразместить таким образом, чтобы не было пустого пространства
             dense; // разместить по строкам, 
@@ -261,6 +262,49 @@
         grid-row-end: span 2;
     }
 
+    /* ### 8 ### */
+    .grid {
+        display: grid;
+        grid-template-columns: repeat(3, 100px);
+        grid-template-rows: repeat(5, 100px);
+    }
+
+    .grid__item:nth-child(1) {
+        grid-area: 1 / 1 / 3 / 4;
+        z-index: 2; /* будет перекрывать нижний */
+    }
+
+    .grid__item:nth-child(2) {
+        grid-area: 2 / 1 / 4 / 2;
+        z-index: 1;
+    }
+
+
+
+    /* ### 9 ### */
+    .grid {
+        display: grid;
+        /* #1 */
+        grid: repeat(3, 100px) / repeat(4, 1fr);
+        /* <-> */
+        grid: 
+            '. . . .' 100px
+            '. . . .' 100px
+            '. . . .' 100px
+            / 1fr 1fr 1fr 1fr;
+        
+        /* #2 */
+        grid: repeat(3, 100px) / auto-flow dense 100px;  
+        
+        /* #3 */  
+        grid: auto-flow 100px / repeat(4, 1fr);
+
+        /* #4 */
+        grid: subgrid; /* наследование от родителя. Пока не реализован в браузерах */
+        grid: contents; /* вложенные элементы становятся частью сетки родителя */
+
+    }
+    
 </style>
 
 <div class="grid">
