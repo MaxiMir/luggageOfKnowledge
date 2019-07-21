@@ -31,7 +31,8 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die(); ?>
 			
 			Asset::getInstance()->addCss(SITE_TEMPLATE_PATH . '/css/style.css'); // подключение стилей. SITE_TEMPLATE_PATH - путь к активному шаблону сайта
 			$APPLICATION->SetAdditionalCss(); // устаревший метод подключения стилей
-			CJSCore::Init(['jquery']); // подключение библиотек из ядра битрикса
+            CJSCore::Init(['jquery']); // подключение библиотек из ядра битрикса
+            Bitrix\Main\UI\Extension::load('ui.vue'); // Подключение Vue JS (с января 2019 входит в ядро)
 			Asset::getInstance()->addJs(SITE_TEMPLATE_PATH . '/js/jquery-1.11.1.min.js');
 			$APPLICATION->AddHeadScript(); // устаревший метод подключения скриптов
 			Asset::getInstance()->addString('<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1>');
