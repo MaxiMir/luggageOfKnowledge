@@ -6,7 +6,6 @@
  * Книга «Exploring ES6»: https://exploringjs.com/es6/
  * Справочник MDN web docs: https://developer.mozilla.org/ru/
  * 
- * 
  * Гарвардский курс «CS50» https://www.youtube.com/watch?v=Sy_wba7l1UU&list=PLawfWYMUziZqyUL5QDLVbe3j5BKWj42E5
  * React https://www.youtube.com/watch?v=2vujABNBFAY&list=PLNkWIWHIRwME_Gv2vlWAR6TfeSXylYfw4
  */
@@ -176,6 +175,36 @@ counter(); // 5
 +function() { // показываем что здесь Function Expression
     alert('Вызов на месте');
 }();
+
+
+
+/* # Одалживание метода» */
+// #1:
+const printArgs = () => {
+    arguments.join = [].join; // скопируем ссылку на функцию в переменную
+
+    const argStr = join.call(arguments, ':'); // запустили join в контексте arguments
+
+    console.log( argStr ); // сработает и выведет 1:2:3
+};
+  
+printArgs(1, 2, 3);
+
+// #2:
+const printArgs = () =>  {
+    // вызов arr.slice() скопирует все элементы из this в новый массив
+    var args = [].slice.call(arguments);
+    console.log( args.join(', ') ); // args - полноценный массив из аргументов
+};
+  
+printArgs('Привет', 'мой', 'мир'); // Привет, мой, мир
+
+// # Сумма переданных аргументов:
+const sumArgs = () => {
+    return [].reduce.call(arguments, (a, b) => a + b);
+}
+  
+sumArgs(4, 5, 6); // 15
 
 
 
@@ -417,6 +446,32 @@ person.age; // => 30
 person.age = 100; 
 
 person.calculateAge(); // => 30
+
+
+
+// >>>>>> Object.defineProperty <<<<<< 
+// Свойство-константа
+const user = {};
+
+Object.defineProperty(user, "name", {
+  value: "Вася",
+  writable: false, // запретить присвоение "user.name="
+  configurable: false // запретить удаление "delete user.name"
+});
+
+// Помечаем toString как не подлежащий перебору в for..in
+const user = {
+    name: "Вася",
+    toString: function() { return this.name; }
+};
+  
+Object.defineProperty(user, "toString", {enumerable: false}); // модифицируем настройки у существующего toString.
+  
+for(var key in user) console.log(key);  // name
+
+
+Object.keys // возвращает только enumerable-свойства.
+Object.getOwnPropertyNames // возвращает все
 
 
 
