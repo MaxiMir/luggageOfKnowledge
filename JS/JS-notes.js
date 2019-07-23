@@ -178,7 +178,7 @@ counter(); // 5
 
 
 
-/* # Одалживание метода» */
+/* # Одалживание метода */
 // #1:
 const printArgs = () => {
     arguments.join = [].join; // скопируем ссылку на функцию в переменную
@@ -205,6 +205,40 @@ const sumArgs = () => {
 }
   
 sumArgs(4, 5, 6); // 15
+
+
+/* # Декоратор для проверки типа: */
+
+// вспомогательная функция для проверки на число
+const checkNumber = value => typeof value == 'number';
+
+// декоратор, проверяющий типы для f
+// второй аргумент checks - массив с функциями для проверки
+const typeCheck = (f, checks) => {
+    return function() {
+        for (var i = 0; i < arguments.length; i++) {
+            if (!checks[i](arguments[i])) {
+                console.log( "Некорректный тип аргумента номер " + i );
+
+                return;
+            }
+        }
+        
+        return f.apply(this, arguments);
+    }
+}
+
+let sum = (a, b) => a + b;
+// обернём декоратор для проверки
+sum = typeCheck(sum, [checkNumber, checkNumber]); // оба аргумента - числа
+
+// пользуемся функцией как обычно
+sum(1, 2); // 3, все хорошо
+
+// а вот так - будет ошибка
+sum(true, null); // некорректный аргумент номер 0
+sum(1, ["array", "in", "sum?!?"]); // некорректный аргумент номер 1
+
 
 
 
