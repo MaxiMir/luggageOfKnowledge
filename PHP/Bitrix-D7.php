@@ -253,3 +253,74 @@ $result = \Bitrix\Iblock\ElementTable::getList([
     'filter' => ['ID' => '1']
 ]);
 
+
+
+
+# Application / Context / Request / Server:
+use Bitrix\Main\Application,
+    Bitrix\Main\Context,
+    Bitrix\Main\Request,
+    Bitrix\Main\Server;
+
+$docRoot = Application::getDocumentRoot();
+echo '<pre>' . print_r($docRoot, true) . '</pre>';
+
+$context = Context::getCurrent();
+//echo '<pre>' . print_r($context, true) . '</pre>';
+
+$request = $context->getRequest(); // объект Request
+//echo '<pre>'.print_r($request, true).'</pre>';
+$server = $context->getServer();   // объект Server
+//echo '<pre>'.print_r($server, true).'</pre>';
+$siteId = $context->getSite();     // ID текущего сайта ("s1")
+//echo '<pre>'.print_r($siteId, true).'</pre>';
+$langId = $context->getLanguage(); // ID текущего языка ("ru")
+//echo '<pre>'.print_r($langId, true).'</pre>';
+
+/** Bitrix\Main\Request */
+
+$request = $context->getRequest();
+// Или более краткая форма:
+$request = Context::getCurrent()->getRequest();
+/** Параметры запроса */
+$value = $request->get("param");       // получение параметра GET или POST
+$value = $request["param"];            // получение параметра GET или POST
+$value = $request->getQuery("param");  // получение GET-параметра
+$values = $request->getQueryList();    // получение списка GET-параметров
+$value = $request->getPost("param");   // получение POST-параметра
+$values = $request->getPostList();     // получение списка POST-параметров
+$value = $request->getFile("param");   // получение загруженного файла
+$values = $request->getFileList();     // получение списка загруженных файлов
+$value = $request->getCookie("param"); // получение значения кука
+$values = $request->getCookieList();   // получение списка кукисов
+
+/** Данные о запросе */
+$method = $request->getRequestMethod(); // получение метода запроса
+$flag = $request->isGet();              // true - GET-запрос, иначе false
+$flag = $request->isPost();             // true - POST-запрос, иначе false
+$flag = $request->isAjaxRequest();      // true - AJAX-запрос, иначе false
+$flag = $request->isHttps();            // true - HTTPS-запрос, иначе false
+
+/** Данные о запрошенной странице */
+$flag = $request->isAdminSection();            // true - находимся в админке, иначе false
+$requestUri = $request->getRequestUri();       // Запрошенный адрес (напр. "/catalog/category/?param=value")
+$requestPage = $request->getRequestedPage();   // Запрошенная страница (напр. "/catalog/category/index.php")
+$rDir = $request->getRequestedPageDirectory();// Директория запрошенной страницы (напр. "/catalog/category")
+
+/** Bitrix\Main\Server */
+
+$server = $context->getServer();
+// Или более краткая форма:
+$server = Context::getCurrent()->getServer();
+
+$server->getDocumentRoot(); // DOCUMENT_ROOT
+$server->getPersonalRoot(); // BX_PERSONAL_ROOT ("/bitrix")
+$server->getHttpHost();     // HTTP_HOST
+$server->getServerName();   // SERVER_NAME
+$server->getServerAddr();   // SERVER_ADDR
+$server->getServerPort();   // SERVER_PORT
+$server->getRequestUri();   // REQUEST_URI
+$server->getRequestMethod();// REQUEST_METHOD
+$server->getPhpSelf();      // PHP_SELF
+$server->getScriptName();   // SCRIPT_NAME
+$server->get('HTTP_ACCEPT');// Любое значение из $_SERVER
