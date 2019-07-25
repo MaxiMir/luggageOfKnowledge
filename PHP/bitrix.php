@@ -1,69 +1,52 @@
 <?
 
 // Глобальные фильтры на всякие случаи жизни https://camouf.ru/blog-note/4717/
-	
-/** Удаляем все кроме:
- * /bitrix
- * /upload
- * .htaccess
- * .access.php
- * 404.php
- * index.php
- * robots.txt
- * Apache-PHP-7-x64_vhost.conf
- * urlrewrite.php
- * web.config
- */
-	
-# исключить обращение по ссылке к шаблону:	
+
+# file: .setting.php - настройка debug - более подробный вывод ошибки	
+
+# ИСКЛЮЧИТЬ ОБРАЩЕНИЕ ПО ССЫЛКЕ К ШАБЛОНУ:	
 if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die(); ?>
 
 
-<!DOCTYPE HTML>
-<html>
-	<head>
-		<title><? $APPLICATION->showTitle() ?></title> <!--ВЫВОД Title: -->
+<head>
+    <title><? $APPLICATION->showTitle() ?></title> <!--ВЫВОД Title: -->
 
-		<?
-			use Bitrix\Main\Page\Asset;
-			
-			$APPLICATION->showHead(); // Метод предназначен для вывода в шаблоне сайта основных полей тега <head>: мета-теги Content-Type, robots, keywords, description; стили CSS; скрипты, заданные через CMain::AddHeadScript
-			
-			Asset::getInstance()->addCss(SITE_TEMPLATE_PATH . '/css/style.css'); // подключение стилей. SITE_TEMPLATE_PATH - путь к активному шаблону сайта
-			$APPLICATION->SetAdditionalCss(); // устаревший метод подключения стилей
-            CJSCore::Init(['jquery']); // подключение библиотек из ядра битрикса
-            Bitrix\Main\UI\Extension::load('ui.vue'); // Подключение Vue JS (с января 2019 входит в ядро)
-			Asset::getInstance()->addJs(SITE_TEMPLATE_PATH . '/js/jquery-1.11.1.min.js');
-			$APPLICATION->AddHeadScript(); // устаревший метод подключения скриптов
-			Asset::getInstance()->addString('<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1>');
-			Asset::getInstance()->addString('<link href="//fonts.googleapis.com/css?family=Monda" rel="stylesheet" type="text/css">');
-			
-			$APPLICATION->SetPageProperty('title', 'Заголовок окна браузера');
-			$APPLICATION->SetTitle('Отзывы');
-		?>
-	</head>		
-</html>
+    <?
+        use Bitrix\Main\Page\Asset;
+        
+        $APPLICATION->showHead(); // Метод предназначен для вывода в шаблоне сайта основных полей тега <head>: мета-теги Content-Type, robots, keywords, description; стили CSS; скрипты, заданные через CMain::AddHeadScript
+        
+        Asset::getInstance()->addCss(SITE_TEMPLATE_PATH . '/css/style.css'); // подключение стилей. SITE_TEMPLATE_PATH - путь к активному шаблону сайта
+        $APPLICATION->SetAdditionalCss(); // устаревший метод подключения стилей
+        CJSCore::Init(['jquery']); // подключение библиотек из ядра битрикса
+        Bitrix\Main\UI\Extension::load('ui.vue'); // Подключение Vue JS (с января 2019 входит в ядро)
+        Asset::getInstance()->addJs(SITE_TEMPLATE_PATH . '/js/jquery-1.11.1.min.js');
+        $APPLICATION->AddHeadScript(); // устаревший метод подключения скриптов
+        Asset::getInstance()->addString('<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1>');
+        Asset::getInstance()->addString('<link href="//fonts.googleapis.com/css?family=Monda" rel="stylesheet" type="text/css">');
+        
+        $APPLICATION->SetPageProperty('title', 'Заголовок окна браузера');
+        $APPLICATION->SetTitle('Отзывы');
+    ?>
+</head>		
 <body>
 	<? if ($GLOBALS['USER']->IsAdmin()): ?>
 	    <div id="panel"><? $APPLICATION->ShowPanel(); ?></div> <!-- ПОКАЗ АДМИН ПАНЕЛИ -->
 	<? endif; ?>
 
-	    <h1><? $APPLICATION->showTitle(false) ?></h1> <!-- ВЫВОД H1 -->
+    <h1><? $APPLICATION->showTitle(false) ?></h1> <!-- ВЫВОД H1 -->
 <?
 
 
 
 // file: /local/php_interface/init.php - здесь можно определить пользовательские функции, к-л. логику, которыми хотели бы пользоваться в шаблоне, до его подключения.
-	
-	define("DEFAULT_TEMPLATE_PATH", "/local/templates/.default"); // теперь можно вместо SITE_TEMPLATE_PATH использовать DEFAULT_TEMPLATE_PATH
-	define('DEFAULT_TEMPLATE_PATH', BX_PERSONAL_PATH . '/templates/.default'); // путь до папки .default в ядре bitrix
-	
-	function debug($data)
-	{
-		echo "<pre>" . print_r($data) . '<pre>';
-	}
+define("DEFAULT_TEMPLATE_PATH", "/local/templates/.default"); // теперь можно вместо SITE_TEMPLATE_PATH использовать DEFAULT_TEMPLATE_PATH
+define('DEFAULT_TEMPLATE_PATH', BX_PERSONAL_PATH . '/templates/.default'); // путь до папки .default в ядре bitrix
 
-
+function debug($data)
+{
+    echo "<pre>" . print_r($data) . '<pre>';
+}
 
 // file: /local/templates/TEMPLATE_NAME:
 	debug($arResult); // используем функцию из init.php
@@ -95,11 +78,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die(); ?>
 
 
 # file: parameters.php, result_modifier.php, component_epilog - позволяют дополнить логику компонента
-
-
-
-# file: component_epilog.php (можно создать в папке с шаблоном) будет подключаться после подключения файла с шаблоном. Например, сюда можно поместить подключение компонента "комментарии", для того чтобы он не кэшировался
-
+// file: component_epilog.php (можно создать в папке с шаблоном) будет подключаться после подключения файла с шаблоном. Например, сюда можно поместить подключение компонента "комментарии", для того чтобы он не кэшировался
 // file: result_modifier.php - сюда можно, например поместить функцию-обработчик элементов массива $arResult:
 foreach ($arResult['ITEMS'] as &$item) {
 	$item['PREVIEW_TEXT'] = mbCutString($item['PREVIEW_TEXT'], 50); // mbCutString - пользовательская функция в init.php
@@ -108,7 +87,8 @@ foreach ($arResult['ITEMS'] as &$item) {
 unset($item); // поскольку массив передаем по ссылке
 
 
-// ВЫВОД ПАГИНАЦИИ: ?>
+
+# ВЫВОД ПАГИНАЦИИ: ?>
 <? if ($arParams['DISPLAY_BOTTOM_PAGER']): ?>
 	<?= arResult['NAV_STRING']; ?>
 <? endif; ?>
@@ -116,12 +96,6 @@ unset($item); // поскольку массив передаем по ссыл�
 
 
 
-# Настройки главного модуля объединять CSS, JS, получать минифированные версии CSS и JS
-
-
-# file: .setting.php - настройка debug - более подробный вывод ошибки
-	
-	
 /** КОМПОНЕНТЫ:
  * - Включаемая область
  *
@@ -162,14 +136,6 @@ unset($item); // поскольку массив передаем по ссыл�
  */
 
 
-
-
-# ТЕКУЩАЯ СТРАНИЦА:
-$APPLICATION->GetCurPage(false); // => относительный урл
-
-
-
-
 # RESIZE изображений В ШАБЛОНЕ:
 $file = CFile::ResizeImageGet(
 	$arItem['PREVIEW_PICTURE'],
@@ -182,13 +148,12 @@ $file['src']; // путь до новой картинки
 
 
 
-
 # ДОБАВЛЕНИЕ КОММЕНТАРИЕВ:
-	/** Используется компонент bitrix: catalog.comments
-	 * В вызове компонента добавить: "AJAX_POST" => "Y"
-	 * СЕРВИСЫ -> БЛОГИ -> Нужный_Инфблок изменить -> вкладка "Права на доступ":
-	 * Права на комментарии: Все посетители - чтение, Авторизованные - запись
-	 */
+/** Используется компонент bitrix: catalog.comments
+ * В вызове компонента добавить: "AJAX_POST" => "Y"
+ * СЕРВИСЫ -> БЛОГИ -> Нужный_Инфблок изменить -> вкладка "Права на доступ":
+ * Права на комментарии: Все посетители - чтение, Авторизованные - запись
+ */
 
 
 
@@ -239,13 +204,13 @@ require($_SERVER['DOCUMENT_ROOT'] . 'bitrix/footer.php');
 
 
 // file: local/templates/.default/components/bitrix/system.auth.form/template: ?>
-    <!-- .... -->
-    <p>Добро пожаловать: <?= $arResult['USER_NAME'] ?></p>
-    <p>Ваш профиль: <a href="<?= $arResult['PROFILE_URL'] ?>">ссылка</a></p>
-    <p>Выход: <a href="<?= $APPLICATION->GetCurPageParam('logout=yes', ['login', 'logout', 'register', 'forgot_password', 'change_passwrod']) ?>">
-			 <?= GetMessage('AUTH_LOGOUT_BUTTON') ?></a>
-    </p>
-    <!-- .... --><?
+<!-- .... -->
+<p>Добро пожаловать: <?= $arResult['USER_NAME'] ?></p>
+<p>Ваш профиль: <a href="<?= $arResult['PROFILE_URL'] ?>">ссылка</a></p>
+<p>Выход: <a href="<?= $APPLICATION->GetCurPageParam('logout=yes', ['login', 'logout', 'register', 'forgot_password', 'change_passwrod']) ?>">
+            <?= GetMessage('AUTH_LOGOUT_BUTTON') ?></a>
+</p>
+<!-- .... --><?
 
 
 // создаем file: /auth/registration.php
@@ -258,55 +223,56 @@ require($_SERVER['DOCUMENT_ROOT'] . 'bitrix/footer.php');
 
 
 
+# ТЕКУЩАЯ СТРАНИЦА:
+$APPLICATION->GetCurPage(false); // => относительный урл
+
+
 
 # КАРТА САЙТА:
 // Главный модуль -> вкладка "Настройки" -> скролл до "Карта сайта" - выбрать из каких меню генерировать ссылки
 
 
 
-# Добавление свойств раздела:
-"SECTION_USER_FIELDS" => ["UF_TEXT_BEFORE"],
+# ДОБАВЛЕНИЕ СВОЙСТВ РАЗДЕЛА:
+// "SECTION_USER_FIELDS" => ["UF_TEXT_BEFORE"]
 
 
 
-# Добавление свойств товара:
-"LIST_PROPERTY_CODE" => [
-    "PRICE",
-    "OPT_PR",
-],
+# ДОБАВЛЕНИЕ СВОЙСТВ ТОВАРА:
+// "LIST_PROPERTY_CODE" => ["PRICE", "OPT_PR"]
 
 
 
-
-# Подключение CSS и JS в шаблоне:
+# ПОДКЛЮЧЕНИЕ CSS И JS В ШАБЛОНЕ:
 $this->addExternalCss("https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css");
 $this->addExternalJS("https://code.jquery.com/ui/1.12.1/jquery-ui.js");
 
 
 
 # Настройка ЧПУ в инфорблоке:
-URL страницы информационного блока:	
-/catalog/
+/*
+    URL страницы информационного блока:	
+    /catalog/
 
-URL страницы раздела:	
-/catalog/#SECTION_CODE_PATH#/
- 
-URL страницы детального просмотра:	
-/catalog/#SECTION_CODE_PATH#/#ELEMENT_CODE#/
+    URL страницы раздела:	
+    /catalog/#SECTION_CODE_PATH#/
+    
+    URL страницы детального просмотра:	
+    /catalog/#SECTION_CODE_PATH#/#ELEMENT_CODE#/
 
-# Настройка ЧПУ в компоненте:
-URL страницы информационного блока:	
-/catalog/
- 
-URL страницы раздела:	
-#SECTION_CODE_PATH#/
- 
-URL страницы детального просмотра:	
-#SECTION_CODE_PATH#/#ELEMENT_CODE#/
+    # Настройка ЧПУ в компоненте:
+    URL страницы информационного блока:	
+    /catalog/
+    
+    URL страницы раздела:	
+    #SECTION_CODE_PATH#/
+    
+    URL страницы детального просмотра:	
+    #SECTION_CODE_PATH#/#ELEMENT_CODE#/
+*/
 
 
-
-# Получение данных по метатегам: 
+# ПОЛУЧЕНИЕ ДАННЫХ ПО МЕТАМ 
 use \Bitrix\Iblock\InheritedProperty\SectionValues;
 
 $seoData = new SectionValues($arParams['IBLOCK_ID'], $arResult['SECTION_ID']);
@@ -393,7 +359,15 @@ if ($rsSect['UF_PROD_M_DESCRIPT']) {
 
 
 
-#@@@ Обновление названия и свойства DETAIL_PAGE_URL у карточек товаров в определенных разделах:
+#@@@ ПОЛУЧЕНИЕ СВОЙСТВ ИНФОБЛОКА:
+$properties = CIBlockProperty::GetList([], ["IBLOCK_ID"=> 1]);
+while ($propData = $properties->GetNext()) {
+    ['CODE' => $code, 'NAME' => $name] = $propData;
+}
+
+
+
+#@@@ ОБНОВЛЕНИЕ НАЗВАНИЯ И СВОЙСТВ DETAIL_PAGE_URL У ТОВАРОВ:
 require($_SERVER["DOCUMENT_ROOT"] . "/bitrix/header.php");
 
 global $DB;
@@ -434,22 +408,18 @@ foreach ($sectionsData as [$IBLOCK_ID, $ID]) {
 			switch ($ID) {
 				case '229':
 					$h1 = "Кабель АВБбшв {$valZhil}х{$valSechenie}";
-					$h1Razvodnay = "АВБбшв {$valZhil}х{$valSechenie}";
+					$h1Section = "АВБбшв {$valZhil}х{$valSechenie}";
 					break;
 				case '230':
 					$h1 = "Кабель ВБбшв {$valZhil}х{$valSechenie}";
-					$h1Razvodnay = "Вббшв {$valZhil}х{$valSechenie}";
-					break;
-				case '251':
-					$h1 = "Кабель КВВГнг-LS {$valZhil}х{$valSechenie}";
-					$h1Razvodnay = "КВВГнг-LS {$valZhil}х{$valSechenie}";
+					$h1Section = "Вббшв {$valZhil}х{$valSechenie}";
 					break;
 				default:
 					throw new Exception("Неизвестный ID: {$ID}!");
 			}
 			
 			$cbe = new CIBlockElement;
-			$test = $cbe->Update($arFields["ID"], ['NAME' => $h1Razvodnay]);
+			$test = $cbe->Update($arFields["ID"], ['NAME' => $h1Section]);
 			CIBlockElement::SetPropertyValuesEx($arFields["ID"], $IBLOCK_ID, ["NAME_ITEM" => $h1]);
 		}
 		
@@ -459,13 +429,13 @@ foreach ($sectionsData as [$IBLOCK_ID, $ID]) {
 
 
 #@@@ ВЫБРАТЬ ЭЛЕМЕНТЫ РАЗДЕЛА, У КОТОРЫХ СВОЙСТВО PROPERTY_SHOW_ON СОВПАДАЕТ С ТЕКУЩИМ ID РАЗДЕЛА:
-	$res = CIBlockElement::GetList([], ['IBLOCK_ID' => 5, 'PROPERTY_SHOW_ON' => $arResult['ID']], false, false, ['ID', 'PROPERTY_YOUTUBE_CODE']);
-	
-	while ($arFields = $res->GetNext()) {
-		echo '<pre>';
-		print_r($arFields);
-		echo '</pre>';
-	}
+$res = CIBlockElement::GetList([], ['IBLOCK_ID' => 5, 'PROPERTY_SHOW_ON' => $arResult['ID']], false, false, ['ID', 'PROPERTY_YOUTUBE_CODE']);
+
+while ($arFields = $res->GetNext()) {
+    echo '<pre>';
+    print_r($arFields);
+    echo '</pre>';
+}
 
 
 
@@ -497,7 +467,6 @@ $res = CIBlockElement::GetList([], $arFilter, false, ['nPageSize' => 3], $arSele
 
 
 #@@@ ИЗМЕНЕНИЕ arResult + ДОБАВЛЕНИЕ ЦЕН И СВОЙСТВ:
-
 // file: --template-component--/result_modifier.php:
 $arSelect = ['ID', 'IBLOCK_ID', 'PROPERTY_INBOX', 'CATALOG_GROUP_10']; // необходимо определить какие цены используются (по дефолту CATALOG_GROUP_1)
 $arFilter = ['IBLOCK_ID' => 31, 'ID' => $offerID];
@@ -511,7 +480,6 @@ if ($obEl = $dbEl->Fetch()) {
 
 
 #@@@ ИЗМЕНЕНИЕ arResult + ДОБАВЛЕНИЕ ПОЛЬЗОВАТЕЛЬСКОГО СВОЙСТВА:
-
 // file: --template-component--/result_modifier.php:
 if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
 
@@ -541,7 +509,7 @@ while ($arRes = $dbSection->Fetch()) {
 
 
 
-#@@@ Отправка на почту и запись в инфоблок:
+#@@@ ОТПРАВКА НА ПОЧТУ + ЗАПИСЬ В ИНФОБЛОК:
 require $_SERVER['DOCUMENT_ROOT'] . '/bitrix/modules/main/include/prolog_before.php';
 
 use Bitrix\Main\{Application, Context};
@@ -551,46 +519,68 @@ $connection = Application::getConnection();
 $context = Context::getCurrent();
 $request = $context->getRequest();
 
-if ($request->isPost()) {
-	$prodName = $request->getPost("prodName");
-	parse_str($request->getPost("formData"), $formData);
-	['rName' => $uName, 'rEmail' => $uEmail, 'rComment' => $uCommet] = $formData;
-	
-	if (empty($uCommet))
-		$uCommet = 'не заполнено';
-	
-	if (!($uName && $uEmail && $prodName)) {
-		echo 'Некоректно заполнены поля формы';
-	} else {
-
-		#@ Отправляем письмо:
-		$arEventFields = [
-			'AUTHOR' => $uName,
-			'AUTHOR_EMAIL' => $uEmail,
-			'PRODUCT_NAME' => $prodName,
-			'COMMENT' => $uCommet
-		];
-		
-		CEvent::Send("FEEDBACK_FORM_", SITE_ID, $arEventFields);
-		
-		#@ Записываем в инфоблок:
-		CModule::IncludeModule("iblock");
-		$el = new CIBlockElement;
-		$PROP = [];
-		$PROP['UNAME'] = $uName;
-		$PROP['UEMAIL'] = $uEmail;
-		$PROP['PRODNAME'] = $prodName;
-		$PROP['UCOMMENT'] = $uCommet;
-		
-		$arLoadProductArray = Array(
-			"IBLOCK_ID" => 43,
-			"NAME" => "{$uName}: $prodName",
-			"PROPERTY_VALUES" => $PROP,
-		);
-		
-		$PRODUCT_ID = $el->Add($arLoadProductArray);
-	}
+if (!$request->isPost()) {
+    return;
 }
+
+$prodName = $request->getPost("prodName");
+parse_str($request->getPost("formData"), $formData);
+['rName' => $uName, 'rEmail' => $uEmail, 'rComment' => $uCommet] = $formData;
+
+if (!($uName && $uEmail && $prodName)) {
+    echo 'Некоректно заполнены поля формы';
+    return;
+} 
+
+#@ Отправляем письмо:
+$arEventFields = [
+    'AUTHOR' => $uName,
+    'AUTHOR_EMAIL' => $uEmail,
+    'PRODUCT_NAME' => $prodName,
+    'COMMENT' => $uCommet
+];
+
+CEvent::Send("AP_CALCULATOR", 's1', $arEventFields, "Y", "", $imgIDs); // imgIDs - массив с картинками
+
+
+#@ Записываем в инфоблок:
+CModule::IncludeModule("iblock");
+$el = new CIBlockElement;
+$PROP = [];
+$PROP['UNAME'] = $uName;
+$PROP['UEMAIL'] = $uEmail;
+$PROP['PRODNAME'] = $prodName;
+$PROP['UCOMMENT'] = $uCommet;
+
+$arLoadProductArray = Array(
+    "IBLOCK_ID" => 43,
+    "NAME" => "{$uName}: $prodName",
+    "PROPERTY_VALUES" => $PROP,
+);
+
+$PRODUCT_ID = $el->Add($arLoadProductArray);
+
+
+#@@@ Загрузка картинки 
+function uploadImg()
+{
+    if (empty($_FILES['file'])) {
+        return;
+    }
+
+    $arrFile = [
+        "name" => $_FILES['file']['name'],
+        "size" => $_FILES['file']['size'],
+        "tmp_name" => $_FILES['file']['tmp_name'],
+        "type" => $_FILES['file']['type'],
+        "old_file" => "",
+        "del" => "Y",
+        "MODULE_ID" => "iblock"
+    ];
+
+    return CFile::SaveFile($arrFile, "userPic");
+}
+
 
 
 #@@@ ВЫВОД КАРТИНОК ИЗ ПОЛЬЗОВАТЕЛЬСКОГО СВОЙСТВА (тип файл - множественный): ?>
@@ -605,110 +595,109 @@ if ($request->isPost()) {
 
 
 #@@@ ПОЛУЧИТЬ ВЛОЖЕННЫЕ РАЗДЕЛЫ:
-    $arResult['ITEMS'] = [];
-   
-    if (CModule::IncludeModule("iblock")) {
-        $arSort = [
-           "SORT" => "ASC"
-        ];
-    
-        $filter = [
-           'IBLOCK_ID' => $arParams['IBLOCK_ID'],
-           'GLOBAL_ACTIVE' => 'Y',
-           'SECTION_ID' => $arParams['SECTION_ID'],
-        ];
-    
-        $arSelect = [
-           "ID",
-           "CODE",
-           "NAME",
-           "SECTION_PAGE_URL",
-           "PICTURE",
-           "UF_*"
-        ];
-        
-        $dbList = CIBlockSection::GetList($arSort, $filter, false, $arSelect);
-        
-        $dbList->result->num_rows; // количество найденных записей
-        
-        while ($row = $dbList->GetNext()) {
-            $arResult['ITEMS'][] = [
-				'ID' => $row['ID'],
-				'NAME' => $row['NAME'],
-				'IMG' => CFile::GetPath($row['PICTURE']),
-				'LINK' => $row['SECTION_PAGE_URL'], 
-				'MIN_PRICE' => $row['UF_MIN_PRICE'], 
-            ];
-        }
-    }
+$arResult['ITEMS'] = [];
 
+if (CModule::IncludeModule("iblock")) {
+    $arSort = [
+        "SORT" => "ASC"
+    ];
+
+    $filter = [
+        'IBLOCK_ID' => $arParams['IBLOCK_ID'],
+        'GLOBAL_ACTIVE' => 'Y',
+        'SECTION_ID' => $arParams['SECTION_ID'],
+    ];
+
+    $arSelect = [
+        "ID",
+        "CODE",
+        "NAME",
+        "SECTION_PAGE_URL",
+        "PICTURE",
+        "UF_*"
+    ];
+    
+    $dbList = CIBlockSection::GetList($arSort, $filter, false, $arSelect);
+    
+    $dbList->result->num_rows; // количество найденных записей
+    
+    while ($row = $dbList->GetNext()) {
+        $arResult['ITEMS'][] = [
+            'ID' => $row['ID'],
+            'NAME' => $row['NAME'],
+            'IMG' => CFile::GetPath($row['PICTURE']),
+            'LINK' => $row['SECTION_PAGE_URL'], 
+            'MIN_PRICE' => $row['UF_MIN_PRICE'], 
+        ];
+    }
+}
 
 
  
 #@@@ bitrix.news -> section.php:    
-    if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) {
-        die();
-    }
+if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) {
+    die();
+}
+
+/*@ Данные о разделе @*/
+$arFilter = [
+    'IBLOCK_ID' => $arParams['IBLOCK_ID'],
+    'ID' => $arResult["VARIABLES"]["SECTION_ID"],
+    "ACTIVE" => "Y",
+    'GLOBAL_ACTIVE' => 'Y',
+];
+
+$arSelect = [
+    "NAME",
+    "UF_*",
+];
+
+$sectionData = CIBlockSection::GetList(["SORT"=>"ASC"], $arFilter, false, $arSelect);
+
+if ($props = $sectionData->Fetch()) {
+    $APPLICATION->SetTitle($props['NAME']);
     
-    /*@ Данные о разделе @*/
-    $arFilter = [
-       'IBLOCK_ID' => $arParams['IBLOCK_ID'],
-       'ID' => $arResult["VARIABLES"]["SECTION_ID"],
-       "ACTIVE" => "Y",
-       'GLOBAL_ACTIVE' => 'Y',
-    ];
+    $textBeforeSert = $props['UF_TEXT_BEFORE_SERT'];
+}
     
-    $arSelect = [
-       "NAME",
-       "UF_*",
-    ];
-    
-    $sectionData = CIBlockSection::GetList(["SORT"=>"ASC"], $arFilter, false, $arSelect);
-    
-    if ($props = $sectionData->Fetch()) {
-        $APPLICATION->SetTitle($props['NAME']);
+/*@ Выводим подразделы: @*/
+
+$arFilter = [
+    'IBLOCK_ID' => $iBlockID,
+    'SECTION_ID' => $sectionID,
+    "ACTIVE" => "Y",
+    "GLOBAL_ACTIVE" => "Y",
+];
         
-        $textBeforeSert = $props['UF_TEXT_BEFORE_SERT'];
-    }
-    
-    /*@ Выводим подразделы: @*/
-    
-    $arFilter = [
-       'IBLOCK_ID' => $iBlockID,
-       'SECTION_ID' => $sectionID,
-       "ACTIVE" => "Y",
-       "GLOBAL_ACTIVE" => "Y",
-    ];
-            
-	$rsSect = CIBlockSection::GetList(["SORT"=>"ASC"], $arFilter);
-       
+$rsSect = CIBlockSection::GetList(["SORT"=>"ASC"], $arFilter);
+?>      
         
-    <? while ($childSection = $rsSect->GetNext()): ?>
-        <div>
-            <a href="<?= $childSection['SECTION_PAGE_URL'] ?>">
-                    <?= $childSection['NAME'] ?>
-            </a>
-            <?= $childSection['DESCRIPTION'] ?>	
-            
-            <?
-            	/*@ Выводим элементы из подраздела: @*/
-                $arSelect = ["ID", "IBLOCK_ID", "NAME", "DETAIL_PAGE_URL", "PREVIEW_PICTURE", "PROPERTY_PRICE"];
-                $arFilter = ["IBLOCK_ID" => $iBlockID, "SECTION_ID" => $childSection['ID'], "ACTIVE" => "Y"];
-                $elementsData = CIBlockElement::GetList([], $arFilter, false, false, $arSelect);
-            ?>
+<? while ($childSection = $rsSect->GetNext()): ?>
+    <div>
+        <a href="<?= $childSection['SECTION_PAGE_URL'] ?>">
+                <?= $childSection['NAME'] ?>
+        </a>
+        <?= $childSection['DESCRIPTION'] ?>	
+        
+        <?
+            /*@ Выводим элементы из подраздела: @*/
+            $arSelect = ["ID", "IBLOCK_ID", "NAME", "DETAIL_PAGE_URL", "PREVIEW_PICTURE", "PROPERTY_PRICE"];
+            $arFilter = ["IBLOCK_ID" => $iBlockID, "SECTION_ID" => $childSection['ID'], "ACTIVE" => "Y"];
+            $elementsData = CIBlockElement::GetList([], $arFilter, false, false, $arSelect);
+        ?>
 
 
-            <? while ($elemData = $elementsData->GetNext()): ?>
-                <? if ($elemData['ID'] === $childSection['ID']) continue; ?>
-                
-                <div class="col-md-4 col-sm-6">
-                	<img src="<?= CFile::GetPath($elemData['PREVIEW_PICTURE']) ?>" alt="<?= $elemData['NAME'] ?>">
-                	<div class="property">Цена: <?= $elemData['PROPERTY_PRICE_VALUE'] ?> руб.</div>
-                </div>
-            <? endwhile; ?>
-        </div>
-    <? endwhile ?>
-<? endif; ?>
+        <? while ($elemData = $elementsData->GetNext()): ?>
+            <? if ($elemData['ID'] === $childSection['ID']) continue; ?>
+            
+            <div class="col-md-4 col-sm-6">
+                <img src="<?= CFile::GetPath($elemData['PREVIEW_PICTURE']) ?>" alt="<?= $elemData['NAME'] ?>">
+                <div class="property">Цена: <?= $elemData['PROPERTY_PRICE_VALUE'] ?> руб.</div>
+            </div>
+        <? endwhile; ?>
+    </div>
+<? endwhile ?>
+
 
 
 <? /*@ Или выводим элементы: @*/
@@ -734,10 +723,7 @@ if ($request->isPost()) {
 
 
 
-
-
-<?
-    
+<?    
 #@@@ ЗАЛИТЬ РАЗДЕЛЫ/ТОВАРЫ:
 
 require($_SERVER["DOCUMENT_ROOT"]."/bitrix/header.php");
@@ -829,9 +815,11 @@ function getSectionsData($fileName)
 function createNewSections($sectionsData, $blockID)
 {
     foreach ($sectionsData as $sectionName => $sectionData) {
-        $parentSectionCODE = $sectionData['parentSectionCODE'];
-        $sectionCODE = $sectionData['sectionCODE'];
-        $nesting = $sectionData['nesting'];
+        [
+            'parentSectionCODE' => $parentSectionCODE,
+            'sectionCODE' => $sectionCODE,
+            'nesting' => $nesting
+        ] = $sectionData;
         
         $parentSectionID = getSectionIDByCode($parentSectionCODE, $nesting, $blockID);
         
@@ -914,7 +902,7 @@ function updateSections($data)
     foreach ($data as $itemData) {
         $bs = new CIBlockSection;
         
-        list($ID, $NAME, $SECTION_META_TITLE, $SECTION_META_DESCRIPTION) = $itemData;
+        [$ID, $NAME, $SECTION_META_TITLE, $SECTION_META_DESCRIPTION] = $itemData;
         $arFields = compact('NAME');
         $arFields["IPROPERTY_TEMPLATES"] = compact('SECTION_META_TITLE', 'SECTION_META_DESCRIPTION');
 
@@ -924,8 +912,7 @@ function updateSections($data)
     }
 }
 
-
-//**@@ Элементы:
+//**@@ ЭЛЕМЕНТЫ:
 function createElements($fileName, $type = 'catalog')
 {
     $counter = 0;
@@ -970,12 +957,12 @@ function createProduct($data)
 {
     $imgFolder = "{$_SERVER['DOCUMENT_ROOT']}/productUploader/img/products/";
 
-    list(
+    [
        $urn, $NAME, $listPhotos, $PRICE, $DETAIL_TEXT, $parentSectionID,
        $TITLE, $DESCRIPTION, $SQUARE, $STONE, $TERM_OF_PRODUCTION, $COLOR,
        $SIZE, $WASH_PRICE, $ADD_INSTALLED, $MATERIAL, $SERVICES, $SINK_METAL_COST,
        $WASH, $WASH_INTEGRATED, $GROOVE_FOR_WATER, $WASH_INTEGRATED_LIT, $EQUIPMENT
-       ) = $data;
+    ] = $data;
 
     $element = new CIBlockElement;
     
@@ -1161,7 +1148,7 @@ function getSymbolCode($urn)
 }
 
 
-# Слайдер:
+#@@@ СЛАЙДЕР:
 if (CModule::IncludeModule("iblock")) {
     // ID инфоблока из которого выводим элементы
     $iblock_id = 11;
@@ -1181,6 +1168,7 @@ if (CModule::IncludeModule("iblock")) {
             'PROPERTY_LIN_PR'
         ]
     );
+
     while($ar_fields = $my_slider->GetNext())
     {
         //Выводим элемент со всеми свойствами + верстка

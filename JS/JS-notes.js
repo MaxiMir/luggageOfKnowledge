@@ -498,19 +498,122 @@ function createFriendDOM(friend) {
         </div>
     </div>
     <style>
+        .container {
+            margin: 0 auto;
+            postion: relative;
+            max-width: rem(940px);
+            width: 95%;
+            display: flex;
+            flex-direction: column;
+        }
+        .wrapper {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
         .maincontent {
             height: 100%;
             transition: transform 1s;
             will-change: transform; // СSS оптимизация для тяжелой анимации
         }
+        
     </style>
 </body>    
 */
 const sections = $('.section');
 const display = $('.maincontent');
 
-// >>>>>> Что такое prototype <<<<<<
+let inscroll = false;
 
+const switchActiveClassInSideMenu = menuItemIndex => {
+    $('.fixed-menu__item')
+        .eq(menuItemIndex)
+        .addClass('active')
+        .siblings()
+        .removeClass('active');
+}
+
+
+const performTransition = sectionEq => {
+    if (inscroll) return;
+
+    const postion = sectionEq * -100 + '%';
+
+    inscroll = true;
+
+    sectionEq
+        .eq(sectionEq) // eq - cелектор по номеру
+        .addClass('active')
+        .siblings() // siblings - элементы одного уровня вложенности
+        .removeClass('active');  
+
+    display.css({
+        'transform': `translateY(${postion})`
+    });        
+
+    setTimeout(() => {
+        inscroll = false;
+        switchActiveClassInSideMenu(sectionEq);
+    }, 1300); // продолжительность транзишна + 300мс - время завершения инерции тачпада   
+};
+
+const scrollToSection = direction => {
+    const activeSection = sections.filter('.active');
+    const nextSection = activeSection.next();
+    const prevSection = activeSection.prev();
+
+    if (direction === 'next' &&  nextSection.length) {
+        performTransition(nextSection.index());
+    }
+
+    if (direction === 'prev' && prevSection.length) {
+        performTransition(prevSection.index());
+    }
+};
+
+
+
+$('.wrapper').on('wheel', e => {
+    const deltaY = e.originalEvent.deltaY; // e.originalEvent - оригинальный e без обертки jQuery
+
+    if (deltaY > 0) { 
+        scrollToSection('next');
+    } 
+
+    if (deltaY < 0) { 
+        scrollToSection('prev');
+    }
+});
+
+
+$(document).on('keydown', e => {
+    switch (e.key) {
+        case 38:
+            scrollToSection('next'); 
+            break;
+        case 40:
+            scrollToSection('prev'); 
+            break;
+    }
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// >>>>>> Что такое prototype <<<<<<
 // #1 добавляем всем объектам метод sayHello:
 const maxiMir = {
     name: "Maxim",
@@ -733,6 +836,14 @@ for(let key in person) {
         console.log('Key', key); // => #1 Ничего не выведет без enumerable
     }
 }
+
+// объект без прототипа
+const data = Object.create(null);
+data.text = "Привет";
+
+alert(data.text); // Привет
+alert(data.toString); // undefined
+
 
 for(let key in person2) {
     console.log('Key', key); // => Key name \n Key birthYear
