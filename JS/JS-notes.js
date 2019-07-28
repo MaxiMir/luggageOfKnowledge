@@ -495,6 +495,11 @@ function createFriendDOM(friend) {
                     ....
                 </div>
             </section>
+            <section class="section best">
+                <div class="container">
+                    ....
+                </div>
+            </section>
         </div>
     </div>
     <style>
@@ -517,7 +522,12 @@ function createFriendDOM(friend) {
             transition: transform 1s;
             will-change: transform; // СSS оптимизация для тяжелой анимации
         }
-        
+        .section {
+            height: 100%;
+            position: relative;
+            display: flex;
+            overflow: hidden;
+        }
     </style>
 </body>    
 */
@@ -525,6 +535,9 @@ const sections = $('.section');
 const display = $('.maincontent');
 
 let inscroll = false;
+
+const md = new MobileDetect(window.navigator.userAgent); // mobile-detect
+const isMobile = md.mobile();
 
 const switchActiveClassInSideMenu = menuItemIndex => {
     $('.fixed-menu__item')
@@ -534,9 +547,14 @@ const switchActiveClassInSideMenu = menuItemIndex => {
         .removeClass('active');
 }
 
-
 const performTransition = sectionEq => {
     if (inscroll) return;
+
+    const sectionEqNum = parseInt(sectionEq);
+
+    if (!!sectionEq === false) {
+        console.error('неверное значение для аргумента sectionEq');
+    }
 
     const postion = sectionEq * -100 + '%';
 
@@ -573,7 +591,6 @@ const scrollToSection = direction => {
 };
 
 
-
 $('.wrapper').on('wheel', e => {
     const deltaY = e.originalEvent.deltaY; // e.originalEvent - оригинальный e без обертки jQuery
 
@@ -586,6 +603,9 @@ $('.wrapper').on('wheel', e => {
     }
 });
 
+$('.wrapper').on('touchmove', e => { // убираем белую полосу при прокрутке вверху/внизу
+    e.preventDefault();
+});
 
 $(document).on('keydown', e => {
     switch (e.key) {
@@ -597,6 +617,18 @@ $(document).on('keydown', e => {
             break;
     }
 });
+
+if (isMobile) {
+    $(window).swipe({ // jquery touchSwipe:
+        swipe: function (event, direction) {
+            const nextOrPrev = direction === 'up' ? 'next' : 'prev';
+    
+            scrollToSection(nextOrPrev);
+        }
+    });
+}
+
+
 
 
 

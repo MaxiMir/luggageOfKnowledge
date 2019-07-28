@@ -1,0 +1,359 @@
+/* ######## Vue ######### */
+<?
+
+# http://book.loftschool.com/vuejs
+
+/** @ ЗАЧЕМ?
+  * Обеспечивать сложный front-end
+  * SPA, PWA
+  * Отдельные виджеты  
+  * Реактивность - данные сообщают об их изменений, и представление отображает текущее состояние модели
+**/
+
+/** @ ЧТО?
+  * Виртуальный DOM
+  * Система событий
+  * Система шаблонов
+  * Двусторонная связь данных
+**/
+
+/** @ Виртуальный дом
+  * Представление реального DOM в виде объекта JS
+  * Оптимальный процесс взаимодействия
+  * Меньшее количество обращений к DOM
+**/
+
+
+// FILE: index.html: ?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta chatset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>vue-js</title
+	<script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script> <!-- подключаем вверху -->
+	<style>
+		[v-cloak]: {
+			display: none;
+		}
+	</style>
+</head>
+<body>
+    <div id="app" v-cloak> <!-- атрибут v-cloak будет у элемента, до тех пор, пока Vue его не обработает -->
+		<h1>{{ title }}</h1> <!-- ИЛИ: <h1 v-text="title"></h1> если кроме title ничего нет -->
+		
+		<!-- v-pre: -->
+		<p v-pre>{{ title }}</p> <!-- {{ title }} не будет обработан Vue -->
+
+		<!-- v-once: -->
+		<p v-text="text" v-once></p> <!-- перерисован будет только 1 раз --> 
+		<p v-text="text"></p>
+		
+		 <!-- v-on: -->
+		<input 
+			type="text" 
+			v-on:input="handleChange"
+		> <!-- v-on - обработка событий, input - имя события, handleChange - имя метода для обработки 
+
+		! Сокращенная рекомендуемая запись: v-on:input="handleChange" -> @input="handleChange"
+		-->
+
+		<!-- Несколько обработчиков: -->
+		<input 
+			type="text" 
+			v-on:"{input="handleChange", focus:handleFocus}"
+		> 
+
+		<!-- Вывод динамических свойств в атрибутах элемента:-->
+		<a v-bind:href="href">ссылка</a> <!-- v-bind +  без {{ }}. В v-bind можно реализовывать JS код
+
+		! Сокращенная рекомендуемая запись: v-bind:href="href" -> :href="href"
+		-->
+
+
+		<!-- Вывод HTML:-->
+		<p v-html="link"></p>
+
+		<!-- Методы с параметрами:-->
+		<div>{{textOfBtn.textOfBtn}}, был клик в x = {{textOfBtn.coordX}}</div>
+		<button @click="handleClick('ONE', $event)">Изменить</button> <!-- $event - данные о событии -->
+		<button @click="handleClick('TWO', $event)">Изменить</button>
+
+
+		<!--
+			v-model — позволяет связать элемент ввода в шаблоне и заставляет его изменять свойство данных Vue, когда пользователь меняет содержимое поля в шаблоне;
+			v-show — элемент не будет исчеpпать из разметки, а будет добавляться display: none;
+			v-if, v-else и v-else-if — директивы условий;
+			v-for — позволяет создать список элементов.
+		-->
+	</div>
+	 
+    <script src="main.js"></script>
+</body>
+
+
+
+<script src="main.js"></script>
+
+<script>
+// FILE: main.js:
+new Vue({
+	el: '#app', 
+	data: { // данные которые хотим отрисовать в компоненте
+		title: 'Hello world',
+		text: 'some text',
+		href: '//gogle.com',
+		link: "<a href='google.com'>google.com</a>",
+		textOfBtn: { // объединяем данные одной сущности в объект
+			'title': 'Ждем клика',   
+			coordX: 0  
+		}  
+	},
+	methods: {
+		handleChange(e) {
+			this.title = e.target.value // меняем title на значение из input
+		},
+		handleClick(newTitle, e) {
+			this.textOfBtn.title = newTitle;
+			this.textOfBtn.coordX = e.clientX;
+		} 
+	}
+});
+
+</script>
+
+
+
+
+
+<!-- # Модификаторы событий -->
+
+<div id="app">
+	<div class="outer" @click.capture="handleOuter"> <!-- события срабатывают в момент погружения
+		@click.stop <-> e.stopPropagation()
+		@click.self - обработчик сработает только на том элементе, на котором произошло событие
+		@click.once - обработчик сработает только 1 раз
+		@click.passive - соответствует опции passive в addEventListener. Улучшить взаимодейтсвие пользователя со скроллом: при нажатии элемента в пассивный элемент, скролл не будет думать нужно ли ему скроллится или нет, а сразу будет производить необходимые операции.
+		@click.left - нажатие левой кнопки мыши
+		@click.right - нажатие правой кнопки мыши
+		@click.middle - нажатие средней кнопки мыши
+		@keydown.alt.enter - нажатие alt + enter (tab|delete|space|esc|up|down|left|right|down|alt|meta). Можжно и с кодом кнопки @keydown.alt.67
+		-->
+		внешний
+		<div class="inner" @click="handleInner"></div>
+
+		<a @click.prevent href="#">ссылка</a> <!-- отменяем действия по умолчанию @click.prevent.once() - отменить действия по умолчанию 1 раз --> 	
+	</div>
+</div>		
+
+<script src="main.js"></script>
+
+<script>
+// FILE: main.js:
+new Vue({
+	el: '#app', 
+	data: { 
+		expample: {
+			'title': 'Ждем клика',   
+			coordX: 0  
+		}  
+	},
+	methods: {
+		handleOuter(e) {
+			console.log('Внешний');
+		},
+		handleInner(newTitle, e) {
+			console.log('Внутренний');
+		}
+	}
+});
+</script>
+
+<!--
+Без @click:
+Внутренний
+Внешний
+
+C @click.capture:
+Внешний
+Внутренний
+
+С @click.stop:
+Внутренний
+-->
+
+
+<!-- # Вычисляемые свойства -->
+<div id="app">
+	<h1>{{ reversedTitle }}</h1>
+
+	<h2>{{ title }}</h2>
+	<button @click="setupTitle">Вывести #1</button>
+	<button @click="setupSecondTitle">Вывести #2</button>
+</div>
+
+<script src="main.js"></script>
+
+<script>
+// FILE: main.js:
+new Vue({
+	el: '#app', 
+	data: { 
+		title: 'Hello world!'
+	},
+	computed: { // вычисляемые свойства (выполняются 1 раз, затем кэшируются)
+		reversedTitle() {
+			return this.title.split('').revese().join();
+		},
+		newTitle() {
+			return 'new Title'; // #1
+		},
+		newSecondTitle: { // #2 !через объект
+			get() {
+				return 'new second Title';		
+			},
+			set(value) {
+				this.title = `new second Title ${value}`
+			}
+		}
+	},
+	methods: {
+		setupTitle() {
+			this.title = this.newTitle; // # берем из #1
+		},
+		setupSecondTitle() {
+			this.newSecondTitle = 'from setter'; // setter
+			this.title = this.newSecondTitle; // getter
+		}
+	}
+});
+</script>
+
+
+
+<!-- # Вотчеры  -->
+<div id="app">
+	<h1>{{ title }}</h1>
+
+	<p>{{ title }}</pack>
+</div>
+
+<script src="main.js"></script>
+
+<script>
+// FILE: main.js:
+new Vue({
+	el: '#app', 
+	data: { 
+		title: 'Hello world!',
+		status: ""
+	},
+	methods: {
+		setupTitle() {
+			this.title = "new title";
+		}
+	},
+	watch: { // указываем свойства, за которыми будем следить
+		title(value) { // в value на что было изменено
+			this.status = `title изменился на ${value}`;
+		}
+	}
+});	
+</script>
+
+
+
+<!-- # Управление классами -->
+<div id="app">
+	<h1 class="static-class" :class="{active: changed}"></h1> <!-- className: propName (propName - true ? добавляем класс className : не добавляем ) 
+
+	// еще пример: класс active и colored - по условию, класс error - всегда:
+	:class="[{ active: changed, active: colored }, errorClass]" 
+	-->
+
+	<button @click="setupTitle">
+		Вывести
+	</button>	
+</div>
+
+<script src="main.js"></script>
+
+<script>
+// FILE: main.js:
+new Vue({
+	el: '#app', 
+	data: { 
+		title: 'Hello world!',
+		activeClass: 'active',
+		errorClass: 'error'
+		changed: false
+	},
+	methods: {
+		setupTitle() {
+			this.changed = !this.changed;
+		}
+	}
+});
+</script>
+
+
+
+<!-- # Работа со стилями: -->
+<div id="app">
+	<h1 :style="styles">{{title}}</h1> 
+	<p :style="{color: fontNewColor, backgroundColor: backgroundColor }">
+		Some text
+	</p>
+</div>
+
+<script src="main.js"></script>
+
+<script>
+// FILE: main.js:
+new Vue({
+	el: '#app', 
+	data: { 
+		title: 'Hello world!',
+		styles: {
+			color: 'white',
+			backgroundColor: 'blue',
+			fontSize: '20px'
+		},
+		fontNewColor: 'blue',
+		backgroundColor: 'pink'
+	}
+});
+</script>
+
+
+<!-- # Условный рендеринг: -->
+<div id="app">
+	<h1 v-if="num === 0">0</h1>
+	<h1 v-else-if="num <= 5">меньше 5</h1> <!-- должны распологаться друг за другом -->
+	<h1 v-else>больше 5</h1>
+
+	<p v-show="show">Some text</p> <!-- при false делает display: none -->
+	<button @click="change">
+		Изменить
+	</button>
+</div>
+
+<script src="main.js"></script>
+
+<script>
+// FILE: main.js:
+new Vue({
+	el: '#app', 
+	data: { 
+		show: true;
+		num: 0
+	},
+	methods: {
+		change() {
+			this.show = !this.show;
+			this.num += 1;
+		}
+	}
+});
+</script>
