@@ -3,25 +3,24 @@
 
 # http://book.loftschool.com/vuejs
 
-/** @ ЗАЧЕМ?
+/** 
+  @ ЗАЧЕМ?
   * Обеспечивать сложный front-end
   * SPA, PWA
   * Отдельные виджеты  
   * Реактивность - данные сообщают об их изменений, и представление отображает текущее состояние модели
-**/
 
-/** @ ЧТО?
+  @ ЧТО?
   * Виртуальный DOM
   * Система событий
   * Система шаблонов
   * Двусторонная связь данных
-**/
 
-/** @ Виртуальный дом
+  @ Виртуальный дом
   * Представление реального DOM в виде объекта JS
   * Оптимальный процесс взаимодействия
   * Меньшее количество обращений к DOM
-**/
+*/
 
 
 // FILE: index.html: ?>
@@ -94,9 +93,8 @@
 
 
 
-<script src="main.js"></script>
+<script src="main.js"></script><script>
 
-<script>
 // FILE: main.js:
 new Vue({
 	el: '#app', 
@@ -125,10 +123,7 @@ new Vue({
 
 
 
-
-
 <!-- # Модификаторы событий -->
-
 <div id="app">
 	<div class="outer" @click.capture="handleOuter"> <!-- события срабатывают в момент погружения
 		@click.stop <-> e.stopPropagation()
@@ -147,9 +142,8 @@ new Vue({
 	</div>
 </div>		
 
-<script src="main.js"></script>
+<script src="main.js"></script><script>
 
-<script>
 // FILE: main.js:
 new Vue({
 	el: '#app', 
@@ -193,9 +187,8 @@ C @click.capture:
 	<button @click="setupSecondTitle">Вывести #2</button>
 </div>
 
-<script src="main.js"></script>
+<script src="main.js"></script><script>
 
-<script>
 // FILE: main.js:
 new Vue({
 	el: '#app', 
@@ -239,9 +232,8 @@ new Vue({
 	<p>{{ title }}</pack>
 </div>
 
-<script src="main.js"></script>
+<script src="main.js"></script><script>
 
-<script>
 // FILE: main.js:
 new Vue({
 	el: '#app', 
@@ -277,9 +269,8 @@ new Vue({
 	</button>	
 </div>
 
-<script src="main.js"></script>
+<script src="main.js"></script><script>
 
-<script>
 // FILE: main.js:
 new Vue({
 	el: '#app', 
@@ -307,9 +298,8 @@ new Vue({
 	</p>
 </div>
 
-<script src="main.js"></script>
+<script src="main.js"></script><script>
 
-<script>
 // FILE: main.js:
 new Vue({
 	el: '#app', 
@@ -339,9 +329,8 @@ new Vue({
 	</button>
 </div>
 
-<script src="main.js"></script>
+<script src="main.js"></script><script>
 
-<script>
 // FILE: main.js:
 new Vue({
 	el: '#app', 
@@ -357,3 +346,272 @@ new Vue({
 	}
 });
 </script>
+
+
+<!-- # Рендеринг списков: -->
+<div id="app">
+	<ul> <!-- массивы -->
+		<li v-for="elem in arr"> <!-- для получения индексов "(elem, index) in arr" -->
+			{{elem}}
+		</li>
+	</ul>
+	<ul> <!-- объекты -->
+		<li v-for="(val, prop) in obj">  <!-- перебор объекта -->
+			{{prop}} : {{val}}
+		</li>	
+	</ul>
+	<ul>
+		<li 
+			v-for="member in arrObj"
+			@click="handleClick" 
+			v-if="member.salary < 1500"
+		><!-- В цикле вышаем обработчики на клик и вывод по условию -->
+			<p>name: {{member.name}}</p>
+			<p>salary: {{member.salary}}</p>
+		</li>
+	</ul>
+	<ul>
+		<li v-for="n in 10"><!-- выводим 10 li-->
+			{n}
+		</li>
+	</ul>
+
+</div>
+
+<script src="main.js"></script><script>
+
+// FILE: main.js:
+new Vue({
+	el: '#app', 
+	data: { 
+		arr: ['one', 'two', 'three'],
+		obj: {
+			prop1: 'val1',
+			prop2: 'val2'
+		},
+		arrObj: [
+			{name: 'John', salary: 2000},
+			{name: 'Foo', salary: 500},
+			{name: 'Bar', salary: 1500}
+		]
+	}
+});
+</script>
+
+
+<!-- # Объект Vue -->
+<div id="app">
+	<h1>{{title}}</h1>
+</div>
+
+<script src="main.js"></script><script>
+
+// FILE: main.js:
+const vueModel = new Vue({
+	data: { // здесь объявляется реактивные поля
+		title: 'hello world!'
+	},
+	methods: {
+		testMeth() {
+			this.$data.newProp = '123'
+		}
+	}
+});
+
+vueModel.$mount('#app'); // монтируем в 'селекторЭлемента'
+
+setTimeout(() => {
+	vueModel.$data.title = 'Поменялось извне' // изменяем title через 2с (таким образом можно менять поля только из data)
+}, 2000);
+
+/*
+На стадии "mount" содержимое DOM узла, указанного в свойстве "el" полностью заменяется 
+на результат выполнения рендер-функции Vue
+*/
+</script>
+
+
+
+<!-- # Создание компонента -->
+<div id="app"> <!--используем в примонтированном объекте: -->
+	<hello></hello><!-- каждый компонент независимая сущность -->
+	<hello></hello><!-- каждый компонент независимая сущность -->
+	<hello></hello><!-- каждый компонент независимая сущность -->
+</div>
+
+<script src="main.js"></script><script>
+
+// FILE: main.js:
+Vue.component('hello', { // экземляр компонета. hello - название компонента, в {} - настройки
+	template: '<h1 @click="handleClick">{{title}}</h1>',
+	data() { // ! в экземляре компонента data должна возвращать объект
+		return {
+			'title': 'hello world'
+		}
+	},
+	methods: {
+		handleClick() {
+			this.title = 'title from handler';
+		}
+	}
+});
+
+const vueModel = new Vue();
+vueModel.$mount('#app');
+</script>
+
+
+
+<!-- # Шаблон компонента + Локальные компоненты -->
+<div id="app"> <!--компоненты выводим в примонтированном объекте: -->
+	<hello></hello><!-- каждый компонент независимая сущность -->
+	<hello></hello><!-- каждый компонент независимая сущность -->
+	<hello></hello><!-- каждый компонент независимая сущность -->
+
+	<!-- или так -->
+	<hello v-for="n in 3"></hello>
+</div>
+
+<script type="text/x-template" id="helloTemplate">
+	<div>
+		<h1 @click="handleClick">{{title}}</h1>
+		<outerComponent></outerComponent><!-- выводим глобальный компонент-->
+		<innerComponent></innerComponent><!-- выводим локальный компонент-->
+	</div>
+</script>
+
+<script src="main.js"></script><script>
+
+// FILE: main.js:
+Vue.component('outerComponent', {
+	template: '<span> внутренний компонент</span>'
+});
+
+
+Vue.component('hello', { 
+	template: "#helloTemplate", // указываем селектор шаблона
+	data() { 
+		return {
+			'title': 'hello world'
+		}
+	},
+	mounted() { // компонент был вмонтирован (полная готовность к функционированию)
+		console.log('компонерт hello вмонтирован');
+	},
+	methods: {
+		handleClick() {
+			this.title = 'title from handler';
+		}
+	},
+	components: { // локальный компонент:
+		innerComponent: {
+			template: '<span> внутренний компонент</span>'
+		}
+	}
+});
+
+const vueModel = new Vue(); 
+vueModel.$mount('#app');
+</script>
+
+
+
+<!-- # Свойства компонента -->
+<div id="app"> 
+	<hello 
+		:key="name"
+		v-for="name in names"
+		:name="name" 
+	></hello><!--для внутренней оптимизации Vue, добавляем уникальный key-->
+<div>
+	
+<script type="text/x-template" id="helloTemplate">
+	<h1>Hello {{name}}!</h1>
+</script>
+
+<script src="main.js"></script><script>
+
+// FILE: main.js:
+Vue.component('hello', { 
+	props: ['name'], // регистрируем с какими свойствами будем работать в компоненте
+	template: "#helloTemplate",
+});
+
+const vueModel = new Vue({
+	data() { // data добавляем в корневой компонент, чтобы данные из нее были доступны в цикле
+		return {
+			names: ['Maxim', 'Bill', 'John', 'Hank']
+		}
+	}
+});
+vueModel.$mount('#app');
+</script>
+
+
+
+<!-- # Пользовательские события -->
+<div id="app"> 
+	<hello 
+		:key="name"
+		v-for="name in names"
+		:name="name" 
+	></hello><!--для внутренней оптимизации Vue, добавляем уникальный key-->
+<div>
+	
+<script type="text/x-template" id="helloTemplate">
+	<h1>Hello {{title}}!</h1>
+	<child @clickEmitted="changeTitle"></child> <!-- #2 -->
+</script>
+	
+<script type="text/x-template" id="childTemplate">
+	<button @click="handleClick">
+		Оповестить
+	</button>
+</script>
+
+<script src="main.js"></script><script>
+
+
+// FILE: main.js:
+Vue.component('child', {
+	template: "#childTemplate",
+	methods: {
+		handleClick() {
+			this.$emit('clickEmitted', {
+				string: "new title",
+				num: 123
+			}); // #1
+			// возможность обратится к родительскому компоненту. 
+			// clickEmitted - имя пользовательского события
+			// {} - передаваемые данные
+		}
+	}
+});
+
+Vue.component('hello', { 
+	props: ['name'], // регистрируем с какими свойствами будем работать в компоненте
+	template: "#helloTemplate",
+	data() {
+		return {
+			title: 'world'
+		}
+	},
+	methods: {
+		changeTitle(payload) { // #3
+			this.title = newTitle;
+		}
+	}
+});
+
+const vueModel = new Vue({
+	data() { // data добавляем в корневой компонент, чтобы данные из нее были доступны в цикле
+		return {
+			names: ['Maxim', 'Bill', 'John', 'Hank']
+		}
+	}
+});
+vueModel.$mount('#app');
+
+</script>
+
+

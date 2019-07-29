@@ -453,6 +453,7 @@ const loadButton = document.querySelector('#loadButton');
 const result = document.querySelector('#result');
 
 loadButton.addEventListener('click', () => {
+    // #1:
     const xhr = new XMLHttpRequest();
 
     xhr.open('GET', 'friends.json');
@@ -473,6 +474,11 @@ loadButton.addEventListener('click', () => {
             }
         }
     });
+
+    // #2:
+    fetch('data.txt')
+        .then(response => response.text())
+        .then(text => console.log(text));
 });
 
 function createFriendDOM(friend) {
@@ -628,6 +634,28 @@ if (isMobile) {
     });
 }
 
+
+const loadButton = document.querySelector('#loadButton');
+const gallery = document.querySelector('#gallery');
+const urls = [
+    'https://ya.ru/images/1.png',
+    'https://ya.ru/images/2.png',
+    'https://ya.ru/images/3.png'
+];
+const loadImage = url => {
+    return new Promise(resolve => {
+        const img = document.createElement('img');
+        gallery.appendChild(img);
+        img.src = url;
+        img.addEventListener('load', () => resolve());
+    });
+}
+
+loadButton.addEventListener('click', () => {
+    loadImage(urls[0])
+        .then(() => loadImage(urls[1]))
+        .then(() => urls[2])
+});
 
 
 
