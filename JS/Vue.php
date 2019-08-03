@@ -615,3 +615,22 @@ vueModel.$mount('#app');
 </script>
 
 
+<!-- # Vue CLI --
+https://cli.vuejs.org/guide/creating-a-project.html#using-the-gui
+
+$ npm install -g @vue/cli // yarn global add @vue/cli
+$ vue create my-vue-project 
+$ vue inspect // выведет конфиг данного форкфлоу, или сохраним в файл: vue inspect > output.js
+
+// Для расширения/изменения сборки, в корне необходимо создать файл vue.config.js:
+module.exports = {
+	// настройки для сборки webpack
+}
+
+
+// Создаем более простую сборку с webpack и singlefile компоненты:
+vue init webpack-simple vue-components
+cd vue-components
+npm install // устанавливаем все зависимости
+
+-->

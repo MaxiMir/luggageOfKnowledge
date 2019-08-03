@@ -47,3 +47,85 @@
         }
     }
 }
+
+
+
+
+// FILE main.scss:
+
+// colors:
+$orange: #e45028;
+
+// breakpoints:
+$tablets: 768px;
+$phones: 480px;
+
+// normalize
+@import "_misc/normalize.scss";
+
+// media:
+@import "_misc/media";
+
+// setups:
+@import "_misc/mixins";
+@import "_misc/fonts";
+@import "_misc/layout";
+
+// blocks:
+@import "blocks/btn.scss";
+@import "blocks/fixed-menu.scss";
+@import "blocks/best.scss";
+
+
+// FILE media:
+@function rem($px) {
+    @return $px / 16px + 0 rem;
+}
+
+@mixin tablets() {
+    @media screen and (max-width: $tablets) {
+
+    }
+}
+
+@mixin phones() {
+    @media screen and (max-width: $phones) {
+        
+    }
+}
+
+
+// FILE: layout.scss:
+html {
+    font-size: 16px;
+
+    @include tablets() {
+        font-size: 14px;
+    }
+
+    @include tablets() {
+        font-size: 13px;
+    }    
+}
+
+
+
+// Пример:
+@mixin test() {
+    .class {
+        @content;
+    }
+}
+
+.test-class {
+    @include test { // ! исключение - медиазапросы оборачивают снаружи
+        color: red; 
+    }
+}
+
+// =>
+.test-class {
+    .class {
+        color: red; 
+    }
+}
