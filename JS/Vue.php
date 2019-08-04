@@ -2,6 +2,7 @@
 <?
 
 # http://book.loftschool.com/vuejs
+# SERVER SITE RENDERING - фреймворк NUXT JS + node
 
 /** 
   @ ЗАЧЕМ?
@@ -615,11 +616,21 @@ vueModel.$mount('#app');
 </script>
 
 
+<!-- # Vuex 
+https://vuex.vuejs.org
+Vuex - библиотека для работы с данными во Vue
+
+$ vue create .
+-->
+
+
+
+
 <!-- # Vue CLI --
 https://cli.vuejs.org/guide/creating-a-project.html#using-the-gui
 
 $ npm install -g @vue/cli // yarn global add @vue/cli
-$ vue create my-vue-project 
+$ vue create my-vue-project // генерируем новый проект
 $ vue inspect // выведет конфиг данного форкфлоу, или сохраним в файл: vue inspect > output.js
 
 // Для расширения/изменения сборки, в корне необходимо создать файл vue.config.js:
