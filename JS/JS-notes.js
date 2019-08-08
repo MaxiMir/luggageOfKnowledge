@@ -1377,7 +1377,7 @@ function* numberGen(n = 10) {
     }
 }
 
-const num = numberGenerator(2);
+const num = numberGen(2);
 num.next(); // {value: 0, done: false}
 num.next(); // {value: 1, done: false}
 num.next(); // {value: undefined, done: true}
@@ -1423,3 +1423,12 @@ for (let k of iter(6)) {
 // 3
 // 4
 // 5
+
+
+// # Методы массивов find и findIndex
+const people = [
+    { name: "Макс", age: 25, budget: 40000},
+    { name: "Игорь", age: 21, budget: 80000}
+];
+const igor = people.find(person => person.name === 'Игорь'); // { name: "Игорь", age: 21, budget: 80000},
+const igorIndex = people.findIndex(person => person.name === 'Игорь'); // 1

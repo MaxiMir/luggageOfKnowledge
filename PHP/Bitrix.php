@@ -1183,3 +1183,91 @@ if (CModule::IncludeModule("iblock")) {
 
 // Если попробуете вывести свойство типа HTML/TEXT получите Array. Для его вывода используйте конструкцию:
 echo htmlspecialcharsBack($ar_fields['PROPERTY_КОД_СВОЙСТВА_VALUE']["TEXT"]);
+
+
+
+
+#@@@ Генерация меню с выпающими меню из каталога и элементов инфоблока:
+global $APPLICATION;
+const CAT_BLOCK_ID = 49;
+const BRAND_BLOCK_ID = 44;
+
+
+$getCatalogLinks = function () use ($APPLICATION) {
+    return $APPLICATION->IncludeComponent(
+        "adpro:menu.sections",
+        "",
+        [
+            "AR_FILTER" => ["!UF_SHOW_MENU_CHILDS" => false],
+            "IS_SEF" => "Y",
+            "SEF_BASE_URL" => "/category/",
+            "SECTION_PAGE_URL" => "#SECTION_CODE_PATH#/",
+            "DETAIL_PAGE_URL" => "#SECTION_CODE_PATH#/#ELEMENT_CODE#",
+            "IBLOCK_TYPE" => "category",
+            "IBLOCK_ID" => CAT_BLOCK_ID,
+            "DEPTH_LEVEL" => 2,
+            "CACHE_TYPE" => "A",
+            "CACHE_TIME" => "1800"
+        ],
+        false
+    );
+};
+
+$getBrands = function() {
+    $brands = [];
+
+    $arFilter = [
+        "IBLOCK_ID" => BRAND_BLOCK_ID,
+        'ACTIVE' => 'Y'
+    ];
+    $arSelect = [
+        'NAME',
+        'DETAIL_PAGE_URL'
+    ];
+
+    $res = CIBlockElement::GetList([], $arFilter, false, false, $arSelect);
+
+    while ($arFields = $res->GetNext()) {
+        ['NAME' => $NAME, 'DETAIL_PAGE_URL' => $DETAIL_PAGE_URL] = $arFields;
+
+        $brands[] = compact('NAME', 'DETAIL_PAGE_URL');
+    }
+
+    return $brands;
+};
+
+$generateBrandsLinks = function () use ($getBrands) {
+    $brandLink = [
+        [
+            "Бренды",
+            "/vendors/",
+            ["/vendors/"],
+            [
+                "FROM_IBLOCK" => 2,
+                "IS_PARENT" => 1,
+                "DEPTH_LEVEL" => 1
+            ]
+        ]
+    ];
+
+    $brands = $getBrands();
+
+    return array_reduce($brands, function ($acc, $linkData) {
+        $acc[] = [
+            $linkData['NAME'],
+            $linkData['DETAIL_PAGE_URL'],
+            [$linkData['DETAIL_PAGE_URL']],
+            [
+                "FROM_IBLOCK" => 2,
+                "IS_PARENT" => '',
+                "DEPTH_LEVEL" => 2
+            ]
+        ];
+
+        return $acc;
+    }, $brandLink);
+};
+
+$aMenuLinksExt = $getCatalogLinks();
+$brandLinks = $generateBrandsLinks();
+$aMenuLinks = array_merge($aMenuLinksExt, $brandLinks);
