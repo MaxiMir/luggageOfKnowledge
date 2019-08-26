@@ -50,8 +50,11 @@
 	$end = microtime(true);
 	echo "\nTIME:". ($end - $start);
 	
-    
-    #@@@ Создать ассоциативный массив исходя из вложенности разделов:
+	
+	
+	/*@@@ 
+	Создать ассоциативный массив исходя из вложенности разделов:
+	*/
     $arElements = [
 	    [
 		    0 => "Раздел1 КОРЕНЬ",
@@ -175,6 +178,9 @@
 	    return $getTreeData['tree'];
     }
 
+
+
+
     class URN 
     {
     	#@@@ Возвращает текущий URN:
@@ -217,3 +223,157 @@
     }
 	
 	
+
+	#@@@ Генерация sitemap.xml на yii2:
+	// FILE: /backend/config/main.php
+	return [
+		// ...
+		'urlManager' => [
+			'enablePrettyUrl' => true,
+			'showScriptName' => false,
+			/*@ Правила для sitemap @*/
+			'rules' => [
+				[
+					"pattern" => "sitemap",
+						"route" => "site/sitemap",
+					],
+				'<action:login|logout>' => 'site/<action>',
+			]
+		],
+	]   
+
+
+	// FILE: /frontend/config/urlManager.php
+	return [
+		// ...
+		/*@ sitemap  @*/
+		'sitemap' => 'site/sitemap',
+	]
+
+
+	// FILE: /frontend/controllers/SiteController.php:
+	namespace frontend\controllers;
+		
+	use frontend\models\Sitemap;
+
+
+	class SiteController extends Controller
+	{
+		// ...
+		
+		public function actionSitemap()
+		{
+			$siteMap = new SiteMap();
+			$siteMapData = Yii::$app->cache->get('siteMapData');
+			$host = Yii::$app->request->hostInfo;
+		
+			if (!$siteMapData) {
+				$siteMapData = $siteMap->getURNData();
+				Yii::$app->cache->set('siteMapData', $siteMapData, 3600 * 24);
+			}
+		
+			Yii::$app->response->format = \yii\web\Response::FORMAT_RAW;
+			Yii::$app->response->headers->add('Content-Type', 'text/xml');
+			
+			return $this->renderPartial(
+				'xml',
+				compact('host', 'siteMapData')
+			);
+		}
+	}
+
+	// FILE: frontend/models/Sitemap.php:
+	namespace frontend\models;
+	
+	use common\models\Category;
+	use common\models\Post;
+	use Yii;
+	use yii\base\Model;
+	
+	
+	/**
+	 * Class SiteMap
+	 *
+	 * @package frontend\models
+	 */
+	class Sitemap extends Model
+	{
+		/**
+		  * @return array - URN всех страниц
+		  */
+		function getURNData()
+		{
+			$categoriesURNs = $this->getCategoriesURN();
+			$pagesURNs = $this->getPagesURN();
+			
+			return array_merge($categoriesURNs, $pagesURNs);
+		}
+		
+		/**
+		  * @return array URN - категории
+		  */
+		function getCategoriesURN()
+		{
+			$urlsData = [];
+			$priority = 0.5;
+			
+			$categories = Category::find()->all();
+			
+			foreach ($categories as $category) {
+				list($urn, $updDate) = [
+					$category->url,
+					date('c', $category->updated_at),
+				];
+				
+				$urlsData[$urn] = compact('priority', 'updDate');
+			}
+			
+			return $urlsData;
+		}
+		
+		/**
+		  * @return array URN - блог + статика
+		  */
+		function getPagesURN()
+		{
+			$sectionBlogId = 17;
+			$priority = 0.8;
+			$urlsData = [];
+			
+			$sectionBlogURN = "/" . Post::findOne($sectionBlogId)->slug . "/";
+			$posts = Post::find()->all();
+			
+			foreach ($posts as $post) {
+				list($urn, $updDate, $isBlogNews) = [
+					"{$post->slug}/",
+					date('c', $post->updated_at),
+					$post->post_type == 1
+				];
+				
+				$urn = !$isBlogNews ? "/{$urn}" : "{$sectionBlogURN}{$urn}";
+				
+				$urlsData[$urn] = compact('priority', 'updDate');
+			}
+			
+			return $urlsData;
+		}
+	}
+	
+	
+	// FILE: frontend/views/site/xml.php: ?>
+	<xml version="1.0" encoding="UTF-8">
+		<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+			<url>
+				<loc><?= $host ?></loc>
+				<lastmod>daily</lastmod>
+				<priority>1</priority>
+			</url>
+			<? foreach ($siteMapData as $urn => $siteMapItemData): ?>
+				<url>
+					<loc><?= $host ?><?= $urn ?></loc>
+					<lastmod><?= $siteMapItemData['updDate'] ?></lastmod>
+					<priority><?= $siteMapItemData['priority'] ?></priority>
+				</url>
+			<? endforeach; ?>
+		</urlset>
+	</xml>

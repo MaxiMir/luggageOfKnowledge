@@ -434,7 +434,7 @@ REGEXP 'a{3,5}' // a - может встречаться от [3,5] раз
 SELECT * FROM salers WHERE sname REGEXP '^[^r].*' // первый символ не 'r', .* -  >= 0 любых символов.
 SELECT * FROM salers WHERE sname REGEXP '^[^r]*$' // исключить значения, где встречается 'r'
 SELECT * FROM salers WHERE sname REGEXP '(r){2}' // найти значения, где 2 подряд 'r'
-SELECT * FROM salers WHERE sname REGEXP '\'' // найти значения, где присутствует одиноч. скобка
+
 
 https://dev.mysql.com/doc/refman/8.0/en/regexp.html
 
@@ -881,3 +881,84 @@ mysql_affected_rows() // возвращает кол-во затронутых �
 while(mysql_fetch_assoc($res)){
 	...
 }
+
+
+-- # Триггеры в MySQL
+DELIMITER $$ 
+
+CREATE
+    TRIGGER `event_name` BEFORE/AFTER INSERT/UPDATE/DELETE
+    ON `database`.`table`
+    FOR EACH ROW BEGIN
+		-- trigger body
+		-- this code is applied to every 
+		-- inserted/updated/deleted row
+    END;​        
+
+DELIMITER ;    
+
+
+
+-- INSERT
+DELIMITER $$
+
+CREATE
+	TRIGGER `blog_after_insert` AFTER INSERT 
+	ON `blog` 
+	FOR EACH ROW BEGIN
+	
+		IF NEW.deleted THEN
+			SET @changetype = 'DELETE';
+		ELSE
+			SET @changetype = 'NEW';
+		END IF;
+    
+		INSERT INTO audit (blog_id, changetype) VALUES (NEW.id, @changetype);
+		
+    END$$
+ 
+DELIMITER ;
+
+
+-- AFTER UPDATE
+DELIMITER $$
+
+CREATE
+	TRIGGER `blog_after_update` AFTER UPDATE 
+	ON `blog` 
+	FOR EACH ROW BEGIN
+	
+		IF NEW.deleted THEN
+			SET @changetype = 'DELETE';
+		ELSE
+			SET @changetype = 'EDIT';
+		END IF;
+    
+		INSERT INTO audit (blog_id, changetype) VALUES (NEW.id, @changetype);
+		
+    END$$
+
+DELIMITER ;
+
+
+-- AFTER UPDATE определенной колонки
+DELIMITER $$
+
+CREATE 
+    TRIGGER `update_products_alturl` AFTER UPDATE
+    ON `ap_products`
+    FOR EACH ROW BEGIN
+
+        IF NOT (NEW.alt_url <=> OLD.alt_url) THEN 
+            INSERT INTO `ap_redirect` (`from`, `to`) VALUES (OLD.alt_url, NEW.alt_url);
+        END IF;
+
+    END$$
+
+DELIMITER ;
+
+
+
+
+-- УДАЛЕНИЕ ТРИГГЕРА:
+DROP TRIGGER IF EXISTS `update_products_alturl`;
