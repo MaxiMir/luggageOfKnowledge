@@ -1926,7 +1926,7 @@
 	 function cleanSectionSeoMeta($blockID, $ids)
 	 {
 		  foreach ($ids as $id) {
-				$iPropTemplates = new \Bitrix\Iblock\InheritedProperty\SectionTemplates ($ids, $id);
+				$iPropTemplates = new \Bitrix\Iblock\InheritedProperty\SectionTemplates ($blockID, $id);
 				$iPropTemplates->set(
 					[
 						"SECTION_META_TITLE" => "",
