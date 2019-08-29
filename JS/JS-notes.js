@@ -1432,3 +1432,86 @@ const people = [
 ];
 const igor = people.find(person => person.name === 'Игорь'); // { name: "Игорь", age: 21, budget: 80000},
 const igorIndex = people.findIndex(person => person.name === 'Игорь'); // 1
+
+
+
+// # Object.fromEntries - метод возвращает массив собственных перечисляемых свойств указанного объекта в формате [key, value]
+let students = {
+    amelia: 20,
+    beatrice: 22,
+    cece: 20,
+    deirdre: 19,
+    eloise: 21
+};
+  
+// convert to array in order to make use of .filter() function:
+let overTwentyOne = Object.entries(students).filter(([name, age]) => {
+    return age >= 21
+}) 
+// => [ [ 'beatrice', 22 ], [ 'eloise', 21 ] ]
+  
+
+// turn multidimensional array back into an object
+let DrinkingAgeStudents = Object.fromEntries(overTwentyOne); 
+// => { beatrice: 22, eloise: 21 }
+
+/*
+It is important to note that arrays and objects are different data structures for a reason. There are certain cases in which switching between the two will cause data loss. The example below of array elements that become duplicate object keys is one of them.
+When using these functions make sure to be aware of the potential side effects.
+*/
+
+
+
+// # Array.prototype.flat - возвращает новый массив, в котором все элементы вложенных подмассивов были рекурсивно "подняты" на указанный уровень depth:
+let courseStudents = [
+    [ 'Janet', 'Martha', 'Bob', [ 'Phil', 'Candace' ] ],
+    [ 'Wilson', 'Taylor' ],
+    [ 'Edith', 'Jacob', 'Peter', 'Betty' ]
+];
+  
+let flattenOneLevel = courseStudents.flat()
+console.log(flattenOneLevel)
+// [
+//   'Janet',
+//   'Martha',
+//   'Bob',
+//   [ 'Phil', 'Candace' ],
+//   'Wilson',
+//   'Taylor',
+//   'Edith',
+//   'Jacob',
+//   'Peter',
+//   'Betty'
+// ]
+  
+let flattenTwoLevels = courseStudents.flat(2) // Infinity - для неизвестной глубины
+console.log(flattenTwoLevels)
+// [
+//   'Janet',   'Martha',
+//   'Bob',     'Phil',
+//   'Candace', 'Wilson',
+//   'Taylor',  'Edith',
+//   'Jacob',   'Peter',
+//   'Betty'
+// ]
+
+
+
+// # Array.prototype.flatMap - сначала применяет функцию к каждому элементу, а затем преобразует полученный результат в плоскую структуру и помещает в новый массив.:
+let grades = [78, 62, 80, 64]
+
+let flatMapped = grades.flatMap(grade => [grade, grade + 7]);
+// [
+//  78, 85, 62, 69,
+//  80, 87, 64, 71
+// ]
+
+
+// # String.trimStart and String.trimEnd:
+let message = "   Welcome to CS 101    "
+message.trimEnd()
+// '   Welcome to CS 101'
+message.trimStart()
+// 'Welcome to CS 101   '
+message.trimEnd().trimStart()
+// 'Welcome to CS 101'

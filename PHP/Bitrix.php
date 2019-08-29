@@ -1,47 +1,68 @@
 <?
 	 
-	 // Глобальные фильтры на всякие случаи жизни https://camouf.ru/blog-note/4717/
+	 ### Глобальные фильтры на всякие случаи жизни https://camouf.ru/blog-note/4717/
 	 
-	 # file: .setting.php - настройка debug - более подробный вывод ошибки	
 	 
-	 # ИСКЛЮЧИТЬ ОБРАЩЕНИЕ ПО ССЫЛКЕ К ШАБЛОНУ:	
+	 #@ БОЛЕЕ ПОДРОБНЫЙ ВЫВОД ОШИБКИ FILE: .setting.php поставить debug => true
+	 
+	 
+	 #@ ИСКЛЮЧИТЬ ОБРАЩЕНИЕ ПО ССЫЛКЕ К ШАБЛОНУ:
 	 if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) {
 		  die();
-	 } ?>
-
-
-<head>
-	 <title><? $APPLICATION->showTitle() ?></title> <!--ВЫВОД Title: -->
+	 }
 	 
-	 <?
-		  
-		  use Bitrix\Main\Page\Asset;
-		  
-		  $APPLICATION->showHead(); // Метод предназначен для вывода в шаблоне сайта основных полей тега <head>: мета-теги Content-Type, robots, keywords, description; стили CSS; скрипты, заданные через CMain::AddHeadScript
-		  
-		  Asset::getInstance()->addCss(SITE_TEMPLATE_PATH . '/css/style.css'); // подключение стилей. SITE_TEMPLATE_PATH - путь к активному шаблону сайта
-		  $APPLICATION->SetAdditionalCss(); // устаревший метод подключения стилей
-		  CJSCore::Init(['jquery']); // подключение библиотек из ядра битрикса
-		  Bitrix\Main\UI\Extension::load('ui.vue'); // Подключение Vue JS (с января 2019 входит в ядро)
-		  Asset::getInstance()->addJs(SITE_TEMPLATE_PATH . '/js/jquery-1.11.1.min.js');
-		  $APPLICATION->AddHeadScript(); // устаревший метод подключения скриптов
-		  Asset::getInstance()->addString('<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1>');
-		  Asset::getInstance()->addString('<link href="//fonts.googleapis.com/css?family=Monda" rel="stylesheet" type="text/css">');
-		  
-		  $APPLICATION->SetPageProperty('title', 'Заголовок окна браузера');
-		  $APPLICATION->SetTitle('Отзывы');
-	 ?>
-</head>
-<body>
-<? if ($GLOBALS['USER']->IsAdmin()): ?>
-	 <div id="panel"><? $APPLICATION->ShowPanel(); ?></div> <!-- ПОКАЗ АДМИН ПАНЕЛИ -->
-<? endif; ?>
+	 #@ ТЕКУЩАЯ СТРАНИЦА:
+	 $APPLICATION->GetCurPage(false); // => относительный урл
+	 
+	 
+	 #@ КАРТА САЙТА:
+	 // Главный модуль -> вкладка "Настройки" -> скролл до "Карта сайта" - выбрать из каких меню генерировать ссылки
+	 
+	 
+	 #@ ДОБАВЛЕНИЕ СВОЙСТВ РАЗДЕЛА:
+	 // "SECTION_USER_FIELDS" => ["UF_TEXT_BEFORE"]
+	 
+	 
+	 #@ ДОБАВЛЕНИЕ СВОЙСТВ ТОВАРА:
+	 // "LIST_PROPERTY_CODE" => ["PRICE", "OPT_PR"]
+	 
+	 #@ Вывод свойства типа HTML/TEXT:
+	 echo htmlspecialcharsBack($arFields['PROPERTY_КОД_СВОЙСТВА_VALUE']["TEXT"]);
+?>
 
-<h1><? $APPLICATION->showTitle(false) ?></h1> <!-- ВЫВОД H1 -->
+
+	 <head>
+		  <title><? $APPLICATION->showTitle() ?></title> <!--ВЫВОД Title: -->
+		  
+		  <?
+				
+				use Bitrix\Main\Page\Asset;
+				
+				$APPLICATION->showHead(); // Метод предназначен для вывода в шаблоне сайта основных полей тега <head>: мета-теги Content-Type, robots, keywords, description; стили CSS; скрипты, заданные через CMain::AddHeadScript
+				
+				Asset::getInstance()->addCss(SITE_TEMPLATE_PATH . '/css/style.css'); // подключение стилей. SITE_TEMPLATE_PATH - путь к активному шаблону сайта
+				$APPLICATION->SetAdditionalCss(); // устаревший метод подключения стилей
+				CJSCore::Init(['jquery']); // подключение библиотек из ядра битрикса
+				Bitrix\Main\UI\Extension::load('ui.vue'); // Подключение Vue JS (с января 2019 входит в ядро)
+				Asset::getInstance()->addJs(SITE_TEMPLATE_PATH . '/js/jquery-1.11.1.min.js');
+				$APPLICATION->AddHeadScript(); // устаревший метод подключения скриптов
+				Asset::getInstance()->addString('<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1>');
+				Asset::getInstance()->addString('<link href="//fonts.googleapis.com/css?family=Monda" rel="stylesheet" type="text/css">');
+				
+				$APPLICATION->SetPageProperty('title', 'Заголовок окна браузера');
+				$APPLICATION->SetTitle('Отзывы');
+		  ?>
+	 </head>
+	 <body>
+		  <? if ($GLOBALS['USER']->IsAdmin()): ?>
+				<div id="panel"><? $APPLICATION->ShowPanel(); ?></div> <!-- ПОКАЗ АДМИН ПАНЕЛИ -->
+		  <? endif; ?>
+
+	 		<h1><? $APPLICATION->showTitle(false) ?></h1> <!-- ВЫВОД H1 -->
 <?
 	 
 	 
-	 // file: /local/php_interface/init.php - здесь можно определить пользовательские функции, к-л. логику, которыми хотели бы пользоваться в шаблоне, до его подключения.
+	 // FILE: /local/php_interface/init.php - здесь можно определить пользовательские функции, к-л. логику, которыми хотели бы пользоваться в шаблоне, до его подключения.
 	 define("DEFAULT_TEMPLATE_PATH",
 		 "/local/templates/.default"); // теперь можно вместо SITE_TEMPLATE_PATH использовать DEFAULT_TEMPLATE_PATH
 	 define('DEFAULT_TEMPLATE_PATH', BX_PERSONAL_PATH . '/templates/.default'); // путь до папки .default в ядре bitrix
@@ -51,47 +72,50 @@
 		  echo "<pre>" . print_r($data) . '<pre>';
 	 }
 	 
-	 // file: /local/templates/TEMPLATE_NAME:
+	 
+	 // FILE: /local/templates/TEMPLATE_NAME:
 	 debug($arResult); // используем функцию из init.php
 	 // Код шаблона
 	 
 	 
-	 # появление РЕДАКТОРА ЭЛЕМЕНТА в визуальном редакторе: ?>
-<div class="box1" id="<?= $this->GetEditAreaId($arItem['ID']); ?>">
-	 <!-- код элемента в цикле -->
-</div>
-<?
 	 
-	 
-	 # измение/удаление элементов в визуальном редакторе: ?>
-<? foreach ($arResult['ITEMS'] as $arItem): ?>
-	 <? $this->AddEditAction($arItem['ID'], $arItem['EDIT_LINK'],
-		 CIBlock::GetArrayByID($arItem['iBLOCK_ID'], 'ELEMENT_EDIT'));
-	 $this->AddDeleteAction($arItem['ID'], $arItem['DELETE_LINK'],
-		 CIBlock::GetArrayByID($arItem['iBLOCK_ID'], 'ELEMENT_DELETE'),
-		 array('CONFIRM' => GetMessage('CT_BNL_ELEMENT_DELETE_CONFIRM'))); ?>
-	 <div class="some-elem-class" id="<?= $this->GetEditAreaId($arItem['ID']) ?>">
-		  <!-- Код шаблона элемента -->
+	 #@ ДОБАВИТЬ РЕДАКТОР ЭЛЕМЕНТА В ВИЗУАЛЬНОМ РЕДАКТОРЕ: ?>
+	 <div class="box1" id="<?= $this->GetEditAreaId($arItem['ID']); ?>">
+		  <!-- код элемента в цикле -->
 	 </div>
-<? endforeach; ?>
 <?
 	 
 	 
-	 # file: parameters.php, result_modifier.php, component_epilog - позволяют дополнить логику компонента
-	 // file: component_epilog.php (можно создать в папке с шаблоном) будет подключаться после подключения файла с шаблоном. Например, сюда можно поместить подключение компонента "комментарии", для того чтобы он не кэшировался
-	 // file: result_modifier.php - сюда можно, например поместить функцию-обработчик элементов массива $arResult:
+	 #@ ИЗМЕНЕНИЕ/УДАЛЕНИЕ ЭЛЕМЕНТОВ В ВИЗУАЛЬНОМ РЕДАКТОРЕ: ?>
+	 <? foreach ($arResult['ITEMS'] as $arItem): ?>
+		  <? $this->AddEditAction($arItem['ID'], $arItem['EDIT_LINK'],
+			  CIBlock::GetArrayByID($arItem['iBLOCK_ID'], 'ELEMENT_EDIT'));
+		  $this->AddDeleteAction($arItem['ID'], $arItem['DELETE_LINK'],
+			  CIBlock::GetArrayByID($arItem['iBLOCK_ID'], 'ELEMENT_DELETE'),
+			  array('CONFIRM' => GetMessage('CT_BNL_ELEMENT_DELETE_CONFIRM'))); ?>
+		  <div class="some-elem-class" id="<?= $this->GetEditAreaId($arItem['ID']) ?>">
+				<!-- Код шаблона элемента -->
+		  </div>
+	 <? endforeach; ?>
+<?
+	 
+	 
+	 #@ FILE: parameters.php, result_modifier.php, component_epilog - позволяют дополнить логику компонента
+	 // FILE: component_epilog.php (можно создать в папке с шаблоном) будет подключаться после подключения файла с шаблоном. Например, сюда можно поместить подключение компонента "комментарии", для того чтобы он не кэшировался
+	 // FILE: result_modifier.php - сюда можно, например поместить функцию-обработчик элементов массива $arResult:
 	 foreach ($arResult['ITEMS'] as &$item) {
-		  $item['PREVIEW_TEXT'] = mbCutString($item['PREVIEW_TEXT'],
-			  50); // mbCutString - пользовательская функция в init.php
+		  $item['PREVIEW_TEXT'] = mbCutString($item['PREVIEW_TEXT'], 50);
+		  // mbCutString - пользовательская функция из init.php
 	 }
 	 
 	 unset($item); // поскольку массив передаем по ссылке
+ 
 	 
 	 
-	 # ВЫВОД ПАГИНАЦИИ: ?>
-<? if ($arParams['DISPLAY_BOTTOM_PAGER']): ?>
-	 <?= arResult['NAV_STRING']; ?>
-<? endif; ?>
+	 #@ ВЫВОД ПАГИНАЦИИ: ?>
+	 <? if ($arParams['DISPLAY_BOTTOM_PAGER']): ?>
+		  <?= arResult['NAV_STRING']; ?>
+	 <? endif; ?>
 <?
 	 
 	 
@@ -135,18 +159,19 @@
 	  */
 	 
 	 
-	 # RESIZE изображений В ШАБЛОНЕ:
-	 $file = CFile::ResizeImageGet(
+	 
+	 #@ RESIZE ИЗОБРАЖЕНИЙ В ШАБЛОНЕ:
+	 $file = CFILE::ResizeImageGet(
 		 $arItem['PREVIEW_PICTURE'],
 		 ['width' => 100, 'height' => 100],
 		 BX_RESIZE_IMAGE_EXACT, // масштабирует в прямоугольник с сохранением пропорций, обрезая лишнее
 		 true
 	 );
-	 
 	 $file['src']; // путь до новой картинки
 	 
 	 
-	 # ДОБАВЛЕНИЕ КОММЕНТАРИЕВ:
+	 
+	 #@ ДОБАВЛЕНИЕ КОММЕНТАРИЕВ:
 	 /** Используется компонент bitrix: catalog.comments
 	  * В вызове компонента добавить: "AJAX_POST" => "Y"
 	  * СЕРВИСЫ -> БЛОГИ -> Нужный_Инфблок изменить -> вкладка "Права на доступ":
@@ -154,25 +179,29 @@
 	  */
 	 
 	 
-	 # ГАЛЕРЕЯ ИЗОБРАЖЕНИЙ:
+	 
+	 #@ ГАЛЕРЕЯ ИЗОБРАЖЕНИЙ:
 	 /*
-	 В свойствах инфоблока создать новое свойство:
-	 Название галерея | тип файл  | множественное - отметить | код - GALLERY | тип загружаемых файлов - изображения
-	 [PROPTERTIES] => [GALLERY] => [PROPERTY_VALUE_ID] => [44, 45, 46, 47] // ID - картинок
-	 */ ?>
-<? if (!empty($arResult['PROPTERTIES']['GALLERY']['VALUE'])): ?>
-	 <?php foreach ($arResult['PROPTERTIES']['GALLERY']['VALUE'] as $photo): ?>
-		  <img src="<?= CFile::GetPath($photo); ?>" alt=""
-				 width="200"> <!-- $photo - содержит ID, по нему получем путь к картинке -->
-	 <?php endforeach; ?>
-<? endif; ?>
+		  В свойствах инфоблока создать новое свойство:
+		  Название галерея | тип файл  | множественное - отметить | код - GALLERY | тип загружаемых файлов - изображения
+		  [PROPTERTIES] => [GALLERY] => [PROPERTY_VALUE_ID] => [44, 45, 46, 47] // ID - картинок
+	 */
+?>
+	 <? if (!empty($arResult['PROPTERTIES']['GALLERY']['VALUE'])): ?>
+		  <?php foreach ($arResult['PROPTERTIES']['GALLERY']['VALUE'] as $photo): ?>
+				<img src="<?= CFILE::GetPath($photo); ?>" alt=""  width="200">
+				<!-- $photo - содержит ID, по нему получем путь к картинке -->
+		  <?php endforeach; ?>
+	 <? endif; ?>
 <?
 	 
 	 
-	 # Авторизация:
-	 // создаем file: /auth/index.php
-	 define('NEED_AUTH',
-		 true); // если инициализировать данную константу значением "true" до подключения пролога, то будет проведена проверка на авторизованность пользователя. Если пользователь не авторизован, то ему будет предложена форма авторизации.
+	 
+	 #@ АВТОРИЗАЦИЯ:
+	 // создаем FILE: /auth/index.php
+	 define('NEED_AUTH', true);
+	 // если инициализировать данную константу значением "true" до подключения пролога, то будет проведена проверка на авторизованность пользователя. Если пользователь не авторизован, то ему будет предложена форма авторизации.
+	 
 	 require($_SERVER['DOCUMENT_ROOT'] . '/bitrix/header.php');
 	 $APPLICATION->SetTitle('Login');
 	 
@@ -199,48 +228,36 @@
 	  */
 	 
 	 
-	 // file: local/templates/.default/components/bitrix/system.auth.form/template: ?>
-<!-- .... -->
-<p>Добро пожаловать: <?= $arResult['USER_NAME'] ?></p>
-<p>Ваш профиль: <a href="<?= $arResult['PROFILE_URL'] ?>">ссылка</a></p>
-<p>Выход: <a href="<?= $APPLICATION->GetCurPageParam('logout=yes',
-		 ['login', 'logout', 'register', 'forgot_password', 'change_passwrod']) ?>">
-		  <?= GetMessage('AUTH_LOGOUT_BUTTON') ?></a>
-</p>
-<!-- .... --><?
+	 // FILE: local/templates/.default/components/bitrix/system.auth.form/template: ?>
+	 <!-- .... -->
+	 <p>Добро пожаловать: <?= $arResult['USER_NAME'] ?></p>
+	 <p>Ваш профиль: <a href="<?= $arResult['PROFILE_URL'] ?>">ссылка</a></p>
+	 <p>Выход: <a href="<?= $APPLICATION->GetCurPageParam('logout=yes',
+			  ['login', 'logout', 'register', 'forgot_password', 'change_passwrod']) ?>">
+				<?= GetMessage('AUTH_LOGOUT_BUTTON') ?></a>
+	 </p>
+	 <!-- .... --><?
 	 
 	 
-	 // создаем file: /auth/registration.php
+	 // создаем FILE: /auth/registration.php
 	 // Вставляем компонент настраиваемая регистрация - bitrix:main.register
 	 
-	 // создаем file: /auth/profile.php
+	 // создаем FILE: /auth/profile.php
 	 // Вставляем компонент параметры пользователя - bitrix:main.register
 	 
 	 // изменяем шаблоны остальных компонентов
 	 
 	 
-	 # ТЕКУЩАЯ СТРАНИЦА:
-	 $APPLICATION->GetCurPage(false); // => относительный урл
 	 
 	 
-	 # КАРТА САЙТА:
-	 // Главный модуль -> вкладка "Настройки" -> скролл до "Карта сайта" - выбрать из каких меню генерировать ссылки
 	 
 	 
-	 # ДОБАВЛЕНИЕ СВОЙСТВ РАЗДЕЛА:
-	 // "SECTION_USER_FIELDS" => ["UF_TEXT_BEFORE"]
-	 
-	 
-	 # ДОБАВЛЕНИЕ СВОЙСТВ ТОВАРА:
-	 // "LIST_PROPERTY_CODE" => ["PRICE", "OPT_PR"]
-	 
-	 
-	 # ПОДКЛЮЧЕНИЕ CSS И JS В ШАБЛОНЕ:
+	 #@ ПОДКЛЮЧЕНИЕ CSS И JS В ШАБЛОНЕ:
 	 $this->addExternalCss("https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css");
 	 $this->addExternalJS("https://code.jquery.com/ui/1.12.1/jquery-ui.js");
 	 
 	 
-	 # Настройка ЧПУ в инфорблоке:
+	 #@ Настройка ЧПУ в инфорблоке:
 	 /*
 		  URL страницы информационного блока:	
 		  /catalog/
@@ -263,7 +280,8 @@
 	 */
 	 
 	 
-	 # ПОЛУЧЕНИЕ ДАННЫХ ПО МЕТАМ 
+	 
+	 #@ ПОЛУЧЕНИЕ ДАННЫХ ПО МЕТАМ:
 	 use \Bitrix\Iblock\InheritedProperty\SectionValues;
 	 
 	 $seoData = new SectionValues($arParams['IBLOCK_ID'], $arResult['SECTION_ID']);
@@ -272,33 +290,8 @@
 	 $APPLICATION->SetPageProperty("description", $seoProps["SECTION_META_DESCRIPTION"]);
 	 
 	 
-	 #@@@ ВЫВОД АКТИВНЫХ НОВОСТЕЙ С УСТАНОВЛЕННЫМ СВОЙСТВОМ SHOW_MAIN:
-	 CModule::IncludeModule('block');
-	 $arSelect = ['ID', 'IBLOCK_ID', 'NAME', 'PREVIEW_TEXT'];
-	 $arFilter = [
-		 'IBLOCK_ID' => 1,
-		 'ACTIVE_DATE' => 'Y',
-		 'ACTIVE' => 'Y',
-		 '!SHOW_MAIN' => false
-	 ]; // IBLOCK_ID - ID инфоблока
-	 $res = CIBlockElement::GetList([], $arFilter, false, ['nPageSize' => 4], $arSelect); ?>
-
-<? if ($res->arResult): ?>
-	 <div class="element">
-		  <? while ($ob = $res->GetNextElement()): $arFields = $ob->GetFields(); ?>
-				<? $imgSrc = CFile::GetPath($arFields['DETAIL_PICTURE']); // получение пути к картинке по ID ?>
-				<a href="<?= $arFields['DETAIL_PAGE_URL'] ?>">
-					 <p><?= $arFields['NAME'] ?></p>
-					 <img src="<?= $imgSrc ?>" alt="<?= $arFields['NAME'] ?>">
-				</a>
-		  <? endwhile; ?>
-	 </div>
-<? endif; ?>
-<?
-	 // $ob->GetFields() - получение полей. $ob->GetProperties() - получение свойств.
 	 
-	 
-	 #@@@ ОБНОВЛЕНИЕ МЕТ:
+	 #@ ОБНОВЛЕНИЕ МЕТ:
 	 function get_min_price_in_product($id)
 	 {
 		  $arSelect = Array(
@@ -329,6 +322,7 @@
 		 ['ID', 'UF_PROD_M_TITLE', 'UF_PROD_M_DESCRIPT'],
 		 false
 	 );
+	 
 	 $rsSect = $arSect->Fetch();
 	 
 	 if ($rsSect['UF_PROD_M_TITLE']) {
@@ -353,14 +347,15 @@
 	 }
 	 
 	 
-	 #@@@ ПОЛУЧЕНИЕ СВОЙСТВ ИНФОБЛОКА:
+	 
+	 #@ ПОЛУЧЕНИЕ СВОЙСТВ ИНФОБЛОКА:
 	 $properties = CIBlockProperty::GetList([], ["IBLOCK_ID" => 1]);
 	 while ($propData = $properties->GetNext()) {
 		  ['CODE' => $code, 'NAME' => $name] = $propData;
 	 }
 	 
 	 
-	 #@@@ ОБНОВЛЕНИЕ НАЗВАНИЯ И СВОЙСТВ DETAIL_PAGE_URL У ТОВАРОВ:
+	 #@ ОБНОВЛЕНИЕ НАЗВАНИЯ И СВОЙСТВ DETAIL_PAGE_URL У ТОВАРОВ:
 	 require($_SERVER["DOCUMENT_ROOT"] . "/bitrix/header.php");
 	 
 	 global $DB;
@@ -373,7 +368,6 @@
 	 
 	 
 	 foreach ($sectionsData as [$IBLOCK_ID, $ID]) {
-		  
 		  $arSelect = [
 			  'ID',
 			  'IBLOCK_ID',
@@ -415,12 +409,12 @@
 					 $test = $cbe->Update($arFields["ID"], ['NAME' => $h1Section]);
 					 CIBlockElement::SetPropertyValuesEx($arFields["ID"], $IBLOCK_ID, ["NAME_ITEM" => $h1]);
 				}
-				
 		  }
 	 }
 	 
 	 
-	 #@@@ ВЫБРАТЬ ЭЛЕМЕНТЫ РАЗДЕЛА, У КОТОРЫХ СВОЙСТВО PROPERTY_SHOW_ON СОВПАДАЕТ С ТЕКУЩИМ ID РАЗДЕЛА:
+	 
+	 #@ ВЫБРАТЬ ЭЛЕМЕНТЫ РАЗДЕЛА, У КОТОРЫХ СВОЙСТВО PROPERTY_SHOW_ON СОВПАДАЕТ С ТЕКУЩИМ ID РАЗДЕЛА:
 	 $res = CIBlockElement::GetList([], ['IBLOCK_ID' => 5, 'PROPERTY_SHOW_ON' => $arResult['ID']], false, false,
 		 ['ID', 'PROPERTY_YOUTUBE_CODE']);
 	 
@@ -429,36 +423,11 @@
 		  print_r($arFields);
 		  echo '</pre>';
 	 }
-	 
-	 
-	 #@@@ ВЫВОД НОВОСТЕЙ:
-	 CModule::IncludeModule('iblock');
-	 $arSelect = ['ID', 'IBLOCK_ID', 'NAME', 'PREVIEW_TEXT', 'DETAIL_PAGE_URL', 'PREVIEW_PICTURE', 'ACTIVE_FROM'];
-	 $arFilter = ['IBLOCK_ID' => 1, 'ACTIVE_DATE' => 'Y', 'ACTIVE' => 'Y', '!PROPERTY_SHOW_ON_MAIN' => false];
-	 $res = CIBlockElement::GetList([], $arFilter, false, ['nPageSize' => 3], $arSelect);
-?>
 
-<? if ($res->arResult): ?>
-	 <? while ($ob = $res->GetNextElement()): $arFieds = $ob->GetFields(); ?>
-		  <? $srcImg = CFile::GetPath($arFields['PREVIEW_PICTURE']); ?>
-		  
-		  <div class="col-md-4">
-				<div class="card card-blog">
-					 <div class="card-img">
-						  <a href="<?= $arFields['DETAIL_PAGE_URL'] ?>" title="Прочитать новость">
-								<img src="<?= $srcImg ?>" alt="" class="img-fluid">
-						  </a>
-					 </div>
-				</div>
-		  </div>
-		  <!-- ... -->
-	 <? endwhile; ?>
-<? endif; ?>
-<?
 	 
 	 
-	 #@@@ ИЗМЕНЕНИЕ arResult + ДОБАВЛЕНИЕ ЦЕН И СВОЙСТВ:
-	 // file: --template-component--/result_modifier.php:
+	 #@ ИЗМЕНЕНИЕ arResult + ДОБАВЛЕНИЕ ЦЕН И СВОЙСТВ:
+	 // FILE: --template-component--/result_modifier.php:
 	 $arSelect = [
 		 'ID',
 		 'IBLOCK_ID',
@@ -474,8 +443,9 @@
 	 }
 	 
 	 
-	 #@@@ ИЗМЕНЕНИЕ arResult + ДОБАВЛЕНИЕ ПОЛЬЗОВАТЕЛЬСКОГО СВОЙСТВА:
-	 // file: --template-component--/result_modifier.php:
+	 
+	 #@ ИЗМЕНЕНИЕ arResult + ДОБАВЛЕНИЕ ПОЛЬЗОВАТЕЛЬСКОГО СВОЙСТВА:
+	 // FILE: --template-component--/result_modifier.php:
 	 if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) {
 		  die();
 	 }
@@ -504,14 +474,15 @@
 	 while ($arRes = $dbSection->Fetch()) {
 		  $currImgs = [];
 		  foreach ($arRes['UF_SLIDER_IMGS'] as $img) {
-				$currImgs[] = CFile::GetPath($img);
+				$currImgs[] = CFILE::GetPath($img);
 		  }
 		  
 		  $arResult['SECTIONS'][++$key]['SLIDER_IMGS'] = $currImgs;
 	 }
 	 
 	 
-	 #@@@ ОТПРАВКА НА ПОЧТУ + ЗАПИСЬ В ИНФОБЛОК:
+	 
+	 #@ ОТПРАВКА НА ПОЧТУ + ЗАПИСЬ В ИНФОБЛОК:
 	 require $_SERVER['DOCUMENT_ROOT'] . '/bitrix/modules/main/include/prolog_before.php';
 	 
 	 use Bitrix\Main\{Application, Context};
@@ -534,7 +505,7 @@
 		  return;
 	 }
 	 
-	 #@ Отправляем письмо:
+	 #@ ОТПРАВКА ПИСЬМА:
 	 $arEventFields = [
 		 'AUTHOR' => $uName,
 		 'AUTHOR_EMAIL' => $uEmail,
@@ -545,7 +516,8 @@
 	 CEvent::Send("AP_CALCULATOR", 's1', $arEventFields, "Y", "", $imgIDs); // imgIDs - массив с картинками
 	 
 	 
-	 #@ Записываем в инфоблок:
+	 
+	 #@ ЗАПИСЬ В ИНФОБЛОК:
 	 CModule::IncludeModule("iblock");
 	 $el = new CIBlockElement;
 	 $PROP = [];
@@ -563,7 +535,8 @@
 	 $PRODUCT_ID = $el->Add($arLoadProductArray);
 	 
 	 
-	 #@@@ Загрузка картинки 
+	 
+	 #@ ЗАГРУЗКА КАРТИНКИ:
 	 function uploadImg()
 	 {
 		  if (empty($_FILES['file'])) {
@@ -580,21 +553,22 @@
 			  "MODULE_ID" => "iblock"
 		  ];
 		  
-		  return CFile::SaveFile($arrFile, "userPic");
+		  return CFILE::SaveFile($arrFile, "userPic");
 	 }
 	 
 	 
-	 #@@@ ВЫВОД КАРТИНОК ИЗ ПОЛЬЗОВАТЕЛЬСКОГО СВОЙСТВА (тип файл - множественный): ?>
-<? foreach ($arResult['UF_ADDITIONAL_GALLER'] as $imgInfo): ?>
-	 <? $imgSrc = CFile::GetPath($imgInfo) ?>
-	 <div class="col-md-3 col-sm-4 col-xs-6">
-		  <img src="<?= $imgSrc ?>" alt="">
-	 </div>
-<? endforeach; ?>
+	 #@ ВЫВОД КАРТИНОК ИЗ ПОЛЬЗОВАТЕЛЬСКОГО СВОЙСТВА (тип файл - множественный): ?>
+	 <? foreach ($arResult['UF_ADDITIONAL_GALLERY'] as $imgInfo): ?>
+		  <? $imgSrc = CFILE::GetPath($imgInfo) ?>
+		  <div class="col-md-3 col-sm-4 col-xs-6">
+				<img src="<?= $imgSrc ?>" alt="">
+		  </div>
+	 <? endforeach; ?>
 <?
 	 
 	 
-	 #@@@ ПОЛУЧИТЬ ВЛОЖЕННЫЕ РАЗДЕЛЫ:
+	 
+	 #@ ПОЛУЧИТЬ ВЛОЖЕННЫЕ РАЗДЕЛЫ:
 	 $arResult['ITEMS'] = [];
 	 
 	 if (CModule::IncludeModule("iblock")) {
@@ -625,7 +599,7 @@
 				$arResult['ITEMS'][] = [
 					'ID' => $row['ID'],
 					'NAME' => $row['NAME'],
-					'IMG' => CFile::GetPath($row['PICTURE']),
+					'IMG' => CFILE::GetPath($row['PICTURE']),
 					'LINK' => $row['SECTION_PAGE_URL'],
 					'MIN_PRICE' => $row['UF_MIN_PRICE'],
 				];
@@ -633,7 +607,7 @@
 	 }
 	 
 	 
-	 #@@@ bitrix.news -> section.php:    
+	 #@ bitrix.news -> section.php:    
 	 if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) {
 		  die();
 	 }
@@ -660,7 +634,6 @@
 	 }
 	 
 	 /*@ Выводим подразделы: @*/
-	 
 	 $arFilter = [
 		 'IBLOCK_ID' => $iBlockID,
 		 'SECTION_ID' => $sectionID,
@@ -690,15 +663,14 @@
 				<? if ($elemData['ID'] === $childSection['ID']) {
 					 continue;
 				} ?>
-				
+
 				<div class="col-md-4 col-sm-6">
-					 <img src="<?= CFile::GetPath($elemData['PREVIEW_PICTURE']) ?>" alt="<?= $elemData['NAME'] ?>">
+					 <img src="<?= CFILE::GetPath($elemData['PREVIEW_PICTURE']) ?>" alt="<?= $elemData['NAME'] ?>">
 					 <div class="property">Цена: <?= $elemData['PROPERTY_PRICE_VALUE'] ?> руб.</div>
 				</div>
 		  <? endwhile; ?>
 	 </div>
 <? endwhile ?>
-
 
 
 <? /*@ Или выводим элементы: @*/
@@ -707,26 +679,25 @@
 	 $elementsData = CIBlockElement::GetList([], $arFilter, false, false, $arSelect);
 ?>
 
-<div class="maxwidth-theme">
-	 <div class="col-md-12">
-		  <div class="row sid-4 items stones">
-				<? while ($elemData = $elementsData->GetNext()): ?>
-					 <div class="col-md-4 col-sm-6">
-						  <img src="<?= CFile::GetPath($elemData['PREVIEW_PICTURE']) ?>" width="150px"
-								 alt="<?= $elemData['NAME'] ?>">
-						  <div class="property">
-								Цена: <?= $elemData['PROPERTY_PRICE_VALUE'] ?> руб./м<sup>2</sup>
+	 <div class="maxwidth-theme">
+		  <div class="col-md-12">
+				<div class="row sid-4 items stones">
+					 <? while ($elemData = $elementsData->GetNext()): ?>
+						  <div class="col-md-4 col-sm-6">
+								<img src="<?= CFILE::GetPath($elemData['PREVIEW_PICTURE']) ?>" width="150px"
+									  alt="<?= $elemData['NAME'] ?>">
+								<div class="property">
+									 Цена: <?= $elemData['PROPERTY_PRICE_VALUE'] ?> руб./м<sup>2</sup>
+								</div>
 						  </div>
-					 </div>
-				<? endwhile; ?>
+					 <? endwhile; ?>
+				</div>
 		  </div>
 	 </div>
-</div>
-
-
 <?
-	 #@@@ ЗАЛИТЬ РАЗДЕЛЫ/ТОВАРЫ:
 	 
+	 
+	 #@ ЗАЛИТЬ РАЗДЕЛЫ/ТОВАРЫ:
 	 require($_SERVER["DOCUMENT_ROOT"] . "/bitrix/header.php");
 	 
 	 global $DB;
@@ -742,29 +713,29 @@
 	 const PALETTE_IBLOCK_ID = 27;
 	 
 	 //**@@ Читаем файл и генерируем данные по разделам каталога:
-	 #$sectionsCData = getSectionsData(FILE_CATALOG);
+	 $sectionsCData = getSectionsData(FILE_CATALOG);
 	 
 	 //**@@ Читаем файл и генерируем данные по по разделам палитры:
-	 #$sectionsPData = getSectionsData(FILE_PALETTE);
+	 $sectionsPData = getSectionsData(FILE_PALETTE);
 	 
 	 //**@@ Создаем новые разделы Каталог:
-	 #createNewSections($sectionsCData, CATALOG_IBLOCK_ID);
+	 createNewSections($sectionsCData, CATALOG_IBLOCK_ID);
 	 
 	 //**@@ Создаем новые разделы Палитра:
-	 #createNewSections($sectionsPData, PALETTE_IBLOCK_ID);
+	 createNewSections($sectionsPData, PALETTE_IBLOCK_ID);
 	 
 	 //**@@ Создаем новые камни:
-	 #$createData = createElements(FILE_STONES, 'palitra');
+	 $createData = createElements(FILE_STONES, 'palitra');
 	 
 	 //**@@ Создаем новые товары:
-	 #$createData = createElements(FILE_PRODUCTS);
-	 #$countProducts = $createData['count'];
-	 #$error = is_null($createData['error']) ? 0 :  $createData['error'];
-	 #echo "Создано {$countProducts} <br> Ошибки: {$error}";
+	 $createData = createElements(FILE_PRODUCTS);
+	 $countProducts = $createData['count'];
+	 $error = is_null($createData['error']) ? 0 :  $createData['error'];
+	 echo "Создано {$countProducts} <br> Ошибки: {$error}";
 	 
 	 //**@@ Меты для разделов:
-	 #$seoData = getCSVData(FILE_META);
-	 #updateSections($seoData);
+	 $seoData = getCSVData(FILE_META);
+	 updateSections($seoData);
 	 
 	 //**@@ Разделы:
 	 function getSectionsData($fileName)
@@ -913,7 +884,8 @@
 		  }
 	 }
 	 
-	 //**@@ ЭЛЕМЕНТЫ:
+	 
+	 //**@@ Элементы:
 	 function createElements($fileName, $type = 'catalog')
 	 {
 		  $counter = 0;
@@ -1007,7 +979,7 @@
 					 $imgPath = "{$imgFolder}{$photos[$key]}";
 					 
 					 $acc["n{$key}"] = [
-						 "VALUE" => CFile::MakeFileArray($imgPath),
+						 "VALUE" => CFILE::MakeFileArray($imgPath),
 					 ];
 					 
 					 return $acc;
@@ -1017,14 +989,14 @@
 		  $productData = [
 			  "IBLOCK_ID" => CATALOG_IBLOCK_ID,
 			  "IBLOCK_SECTION" => [$parentSectionID],
-			  "NAME" => $NAME,
+			  "NAMEC" => $NAME,
 			  "CODE" => getSymbolCode($urn),
 			  "PROPERTY_VALUES" => $props,
 			  "ACTIVE" => "Y",
 			  "DETAIL_TEXT" => $DETAIL_TEXT,
 			  "DETAIL_TEXT_TYPE" => 'html',
-			  "DETAIL_PICTURE" => CFile::MakeFileArray($mainImg),
-			  "PREVIEW_PICTURE" => CFile::MakeFileArray($mainImg),
+			  "DETAIL_PICTURE" => CFILE::MakeFileArray($mainImg),
+			  "PREVIEW_PICTURE" => CFILE::MakeFileArray($mainImg),
 			  "IPROPERTY_TEMPLATES" => [
 				  "ELEMENT_META_TITLE" => $TITLE,
 				  "ELEMENT_META_DESCRIPTION" => $DESCRIPTION,
@@ -1033,9 +1005,10 @@
 		  
 		  if ($PRODUCT_ID = $element->Add($productData)) {
 				return ['result' => true, 'error' => null];
-		  } else {
-				return ['result' => false, 'error' => "Error: {$NAME} " . $element->LAST_ERROR];
 		  }
+		  
+		  return ['result' => false, 'error' => "Error: {$NAME} " . $element->LAST_ERROR];
+		  
 	 }
 	 
 	 function createStone($data)
@@ -1065,7 +1038,7 @@
 					 $imgPath = "{$imgFolder}{$photos[$key]}";
 					 
 					 $acc["n{$key}"] = [
-						 "VALUE" => CFile::MakeFileArray($imgPath),
+						 "VALUE" => CFILE::MakeFileArray($imgPath),
 					 ];
 					 
 					 return $acc;
@@ -1081,8 +1054,8 @@
 			  "ACTIVE" => "Y",
 			  "DETAIL_TEXT" => $DETAIL_TEXT,
 			  "DETAIL_TEXT_TYPE" => 'html',
-			  "DETAIL_PICTURE" => CFile::MakeFileArray($mainImg),
-			  "PREVIEW_PICTURE" => CFile::MakeFileArray($mainImg),
+			  "DETAIL_PICTURE" => CFILE::MakeFileArray($mainImg),
+			  "PREVIEW_PICTURE" => CFILE::MakeFileArray($mainImg),
 			  "IPROPERTY_TEMPLATES" => [
 				  "ELEMENT_META_TITLE" => $TITLE,
 				  "ELEMENT_META_DESCRIPTION" => $DESCRIPTION,
@@ -1169,49 +1142,13 @@
 	 }
 	 
 	 
-	 #@@@ СЛАЙДЕР:
-	 if (CModule::IncludeModule("iblock")) {
-		  // ID инфоблока из которого выводим элементы
-		  $iblock_id = 11;
+	 
+	 #@ ГЕНЕРАЦИЯ МЕНЮ С "ИСКУССТВЕННЫМИ" РАЗДЕЛАМИ:
+	 ### данные меню каталога уровень 1: ###
+	 function getCatalogMainLinks()
+	 {
+		  global $APPLICATION;
 		  
-		  $my_slider = CIBlockElement::GetList(
-		  // Сортировка элементов
-			  ["ID" => "ASC"],
-			  ["IBLOCK_ID" => $iblock_id],
-			  false,
-			  false,
-			  // Перечисляесм все свойства элементов, которые планируем выводить
-			  [
-				  'ID',
-				  'NAME',
-				  'PREVIEW_PICTURE',
-				  'PREVIEW_TEXT',
-				  'PROPERTY_LIN_PR'
-			  ]
-		  );
-		  
-		  while ($ar_fields = $my_slider->GetNext()) {
-				//Выводим элемент со всеми свойствами + верстка
-				$img_path = CFile::GetPath($ar_fields["PREVIEW_PICTURE"]);
-				echo '<li><a href="' . $ar_fields['PROPERTY_LIN_PR_VALUE'] . '">';
-				echo '<h4>' . $ar_fields['NAME'] . "</h4>";
-				echo "<img src='" . $img_path . "'/>";
-				echo "<p>" . $ar_fields['PREVIEW_TEXT'] . "'</p>";
-				echo '</a></li>';
-		  }
-	 }
-	 
-	 // Если попробуете вывести свойство типа HTML/TEXT получите Array. Для его вывода используйте конструкцию:
-	 echo htmlspecialcharsBack($ar_fields['PROPERTY_КОД_СВОЙСТВА_VALUE']["TEXT"]);
-	 
-	 
-	 #@@@ Генерация меню с выпающими меню из каталога и элементов инфоблока:
-	 global $APPLICATION;
-	 const CAT_BLOCK_ID = 49;
-	 const BRAND_BLOCK_ID = 44;
-	 
-	 
-	 $getCatalogLinks = function () use ($APPLICATION) {
 		  return $APPLICATION->IncludeComponent(
 			  "adpro:menu.sections",
 			  "",
@@ -1222,20 +1159,96 @@
 				  "SECTION_PAGE_URL" => "#SECTION_CODE_PATH#/",
 				  "DETAIL_PAGE_URL" => "#SECTION_CODE_PATH#/#ELEMENT_CODE#",
 				  "IBLOCK_TYPE" => "category",
-				  "IBLOCK_ID" => CAT_BLOCK_ID,
-				  "DEPTH_LEVEL" => 2,
+				  "IBLOCK_ID" => CATALOG_I_BLOCK_ID,
+				  "DEPTH_LEVEL" => 1,
 				  "CACHE_TYPE" => "A",
 				  "CACHE_TIME" => "1800"
 			  ],
 			  false
 		  );
-	 };
+	 }
 	 
-	 $getBrands = function () {
+	 
+	 ### данные меню каталога уровень 2: ###
+	 function getCatalogSecondLinks()
+	 {
+		  $menuData = [];
+		  $fromIBlockMap = [];
+		  $arSort = [];
+		  $counter = 0;
+		  $arSelect = [
+			  "NAME",
+			  "SECTION_PAGE_URL",
+			  "UF_SHOW_IN_SECT_MENU"
+		  ];
+		  $arFilter = [
+			  "IBLOCK_ID" => CATALOG_I_BLOCK_ID,
+			  "!UF_SHOW_IN_SECT_MENU" => false,
+			  "GLOBAL_ACTIVE" => "Y"
+		  ];
+		  
+		  $sectionsDBData = CIBlockSection::GetList($arSort, $arFilter, false, $arSelect);
+		  
+		  while ($sectionData = $sectionsDBData->GetNext()) {
+				[
+					"NAME" => $name,
+					"SECTION_PAGE_URL" => $sectionPageURL,
+					"UF_SHOW_IN_SECT_MENU" => $parentSectionID
+				] = $sectionData;
+				
+				if (!array_key_exists($parentSectionID, $menuData)) {
+					 $menuData[$parentSectionID] = [];
+					 $fromIBlockMap[$parentSectionID] = ++$counter;
+				}
+				
+				$fromBlock = $fromIBlockMap[$parentSectionID];
+				
+				$menuData[$parentSectionID][] = [
+					$name,
+					$sectionPageURL,
+					[$sectionPageURL],
+					[
+						"FROM_IBLOCK" => $fromBlock,
+						"IS_PARENT" => "",
+						"DEPTH_LEVEL" => 2
+					]
+				];
+		  }
+		  
+		  return $menuData;
+	 }
+	 
+	 
+	 ### полные данные меню каталога: ###
+	 function getCatalogMenuLinks()
+	 {
+		  $menuLinks = [];
+		  $catalogMainLinks = getCatalogMainLinks();
+		  $catalogSecondLinks = getCatalogSecondLinks();
+		  
+		  foreach ($catalogMainLinks as $linkData) {
+				$sectionID = end($linkData);
+				$menuLinks[] = $linkData;
+				
+				if (!array_key_exists($sectionID, $catalogSecondLinks)) {
+					 continue;
+				}
+				
+				$childLinkData = $catalogSecondLinks[$sectionID];
+				array_push($menuLinks, ...$childLinkData);
+		  }
+		  
+		  return $menuLinks;
+	 }
+	 
+	 
+	 ### данные по брендам: ###
+	 function getBrands()
+	 {
 		  $brands = [];
 		  
 		  $arFilter = [
-			  "IBLOCK_ID" => BRAND_BLOCK_ID,
+			  "IBLOCK_ID" => BRAND_I_BLOCK_ID,
 			  'ACTIVE' => 'Y'
 		  ];
 		  $arSelect = [
@@ -1252,9 +1265,12 @@
 		  }
 		  
 		  return $brands;
-	 };
+	 }
 	 
-	 $generateBrandsLinks = function () use ($getBrands) {
+	 
+	 ### данные меню по брендам: ###
+	 function generateBrandsLinks()
+	 {
 		  $brandLink = [
 			  [
 				  "Бренды",
@@ -1268,7 +1284,7 @@
 			  ]
 		  ];
 		  
-		  $brands = $getBrands();
+		  $brands = getBrands();
 		  
 		  return array_reduce($brands, function ($acc, $linkData) {
 				$acc[] = [
@@ -1277,22 +1293,43 @@
 					[$linkData['DETAIL_PAGE_URL']],
 					[
 						"FROM_IBLOCK" => 2,
-						"IS_PARENT" => '',
+						"IS_PARENT" => "",
 						"DEPTH_LEVEL" => 2
 					]
 				];
 				
 				return $acc;
 		  }, $brandLink);
-	 };
-	 
-	 $aMenuLinksExt = $getCatalogLinks();
-	 $brandLinks = $generateBrandsLinks();
-	 $aMenuLinks = array_merge($aMenuLinksExt, $brandLinks);
+	 }
 	 
 	 
-	 #@@@ Связка отзывов с форума и товаров:
-	 // FILE /responses/index.php:  
+	 ### данные меню: ###
+	 function getMenuLinks()
+	 {
+		  $aMenuLinksExt = getCatalogMenuLinks();
+		  $brandLinks = generateBrandsLinks();
+		  
+		  return array_merge($aMenuLinksExt, $brandLinks);
+	 }
+	 
+	 
+	 ### данные меню из кэша: ###
+	 function getMenuLinksFromCache()
+	 {
+		  $cacheTime = 3600 * 6;
+		  $cacheID = "menuLinks";
+		  
+		  return returnResultCache($cacheTime, $cacheID, 'getMenuLinks');
+	 }
+	 
+	 
+	 // использование:
+	 $aMenuLinks = getMenuLinksFromCache();
+	 
+	 
+	 
+	 #@ СВЯЗКА ОТЗЫВОВ С ФОРУМА И ТОВАРОВ:
+	 // FILE: /responses/index.php:
 	 require($_SERVER["DOCUMENT_ROOT"] . "/bitrix/header.php");
 	 
 	 $APPLICATION->SetTitle("Последние отзывы о товарах");
@@ -1326,13 +1363,18 @@
 		 ["HIDE_ICONS" => "Y"]
 	 );
 	 
-	 // /local/php_interface/include/functions.php:
+	 // FILE: /local/php_interface/include/functions.php:
 	 use Bitrix\Main\Context,
 		 Bitrix\Main\Server;
 	 
-	 ### распечатываем любое количество аргументов ###
+	 
+	 ### дебаггер ###
 	 function dbg(...$args)
 	 {
+		  if (!$USER->IsAdmin()) {
+				return;
+		  }
+	 	 
 		  echo '<pre>';
 		  
 		  foreach ($args as $arg) {
@@ -1343,7 +1385,7 @@
 	 }
 	 
 	 
-	 ### обрезаем строку на заданную длину с добавлением маркера ###
+	 ### обрезаем строку на заданную длину с добавлением маркера: ###
 	 function getTrimLine($str, $length = 100, $trimMarker = '...')
 	 {
 		  return mb_strimwidth($str, 0, $length, $trimMarker);
@@ -1420,8 +1462,6 @@
 		  
 		  return $sectionsData;
 	 }
-	 
-	 ;
 	 
 	 
 	 ### => все разделы из кэша: ###
@@ -1509,7 +1549,7 @@
 	 }
 	 
 	 
-	 // /component-template/result_modifier.php:
+	 // FILE: /component-template/result_modifier.php:
 	 [
 		 "ITEMS" => $items,
 		 "SECTION_CODE" => $sectionCode
@@ -1557,120 +1597,118 @@
 	 $obParser = new CTextParser;
 ?>
 
-<p>Оставляйте свои впечатления и отзывы о товарах на сайте</p>
-
-<? if ($sectionsData): ?>
-	 <section id="sectionData" class="sectionData">
-		  <div class="dropdown">
-				<div class="select">
-					 <span>Другие разделы с отзывами</span>
-					 <i class="fa fa-chevron-left"></i>
-				</div>
-				<div class="dropdown-menu">
-					 <? foreach ($sectionsData as $sectionData): ?>
-						  <?
-						  [
-							  "NAME" => $name,
-							  "CODE" => $code
-						  ] = $sectionData;
-						 
-						  if ($sectionCode === $code) {
-								continue;
-						  }
-						  ?>
-						  <div class="dropdown-menu__elem">
-								<a href="/reviews/<?= $code ?>/" class="dropdown-menu__link">
-									 <?= $name ?>
-								</a>
-						  </div>
-					 <? endforeach; ?>
-				</div>
-		  </div>
-	 </section>
-<? endif; ?>
-
-<? if ($countItems): ?>
-	 <h2><?= $sectionName ?> отзывы</h2>
-	 
-	 <div class="response-panel">
-		  <div class="response-panel__count">Найдено отзывов: <b><?= $countItems ?></b></div>
-		  <div class="response-panel__sort">
-				Сортировка:
-				<a href="<?= $urn ?>" class="<?= $isSortByCount ? '' : 'link--disabled' ?>">
-					 по дате
-				</a>
-				<a href="<?= $urn ?>?sort=count" class="<?= !$isSortByCount ? '' : 'link--disabled' ?>">
-					 по количеству отзывов
-				</a>
-		  </div>
-	 </div>
-	 
-	 
-	 <div class="responses">
-		  <div class="response__item response__item--main">
-				<div class="response__img"></div>
-				<div class="response__text">
-					 Текст отзыва
-				</div>
-				<div class="response__info response__info--main">Дата</div>
-				<div class="response__count response__count--main">Отзывы</div>
-		  </div>
-		  
-		  <? foreach ($items as $item): ?>
-				<div class="response__item">
-					 <?
-						  [
-							  'product' => [
-								  'id' => $id,
-								  'name' => $name,
-								  'src' => $src,
-								  'urn' => $urn
-							  ],
-							  'response' => [
-								  'author' => $author,
-								  'message' => $message,
-								  'postDate' => $postDate
-							  ],
-							  'responseCount' => $responseCount
-						  ] = $item;
-						  
-						  $messageHTML = $obParser->convertText($message); // для отображения смайлов
-					 ?>
-					 
-					 <div class="response__img">
-						  <a href="<?= $urn ?>" title="<?= $name ?>">
-								<img src="<?= $src ?>" alt="<?= $name ?>'">
-						  </a>
+	 <? if ($sectionsData): ?>
+		  <section id="sectionData" class="sectionData">
+				<div class="dropdown">
+					 <div class="select">
+						  <span>Другие разделы с отзывами</span>
+						  <i class="fa fa-chevron-left"></i>
 					 </div>
-					 <div class="response__text">
-						  <div class="response__link">
-								<a href="<?= $urn ?>/reviews/#reviewTab" title="<?= $name ?>">
-									 <?= $name ?>
-								</a>
-								<? if ($sectionName && $sectionURN): ?>
-									 [
-									 <a href="<?= $sectionURN ?>" title="<?= $sectionName ?>">
-										  <?= $sectionName ?>
+					 <div class="dropdown-menu">
+						  <? foreach ($sectionsData as $sectionData): ?>
+								<?
+								[
+									"NAME" => $name,
+									"CODE" => $code
+								] = $sectionData;
+								
+								if ($sectionCode === $code) {
+									 continue;
+								}
+								?>
+								<div class="dropdown-menu__elem">
+									 <a href="/reviews/<?= $code ?>/" class="dropdown-menu__link">
+										  <?= $name ?>
 									 </a>
-									 ]
-								<? endif; ?>
-						  </div>
-						  <div class="response__content">
-								<p><?= $messageHTML ?></p>
-						  </div>
-					 </div>
-					 <div class="response__info">
-						  <span class="response__date"><?= ConvertDateTime($postDate, 'YYYY-MM-DD') ?></span>
-						  <span class="response__author"><?= $author ?></span>
-					 </div>
-					 <div class="response__count">
-						  <a href="<?= $urn ?>/reviews/#reviewTab" title="Читать остальные отзывы"
-							  class="response__link-with-img">[ <?= $responseCount ?> ]</a>
+								</div>
+						  <? endforeach; ?>
 					 </div>
 				</div>
-		  <? endforeach; ?>
-	 </div>
+		  </section>
+	 <? endif; ?>
+
+	 <? if ($countItems): ?>
+		  <h2><?= $sectionName ?> отзывы</h2>
 	 
+		  <div class="response-panel">
+				<div class="response-panel__count">Найдено отзывов: <b><?= $countItems ?></b></div>
+				<div class="response-panel__sort">
+					 Сортировка:
+					 <a href="<?= $urn ?>" class="<?= $isSortByCount ? '' : 'link--disabled' ?>">
+						  по дате
+					 </a>
+					 <a href="<?= $urn ?>?sort=count" class="<?= !$isSortByCount ? '' : 'link--disabled' ?>">
+						  по количеству отзывов
+					 </a>
+				</div>
+		  </div>
+	 
+	 
+		  <div class="responses">
+				<div class="response__item response__item--main">
+					 <div class="response__img"></div>
+					 <div class="response__text">
+						  Текст отзыва
+					 </div>
+					 <div class="response__info response__info--main">Дата</div>
+					 <div class="response__count response__count--main">Отзывы</div>
+				</div>
+				
+				<? foreach ($items as $item): ?>
+					 <div class="response__item">
+						  <?
+								[
+									'product' => [
+										'id' => $id,
+										'name' => $name,
+										'src' => $src,
+										'urn' => $urn
+									],
+									'response' => [
+										'author' => $author,
+										'message' => $message,
+										'postDate' => $postDate
+									],
+									'responseCount' => $responseCount
+								] = $item;
+								
+								$messageHTML = $obParser->convertText($message); // для отображения смайлов
+						  ?>
+	 
+						  <div class="response__img">
+								<a href="<?= $urn ?>" title="<?= $name ?>">
+									 <img src="<?= $src ?>" alt="<?= $name ?>'">
+								</a>
+						  </div>
+						  <div class="response__text">
+								<div class="response__link">
+									 <a href="<?= $urn ?>/reviews/#reviewTab" title="<?= $name ?>">
+										  <?= $name ?>
+									 </a>
+									 <? if ($sectionName && $sectionURN): ?>
+										  [
+										  <a href="<?= $sectionURN ?>" title="<?= $sectionName ?>">
+												<?= $sectionName ?>
+										  </a>
+										  ]
+									 <? endif; ?>
+								</div>
+								<div class="response__content">
+									 <p><?= $messageHTML ?></p>
+								</div>
+						  </div>
+						  <div class="response__info">
+								<span class="response__date"><?= ConvertDateTime($postDate, 'YYYY-MM-DD') ?></span>
+								<span class="response__author"><?= $author ?></span>
+						  </div>
+						  <div class="response__count">
+								<a href="<?= $urn ?>/reviews/#reviewTab" title="Читать остальные отзывы"
+									class="response__link-with-img">[ <?= $responseCount ?> ]</a>
+						  </div>
+					 </div>
+				<? endforeach; ?>
+		  </div>
+
 	 <div
 		 class="bottom_nav <?= $arParams["DISPLAY_TYPE"]; ?>"
 		 <?= ($arParams["AJAX_REQUEST"] == "Y" ? "style='display: none; '" : ""); ?>
@@ -1682,3 +1720,222 @@
 		  ?>
 	 </div>
 <? endif; ?>
+
+
+<?
+	 
+	 #@ УДАЛЕНИЕ ДУБЛЕЙ ТОВАРОВ + РЕДИРЕКТЫ:
+	 
+	 use h2o\Redirect\RedirectTable;
+	 
+	 require_once "{$_SERVER["DOCUMENT_ROOT"]}/bitrix/modules/main/include/prolog_before.php";
+	 
+	 const CATALOG_IBLOCK_ID = 17;
+	 
+	 
+	 [$origElementsWithDoubles, $doublesElements, $doubleElemCodes] = getCatalogDoublesData();
+	 
+	 [
+		 'toDel' => $toDelProducts,
+		 'toSave' => $toSaveProducts
+	 ] = splitCatalogDoublesData($origElementsWithDoubles, $doublesElements, $doubleElemCodes);
+	 
+	 
+	 ['errors' => $redirectError] = addRedirectsForCatalogDoubles($toDelProducts, $toSaveProducts, $doubleElemCodes);
+	 
+	 if ($redirectError) {
+		  echo "Error add redirect: <br>" . implode("<br>", $redirectError);
+	 }
+	 
+	 ['errors' => $deleteErrors] = deleteCatalogDoubles($toDelProducts);
+	 
+	 if ($deleteErrors) {
+		  echo "Error delete elements: <br>" . implode("<br>", $deleteErrors);
+	 }
+	 
+	 if (!$redirectError && !$deleteErrors) {
+		  echo 'Success';
+	 }
+	 
+	 
+	 /**
+	  * @return array [
+	  *    данные по товарам, имеющими дубли,
+	  *    данные по дублями,
+	  *    символьные кода товаров
+	  * ]
+	  */
+	 function getCatalogDoublesData()
+	 {
+		  $origElements = [];
+		  $doublesElements = [];
+		  $arSort = [];
+		  $arFilter = [
+			  "IBLOCK_ID" => CATALOG_IBLOCK_ID,
+			  "ACTIVE" => "Y",
+		  ];
+		  $arSelect = [
+			  "ID",
+			  "NAME",
+			  "CODE",
+			  "DETAIL_PAGE_URL",
+		  ];
+		  
+		  $dbResElements = CIBlockElement::GetList($arSort, $arFilter, false, false, $arSelect);
+		  
+		  while ($elemData = $dbResElements->GetNext()) {
+				[
+					"ID" => $id,
+					"NAME" => $name,
+					"CODE" => $code,
+					"DETAIL_PAGE_URL" => $urn,
+				] = $elemData;
+				
+				$isOrigElem = !array_key_exists($code, $origElements);
+				$depth = substr_count($urn, '/') - 2;
+				$elemData = compact('id', 'name', 'urn', 'depth');
+				
+				if ($isOrigElem) {
+					 $origElements[$code] = $elemData;
+					 continue;
+				}
+				
+				$doublesElements[$code] = $elemData;
+		  }
+		  
+		  $doubleElemCodes = array_keys($doublesElements);
+		  $origElementsWithDoubles = array_filter($origElements, function ($key) use ($doubleElemCodes) {
+				return in_array($key, $doubleElemCodes);
+		  }, ARRAY_FILTER_USE_KEY);
+		  
+		  return [$origElementsWithDoubles, $doublesElements, $doubleElemCodes];
+	 }
+	 
+	 
+	 /**
+	  * @param $origElementsWithDoubles
+	  * @param $doublesElements
+	  * @param $doubleElemCodes
+	  * @return mixed * @return mixed [
+	  *    'toDel' => данные товаров для удаления,
+	  *    'toSave' => данные товаров, которые оставляем
+	  * ] (исходя из глубины вложенности товара)
+	  */
+	 function splitCatalogDoublesData($origElementsWithDoubles, $doublesElements, $doubleElemCodes)
+	 {
+		  return array_reduce($doubleElemCodes, function ($acc, $code) use ($origElementsWithDoubles, $doublesElements) {
+				$origElement = $origElementsWithDoubles[$code];
+				$doubleElement = $doublesElements[$code];
+				['depth' => $depthOrig] = $origElement;
+				['depth' => $depthDouble] = $doubleElement;
+				
+				$acc['toDel'][$code] = $depthOrig > $depthDouble ? $origElement : $doubleElement;
+				$acc['toSave'][$code] = $depthOrig < $depthDouble ? $origElement : $doubleElement;;
+				
+				return $acc;
+		  }, ['toDel' => [], 'toSave' => []]);
+	 }
+	 
+	 /**
+	  * @param $toDelProducts
+	  * @param $toSaveProducts
+	  * @param $doubleElemCodes
+	  * @return array [
+	  * 'redirects' => данные по проставленным редиректам
+	  * 'errors' => не добавленные редиректы
+	  * ]
+	  */
+	 function addRedirectsForCatalogDoubles($toDelProducts, $toSaveProducts, $doubleElemCodes)
+	 {
+		  $result = [
+			  'errors' => [],
+			  'redirects' => []
+		  ];
+		  
+		  foreach ($doubleElemCodes as $code) {
+				['urn' => $redirectFrom] = $toDelProducts[$code];
+				['urn' => $redirectTo] = $toSaveProducts[$code];
+				
+				if ($redirectFrom == $redirectTo) {
+					 continue;
+				}
+				
+				$result['redirects'][] = "FROM: {$redirectFrom} TO: {$redirectTo}";
+				
+				$dbResAdd = h2o\Redirect\RedirectTable::add([
+					"ACTIVE" => "Y",
+					"REDIRECT_FROM" => $redirectFrom,
+					"REDIRECT_TO" => $redirectTo,
+					"IS_REGEXP" => "N",
+				]);
+				
+				$keyData = $dbResAdd ? 'redirects' : 'errors';
+			 
+				$result[$keyData][] = "FROM: {$redirectFrom} TO: {$redirectTo}";
+		  }
+		  
+		  return $result;
+	 }
+	 
+	 /**
+	  * @param $toDelProducts
+	  * @return array [
+	  * 'deletedIDs' => удаленные ID
+	  * 'errors' => не удаленные ID
+	  * ]
+	  */
+	 function deleteCatalogDoubles($toDelProducts)
+	 {
+		  $result = [
+			  'errors' => [],
+			  'deletedIDs' => []
+		  ];
+		  
+		  foreach ($toDelProducts as $delProduct) {
+				['id' => $id] = $delProduct;
+				
+				$resDel = CIBlockElement::Delete($id);
+				$keyData = $resDel ? 'deletedIDs' : 'errors';
+				
+				$result[$keyData][] = $id;
+		  }
+		  
+		  return $result;
+	 }
+	 
+	 
+	 #@ УДАЛЕНИЕ SEO МЕТАТЕГОВ У ЭЛЕМЕНТОВ:
+	 CModule::IncludeModule('iblock');
+	 
+	 function cleanProductsSeoMeta($blockID, $ids)
+	 {
+		  foreach ($ids as $id) {
+				$iPropTemplates = new \Bitrix\Iblock\InheritedProperty\ElementTemplates ($blockID, $id);
+				$iPropTemplates->set(
+					[
+						"ELEMENT_META_TITLE" => "",
+						"ELEMENT_META_KEYWORDS" => "",
+						"ELEMENT_META_DESCRIPTION" => "",
+					]
+				);
+				
+		  }
+	 }
+	 
+	 #@ УДАЛЕНИЕ SEO МЕТАТЕГОВ У РАЗДЕЛОВ:
+	 function cleanSectionSeoMeta($blockID, $ids)
+	 {
+		  foreach ($ids as $id) {
+				$iPropTemplates = new \Bitrix\Iblock\InheritedProperty\SectionTemplates ($ids, $id);
+				$iPropTemplates->set(
+					[
+						"SECTION_META_TITLE" => "",
+						"SECTION_META_KEYWORDS" => "",
+						"SECTION_META_DESCRIPTION" => "",
+						"ELEMENT_META_TITLE" => "",
+						"ELEMENT_META_KEYWORDS" => "",
+						"ELEMENT_META_DESCRIPTION" => "",
+					]
+				);
+		  }
+	 }

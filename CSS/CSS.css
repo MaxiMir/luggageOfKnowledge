@@ -1,0 +1,22 @@
+/* Переменные на чистом CSS */
+:root { /* :root - класс для глобальных переменных */
+    --color: red
+}
+
+.elements {
+    --width: 100px; /* локальная переменная - для дочерних элементов .elements */
+    color: var(--color, blue); /* blue - цвет по умолч. */
+}
+
+.elements__item{
+    width: var(--width);
+}
+
+/*
+--- В JS --
+const rootCss = document.querySelector(':root'); 
+const CssRules = getComputedStyle(element);
+const color = CssRules.getPropertyValue('--color'); // получение свойства
+
+rootCss.style.setProperty('--color', 'green'); // изменение свойства
+*/
