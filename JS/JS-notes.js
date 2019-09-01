@@ -1515,3 +1515,70 @@ message.trimStart()
 // 'Welcome to CS 101   '
 message.trimEnd().trimStart()
 // 'Welcome to CS 101'
+
+
+
+// access array item (with default value)
+const colors = [];
+const [, secondColor = 'black'] = colors;
+
+// immutable operations
+const big = {
+   foo: 'value Foo',
+   bar: 'value Bar'
+};
+
+const { foo, ...small } = big;
+foo = ''
+small; // => { bar: 'value Bar' }
+
+// destructuring iterables
+const movies = {
+   list: [
+      { title: 'Heat' },
+      { title: 'Interstellar' }
+   ],
+   [Symbol.iterator]() {
+      let index = 0;
+      return {
+         next: () => {
+            if (index < this.list.length) {
+               const value = this.list[index++].title;
+               return { value, done: false };
+            }
+            return { done: true };
+         }
+      };
+   }
+};
+
+const [firstMovieTitle] = movies;
+console.log(firstMovieTitle); // => 'Heat'
+
+
+// destructuring dynamic properties
+function greet(obj, nameProp) {
+   const { [nameProp]: name = 'Unknown' } = obj;
+   return `Hello, ${name}!`;
+}
+
+greet({ name: 'Batman' }, 'name'); // => 'Hello, Batman!'
+greet({ }, 'name'); // => 'Hello, Unknown!'
+
+
+
+// # Сохраняем данные формы на сайте при перезагрузке страницы, с помощью sessionStorage:
+document.addEventListener("DOMContentLoaded", function() { // событие загрузки страницы
+    // выбираем на странице все элементы типа textarea и input
+    document.querySelectorAll('textarea, input').forEach(e => {
+        // если данные значения уже записаны в sessionStorage, то вставляем их в поля формы
+        // путём этого мы как раз берём данные из памяти браузера, если страница была случайно перезагружена
+        e.value = window.sessionStorage.getItem(e.name, e.value);
+        // на событие ввода данных (включая вставку с помощью мыши) вешаем обработчик
+        e.addEventListener('input', () => {
+            // и записываем в sessionStorage данные, в качестве имени используя атрибут name поля элемента ввода
+            window.sessionStorage.setItem(e.name, e.value);
+        })
+    })
+
+}); 

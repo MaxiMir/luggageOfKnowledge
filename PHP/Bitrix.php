@@ -29,8 +29,8 @@
 	 #@ Вывод свойства типа HTML/TEXT:
 	 echo htmlspecialcharsBack($arFields['PROPERTY_КОД_СВОЙСТВА_VALUE']["TEXT"]);
 ?>
-
-
+	 
+	 
 	 <head>
 		  <title><? $APPLICATION->showTitle() ?></title> <!--ВЫВОД Title: -->
 		  
@@ -54,11 +54,11 @@
 		  ?>
 	 </head>
 	 <body>
-		  <? if ($GLOBALS['USER']->IsAdmin()): ?>
-				<div id="panel"><? $APPLICATION->ShowPanel(); ?></div> <!-- ПОКАЗ АДМИН ПАНЕЛИ -->
-		  <? endif; ?>
-
-	 		<h1><? $APPLICATION->showTitle(false) ?></h1> <!-- ВЫВОД H1 -->
+<? if ($GLOBALS['USER']->IsAdmin()): ?>
+	 <div id="panel"><? $APPLICATION->ShowPanel(); ?></div> <!-- ПОКАЗ АДМИН ПАНЕЛИ -->
+<? endif; ?>
+	 
+	 <h1><? $APPLICATION->showTitle(false) ?></h1> <!-- ВЫВОД H1 -->
 <?
 	 
 	 
@@ -78,7 +78,6 @@
 	 // Код шаблона
 	 
 	 
-	 
 	 #@ ДОБАВИТЬ РЕДАКТОР ЭЛЕМЕНТА В ВИЗУАЛЬНОМ РЕДАКТОРЕ: ?>
 	 <div class="box1" id="<?= $this->GetEditAreaId($arItem['ID']); ?>">
 		  <!-- код элемента в цикле -->
@@ -87,16 +86,16 @@
 	 
 	 
 	 #@ ИЗМЕНЕНИЕ/УДАЛЕНИЕ ЭЛЕМЕНТОВ В ВИЗУАЛЬНОМ РЕДАКТОРЕ: ?>
-	 <? foreach ($arResult['ITEMS'] as $arItem): ?>
-		  <? $this->AddEditAction($arItem['ID'], $arItem['EDIT_LINK'],
-			  CIBlock::GetArrayByID($arItem['iBLOCK_ID'], 'ELEMENT_EDIT'));
-		  $this->AddDeleteAction($arItem['ID'], $arItem['DELETE_LINK'],
-			  CIBlock::GetArrayByID($arItem['iBLOCK_ID'], 'ELEMENT_DELETE'),
-			  array('CONFIRM' => GetMessage('CT_BNL_ELEMENT_DELETE_CONFIRM'))); ?>
-		  <div class="some-elem-class" id="<?= $this->GetEditAreaId($arItem['ID']) ?>">
-				<!-- Код шаблона элемента -->
-		  </div>
-	 <? endforeach; ?>
+<? foreach ($arResult['ITEMS'] as $arItem): ?>
+	 <? $this->AddEditAction($arItem['ID'], $arItem['EDIT_LINK'],
+		 CIBlock::GetArrayByID($arItem['iBLOCK_ID'], 'ELEMENT_EDIT'));
+	 $this->AddDeleteAction($arItem['ID'], $arItem['DELETE_LINK'],
+		 CIBlock::GetArrayByID($arItem['iBLOCK_ID'], 'ELEMENT_DELETE'),
+		 array('CONFIRM' => GetMessage('CT_BNL_ELEMENT_DELETE_CONFIRM'))); ?>
+	 <div class="some-elem-class" id="<?= $this->GetEditAreaId($arItem['ID']) ?>">
+		  <!-- Код шаблона элемента -->
+	 </div>
+<? endforeach; ?>
 <?
 	 
 	 
@@ -109,13 +108,12 @@
 	 }
 	 
 	 unset($item); // поскольку массив передаем по ссылке
- 
 	 
 	 
 	 #@ ВЫВОД ПАГИНАЦИИ: ?>
-	 <? if ($arParams['DISPLAY_BOTTOM_PAGER']): ?>
-		  <?= arResult['NAV_STRING']; ?>
-	 <? endif; ?>
+<? if ($arParams['DISPLAY_BOTTOM_PAGER']): ?>
+	 <?= arResult['NAV_STRING']; ?>
+<? endif; ?>
 <?
 	 
 	 
@@ -159,7 +157,6 @@
 	  */
 	 
 	 
-	 
 	 #@ RESIZE ИЗОБРАЖЕНИЙ В ШАБЛОНЕ:
 	 $file = CFILE::ResizeImageGet(
 		 $arItem['PREVIEW_PICTURE'],
@@ -170,14 +167,12 @@
 	 $file['src']; // путь до новой картинки
 	 
 	 
-	 
 	 #@ ДОБАВЛЕНИЕ КОММЕНТАРИЕВ:
 	 /** Используется компонент bitrix: catalog.comments
 	  * В вызове компонента добавить: "AJAX_POST" => "Y"
 	  * СЕРВИСЫ -> БЛОГИ -> Нужный_Инфблок изменить -> вкладка "Права на доступ":
 	  * Права на комментарии: Все посетители - чтение, Авторизованные - запись
 	  */
-	 
 	 
 	 
 	 #@ ГАЛЕРЕЯ ИЗОБРАЖЕНИЙ:
@@ -187,14 +182,13 @@
 		  [PROPTERTIES] => [GALLERY] => [PROPERTY_VALUE_ID] => [44, 45, 46, 47] // ID - картинок
 	 */
 ?>
-	 <? if (!empty($arResult['PROPTERTIES']['GALLERY']['VALUE'])): ?>
-		  <?php foreach ($arResult['PROPTERTIES']['GALLERY']['VALUE'] as $photo): ?>
-				<img src="<?= CFILE::GetPath($photo); ?>" alt=""  width="200">
-				<!-- $photo - содержит ID, по нему получем путь к картинке -->
-		  <?php endforeach; ?>
-	 <? endif; ?>
+<? if (!empty($arResult['PROPTERTIES']['GALLERY']['VALUE'])): ?>
+	 <?php foreach ($arResult['PROPTERTIES']['GALLERY']['VALUE'] as $photo): ?>
+		  <img src="<?= CFILE::GetPath($photo); ?>" alt="" width="200">
+		  <!-- $photo - содержит ID, по нему получем путь к картинке -->
+	 <?php endforeach; ?>
+<? endif; ?>
 <?
-	 
 	 
 	 
 	 #@ АВТОРИЗАЦИЯ:
@@ -248,10 +242,6 @@
 	 // изменяем шаблоны остальных компонентов
 	 
 	 
-	 
-	 
-	 
-	 
 	 #@ ПОДКЛЮЧЕНИЕ CSS И JS В ШАБЛОНЕ:
 	 $this->addExternalCss("https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css");
 	 $this->addExternalJS("https://code.jquery.com/ui/1.12.1/jquery-ui.js");
@@ -280,7 +270,6 @@
 	 */
 	 
 	 
-	 
 	 #@ ПОЛУЧЕНИЕ ДАННЫХ ПО МЕТАМ:
 	 use \Bitrix\Iblock\InheritedProperty\SectionValues;
 	 
@@ -288,7 +277,6 @@
 	 $seoProps = $seoData->getValues();
 	 $APPLICATION->SetPageProperty("title", $seoProps["SECTION_META_TITLE"]);
 	 $APPLICATION->SetPageProperty("description", $seoProps["SECTION_META_DESCRIPTION"]);
-	 
 	 
 	 
 	 #@ ОБНОВЛЕНИЕ МЕТ:
@@ -345,7 +333,6 @@
 		  $APPLICATION->SetPageProperty("description", $meta_description);
 		  $APPLICATION->SetPageProperty("og:description", $meta_description);
 	 }
-	 
 	 
 	 
 	 #@ ПОЛУЧЕНИЕ СВОЙСТВ ИНФОБЛОКА:
@@ -413,7 +400,6 @@
 	 }
 	 
 	 
-	 
 	 #@ ВЫБРАТЬ ЭЛЕМЕНТЫ РАЗДЕЛА, У КОТОРЫХ СВОЙСТВО PROPERTY_SHOW_ON СОВПАДАЕТ С ТЕКУЩИМ ID РАЗДЕЛА:
 	 $res = CIBlockElement::GetList([], ['IBLOCK_ID' => 5, 'PROPERTY_SHOW_ON' => $arResult['ID']], false, false,
 		 ['ID', 'PROPERTY_YOUTUBE_CODE']);
@@ -423,7 +409,6 @@
 		  print_r($arFields);
 		  echo '</pre>';
 	 }
-
 	 
 	 
 	 #@ ИЗМЕНЕНИЕ arResult + ДОБАВЛЕНИЕ ЦЕН И СВОЙСТВ:
@@ -441,7 +426,6 @@
 		  $arResult['offerData'][$offerID]['Единиц в коробке'] = $obEl['PROPERTY_INBOX_VALUE'];
 		  $arResult['offerData'][$offerID]['Цена'] = $obEl['CATALOG_PRICE_10'];
 	 }
-	 
 	 
 	 
 	 #@ ИЗМЕНЕНИЕ arResult + ДОБАВЛЕНИЕ ПОЛЬЗОВАТЕЛЬСКОГО СВОЙСТВА:
@@ -481,7 +465,6 @@
 	 }
 	 
 	 
-	 
 	 #@ ОТПРАВКА НА ПОЧТУ + ЗАПИСЬ В ИНФОБЛОК:
 	 require $_SERVER['DOCUMENT_ROOT'] . '/bitrix/modules/main/include/prolog_before.php';
 	 
@@ -516,7 +499,6 @@
 	 CEvent::Send("AP_CALCULATOR", 's1', $arEventFields, "Y", "", $imgIDs); // imgIDs - массив с картинками
 	 
 	 
-	 
 	 #@ ЗАПИСЬ В ИНФОБЛОК:
 	 CModule::IncludeModule("iblock");
 	 $el = new CIBlockElement;
@@ -533,7 +515,6 @@
 	 );
 	 
 	 $PRODUCT_ID = $el->Add($arLoadProductArray);
-	 
 	 
 	 
 	 #@ ЗАГРУЗКА КАРТИНКИ:
@@ -558,14 +539,13 @@
 	 
 	 
 	 #@ ВЫВОД КАРТИНОК ИЗ ПОЛЬЗОВАТЕЛЬСКОГО СВОЙСТВА (тип файл - множественный): ?>
-	 <? foreach ($arResult['UF_ADDITIONAL_GALLERY'] as $imgInfo): ?>
-		  <? $imgSrc = CFILE::GetPath($imgInfo) ?>
-		  <div class="col-md-3 col-sm-4 col-xs-6">
-				<img src="<?= $imgSrc ?>" alt="">
-		  </div>
-	 <? endforeach; ?>
+<? foreach ($arResult['UF_ADDITIONAL_GALLERY'] as $imgInfo): ?>
+	 <? $imgSrc = CFILE::GetPath($imgInfo) ?>
+	 <div class="col-md-3 col-sm-4 col-xs-6">
+		  <img src="<?= $imgSrc ?>" alt="">
+	 </div>
+<? endforeach; ?>
 <?
-	 
 	 
 	 
 	 #@ ПОЛУЧИТЬ ВЛОЖЕННЫЕ РАЗДЕЛЫ:
@@ -663,7 +643,7 @@
 				<? if ($elemData['ID'] === $childSection['ID']) {
 					 continue;
 				} ?>
-
+				
 				<div class="col-md-4 col-sm-6">
 					 <img src="<?= CFILE::GetPath($elemData['PREVIEW_PICTURE']) ?>" alt="<?= $elemData['NAME'] ?>">
 					 <div class="property">Цена: <?= $elemData['PROPERTY_PRICE_VALUE'] ?> руб.</div>
@@ -678,7 +658,7 @@
 	 $arFilter = ["IBLOCK_ID" => $iBlockID, "SECTION_ID" => $sectionID, "ACTIVE" => "Y"];
 	 $elementsData = CIBlockElement::GetList([], $arFilter, false, false, $arSelect);
 ?>
-
+	 
 	 <div class="maxwidth-theme">
 		  <div class="col-md-12">
 				<div class="row sid-4 items stones">
@@ -730,7 +710,7 @@
 	 //**@@ Создаем новые товары:
 	 $createData = createElements(FILE_PRODUCTS);
 	 $countProducts = $createData['count'];
-	 $error = is_null($createData['error']) ? 0 :  $createData['error'];
+	 $error = is_null($createData['error']) ? 0 : $createData['error'];
 	 echo "Создано {$countProducts} <br> Ошибки: {$error}";
 	 
 	 //**@@ Меты для разделов:
@@ -1142,7 +1122,6 @@
 	 }
 	 
 	 
-	 
 	 #@ ГЕНЕРАЦИЯ МЕНЮ С "ИСКУССТВЕННЫМИ" РАЗДЕЛАМИ:
 	 ### данные меню каталога уровень 1: ###
 	 function getCatalogMainLinks()
@@ -1155,7 +1134,7 @@
 			  [
 				  "AR_FILTER" => ["!UF_SHOW_MENU_CHILDS" => false],
 				  "IS_SEF" => "Y",
-				  "SEF_BASE_URL" => "/category/",
+				  "SEF_BASE_URL" => "/categories/",
 				  "SECTION_PAGE_URL" => "#SECTION_CODE_PATH#/",
 				  "DETAIL_PAGE_URL" => "#SECTION_CODE_PATH#/#ELEMENT_CODE#",
 				  "IBLOCK_TYPE" => "category",
@@ -1168,15 +1147,15 @@
 		  );
 	 }
 	 
-	 
-	 ### данные меню каталога уровень 2: ###
-	 function getCatalogSecondLinks()
+	 ### данные меню каталога уровень 2,3: ###
+	 function getCatalogChildLinks()
 	 {
 		  $menuData = [];
 		  $fromIBlockMap = [];
-		  $arSort = [];
 		  $counter = 0;
+		  $arSort = [];
 		  $arSelect = [
+			  "ID",
 			  "NAME",
 			  "SECTION_PAGE_URL",
 			  "UF_SHOW_IN_SECT_MENU"
@@ -1191,6 +1170,7 @@
 		  
 		  while ($sectionData = $sectionsDBData->GetNext()) {
 				[
+					"ID" => $id,
 					"NAME" => $name,
 					"SECTION_PAGE_URL" => $sectionPageURL,
 					"UF_SHOW_IN_SECT_MENU" => $parentSectionID
@@ -1213,18 +1193,58 @@
 						"DEPTH_LEVEL" => 2
 					]
 				];
+				
+				$catalogLink3lvl = getCatalogLinks3Lvl($id, $fromBlock);
+				array_push($menuData[$parentSectionID], ...$catalogLink3lvl);
 		  }
 		  
 		  return $menuData;
 	 }
 	 
+	 ### данные меню каталога уровень 3: ###
+	 function getCatalogLinks3Lvl($sectionID, $fromBlock)
+	 {
+		  $menuData = [];
+		  $arSort = [];
+		  $arSelect = [
+			  "NAME",
+			  "SECTION_PAGE_URL"
+		  ];
+		  $arFilter = [
+			  "IBLOCK_ID" => CATALOG_I_BLOCK_ID,
+			  "SECTION_ID" => $sectionID,
+			  "GLOBAL_ACTIVE" => "Y"
+		  ];
+		  
+		  $sectionsDBData = CIBlockSection::GetList($arSort, $arFilter, false, $arSelect);
+		  
+		  while ($sectionData = $sectionsDBData->GetNext()) {
+				[
+					"NAME" => $name,
+					"SECTION_PAGE_URL" => $sectionPageURL,
+				] = $sectionData;
+				
+				$menuData[] = [
+					$name,
+					$sectionPageURL,
+					[$sectionPageURL],
+					[
+						"FROM_IBLOCK" => $fromBlock,
+						"IS_PARENT" => "",
+						"DEPTH_LEVEL" => 3
+					]
+				];
+		  }
+		  
+		  return $menuData;
+	 }
 	 
 	 ### полные данные меню каталога: ###
 	 function getCatalogMenuLinks()
 	 {
 		  $menuLinks = [];
 		  $catalogMainLinks = getCatalogMainLinks();
-		  $catalogSecondLinks = getCatalogSecondLinks();
+		  $catalogSecondLinks = getCatalogChildLinks();
 		  
 		  foreach ($catalogMainLinks as $linkData) {
 				$sectionID = end($linkData);
@@ -1240,7 +1260,6 @@
 		  
 		  return $menuLinks;
 	 }
-	 
 	 
 	 ### данные по брендам: ###
 	 function getBrands()
@@ -1266,7 +1285,6 @@
 		  
 		  return $brands;
 	 }
-	 
 	 
 	 ### данные меню по брендам: ###
 	 function generateBrandsLinks()
@@ -1302,7 +1320,6 @@
 		  }, $brandLink);
 	 }
 	 
-	 
 	 ### данные меню: ###
 	 function getMenuLinks()
 	 {
@@ -1311,7 +1328,6 @@
 		  
 		  return array_merge($aMenuLinksExt, $brandLinks);
 	 }
-	 
 	 
 	 ### данные меню из кэша: ###
 	 function getMenuLinksFromCache()
@@ -1325,7 +1341,6 @@
 	 
 	 // использование:
 	 $aMenuLinks = getMenuLinksFromCache();
-	 
 	 
 	 
 	 #@ СВЯЗКА ОТЗЫВОВ С ФОРУМА И ТОВАРОВ:
@@ -1374,7 +1389,7 @@
 		  if (!$USER->IsAdmin()) {
 				return;
 		  }
-	 	 
+		  
 		  echo '<pre>';
 		  
 		  foreach ($args as $arg) {
@@ -1597,118 +1612,118 @@
 	 $obParser = new CTextParser;
 ?>
 
-	 <? if ($sectionsData): ?>
-		  <section id="sectionData" class="sectionData">
-				<div class="dropdown">
-					 <div class="select">
-						  <span>Другие разделы с отзывами</span>
-						  <i class="fa fa-chevron-left"></i>
-					 </div>
-					 <div class="dropdown-menu">
-						  <? foreach ($sectionsData as $sectionData): ?>
-								<?
-								[
-									"NAME" => $name,
-									"CODE" => $code
-								] = $sectionData;
-								
-								if ($sectionCode === $code) {
-									 continue;
-								}
-								?>
-								<div class="dropdown-menu__elem">
-									 <a href="/reviews/<?= $code ?>/" class="dropdown-menu__link">
-										  <?= $name ?>
-									 </a>
-								</div>
-						  <? endforeach; ?>
-					 </div>
+<? if ($sectionsData): ?>
+	 <section id="sectionData" class="sectionData">
+		  <div class="dropdown">
+				<div class="select">
+					 <span>Другие разделы с отзывами</span>
+					 <i class="fa fa-chevron-left"></i>
 				</div>
-		  </section>
-	 <? endif; ?>
-
-	 <? if ($countItems): ?>
-		  <h2><?= $sectionName ?> отзывы</h2>
-	 
-		  <div class="response-panel">
-				<div class="response-panel__count">Найдено отзывов: <b><?= $countItems ?></b></div>
-				<div class="response-panel__sort">
-					 Сортировка:
-					 <a href="<?= $urn ?>" class="<?= $isSortByCount ? '' : 'link--disabled' ?>">
-						  по дате
-					 </a>
-					 <a href="<?= $urn ?>?sort=count" class="<?= !$isSortByCount ? '' : 'link--disabled' ?>">
-						  по количеству отзывов
-					 </a>
-				</div>
-		  </div>
-	 
-	 
-		  <div class="responses">
-				<div class="response__item response__item--main">
-					 <div class="response__img"></div>
-					 <div class="response__text">
-						  Текст отзыва
-					 </div>
-					 <div class="response__info response__info--main">Дата</div>
-					 <div class="response__count response__count--main">Отзывы</div>
-				</div>
-				
-				<? foreach ($items as $item): ?>
-					 <div class="response__item">
+				<div class="dropdown-menu">
+					 <? foreach ($sectionsData as $sectionData): ?>
 						  <?
-								[
-									'product' => [
-										'id' => $id,
-										'name' => $name,
-										'src' => $src,
-										'urn' => $urn
-									],
-									'response' => [
-										'author' => $author,
-										'message' => $message,
-										'postDate' => $postDate
-									],
-									'responseCount' => $responseCount
-								] = $item;
-								
-								$messageHTML = $obParser->convertText($message); // для отображения смайлов
+						  [
+							  "NAME" => $name,
+							  "CODE" => $code
+						  ] = $sectionData;
+						  
+						  if ($sectionCode === $code) {
+								continue;
+						  }
 						  ?>
-	 
-						  <div class="response__img">
-								<a href="<?= $urn ?>" title="<?= $name ?>">
-									 <img src="<?= $src ?>" alt="<?= $name ?>'">
+						  <div class="dropdown-menu__elem">
+								<a href="/reviews/<?= $code ?>/" class="dropdown-menu__link">
+									 <?= $name ?>
 								</a>
 						  </div>
-						  <div class="response__text">
-								<div class="response__link">
-									 <a href="<?= $urn ?>/reviews/#reviewTab" title="<?= $name ?>">
-										  <?= $name ?>
+					 <? endforeach; ?>
+				</div>
+		  </div>
+	 </section>
+<? endif; ?>
+
+<? if ($countItems): ?>
+	 <h2><?= $sectionName ?> отзывы</h2>
+	 
+	 <div class="response-panel">
+		  <div class="response-panel__count">Найдено отзывов: <b><?= $countItems ?></b></div>
+		  <div class="response-panel__sort">
+				Сортировка:
+				<a href="<?= $urn ?>" class="<?= $isSortByCount ? '' : 'link--disabled' ?>">
+					 по дате
+				</a>
+				<a href="<?= $urn ?>?sort=count" class="<?= !$isSortByCount ? '' : 'link--disabled' ?>">
+					 по количеству отзывов
+				</a>
+		  </div>
+	 </div>
+	 
+	 
+	 <div class="responses">
+		  <div class="response__item response__item--main">
+				<div class="response__img"></div>
+				<div class="response__text">
+					 Текст отзыва
+				</div>
+				<div class="response__info response__info--main">Дата</div>
+				<div class="response__count response__count--main">Отзывы</div>
+		  </div>
+		  
+		  <? foreach ($items as $item): ?>
+				<div class="response__item">
+					 <?
+						  [
+							  'product' => [
+								  'id' => $id,
+								  'name' => $name,
+								  'src' => $src,
+								  'urn' => $urn
+							  ],
+							  'response' => [
+								  'author' => $author,
+								  'message' => $message,
+								  'postDate' => $postDate
+							  ],
+							  'responseCount' => $responseCount
+						  ] = $item;
+						  
+						  $messageHTML = $obParser->convertText($message); // для отображения смайлов
+					 ?>
+					 
+					 <div class="response__img">
+						  <a href="<?= $urn ?>" title="<?= $name ?>">
+								<img src="<?= $src ?>" alt="<?= $name ?>'">
+						  </a>
+					 </div>
+					 <div class="response__text">
+						  <div class="response__link">
+								<a href="<?= $urn ?>/reviews/#reviewTab" title="<?= $name ?>">
+									 <?= $name ?>
+								</a>
+								<? if ($sectionName && $sectionURN): ?>
+									 [
+									 <a href="<?= $sectionURN ?>" title="<?= $sectionName ?>">
+										  <?= $sectionName ?>
 									 </a>
-									 <? if ($sectionName && $sectionURN): ?>
-										  [
-										  <a href="<?= $sectionURN ?>" title="<?= $sectionName ?>">
-												<?= $sectionName ?>
-										  </a>
-										  ]
-									 <? endif; ?>
-								</div>
-								<div class="response__content">
-									 <p><?= $messageHTML ?></p>
-								</div>
+									 ]
+								<? endif; ?>
 						  </div>
-						  <div class="response__info">
-								<span class="response__date"><?= ConvertDateTime($postDate, 'YYYY-MM-DD') ?></span>
-								<span class="response__author"><?= $author ?></span>
-						  </div>
-						  <div class="response__count">
-								<a href="<?= $urn ?>/reviews/#reviewTab" title="Читать остальные отзывы"
-									class="response__link-with-img">[ <?= $responseCount ?> ]</a>
+						  <div class="response__content">
+								<p><?= $messageHTML ?></p>
 						  </div>
 					 </div>
-				<? endforeach; ?>
-		  </div>
-
+					 <div class="response__info">
+						  <span class="response__date"><?= ConvertDateTime($postDate, 'YYYY-MM-DD') ?></span>
+						  <span class="response__author"><?= $author ?></span>
+					 </div>
+					 <div class="response__count">
+						  <a href="<?= $urn ?>/reviews/#reviewTab" title="Читать остальные отзывы"
+							  class="response__link-with-img">[ <?= $responseCount ?> ]</a>
+					 </div>
+				</div>
+		  <? endforeach; ?>
+	 </div>
+	 
 	 <div
 		 class="bottom_nav <?= $arParams["DISPLAY_TYPE"]; ?>"
 		 <?= ($arParams["AJAX_REQUEST"] == "Y" ? "style='display: none; '" : ""); ?>
@@ -1725,7 +1740,6 @@
 <?
 	 
 	 #@ УДАЛЕНИЕ ДУБЛЕЙ ТОВАРОВ + РЕДИРЕКТЫ:
-	 
 	 use h2o\Redirect\RedirectTable;
 	 
 	 require_once "{$_SERVER["DOCUMENT_ROOT"]}/bitrix/modules/main/include/prolog_before.php";
@@ -1870,7 +1884,7 @@
 				]);
 				
 				$keyData = $dbResAdd ? 'redirects' : 'errors';
-			 
+				
 				$result[$keyData][] = "FROM: {$redirectFrom} TO: {$redirectTo}";
 		  }
 		  
@@ -1939,3 +1953,28 @@
 				);
 		  }
 	 }
+	 
+	 #@ ВЫВОД в bitrix:form.result.list данных с форм с датой (result_modifier.php):
+	 $arrResults = $arResult['arrResults'];
+	 $answersData = $arResult['arrAnswers'];
+	 
+	 if (!$arrResults || !$answersData) {
+		  return;
+	 }
+	 
+	 $arResult['ITEMS'] = array_map(function ($answerData, $userData) {
+		  [
+			  "47" => [
+				  "47" => ["USER_TEXT" => $name]
+			  ],
+			  "49" => [
+				  "49" => ["USER_TEXT" => $responseTxt]
+			  ]
+		  ] = $answerData;
+		  
+		  ["DATE_CREATE" => $date] = $userData;
+		  
+		  return compact("name", "responseTxt", "date");
+		  
+	 }, $answersData, $arrResults);
+	 
