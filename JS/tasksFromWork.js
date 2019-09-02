@@ -74,3 +74,63 @@ const generateSelects = () => {
         });
     }
 };
+
+
+
+/* #@@@ Анимация у счетчиков при скролле до элемента @@@#*/
+const isMainPage = location.pathname === '/';
+
+    if (isMainPage) {
+        let isNotWorkOutAnimate = true;
+        const windowDOM = $(window);
+        const counters = $('.counters');
+
+        const countersPos = counters.offset().top;
+        const windowHeight = windowDOM.height();
+        const scrollDistanceForCounters = countersPos - windowHeight;
+
+        windowDOM.scroll(function() {
+            const scrollDistance = $(this).scrollTop();
+            const userSeesBlockCounters = scrollDistance > scrollDistanceForCounters;
+
+            if (isNotWorkOutAnimate && userSeesBlockCounters) {
+            animateCounters();
+            isNotWorkOutAnimate = false;
+            }
+        });
+    }
+
+    function animateCounters() {
+        const counts = $('.counters__num');
+
+        $.each(counts, function () {
+            const elem = $(this);
+            const countText = elem.text();
+
+            elem.prop('Counter', 0).animate(
+                {   
+                    Counter: countText 
+                },
+                {
+                    duration: 1500,
+                    easing: 'swing',
+                    step: now => {
+                        elem.text(Math.ceil(now));
+                    },
+                },
+            );
+        });
+    }
+   
+/*
+<div class="counters">
+    <div class="counters__item">
+        <span class="counters__num">37</span>
+        <span>текст текст</span>
+    </div>
+    <div class="counters__item">
+        <span class="counters__num">137</span>
+        <span>текст текст</span>
+    </div>
+</div>
+*/

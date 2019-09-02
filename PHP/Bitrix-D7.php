@@ -254,6 +254,32 @@ $result = \Bitrix\Iblock\ElementTable::getList([
 ]);
 
 
+# 6 D7:
+# Настройки > Производительность > Таблицы
+# ?orm=y   
+use Bitrix\Form\ResultAnswerTable;
+use Bitrix\Main\Loader;
+
+require($_SERVER["DOCUMENT_ROOT"] . "/bitrix/header.php");
+
+Loader::includeModule("form");
+
+$dbRes = ResultAnswerTable::getList(
+    [
+        "select" => [
+            "ID",
+            "USER_TEXT"
+        ],
+        "filter" => [
+            "FORM_ID" => 2
+        ]
+    ]
+);
+
+echo "<pre>";
+print_r($dbRes->fetchAll());
+echo "</pre>";
+
 
 
 # Application / Context / Request / Server:
@@ -324,3 +350,7 @@ $server->getRequestMethod();// REQUEST_METHOD
 $server->getPhpSelf();      // PHP_SELF
 $server->getScriptName();   // SCRIPT_NAME
 $server->get('HTTP_ACCEPT');// Любое значение из $_SERVER
+
+
+
+
