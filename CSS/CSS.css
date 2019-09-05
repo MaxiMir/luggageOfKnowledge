@@ -1,4 +1,4 @@
-/* Переменные на чистом CSS */
+/* ### Переменные на чистом CSS ### */
 :root { /* :root - класс для глобальных переменных */
     --color: red
 }
@@ -20,3 +20,44 @@ const color = CssRules.getPropertyValue('--color'); // получение сво
 
 rootCss.style.setProperty('--color', 'green'); // изменение свойства
 */
+
+
+/* ### Bounce Element Around Viewport in CSS (https://css-tricks.com/bounce-element-around-viewport-in-css/) ### */
+
+/* HTML:
+<div class="x">
+  <img class="y" src="https://blog.codepen.io/wp-content/uploads/2012/06/Button-Black-Large.png" alt="codepen" />
+</div>
+*/
+
+/* SCSS: */
+$size: 100px;
+
+body {
+    margin: 0;
+}
+
+img, div {
+    width: $size;
+    height: $size;
+}
+
+.x {
+    animation: x 13s linear infinite alternate;
+}
+
+.y {
+    animation: y 7s linear infinite alternate;
+}
+
+@keyframes x {
+    100% {
+        transform: translateX( calc(100vw - #{$size}) );
+    }
+}
+
+@keyframes y {
+    100% {
+        transform: translateY( calc(100vh - #{$size}) );
+    }
+}

@@ -29,36 +29,36 @@
 	 #@ Вывод свойства типа HTML/TEXT:
 	 echo htmlspecialcharsBack($arFields['PROPERTY_КОД_СВОЙСТВА_VALUE']["TEXT"]);
 ?>
+
+
+<head>
+	 <title><? $APPLICATION->showTitle() ?></title> <!--ВЫВОД Title: -->
 	 
-	 
-	 <head>
-		  <title><? $APPLICATION->showTitle() ?></title> <!--ВЫВОД Title: -->
+	 <?
 		  
-		  <?
-				
-				use Bitrix\Main\Page\Asset;
-				
-				$APPLICATION->showHead(); // Метод предназначен для вывода в шаблоне сайта основных полей тега <head>: мета-теги Content-Type, robots, keywords, description; стили CSS; скрипты, заданные через CMain::AddHeadScript
-				
-				Asset::getInstance()->addCss(SITE_TEMPLATE_PATH . '/css/style.css'); // подключение стилей. SITE_TEMPLATE_PATH - путь к активному шаблону сайта
-				$APPLICATION->SetAdditionalCss(); // устаревший метод подключения стилей
-				CJSCore::Init(['jquery']); // подключение библиотек из ядра битрикса
-				Bitrix\Main\UI\Extension::load('ui.vue'); // Подключение Vue JS (с января 2019 входит в ядро)
-				Asset::getInstance()->addJs(SITE_TEMPLATE_PATH . '/js/jquery-1.11.1.min.js');
-				$APPLICATION->AddHeadScript(); // устаревший метод подключения скриптов
-				Asset::getInstance()->addString('<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1>');
-				Asset::getInstance()->addString('<link href="//fonts.googleapis.com/css?family=Monda" rel="stylesheet" type="text/css">');
-				
-				$APPLICATION->SetPageProperty('title', 'Заголовок окна браузера');
-				$APPLICATION->SetTitle('Отзывы');
-		  ?>
-	 </head>
-	 <body>
+		  use Bitrix\Main\Page\Asset;
+		  
+		  $APPLICATION->showHead(); // Метод предназначен для вывода в шаблоне сайта основных полей тега <head>: мета-теги Content-Type, robots, keywords, description; стили CSS; скрипты, заданные через CMain::AddHeadScript
+		  
+		  Asset::getInstance()->addCss(SITE_TEMPLATE_PATH . '/css/style.css'); // подключение стилей. SITE_TEMPLATE_PATH - путь к активному шаблону сайта
+		  $APPLICATION->SetAdditionalCss(); // устаревший метод подключения стилей
+		  CJSCore::Init(['jquery']); // подключение библиотек из ядра битрикса
+		  Bitrix\Main\UI\Extension::load('ui.vue'); // Подключение Vue JS (с января 2019 входит в ядро)
+		  Asset::getInstance()->addJs(SITE_TEMPLATE_PATH . '/js/jquery-1.11.1.min.js');
+		  $APPLICATION->AddHeadScript(); // устаревший метод подключения скриптов
+		  Asset::getInstance()->addString('<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1>');
+		  Asset::getInstance()->addString('<link href="//fonts.googleapis.com/css?family=Monda" rel="stylesheet" type="text/css">');
+		  
+		  $APPLICATION->SetPageProperty('title', 'Заголовок окна браузера');
+		  $APPLICATION->SetTitle('Отзывы');
+	 ?>
+</head>
+<body>
 <? if ($GLOBALS['USER']->IsAdmin()): ?>
 	 <div id="panel"><? $APPLICATION->ShowPanel(); ?></div> <!-- ПОКАЗ АДМИН ПАНЕЛИ -->
 <? endif; ?>
-	 
-	 <h1><? $APPLICATION->showTitle(false) ?></h1> <!-- ВЫВОД H1 -->
+
+<h1><? $APPLICATION->showTitle(false) ?></h1> <!-- ВЫВОД H1 -->
 <?
 	 
 	 
@@ -79,9 +79,9 @@
 	 
 	 
 	 #@ ДОБАВИТЬ РЕДАКТОР ЭЛЕМЕНТА В ВИЗУАЛЬНОМ РЕДАКТОРЕ: ?>
-	 <div class="box1" id="<?= $this->GetEditAreaId($arItem['ID']); ?>">
-		  <!-- код элемента в цикле -->
-	 </div>
+<div class="box1" id="<?= $this->GetEditAreaId($arItem['ID']); ?>">
+	 <!-- код элемента в цикле -->
+</div>
 <?
 	 
 	 
@@ -115,7 +115,21 @@
 	 <?= arResult['NAV_STRING']; ?>
 <? endif; ?>
 <?
-	 
+
+
+	 #@ ТРАНСЛИТЕРАЦИЯ:
+	 $params = array(
+     "max_len" => "100",
+     "change_case" => "L",
+     "replace_space" => "_",
+     "replace_other" => "_",
+     "delete_repeat_replace" => "true",
+     "use_google" => "false",
+     );
+
+     $code = CUtil::translit($row[], "ru", $params);
+
+
 	 
 	 /** КОМПОНЕНТЫ:
 	  * - Включаемая область
@@ -223,14 +237,14 @@
 	 
 	 
 	 // FILE: local/templates/.default/components/bitrix/system.auth.form/template: ?>
-	 <!-- .... -->
-	 <p>Добро пожаловать: <?= $arResult['USER_NAME'] ?></p>
-	 <p>Ваш профиль: <a href="<?= $arResult['PROFILE_URL'] ?>">ссылка</a></p>
-	 <p>Выход: <a href="<?= $APPLICATION->GetCurPageParam('logout=yes',
-			  ['login', 'logout', 'register', 'forgot_password', 'change_passwrod']) ?>">
-				<?= GetMessage('AUTH_LOGOUT_BUTTON') ?></a>
-	 </p>
-	 <!-- .... --><?
+<!-- .... -->
+<p>Добро пожаловать: <?= $arResult['USER_NAME'] ?></p>
+<p>Ваш профиль: <a href="<?= $arResult['PROFILE_URL'] ?>">ссылка</a></p>
+<p>Выход: <a href="<?= $APPLICATION->GetCurPageParam('logout=yes',
+		 ['login', 'logout', 'register', 'forgot_password', 'change_passwrod']) ?>">
+		  <?= GetMessage('AUTH_LOGOUT_BUTTON') ?></a>
+</p>
+<!-- .... --><?
 	 
 	 
 	 // создаем FILE: /auth/registration.php
@@ -658,22 +672,22 @@
 	 $arFilter = ["IBLOCK_ID" => $iBlockID, "SECTION_ID" => $sectionID, "ACTIVE" => "Y"];
 	 $elementsData = CIBlockElement::GetList([], $arFilter, false, false, $arSelect);
 ?>
-	 
-	 <div class="maxwidth-theme">
-		  <div class="col-md-12">
-				<div class="row sid-4 items stones">
-					 <? while ($elemData = $elementsData->GetNext()): ?>
-						  <div class="col-md-4 col-sm-6">
-								<img src="<?= CFILE::GetPath($elemData['PREVIEW_PICTURE']) ?>" width="150px"
-									  alt="<?= $elemData['NAME'] ?>">
-								<div class="property">
-									 Цена: <?= $elemData['PROPERTY_PRICE_VALUE'] ?> руб./м<sup>2</sup>
-								</div>
+
+<div class="maxwidth-theme">
+	 <div class="col-md-12">
+		  <div class="row sid-4 items stones">
+				<? while ($elemData = $elementsData->GetNext()): ?>
+					 <div class="col-md-4 col-sm-6">
+						  <img src="<?= CFILE::GetPath($elemData['PREVIEW_PICTURE']) ?>" width="150px"
+								 alt="<?= $elemData['NAME'] ?>">
+						  <div class="property">
+								Цена: <?= $elemData['PROPERTY_PRICE_VALUE'] ?> руб./м<sup>2</sup>
 						  </div>
-					 <? endwhile; ?>
-				</div>
+					 </div>
+				<? endwhile; ?>
 		  </div>
 	 </div>
+</div>
 <?
 	 
 	 
@@ -1978,3 +1992,187 @@
 		  
 	 }, $answersData, $arrResults);
 	 
+	 
+	 #@@@ Минимальная цена товара в метатегах раздела @@@#
+	 
+	 ### минимальная цена товара в разделе ###
+	 function getMinPriceBySectionID($sectionID)
+	 {
+		  $catalogID = 26;
+		  
+		  $arSort = ['PROPERTY_PRICE' => 'ASC'];
+		  $arFilter = [
+			  'IBLOCK_ID' => $catalogID,
+			  'SECTION_ID' => $sectionID,
+			  'ACTIVE' => 'Y',
+		  ];
+		  $arSelect = ['ID'];
+		  $arTopCount = ['nTopCount' => 1];
+		  
+		  $rsProducts = CIBlockElement::GetList(
+			  $arSort,
+			  $arFilter,
+			  false,
+			  $arTopCount,
+			  $arSelect
+		  );
+		  
+		  ["PROPERTY_PRICE_VALUE" => $price] = $rsProducts->Fetch();
+		  
+		  return $price;
+	 }
+	 
+	 
+	 ### минимальная цена товара в разделе из кэша ###
+	 function getMinPriceBySectionIDFromCache($sectionID)
+	 {
+		  $cacheTime = 3600 * 6;
+		  $cacheID = "sectMinPrice{$sectionID}";
+		  
+		  return returnResultCache($cacheTime, $cacheID, 'getMinPriceBySectionID', $sectionID);
+	 }
+	 
+	 
+	 ### заменить плейсхолдер на значение ###
+	 function replacePlaceHolder($placeholder, $replaceable, $string)
+	 {
+		  return str_replace($placeholder, $replaceable, $string);
+	 }
+	 
+	 
+	 ### заменить плейсхолдер #SECT_MIN_PRICE# ###
+	 function insertMinPrice($sectionID, $string)
+	 {
+		  $sectionMinPrice = getMinPriceBySectionIDFromCache($sectionID);
+		  
+		  return replacePlaceHolder('#SECT_MIN_PRICE#', $sectionMinPrice, $string);
+	 }
+	 
+	 // FILE section.php: после подлючения catalog.section:
+	 $id = $arResult['VARIABLES']['SECTION_ID'];
+	 $title = $APPLICATION->GetProperty("title");
+	 $keywords = $APPLICATION->GetProperty("keywords");
+	 $description = $APPLICATION->GetProperty("description");
+	 
+	 $titleWithMinPrice = insertMinPrice($id, $title);
+	 $keywordsWithMinPrice = insertMinPrice($id, $keywords);
+	 $descriptionWithMinPrice = insertMinPrice($id, $description);
+	 
+	 $APPLICATION->SetPageProperty("title", $titleWithMinPrice);
+	 $APPLICATION->SetPageProperty("keywords", $keywordsWithMinPrice);
+	 $APPLICATION->SetPageProperty("description", $descriptionWithMinPrice);
+	 
+	 
+	 /**
+	  * Масштабирует фото, сохраняет копию файла и возвращает путь к нему
+	  * либо возвращает ссылку на картинку-заглушку
+	  *
+	  * ---
+	  *
+	  * Водяной знак - если существует файл /upload/watermark/watermark_original.png - он будет
+	  * смасштабирован под фото и нанесен на всю поверхность с небольшим отступом от края.
+	  * watermark_original.png - должен быть большого размера, чтобы не терялось качество.
+	  *
+	  * @param $imgId
+	  * @param $width int
+	  * @param $height int Если не задано, будет пропорционально ширине
+	  * @param $proportional bool false - Обрезать жестко по заданному размеру (удобно для мини картинок). true - пропорционально (для больших)
+	  *
+	  * @return string Путь к измененному файлу
+	  * @throws Exception File dimensions can not be a null
+	  *
+	  *
+	  */
+	 function getResizedImgOrPlaceholder($imgId, $width, $height = "auto", $proportional = true)
+	 {
+		  if (!$width) {
+				throw new \Exception("File dimensions can not be a null");
+		  }
+		  
+		  $resizeType = BX_RESIZE_IMAGE_EXACT;
+		  $autoHeightMax = 9999;
+		  
+		  if ($height == "auto") {
+				$height = $autoHeightMax;
+				$resizeType = BX_RESIZE_IMAGE_PROPORTIONAL;
+		  }
+		  
+		  if (!$height) {
+				$height = $width;
+		  }
+		  
+		  if ($proportional) {
+				$resizeType = BX_RESIZE_IMAGE_PROPORTIONAL;
+		  }
+		  
+		  if (!$imgId) {  // если картинка не существует (например, пустое значение некотрого св-ва) - вернем заглушку нужного размера
+				// тут можно положить собственную заглушку под стиль сайта
+				$customNoImg = SITE_TEMPLATE_PATH . "/upload/img_placeholder.jpg";
+				// есть ограничение на размер заглушки на сайте dummyimage.com. можно еще задать цвет фона и текста.
+				$height = $height == $autoHeightMax ? $width : $height;
+				
+				return file_exists($_SERVER["DOCUMENT_ROOT"] . $customNoImg) ? $customNoImg : "http://dummyimage.com/{$width}x{$height}/5C7BA4/fff";
+		  }
+		  
+		  $arFilters = [];
+		  /*
+			* <watermark>
+			* 1) получаем размер ($arDestinationSize) итоговой картинки (фото товара) после ресайза, с учетом типа ресайза ($resizeType)
+			* 2) создаем водяной знак под этот размер фото (он должен быть чуть меньше самого фото)
+			* 3) формируем фильтр для наложения знака
+			* */
+		  $watermark = $_SERVER['DOCUMENT_ROOT'] . "/upload/watermark/watermark_original.png";
+		  
+		  if (is_readable($watermark)) {
+				$bNeedCreatePicture = $arSourceSize = $arDestinationSize = false;
+				$imgSize = \CFile::GetImageSize($_SERVER["DOCUMENT_ROOT"] . \CFile::GetPath($imgId));
+				\CFile::ScaleImage($imgSize["0"], $imgSize["1"], ["width" => $width, "height" => $height], $resizeType,
+					$bNeedCreatePicture, $arSourceSize, $arDestinationSize);
+				
+				$koef = 0.95;
+				$watermarkResized = $_SERVER['DOCUMENT_ROOT'] . "/upload/watermark/watermark_" . $arDestinationSize["width"] * $koef . ".png";
+				
+				if (!is_readable($watermarkResized)) {
+					 \CFile::ResizeImageFile($watermark, $watermarkResized,
+						 ["width" => $arDestinationSize["width"] * $koef, "height" => $arDestinationSize["height"] * $koef],
+						 BX_RESIZE_IMAGE_PROPORTIONAL, false, 95, []);
+				}
+				
+				if (is_readable($watermarkResized)) {
+					 $arFilters[] = [
+						 "name" => "watermark",
+						 "position" => "center",
+						 "size" => "real",
+						 "file" => $watermarkResized
+					 ];
+				}
+		  }
+		  
+		  /*
+			* </watermark>
+			* */
+		  $resizedImg = \CFile::ResizeImageGet($imgId, ["width" => $width, "height" => $height], $resizeType, false,
+			  $arFilters, false, 100);
+		  // если файл по каким-то причинам не создался - вернем заглушку
+		  if (!file_exists($_SERVER["DOCUMENT_ROOT"] . $resizedImg['src'])) {
+				if ($height == $autoHeightMax) {
+					 $height = $width;
+				}
+				return self::getResizedImgOrPlaceholder(false, $width, $height, $proportional);
+		  }
+		  
+		  return $resizedImg['src'];
+	 }
+
+?>
+
+<!-- пример любой картинки, которую нужно пропорционально уменьшить -->
+<img src="<?= getResizedImgOrPlaceholder($arResult["DETAIL_PICTURE"]["ID"], $width = 1024) ?>"/>
+
+<!-- пример для большой картинки в карточке товара или в списке товаров -->
+<img src="<?= getResizedImgOrPlaceholder($arResult["DETAIL_PICTURE"]["ID"], $width = 600, $height = 400,
+	$proportional = true) ?>"/>
+
+<!-- пример для маленькой картинки в слайдере -->
+<img src="<?= getResizedImgOrPlaceholder($arResult["DETAIL_PICTURE"]["ID"], $width = 60, $height = 60,
+	$proportional = false) ?>"/>

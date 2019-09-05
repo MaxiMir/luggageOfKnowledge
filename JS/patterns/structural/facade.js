@@ -1,4 +1,4 @@
-// Пример фасада jQuery
+// Пример фасада - jQuery
 
 class Complaints {
     constructor() {
@@ -28,8 +28,8 @@ class ServiceComplaints extends Complaints {
 
 class ComplaintRegistry { // класс фасад
     register(customer, type, details) {
-        const id = Date.now();
         let complaint;
+        const id = Date.now();
 
         if (type === 'service') {
             complaint = new ServiceComplaints();
@@ -40,3 +40,9 @@ class ComplaintRegistry { // класс фасад
         return complaint.add({id, customer, details});
     }
 }
+
+
+const registry = new ComplaintRegistry();
+console.log(registry.register('Maxim', 'service', 'недоступен')); // => Service: 1567497706372: Maxim (недоступен)
+console.log(registry.register('Elena', 'product', 'выпадает ошибка')); // => Service: 1567497706399: Elena (выпадает ошибка)
+

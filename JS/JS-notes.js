@@ -1580,5 +1580,134 @@ document.addEventListener("DOMContentLoaded", function() { // событие з�
             window.sessionStorage.setItem(e.name, e.value);
         })
     })
+});
 
-}); 
+
+
+
+// # Debouncing:
+
+// FILE: debounce.html:
+/*
+<html>
+	<body>
+		<label>Search</label>
+		<!-- Renders an HTML input box -->
+		<input  type="text"  id="search-box">
+
+		<p>No of times event fired</p>
+		<p  id='show-api-call-count'></p>
+
+		<p>No of times debounce executed the method</p>
+		<p  id="debounce-count"></p>
+	</body>
+	<script  src="debounce.js"></script>
+</html>
+*/
+
+// FILE: debounce.js:
+let  timerId;
+const  searchBoxDom  =  document.getElementById('search-box');
+
+// This represents a very heavy method. Which takes a lot of time to execute
+const makeAPICall = () => {
+    const  debounceDom  =  document.getElementById('debounce-count');
+    const  debounceCount  =  debounceDom.innerHTML  ||  0;
+
+    debounceDom.innerHTML  =  parseInt(debounceCount) +  1
+};
+
+// Debounce function: Input as function which needs to be debounced and delay is the debounced time in milliseconds
+const debounceFunction = (func, delay) => {
+    // Cancels the setTimeout method execution
+    clearTimeout(timerId);
+
+    // Executes the func after delay time.
+    timerId  =  setTimeout(func, delay)
+};
+
+// Event listener on the input box
+searchBoxDom.addEventListener('input', () => {
+    const  apiCallCountDom  =  document.getElementById('show-api-call-count');
+    let  apiCallCount  =  apiCallCountDom.innerHTML  ||  0;
+    apiCallCount  =  parseInt(apiCallCount) +  1;
+
+    // Updates the number of times makeAPICall method is called
+    apiCallCountDom.innerHTML  =  apiCallCount;
+
+    // Debounces makeAPICall method
+    debounceFunction(makeAPICall, 200)
+});
+
+
+// # Throttling
+// FILE: throttling.html:
+/*
+<html>
+	<style>
+		div {
+			border: 1px  solid  black;
+			width: 300px;
+			height: 200px;
+			overflow: scroll;
+		}
+	</style>
+	<body>
+		<div  id="div-body">
+			<p style="background-color: red; height: 700px">This is line 1</p>
+			<p style="background-color: blue; height: 700px">This is line 2</p>
+			<p style="background-color: green; height: 700px">This is line 3</p>
+			<p style="background-color: yellow; height: 700px">This is line 4</p>
+		</div>
+
+		<p>No of times event fired</p>
+		<p id='show-api-call-count'></p>
+
+		<p>No of times throttling executed the method</p>
+		<p id="debounc-count"></p>
+	</body>
+
+	<script  src="throttling.js">  </script>
+</html>
+* */
+// FILE: throttling.js:
+let  timerID;
+const  divBodyDom  =  document.getElementById('div-body');
+
+// This represents a very heavy method which takes a lot of time to execute
+const makeAPICall = () => {
+    const  debounceDom  =  document.getElementById('debounc-count');
+    let  debounceCount  =  debounceDom.innerHTML  ||  0;
+
+    debounceDom.innerHTML  =  parseInt(debounceCount) +  1
+};
+
+// Throttle function: Input as function which needs to be throttled and delay is the time interval in milliseconds
+const throttleFunction = (func, delay) => {
+    // If setTimeout is already scheduled, no need to do anything
+    if (timerID) {
+        return;
+    }
+
+    // Schedule a setTimeout after delay seconds
+    timerID  =  setTimeout(() => {
+        func();
+
+        // Once setTimeout function execution is finished, timerId = undefined so that in <br>
+        // the next scroll event function execution can be scheduled by the setTimeout
+        timerID  =  undefined;
+    }, delay);
+};
+
+// Event listener on the input box
+divBodyDom.addEventListener('scroll', () => {
+    const apiCallCountDom  =  document.getElementById('show-api-call-count');
+    let apiCallCount  =  apiCallCountDom.innerHTML  ||  0;
+    apiCallCount  =  parseInt(apiCallCount) +  1;
+
+    // Updates the number of times makeAPICall method is called
+    apiCallCountDom.innerHTML  =  apiCallCount;
+
+    // Throttles makeAPICall method such that it is called once in every 200 milliseconds
+    throttleFunction(makeAPICall, 200);
+});

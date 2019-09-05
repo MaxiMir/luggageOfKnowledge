@@ -134,3 +134,124 @@ const isMainPage = location.pathname === '/';
     </div>
 </div>
 */
+
+
+/* #@@@ Lazy Load + подзагрузка товаров @@@#*/
+$(() => {
+    const imgCollection = $('.lazy');
+    const isMainPage = window.location.pathname === '/';
+    const loadProducts = $('#loadProducts');
+ 
+ 
+    // @@@ Lazy Load @@@:
+    if (imgCollection.length) {
+       imgCollection.Lazy({
+          afterLoad: element => {
+             element.removeClass('lazyLoader');
+          }
+       });
+    }
+ 
+    if (isMainPage) {
+       delay(1000)
+          .then(() => getContent('slider'))
+          .then(data => generateSlider(data))
+          .catch(error => console.error(error));
+    }
+ 
+ 
+ 
+    // @@@ Подзагрузка товаров @@@:
+    loadProducts.on('click', e => {
+       const productContainer = $('.pr_list');
+       const loadProductsBtn = $(e.currentTarget);
+       const searchParams = location.search;
+ 
+       let {id, steps, step = 1} = loadProductsBtn.data();
+       const convertedSearchParams = changePaginationInSearchParams(searchParams, step);
+ 
+       $.ajax({
+          url: `/ajax/downloadable-products.php?${convertedSearchParams}`,
+          type: 'POST',
+          data: { id },
+          success: res => {
+             const nextStep = step + 1;
+             loadProductsBtn.data('step', nextStep);
+             productContainer.append(res);
+ 
+             if (steps === nextStep) {
+                loadProductsBtn.hide();
+             }
+          },
+          error: () => {
+             alert('Произошла ошибка при отправке данных!');
+          }
+       });
+    });
+ 
+ 
+ 
+ 
+    /**
+     *
+     * @param ms
+     * @returns {Promise<unknown>} промисифицированный setTimeout
+     */
+    function delay(ms) {
+       return new Promise(resolve => {
+          setTimeout(() => {
+             resolve();
+          }, ms)
+       });
+    }
+ 
+ 
+    /**
+     * Документация по URLSearchParams: https://developer.mozilla.org/ru/docs/Web/API/URLSearchParams
+     * @param searchParams
+     * @param step
+     * @returns {string} строка с измененным значением пагинации в строке запроса
+     */
+    function changePaginationInSearchParams(searchParams, step) {
+       const urlSearchParams = new URLSearchParams(searchParams);
+       const isFirstPage = !urlSearchParams.has("p");
+ 
+       if (isFirstPage) {
+          urlSearchParams.append("p", "2");
+       } else {
+          const newStep = + urlSearchParams.get("p") + step;
+          urlSearchParams.set("p", newStep);
+       }
+ 
+       return urlSearchParams.toString();
+    }
+ 
+ 
+    /**
+     *
+     * @param fileName
+     * @returns {Promise<string>} промис с содержимым файла
+     */
+    function getContent(fileName) {
+       return fetch(`/ajax/content/${fileName}.php`)
+          .then(response => response.text());
+    }
+ 
+    
+    function generateSlider(data) {
+       const mainSlider = $('#mainSlider');
+       const sliderSettings = {
+          dots: false,
+          arrows: false,
+          autoplay: false,
+          autoplaySpeed: 5000,
+          speed: 600,
+       };
+ 
+       mainSlider
+          .append(data)
+          .slick(sliderSettings);
+    }
+ });
+ 
+ 
