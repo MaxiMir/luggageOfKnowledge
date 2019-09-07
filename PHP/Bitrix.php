@@ -115,21 +115,20 @@
 	 <?= arResult['NAV_STRING']; ?>
 <? endif; ?>
 <?
-
-
+	 
+	 
 	 #@ ТРАНСЛИТЕРАЦИЯ:
 	 $params = array(
-     "max_len" => "100",
-     "change_case" => "L",
-     "replace_space" => "_",
-     "replace_other" => "_",
-     "delete_repeat_replace" => "true",
-     "use_google" => "false",
-     );
-
-     $code = CUtil::translit($row[], "ru", $params);
-
-
+		 "max_len" => "100",
+		 "change_case" => "L",
+		 "replace_space" => "_",
+		 "replace_other" => "_",
+		 "delete_repeat_replace" => "true",
+		 "use_google" => "false",
+	 );
+	 
+	 $code = CUtil::translit($row[], "ru", $params);
+	 
 	 
 	 /** КОМПОНЕНТЫ:
 	  * - Включаемая область
@@ -1393,17 +1392,15 @@
 	 );
 	 
 	 // FILE: /local/php_interface/include/functions.php:
-	 use Bitrix\Main\Context,
-		 Bitrix\Main\Server;
+	 use Bitrix\Main\Context;
 	 
+	 global $APPLICATION;
 	 
-	 ### дебаггер ###
+	 ###### @ HELPERS @ ######
+	 
+	 ### распечатываем любое количество аргументов ###
 	 function dbg(...$args)
 	 {
-		  if (!$USER->IsAdmin()) {
-				return;
-		  }
-		  
 		  echo '<pre>';
 		  
 		  foreach ($args as $arg) {
@@ -1414,12 +1411,349 @@
 	 }
 	 
 	 
-	 ### обрезаем строку на заданную длину с добавлением маркера: ###
+	 ### обрезаем строку на заданную длину с добавлением маркера ###
 	 function getTrimLine($str, $length = 100, $trimMarker = '...')
 	 {
 		  return mb_strimwidth($str, 0, $length, $trimMarker);
 	 }
 	 
+	 
+	 ###### @ BREADCRUMBS @ ######
+	 
+	 ### => CODE раздела || false: ###
+	 function getCurrentSection($urn)
+	 {
+		  $requestUrnData = explode('/', $urn);
+		  $urnData = array_filter($requestUrnData, function ($partUrb) {
+				return $partUrb != '';
+		  });
+		  
+		  return end($urnData);
+	 }
+	 
+	 
+	 ### => ID раздела по символьному коду: ###
+	 function getSectionIDByUrn($urn)
+	 {
+		  $code = getCurrentSection($urn);
+		  
+		  if (!$code) {
+				return false;
+		  }
+		  
+		  $arSort = [];
+		  $arFilter = [
+			  "IBLOCK_ID" => CATALOG_I_BLOCK_ID,
+			  "CODE" => $code,
+			  "ACTIVE" => "Y",
+		  ];
+		  
+		  $sectionDBData = CIBlockSection::GetList($arSort, $arFilter);
+		  
+		  if ($sectionData = $sectionDBData->Fetch()) {
+				return $sectionData["ID"];
+		  }
+		  
+		  return false;
+	 }
+	 
+	 
+	 ### проверяет на "искусственный" раздел: ###
+	 function isMadeSection($sectionID)
+	 {
+		  return in_array($sectionID, MADE_CATALOG_IDS);
+	 }
+	 
+	 
+	 ### => ID родительского "искусственного" раздела || false: ###
+	 function getParentMadeSectionID($sectionID)
+	 {
+		  $arSort = [];
+		  $arSelect = [
+			  "ID",
+			  "UF_SHOW_IN_SECT_MENU"
+		  ];
+		  $arFilter = [
+			  "ID" => $sectionID,
+			  "IBLOCK_ID" => CATALOG_I_BLOCK_ID,
+			  "GLOBAL_ACTIVE" => "Y"
+		  ];
+		  
+		  $sectionDBData = CIBlockSection::GetList($arSort, $arFilter, false, $arSelect);
+		  
+		  if ($arSection = $sectionDBData->GetNext()) {
+				return $arSection["UF_SHOW_IN_SECT_MENU"];
+		  }
+		  
+		  return false;
+	 }
+	 
+	 
+	 ### получить подразделы с учетом "искусственных" разделов: ###
+	 function getSubsectionsData($sectionID)
+	 {
+		  $sectionsData = [];
+		  $isMadeSection = isMadeSection($sectionID);
+		  $keyFilterParentSection = $isMadeSection ? "UF_SHOW_IN_SECT_MENU" : "SECTION_ID";
+		  
+		  $arSort = [];
+		  $arSelect = [
+			  "ID",
+			  "NAME",
+			  "SECTION_PAGE_URL",
+		  ];
+		  $arFilter = [
+			  "IBLOCK_ID" => CATALOG_I_BLOCK_ID,
+			  "GLOBAL_ACTIVE" => "Y",
+			  $keyFilterParentSection => $sectionID
+		  ];
+		  
+		  $sectionsDBData = CIBlockSection::GetList($arSort, $arFilter, false, $arSelect);
+		  
+		  while ($sectionData = $sectionsDBData->GetNext()) {
+				$sectionsData[] = $sectionData;
+		  }
+		  
+		  return $sectionsData;
+	 }
+	 
+	 
+	 ### данные раздела: ###
+	 function getSectionDataByID($sectionID)
+	 {
+		  $sectionDBData = CIBlockSection::GetByID($sectionID);
+		  
+		  return $sectionDBData->GetNext();
+	 }
+	 
+	 
+	 
+	 ###### @ MAIN MENU @ ######
+	 
+	 ### данные меню каталога уровень 1: ###
+	 function getCatalogMainLinks()
+	 {
+		  global $APPLICATION;
+		  
+		  return $APPLICATION->IncludeComponent(
+			  "adpro:menu.sections",
+			  "",
+			  [
+				  "AR_FILTER" => ["!UF_SHOW_MENU_CHILDS" => false],
+				  "IS_SEF" => "Y",
+				  "SEF_BASE_URL" => "/categories/",
+				  "SECTION_PAGE_URL" => "#SECTION_CODE_PATH#/",
+				  "DETAIL_PAGE_URL" => "#SECTION_CODE_PATH#/#ELEMENT_CODE#",
+				  "IBLOCK_TYPE" => "category",
+				  "IBLOCK_ID" => CATALOG_I_BLOCK_ID,
+				  "DEPTH_LEVEL" => 1,
+				  "CACHE_TYPE" => "A",
+				  "CACHE_TIME" => "1800"
+			  ],
+			  false
+		  );
+	 }
+	 
+	 
+	 ### данные меню каталога уровень 2,3: ###
+	 function getCatalogChildLinks()
+	 {
+		  $menuData = [];
+		  $fromIBlockMap = [];
+		  $counter = 0;
+		  $arSort = [];
+		  $arSelect = [
+			  "ID",
+			  "NAME",
+			  "SECTION_PAGE_URL",
+			  "UF_SHOW_IN_SECT_MENU"
+		  ];
+		  $arFilter = [
+			  "IBLOCK_ID" => CATALOG_I_BLOCK_ID,
+			  "!UF_SHOW_IN_SECT_MENU" => false,
+			  "GLOBAL_ACTIVE" => "Y"
+		  ];
+		  
+		  $sectionsDBData = CIBlockSection::GetList($arSort, $arFilter, false, $arSelect);
+		  
+		  while ($sectionData = $sectionsDBData->GetNext()) {
+				[
+					"ID" => $id,
+					"NAME" => $name,
+					"SECTION_PAGE_URL" => $sectionPageURL,
+					"UF_SHOW_IN_SECT_MENU" => $parentSectionID
+				] = $sectionData;
+				
+				if (!array_key_exists($parentSectionID, $menuData)) {
+					 $menuData[$parentSectionID] = [];
+					 $fromIBlockMap[$parentSectionID] = ++$counter;
+				}
+				
+				$fromBlock = $fromIBlockMap[$parentSectionID];
+				
+				$menuData[$parentSectionID][] = [
+					$name,
+					$sectionPageURL,
+					[$sectionPageURL],
+					[
+						"FROM_IBLOCK" => $fromBlock,
+						"IS_PARENT" => "",
+						"DEPTH_LEVEL" => 2
+					]
+				];
+				
+				$catalogLink3lvl = getCatalogLinks3Lvl($id, $fromBlock);
+				array_push($menuData[$parentSectionID], ...$catalogLink3lvl);
+		  }
+		  
+		  return $menuData;
+	 }
+	 
+	 
+	 ### данные меню каталога уровень 3: ###
+	 function getCatalogLinks3Lvl($sectionID, $fromBlock)
+	 {
+		  $menuData = [];
+		  $arSort = [];
+		  $arSelect = [
+			  "NAME",
+			  "SECTION_PAGE_URL"
+		  ];
+		  $arFilter = [
+			  "IBLOCK_ID" => CATALOG_I_BLOCK_ID,
+			  "SECTION_ID" => $sectionID,
+			  "GLOBAL_ACTIVE" => "Y"
+		  ];
+		  
+		  $sectionsDBData = CIBlockSection::GetList($arSort, $arFilter, false, $arSelect);
+		  
+		  while ($sectionData = $sectionsDBData->GetNext()) {
+				[
+					"NAME" => $name,
+					"SECTION_PAGE_URL" => $sectionPageURL,
+				] = $sectionData;
+				
+				$menuData[] = [
+					$name,
+					$sectionPageURL,
+					[$sectionPageURL],
+					[
+						"FROM_IBLOCK" => $fromBlock,
+						"IS_PARENT" => "",
+						"DEPTH_LEVEL" => 3
+					]
+				];
+		  }
+		  
+		  return $menuData;
+	 }
+	 
+	 
+	 ### полные данные меню каталога: ###
+	 function getCatalogMenuLinks()
+	 {
+		  $menuLinks = [];
+		  $catalogMainLinks = getCatalogMainLinks();
+		  $catalogSecondLinks = getCatalogChildLinks();
+		  
+		  foreach ($catalogMainLinks as $linkData) {
+				$sectionID = end($linkData);
+				$menuLinks[] = $linkData;
+				
+				if (!array_key_exists($sectionID, $catalogSecondLinks)) {
+					 continue;
+				}
+				
+				$childLinkData = $catalogSecondLinks[$sectionID];
+				array_push($menuLinks, ...$childLinkData);
+		  }
+		  
+		  return $menuLinks;
+	 }
+	 
+	 
+	 ### данные по брендам: ###
+	 function getBrands()
+	 {
+		  $brands = [];
+		  
+		  $arFilter = [
+			  "IBLOCK_ID" => BRAND_I_BLOCK_ID,
+			  'ACTIVE' => 'Y'
+		  ];
+		  $arSelect = [
+			  'NAME',
+			  'DETAIL_PAGE_URL'
+		  ];
+		  
+		  $res = CIBlockElement::GetList([], $arFilter, false, false, $arSelect);
+		  
+		  while ($arFields = $res->GetNext()) {
+				['NAME' => $NAME, 'DETAIL_PAGE_URL' => $DETAIL_PAGE_URL] = $arFields;
+				
+				$brands[] = compact('NAME', 'DETAIL_PAGE_URL');
+		  }
+		  
+		  return $brands;
+	 }
+	 
+	 
+	 ### данные меню по брендам: ###
+	 function generateBrandsLinks()
+	 {
+		  $brandLink = [
+			  [
+				  "Бренды",
+				  "/vendors/",
+				  ["/vendors/"],
+				  [
+					  "FROM_IBLOCK" => 2,
+					  "IS_PARENT" => 1,
+					  "DEPTH_LEVEL" => 1
+				  ]
+			  ]
+		  ];
+		  
+		  $brands = getBrands();
+		  
+		  return array_reduce($brands, function ($acc, $linkData) {
+				$acc[] = [
+					$linkData['NAME'],
+					$linkData['DETAIL_PAGE_URL'],
+					[$linkData['DETAIL_PAGE_URL']],
+					[
+						"FROM_IBLOCK" => 2,
+						"IS_PARENT" => "",
+						"DEPTH_LEVEL" => 2
+					]
+				];
+				
+				return $acc;
+		  }, $brandLink);
+	 }
+	 
+	 
+	 ### данные меню: ###
+	 function getMenuLinks()
+	 {
+		  $aMenuLinksExt = getCatalogMenuLinks();
+		  $brandLinks = generateBrandsLinks();
+		  
+		  return array_merge($aMenuLinksExt, $brandLinks);
+	 }
+	 
+	 
+	 ### данные меню из кэша: ###
+	 function getMenuLinksFromCache()
+	 {
+		  $cacheTime = 3600 * 6;
+		  $cacheID = "menuLinks";
+		  
+		  return returnResultCache($cacheTime, $cacheID, 'getMenuLinks');
+	 }
+	 
+	 
+	 ###### @ REVIEWS @ ######
 	 
 	 ### получаем SECTION_CODE раздела каталога: ###
 	 function getCurrentSectionCodeInReviews($urn)
@@ -2063,12 +2397,155 @@
 	 $APPLICATION->SetPageProperty("description", $descriptionWithMinPrice);
 	 
 	 
+	 #@@@ ЗАЛИВКА РЕЗУЛЬТОВ ФОРМЫ: @@@#
+	 use Bitrix\Main\Loader;
+	 
+	 const FORM_RESPONSE_COMPANY_ID = 10;
+	 const RESPONSES_CSV_FILE = "response.csv";
+	 
+	 Loader::includeModule("form");
+	 
+	 $responsesData = getCSVData(RESPONSES_CSV_FILE);
+	 
+	 
+	 [
+		 'errors' => $errorsResponses,
+		 'createdCount' => $createdResponsesCount
+	 ] = addAllResponses($responsesData);
+	 
+	 
 	 /**
-	  * Масштабирует фото, сохраняет копию файла и возвращает путь к нему
-	  * либо возвращает ссылку на картинку-заглушку
-	  *
-	  * ---
-	  *
+	  * @param $responsesData
+	  * @return array [
+	  *   'errors' => ошибки,
+	  *   'createdCount' => количество созданных отзывов
+	  * ]
+	  */
+	 function addAllResponses($responsesData)
+	 {
+		  $result = [
+			  'errors' => [],
+			  'createdCount' => 0
+		  ];
+		  
+		  foreach ($responsesData as $key => $responseData) {
+				if (!$key) {
+					 continue;
+				}
+				
+				$resultAdd = addResponseFormResult($responseData);
+				
+				if (!$resultAdd) {
+					 $result['errors'][] = "Не удалось создать отзыв с данными со строки: {$key}";
+					 continue;
+				}
+				
+				++$result['createdCount'];
+				
+		  }
+		  
+		  return $result;
+	 }
+	 
+	 /**
+	  * @param $data
+	  * @return bool - создан отзыв с обновленной датой
+	  */
+	 function addResponseFormResult($data)
+	 {
+		  global $DB;
+		  
+		  [$name, $email, $date, $response] = $data;
+		  
+		  $formData = [
+			  "form_text_47" => $name,
+			  "form_email_48" => $email,
+			  "form_textarea_49" => $response
+		  ];
+		  
+		  if (!$resultFID = CFormResult::Add(FORM_RESPONSE_COMPANY_ID, $formData, "N")) {
+				return false;
+		  }
+		  
+		  $DB->PrepareFields("b_form_result");
+		  
+		  $dbData = [
+			  "DATE_CREATE" => "'{$date}'"
+		  ];
+		  
+		  return $DB->Update("b_form_result", $dbData, "WHERE ID='{$resultFID}'") === 1;
+	 }
+
+?>
+
+<p>Создано отзывов: <b><?= $createdResponsesCount ?></b></p>
+
+<? if ($errorsResponses): ?>
+	 <p><b>Ошибки:</b></p>
+	 <p><?= implode("<br>", $errorsResponses) ?> </p>
+<? endif; ?>
+
+
+
+<?
+	 #@@@ ВЫВОДИТЬ NAME в хлебных крошках: @@@#
+	 $APPLICATION->IncludeComponent(
+		 "bitrix:catalog",
+		 "",
+		 [
+			  //...
+			 "ADD_SECTIONS_CHAIN" => "N", // ### Включать раздел в цепочку навигации
+			 "ADD_ELEMENT_CHAIN" => "N", // ### Включать название элемента в цепочку навигации
+		 ]
+	 );
+
+	 // FILE: component_epilog.php в шаблонах catalog.element и catalog.section:
+	 if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED!==true) {
+	 	 die();
+	 }
+	 
+	 if(!is_array($arResult["SECTION"])) {
+	 	 return;
+	 }
+	 
+	 global $APPLICATION;
+	 
+	 #@@@ Изменение хлебных крошек у товара с учетом "искусственных" разделов: @@@#
+	 if (is_array($arResult["SECTION"])) {
+		  foreach ($arResult["SECTION"]["PATH"] as $key => ["ID" => $id, "NAME" => $name, "SECTION_PAGE_URL" => $urn]) {
+				if (!$key) {
+					 $parentMadeSectionID = getParentMadeSectionID($id);
+					 
+					 if ($parentMadeSectionID) {
+						  [
+							  "NAME" => $parentMadeSectionName,
+							  "SECTION_PAGE_URL" => $parentMadeSectionURN
+						  ] = getSectionDataByIDFromCache($parentMadeSectionID);
+						  
+						  $APPLICATION->AddChainItem($parentMadeSectionName, $parentMadeSectionURN);
+					 }
+				}
+				
+				$APPLICATION->AddChainItem($name, $urn);
+		  }
+	 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	 #@@@ МАСШТАБИРОВАНИЕ ФОТО (сохраняет копию файла и возвращает путь к нему либо возвращает ссылку на картинку-заглушку): @@@#
+	 
+	 /**
 	  * Водяной знак - если существует файл /upload/watermark/watermark_original.png - он будет
 	  * смасштабирован под фото и нанесен на всю поверхность с небольшим отступом от края.
 	  * watermark_original.png - должен быть большого размера, чтобы не терялось качество.
