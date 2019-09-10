@@ -1138,241 +1138,13 @@
 	 
 	 
 	 
-	 #@ ГЕНЕРАЦИЯ МЕНЮ С "ИСКУССТВЕННЫМИ" РАЗДЕЛАМИ:
-	 ### данные меню каталога уровень 1: ###
-	 function getCatalogMainLinks()
-	 {
-		  global $APPLICATION;
-		  
-		  return $APPLICATION->IncludeComponent(
-			  "adpro:menu.sections",
-			  "",
-			  [
-				  "AR_FILTER" => ["!UF_SHOW_MENU_CHILDS" => false],
-				  "IS_SEF" => "Y",
-				  "SEF_BASE_URL" => "/categories/",
-				  "SECTION_PAGE_URL" => "#SECTION_CODE_PATH#/",
-				  "DETAIL_PAGE_URL" => "#SECTION_CODE_PATH#/#ELEMENT_CODE#",
-				  "IBLOCK_TYPE" => "category",
-				  "IBLOCK_ID" => CATALOG_I_BLOCK_ID,
-				  "DEPTH_LEVEL" => 1,
-				  "CACHE_TYPE" => "A",
-				  "CACHE_TIME" => "1800"
-			  ],
-			  false
-		  );
-	 }
-	 
-	 
-	 ### данные меню каталога уровень 2,3: ###
-	 function getCatalogChildLinks()
-	 {
-		  $menuData = [];
-		  $fromIBlockMap = [];
-		  $counter = 0;
-		  $arSort = [];
-		  $arSelect = [
-			  "ID",
-			  "NAME",
-			  "SECTION_PAGE_URL",
-			  "UF_SHOW_IN_SECT_MENU"
-		  ];
-		  $arFilter = [
-			  "IBLOCK_ID" => CATALOG_I_BLOCK_ID,
-			  "!UF_SHOW_IN_SECT_MENU" => false,
-			  "GLOBAL_ACTIVE" => "Y"
-		  ];
-		  
-		  $sectionsDBData = CIBlockSection::GetList($arSort, $arFilter, false, $arSelect);
-		  
-		  while ($sectionData = $sectionsDBData->GetNext()) {
-				[
-					"ID" => $id,
-					"NAME" => $name,
-					"SECTION_PAGE_URL" => $sectionPageURL,
-					"UF_SHOW_IN_SECT_MENU" => $parentSectionID
-				] = $sectionData;
-				
-				if (!array_key_exists($parentSectionID, $menuData)) {
-					 $menuData[$parentSectionID] = [];
-					 $fromIBlockMap[$parentSectionID] = ++$counter;
-				}
-				
-				$fromBlock = $fromIBlockMap[$parentSectionID];
-				
-				$menuData[$parentSectionID][] = [
-					$name,
-					$sectionPageURL,
-					[$sectionPageURL],
-					[
-						"FROM_IBLOCK" => $fromBlock,
-						"IS_PARENT" => "",
-						"DEPTH_LEVEL" => 2
-					]
-				];
-				
-				$catalogLink3lvl = getCatalogLinks3Lvl($id, $fromBlock);
-				array_push($menuData[$parentSectionID], ...$catalogLink3lvl);
-		  }
-		  
-		  return $menuData;
-	 }
-	 
-	 
-	 ### данные меню каталога уровень 3: ###
-	 function getCatalogLinks3Lvl($sectionID, $fromBlock)
-	 {
-		  $menuData = [];
-		  $arSort = [];
-		  $arSelect = [
-			  "NAME",
-			  "SECTION_PAGE_URL"
-		  ];
-		  $arFilter = [
-			  "IBLOCK_ID" => CATALOG_I_BLOCK_ID,
-			  "SECTION_ID" => $sectionID,
-			  "GLOBAL_ACTIVE" => "Y"
-		  ];
-		  
-		  $sectionsDBData = CIBlockSection::GetList($arSort, $arFilter, false, $arSelect);
-		  
-		  while ($sectionData = $sectionsDBData->GetNext()) {
-				[
-					"NAME" => $name,
-					"SECTION_PAGE_URL" => $sectionPageURL,
-				] = $sectionData;
-				
-				$menuData[] = [
-					$name,
-					$sectionPageURL,
-					[$sectionPageURL],
-					[
-						"FROM_IBLOCK" => $fromBlock,
-						"IS_PARENT" => "",
-						"DEPTH_LEVEL" => 3
-					]
-				];
-		  }
-		  
-		  return $menuData;
-	 }
-	 
-	 
-	 ### полные данные меню каталога: ###
-	 function getCatalogMenuLinks()
-	 {
-		  $menuLinks = [];
-		  $catalogMainLinks = getCatalogMainLinks();
-		  $catalogSecondLinks = getCatalogChildLinks();
-		  
-		  foreach ($catalogMainLinks as $linkData) {
-				$sectionID = end($linkData);
-				$menuLinks[] = $linkData;
-				
-				if (!array_key_exists($sectionID, $catalogSecondLinks)) {
-					 continue;
-				}
-				
-				$childLinkData = $catalogSecondLinks[$sectionID];
-				array_push($menuLinks, ...$childLinkData);
-		  }
-		  
-		  return $menuLinks;
-	 }
-	 
-	 
-	 ### данные по брендам: ###
-	 function getBrands()
-	 {
-		  $brands = [];
-		  
-		  $arFilter = [
-			  "IBLOCK_ID" => BRAND_I_BLOCK_ID,
-			  'ACTIVE' => 'Y'
-		  ];
-		  $arSelect = [
-			  'NAME',
-			  'DETAIL_PAGE_URL'
-		  ];
-		  
-		  $res = CIBlockElement::GetList([], $arFilter, false, false, $arSelect);
-		  
-		  while ($arFields = $res->GetNext()) {
-				['NAME' => $NAME, 'DETAIL_PAGE_URL' => $DETAIL_PAGE_URL] = $arFields;
-				
-				$brands[] = compact('NAME', 'DETAIL_PAGE_URL');
-		  }
-		  
-		  return $brands;
-	 }
-	 
-	 
-	 ### данные меню по брендам: ###
-	 function generateBrandsLinks()
-	 {
-		  $brandLink = [
-			  [
-				  "Бренды",
-				  "/vendors/",
-				  ["/vendors/"],
-				  [
-					  "FROM_IBLOCK" => 2,
-					  "IS_PARENT" => 1,
-					  "DEPTH_LEVEL" => 1
-				  ]
-			  ]
-		  ];
-		  
-		  $brands = getBrands();
-		  
-		  return array_reduce($brands, function ($acc, $linkData) {
-				$acc[] = [
-					$linkData['NAME'],
-					$linkData['DETAIL_PAGE_URL'],
-					[$linkData['DETAIL_PAGE_URL']],
-					[
-						"FROM_IBLOCK" => 2,
-						"IS_PARENT" => "",
-						"DEPTH_LEVEL" => 2
-					]
-				];
-				
-				return $acc;
-		  }, $brandLink);
-	 }
-	 
-	 
-	 ### данные меню: ###
-	 function getMenuLinks()
-	 {
-		  $aMenuLinksExt = getCatalogMenuLinks();
-		  $brandLinks = generateBrandsLinks();
-		  
-		  return array_merge($aMenuLinksExt, $brandLinks);
-	 }
-	 
-	 
-	 ### данные меню из кэша: ###
-	 function getMenuLinksFromCache()
-	 {
-		  $cacheTime = 3600 * 6;
-		  $cacheID = "menuLinks";
-		  
-		  return returnResultCache($cacheTime, $cacheID, 'getMenuLinks');
-	 }
-	 
-	 
-	 // использование:
-	 $aMenuLinks = getMenuLinksFromCache();
-	 
+	 #@@@ Наработки: @@@#
 	 
 	 use Bitrix\Main\Loader;
 	 use Bitrix\Main\Context;
 	 
 	 Loader::includeModule("iblock");
 	 Loader::includeSharewareModule("forum");
-	 
-	 
 	 
 	 
 	 ###### @ HELPERS @ ######
@@ -1395,7 +1167,6 @@
 	 {
 		  return mb_strimwidth($str, 0, $length, $trimMarker);
 	 }
-	 
 	 
 	 
 	 ###### @ BREADCRUMBS @ ######
@@ -1509,7 +1280,307 @@
 		  
 		  return $sectionDBData->GetNext();
 	 }
-
+	 
+	 
+	 ###### @ MAIN MENU AND LEFT MENU @ ######
+	 
+	 ### данные меню каталога уровень 1: ###
+	 function getMainCatalogLinks($isOnlyMadeSections = false)
+	 {
+		  global $APPLICATION;
+		  
+		  $arFilter = [
+			  "ACTIVE" => "Y",
+		  ];
+		  
+		  if ($isOnlyMadeSections) {
+				$arFilter["!UF_SHOW_MENU_CHILDS"] = false;
+		  }
+		  
+		  $isGetAssocArr = $isOnlyMadeSections ? false : true;
+		  
+		  $menuSectionsData = $APPLICATION->IncludeComponent(
+			  "adpro:menu.sections",
+			  "",
+			  [
+				  "AR_FILTER" => $arFilter,
+				  "IS_SEF" => "Y",
+				  "SEF_BASE_URL" => "/categories/",
+				  "SECTION_PAGE_URL" => "#SECTION_CODE_PATH#/",
+				  "DETAIL_PAGE_URL" => "#SECTION_CODE_PATH#/#ELEMENT_CODE#",
+				  "IBLOCK_TYPE" => "category",
+				  "IBLOCK_ID" => CATALOG_I_BLOCK_ID,
+				  "CACHE_TYPE" => "A",
+				  "CACHE_TIME" => "1800",
+				  "GET_ASSOC_ARR" => $isGetAssocArr
+			  ],
+			  false
+		  );
+		  
+		  return $isOnlyMadeSections ? $menuSectionsData : linkCatalogLinks($menuSectionsData);
+	 }
+	 
+	 
+	 ### привязывает "искусственные" разделы: ###
+	 function linkCatalogLinks($catalogLinksData)
+	 {
+		  return array_reduce($catalogLinksData, function ($acc, $linkData) {
+				["ID" => $id, "UF_SHOW_IN_SECT_MENU" => $parentID] = $linkData;
+				
+				if (!$parentID) {
+					 if (!array_key_exists($id, $acc)) {
+						  $acc[$id] = [];
+						  $acc[$id]["DATA"] = [];
+					 }
+					 
+					 $acc[$id]["DATA"] = $linkData;
+				} else {
+					 if (!array_key_exists($parentID, $acc)) {
+						  $acc[$parentID] = [];
+						  $acc[$parentID]['CHILD'] = [];
+					 }
+					 
+					 $acc[$parentID]['CHILD'][] = $linkData;
+				}
+				
+				return $acc;
+		  }, []);
+	 }
+	 
+	 
+	 ### данные для top меню каталога уровень 2,3: ###
+	 function getMadeCatalogChildLinks()
+	 {
+		  $menuData = [];
+		  $fromIBlockMap = [];
+		  $counter = 0;
+		  $arSort = [];
+		  $arSelect = [
+			  "ID",
+			  "NAME",
+			  "SECTION_PAGE_URL",
+			  "UF_SHOW_IN_SECT_MENU"
+		  ];
+		  $arFilter = [
+			  "IBLOCK_ID" => CATALOG_I_BLOCK_ID,
+			  "!UF_SHOW_IN_SECT_MENU" => false,
+			  "GLOBAL_ACTIVE" => "Y"
+		  ];
+		  
+		  $sectionsDBData = CIBlockSection::GetList($arSort, $arFilter, false, $arSelect);
+		  
+		  while ($sectionData = $sectionsDBData->GetNext()) {
+				[
+					"ID" => $id,
+					"NAME" => $name,
+					"SECTION_PAGE_URL" => $sectionPageURL,
+					"UF_SHOW_IN_SECT_MENU" => $parentSectionID
+				] = $sectionData;
+				
+				if (!array_key_exists($parentSectionID, $menuData)) {
+					 $menuData[$parentSectionID] = [];
+					 $fromIBlockMap[$parentSectionID] = ++$counter;
+				}
+				
+				$fromBlock = $fromIBlockMap[$parentSectionID];
+				
+				$menuData[$parentSectionID][] = [
+					$name,
+					$sectionPageURL,
+					[$sectionPageURL],
+					[
+						"FROM_IBLOCK" => $fromBlock,
+						"IS_PARENT" => "",
+						"DEPTH_LEVEL" => 2
+					]
+				];
+				
+				$catalogLink3lvl = getMadeCatalogChildLinks3Lvl($id, $fromBlock);
+				array_push($menuData[$parentSectionID], ...$catalogLink3lvl);
+		  }
+		  
+		  return $menuData;
+	 }
+	 
+	 
+	 ### данные для top меню каталога уровень 3: ###
+	 function getMadeCatalogChildLinks3Lvl($sectionID, $fromBlock)
+	 {
+		  $menuData = [];
+		  $arSort = [];
+		  $arSelect = [
+			  "NAME",
+			  "SECTION_PAGE_URL"
+		  ];
+		  $arFilter = [
+			  "IBLOCK_ID" => CATALOG_I_BLOCK_ID,
+			  "SECTION_ID" => $sectionID,
+			  "GLOBAL_ACTIVE" => "Y"
+		  ];
+		  
+		  $sectionsDBData = CIBlockSection::GetList($arSort, $arFilter, false, $arSelect);
+		  
+		  while ($sectionData = $sectionsDBData->GetNext()) {
+				[
+					"NAME" => $name,
+					"SECTION_PAGE_URL" => $sectionPageURL,
+				] = $sectionData;
+				
+				$menuData[] = [
+					$name,
+					$sectionPageURL,
+					[$sectionPageURL],
+					[
+						"FROM_IBLOCK" => $fromBlock,
+						"IS_PARENT" => "",
+						"DEPTH_LEVEL" => 3
+					]
+				];
+		  }
+		  
+		  return $menuData;
+	 }
+	 
+	 
+	 ### полные данные для top меню каталога: ###
+	 function getCatalogTopMenuLinks()
+	 {
+		  $menuLinks = [];
+		  $catalogMainLinks = getMainCatalogLinks(true);
+		  $catalogSecondLinks = getMadeCatalogChildLinks();
+		  
+		  foreach ($catalogMainLinks as $linkData) {
+				$sectionID = end($linkData);
+				$menuLinks[] = $linkData;
+				
+				if (!array_key_exists($sectionID, $catalogSecondLinks)) {
+					 continue;
+				}
+				
+				$childLinkData = $catalogSecondLinks[$sectionID];
+				array_push($menuLinks, ...$childLinkData);
+		  }
+		  
+		  return $menuLinks;
+	 }
+	 
+	 
+	 ### данные по брендам: ###
+	 function getBrands()
+	 {
+		  $brands = [];
+		  
+		  $arFilter = [
+			  "IBLOCK_ID" => BRAND_I_BLOCK_ID,
+			  'ACTIVE' => 'Y'
+		  ];
+		  $arSelect = [
+			  'NAME',
+			  'DETAIL_PAGE_URL'
+		  ];
+		  
+		  $res = CIBlockElement::GetList([], $arFilter, false, false, $arSelect);
+		  
+		  while ($arFields = $res->GetNext()) {
+				['NAME' => $NAME, 'DETAIL_PAGE_URL' => $DETAIL_PAGE_URL] = $arFields;
+				
+				$brands[] = compact('NAME', 'DETAIL_PAGE_URL');
+		  }
+		  
+		  return $brands;
+	 }
+	 
+	 
+	 ### данные меню по брендам: ###
+	 function getBrandsLinks()
+	 {
+		  $brandLink = [
+			  [
+				  "Бренды",
+				  "/vendors/",
+				  ["/vendors/"],
+				  [
+					  "FROM_IBLOCK" => 2,
+					  "IS_PARENT" => 1,
+					  "DEPTH_LEVEL" => 1
+				  ]
+			  ]
+		  ];
+		  
+		  $brands = getBrands();
+		  
+		  return array_reduce($brands, function ($acc, $linkData) {
+				$acc[] = [
+					$linkData['NAME'],
+					$linkData['DETAIL_PAGE_URL'],
+					[$linkData['DETAIL_PAGE_URL']],
+					[
+						"FROM_IBLOCK" => 2,
+						"IS_PARENT" => "",
+						"DEPTH_LEVEL" => 2
+					]
+				];
+				
+				return $acc;
+		  }, $brandLink);
+	 }
+	 
+	 
+	 ### данные меню: ###
+	 function getMenuLinks()
+	 {
+		  $aMenuLinksExt = getCatalogTopMenuLinks();
+		  $brandLinks = getBrandsLinks();
+		  
+		  return array_merge($aMenuLinksExt, $brandLinks);
+	 }
+	 
+	 
+	 
+	 ### @ FUNCTIONS WITH CACHE @ ###
+	 
+	 ### данные меню из кэша: ###
+	 function getMenuLinksFromCache()
+	 {
+		  $cacheTime = 3600 * 6;
+		  $cacheID = "menuLinks";
+		  
+		  return returnResultCache($cacheTime, $cacheID, 'getMenuLinks');
+	 }
+	 
+	 ### данные для left меню из кэша: ###
+	 function getMainCatalogLinksFromCache()
+	 {
+		  $cacheTime = 3600 * 6;
+		  $cacheID = "leftMenuLinks";
+		  
+		  return returnResultCache($cacheTime, $cacheID, 'getMainCatalogLinks');
+	 }
+	 
+	 
+	 ### => все разделы из кэша: ###
+	 function getAllSectionsFromCache($params)
+	 {
+		  $cacheTime = 3600 * 6;
+		  $cacheID = "allCatalogSections";
+		  
+		  return returnResultCache($cacheTime, $cacheID, 'getAllSections', $params);
+	 }
+	 
+	 
+	 ### => данные отзывов с текущими товарами из кэша: ###
+	 function getResponseDataWithProdsFromCache($prodsDataForResponse, $sectionCode)
+	 {
+		  $cacheTime = 3600;
+		  $cacheID = "ResponseDataWithProds{$sectionCode}";
+		  
+		  return returnResultCache($cacheTime, $cacheID, 'getResponseDataWithProds', $prodsDataForResponse);
+	 }
+	 
+	 
+	 // использование:
+	 $aMenuLinks = getMenuLinksFromCache();
+	 
 	 
 	 
 	 #@ СВЯЗКА ОТЗЫВОВ С ФОРУМА И ТОВАРОВ:
