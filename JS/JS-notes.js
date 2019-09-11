@@ -1711,3 +1711,10 @@ divBodyDom.addEventListener('scroll', () => {
     // Throttles makeAPICall method such that it is called once in every 200 milliseconds
     throttleFunction(makeAPICall, 200);
 });
+
+
+
+
+// # Убрать из массива переданные отстальными аргументами элементы:
+const filterArr = (a, ...args) => a.filter(i => !args.includes(item));
+fitlerArr([1, 2, 3, 4, 5, 6, 7], 1, 3, 5, 6); // => [2, 4, 7]
