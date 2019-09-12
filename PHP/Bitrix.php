@@ -1645,6 +1645,17 @@
         return returnResultCache($cacheTime, $cacheID, 'getResponseDataWithProds', $prodsDataForResponse);
     }
 	 
+Урл должен сохраняться =)
+31 августа
+￼
+Ник 16:55
+
+)))
+
+там где я пробовал настройки другие у апача походу
+5 сентября
+￼
+Ник 15:5
     
 	 // использование:
 	 $aMenuLinks = getMenuLinksFromCache();
