@@ -19,6 +19,7 @@
 <div id="root2"></div>
 
 <script type="text/babel">
+    // #1:
     function Car(props) {
         return ( // JSX cинтаксис:
             <div className="car"> // class - зарезервированно
@@ -28,27 +29,22 @@
         )
     }
     
-    // #1:
     ReactDOM.render(
-        <Car />, // добавляем компонент
-        document.querySelector('#root1') // место для вставки сгенерированного кода
+        <Car name="Mazda" year="2019" />, // добавляем компонент + передаем параметры
+        document.querySelector('#root2') // место для вставки сгенерированного кода
     )
 
-    ReactDOM.render(
-        <Car name="Mazda" year="2019" />, 
-        document.querySelector('#root2') 
-    )
 
     // #2:
     const App = (
-        <div>
+        <div> // элементы должны быть обернуты в корневой элемент
             <Car name="Ford" year="2019" /> 
             <Car name="Mazda" year="2017" />
         </div>
     );
 
     ReactDOM.render(
-        App, // App содержит JSX код, поэтому его не надо оборачивать в < />
+        App, // App содержит JSX код, поэтому его не надо оборачивать в "<" "/>"
         document.querySelector('#root1') // место для вставки сгенерированного кода
     )
 </script>
@@ -57,11 +53,14 @@
 
 /*@ Создание проекта @*/
 sudo npm install -g create-react-app // установка create-react-app
-sudo create-react-app mirabase // создание проекта
+cd WebstormProjects/
+sudo create-react-app react-theory // создание проекта
+
 npm run start // запуск версии для разработки приложения (cмотреть package.json ключ scripts)
 npm run build // для оптимизации приложения (получение статических файлов, которые будут отвечать за функционал всего приложения)
 npm run test // запуск тестов в React
 npm run eject // получить доступ к конфигурации для проекта create-react-app
+
 npm install -g yarn // file yarn.lock - аналог npm (более оптимизирован для React)
 
 
@@ -75,14 +74,15 @@ import React from 'react'; // импортируем библиотеку React
 import ReactDOM from 'react-dom'; // импортируем библиотеку ReactDOM (ядро библиотеки React)
 import './index.css'; // импортируем стили
 import App from './App'; // импортируем компонент App
-import * as serviceWorker from './serviceWorker'; // функционал для Progressive Web Application (например кэширование)
+import registerServiceWorker from './registerServiceWorker'; // функционал для Progressive Web Application (например кэширование)
+
 
 ReactDOM.render(<App />, document.getElementById('root')); // генерируем и вставляем в элемент с ID = root
 
 
 
 // file: /src/App.js:
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import './App.css';
 
 class App extends Component {
