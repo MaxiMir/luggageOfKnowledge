@@ -12,7 +12,8 @@
  */ 
 
 
-/*@ Компоненты @*/
+
+/* #@ Компоненты #@ */
 
 // file: index.html:
 <div id="root1"></div>
@@ -41,7 +42,7 @@
             <Car name="Ford" year="2019" /> 
             <Car name="Mazda" year="2017" />
         </div>
-    );
+    )
 
     ReactDOM.render(
         App, // App содержит JSX код, поэтому его не надо оборачивать в "<" "/>"
@@ -51,7 +52,7 @@
 
 
 
-/*@ Создание проекта @*/
+/* #@ Создание проекта @# */
 sudo npm install -g create-react-app // установка create-react-app
 cd WebstormProjects/
 sudo create-react-app react-theory // создание проекта
@@ -70,20 +71,22 @@ npm install -g yarn // file yarn.lock - аналог npm (более оптим�
 
 
 // file: /src/index.js:
-import React from 'react'; // импортируем библиотеку React
-import ReactDOM from 'react-dom'; // импортируем библиотеку ReactDOM (ядро библиотеки React)
-import './index.css'; // импортируем стили
-import App from './App'; // импортируем компонент App
-import registerServiceWorker from './registerServiceWorker'; // функционал для Progressive Web Application (например кэширование)
+import React from 'react' // импортируем библиотеку React
+import ReactDOM from 'react-dom' // импортируем библиотеку ReactDOM (ядро библиотеки React)
+import './index.css' // импортируем стили
+import App from './App' // импортируем компонент App
+import registerServiceWorker from './registerServiceWorker' // функционал для Progressive Web Application (например кэширование)
 
 
-ReactDOM.render(<App />, document.getElementById('root')); // генерируем и вставляем в элемент с ID = root
+ReactDOM.render(<App />, document.getElementById('root')) // генерируем и вставляем в элемент с ID = root
+registerServiceWorker()
 
 
+/* #@ Cинтаксис JSX + Инлайн стили: @# */
 
 // file: /src/App.js:
-import React, { Component } from 'react';
-import './App.css';
+import React, { Component } from 'react'
+import './App.css'
 
 class App extends Component {
     render() {
@@ -91,46 +94,45 @@ class App extends Component {
             <div className="App">
                 <h1>Hello world!</h1>
             </div>
-        );
+        )
         
-        // <->
+        // абстракция <->
         
         return React.createElement( 
-            'div',
-            {
+            'div', // tag
+            { // options:
                 className: 'App'
             },
-            React.createElement( // вложенный элемент
-                'h1', 
-                null,
-                'Hello world!'
+            React.createElement( // children
+                'h1', // tag
+                null, // options:
+                'Hello world!' // text node
             ),
             'Some text...' // text node
-        );
+        )
     }
 }
 
-export default App;
+export default App
 
 
-
-/*@ Cинтаксис JSX: @*/
-
+// при использовании JSX import React from 'react' обязателен
 // if, else, while, for - только вне JSX
-// ! Использовать className вместо class
+// Использовать className вместо class
+
 
 class App extends Component {
     render() {
         const divStyle = { // создание инлайн стилей
-            textAlign : 'center'
+            textAlign : 'center' // ! cвойства в camelcase
         }
         
         return (
-            <div className="App" style={divStyle}> // применение инлайн-стилей #1 cпособ
-                <h1 style={{color: 'blue', fontSize: '10px'}}>Hello world!</h1> // применение инлайн-стилей #2 cпособ
+            <div className="App" style={divStyle}> // инлайн-стилей #1 cпособ задать
+                <h1 style={{color: 'blue', fontSize: '10px'}}>Hello world!</h1> // инлайн-стилей #2 cпособ задать
             </div>
             <p>Hello</p> // => Ошибка должен возвращаться один корневой элемент (испр. вложить в .App)
-        );
+        )
     }
 }
 
@@ -138,33 +140,17 @@ class App extends Component {
 
 /*@ Создание компонентов: @*/
 
-// folder: /src/ cоздаем папку для компонента Car и файл Car.js:
-import React from 'react'; // необходимо импортировать при использовании JSX cинтаксиса
+// folder: /src/ cоздаем папку Car и файл Car.js:
+import React from 'react' // необходимо импортировать при использовании JSX cинтаксиса
 
-function car() { 
-    return (
-        <h2>This is car component</h2>
-    )
-}
-
-export default car;
-
-// <-> Используя синтаксис ES 6: 
-
-// #1:
-сonst car = () => <h2>This is car component</h2> // Если возвращается несколько строк все оборачиваем в ()
-
-export default car;
-
-// #2:
-export default () => <h2>This is car component</h2>
+export default () => <h2>This is car component</h2> // Если возвращается несколько строк все оборачиваем в ()
 
 
 
 // file /src/App.js:
-import React, {Component} from 'react';
-import './App.css';
-import car from './Car/Car.js'; // импортируем компонент
+import React, {Component} from 'react'
+import './App.css'
+import Car from './Car/Car.js' // импортируем компонент Car
 
 
 class App extends Component {
@@ -180,45 +166,44 @@ class App extends Component {
                 <Car /> // вставка JSX кода компонента
             </div>
         
-        );
+        )
     }
 }
 
 
 
-/*@ Вывод динамических данных: @*/
+/* #@ Вывод динамических данных: @# */
 
 // file: /src/Car/Car.js:
-import React from 'react'; 
+import React from 'react' 
 
 export default () => (
     <div>
         <p>This is car component</p>
-        <p><strong>Number: {Math.round(Math.random() * 100)}</strong></p> // {} указывает, что внутри простая JS интрепритация
-        
+        <p><strong>Number: {Math.round(Math.random() * 100)}</strong></p> // {} - указывает, что внутри простая JS интрепритация
     </div>
 )
 
 
 
-/*@ Передача параметров и контента: @*/
+/* #@ Передача параметров и контента: @# */
 
 // file: /src/Car/Car.js:
-import React from 'react'; 
+import React from 'react' 
 
-export default props => ( // 1 параметр (props) - в скобочки можно не оборачивать
+export default props => ( 
     <div>
         <h3>Car name: {props.name}</h3>
         <p>Year: <strong>{props.year}</strong></p>
-        {props.children} // обработка контента
+        {props.children} // вывод контента, переданного в компонент(#1)
     </div>
 )
 
 
 // file /src/App.js:
-import React, {Component} from 'react';
-import './App.css';
-import car from './Car/Car.js'; 
+import React, {Component} from 'react'
+import './App.css'
+import Car from './Car/Car.js' 
 
 class App extends Component {
     render() {
@@ -230,25 +215,25 @@ class App extends Component {
             <div style={divStyle}> 
                 <h1>Hello world!</h1> 
             
-                <Car name={'Ford'} year={2016} /> 
+                <Car name={'Ford'} year={2016} /> // передаем атрибуты
                 <Car name="Audi" year={2012} /> // передаем атрибут в виде обычной строки - {} не нужны
-                <Car name={'Mazda'} year={2011}> // ! без закрывающего /
-                    <p style="{{color: red}}">COLOR</p> // передача контента в компонент
+                
+                <Car name={'Mazda'} year={2011}> 
+                    <p style="{{color: red}}">COLOR</p> // передача контента в компонент (#1)
                 </Car> 
             </div>
-        
-        );
+        )
     }
 }
 
 
 
-/*@ State: @*/
+/* #@ State: @# */
 
 // file /src/App.js:
-import React, {Component} from 'react';
-import './App.css';
-import car from './Car/Car.js'; 
+import React, {Component} from 'react'
+import './App.css'
+import Car from './Car/Car.js' 
 
 class App extends Component {
     state = { // задание State (если класс наследник Component) - описание состояния данного компонента
@@ -261,8 +246,8 @@ class App extends Component {
     } 
     
     changeTitleHandler = () => { // функция обработчик (cписок events: reactjs.org/docs/events.html)
-        const oldTitle = this.state.pageTitle;
-        const newTitle = oldTitle + ' (changed)';
+        const oldTitle = this.state.pageTitle
+        const newTitle = oldTitle + ' (changed)'
     
         this.setState({ // изменение состояния внутри компонента (заново вызывает метод render)
             pageTitle: newTitle
@@ -289,7 +274,7 @@ class App extends Component {
                 <Car name={cars[2].name} year={cars[2].name} /> 
             </div>
         
-        );
+        )
     }
 }
 
@@ -298,7 +283,7 @@ class App extends Component {
 /*@ Передача параметров в функцию: @*/
 
 // file: /src/Car/Car.js:
-import React from 'react'; 
+import React from 'react' 
 
 export default props => ( // 1 параметр (props) - в скобочки можно не оборачивать
     <div>
@@ -310,9 +295,9 @@ export default props => ( // 1 параметр (props) - в скобочки м
 
 
 // file /src/App.js:
-import React, {Component} from 'react';
-import './App.css';
-import car from './Car/Car.js'; 
+import React, {Component} from 'react'
+import './App.css'
+import Car from './Car/Car.js' 
 
 
 class App extends Component {
@@ -372,7 +357,7 @@ class App extends Component {
                 />     
             </div>
         
-        );
+        )
     }
 }
 
@@ -381,9 +366,9 @@ class App extends Component {
 /*@ Работа со списком: @*/
 
 // file /src/App.js:
-import React, {Component} from 'react';
-import './App.css';
-import car from './Car/Car.js'; 
+import React, {Component} from 'react'
+import './App.css'
+import Car from './Car/Car.js' 
 
 
 class App extends Component {
@@ -436,7 +421,7 @@ class App extends Component {
                     )
                 }) }
             </div>    
-        );
+        )
     }
 }
 
@@ -445,9 +430,9 @@ class App extends Component {
 /*@ Работа условными операторами: @*/
 
 // file /src/App.js:
-import React, {Component} from 'react';
-import './App.css';
-import car from './Car/Car.js'; 
+import React, {Component} from 'react'
+import './App.css'
+import Car from './Car/Car.js' 
 
 
 class App extends Component {
@@ -504,7 +489,7 @@ class App extends Component {
                 
                 { cars } // выводим список Сars или null
             </div>    
-        );
+        )
     }
 }
 
@@ -513,7 +498,7 @@ class App extends Component {
 /*@ Динамические списки: @*/
 
 // file: /src/Car/Car.js:
-import React from 'react'; 
+import React from 'react' 
 
 export default props => ( 
     <div style={{
@@ -529,9 +514,9 @@ export default props => (
 
 
 // file /src/App.js:
-import React, {Component} from 'react';
-import './App.css';
-import car from './Car/Car.js'; 
+import React, {Component} from 'react'
+import './App.css'
+import Car from './Car/Car.js' 
 
 
 class App extends Component {
@@ -607,7 +592,7 @@ class App extends Component {
                 
                 { cars } 
             </div>    
-        );
+        )
     }
 }
 
@@ -617,11 +602,11 @@ class App extends Component {
 
 // folder: /src/Car/ создаем файл Car.css:
 .Car {
-    dispay: block;
-    border: 1px solid #ccc;
-    margin-bootom: 10px;
-    padding: 10px;
-    transition: border, box-shadow .3s;
+    dispay: block
+    border: 1px solid #ccc
+    margin-bootom: 10px
+    padding: 10px
+    transition: border, box-shadow .3s
 }
 
 .input {
@@ -630,38 +615,38 @@ class App extends Component {
 
 .input:active,
 .input:focus {
-    oputline: none;
+    oputline: none
 }
 
 .input.green {
-    border: 1px solid green;
+    border: 1px solid green
 }
 
 .input.red {
-    border: 1px solid red;
+    border: 1px solid red
 }
 
 .input.bold {
-    border: 2px solid green;
-    font-weight: bold;
+    border: 2px solid green
+    font-weight: bold
 }
 
 
 // file: /src/Car/Car.js:
-import React from 'react'; 
-import './Car.css'; // подключаем файл стилей
+import React from 'react' 
+import './Car.css' // подключаем файл стилей
 
 export default props => {
     const inputClasses = ['input']
     
     if (props.name != '') {
-        inputClasses.push('green');
+        inputClasses.push('green')
     } else {
-        inputClasses.push('red');
+        inputClasses.push('red')
     }
     
     if (props.name.length > 4) {
-        inputClasses.push('bold');
+        inputClasses.push('bold')
     }
     
     return ( 
@@ -688,21 +673,21 @@ yarn start // заново собираем проект
 
 
 // file: /src/Car/Car.js:
-import React from 'react'; 
-import Radium from 'radium'; // подключаем библиотеку Radium
-import './Car.css'; // подключаем файл стилей
+import React from 'react' 
+import Radium from 'radium' // подключаем библиотеку Radium
+import './Car.css' // подключаем файл стилей
 
 const Car = props => {
     const inputClasses = ['input']
     
     if (props.name != '') {
-        inputClasses.push('green');
+        inputClasses.push('green')
     } else {
-        inputClasses.push('red');
+        inputClasses.push('red')
     }
     
     if (props.name.length > 4) {
-        inputClasses.push('bold');
+        inputClasses.push('bold')
     }
     
     const style = {
@@ -791,21 +776,21 @@ yarn start // cобираем проект
 // Стили стали локальными:
 
 // file: /src/Car/Car.js:
-import React from 'react'; 
-import Radium from 'radium'; 
-import classes from './Car.css'; // сохраняем CSS классы в переменную
+import React from 'react' 
+import Radium from 'radium' 
+import classes from './Car.css' // сохраняем CSS классы в переменную
 
 const Car = props => {
     const inputClasses = [classes.input] // добавляем стили .input
     
     if (props.name != '') {
-        inputClasses.push(classes.green); // добавляем стили .green
+        inputClasses.push(classes.green) // добавляем стили .green
     } else {
-        inputClasses.push(classes.red); // добавляем стили .red
+        inputClasses.push(classes.red) // добавляем стили .red
     }
     
     if (props.name.length > 4) {
-        inputClasses.push(classes.bold); // добавляем стили .bold
+        inputClasses.push(classes.bold) // добавляем стили .bold
     }
     
     const style = {
@@ -875,24 +860,24 @@ yarn start // cобираем проект
 
 // folder: /src/ переименовываем App.css -> App.scss:
 .AppButton {
-    padding: 8px 10px;
-    border: 1px solid #ccc;
-    font-weight: bold;
+    padding: 8px 10px
+    border: 1px solid #ccc
+    font-weight: bold
     
     &:focus, &:active {
-        outline: none;
+        outline: none
     }
     
     &:hover {
-        background: #000;
+        background: #000
     }
 }
 
 
 // file /src/App.js:
-import React, {Component} from 'react';
-import './App.scss'; // импортируем App.scss
-import car from './Car/Car.js'; 
+import React, {Component} from 'react'
+import './App.scss' // импортируем App.scss
+import Car from './Car/Car.js' 
 
 class App extends Component {
     // ...
@@ -911,7 +896,7 @@ class App extends Component {
                 
                 { cars } 
             </div>    
-        );
+        )
     }
 }
 
@@ -920,19 +905,19 @@ class App extends Component {
 /*@ Передача параметров в компонент: @*/
 
 // file: /src/index.js:
-import React from 'react'; 
-import ReactDOM from 'react-dom'; 
-import './index.css'; 
-import App from './App'; 
-import * as serviceWorker from './serviceWorker'; 
+import React from 'react' 
+import ReactDOM from 'react-dom' 
+import './index.css' 
+import App from './App' 
+import * as serviceWorker from './serviceWorker' 
 
-ReactDOM.render(<App title={'I am from props'} />, document.getElementById('root')); // передаем параметр title 
+ReactDOM.render(<App title={'I am from props'} />, document.getElementById('root')) // передаем параметр title 
 
 
 // file /src/App.js:
-import React, {Component} from 'react';
-import './App.css';
-import car from './Car/Car.js'; 
+import React, {Component} from 'react'
+import './App.css'
+import Car from './Car/Car.js' 
 
 
 class App extends Component {
@@ -951,7 +936,7 @@ class App extends Component {
                 
                 { cars } 
             </div>    
-        );
+        )
     }
 }
 
@@ -960,9 +945,9 @@ class App extends Component {
 /*@ Ининициализация State: @*/
 
 // file /src/App.js:
-import React, {Component} from 'react';
-import './App.css';
-import car from './Car/Car.js'; 
+import React, {Component} from 'react'
+import './App.css'
+import Car from './Car/Car.js' 
 
 class App extends Component {
     constructor(props) { // в props попадают переданные параметры
@@ -989,9 +974,9 @@ class App extends Component {
 // доступны для классов наследников от базового класса
 
 // file /src/App.js:
-import React, {Component} from 'react';
-import './App.css';
-import car from './Car/Car.js'; 
+import React, {Component} from 'react'
+import './App.css'
+import Car from './Car/Car.js' 
 
 
 class App extends Component {
@@ -1019,9 +1004,9 @@ class App extends Component {
 /*@ Создание Stateful компонента: @*/
 
 // file: /src/Car/Car.js:
-import React from 'react'; 
-import Radium from 'radium'; 
-import classes from './Car.css'; 
+import React from 'react' 
+import Radium from 'radium' 
+import classes from './Car.css' 
 
 // cтараться избегать частого создания компонентов наследников React.Component - лучше функциональные компоненты React
 class Car extends React.Component { 
@@ -1029,13 +1014,13 @@ class Car extends React.Component {
         const inputClasses = [classes.input] 
     
         if (this.props.name != '') { // если class у props прописываем this
-            inputClasses.push(classes.green); 
+            inputClasses.push(classes.green) 
         } else {
-            inputClasses.push(classes.red);
+            inputClasses.push(classes.red)
         }
         
         if (this.props.name.length > 4) { 
-            inputClasses.push(classes.bold); 
+            inputClasses.push(classes.bold) 
         }
         
         const style = {
@@ -1071,9 +1056,9 @@ export default Radium(Car)
 /*@ Жизненный цикл изменения/удаления: @*/
 
 // file: /src/Car/Car.js:
-import React from 'react'; 
-import Radium from 'radium'; 
-import classes from './Car.css'; 
+import React from 'react' 
+import Radium from 'radium' 
+import classes from './Car.css' 
 
 class Car extends React.Component { 
     
