@@ -236,13 +236,13 @@ import './App.css'
 import Car from './Car/Car.js' 
 
 class App extends Component {
-    state = { // задание State (если класс наследник Component) - описание состояния данного компонента
+    state = { // задание State (класс должен наследоваться от Component) - описание состояния данного компонента
         cars : [
             {name: 'Ford', year: 2018},
             {name: 'Audi', year: 2012},
             {name: 'Mazda', year: 2011}
         ], 
-        pageTitle: 'React Components'
+        pageTitle: 'React Cars'
     } 
     
     changeTitleHandler = () => { // функция обработчик (cписок events: reactjs.org/docs/events.html)
@@ -260,7 +260,7 @@ class App extends Component {
             textAlign : 'center'
         }
         
-        const cars = this.state.cars
+        const cars = this.state.cars // берем данные из State
         
         return (
             <div style={divStyle}> 
@@ -268,7 +268,6 @@ class App extends Component {
                 
                 <button onClick={this.changeTitleHandler}>Change Title</button> // обработчики в Camel Case и без ()
                 
-                // передаем данные из State: 
                 <Car name={cars[0].name} year={cars[0].year} /> 
                 <Car name={cars[1].name} year={cars[1].name} /> 
                 <Car name={cars[2].name} year={cars[2].name} /> 

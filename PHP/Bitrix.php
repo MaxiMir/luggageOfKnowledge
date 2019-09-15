@@ -356,7 +356,7 @@
 	 
 	 
 	 #@ ОБНОВЛЕНИЕ НАЗВАНИЯ И СВОЙСТВ DETAIL_PAGE_URL У ТОВАРОВ:
-	 require($_SERVER["DOCUMENT_ROOT"] . "/bitrix/header.php");
+	 require($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/main/include/prolog_before.php");
 	 
 	 global $DB;
 	 
@@ -422,6 +422,12 @@
 		  print_r($arFields);
 		  echo '</pre>';
 	 }
+	 
+	 /* ДАННЫЕ О ПОЛЬЗОВАТЕЛЕ: */
+	 $userID = $USER->GetID();
+	 $userData = CUser::GetByID($userID)->Fetch();
+	 
+	 ["NAME" => $name, "LAST_NAME" => $lastName] = $userData;
 	 
 	 
 	 #@ ИЗМЕНЕНИЕ arResult + ДОБАВЛЕНИЕ ЦЕН И СВОЙСТВ:
@@ -514,18 +520,21 @@
 	 
 	 #@ ЗАПИСЬ В ИНФОБЛОК:
 	 CModule::IncludeModule("iblock");
-	 $el = new CIBlockElement;
-	 $PROP = [];
-	 $PROP['UNAME'] = $uName;
-	 $PROP['UEMAIL'] = $uEmail;
-	 $PROP['PRODNAME'] = $prodName;
-	 $PROP['UCOMMENT'] = $uCommet;
 	 
-	 $arLoadProductArray = Array(
+	 $el = new CIBlockElement;
+	 
+	 $props = [
+		 'UNAME' => $uName,
+		 'UEMAIL' => $uEmail,
+		 'PRODNAME' => $prodName,
+		 'UCOMMENT' => $uCommet
+	 ];
+	 
+	 $arLoadProductArray = [
 		 "IBLOCK_ID" => 43,
 		 "NAME" => "{$uName}: $prodName",
-		 "PROPERTY_VALUES" => $PROP,
-	 );
+		 "PROPERTY_VALUES" => $props,
+	 ];
 	 
 	 $PRODUCT_ID = $el->Add($arLoadProductArray);
 	 
@@ -691,7 +700,7 @@
 	 
 	 
 	 #@ ЗАЛИТЬ РАЗДЕЛЫ/ТОВАРЫ:
-	 require($_SERVER["DOCUMENT_ROOT"] . "/bitrix/header.php");
+	 require($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/main/include/prolog_before.php");
 	 
 	 global $DB;
 	 
@@ -1136,12 +1145,8 @@
 	 
 	 
 	 
-	 
-	 
 	 #@@@ Наработки: @@@#
-	 
-	 <?
-    
+
     use Bitrix\Main\Loader;
     use Bitrix\Main\Context;
     
@@ -1305,6 +1310,29 @@
         
         return $sectionDBData->GetNext();
     }
+	 
+	 
+	 ### данные товара: ###
+	 function getElementDataByID($productID, $props = false)
+	 {
+		  if (!$props) {
+				$elementDBData = CIBlockElement::GetByID($productID);
+				
+				return $elementDBData->GetNext();
+		  }
+		  
+		  $arSelect = array_merge($props, ["ID", "IBLOCK_ID", "NAME"]);
+		  
+		  $arFilter = [
+			  "IBLOCK_ID" => CATALOG_I_BLOCK_ID,
+			  "ACTIVE" => "Y",
+			  "ID" => $productID
+		  ];
+		  
+		  $prodDBData = CIBlockElement::GetList([], $arFilter, false, false, $arSelect);
+		  
+		  return $prodDBData->GetNext();
+	 }
     
     
     
@@ -1644,30 +1672,18 @@
         
         return returnResultCache($cacheTime, $cacheID, 'getResponseDataWithProds', $prodsDataForResponse);
     }
-	 
-Урл должен сохраняться =)
-31 августа
-￼
-Ник 16:55
-
-)))
-
-там где я пробовал настройки другие у апача походу
-5 сентября
-￼
-Ник 15:5
+    
     
 	 // использование:
 	 $aMenuLinks = getMenuLinksFromCache();
     
     // и:
-    
 	 $arResult['ITEMS'] = getCatalogLeftMenuLinksFromCache();
 	 
 	 
 	 #@ СВЯЗКА ОТЗЫВОВ С ФОРУМА И ТОВАРОВ:
 	 // FILE: /responses/index.php:
-	 require($_SERVER["DOCUMENT_ROOT"] . "/bitrix/header.php");
+	 require($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/main/include/prolog_before.php");
 	 
 	 $APPLICATION->SetTitle("Последние отзывы о товарах");
 	 
@@ -1743,7 +1759,6 @@
         $arSelect = [
            'ID',
            'NAME',
-           'DETAIL_PAGE_URL',
            'DETAIL_PAGE_URL',
            'PREVIEW_PICTURE',
         ];
@@ -2538,7 +2553,7 @@
 	 #@@@ ЗАЛИВКА СТАТЕЙ: @@@#
 	 use Bitrix\Main\Loader;
 	 
-	 require($_SERVER["DOCUMENT_ROOT"] . "/bitrix/header.php");
+	 require($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/main/include/prolog_before.php");
 	 
 	 # ФАЙЛЫ: #
 	 const NEWS_CSV_FILE = "news.csv";
@@ -2663,6 +2678,92 @@
 <p><?= implode("<br>", $newsErrors) ?> </p>
 <? endif; ?>
 
+
+<?
+	 #@@@ СОЗДАНИЕ ОТЗЫВОВ и ОБНОВЛЕНИЕ СВОЙСТВА ЭЛЕМЕНТА #@@@
+	 
+	 use Bitrix\Main\{Application, Context, Loader};
+	 
+	 require($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/main/include/prolog_before.php");
+	 
+	 
+	 Loader::includeModule("iblock");
+	 
+	 $connection = Application::getConnection();
+	 $context = Context::getCurrent();
+	 $request = $context->getRequest();
+	 
+	 if (!$request->isPost()) {
+		  return;
+	 }
+	 
+	 
+	 $postData = $request->getPostList()->toArray();
+	 $fullName = getUserFullName();
+	 $prodID = $postData["prodID"];
+	 
+	 ['error' => $errorCreate] = createResponse($postData, $fullName);
+	 
+	 if (!$errorCreate) {
+		  increasePropCountResponse($prodID);
+	 }
+	 
+	 
+	 ### NAME и LAST_NAME пользователя ###
+	 function getUserFullName()
+	 {
+		  global $USER;
+		  
+		  $userID = $USER->GetID();
+		  $userData = CUser::GetByID($userID)->Fetch();
+		  
+		  ["NAME" => $name, "LAST_NAME" => $lastName] = $userData;
+		  
+		  return "{$name} {$lastName}";
+	 }
+	 
+	 
+	 ### ID созданного отзыва || ошибку ###
+	 function createResponse($responseData, $userFullName)
+	 {
+		  [
+			  "prodID" => $prodID,
+			  "sectionID" => $sectionID,
+			  "responseHTML" => $responseHTML,
+			  "rating" => $rating
+		  ] = $responseData;
+		  
+		  if (!isset($prodID, $sectionID, $responseHTML, $rating)) {
+				return;
+		  }
+		  
+		  $el = new CIBlockElement;
+		  
+		  $props = [
+			  'USER_NAME' => $userFullName,
+			  'RATING' => $rating,
+			  'PRODUCT' => $prodID,
+			  'CATALOG_SECTION' => $sectionID
+		  ];
+		  
+		  
+		  $responseData = [
+			  "IBLOCK_ID" => RESPONSE_I_BLOCK_ID,
+			  "NAME" => $userFullName,
+			  "ACTIVE" => "Y",
+			  "PREVIEW_TEXT" => $responseHTML,
+			  "PREVIEW_TEXT_TYPE" => 'html',
+			  "PROPERTY_VALUES" => $props,
+		  ];
+		  
+		  
+		  if ($newElement = $el->Add($responseData)) {
+				return ['id' => $newElement];
+		  }
+		  
+		  return ['error' => $el->LAST_ERROR];
+	 }
+?>
 
 
 

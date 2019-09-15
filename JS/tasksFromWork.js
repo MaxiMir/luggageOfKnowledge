@@ -255,3 +255,105 @@ $(() => {
  });
  
  
+
+ /* Рейтинг */
+ const state = {
+    rating: null
+};
+const formForumResponse = $('.reviews-form');
+const starsElementsBlock = $('.user-rating__stars');
+const starsElements = $('.user-rating__star');
+const errorResponseText = $('.error--rating');
+
+
+const showRatingError = () => {
+    starsElementsBlock.addClass('user-rating__stars-error');
+    errorResponseText.removeClass('hidden');
+};
+
+const hideRatingError = () => {
+    starsElementsBlock.removeClass('user-rating__stars-error');
+    errorResponseText.addClass('hidden');
+};
+
+
+const saveRating = starNum => state.rating = starNum;
+
+const getSavedRating = () => state.rating;
+
+const setRating = starNum => {
+    const emptyStarClass = 'star-empty user-rating__star';
+    const activeStarClass = 'star-voted user-rating__star';
+
+    if (starNum === null) {
+        starsElements.attr('class', emptyStarClass);
+
+        return;
+    }
+
+    starsElements.each((index, elem) => {
+        const classElem = index <= starNum ? activeStarClass : emptyStarClass;
+
+        $(elem).attr('class', classElem);
+    });
+};
+
+starsElements.on('click mouseenter', e => {
+    const isClick = e.type === 'click';
+    const currStar = $(e.currentTarget);
+    const starNum = currStar.index();
+    const isDisplayedError = starsElementsBlock.hasClass('user-rating__stars-error');
+
+    setRating(starNum);
+
+    if (!isClick) {
+        return;
+    }
+    
+    if (isDisplayedError) {
+        hideRatingError();
+    }
+
+    saveRating(starNum);
+});
+
+starsElementsBlock.on('mouseleave', () => {
+    const savedRating = getSavedRating();
+
+    setRating(savedRating);
+});
+
+formForumResponse.on('submit', () => {
+    const rating = getSavedRating();
+
+    if (!rating) {
+        return;
+    }
+
+    const prodID = $('[name="ELEMENT_ID"]').val();
+    const sectionID = $('[name="SECTION_ID"]').val();
+    const responseHTML = $('.bx-editor-iframe')
+        .contents()
+        .find('body')
+        .html();
+
+    $.ajax(
+        {
+            url: '/ajax/adpro/addResponse.php',
+            type: 'POST',
+            cache: false,
+            data: {
+                prodID,
+                sectionID,
+                responseHTML,
+                rating
+            },
+            success: data => {
+                
+            },
+            error: () => {
+                alert('По техническим причинам сообщение не было отправлено.');
+            },
+        }
+    );
+});
