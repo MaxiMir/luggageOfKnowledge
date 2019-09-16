@@ -692,7 +692,7 @@ Object.prototype.sayHello = function () {
 // цепочка наследования - объект __proto__
 
 maxiMir.sayHello(); // => Hello!
-
+ и
 // #2 один из вариантов наследования:
 const maxCon = Object.create(maxiMir);
 maxCon.age = 30;

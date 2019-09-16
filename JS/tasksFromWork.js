@@ -256,20 +256,40 @@ $(() => {
  
  
 
- /* Рейтинг */
- const state = {
-    rating: null
-};
+/* Рейтинг */
 const formForumResponse = $('.reviews-form');
 const starsElementsBlock = $('.user-rating__stars');
 const starsElements = $('.user-rating__star');
 const errorResponseText = $('.error--rating');
+const state = {
+    rating: null,
+    getSavedRating: () => state.rating,
+    checkOnSelectedRating: () => state.rating !== null,
+    saveRating: starNum => state.rating = starNum,
+    setRating: starNum => {
+        const emptyStarClass = 'star-empty user-rating__star';
+        const activeStarClass = 'star-voted user-rating__star';
+        const isSelectedRating = state.checkOnSelectedRating();
 
+        if (!isSelectedRating) {
+            starsElements.attr('class', emptyStarClass);
+
+            return;
+        }
+
+        starsElements.each((index, elem) => {
+            const classElem = index <= starNum ? activeStarClass : emptyStarClass;
+
+            $(elem).attr('class', classElem);
+        });
+    }
+};
 
 const showRatingError = () => {
     starsElementsBlock.addClass('user-rating__stars-error');
     errorResponseText.removeClass('hidden');
 };
+
 
 const hideRatingError = () => {
     starsElementsBlock.removeClass('user-rating__stars-error');
@@ -277,56 +297,38 @@ const hideRatingError = () => {
 };
 
 
-const saveRating = starNum => state.rating = starNum;
-
-const getSavedRating = () => state.rating;
-
-const setRating = starNum => {
-    const emptyStarClass = 'star-empty user-rating__star';
-    const activeStarClass = 'star-voted user-rating__star';
-
-    if (starNum === null) {
-        starsElements.attr('class', emptyStarClass);
-
-        return;
-    }
-
-    starsElements.each((index, elem) => {
-        const classElem = index <= starNum ? activeStarClass : emptyStarClass;
-
-        $(elem).attr('class', classElem);
-    });
-};
-
 starsElements.on('click mouseenter', e => {
-    const isClick = e.type === 'click';
+    const isMouseEnter = e.type === 'mouseenter';
     const currStar = $(e.currentTarget);
     const starNum = currStar.index();
     const isDisplayedError = starsElementsBlock.hasClass('user-rating__stars-error');
 
-    setRating(starNum);
+    state.setRating(starNum);
 
-    if (!isClick) {
+    if (isMouseEnter) {
         return;
     }
-    
+
     if (isDisplayedError) {
         hideRatingError();
     }
 
-    saveRating(starNum);
+    state.saveRating(starNum);
 });
+
 
 starsElementsBlock.on('mouseleave', () => {
-    const savedRating = getSavedRating();
+    const savedRating = state.getSavedRating();
 
-    setRating(savedRating);
+    state.setRating(savedRating);
 });
 
-formForumResponse.on('submit', () => {
-    const rating = getSavedRating();
 
-    if (!rating) {
+formForumResponse.on('submit', () => {
+    const rating = state.getSavedRating();
+    const isSelectedRating = state.checkOnSelectedRating();
+
+    if (!isSelectedRating) {
         return;
     }
 
@@ -348,9 +350,7 @@ formForumResponse.on('submit', () => {
                 responseHTML,
                 rating
             },
-            success: data => {
-                
-            },
+            success: () => {},
             error: () => {
                 alert('По техническим причинам сообщение не было отправлено.');
             },

@@ -245,13 +245,14 @@ class App extends Component {
         pageTitle: 'React Cars'
     } 
     
+
     changeTitleHandler = () => { // функция обработчик (cписок events: reactjs.org/docs/events.html)
         const oldTitle = this.state.pageTitle
-        const newTitle = oldTitle + ' (changed)'
+        const newTitle = `${oldTitle} (changed)`
     
-        this.setState({ // изменение состояния внутри компонента (заново вызывает метод render)
-            pageTitle: newTitle
-        }) 
+        this.setState( // изменение State (заново вызывает метод render)
+            { pageTitle: newTitle }
+        ) 
     }
     
     
@@ -268,9 +269,18 @@ class App extends Component {
                 
                 <button onClick={this.changeTitleHandler}>Change Title</button> // обработчики в Camel Case и без ()
                 
-                <Car name={cars[0].name} year={cars[0].year} /> 
-                <Car name={cars[1].name} year={cars[1].name} /> 
-                <Car name={cars[2].name} year={cars[2].name} /> 
+                <Car 
+                    name={cars[0].name}
+                    year={cars[0].year} 
+                /> 
+                <Car
+                    name={cars[1].name}
+                    year={cars[1].name} 
+                /> 
+                <Car
+                    name={cars[2].name}
+                    year={cars[2].name} 
+                /> 
             </div>
         
         )
@@ -279,12 +289,12 @@ class App extends Component {
 
 
 
-/*@ Передача параметров в функцию: @*/
+/* #@ Передача параметров в функцию: @# */
 
 // file: /src/Car/Car.js:
 import React from 'react' 
 
-export default props => ( // 1 параметр (props) - в скобочки можно не оборачивать
+export default props => ( 
     <div>
         <h3>Car name: {props.name}</h3>
         <p>Year: <strong>{props.year}</strong></p>
@@ -310,12 +320,12 @@ class App extends Component {
     } 
     
     changeTitleHandler = newTitle => {
-        this.setState({ 
-            pageTitle: newTitle
-        }) 
+        this.setState(
+            { pageTitle: newTitle }
+        ) 
     }
     
-    handleInput = (event) => { // React передает в функцию событие 
+    handleInput = event => { // React передает в функцию событие 
         this.setState({ 
             pageTitle: event.target.value // event.target.value - текущее состояние input
         }) 
