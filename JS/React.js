@@ -152,7 +152,6 @@ import React, {Component} from 'react'
 import './App.css'
 import Car from './Car/Car.js' // импортируем компонент Car
 
-
 class App extends Component {
     render() {
         const divStyle = { 
@@ -298,6 +297,7 @@ export default props => (
     <div>
         <h3>Car name: {props.name}</h3>
         <p>Year: <strong>{props.year}</strong></p>
+
         <button onClick={props.onChangeTitle}>Click</button> // привязываем переданный обработчик к элементу
     </div>
 )
@@ -307,7 +307,6 @@ export default props => (
 import React, {Component} from 'react'
 import './App.css'
 import Car from './Car/Car.js' 
-
 
 class App extends Component {
     state = { 
@@ -344,7 +343,9 @@ class App extends Component {
                 
                 <input type="text" onChange={this.handleInput} /> // прослушка изменений в input
                 
-                <button onClick={this.changeTitleHandler.bind(this, 'Changed!')}> // bind - вызов функции в контексте
+                <button 
+                    onClick={this.changeTitleHandler.bind(this, 'Changed!')} // 1 аргумент - контекст, в котором должна быть вызвана функция, 2 и более параметры для функции 
+                > 
                     Change Title
                 </button> 
                 
@@ -352,7 +353,7 @@ class App extends Component {
                 <Car 
                     name={cars[0].name}
                     year={cars[0].year} 
-                    onChangeTitle = {this.changeTitleHandler.bind(this, cars[0].name)} // передача обработчика для кастомного компонента #1 cпособ (БОЛЕЕ ПРАВИЛЬНЫЙ)
+                    onChangeTitle = {this.changeTitleHandler.bind(this, cars[0].name)} // передача обработчика для кастомного компонента #1 cпособ (БОЛЕЕ ПРАВИЛЬНЫЙ - занимает меньше ресурсов у браузера)
                 /> 
                 <Car 
                     name={cars[1].name}
@@ -372,13 +373,12 @@ class App extends Component {
 
 
 
-/*@ Работа со списком: @*/
+/* #@ Работа со списком: @# */
 
 // file /src/App.js:
 import React, {Component} from 'react'
 import './App.css'
 import Car from './Car/Car.js' 
-
 
 class App extends Component {
     state = { 
@@ -396,9 +396,9 @@ class App extends Component {
         }) 
     }
     
-    handleInput = (event) => {
+    handleInput = event => { // React передает событие event 
         this.setState({ 
-            pageTitle: event.target.value 
+            pageTitle: event.target.value // меняем заголовок на введенное значение
         }) 
     }
     
@@ -415,20 +415,24 @@ class App extends Component {
                 
                 <input type="text" onChange={this.handleInput} /> 
                 
-                <button onClick={this.changeTitleHandler.bind(this, 'Changed!')}> 
+                <button 
+                    onClick={this.changeTitleHandler.bind(this, 'Changed!')}
+                > 
                     Change Title
                 </button> 
                 
-                { this.state.cars.map((car, index) => { // cоздание списка 
-                    return (
-                        <Car
-                            key={index} // для каждого элемента списка необходимо определять уникальный key
-                            name={car.name}
-                            year={car.year}
-                            onChangeTitle={() => this.changeTitleHandler(car.name)}
-                        />
-                    )
-                }) }
+                { 
+                    this.state.cars.map((car, index) => { // cоздание списка 
+                        return (
+                            <Car
+                                key={index} // для каждого элемента списка необходимо определять уникальный key
+                                name={car.name}
+                                year={car.year}
+                                onChangeTitle={() => this.changeTitleHandler(car.name)}
+                            />
+                        )
+                    }) 
+                }
             </div>    
         )
     }
@@ -436,13 +440,12 @@ class App extends Component {
 
 
 
-/*@ Работа условными операторами: @*/
+/* #@ Работа условными операторами: @# */
 
 // file /src/App.js:
 import React, {Component} from 'react'
 import './App.css'
 import Car from './Car/Car.js' 
-
 
 class App extends Component {
     state = { 
@@ -456,7 +459,7 @@ class App extends Component {
     } 
     
     changeTitleHandler = pageTitle => {
-        // если название аргумента (pageTitle) совпадает с названием значения (pageTitle) из состояния можно записывать в сокр. виде:
+        // если название аргумента (pageTitle) совпадает с названием поля из state можно записывать в сокр. виде:
         this.setState({pageTitle}) 
     }
     
@@ -485,7 +488,7 @@ class App extends Component {
                         onChangeTitle={() => this.changeTitleHandler(car.name)}
                     />
                 )
-            }
+            })
         }
         
         return (
@@ -504,16 +507,18 @@ class App extends Component {
 
 
 
-/*@ Динамические списки: @*/
+/* #@ Динамические списки: @# */
 
 // file: /src/Car/Car.js:
 import React from 'react' 
 
 export default props => ( 
-    <div style={{
-        border: '1px solid #ccc',
-        marginBottom: '10' // px - можно не прописывать
-    }}>
+    <div 
+        style={{
+            border: '1px solid #ccc',
+            marginBottom: '10' // px - можно не прописывать
+        }}
+    >
         <h3>Car name: {props.name}</h3>
         <p>Year: <strong>{props.year}</strong></p>
         <input type="text" onChange={props.onChangeName} value={props.name} /> // добавляем input c обработчиком и со значением по умолчанию
@@ -588,7 +593,7 @@ class App extends Component {
                         onDelete={this.deleteHandler.bind(this, index)}
                     />
                 )
-            }
+            })
         }
         
         return (
