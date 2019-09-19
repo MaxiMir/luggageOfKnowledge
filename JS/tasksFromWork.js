@@ -126,7 +126,7 @@ $(() => {
                 productContainer.append(res);
 
                 if (steps === nextStep) {
-                loadProductsBtn.hide();
+                    loadProductsBtn.hide();
                 }
             },
             error: () => {
@@ -205,15 +205,15 @@ const formForumResponse = $('.reviews-form');
 const starsElementsBlock = $('.user-rating__stars');
 const starsElements = $('.user-rating__star');
 const errorResponseText = $('.error--rating');
-const state = {
+const app = {
     rating: null,
-    getSavedRating: () => state.rating,
-    checkOnSelectedRating: () => state.rating !== null,
-    saveRating: starNum => state.rating = starNum,
+    getSavedRating: () => app.rating,
+    checkOnSelectedRating: () => app.rating !== null,
+    saveRating: starNum => app.rating = starNum,
     setRating: starNum => {
         const emptyStarClass = 'star-empty user-rating__star';
         const activeStarClass = 'star-voted user-rating__star';
-        const isSelectedRating = state.checkOnSelectedRating();
+        const isSelectedRating = app.checkOnSelectedRating();
 
         if (!isSelectedRating) {
             starsElements.attr('class', emptyStarClass);
@@ -247,7 +247,7 @@ starsElements.on('click mouseenter', e => {
     const starNum = currStar.index();
     const isDisplayedError = starsElementsBlock.hasClass('user-rating__stars-error');
 
-    state.setRating(starNum);
+    app.setRating(starNum);
 
     if (isMouseEnter) {
         return;
@@ -257,20 +257,20 @@ starsElements.on('click mouseenter', e => {
         hideRatingError();
     }
 
-    state.saveRating(starNum);
+    app.saveRating(starNum);
 });
 
 
 starsElementsBlock.on('mouseleave', () => {
-    const savedRating = state.getSavedRating();
+    const savedRating = app.getSavedRating();
 
-    state.setRating(savedRating);
+    app.setRating(savedRating);
 });
 
 
 formForumResponse.on('submit', () => {
-    const rating = state.getSavedRating();
-    const isSelectedRating = state.checkOnSelectedRating();
+    const rating = app.getSavedRating();
+    const isSelectedRating = app.checkOnSelectedRating();
 
     if (!isSelectedRating) {
         return;

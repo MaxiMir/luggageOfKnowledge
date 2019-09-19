@@ -521,7 +521,7 @@ export default props => (
     >
         <h3>Car name: {props.name}</h3>
         <p>Year: <strong>{props.year}</strong></p>
-        <input type="text" onChange={props.onChangeName} value={props.name} /> // добавляем input c обработчиком и со значением по умолчанию
+        <input type="text" onChange={props.onChangeName} value={props.name} /> // добавляем input c обработчиком
         <button onClick={props.onDelete}>Delete</button> // добавляем кнопку с удалением элемента
     </div>
 )
@@ -612,9 +612,10 @@ class App extends Component {
 
 
 
-/*@ Подключение CSS и Динамические классы: @*/
+/* #@ Подключение CSS и Динамические классы: @# */
 
-// folder: /src/Car/ создаем файл Car.css:
+// folder: /src/Car/ создаем файл Car.css: 
+/*
 .Car {
     dispay: block
     border: 1px solid #ccc
@@ -623,9 +624,7 @@ class App extends Component {
     transition: border, box-shadow .3s
 }
 
-.input {
-    
-}
+.input {}
 
 .input:active,
 .input:focus {
@@ -644,7 +643,7 @@ class App extends Component {
     border: 2px solid green
     font-weight: bold
 }
-
+*/
 
 // file: /src/Car/Car.js:
 import React from 'react' 
@@ -652,26 +651,25 @@ import './Car.css' // подключаем файл стилей
 
 export default props => {
     const inputClasses = ['input']
-    
-    if (props.name != '') {
-        inputClasses.push('green')
-    } else {
-        inputClasses.push('red')
-    }
+    const secInputClass = props.name === '' ? 'red': 'green';
+
+    inputClasses.push(secInputClass)
     
     if (props.name.length > 4) {
         inputClasses.push('bold')
     }
+
+    const currentInputClass = inputClasses.join(' ');
     
     return ( 
-        <div className="Car">
+        <div className="Car"> // указываем класс из файла стилей
             <h3>Car name: {props.name}</h3>
             <p>Year: <strong>{props.year}</strong></p>
             <input 
                 type="text"
                 onChange={props.onChangeName}
                 value={props.name} 
-                className={inputClasses.join(' ')}
+                className={currentInputClass}
             /> 
             <button onClick={props.onDelete}>Delete</button> 
         </div>
@@ -680,10 +678,10 @@ export default props => {
 
 
 
-/*@ Библиотека Radium: @*/
+/* #@ Библиотека Radium: @# */
 
-yarn add radium
-yarn start // заново собираем проект
+// $ yarn add radium
+// $ yarn start // заново собираем проект
 
 
 // file: /src/Car/Car.js:
@@ -693,20 +691,19 @@ import './Car.css' // подключаем файл стилей
 
 const Car = props => {
     const inputClasses = ['input']
-    
-    if (props.name != '') {
-        inputClasses.push('green')
-    } else {
-        inputClasses.push('red')
-    }
+    const secInputClass = props.name === '' ? 'red': 'green';
+
+    inputClasses.push(secInputClass)
     
     if (props.name.length > 4) {
         inputClasses.push('bold')
     }
+
+    const currentInputClass = inputClasses.join(' ');
     
     const style = {
         border: '1px solid #ccc',
-        boxShadow: '0 4px 5px 0 rgba(0, 0, 0, .14)'
+        boxShadow: '0 4px 5px 0 rgba(0, 0, 0, .14)',
         ':hover': { // используем библиотеку Radium
             border: '1px solid #aaa',
             boxShadow: '0 4px 15px 0 rgba(0, 0, 0, .25)',
@@ -722,7 +719,7 @@ const Car = props => {
                 type="text"
                 onChange={props.onChangeName}
                 value={props.name} 
-                className={inputClasses.join(' ')}
+                className={currentInputClass}
             /> 
             <button onClick={props.onDelete}>Delete</button> 
         </div>
@@ -733,27 +730,27 @@ export default Radium(Car) // обрачиваем компонент Car в ф�
 
 
 
-/*@ CSS-модули: @*/
-Ctrl+C // останавливаем проект
-yarn run eject 
+/* #@ CSS-модули: @# */
+// $ Ctrl+C останавливаем проект
+// $ yarn run eject - вызывается для получения доступа от конфигурации сreate-react-app
 
 // file: /config/webpack.config.dev.js найти module.exports -> module в нем:
 {
     test: /\.css$/,
     use: [
-        require.resolve('style-loader'),
+        require.resolve('style-loader'), // преобразовывает в css
         {
-            loader: require.resolve('css-loader'),
+            loader: require.resolve('css-loader'), // для загрузки css
             options: {
                 importLoaders: 1,
                 modules: true, // добавляем
-                localIdentName: '[name]__[local]__[hash:base64:5]' // конфигурируем модули
+                localIdentName: '[name]__[local]__[hash:base64:5]' // добавляем - какое имя класса будет сгенерировано для каждого компонента; Здесь: Название-класса__Название компонента__рандомный-хэш-из-5-символов
             }
         }
     ]
 }
 
-// file: /config/webpack.config.prod.js найти module -> test: /\.css$/, в нем:
+// file: /config/webpack.config.prod.js найти module в нем:
 {
     test: /\.css$/,
     loader: ExtractTextPlugin.extract(
@@ -773,21 +770,20 @@ yarn run eject
                             minimize: true,
                             sourceMap: shouldUseSourceMap,
                             modules: true, // добавляем
-                            localIdentName: '[name]__[local]__[hash:base64:5]' // конфигурируем модули
+                            localIdentName: '[name]__[local]__[hash:base64:5]' // добавляем
                         },
                     },
                 ]
             }
         )
     )
-},
+}
 
 
-yarn start // cобираем проект
-
+// $ yarn start // cобираем проект
 
 // После этого стили из файла /src/Car/Car.css пропадут.
-// Стили стали локальными:
+// Стили стали локальными, исправляем это:
 
 // file: /src/Car/Car.js:
 import React from 'react' 
@@ -796,20 +792,19 @@ import classes from './Car.css' // сохраняем CSS классы в пер
 
 const Car = props => {
     const inputClasses = [classes.input] // добавляем стили .input
-    
-    if (props.name != '') {
-        inputClasses.push(classes.green) // добавляем стили .green
-    } else {
-        inputClasses.push(classes.red) // добавляем стили .red
-    }
+    const secInputClass = props.name === '' ? classes.red : classes.green;  // добавляем стили .green или стили .red
+
+    inputClasses.push(secInputClass)
     
     if (props.name.length > 4) {
         inputClasses.push(classes.bold) // добавляем стили .bold
     }
-    
+
+    const currentInputClass = inputClasses.join(' ');
+
     const style = {
         border: '1px solid #ccc',
-        boxShadow: '0 4px 5px 0 rgba(0, 0, 0, .14)'
+        boxShadow: '0 4px 5px 0 rgba(0, 0, 0, .14)',
         ':hover': { 
             border: '1px solid #aaa',
             boxShadow: '0 4px 15px 0 rgba(0, 0, 0, .25)',
@@ -818,7 +813,7 @@ const Car = props => {
     }
     
     return ( 
-        <div className="{classes.Car}" style={style}> // применяем стили .Car
+        <div className="{classes.Car}" style={style}> 
             // Конечный вид после преобразования в DOM - class="Car__Car__qfbwz"
             // В CSS: Car__Car__qfbwz {...}
             <h3>Car name: {props.name}</h3>
@@ -827,7 +822,7 @@ const Car = props => {
                 type="text"
                 onChange={props.onChangeName}
                 value={props.name} 
-                className={inputClasses.join(' ')}
+                className={currentInputClass}
             /> 
             <button onClick={props.onDelete}>Delete</button> 
         </div>
@@ -838,41 +833,50 @@ const Car = props => {
 
 /*@ Препроцессоры: @*/
 
-yarn add node-sass sass-loader // устанавливаем библиотеку для работы с SCSS
+// $ yarn add node-sass // устанавливаем библиотеку для работы с SCSS
+
+
+// УСТАРЕВШИЙ СПОСОБ:
+// $ yarn add node-sass sass-loader // устанавливаем библиотеку для работы с SCSS
 
 // file: /config/webpack.config.dev.js:
 {
     test: /\.css$/,
     // ...
 },
-{ // добавляем новый loader:
+// добавляем новый loader:
+{ 
     test: /\.scss$/,
     use: [
         require.resolve('style-loader'), // в конце style-loader
         require.resolve('css-loader'), // затем css-loader
         require.resolve('sass-loader'), // вначале будет работать sass-loader
     ]
-},
-
+}
 
 // file: /config/webpack.config.prod.js:
 {
     test: /\.css$/,
     // ...
 },
-{ // добавляем новый loader:
+// добавляем новый loader:
+{ 
     test: /\.scss$/,
     use: [
         require.resolve('style-loader'), 
         require.resolve('css-loader'), 
         require.resolve('sass-loader'), 
     ]
-},
+}
 
 
-yarn start // cобираем проект
+
+
+// $ yarn start // cобираем проект
+
 
 // folder: /src/ переименовываем App.css -> App.scss:
+/*
 .AppButton {
     padding: 8px 10px
     border: 1px solid #ccc
@@ -886,7 +890,7 @@ yarn start // cобираем проект
         background: #000
     }
 }
-
+*/
 
 // file /src/App.js:
 import React, {Component} from 'react'
@@ -916,14 +920,14 @@ class App extends Component {
 
 
 
-/*@ Передача параметров в компонент: @*/
+/* #@ Передача параметров в компонент: @# */
 
 // file: /src/index.js:
 import React from 'react' 
 import ReactDOM from 'react-dom' 
 import './index.css' 
 import App from './App' 
-import * as serviceWorker from './serviceWorker' 
+import serviceWorker from './serviceWorker' 
 
 ReactDOM.render(<App title={'I am from props'} />, document.getElementById('root')) // передаем параметр title 
 
@@ -933,7 +937,6 @@ import React, {Component} from 'react'
 import './App.css'
 import Car from './Car/Car.js' 
 
-
 class App extends Component {
     // ...
     
@@ -942,8 +945,7 @@ class App extends Component {
         
         return (
             <div style={divStyle}> 
-                <h1>{this.props.title}</h1> // выводим переданный в App компонент параметр (!здесь через this) 
-                
+                <h1>{this.props.title}</h1> // выводим переданный в App компонент параметр (! в классах через  this) 
                 <button onClick={this.changeCarsHandler}> 
                     Tooggle Cars
                 </button> 
@@ -956,7 +958,7 @@ class App extends Component {
 
 
 
-/*@ Ининициализация State: @*/
+/* #@ Ининициализация State: @# */
 
 // file /src/App.js:
 import React, {Component} from 'react'
@@ -983,9 +985,9 @@ class App extends Component {
 
 
 
-/*@ Базовый жизненный цикл: @*/
+/* #@ Базовый жизненный цикл: @# */
 
-// доступны для классов наследников от базового класса
+// доступны для классов наследников от базового класса (Component)
 
 // file /src/App.js:
 import React, {Component} from 'react'
@@ -1015,15 +1017,17 @@ class App extends Component {
 
 
 
-/*@ Создание Stateful компонента: @*/
+/* #@ Создание Stateful компонента: @# */
+
+// - имеет доступ к жизненным циклам
 
 // file: /src/Car/Car.js:
 import React from 'react' 
 import Radium from 'radium' 
 import classes from './Car.css' 
 
-// cтараться избегать частого создания компонентов наследников React.Component - лучше функциональные компоненты React
-class Car extends React.Component { 
+// ! cтараться избегать частого создания компонентов наследников React.Component - лучше функциональные компоненты React
+class Car extends React.Component { // если import React,{Component} from 'react' -> extends Component
     render() {
         const inputClasses = [classes.input] 
     
@@ -1039,7 +1043,7 @@ class Car extends React.Component {
         
         const style = {
             border: '1px solid #ccc',
-            boxShadow: '0 4px 5px 0 rgba(0, 0, 0, .14)'
+            boxShadow: '0 4px 5px 0 rgba(0, 0, 0, .14)',
             ':hover': { 
                 border: '1px solid #aaa',
                 boxShadow: '0 4px 15px 0 rgba(0, 0, 0, .25)',
@@ -1067,7 +1071,7 @@ export default Radium(Car)
 
 
 
-/*@ Жизненный цикл изменения/удаления: @*/
+/* #@ Жизненный цикл изменения/удаления: @# */
 
 // file: /src/Car/Car.js:
 import React from 'react' 
@@ -1076,7 +1080,7 @@ import classes from './Car.css'
 
 class Car extends React.Component { 
     
-    componentWillReceiveProps(nextProps) { // #1 для синхронизации локального State с входящими свойствами
+    componentWillReceiveProps(nextProps) { // #1 для синхронизации локального State с входящими свойствами (version < 16.3)
         
     }
     
@@ -1085,11 +1089,11 @@ class Car extends React.Component {
         return nextProps.name.trim() !== this.props.name.trim()
     }
     
-    componentWillUpdate(nextProps, nextState) { // #3 подготавливаемся к изменению компонента, например, синхронизировать локальный State с входящими свойствами
+    componentWillUpdate(nextProps, nextState) { // #3 подготавливаемся к изменению компонента, например, синхронизировать локальный State с входящими свойствами (version < 16.3)
         
     }
     
-    static getDerivedStateFromProps(nextProps, prevState) { // version > 16.3 <-> componentWillUpdate, но запрещает изменение State напрямую (исп. без componentWillReceiveProps и componentWillUpdate)
+    static getDerivedStateFromProps(nextProps, prevState) { // <-> componentWillUpdate, но запрещает изменение State напрямую (исп. без componentWillReceiveProps и componentWillUpdate) (version > 16.3)
         return { // возвращаем результирующий State, который будет смержен с основным State
             
         }
@@ -1099,7 +1103,7 @@ class Car extends React.Component {
         
     }
     
-    getSnapshotBeforeUpdate() { // вызывается после Car render и перед componentDidUpdate - позволяет получить неизменное до обновления DOM дерево
+    getSnapshotBeforeUpdate() { // вызывается после Car render и перед componentDidUpdate - позволяет получить неизменное до обновления DOM дерево (version > 16.3)
         
     }
     
@@ -1116,6 +1120,6 @@ export default Radium(Car)
 
 
 
-/*@ ErrorBoundary (version > 16): @*/
+/* #@ ErrorBoundary (version > 16): @# */
 
 

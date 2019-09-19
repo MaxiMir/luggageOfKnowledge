@@ -1,13 +1,19 @@
 /** @@@ LEARN @@@
+
  * Портал Ильи Кантора: http://learn.javascript.ru/
+
  * Codewars: https://www.codewars.com/
+ 
  * Серия «You don't know JS»: https://github.com/azat-io/you-dont-know-js-ru
- * HEXLET
+ 
  * Книга «Exploring ES6»: https://exploringjs.com/es6/
+
  * Справочник MDN web docs: https://developer.mozilla.org/ru/
- * 
+ 
  * Гарвардский курс «CS50» https://www.youtube.com/watch?v=Sy_wba7l1UU&list=PLawfWYMUziZqyUL5QDLVbe3j5BKWj42E5
- * React https://www.youtube.com/watch?v=2vujABNBFAY&list=PLNkWIWHIRwME_Gv2vlWAR6TfeSXylYfw4
+ 
+ * https://habr.com/ru/company/mailru/blog/335292/
+
  */
 
 
