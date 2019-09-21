@@ -1122,4 +1122,239 @@ export default Radium(Car)
 
 /* #@ ErrorBoundary (version > 16): @# */
 
+// В /src/ создаем новую директорию /ErrorBoundary, а в ней FILE ErrorBoundary.js:
+import React, {Component} from 'react'
 
+export default class ErrorBoundary extends Component {
+    state = {
+        hasError: false
+    }
+
+    componentDidCatch(error, info) { // отлавливает Exception у детей
+        this.setState({hasError: true})    
+    }
+
+    render() {
+        if (this.state.hasError) {
+            return <h1 style={{color:'red'}}>Something went wrong</h1>
+        }
+
+        return this.props.children  // иначе показываем сам компонент
+    }
+}
+
+
+// file /src/App.js:
+import React, {Component} from 'react'
+import './App.css'
+import Car from './Car/Car.js' 
+import ErrorBoundary from './ErrorBoundary/ErrorBoundary.js' // импортируем компонент
+
+
+class App extends Component {    
+    constructor(props) { 
+        super(props) 
+        
+        this.state = { 
+            cars : [
+                {name: 'Ford', year: 2018},
+                {name: 'Audi', year: 2012},
+                {name: 'Mazda', year: 2011}
+            ], 
+            pageTitle: 'React Components',
+            showCars: false 
+        }
+    }
+
+    onChangeName(name, index) { 
+        const car = this.state.cars[index]
+        car.name = name
+        
+        const cars = [...this.state.cars]
+        cars[index] = car
+        
+        this.setState({
+            cars
+        })
+    }
+
+    deleteHandler(index) { 
+        const cars = [...this.state.cars]
+        cars.splice(index, 1)
+        
+        this.setState({cars})
+    }
+    
+    render() { 
+        if (Math.random() > 0.7) { // генерация случайной ошибки
+            throw new Error('Car random failed')        
+        }
+
+        const divStyle = { 
+            textAlign : 'center'
+        }
+        
+        const cars = this.state.cars
+        
+        let cars = null
+        
+        if (this.state.showCars) {
+            cars = this.state.cars.map((car, index) => { 
+                return (
+                    <ErrorBoundary key={index}> // оборачиваем компонент Car в ErrorBoundary + переносим key из Car в ErrorBoundary, тк он является корневым
+                        <Car
+                            name={car.name}
+                            year={car.year}
+                            onChangeName={event => this.onChangeName(event.target.value, index)} // event - cобытие (автоматически передается React), event.target.value - значение из input, index -берется из map
+                            onDelete={this.deleteHandler.bind(this, index)}
+                        />
+                    </ErrorBoundary>
+                )
+            })
+        }
+        
+        return (
+            <div style={divStyle}> 
+                <h1>{this.state.PageTitle}</h1> 
+                
+                <button onClick={this.changeCarsHandler}> 
+                    Tooggle Cars
+                </button> 
+                
+                { cars } 
+            </div>    
+        )
+    }
+}
+
+
+
+
+
+/* #@ Фрагменты: @# */
+
+// в /src/ создаем папку Counter, а в ней FILE Сounter.js:
+import React, {Component} from 'react'
+
+export default class Counter extends Component {
+    state = {
+        counter: 0
+    }
+
+    addCounter = () => {
+        this.setState({
+            counter: this.state.counter + 1
+        })
+    }
+    render() {
+        // #1
+        return (
+            <div>
+                <h2>Counter {this.state.counter}</h2>
+                <button onClick={this.addCounter}>+</button>
+                <button onClick={() => this.setState({counter: this.state.counter - 1})}>-</button> // изменение State в JSX
+            </div>
+        )
+
+        // #2 без корневого div    
+        return [
+            <h2 key={'1'}>Counter {this.state.counter}</h2>,
+            <button 
+                key={'2'}
+                onClick={this.addCounter}
+            >
+                +
+            </button>,
+            <button 
+                key={'3'}
+                onClick={() => this.setState({counter: this.state.counter - 1})}
+            >
+                -
+            </button> 
+        ]    
+    }
+}
+
+
+// file /src/App.js:
+import React, {Component} from 'react'
+import './App.css'
+import Car from './Car/Car.js' 
+import Counter from './Counter/Counter.js' // импортируем компонент
+
+
+class App extends Component {    
+    constructor(props) { 
+        super(props) 
+        
+        this.state = { 
+            cars : [
+                {name: 'Ford', year: 2018},
+                {name: 'Audi', year: 2012},
+                {name: 'Mazda', year: 2011}
+            ], 
+            pageTitle: 'React Components',
+            showCars: false 
+        }
+    }
+
+    onChangeName(name, index) { 
+        const car = this.state.cars[index]
+        car.name = name
+        
+        const cars = [...this.state.cars]
+        cars[index] = car
+        
+        this.setState({
+            cars
+        })
+    }
+
+    deleteHandler(index) { 
+        const cars = [...this.state.cars]
+        cars.splice(index, 1)
+        
+        this.setState({cars})
+    }
+    
+    render() { 
+        const divStyle = { 
+            textAlign : 'center'
+        }
+        
+        const cars = this.state.cars
+        
+        let cars = null
+        
+        if (this.state.showCars) {
+            cars = this.state.cars.map((car, index) => { 
+                return (
+                    <Car
+                        name={car.name}
+                        year={car.year}
+                        onChangeName={event => this.onChangeName(event.target.value, index)} // event - cобытие (автоматически передается React), event.target.value - значение из input, index -берется из map
+                        onDelete={this.deleteHandler.bind(this, index)}
+                    />
+                )
+            })
+        }
+        
+        return (
+            <div style={divStyle}> 
+                <h1>{this.state.PageTitle}</h1> 
+
+                <Counter/> // вставляем компонент
+                
+                <button 
+                    style={{marginTop: 10}}
+                    className={'AppButton'}
+                    onClick={this.changeCarsHandler}
+                > 
+                    Tooggle Cars
+                </button> 
+                
+                { cars } 
+            </div>    
+        )
+    }
+}
