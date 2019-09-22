@@ -1256,7 +1256,7 @@ export default class Counter extends Component {
             </div>
         )
 
-        // #2 без корневого div    
+        // #2 без корневого элемента (version > 16)   
         return [
             <h2 key={'1'}>Counter {this.state.counter}</h2>,
             <button 

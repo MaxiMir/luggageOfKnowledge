@@ -1932,3 +1932,46 @@ observer.observe(target, {
 const mutations = observer.takeRecords();
 callback(mutations);
 observer.disconnect();
+
+
+// # КОНСОЛЬ:
+
+// console.count(label) - выводит общее количество вызовов функции:
+const sayHello = name => {
+    console.count(name) // eсли label не указан, то отображается количество вызовов с параметром по умолчанию.
+    console.log(name)
+};
+
+
+// console.warn - выводит в консоли предупреждение:
+const sayHello = name => {
+    if(!name) {
+      console.warn("No name given")
+    }
+};
+
+// console.table - выводит массивы или объекты в таблице:
+const pets = {
+    name: "Simon",
+    type: "cat"
+};
+  
+const person = {
+firstName: "Indrek",
+lastName: "Lasn"
+};
+  
+console.table([pets, person]); // с группировкой
+
+
+// console.group - вывод вложенных групп
+console.log("This is the first level");
+console.group();
+console.log("Level 2");
+console.group();
+console.log("Level 3");
+console.warn("More of level 3");
+console.groupEnd();
+console.log("Back to level 2");
+console.groupEnd();
+console.log("Back to the first level");

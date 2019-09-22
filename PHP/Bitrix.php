@@ -91,7 +91,7 @@
 		 CIBlock::GetArrayByID($arItem['iBLOCK_ID'], 'ELEMENT_EDIT'));
 	 $this->AddDeleteAction($arItem['ID'], $arItem['DELETE_LINK'],
 		 CIBlock::GetArrayByID($arItem['iBLOCK_ID'], 'ELEMENT_DELETE'),
-		 array('CONFIRM' => GetMessage('CT_BNL_ELEMENT_DELETE_CONFIRM'))); ?>
+		 ['CONFIRM' => GetMessage('CT_BNL_ELEMENT_DELETE_CONFIRM')]); ?>
 	 <div class="some-elem-class" id="<?= $this->GetEditAreaId($arItem['ID']) ?>">
 		  <!-- Код шаблона элемента -->
 	 </div>
@@ -118,14 +118,14 @@
 	 
 	 
 	 #@ ТРАНСЛИТЕРАЦИЯ:
-	 $params = array(
+	 $params = [
 		 "max_len" => "100",
 		 "change_case" => "L",
 		 "replace_space" => "_",
 		 "replace_other" => "_",
 		 "delete_repeat_replace" => "true",
 		 "use_google" => "false",
-	 );
+	 ];
 	 
 	 $code = CUtil::translit($row[], "ru", $params);
 	 
@@ -295,20 +295,20 @@
 	 #@ ОБНОВЛЕНИЕ МЕТ:
 	 function get_min_price_in_product($id)
 	 {
-		  $arSelect = Array(
+		  $arSelect = [
 			  "ID",
 			  "PROPERTY_PRICE",
-		  );
+		  ];
 		  
-		  $arFilter = Array(
+		  $arFilter = [
 			  "ID" => $id,
 			  "IBLOCK_ID" => IntVal(5),
 			  "ACTIVE_DATE" => "Y",
 			  "ACTIVE" => "Y",
 			  ">CATALOG_PRICE_1" => "0",
-		  );
+		  ];
 		  
-		  $res = CIBlockElement::GetList(array("CATALOG_PRICE_1" => 'ASC'), $arFilter, false, array('nTopCount' => 1),
+		  $res = CIBlockElement::GetList(["CATALOG_PRICE_1" => 'ASC'], $arFilter, false, ['nTopCount' => 1],
 			  $arSelect);
 		  $row = $res->GetNext();
 		  
@@ -1144,7 +1144,6 @@
 	 }
 	 
 	 
-	 
 	 #@@@ Наработки: @@@#
 	 
 	 use Bitrix\Main\{Loader, Context};
@@ -1180,7 +1179,7 @@
 	 {
 		  $result = false;
 		  $obCache = new CPHPCache();
-		  $cachePath = '/'.SITE_ID.'/'.$cacheId;
+		  $cachePath = '/' . SITE_ID . '/' . $cacheId;
 		  
 		  if ($obCache->InitCache($timeSeconds, $cacheId, $cachePath)) {
 				$vars = $obCache->GetVars();
@@ -1192,7 +1191,6 @@
 		  
 		  return $result;
 	 }
-	 
 	 
 	 
 	 ###### @ BREADCRUMBS @ ######
@@ -1221,8 +1219,8 @@
 		  $arSort = [];
 		  $arFilter = [
 			  "IBLOCK_ID" => CATALOG_I_BLOCK_ID,
-			  "CODE"      => $code,
-			  "ACTIVE"    => "Y",
+			  "CODE" => $code,
+			  "ACTIVE" => "Y",
 		  ];
 		  
 		  $sectionDBData = CIBlockSection::GetList($arSort, $arFilter);
@@ -1251,8 +1249,8 @@
 			  "UF_SHOW_IN_SECT_MENU",
 		  ];
 		  $arFilter = [
-			  "ID"            => $sectionID,
-			  "IBLOCK_ID"     => CATALOG_I_BLOCK_ID,
+			  "ID" => $sectionID,
+			  "IBLOCK_ID" => CATALOG_I_BLOCK_ID,
 			  "GLOBAL_ACTIVE" => "Y",
 		  ];
 		  
@@ -1281,8 +1279,8 @@
 			  "IBLOCK_SECTION_ID"
 		  ];
 		  $arFilter = [
-			  "IBLOCK_ID"             => CATALOG_I_BLOCK_ID,
-			  "GLOBAL_ACTIVE"         => "Y",
+			  "IBLOCK_ID" => CATALOG_I_BLOCK_ID,
+			  "GLOBAL_ACTIVE" => "Y",
 			  $keyFilterParentSection => $sectionID,
 		  ];
 		  
@@ -1332,7 +1330,6 @@
 	 }
 	 
 	 
-	 
 	 ###### @ MAIN MENU AND LEFT MENU @ ######
 	 
 	 ### данные для меню каталога (корневые разделы): ###
@@ -1354,16 +1351,16 @@
 			  "adpro:menu.sections",
 			  "",
 			  [
-				  "AR_FILTER"        => $arFilter,
-				  "IS_SEF"           => "Y",
-				  "SEF_BASE_URL"     => "/categories/",
+				  "AR_FILTER" => $arFilter,
+				  "IS_SEF" => "Y",
+				  "SEF_BASE_URL" => "/categories/",
 				  "SECTION_PAGE_URL" => "#SECTION_CODE_PATH#/",
-				  "DETAIL_PAGE_URL"  => "#SECTION_CODE_PATH#/#ELEMENT_CODE#",
-				  "IBLOCK_TYPE"      => "category",
-				  "IBLOCK_ID"        => CATALOG_I_BLOCK_ID,
-				  "CACHE_TYPE"       => "A",
-				  "CACHE_TIME"       => "1800",
-				  "GET_ASSOC_ARR"    => $isGetAssocArr,
+				  "DETAIL_PAGE_URL" => "#SECTION_CODE_PATH#/#ELEMENT_CODE#",
+				  "IBLOCK_TYPE" => "category",
+				  "IBLOCK_ID" => CATALOG_I_BLOCK_ID,
+				  "CACHE_TYPE" => "A",
+				  "CACHE_TIME" => "1800",
+				  "GET_ASSOC_ARR" => $isGetAssocArr,
 			  ],
 			  false
 		  );
@@ -1412,18 +1409,18 @@
 			  "UF_SHOW_IN_SECT_MENU",
 		  ];
 		  $arFilter = [
-			  "IBLOCK_ID"             => CATALOG_I_BLOCK_ID,
+			  "IBLOCK_ID" => CATALOG_I_BLOCK_ID,
 			  "!UF_SHOW_IN_SECT_MENU" => false,
-			  "GLOBAL_ACTIVE"         => "Y",
+			  "GLOBAL_ACTIVE" => "Y",
 		  ];
 		  
 		  $sectionsDBData = CIBlockSection::GetList($arSort, $arFilter, false, $arSelect);
 		  
 		  while ($sectionData = $sectionsDBData->GetNext()) {
 				[
-					"ID"                   => $id,
-					"NAME"                 => $name,
-					"SECTION_PAGE_URL"     => $sectionPageURL,
+					"ID" => $id,
+					"NAME" => $name,
+					"SECTION_PAGE_URL" => $sectionPageURL,
 					"UF_SHOW_IN_SECT_MENU" => $parentSectionID,
 				] = $sectionData;
 				
@@ -1440,7 +1437,7 @@
 					[$sectionPageURL],
 					[
 						"FROM_IBLOCK" => $fromBlock,
-						"IS_PARENT"   => "",
+						"IS_PARENT" => "",
 						"DEPTH_LEVEL" => 2,
 					],
 				];
@@ -1463,8 +1460,8 @@
 			  "SECTION_PAGE_URL",
 		  ];
 		  $arFilter = [
-			  "IBLOCK_ID"     => CATALOG_I_BLOCK_ID,
-			  "SECTION_ID"    => $sectionID,
+			  "IBLOCK_ID" => CATALOG_I_BLOCK_ID,
+			  "SECTION_ID" => $sectionID,
 			  "GLOBAL_ACTIVE" => "Y",
 		  ];
 		  
@@ -1472,7 +1469,7 @@
 		  
 		  while ($sectionData = $sectionsDBData->GetNext()) {
 				[
-					"NAME"             => $name,
+					"NAME" => $name,
 					"SECTION_PAGE_URL" => $sectionPageURL,
 				] = $sectionData;
 				
@@ -1482,7 +1479,7 @@
 					[$sectionPageURL],
 					[
 						"FROM_IBLOCK" => $fromBlock,
-						"IS_PARENT"   => "",
+						"IS_PARENT" => "",
 						"DEPTH_LEVEL" => 3,
 					],
 				];
@@ -1562,7 +1559,7 @@
 		  
 		  $arFilter = [
 			  "IBLOCK_ID" => BRAND_I_BLOCK_ID,
-			  'ACTIVE'    => 'Y',
+			  'ACTIVE' => 'Y',
 		  ];
 		  $arSelect = [
 			  'NAME',
@@ -1591,7 +1588,7 @@
 				  ["/vendors/"],
 				  [
 					  "FROM_IBLOCK" => 2,
-					  "IS_PARENT"   => 1,
+					  "IS_PARENT" => 1,
 					  "DEPTH_LEVEL" => 1,
 				  ],
 			  ],
@@ -1606,7 +1603,7 @@
 					[$linkData['DETAIL_PAGE_URL']],
 					[
 						"FROM_IBLOCK" => 2,
-						"IS_PARENT"   => "",
+						"IS_PARENT" => "",
 						"DEPTH_LEVEL" => 2,
 					],
 				];
@@ -1658,7 +1655,8 @@
 	 
 	 
 	 ###  данные отзывов с текущими товарами из кэша: ###
-	 function getResponseDataWithProdsFromCache($prodsDataForResponse, $sectionCode) {
+	 function getResponseDataWithProdsFromCache($prodsDataForResponse, $sectionCode)
+	 {
 		  $cacheTime = 3600;
 		  $cacheID = "responseDataWithProds{$sectionCode}";
 		  
@@ -1667,8 +1665,8 @@
 	 
 	 // использование:
 	 $aMenuLinks = getMenuLinksFromCache();
-    
-    // и:
+	 
+	 // и:
 	 $arResult['ITEMS'] = getCatalogLeftMenuLinksFromCache();
 	 
 	 
@@ -1699,7 +1697,7 @@
 			 'IBLOCK_ID' => CATALOG_I_BLOCK_ID,
 			 'SECTION_ID' => '',
 			 'SECTION_CODE' => $sectionCode,
-			  'FILTER_NAME' => 'FORUM_RESPONSE',
+			 'FILTER_NAME' => 'FORUM_RESPONSE',
 			  // ..
 			 'ADDITIONAL_DATA' => compact('urn', 'isSortByCount', 'sectionsData')
 		 ],
@@ -1744,7 +1742,7 @@
 		  
 		  $arFilter = [
 			  "IBLOCK_ID" => CATALOG_I_BLOCK_ID,
-			  'ACTIVE'    => 'Y',
+			  'ACTIVE' => 'Y',
 			  "SECTION_CODE" => $sectionCode
 		  ];
 		  $arSelect = [
@@ -1758,8 +1756,8 @@
 		  
 		  while ($prodData = $res->GetNext()) {
 				[
-					'ID'              => $id,
-					'NAME'            => $name,
+					'ID' => $id,
+					'NAME' => $name,
 					'DETAIL_PAGE_URL' => $urn,
 					'PREVIEW_PICTURE' => ['SRC' => $src],
 				] = $prodData;
@@ -1791,7 +1789,7 @@
 		  $arSelect = $arSelect ?? ["ID", "NAME", "SECTION_PAGE_URL"];
 		  
 		  $arFilter = [
-			  "IBLOCK_ID"     => $iBlockID,
+			  "IBLOCK_ID" => $iBlockID,
 			  "GLOBAL_ACTIVE" => "Y",
 		  ];
 		  
@@ -1810,8 +1808,8 @@
 	 {
 		  return array_reduce($itemsData, function ($acc, $item) {
 				[
-					'ID'              => $id,
-					'NAME'            => $name,
+					'ID' => $id,
+					'NAME' => $name,
 					'DETAIL_PAGE_URL' => $urn,
 					'PREVIEW_PICTURE' => ['SRC' => $src],
 				]
@@ -1833,17 +1831,17 @@
 		  $arFilter = [
 			  "FORUM_ID" => FORUM_ID,
 			  "APPROVED" => "Y",
-			  "@PARAM2"  => $productsID,
+			  "@PARAM2" => $productsID,
 		  ];
 		  
 		  $responseDBData = CForumMessage::GetListEx($arSort, $arFilter);
 		  
 		  while ($responseData = $responseDBData->Fetch()) {
 				[
-					"PARAM2"            => $id,
-					"AUTHOR_NAME"       => $author,
+					"PARAM2" => $id,
+					"AUTHOR_NAME" => $author,
 					"POST_MESSAGE_HTML" => $message,
-					"POST_DATE"         => $postDate,
+					"POST_DATE" => $postDate,
 				]
 					= $responseData;
 				
@@ -1879,7 +1877,7 @@
 		  $arFilter = [
 			  "FORUM_ID" => FORUM_ID,
 			  "APPROVED" => "Y",
-			  "@PARAM2"  => $productID,
+			  "@PARAM2" => $productID,
 		  ];
 		  
 		  return CForumMessage::GetListEx($arSort, $arFilter, true);
@@ -1930,13 +1928,12 @@
 		  $sumRating = array_reduce($productResponseData, function ($acc, $responseData) {
 				['PROPERTY_RATING_VALUE' => $rating] = $responseData;
 				
-				return $acc + (int) $rating;
+				return $acc + (int)$rating;
 		  }, 0);
 		  
 		  return round($sumRating / $countResponses, 2);
 	 }
 	 
-	 	 
 	 
 	 // FILE: /component-template/result_modifier.php:
 	 [
@@ -2524,14 +2521,14 @@
 			 "ADD_ELEMENT_CHAIN" => "N", // ### Включать название элемента в цепочку навигации
 		 ]
 	 );
-
+	 
 	 // FILE: component_epilog.php в шаблонах catalog.element и catalog.section:
-	 if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED!==true) {
-	 	 die();
+	 if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) {
+		  die();
 	 }
 	 
-	 if(!is_array($arResult["SECTION"])) {
-	 	 return;
+	 if (!is_array($arResult["SECTION"])) {
+		  return;
 	 }
 	 
 	 global $APPLICATION;
@@ -2590,7 +2587,6 @@
 	 }
 	 
 	 
-	 
 	 #@@@ ЗАЛИВКА СТАТЕЙ: @@@#
 	 use Bitrix\Main\Loader;
 	 
@@ -2620,12 +2616,12 @@
 	  */
 	 function convertToAssocArr($data)
 	 {
-	 	 return array_reduce($data, function ($acc, $sectionData) {
-			  [$key, $value] = $sectionData;
-			  $acc[$key] = $value;
-			
-			  return $acc;
-		 }, []);
+		  return array_reduce($data, function ($acc, $sectionData) {
+				[$key, $value] = $sectionData;
+				$acc[$key] = $value;
+				
+				return $acc;
+		  }, []);
 	 }
 	 
 	 /**
@@ -2683,7 +2679,7 @@
 		  $imgPreviewPath = "{$dirWithImg}{$stamp}_{$img}$imgExt";
 		  
 		  $el = new CIBlockElement;
-
+		  
 		  $newsData = [
 			  "IBLOCK_ID" => ARTICLES_I_BLOCK_ID,
 			  "IBLOCK_SECTION" => $iBlockSection,
@@ -2695,34 +2691,35 @@
 			  "DETAIL_TEXT" => $text,
 			  "DETAIL_TEXT_TYPE" => 'html'
 		  ];
-
+		  
 		  if (file_exists($imgDetailPath)) {
 				$newsData["DETAIL_PICTURE"] = CFILE::MakeFileArray($imgDetailPath);
 		  }
-
+		  
 		  if (file_exists($imgPreviewPath)) {
 				$newsData["PREVIEW_PICTURE"] = CFILE::MakeFileArray($imgPreviewPath);
 		  }
-
+		  
 		  if ($newElement = $el->Add($newsData)) {
 				return ['id' => $newElement];
 		  }
-
+		  
 		  return ['error' => $el->LAST_ERROR];
 	 }
+
 ?>
 
 <p>Создано статей: <b><?= $createdNewsCount ?></b></p>
 
 <? if ($newsErrors): ?>
-<p><b>Ошибки:</b></p>
-<p><?= implode("<br>", $newsErrors) ?> </p>
+	 <p><b>Ошибки:</b></p>
+	 <p><?= implode("<br>", $newsErrors) ?> </p>
 <? endif; ?>
 
 
 <?
 	 #@@@ СОЗДАНИЕ ОТЗЫВОВ и ОБНОВЛЕНИЕ СВОЙСТВА ЭЛЕМЕНТА #@@@
-
+	 
 	 use Bitrix\Main\{Application, Context, Loader};
 	 
 	 require($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/main/include/prolog_before.php");
@@ -2745,8 +2742,8 @@
 	 ['error' => $errorCreate] = createResponse($postData, $fullName);
 	 
 	 if (!$errorCreate) {
-        increasePropCountResponse($prodID);
-        updateRatingProduct($prodID);
+		  increasePropCountResponse($prodID);
+		  updateRatingProduct($prodID);
 	 }
 	 
 	 
@@ -2804,193 +2801,273 @@
 		  
 		  return ['error' => $el->LAST_ERROR];
 	 }
-    
-    
-    ### обновление количества отзывов о товаре: ###
+	 
+	 
+	 ### обновление количества отзывов о товаре: ###
 	 function increasePropCountResponse($prodID)
 	 {
-        $responseCount = getProductResponseCount($prodID);
+		  $responseCount = getProductResponseCount($prodID);
 		  $responseCountValue = !$responseCount ? 1 : ++$responseCount;
 		  
 		  CIBlockElement::SetPropertyValuesEx($prodID, false, ["vote_count" => $responseCountValue]);
 	 }
-    
 	 
-    ### обновление рейтинга товара: ###
-    function updateRatingProduct($prodID)
-    {
-        $productRating = getProductRating($prodID);
-        
-        CIBlockElement::SetPropertyValuesEx($prodID, false, ["rating" => $productRating]);
-    }
-
-
-
-
-
-	#@@@  ОБНОВЛЕНИЕ ПРИВЯЗКИ К РАЗДЕЛАМ @@@#
-	use Bitrix\Main\Loader;
-    use \Bitrix\Iblock\PropertyIndex\Manager;
-    
-    
-    /**
-     * @param $productSectionData
-     *
-     * @return array [
-     *   'errors' => ошибки,
-     *   'createdCount' => количество созданных отзывов
-     * ]
-     */
-    function updateElementsSection($productSectionData)
-    {
-        $result = [
-           'errors' => [],
-           'createdCount' => 0
-        ];
-        
-        foreach ($productSectionData as $key => $productData) {
-            if (!$key) {
-                continue;
-            }
-            
-            [$prodID, $prodSections] = $productData;
-            
-            $prodSectionsData = explode(',', $prodSections);
-            
-            if (!$prodID || !$prodSectionsData) {
-                continue;
-            }
-            
-            updateElementSection($prodID, $prodSectionsData);
-            ++$result['createdCount'];
-        }
-        
-        return $result;
-    }
-
-
-	/**
-     * @param $prodID
-     * @param $sectionsID
-     * обновляет привязку к разделам у товаров + обновление фасетных индексов
-     */
-    function updateElementSection($prodID, $sectionsID)
-    {
-        CIBlockElement::SetElementSection($prodID, $sectionsID);
-        
-        Manager::updateElementIndex(CATALOG_I_BLOCK_ID, $prodID);
-    }
-
-
-
-
-	 #@@@ МАСШТАБИРОВАНИЕ ФОТО (сохраняет копию файла и возвращает путь к нему либо возвращает ссылку на картинку-заглушку): @@@#
+	 
+	 ### обновление рейтинга товара: ###
+	 function updateRatingProduct($prodID)
+	 {
+		  $productRating = getProductRating($prodID);
+		  
+		  CIBlockElement::SetPropertyValuesEx($prodID, false, ["rating" => $productRating]);
+	 }
+	 
+	 
+	 #@@@  ОБНОВЛЕНИЕ ПРИВЯЗКИ К РАЗДЕЛАМ @@@#
+	 use Bitrix\Main\Loader;
+	 use \Bitrix\Iblock\PropertyIndex\Manager;
+	 
 	 
 	 /**
-	  * Водяной знак - если существует файл /upload/watermark/watermark_original.png - он будет
-	  * смасштабирован под фото и нанесен на всю поверхность с небольшим отступом от края.
-	  * watermark_original.png - должен быть большого размера, чтобы не терялось качество.
+	  * @param $productSectionData
 	  *
-	  * @param $imgId
-	  * @param $width int
-	  * @param $height int Если не задано, будет пропорционально ширине
-	  * @param $proportional bool false - Обрезать жестко по заданному размеру (удобно для мини картинок). true - пропорционально (для больших)
-	  *
-	  * @return string Путь к измененному файлу
-	  * @throws Exception File dimensions can not be a null
-	  *
-	  *
+	  * @return array [
+	  *   'errors' => ошибки,
+	  *   'createdCount' => количество созданных отзывов
+	  * ]
 	  */
-	 function getResizedImgOrPlaceholder($imgId, $width, $height = "auto", $proportional = true)
+	 function updateElementsSection($productSectionData)
 	 {
-		  if (!$width) {
-				throw new \Exception("File dimensions can not be a null");
-		  }
+		  $result = [
+			  'errors' => [],
+			  'createdCount' => 0
+		  ];
 		  
-		  $resizeType = BX_RESIZE_IMAGE_EXACT;
-		  $autoHeightMax = 9999;
-		  
-		  if ($height == "auto") {
-				$height = $autoHeightMax;
-				$resizeType = BX_RESIZE_IMAGE_PROPORTIONAL;
-		  }
-		  
-		  if (!$height) {
-				$height = $width;
-		  }
-		  
-		  if ($proportional) {
-				$resizeType = BX_RESIZE_IMAGE_PROPORTIONAL;
-		  }
-		  
-		  if (!$imgId) {  // если картинка не существует (например, пустое значение некотрого св-ва) - вернем заглушку нужного размера
-				// тут можно положить собственную заглушку под стиль сайта
-				$customNoImg = SITE_TEMPLATE_PATH . "/upload/img_placeholder.jpg";
-				// есть ограничение на размер заглушки на сайте dummyimage.com. можно еще задать цвет фона и текста.
-				$height = $height == $autoHeightMax ? $width : $height;
-				
-				return file_exists($_SERVER["DOCUMENT_ROOT"] . $customNoImg) ? $customNoImg : "http://dummyimage.com/{$width}x{$height}/5C7BA4/fff";
-		  }
-		  
-		  $arFilters = [];
-		  /*
-			* <watermark>
-			* 1) получаем размер ($arDestinationSize) итоговой картинки (фото товара) после ресайза, с учетом типа ресайза ($resizeType)
-			* 2) создаем водяной знак под этот размер фото (он должен быть чуть меньше самого фото)
-			* 3) формируем фильтр для наложения знака
-			* */
-		  $watermark = $_SERVER['DOCUMENT_ROOT'] . "/upload/watermark/watermark_original.png";
-		  
-		  if (is_readable($watermark)) {
-				$bNeedCreatePicture = $arSourceSize = $arDestinationSize = false;
-				$imgSize = \CFile::GetImageSize($_SERVER["DOCUMENT_ROOT"] . \CFile::GetPath($imgId));
-				\CFile::ScaleImage($imgSize["0"], $imgSize["1"], ["width" => $width, "height" => $height], $resizeType,
-					$bNeedCreatePicture, $arSourceSize, $arDestinationSize);
-				
-				$koef = 0.95;
-				$watermarkResized = $_SERVER['DOCUMENT_ROOT'] . "/upload/watermark/watermark_" . $arDestinationSize["width"] * $koef . ".png";
-				
-				if (!is_readable($watermarkResized)) {
-					 \CFile::ResizeImageFile($watermark, $watermarkResized,
-						 ["width" => $arDestinationSize["width"] * $koef, "height" => $arDestinationSize["height"] * $koef],
-						 BX_RESIZE_IMAGE_PROPORTIONAL, false, 95, []);
+		  foreach ($productSectionData as $key => $productData) {
+				if (!$key) {
+					 continue;
 				}
 				
-				if (is_readable($watermarkResized)) {
-					 $arFilters[] = [
-						 "name" => "watermark",
-						 "position" => "center",
-						 "size" => "real",
-						 "file" => $watermarkResized
-					 ];
+				[$prodID, $prodSections] = $productData;
+				
+				$prodSectionsData = explode(',', $prodSections);
+				
+				if (!$prodID || !$prodSectionsData) {
+					 continue;
 				}
+				
+				updateElementSection($prodID, $prodSectionsData);
+				++$result['createdCount'];
 		  }
 		  
-		  /*
-			* </watermark>
-			* */
-		  $resizedImg = \CFile::ResizeImageGet($imgId, ["width" => $width, "height" => $height], $resizeType, false,
-			  $arFilters, false, 100);
-		  // если файл по каким-то причинам не создался - вернем заглушку
-		  if (!file_exists($_SERVER["DOCUMENT_ROOT"] . $resizedImg['src'])) {
-				if ($height == $autoHeightMax) {
-					 $height = $width;
-				}
-				return self::getResizedImgOrPlaceholder(false, $width, $height, $proportional);
-		  }
-		  
-		  return $resizedImg['src'];
+		  return $result;
 	 }
-
-?>
-
-<!-- пример любой картинки, которую нужно пропорционально уменьшить -->
-<img src="<?= getResizedImgOrPlaceholder($arResult["DETAIL_PICTURE"]["ID"], $width = 1024) ?>"/>
-
-<!-- пример для большой картинки в карточке товара или в списке товаров -->
-<img src="<?= getResizedImgOrPlaceholder($arResult["DETAIL_PICTURE"]["ID"], $width = 600, $height = 400,
-	$proportional = true) ?>"/>
-
-<!-- пример для маленькой картинки в слайдере -->
-<img src="<?= getResizedImgOrPlaceholder($arResult["DETAIL_PICTURE"]["ID"], $width = 60, $height = 60,
-	$proportional = false) ?>"/>
+	 
+	 
+	 /**
+	  * @param $prodID
+	  * @param $sectionsID
+	  * обновляет привязку к разделам у товаров + обновление фасетных индексов
+	  */
+	 function updateElementSection($prodID, $sectionsID)
+	 {
+		  CIBlockElement::SetElementSection($prodID, $sectionsID);
+		  
+		  Manager::updateElementIndex(CATALOG_I_BLOCK_ID, $prodID);
+	 }
+	 
+	 
+	 
+	 #@@@ ЗАГРУЗКА КУПОНОВ: @@@#
+	 use Bitrix\Main\Loader;
+	 use Bitrix\Sale\Internals\DiscountCouponTable;
+	 
+	 require "{$_SERVER['DOCUMENT_ROOT']}/bitrix/modules/main/include/prolog_before.php";
+	 
+	 # ФАЙЛЫ: #
+	 const DISCOUNT_CARDS_FILE = "discountCardsFile.csv";
+	 
+	 Loader::includeModule('sale');
+	 
+	 $discountCardsData = getCSVData(DISCOUNT_CARDS_FILE);
+	 [
+		 'errors' => $errorsCreateCoupons,
+		 'createdCount' => $countCreatedCoupons
+	 ] = addCoupons($discountCardsData);
+	 
+	 /**
+	  * @param $discountCardsData
+	  * @return array [
+	  * 	'errors' => ошибки при создании купонов,
+	  *	'createdCount' => количество созданных купонов
+	  * ]
+	  */
+	 function addCoupons($discountCardsData)
+	 {
+		  $result = [
+			  'errors' => [],
+			  'createdCount' => 0
+		  ];
+		  
+		  foreach ($discountCardsData as $key => $discountCardData) {
+				if (!$key) {
+					 continue;
+				}
+				
+				['error' => $errorCreate] = createCoupon($discountCardData);
+				
+				if ($errorCreate) {
+					 $result['errors'][] = $errorCreate;
+					 continue;
+				}
+				
+				++$result['createdCount'];
+		  }
+		  
+		  return $result;
+	 }
+	 
+	 /**
+	  * @param $discountCardData
+	  * @return array [
+	  *   'couponCode' => код купона ||
+	  *   'error' => ошибку, возникшую при создании
+	  * ]
+	  */
+	 function createCoupon($discountCardData)
+	 {
+		  [$coupon, $fullName, $phone, $city] = $discountCardData;
+		  
+		  $phoneForDesc = !$phone ? 'отсутствует' : $phone;
+		  $cityForDesc = !$city ? 'отсутствует' : $city;
+		  
+		  $description = "ИМЯ: {$fullName}, ТЕЛЕФОН: {$phoneForDesc}, ГОРОД: {$cityForDesc}";
+		  
+		  
+		  $addCouponDb = DiscountCouponTable::add(
+			  [
+				  'DISCOUNT_ID' => VIP_ID_BASKET_RULES,
+				  'COUPON' => $coupon, // DiscountCouponTable::generateCoupon(true)
+				  'TYPE' =>  DiscountCouponTable::TYPE_MULTI_ORDER,
+				  'MAX_USE' => 0,
+				  'USER_ID' => 0,
+				  'DESCRIPTION' => $description
+			  ]
+		  );
+		  
+		  if ($addCouponDb->isSuccess()) {
+				return ['couponCode' => $coupon];
+		  }
+		  
+		  $error = $addCouponDb->getErrorMessages();
+		  
+		  return ['error' => $error];
+	 }
+	 
+	 
+	 
+	 #@@@ ЗАГРУЗКА ПОЛЬЗОВАТЕЛЕЙ: @@@#
+	 
+	 /**
+	  * @param $usersData
+	  * @return array [
+	  * 	'errors' => ошибки при создании пользователей,
+	  *	'createdCount' => количество созданных пользователей
+	  * ]
+	  */
+	 function createUsers($usersData)
+	 {
+		  $result = [
+			  'errors' => [],
+			  'createdCount' => 0
+		  ];
+		  
+		  foreach ($usersData as $key => $userData) {
+				if (!$key) {
+					 continue;
+				}
+				
+				['error' => $errorCreate] = createUser($userData);
+				
+				
+				if ($errorCreate) {
+					 $result['errors'][] = $errorCreate;
+					 continue;
+				}
+				
+				++$result['createdCount'];
+		  }
+		  
+		  return $result;
+	 }
+	 
+	 /**
+	  * @param $userData
+	  * @return array [
+	  *   'id' => ID нового пользователя ||
+	  *   'error' => ошибку, возникшую при создании
+	  * ]
+	  */
+	 function createUser($userData)
+	 {
+		  $LID = "ru";
+		  $ACTIVE = "Y";
+		  $personalNotesData = [];
+		  $GROUP_ID = [AUTH_USERS_GROUP];
+		  $PASSWORD = $CONFIRM_PASSWORD = "toBeStrong"; // randString(COUNT_SIGNS)
+		  $fieldsName = [
+			  "LOGIN",
+			  "LAST_NAME",
+			  "NAME",
+			  "SECOND_NAME",
+			  "PERSONAL_MOBILE",
+			  "EMAIL",
+			  "PERSONAL_GENDER",
+			  "PERSONAL_STREET",
+			  "GROUP_ID",
+			  "PASSWORD",
+			  "CONFIRM_PASSWORD",
+			  "ACTIVE",
+			  "LID",
+			  "PERSONAL_NOTES",
+			  "UF_WHOLESALE_BUYER",
+			  "UF_CREAT_UN_TIME"
+		  ];
+		  
+		  [
+			  $LOGIN,
+			  $LAST_NAME,
+			  $NAME,
+			  $SECOND_NAME,
+			  $isMale,
+			  $delivery_time,
+			  $PERSONAL_MOBILE,
+			  $EMAIL,
+			  $regDate,
+			  $metro,
+			  $PERSONAL_STREET,
+			  $op,
+		  ] = $userData;
+		  
+		  
+		  if ($metro) {
+				$personalNotesData[] = "МЕТРО: {$metro};";
+		  }
+		  
+		  if ($delivery_time) {
+				$personalNotesData[] = "ВРЕМЯ ДОСТАВКИ: {$delivery_time};";
+		  }
+		  
+		  $PERSONAL_GENDER = $isMale ? "M" : "";
+		  $PERSONAL_NOTES = implode($personalNotesData);
+		  $UF_CREAT_UN_TIME = (int)$regDate;
+		  $UF_WHOLESALE_BUYER = $op ? true : false;
+		  
+		  $user = new CUser;
+		  $arUserFields = compact(...$fieldsName);
+		  
+		  if ($newUserID = $user->Add($arUserFields)) {
+				return ['id' => $newUserID];
+		  }
+		  
+		  return ['error' => $user->LAST_ERROR];
+	 }
