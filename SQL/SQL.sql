@@ -950,6 +950,7 @@ CREATE
     FOR EACH ROW BEGIN
 
         IF NOT (NEW.alt_url <=> OLD.alt_url) THEN 
+			DELETE FROM `ap_redirect` WHERE `from` = NEW.alt_url AND `to` = OLD.alt_url;
             INSERT INTO `ap_redirect` (`from`, `to`) VALUES (OLD.alt_url, NEW.alt_url);
         END IF;
 

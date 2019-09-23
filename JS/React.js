@@ -1,12 +1,17 @@
 // ################### REACT ###################
 
 /** Преимущества React:
+
  * МОЛНИЕНОСНЫЙ РЕНДЕРИНГ
-Многие схожие с React библиотеки работают с DOM напрямую. И взаимодействие с DOM напрямую негативно отражается на скорости работы приложения. В React решили эту проблему, внедрив концепцию виртуального DOM. Виртуальный DOM — это легковесная копия обычного DOM. Такая работа с DOM оказывается гораздо эффективнее, чем работа из JavaScript напрямую.
+Многие схожие с React библиотеки работают с DOM напрямую. 
+А взаимодействие с DOM напрямую негативно отражается на скорости работы приложения. В React решили эту проблему, внедрив концепцию виртуального DOM. Виртуальный DOM — это легковесная копия обычного DOM. Такая работа с DOM оказывается гораздо эффективнее, чем работа из JavaScript напрямую.
+
  * КОМПОНЕНТНО-ОРИЕНТИРОВАННЫЙ ПОДХОД
 Если говорить простыми словами, то компонент в Реакт — это кусок кода, который представляет какую-то часть на странице (поле для ввода данных, кнопку поиска и т.п.). Из более простых компонентов можно создавать сложные. Созданные в React компоненты вы легко можете переносить из проекта в проект, тем самым ускоряя веб-разработку.
+
  * УЛУЧШЕННОЕ SEO
 Итоговый HTML, который формируют компоненты, может формироваться как на стороне клиента, так и на стороне сервера, что позволяет создавать так называемые изоморфные приложения. Поисковые системы лучше индексируют страницы таких приложений.
+
  * ВОЗМОЖНОСТЬ СОЗДАНИЯ МОБИЛЬНЫХ ПРИЛОЖЕНИЙ
 В React за разработку мобильных приложений отвечает платформа React Native. Код, который написан для создания сайта, может быть снова использован для создания мобильного приложения, что значительно сократит время на разработку, если вам нужно и мобильное приложение, и сайт. Библиотека относительно проста в освоении, имеет понятный, лаконичный синтаксис.
  */ 
@@ -15,7 +20,7 @@
 
 /* #@ Компоненты #@ */
 
-// file: index.html:
+// FILE: index.html:
 <div id="root1"></div>
 <div id="root2"></div>
 
@@ -66,11 +71,11 @@ npm install -g yarn // file yarn.lock - аналог npm (более оптим�
 
 
 
-// file: /public/manifest.json - превращает приложение в Progressive Web Application
+// FILE: /public/manifest.json - превращает приложение в Progressive Web Application
 
 
 
-// file: /src/index.js:
+// FILE: /src/index.js:
 import React from 'react' // импортируем библиотеку React
 import ReactDOM from 'react-dom' // импортируем библиотеку ReactDOM (ядро библиотеки React)
 import './index.css' // импортируем стили
@@ -84,7 +89,7 @@ registerServiceWorker()
 
 /* #@ Cинтаксис JSX + Инлайн стили: @# */
 
-// file: /src/App.js:
+// FILE: /src/App.js:
 import React, { Component } from 'react'
 import './App.css'
 
@@ -173,7 +178,7 @@ class App extends Component {
 
 /* #@ Вывод динамических данных: @# */
 
-// file: /src/Car/Car.js:
+// FILE: /src/Car/Car.js:
 import React from 'react' 
 
 export default () => (
@@ -187,7 +192,7 @@ export default () => (
 
 /* #@ Передача параметров и контента: @# */
 
-// file: /src/Car/Car.js:
+// FILE: /src/Car/Car.js:
 import React from 'react' 
 
 export default props => ( 
@@ -290,7 +295,7 @@ class App extends Component {
 
 /* #@ Передача параметров в функцию: @# */
 
-// file: /src/Car/Car.js:
+// FILE: /src/Car/Car.js:
 import React from 'react' 
 
 export default props => ( 
@@ -509,7 +514,7 @@ class App extends Component {
 
 /* #@ Динамические списки: @# */
 
-// file: /src/Car/Car.js:
+// FILE: /src/Car/Car.js:
 import React from 'react' 
 
 export default props => ( 
@@ -645,7 +650,7 @@ class App extends Component {
 }
 */
 
-// file: /src/Car/Car.js:
+// FILE: /src/Car/Car.js:
 import React from 'react' 
 import './Car.css' // подключаем файл стилей
 
@@ -684,7 +689,7 @@ export default props => {
 // $ yarn start // заново собираем проект
 
 
-// file: /src/Car/Car.js:
+// FILE: /src/Car/Car.js:
 import React from 'react' 
 import Radium from 'radium' // подключаем библиотеку Radium
 import './Car.css' // подключаем файл стилей
@@ -734,7 +739,7 @@ export default Radium(Car) // обрачиваем компонент Car в ф�
 // $ Ctrl+C останавливаем проект
 // $ yarn run eject - вызывается для получения доступа от конфигурации сreate-react-app
 
-// file: /config/webpack.config.dev.js найти module.exports -> module в нем:
+// FILE: /config/webpack.config.dev.js найти module.exports -> module в нем:
 {
     test: /\.css$/,
     use: [
@@ -750,7 +755,7 @@ export default Radium(Car) // обрачиваем компонент Car в ф�
     ]
 }
 
-// file: /config/webpack.config.prod.js найти module в нем:
+// FILE: /config/webpack.config.prod.js найти module в нем:
 {
     test: /\.css$/,
     loader: ExtractTextPlugin.extract(
@@ -785,7 +790,7 @@ export default Radium(Car) // обрачиваем компонент Car в ф�
 // После этого стили из файла /src/Car/Car.css пропадут.
 // Стили стали локальными, исправляем это:
 
-// file: /src/Car/Car.js:
+// FILE: /src/Car/Car.js:
 import React from 'react' 
 import Radium from 'radium' 
 import classes from './Car.css' // сохраняем CSS классы в переменную
@@ -839,7 +844,7 @@ const Car = props => {
 // УСТАРЕВШИЙ СПОСОБ:
 // $ yarn add node-sass sass-loader // устанавливаем библиотеку для работы с SCSS
 
-// file: /config/webpack.config.dev.js:
+// FILE: /config/webpack.config.dev.js:
 {
     test: /\.css$/,
     // ...
@@ -854,7 +859,7 @@ const Car = props => {
     ]
 }
 
-// file: /config/webpack.config.prod.js:
+// FILE: /config/webpack.config.prod.js:
 {
     test: /\.css$/,
     // ...
@@ -922,7 +927,7 @@ class App extends Component {
 
 /* #@ Передача параметров в компонент: @# */
 
-// file: /src/index.js:
+// FILE: /src/index.js:
 import React from 'react' 
 import ReactDOM from 'react-dom' 
 import './index.css' 
@@ -1021,7 +1026,7 @@ class App extends Component {
 
 // - имеет доступ к жизненным циклам
 
-// file: /src/Car/Car.js:
+// FILE: /src/Car/Car.js:
 import React from 'react' 
 import Radium from 'radium' 
 import classes from './Car.css' 
@@ -1073,7 +1078,7 @@ export default Radium(Car)
 
 /* #@ Жизненный цикл изменения/удаления: @# */
 
-// file: /src/Car/Car.js:
+// FILE: /src/Car/Car.js:
 import React from 'react' 
 import Radium from 'radium' 
 import classes from './Car.css' 
@@ -1229,8 +1234,6 @@ class App extends Component {
 
 
 
-
-
 /* #@ Фрагменты: @# */
 
 // в /src/ создаем папку Counter, а в ней FILE Сounter.js:
@@ -1242,9 +1245,15 @@ export default class Counter extends Component {
     }
 
     addCounter = () => {
-        this.setState({
-            counter: this.state.counter + 1
-        })
+        // this.setState({
+        //     counter: this.state.counter + 1
+        // })
+
+        this.setState(prevState => { // БОЛЕЕ ПРАВИЛЬНЫЙ И БЕЗОПАСНЫЙ: защита от асинхронных изменений state
+           return {
+               counter: prevState.counter + 1
+           }     
+        });
     }
     render() {
         // #1
@@ -1271,7 +1280,17 @@ export default class Counter extends Component {
             >
                 -
             </button> 
-        ]    
+        ]
+        
+        // #3 НАИБОЛЕЕ ВАЛИДНЫЙ СПОСОБ:
+        return (
+            <React.Fragment> // скоро появится <></>
+                <h2>Counter {this.state.counter}</h2>
+                <button onClick={this.addCounter}>+</button>
+                <button onClick={() => this.setState({counter: this.state.counter - 1})}>-</button> // изменение State в JSX
+            </React.Fragment>
+        )
+
     }
 }
 
@@ -1358,3 +1377,113 @@ class App extends Component {
         )
     }
 }
+
+
+
+// в /src/ создаем папку hoc (high order components), а в ней FILE Auxiliary.js:
+import React from 'react'
+
+const Auxiliary = props => {
+    return props.children;
+}
+
+export default Auxiliary;
+
+
+// FILE Сounter.js:
+import React, {Component} from 'react'
+import Auxiliary from '..hoc/Auxiliary'
+
+export default class Counter extends Component {
+    state = {
+        counter: 0
+    }
+
+    addCounter = () => {
+        this.setState({
+            counter: this.state.counter + 1
+        })
+    }
+    render() {
+        return (
+            <Auxiliary> // через свой компонент
+                <h2>Counter {this.state.counter}</h2>
+                <button onClick={this.addCounter}>+</button>
+                <button onClick={() => this.setState({counter: this.state.counter - 1})}>-</button> // изменение State в JSX
+            </Auxiliary>
+        )
+    }
+}
+
+
+
+/* #@ Компоненты высшего порядка HIGH ORDER COMPONENTS: @# */
+/* #@ Валидация параметров с PropTypes: @# */
+// $ yarn add prop-types // устанавливаем пакет (c version 15.5 стала отдельным пакетом)
+// $ yarn start
+
+// FOLDER: /src/hoc/ создаем файл withClass.js:
+import React from 'react'
+
+const withClass = (Component, className) => { // оборачивает Component в section c классом className
+    return props => {
+        return (
+            <section className={className}>
+               <Component {...props} /> // передаем в Component опции из App компонента
+            </section>
+        )        
+    }
+}
+
+export default withClass
+
+
+
+// FILE: /src/Car/Car.js:
+import React from 'react' 
+import classes from './Car.css' 
+import PropTypes from 'prop-types'
+import withClass from '../hoc/withClass'
+
+class Car extends React.Component { 
+    render() {
+        const inputClasses = [classes.input] 
+    
+        if (this.props.name != '') { 
+            inputClasses.push(classes.green) 
+        } else {
+            inputClasses.push(classes.red)
+        }
+        
+        if (this.props.name.length > 4) { 
+            inputClasses.push(classes.bold) 
+        }
+        
+        return ( 
+            <React.Fragment>
+                <h3>Car name: {this.props.name}</h3>
+                <p>Year: <strong>{this.props.year}</strong></p>
+                <input 
+                    type="text"
+                    onChange={this.props.onChangeName}
+                    value={this.props.name} 
+                    className={inputClasses.join(' ')}
+                /> 
+                <button onClick={this.props.onDelete}>Delete</button> 
+            </React.Fragment>
+        )
+    }
+}
+
+Car.propTypes = { // указываем типы данных для свойств только для statefull компонентов (class + extends Component)
+    name: PropTypes.string.isRequired, // обязательное свойство + тип строка
+    year: PropTypes.number,
+    onChangeName: PropTypes.func,
+    OnDelete: PropTypes.func
+}
+
+export default withClass(Car, classes.Car); // используем hoc withClass
+
+
+
+
