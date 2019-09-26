@@ -1727,7 +1727,7 @@ filterArr([1, 2, 3, 4, 5, 6, 7], 1, 3, 5, 6); // => [2, 4, 7]
 
 
 // # DOM:
-// Обретка как в Jquery:
+// Обёртка как в Jquery:
 const $ = document.querySelector.bind(document);
 $('#container');
 
@@ -1975,3 +1975,168 @@ console.groupEnd();
 console.log("Back to level 2");
 console.groupEnd();
 console.log("Back to the first level");
+
+
+
+// # Map, Set, WeakMap, WeakSet
+
+const obj = {
+    name: 'Max',
+    age: 26,
+    job: 'Fullstack'
+};
+
+const entries = [
+    ['name', 'Max'],
+    ['age', 26],
+    ['job', 'Fullstack'],
+];
+
+Object.entries(obj); // Объект в массив => [['name', 'Max'], ['age', 26], ['job', 'Fullstack']]
+Object.fromEntries(entries); // Массив в объект => { name: 'Max', age: 26, job: 'Fullstack' }
+
+// @ Map:
+const map = new Map(entries);
+map; // { 'name': 'Max', 'age': 26, 'job': 'Fullstack' }
+map.get('job'); // Fullstack
+map
+    .set('newField', 42)
+    .set(obj, 'Value of object') // задаем ключ объект
+    .set(NaN, 'NaN ??'); // задаем ключ NaN
+
+map.get(obj); // Получаем значение по ключу объекту => Value of object
+map.get(NaN); // NaN ??
+map.delete('job'); // удаляем из map 'job': 'Fullstack'
+map.has('job'); // проверяем наличие в map 'job'
+map.size // размер карты => 6
+map.clear(); // очищаем карту
+
+for (let [key, value] of map) { // итерируем map
+
+}
+
+for (let keys of map.keys()) { // итерация по значениям
+
+}
+
+for (let val of map.values()) { // итерация по значениям
+
+}
+
+map.forEach((val, key, m) => { // итерация через forEach
+
+});
+
+const array = [...map]; // преобразуем map в массив <-> Array.from(map)
+const mabObj = Object.fromEntries(map.entries()); // преобразуем map в массив (если ключ объект, то в объекте будет [object Object])
+
+
+const users = [
+    {name: 'Juli'},
+    {name: 'Alex'},
+    {name: 'Irina'}
+];
+
+const visits = new Map();
+
+visits
+    .set(users[0], new Date())
+    .set(users[1], new Date(new Date().getTime() + 1000 * 60))
+    .set(users[2], new Date(new Date().getTime() + 5000 * 60));
+
+const lastVisit = user => visits.get(user)
+lastVisit(user[1]); // 2019-09-26T08:33:21.696Z
+
+
+// @ Set:
+const set = new Set([1,2,3,3,4,4,5]); // остаются уникальные значения => {1,2,3,4,5}
+set
+    .add(10) // добавленые новых элементов в set
+    .add(20);
+
+set.has(32); // проверяет на наличие в set элемента => false
+set.size(); // размер set => 7
+set.delete(1); // удаление элемента из ыet
+set.clear(); // очистка set
+
+set.values(); // [Set Iterator] {1,2,3,4,5,10,20}
+set.keys(); // [Set Iterator] {1,2,3,4,5,10,20}
+set.entries(); // [Set Entries] {[1,1],[2,2],[3,3],[4,4],[5,5],[10,10],[20,20]}
+
+for (let value of set) { 
+
+}
+
+const uniqValues = array => [...new Set(array)]; // <-> [Array.from(new Set(array))]
+
+
+// @ WeakMap:
+
+// #1:
+let obj = {name: 'weakmap'};
+obj = null; // сборщик мусора удалил объект
+obj; // null
+
+// #2:
+let obj = {name: 'weakmap'};
+const arr = [obj];
+obj = null; // сборщик мусора удалил объект
+obj; // null
+arr; // {name: 'weakmap'}
+
+
+сonst weakMap = new WeakMap([ // позволяет избежать утечки памяти (ключи только объекты)
+    [obj, 'obj Data']
+]); 
+
+// METHODS: // get set delete has
+
+weakMap.has(obj); // true
+weakMap.get(obj); // obj Data
+
+obj.null; // сборщик мусора удалил объект obj + удалил obj в weakMap
+map.get(obj); // undefined
+map // WeakMap { <items> unknown> }
+
+const cache = new WeakMap();
+
+const cacheUser = user => {
+    if (!cache.has(user)) {
+        cache.set(user, Date.now());
+    }
+
+    return cache.get(user);
+};
+
+const lena = {name: 'Elena'};
+const alex = {name: 'Alex'};
+
+cacheUser(lena);
+cacheUser(alex);
+
+lena = null;
+
+// автоматически у WeakMap был удален объект + очищена память
+0
+cache.has(lena); // true0
+cache.has(alex); // true0
+0
+
+// @ WeakSet:
+const users = [
+    {name: 'Elena'},
+    {name: 'Alex'},
+    {name: 'Irina'}
+];
+
+const visits = new WeakSet();
+
+visits
+    .add(users[0])
+    .add(users[1]);
+
+users.splice(1, 1);    
+// автоматически у WeakSet был удален объект + очищена память
+
+console.log(visits.has(users[0])); // true
+console.log(visits.has(users[1])); // false

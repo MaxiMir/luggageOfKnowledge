@@ -377,3 +377,150 @@
 			<? endforeach; ?>
 		</urlset>
 	</xml>
+
+
+
+
+	<?
+	 
+	 namespace app\components;
+	 
+	 use yii\helpers\ArrayHelper;
+	 use yii\helpers\Html;
+	 use yii\web\AssetBundle;
+	 use yii\web\View;
+	 use frontend\controllers\TownsController;
+	 
+	 class CustomView extends View
+	 {
+		  /**
+			* @param $viewFile
+			* @param $params
+			* @param $output HTML с замененными плейсхолдерами
+			*/
+		  public function afterRender($viewFile, $params, &$output)
+		  {
+				$placeholders = [
+					"#town_id#",
+					"#town_name#",
+					"#nominative_case#",
+					"#genitive_case#",
+					"#detailed_case#",
+					"#accusative_case#",
+					"#instrumental_case#",
+					"#prepositional_case#",
+					"#adress#",
+					"#map#",
+					"#phone#"
+				];
+				
+				$cityData = TownsController::getCityDataByName();
+				
+				if (!$cityData) {
+					 return;
+				}
+				
+				$replacedValues = array_values($cityData);
+				
+				$output = str_replace($placeholders, $replacedValues, $output);
+		  }
+	 }
+	 
+
+
+
+	 #@@@ Поддомены YII2:
+
+	 // DNS: serveralias *.имядомена
+
+	 // FILE: /frontend/controllers/TownsController.php
+	 namespace frontend\controllers;
+	 
+	 use Yii;
+	 use yii\web\Controller;
+	 use app\models\Towns;
+	 
+	 class TownsController extends Controller
+	 {
+		  const HOST = ".hoho.ru";
+		  const MAIN_CITY_CODE = 'msk';
+		  
+		  /**
+			* @return string символьный код города
+			*/
+		  private static function getCityName()
+		  {
+				$serverName = Yii::$app->getRequest()->serverName;
+				$city = explode(self::HOST, $serverName)[0];
+				return $city == $serverName ? self::MAIN_CITY_CODE : $city;
+		  }
+		  
+		  /**
+			* @return mixed данные о городе
+			*/
+		  public static function getCityDataByName()
+		  {
+				$cityName = self::getCityName();
+				
+				$cache = Yii::$app->cache;
+				$key = "cityData{$cityName}";
+				
+				$townData = $cache->get($key);
+				
+				if ($townData === false) {
+					 $townData = Towns::find()->where(['name' => $cityName])->asArray()->one();
+					 
+					 if (!$townData) {
+						  $townData = Towns::find()->where(['name' => self::MAIN_CITY_CODE])->asArray()->one();
+					 }
+					 
+					 $cache->set($key, $townData);
+				}
+				
+				return $townData;
+		  }
+	 }
+	 
+	 
+	 class m190924_152055_remove_and_add_towns_table extends Migration
+    {
+        public function safeUp()
+        {
+    		  $tableOptions = "";
+    	 
+    		  if ($this->db->driverName === 'mysql') {
+    				$tableOptions = 'CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=InnoDB';
+    		  }
+    	 
+    		  $this->createTable('towns', [
+    			  'id' => $this->primaryKey(),
+    			  'name' => $this->string()->notNull(), # название
+    			  'nominative_case' => $this->string()->notNull(), # именительный
+    			  'genitive_case' => $this->string()->notNull(), # родительный
+    			  'detailed_case' => $this->string()->notNull(), # дательный
+    			  'accusative_case' => $this->string()->notNull(), # дательный
+    			  'instrumental_case' => $this->string()->notNull(), # творительный
+    			  'prepositional_case' => $this->string()->notNull(), # предложный
+    			  'adress' => $this->text(), # адрес
+    			  'map' => $this->text(), # карта
+    			  'phone' => $this->string(), # телефон
+    		  ], $tableOptions);
+    	 
+    		  $this->insert('towns',
+    			  [
+    				  'name' => 'msk', # название
+    				  'nominative_case' => 'Москва', # название
+    				  'genitive_case' => "Москвы", # родительный
+    				  'detailed_case' => "Москве", # дательный
+    				  'accusative_case' => "Москве", # дательный
+    				  'instrumental_case' => "Москвой", # творительный
+    				  'prepositional_case' => "Москве", # предложный
+    				  'adress' => "Москва ул. Б.Сеpпуховская д. 38 к.8", # адрес
+    				  'map' => "<div id=\"YMapsID\" style=\"width: 100%; height: 303px;\">&nbsp;</div>", # карта
+    				  'phone' => "8(495) 587-71-31", # телефон
+    			  ]
+    		  );
+        }
+    
+        // ...
+    }
