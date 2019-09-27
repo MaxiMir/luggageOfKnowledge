@@ -50,7 +50,7 @@
     )
 
     ReactDOM.render(
-        App, // App содержит JSX код, поэтому его не надо оборачивать в "<" "/>"
+        App, // App содержит JSX код, поэтому его не надо оборачивать в < />
         document.querySelector('#root1') // место для вставки сгенерированного кода
     )
 </script>
@@ -58,17 +58,18 @@
 
 
 /* #@ Создание проекта @# */
-sudo npm install -g create-react-app // установка create-react-app
-cd WebstormProjects/
-sudo create-react-app react-theory // создание проекта
+/*
+$ sudo npm install -g create-react-app # установка create-react-app
+$ cd WebstormProjects/
+$ sudo create-react-app myapp # создание проекта myapp
 
-npm run start // запуск версии для разработки приложения (cмотреть package.json ключ scripts)
-npm run build // для оптимизации приложения (получение статических файлов, которые будут отвечать за функционал всего приложения)
-npm run test // запуск тестов в React
-npm run eject // получить доступ к конфигурации для проекта create-react-app
+$ npm run start # запуск версии для разработки приложения (cмотреть package.json ключ scripts)
+$ npm run build # для оптимизации приложения (получение статических файлов, которые будут отвечать за функционал всего приложения)
+$ npm run test # запуск тестов в React
+$ npm run eject # получить доступ к конфигурации для проекта create-react-app
 
-npm install -g yarn // file yarn.lock - аналог npm (более оптимизирован для React)
-
+$ npm install -g yarn # file yarn.lock - аналог npm (более оптимизирован для React)
+*/
 
 
 // FILE: /public/manifest.json - превращает приложение в Progressive Web Application
@@ -85,6 +86,7 @@ import registerServiceWorker from './registerServiceWorker' // функцион�
 
 ReactDOM.render(<App />, document.getElementById('root')) // генерируем и вставляем в элемент с ID = root
 registerServiceWorker()
+
 
 
 /* #@ Cинтаксис JSX + Инлайн стили: @# */
@@ -129,12 +131,12 @@ export default App
 class App extends Component {
     render() {
         const divStyle = { // создание инлайн стилей
-            textAlign : 'center' // ! cвойства в camelcase
+            textAlign : 'center' // ! cвойства в CamelCase
         }
         
         return (
-            <div className="App" style={divStyle}> // инлайн-стилей #1 cпособ задать
-                <h1 style={{color: 'blue', fontSize: '10px'}}>Hello world!</h1> // инлайн-стилей #2 cпособ задать
+            <div className="App" style={divStyle}> // инлайн-стилей #1 
+                <h1 style={{color: 'blue', fontSize: '10px'}}>Hello world!</h1> // инлайн-стилей #2 
             </div>
             <p>Hello</p> // => Ошибка должен возвращаться один корневой элемент (испр. вложить в .App)
         )
@@ -143,16 +145,17 @@ class App extends Component {
 
 
 
-/*@ Создание компонентов: @*/
 
-// folder: /src/ cоздаем папку Car и файл Car.js:
+/* #@ Создание компонентов: @# */
+
+// FOLDER: /src/ cоздаем папку Car и файл Car.js:
 import React from 'react' // необходимо импортировать при использовании JSX cинтаксиса
 
 export default () => <h2>This is car component</h2> // Если возвращается несколько строк все оборачиваем в ()
 
 
 
-// file /src/App.js:
+// FILE /src/App.js:
 import React, {Component} from 'react'
 import './App.css'
 import Car from './Car/Car.js' // импортируем компонент Car
@@ -176,6 +179,7 @@ class App extends Component {
 
 
 
+
 /* #@ Вывод динамических данных: @# */
 
 // FILE: /src/Car/Car.js:
@@ -184,9 +188,10 @@ import React from 'react'
 export default () => (
     <div>
         <p>This is car component</p>
-        <p><strong>Number: {Math.round(Math.random() * 100)}</strong></p> // {} - указывает, что внутри простая JS интрепритация
+        <p><strong>Number: {Math.round(Math.random() * 100)}</strong></p> // {} - указывает, что внутри JS интерпритация
     </div>
 )
+
 
 
 
@@ -199,12 +204,12 @@ export default props => (
     <div>
         <h3>Car name: {props.name}</h3>
         <p>Year: <strong>{props.year}</strong></p>
-        {props.children} // вывод контента, переданного в компонент(#1)
+        {props.children} // вывод контента, переданного в компонент (#props.children)
     </div>
 )
 
 
-// file /src/App.js:
+// FILE /src/App.js:
 import React, {Component} from 'react'
 import './App.css'
 import Car from './Car/Car.js' 
@@ -223,7 +228,7 @@ class App extends Component {
                 <Car name="Audi" year={2012} /> // передаем атрибут в виде обычной строки - {} не нужны
                 
                 <Car name={'Mazda'} year={2011}> 
-                    <p style="{{color: red}}">COLOR</p> // передача контента в компонент (#1)
+                    <p style="{{color: red}}">COLOR</p> // передача контента в компонент (#props.children)
                 </Car> 
             </div>
         )
@@ -232,9 +237,10 @@ class App extends Component {
 
 
 
+
 /* #@ State: @# */
 
-// file /src/App.js:
+// FILE /src/App.js:
 import React, {Component} from 'react'
 import './App.css'
 import Car from './Car/Car.js' 
@@ -271,7 +277,7 @@ class App extends Component {
             <div style={divStyle}> 
                 <h1>{this.state.PageTitle}</h1> // выводит pageTitle из State
                 
-                <button onClick={this.changeTitleHandler}>Change Title</button> // обработчики в Camel Case и без ()
+                <button onClick={this.changeTitleHandler}>Change Title</button> // обработчики в CamelCase и без ()
                 
                 <Car 
                     name={cars[0].name}
@@ -293,6 +299,7 @@ class App extends Component {
 
 
 
+
 /* #@ Передача параметров в функцию: @# */
 
 // FILE: /src/Car/Car.js:
@@ -308,7 +315,7 @@ export default props => (
 )
 
 
-// file /src/App.js:
+// FILE /src/App.js:
 import React, {Component} from 'react'
 import './App.css'
 import Car from './Car/Car.js' 
@@ -380,7 +387,7 @@ class App extends Component {
 
 /* #@ Работа со списком: @# */
 
-// file /src/App.js:
+// FILE /src/App.js:
 import React, {Component} from 'react'
 import './App.css'
 import Car from './Car/Car.js' 
@@ -445,9 +452,10 @@ class App extends Component {
 
 
 
+
 /* #@ Работа условными операторами: @# */
 
-// file /src/App.js:
+// FILE /src/App.js:
 import React, {Component} from 'react'
 import './App.css'
 import Car from './Car/Car.js' 
@@ -478,8 +486,6 @@ class App extends Component {
         const divStyle = { 
             textAlign : 'center'
         }
-        
-        const cars = this.state.cars
         
         let cars = null
         
@@ -512,6 +518,7 @@ class App extends Component {
 
 
 
+
 /* #@ Динамические списки: @# */
 
 // FILE: /src/Car/Car.js:
@@ -532,7 +539,7 @@ export default props => (
 )
 
 
-// file /src/App.js:
+// FILE /src/App.js:
 import React, {Component} from 'react'
 import './App.css'
 import Car from './Car/Car.js' 
@@ -617,9 +624,10 @@ class App extends Component {
 
 
 
+
 /* #@ Подключение CSS и Динамические классы: @# */
 
-// folder: /src/Car/ создаем файл Car.css: 
+// FOLDER: /src/Car/ создаем файл Car.css: 
 /*
 .Car {
     dispay: block
@@ -683,6 +691,7 @@ export default props => {
 
 
 
+
 /* #@ Библиотека Radium: @# */
 
 // $ yarn add radium
@@ -732,6 +741,7 @@ const Car = props => {
 }
 
 export default Radium(Car) // обрачиваем компонент Car в функционал пакета Radium
+
 
 
 
@@ -836,6 +846,7 @@ const Car = props => {
 
 
 
+
 /*@ Препроцессоры: @*/
 
 // $ yarn add node-sass // устанавливаем библиотеку для работы с SCSS
@@ -875,12 +886,10 @@ const Car = props => {
 }
 
 
-
-
 // $ yarn start // cобираем проект
 
 
-// folder: /src/ переименовываем App.css -> App.scss:
+// FOLDER: /src/ переименовываем App.css -> App.scss:
 /*
 .AppButton {
     padding: 8px 10px
@@ -897,7 +906,7 @@ const Car = props => {
 }
 */
 
-// file /src/App.js:
+// FILE /src/App.js:
 import React, {Component} from 'react'
 import './App.scss' // импортируем App.scss
 import Car from './Car/Car.js' 
@@ -925,6 +934,7 @@ class App extends Component {
 
 
 
+
 /* #@ Передача параметров в компонент: @# */
 
 // FILE: /src/index.js:
@@ -937,7 +947,7 @@ import serviceWorker from './serviceWorker'
 ReactDOM.render(<App title={'I am from props'} />, document.getElementById('root')) // передаем параметр title 
 
 
-// file /src/App.js:
+// FILE /src/App.js:
 import React, {Component} from 'react'
 import './App.css'
 import Car from './Car/Car.js' 
@@ -965,7 +975,7 @@ class App extends Component {
 
 /* #@ Ининициализация State: @# */
 
-// file /src/App.js:
+// FILE /src/App.js:
 import React, {Component} from 'react'
 import './App.css'
 import Car from './Car/Car.js' 
@@ -990,11 +1000,12 @@ class App extends Component {
 
 
 
+
 /* #@ Базовый жизненный цикл: @# */
 
-// доступны для классов наследников от базового класса (Component)
+// ! доступны для классов наследников от базового класса (Component)
 
-// file /src/App.js:
+// FILE /src/App.js:
 import React, {Component} from 'react'
 import './App.css'
 import Car from './Car/Car.js' 
@@ -1022,9 +1033,10 @@ class App extends Component {
 
 
 
+
 /* #@ Создание Stateful компонента: @# */
 
-// - имеет доступ к жизненным циклам
+// Stateful компонент имеет доступ к жизненным циклам
 
 // FILE: /src/Car/Car.js:
 import React from 'react' 
@@ -1032,6 +1044,7 @@ import Radium from 'radium'
 import classes from './Car.css' 
 
 // ! cтараться избегать частого создания компонентов наследников React.Component - лучше функциональные компоненты React
+
 class Car extends React.Component { // если import React,{Component} from 'react' -> extends Component
     render() {
         const inputClasses = [classes.input] 
@@ -1073,6 +1086,7 @@ class Car extends React.Component { // если import React,{Component} from 'r
 }
 
 export default Radium(Car)
+
 
 
 
@@ -1149,7 +1163,7 @@ export default class ErrorBoundary extends Component {
 }
 
 
-// file /src/App.js:
+// FILE /src/App.js:
 import React, {Component} from 'react'
 import './App.css'
 import Car from './Car/Car.js' 
@@ -1290,12 +1304,11 @@ export default class Counter extends Component {
                 <button onClick={() => this.setState({counter: this.state.counter - 1})}>-</button> // изменение State в JSX
             </React.Fragment>
         )
-
     }
 }
 
 
-// file /src/App.js:
+// FILE /src/App.js:
 import React, {Component} from 'react'
 import './App.css'
 import Car from './Car/Car.js' 
@@ -1404,6 +1417,7 @@ export default class Counter extends Component {
             counter: this.state.counter + 1
         })
     }
+
     render() {
         return (
             <Auxiliary> // через свой компонент
@@ -1417,8 +1431,10 @@ export default class Counter extends Component {
 
 
 
+
 /* #@ Компоненты высшего порядка HIGH ORDER COMPONENTS: @# */
 /* #@ Валидация параметров с PropTypes: @# */
+
 // $ yarn add prop-types // устанавливаем пакет (c version 15.5 стала отдельным пакетом)
 // $ yarn start
 
@@ -1483,7 +1499,3 @@ Car.propTypes = { // указываем типы данных для свойс�
 }
 
 export default withClass(Car, classes.Car); // используем hoc withClass
-
-
-
-
