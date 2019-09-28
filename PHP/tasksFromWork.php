@@ -52,145 +52,17 @@
 	
 	
 	
-	/*@@@ 
-	Создать ассоциативный массив исходя из вложенности разделов:
-	*/
-    $arElements = [
-	    [
-		    0 => "Раздел1 КОРЕНЬ",
-		    1 => "",
-		    2 => "",
-		    3 => ""
-	    ],
-	    [
-		    0 => "",
-		    1 => "Раздел1 УРОВЕНЬ 2-1",
-		    2 => "",
-		    3 => ""
-	    ],
-	    [
-		    0 => "",
-		    1 => "",
-		    2 => "Раздел1 УРОВЕНЬ 3-1",
-		    3 => ""
-	    ],
-	    [
-		    0 => "",
-		    1 => "",
-		    2 => "Раздел1 УРОВЕНЬ 3-2",
-		    3 => ""
-	    ],
-	    [
-		    0 => "",
-		    1 => "Раздел1 УРОВЕНЬ 2-2",
-		    2 => "",
-		    3 => ""
-	    ],
-	    [
-		    0 => "",
-		    1 => "",
-		    2 => "",
-		    3 => ""
-	    ],
-	    [
-		    0 => "Раздел1 КОРЕНЬ",
-		    1 => "",
-		    2 => "",
-		    3 => ""
-	    ],
-	    [
-		    0 => "",
-		    1 => "",
-		    2 => "",
-		    3 => ""
-	    ],
-	    [
-		    0 => "Раздел1 КОРЕНЬ",
-		    1 => "",
-		    2 => "",
-		    3 => ""
-	    ],
-	    [
-		    0 => "",
-		    1 => "Раздел1 УРОВЕНЬ 3-1",
-		    2 => "",
-		    3 => ""
-	    ],
-    ];
-        
-    function getTree(array $data)
-    {
-	    $getCatInfo = function (array $arr) {
-		    foreach ($arr as $num => $name) {
-			    if (!empty($name)) { return [$num, $name]; }
-		    }
-	    };
-	
-	    $createEmtyArr = function ($elements, $currCatName, $newCatName) use (&$createEmtyArr) {
-		    $newElememts = [];
-		
-		    foreach ($elements as $key => $val) {
-			    $newElememts[$key] = empty($val) ? $val : $createEmtyArr($val, $currCatName, $newCatName);
-			    if ($key == $currCatName) {
-				    $newElememts[$key][$newCatName] = [];
-			    }
-		    }
-		
-		    return $newElememts;
-	    };
-	
-	    $getTreeData = array_reduce(array_keys($data), function($acc, $key) use ($data, $getCatInfo, $createEmtyArr) {
-		    ['tree' => $tree, 'branch' => $branch, 'stack' => $stack, 'countDepth' => $countDepth] = $acc;
-		    $arr = $data[$key];
-		    $lastArr = count($data) - 1;
-		    $infoCat = $getCatInfo($arr);
-		    $isSeparator = $infoCat == [];
-		
-		    if ($isSeparator) {
-			    $tree = array_merge($tree, $branch);
-			    $branch = $stack = [];
-			    $countDepth = 0;
-		    } else {
-			    list($depth, $newCatName) = $infoCat;
-			
-			    if (empty($stack)) {
-				    $branch[$newCatName] = [];
-				    array_push($stack, $newCatName);
-				    $countDepth++;
-			    } else {
-				    while($countDepth != $depth) {
-					    array_pop($stack);
-					    $countDepth--;
-				    }
-				
-				    $branch = $createEmtyArr($branch, end($stack), $newCatName);
-				    array_push($stack, $newCatName);
-				    $countDepth++;
-			    }
-			
-			    if($key == $lastArr) { $tree = array_merge($tree, $branch); }
-		    }
-		
-		    return ['tree' => $tree, 'branch' => $branch, 'stack' => $stack, 'countDepth' => $countDepth];
-		
-	    }, ['tree' => [], 'branch' => [], 'stack' => [], 'countDepth' => 0]);
-	
-	    return $getTreeData['tree'];
-    }
-
-
-
 
     class URN 
     {
-    	#@@@ Возвращает текущий URN:
+    	#@@@ Возвращает URN с учетом редиректа:
     	public function getCurrURN($url, $urn)
     	{
     		$uri = "{$url}{$urn}";
     		$headers = get_headers($uri, 1);
     		
     		if ($headers[0] == "HTTP/1.1 404 Not Found") {
-    			return '404 Not Found';
+    			return false;
     		} elseif ($headers[0] == "HTTP/1.1 301 Moved Permanently") {
     			$location = $headers['Location'];
     			$newURN = !is_array($location) ? $location : $location[1];
@@ -198,34 +70,14 @@
     		}
     		
     		return $urn;
-    	}
-    	
-    	#@@@ Запись в CSV URN сайта:
-    	public function writeRedirectAnd404($data)
-    	{
-    	    $url = 'https://www.dveri-md.ru/';
-    	    $result = 'success';
-    	    $csvFile = 'getLinks.csv';
-      	    $checkURN = $data[0];
-      	    
-    		$currURN = getCurrURN($url, $checkURN);
-    		
-    		if ($checkURN != $currURN) {
-    		    $isWritten = ContentManager::writeOnCSV($csvFile, [$checkURN, $currURN]);
-    		    
-    		    if (!$isWritten) {
-    		        $result = 'error';
-    		    }
-    		}
-    		
-    		return ['result' => $result];
-    	}        
+    	}    
     }
 	
 	
 
+
 	#@@@ Генерация sitemap.xml на yii2:
-	// FILE: /backend/config/main.php
+	// FILE: /backend/config/main.php:
 	return [
 		// ...
 		'urlManager' => [
@@ -235,8 +87,8 @@
 			'rules' => [
 				[
 					"pattern" => "sitemap",
-						"route" => "site/sitemap",
-					],
+					"route" => "site/sitemap",
+				],
 				'<action:login|logout>' => 'site/<action>',
 			]
 		],
@@ -381,50 +233,50 @@
 
 
 
-	<?
+<?
 	 
-	 namespace app\components;
-	 
-	 use yii\helpers\ArrayHelper;
-	 use yii\helpers\Html;
-	 use yii\web\AssetBundle;
-	 use yii\web\View;
-	 use frontend\controllers\TownsController;
-	 
-	 class CustomView extends View
-	 {
-		  /**
-			* @param $viewFile
-			* @param $params
-			* @param $output HTML с замененными плейсхолдерами
-			*/
-		  public function afterRender($viewFile, $params, &$output)
-		  {
-				$placeholders = [
-					"#town_id#",
-					"#town_name#",
-					"#nominative_case#",
-					"#genitive_case#",
-					"#detailed_case#",
-					"#accusative_case#",
-					"#instrumental_case#",
-					"#prepositional_case#",
-					"#adress#",
-					"#map#",
-					"#phone#"
-				];
-				
-				$cityData = TownsController::getCityDataByName();
-				
-				if (!$cityData) {
-					 return;
-				}
-				
-				$replacedValues = array_values($cityData);
-				
-				$output = str_replace($placeholders, $replacedValues, $output);
-		  }
-	 }
+	namespace app\components;
+	
+	use yii\helpers\ArrayHelper;
+	use yii\helpers\Html;
+	use yii\web\AssetBundle;
+	use yii\web\View;
+	use frontend\controllers\TownsController;
+	
+	class CustomView extends View
+	{
+		/**
+		* @param $viewFile
+		* @param $params
+		* @param $output HTML с замененными плейсхолдерами поддоменов
+		*/
+		public function afterRender($viewFile, $params, &$output)
+		{
+			$placeholders = [
+				"#town_id#",
+				"#town_name#",
+				"#nominative_case#",
+				"#genitive_case#",
+				"#detailed_case#",
+				"#accusative_case#",
+				"#instrumental_case#",
+				"#prepositional_case#",
+				"#adress#",
+				"#map#",
+				"#phone#"
+			];
+			
+			$cityData = TownsController::getCityDataByName();
+			
+			if (!$cityData) {
+				return;
+			}
+			
+			$replacedValues = array_values($cityData);
+			
+			$output = str_replace($placeholders, $replacedValues, $output);
+		}
+	}
 	 
 
 
@@ -468,13 +320,13 @@
 				$townData = $cache->get($key);
 				
 				if ($townData === false) {
-					 $townData = Towns::find()->where(['name' => $cityName])->asArray()->one();
-					 
-					 if (!$townData) {
-						  $townData = Towns::find()->where(['name' => self::MAIN_CITY_CODE])->asArray()->one();
-					 }
-					 
-					 $cache->set($key, $townData);
+					$townData = Towns::find()->where(['name' => $cityName])->asArray()->one();
+
+					if (!$townData) {
+						$townData = Towns::find()->where(['name' => self::MAIN_CITY_CODE])->asArray()->one();
+					}
+
+					$cache->set($key, $townData);
 				}
 				
 				return $townData;

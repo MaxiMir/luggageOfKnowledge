@@ -745,7 +745,7 @@ export default Radium(Car) // обрачиваем компонент Car в ф�
 
 
 
-/* #@ CSS-модули: @# */
+/* #@ CSS-модули: @# (#css-loader) */
 // $ Ctrl+C останавливаем проект
 // $ yarn run eject - вызывается для получения доступа от конфигурации сreate-react-app
 
@@ -793,7 +793,6 @@ export default Radium(Car) // обрачиваем компонент Car в ф�
         )
     )
 }
-
 
 // $ yarn start // cобираем проект
 
@@ -1434,6 +1433,7 @@ export default class Counter extends Component {
 
 /* #@ Компоненты высшего порядка HIGH ORDER COMPONENTS: @# */
 /* #@ Валидация параметров с PropTypes: @# */
+/* #@ Референции: @# */
 
 // $ yarn add prop-types // устанавливаем пакет (c version 15.5 стала отдельным пакетом)
 // $ yarn start
@@ -1462,6 +1462,38 @@ import PropTypes from 'prop-types'
 import withClass from '../hoc/withClass'
 
 class Car extends React.Component { 
+    componentDidMount() { // элемент зарендерен
+        // До VERSION < 16 фокус через референции:
+        this.inputRef.focus() // так будем фокусироваться на последнем input
+
+        /* для фокуса на первом input в App.js в Сar передаем index:        
+        <Car
+            name={car.name}
+            year={car.year}
+            index={index}
+            ...
+        />            
+
+        А здесь:
+        */
+        if (this.props.index === 0) {
+            this.inputRef.focus()
+        }
+
+
+        // C VERSION 16:
+        if (this.props.index === 0) {
+            this.inputRef.current.focus() // current - для оптимизации
+        }
+    }
+
+    constructor(props) {
+         // C VERSION 16 фокус:
+        super(props)
+
+        this.inputRef = React.createRef()
+    }
+
     render() {
         const inputClasses = [classes.input] 
     
@@ -1480,6 +1512,8 @@ class Car extends React.Component {
                 <h3>Car name: {this.props.name}</h3>
                 <p>Year: <strong>{this.props.year}</strong></p>
                 <input 
+                    ref={inputRef => this.inputRef = inputRef} // До VERSION < 16: записываем в свойство ref на элемент; атрибут не виден в HTML.
+                    ref={this.inputRef} // C VERSION 16
                     type="text"
                     onChange={this.props.onChangeName}
                     value={this.props.name} 
@@ -1494,8 +1528,337 @@ class Car extends React.Component {
 Car.propTypes = { // указываем типы данных для свойств только для statefull компонентов (class + extends Component)
     name: PropTypes.string.isRequired, // обязательное свойство + тип строка
     year: PropTypes.number,
+    index: PropTypes.number,
     onChangeName: PropTypes.func,
     OnDelete: PropTypes.func
 }
 
 export default withClass(Car, classes.Car); // используем hoc withClass
+
+// Референции используются при работе с svg, canvas, html5 (audio, video), обертка плагина
+
+
+
+
+/* #@ Context API: @# */
+// в /src/ создаем папку Counter2, а в ней FILE Сounter2.js:
+import React from 'react'
+import {ClickedContext} from '../App'
+
+export default props => {
+    return (
+        <div 
+            style={{
+                border: '1px solid #ccc',
+                width: 200,
+                margin: '0 auto'
+            }}
+        >
+            <h3>Counter 2</h3>
+            <ClickedContext.Consumer>
+                {clicked => clicked ? <p>Clicked</p> : null}
+            </ClickedContext.Consumer>
+        </div>
+    )
+}
+
+
+// FILE: /src/Counter/Counter.js:
+import React, {Component} from 'react'
+import Auxiliary from '..hoc/Auxiliary'
+import Counter2 from '../Counter2/Counter2'
+
+export default class Counter extends Component {
+    state = {
+        counter: 0
+    }
+
+    addCounter = () => {
+        this.setState({
+            counter: this.state.counter + 1
+        })
+    }
+
+    render() {
+        return (
+            <Auxiliary> 
+                <h2>Counter {this.state.counter}</h2>
+                <Counter2 />
+                <button onClick={this.addCounter}>+</button>
+                <button onClick={() => this.setState({counter: this.state.counter - 1})}>-</button> 
+            </Auxiliary>
+        )
+    }
+}
+
+
+// FILE /src/App.js:
+import React, {Component} from 'react'
+import './App.css'
+import Car from './Car/Car.js' 
+import Counter from './Counter/Counter.js' 
+
+
+export const ClickedContext = React.createContext(false); // создаем контекст cо значением по умолчанию
+
+class App extends Component {    
+    constructor(props) { 
+        super(props) 
+        
+        this.state = { 
+            clicked: false,
+            cars : [
+                {name: 'Ford', year: 2018},
+                {name: 'Audi', year: 2012},
+                {name: 'Mazda', year: 2011}
+            ], 
+            pageTitle: 'React Components',
+            showCars: false 
+        }
+    }
+
+    onChangeName(name, index) { 
+        const car = this.state.cars[index]
+        car.name = name
+        
+        const cars = [...this.state.cars]
+        cars[index] = car
+        
+        this.setState({
+            cars
+        })
+    }
+
+    deleteHandler(index) { 
+        const cars = [...this.state.cars]
+        cars.splice(index, 1)
+        
+        this.setState({cars})
+    }
+    
+    render() { 
+        const divStyle = { 
+            textAlign : 'center'
+        }
+        
+        const cars = this.state.cars
+        
+        let cars = null
+        
+        if (this.state.showCars) {
+            cars = this.state.cars.map((car, index) => { 
+                return (
+                    <Car
+                        name={car.name}
+                        year={car.year}
+                        onChangeName={event => this.onChangeName(event.target.value, index)} 
+                        onDelete={this.deleteHandler.bind(this, index)}
+                    />
+                )
+            })
+        }
+        
+        return (
+            <div style={divStyle}> 
+                <h1>{this.state.PageTitle}</h1> 
+
+                <ClickedContext.Provider value="this.state.clicked"> 
+                    <Counter/> // оборачиваем компонент, в который необходимо передать ClickedContext
+                </ClickedContext.Provider>
+                
+                
+                <button 
+                    style={{marginTop: 10}}
+                    className={'AppButton'}
+                    onClick={this.changeCarsHandler}
+                > 
+                    Tooggle Cars
+                </button> 
+
+                <button onClick={() => this.setState({clicked: true})}>
+                    Changed clicked
+                </button>
+                
+                { cars } 
+            </div>    
+        )
+    }
+}
+
+
+
+
+
+
+
+
+
+/* #@ ПРАКТИКА: @# */
+
+/* #@ Создание проекта: @# */
+// $ cd WebstormProjects/
+// $ create-react-app react-quiz
+// $ yarn eject # для того чтобы пользоваться различными конфигурациями webpack (нативный в сreate-react-app) и css модулями
+// $ yarn install # обновить список зависимостей
+// $ yarn start # запусить проект
+
+/** DROP
+ * /src/App.test.js
+ * /src/logo.svg
+ * /src/App.css
+ */
+
+
+// FILE /src/App.js:
+import React, {Component} from 'react'
+import Layout from './hoc/Layout/Layout'
+import Quiz from './containers/Quiz/Quiz.js'
+
+class App extends Component {
+    render() {
+        return (
+            <Layout>
+                <Quiz /> 
+            </Layout>
+        )
+    }
+}
+
+export default App;
+
+
+
+
+/* #@ Создание Layout: @# */
+
+// FOLDER /src создаем hoc/Layout/ а в ней FILE Layout.js:
+
+import React, {Component} from 'react'
+import classes from './Layout.css'
+
+class Layout extends Component {
+    render() {
+        <div className={classes.Layout}>
+            <main>
+                { this.props.children }
+            </main>
+        </div>
+    }
+}
+
+export default Layout
+
+
+// FOLDER /src/hoc/Layout/ создаем FILE Layout.js:
+/*
+.Layout {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.Layout main {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1; // main - будет занимать всю доступную высоту
+}
+*/
+
+
+// Настраиваем сss loader (#css-loader)
+
+
+
+
+/* #@ Создание главной страницы: @# */
+
+// FOLDER /src создаем containers/ - здесь будут хранится компоненты со cвоим state
+// FOLDER /src создаем components/ - здесь будут хранится функциональные компоненты
+// FOLDER /src/containers/ создаем FOLDER Quiz/ а в ней FILE: /Quiz.js:
+import React, {Component} from 'react'
+import classes from './Quiz.css'
+import ActiveQuiz from '../../components/ActiveQuiz/ActiveQuiz'
+
+class Quiz extends Component {
+    render() {
+        state = {
+            quiz: []        
+        }
+
+        return (
+            <div className={classes.Quiz}>
+                <div className={classes.QuizWrapper}>
+                    <h1>Quiz</h1>
+                    <ActiveQuiz />
+                </div>
+            </div>
+        )
+    }
+}
+
+export default Quiz
+
+// FOLDER /src/containers/Quiz/ создаем FILE: /Quiz.css:
+/*
+.Quiz {
+    display: flex;
+    justify-content: center;
+    padding-top: 100px;
+    flex-grow: 1;
+    width: 100%;
+    background: linear-gradient(90 deg, #5041b2 0%, #7969e6 100%);
+}
+
+.Quiz h1 {
+    color: #fff;
+    margin-left: 10px;
+}
+
+.QuizWrapper {
+    width: 600px;
+}
+*/
+
+
+// FOLDER /src/ создаем FOLDER ActiveQuiz/ а в ней FILE ActiveQuiz.js:
+import React from 'react'
+import classes from './ActiveQuiz.css'
+
+const ActiveQuiz = props => (
+    <div className={classes.ActiveQuiz}>
+        <p className={classes.Question}>
+            <span>
+                <strong>2.</strong>&nbsp;
+                Как дела?
+            </span>
+
+            <small>4 из 12</small>
+        </p>
+        
+        <ul>
+            <li>1</li>
+            <li>2</li>
+            <li>3</li>
+            <li>4</li>
+        </ul>  
+    </div>
+)
+
+export default ActiveQuiz
+
+// FOLDER /src/ActiveQuiz/ создаем FILE ActiveQuiz.css:
+/*
+.ActiveQuiz {
+    padding: 20px;
+    color: #fff;
+    border: 2px solid #fff;
+    border-radius: 5px;
+    margin: 0 10px;
+    box-sizing: border-box;
+}
+
+.Question {
+    display: flex;
+    jusctify-content:space-between;
+}
+*/

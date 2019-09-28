@@ -26,7 +26,9 @@ this[myPrivateMethod] = function() {/* */};
 */
 
 
-/* # Унарный побитовый оператор */
+
+
+/* @# Унарный побитовый оператор: #@ */
 // проверка на −1: 
 const str = "Проверка";
 
@@ -34,11 +36,16 @@ if (~str.indexOf("верка")) { // если найдено , т.к. ~n = -(n+1
   alert( 'найдено!' );
 }
 
-/* # Проверка на целое число: */
+
+
+
+/* @# Проверка на целое число: @# */
 const isInteger = num => (num ^ 0) === num; // ^ исключающее ИЛИ
 
 
-/* # Неточные вычисления */
+
+
+/* @# Неточные вычисления #@ */
 alert( 0.1 + 0.2 ); // 0.30000000000000004
 /*
 Всё дело в том, что в стандарте IEEE 754 на число выделяется ровно 8 байт(=64 бита), не больше и не меньше.
@@ -46,9 +53,9 @@ alert( 0.1 + 0.2 ); // 0.30000000000000004
 Число 0.1 (одна десятая) записывается просто в десятичном формате. Но в двоичной системе счисления это бесконечная дробь, так как единица на десять в двоичной системе так просто не делится. Также бесконечной дробью является 0.2 (=2/10).
 
 Когда мы складываем 0.1 и 0.2, то две неточности складываются, получаем незначительную, но всё же ошибку в вычислениях.
- */
+*/
 
-alert( 9999999999999999 ); // выведет 10000000000000000
+alert(9999999999999999); // выведет 10000000000000000
 
 /*
 Причина та же – потеря точности.
@@ -57,7 +64,10 @@ alert( 9999999999999999 ); // выведет 10000000000000000
 */
 
 
-/* # Генерация случайного целого числа между min и max
+
+
+/* #@ Генерация случайного целого числа между min и max: #@ */
+/*
 Напишите функцию randomInteger(min, max) для генерации случайного целого числа между min и max, включая min,max как возможные значения.
 
 Любое число из интервала min..max должно иметь одинаковую вероятность.
@@ -69,21 +79,24 @@ const randomInteger = (min, max) => {
     return Math.floor(rand);
 };
 
-/* # Очередь и Стек
+
+
+
+/* #@ Очередь и Стек: #@ */
+/*
  * Очередь - упорядоченная коллекция элементов, в которой новые элементы добавляются в конец, а обрабатываются – с начала.
  * Стек - коллекция элементов, в которой новые элементы берутся и добавляются с конца.
 */
 
 
-/* # new Array + join = Повторение строки */
+/* #@ new Array + join = Повторение строки  #@ */
 new Array(4).join("ля"); // ляляля
 
 
 
-LexicalEnvironment
 
-
-/* # Замыкания
+/* #@ Замыкания #@ */
+/* 
 Замыкание – это функция вместе со всеми внешними переменными, которые ей доступны.
 
 Все переменные внутри функции – это свойства специального внутреннего объекта LexicalEnvironment (лексическое окружение).
@@ -120,8 +133,6 @@ sayHi('Вася');
 /*
  3. В конце выполнения функции объект с переменными обычно выбрасывается и память очищается (исключение - замыкания). 
 
-
-  
 В функции ссылка на внешний объект переменных хранится в специальном внутреннем свойстве функции, которое называется [[Scope]].
 
 - Каждая функция при создании получает ссылку [[Scope]] на объект с переменными, в контексте которого была создана.
@@ -138,7 +149,7 @@ sayHi('Вася');
 */
 
 
-/* # Счетчик с установкой/сбросом значений: */
+/* #@ Счетчик с установкой/сбросом значений: #@ */
 const makeCounter = () =>  {
     let currentCount = 1;
   
@@ -164,7 +175,9 @@ counter.set(5);
 counter(); // 5
 
 
-/* # Приём проектирования «Модуль» */
+
+
+/* #@ Приём проектирования «Модуль»: @# */
 // FILE: some-module.js:
 ;(function() { // Function Expression
     // глобальная переменная нашего скрипта
@@ -184,7 +197,8 @@ counter(); // 5
 
 
 
-/* # Одалживание метода */
+
+/* #@  Одалживание метода: @# */
 // #1:
 const printArgs = () => {
     arguments.join = [].join; // скопируем ссылку на функцию в переменную
@@ -199,7 +213,7 @@ printArgs(1, 2, 3);
 // #2:
 const printArgs = () =>  {
     // вызов arr.slice() скопирует все элементы из this в новый массив
-    var args = [].slice.call(arguments);
+    const args = [].slice.call(arguments);
     console.log( args.join(', ') ); // args - полноценный массив из аргументов
 };
   
@@ -213,7 +227,9 @@ const sumArgs = () => {
 sumArgs(4, 5, 6); // 15
 
 
-/* # Декоратор для проверки типа: */
+
+
+/* #@ Декоратор для проверки типа: #@ */
 
 // вспомогательная функция для проверки на число
 const checkNumber = value => typeof value == 'number';
@@ -221,8 +237,8 @@ const checkNumber = value => typeof value == 'number';
 // декоратор, проверяющий типы для f
 // второй аргумент checks - массив с функциями для проверки
 const typeCheck = (f, checks) => {
-    return function() {
-        for (var i = 0; i < arguments.length; i++) {
+    return () => {
+        for (let i = 0; i < arguments.length; i++) {
             if (!checks[i](arguments[i])) {
                 console.log( "Некорректный тип аргумента номер " + i );
 
@@ -248,12 +264,7 @@ sum(1, ["array", "in", "sum?!?"]); // некорректный аргумент 
 
 
 
-
-
-
-
-
-// # Табы 
+// #@ Табы: @# 
 /* HTML
 <div class="container">
     <ul class="acco">
@@ -303,13 +314,13 @@ sum(1, ["array", "in", "sum?!?"]); // некорректный аргумент 
 
 const items = document.querySelectorAll('.acco_item');
 
-for (item of items) {
+for (let item of items) {
     item.addEventListener('click', e => handleAccoOpening);
 }   
 
 function handleAccoOpening(e) {
     const curItem = e.currentTarget; // ссылается на элемент, на который повесили обработчик
-    // e.target; // фактический элемент, на котором сработало событие
+    // e.target - фактический элемент, на котором сработало событие
     const isClosedItem = curItem.classList.contains('active');
 
     if (isClosedItem) {
@@ -338,8 +349,8 @@ function openItem(item) {
 
 
 
-// # Cлайдер:
-/* HTML
+/* #@ Cлайдер: #@:
+
 <div class="container">
     <div class="slider-container">
         <a href="#" class="arrow" id="left"><-</a>
@@ -386,11 +397,9 @@ leftBtn.addEventListener('click', e => {
 
 
 
-// # Модальное окно:
-/*
+/* #@ Модальное окно: @#
+
 <button id="showModal">Show Modal</button>
-
-
 
 <script type="template" id="#modal">
     <div class="overlay">
@@ -449,8 +458,11 @@ function createModal() {
     };
 }
 
-/* XMLHttpRequest + JSON */
-/*
+
+
+
+/* #@ XMLHttpRequest + JSON: #@ 
+
 <button id="loadButton">Загрузить</button>
 <div id="result"></div>
 */
@@ -666,43 +678,33 @@ loadButton.addEventListener('click', () => {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 // >>>>>> Что такое prototype <<<<<<
+
 // #1 добавляем всем объектам метод sayHello:
 const maxiMir = {
     name: "Maxim",
     age: 25,
-    greet: function () {
+    greet: () => {
         console.log('Greet');
     }
 };
 
 maxiMir.sayHello(); // => Uncaught TypeError
 
-Object.prototype.sayHello = function () { 
+Object.prototype.sayHello = () => { 
     console.log('Hello!');
 };
 
 // цепочка наследования - объект __proto__
 
 maxiMir.sayHello(); // => Hello!
- и
+
+ 
 // #2 один из вариантов наследования:
 const maxCon = Object.create(maxiMir);
 maxCon.age = 30;
 maxCon.greet(); // Greet
+
 
 
 
@@ -722,7 +724,7 @@ maxiMir.sayHello(); // Hello > {name: "Maxim", age: 25, sayHello: f}
 window.hello(); // <-> hello(); Hello > Window {postMessage: f, blur: f, focus: f, ...}
 
 
-this === window; // true
+this === window; // ! => true
 
 
 const maxiMir = {
@@ -752,7 +754,7 @@ fnMaxConInfoLog(); // () - т.к. метод bind не вызывает функ
 // #2 call:
 maxiMir.logInfo.call(maxCon, 'Frontend', '8-999-999-99-99'); // сразу вызывает функцию => 
 
-// #3:
+// #3 apply:
 maxiMir.logInfo.apply(maxCon, ['Frontend', '8-999-999-99-99']); // сразу вызывает функцию => 
 
 // Max info:
@@ -772,9 +774,6 @@ Array.prototype.multBy = function(n) {
 nums.multBy(2); // [2, 4, 6, 8, 10]
 
 
-
-// >>>>>> Что такое замыкания <<<<<<
-
 // Написать свою функцию bind
 function logPerson() {
     console.log(`Person: ${this.name}, ${this.age}, ${this.job}`);
@@ -789,6 +788,7 @@ function bind(context, fn) {
 
 bind(person1, logPerson)(); // Person: Maxim, 22, Frontend
 bind(person2, logPerson)(); // Person: John, 23, SMM
+
 
 
 
@@ -863,6 +863,7 @@ Promise.race([sleep(2000), sleep(3000)])
 
 
 
+
 // >>>>>> Объекты с Object.create <<<<<<
 
 const person = Object.create(
@@ -927,6 +928,7 @@ person.calculateAge(); // => 30
 
 
 
+
 // >>>>>> Object.defineProperty <<<<<< 
 // Свойство-константа
 const user = {};
@@ -943,13 +945,14 @@ const user = {
     toString: function() { return this.name; }
 };
   
-Object.defineProperty(user, "toString", {enumerable: false}); // модифицируем настройки у существующего toString.
+Object.defineProperty(user, "toString", { enumerable: false }); // модифицируем настройки у существующего toString.
   
 for(var key in user) console.log(key);  // name
 
 
 Object.keys // возвращает только enumerable-свойства.
 Object.getOwnPropertyNames // возвращает все
+
 
 
 
@@ -994,11 +997,11 @@ class Cat extends Animal {
         console.log('I am cat')
     }
 
-    get ageInfo() {
+    get ageInfo() { // геттер
         return this.age * 7;
     }
 
-    set ageInfo(newAge) {
+    set ageInfo(newAge) { // сеттер
         this.age = newAge;
     }
 }
@@ -1017,8 +1020,8 @@ cat.ageInfo = 8; // => 49
 cat.ageInfo; // => 56
 
 
-// #2:
 
+// #2:
 class Component {
     constructor(selector) {
         this.$el = document.querySelector(selector);
@@ -1033,6 +1036,7 @@ class Component {
     }
 }
 
+
 class Box extends Component {
     constructor(options) {
         super(options.selector);
@@ -1042,6 +1046,7 @@ class Box extends Component {
     }
 }
 
+
 class Circle extends Box {
     constructor(options) {
         super(options);
@@ -1050,17 +1055,20 @@ class Circle extends Box {
     }
 }
 
+
 const box1 = new Box({
     selector: '#box1',
     size: 100,
     color: 'red'
 });
 
+
 const box2 = new Box({
     selector: '#box2',
     size: 130,
     color: 'blue'
 });
+
 
 const circle = new Circle({
     selector: '#circle',
@@ -1074,6 +1082,7 @@ box1.show(); // показываем элемент box1
 
 box2.hide(); // cкрываем элемент box2
 box2.show(); // показываем элемент box2
+
 
 
 
@@ -1099,6 +1108,7 @@ fetchTodos()
 		console.log('Data:', data)
 	})
 	.catch(e => console.error(e));
+
 
 
 // #2 аналогично через async + await:
@@ -1128,8 +1138,8 @@ function readFile() {
         const FileReader = new FileReader();
         
         FileReader.addEventListener("load", e => {
-        document.getElementById("img").src       = e.target.result;
-        document.getElementById("b64").innerHTML = e.target.result;
+            document.getElementById("img").src = e.target.result;
+            document.getElementById("b64").innerHTML = e.target.result;
         }); 
         
         FileReader.readAsDataURL( this.files[0] );
@@ -1144,6 +1154,9 @@ document.getElementById("inp").addEventListener("change", readFile);
 <img id="img" height="150"></img>
 */
 
+
+
+
 // >>>>>> Proxy. Объекты, функции, классы. <<<<<<
 
 // # Objects:
@@ -1157,7 +1170,8 @@ const op = new Proxy(person, {
 	get(target, prop) { // ловушка на метод get
 		console.log('Target', target);
 		console.log('Prop', prop);
-		console.log(`Getting prop ${prop}`);
+        console.log(`Getting prop ${prop}`);
+        
 		return target[prop];
 	},
 	set(target, prop, value) {
@@ -1271,6 +1285,7 @@ position.y
 position.z
 // 0
 
+
 // # Hidden properties:
 const withHiddenProps = (target, prefix = '_') => {
     return new Proxy(target, {
@@ -1307,7 +1322,9 @@ Object.keys(data)
 // ['name', 'age']
 
 
-// Optimization
+
+
+// #@ Optimization: @#
 const userData = [
   {id: 1, name: 'MaxiMir', job: 'Fullstact', age: 25},
   {id: 2, name: 'Elena', job: 'Student', age: 22},  
@@ -1325,7 +1342,8 @@ userData.forEach(i => (index[i.id] = i));
 // 3: {id: 3, name: 'Victor', job: 'Backend', age: 23},  
 index[2]; // {id: 2, name: 'Elena', job: 'Student', age: 22}
 
-// Right Way:
+
+// ! Right Way:
 const IndexedArray = new Proxy(Array, {
     construct(target, [args]) {
         const index = {};
@@ -1376,6 +1394,7 @@ str.next(); // {value: E, done: false}
 str.next(); // {value: S, done: false}
 str.next(); // {value: undefined, done: true}
 
+
 // @2:
 function* numberGen(n = 10) {
     for (let i = 0; i < n; i++) {
@@ -1387,6 +1406,7 @@ const num = numberGen(2);
 num.next(); // {value: 0, done: false}
 num.next(); // {value: 1, done: false}
 num.next(); // {value: undefined, done: true}
+
 
 // @3 cвой генератор:
 сonst iterator = {
@@ -1591,8 +1611,8 @@ document.addEventListener("DOMContentLoaded", function() { // событие з�
 
 
 
-// # Debouncing:
-
+// #@ Debouncing: #@
+ 
 // FILE: debounce.html:
 /*
 <html>
@@ -1644,6 +1664,7 @@ searchBoxDom.addEventListener('input', () => {
     // Debounces makeAPICall method
     debounceFunction(makeAPICall, 200)
 });
+
 
 
 // # Throttling
@@ -1720,21 +1741,23 @@ divBodyDom.addEventListener('scroll', () => {
 
 
 
-// # Убрать из массива переданные отстальными аргументами элементы:
+
+// #@ Убрать из массива переданные отстальными аргументами элементы: #@
 const filterArr = (a, ...args) => a.filter(i => !args.includes(i));
 filterArr([1, 2, 3, 4, 5, 6, 7], 1, 3, 5, 6); // => [2, 4, 7]
 
 
 
-// # DOM:
-// Обёртка как в Jquery:
+
+// #@ DOM: #@
+// @ Обёртка как в Jquery:
 const $ = document.querySelector.bind(document);
 $('#container');
 
 const $$ = document.querySelectorAll.bind(document);
 $$('p');
 
-// Добавление элементов:
+// @ Добавление элементов:
 const link = document.createElement('a');
 a.setAttribute('href', '/home');
 a.className = 'active';
@@ -1742,7 +1765,7 @@ a.textContent = 'Главная страница';
 
 document.body.appendChild(link);
 
-// нативный эквивалент:
+// @ Нативный эквивалент:
 document.body.insertAdjacentHTML('beforeend', '<a href="/home" class="active">Главная страница</a>');
 /*
  * 'beforebegin': перед элементом.
@@ -1759,14 +1782,14 @@ document.body.insertAdjacentHTML('beforeend', '<a href="/home" class="active">Г
 <!-- afterend -->
 */
 
-// вставляем текст:
+// @ Вставляем текст:
 const link = document.createElement('a');
 const p = document.querySelector('p');
 
 p.insertAdjacentText('afterbegin', 'foo');
 
 
-// Двигаем элементы:
+// @ Двигаем элементы:
 /*
 Исходный верстка:
 <div class="first">
@@ -1782,13 +1805,14 @@ const h2 = document.querySelector('h2');
 
 h1.insertAdjacentElement('afterend', h2); //  и <h2> вставляется после <h1> (он просто сдвигается, а не копируется)
 
-// Заменяем элементы:
+
+// @ Заменяем элементы:
 const h1 = document.querySelector('h1');
 const h2 = document.querySelector('h2');
 
 h1.replaceWith(h2); // заменой выступает новый элемент, созданный с помощью document.createElement, или элемент, который уже есть в том же документе (тогда он снова будет перемещён, а не скопирован
 
-// Создаём элемент из сырого HTML:
+// @ Создаём элемент из сырого HTML:
 /*
 Если хотим создать элемент из сырого HTML и использовать его позже:
 Для этого понадобится объект DomParser и метод parseFromString. 
@@ -1802,8 +1826,8 @@ const createElement = domString => {
 
 const a = createElement('<a href="/home" class="active">Главная страница</a>');
 
-// Инспектируем DOM:
-// Стандартный DOM API также предоставляет методы для инспекции DOM. Например, matchesпроверяет соответствие элемента определённому селектору:
+// @ Инспектируем DOM:
+// Стандартный DOM API также предоставляет методы для инспекции DOM. Например, matches проверяет соответствие элемента определённому селектору:
 <p class="foo">Hello world</p>
 
 const p = document.querySelector('p');
@@ -1852,7 +1876,7 @@ h2.compareDocumentPosition(h1);
 Поскольку устанавливается не один бит, в приведённом выше примере container.compareDocumenPosition(h1)возвращает 20, когда ожидалось 16, ведь h1 содержится в container. Но h1 также следует за элементом container(4), поэтому полученное значение равно 16 + 4 = 20.
 */
 
-// Отслеживание изменений  в любом узле DOM:
+// #@ Отслеживание изменений  в любом узле DOM: #@
 /*
 Для этого используется интерфейс MutationObserver. 
 Включает в себя:
