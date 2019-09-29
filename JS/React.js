@@ -1771,6 +1771,7 @@ export default Layout
 
 
 /* #@ Создание главной страницы: @# */
+/* #@ Компонент активного вопроса @# */
 
 // FOLDER /src создаем containers/ - здесь будут хранится компоненты со cвоим state
 // FOLDER /src создаем components/ - здесь будут хранится функциональные компоненты
@@ -1780,16 +1781,97 @@ import classes from './Quiz.css'
 import ActiveQuiz from '../../components/ActiveQuiz/ActiveQuiz'
 
 class Quiz extends Component {
-    render() {
-        state = {
-            quiz: []        
-        }
+    state = {
+        isFinished: false,
+        activeQuestion: 0,
+        answerState: null, // {[id]: 'success' || 'error'}
+        quiz: [
+            { 
+                id: 1,
+                question: 'Какого цвета небо',
+                rightAnswerId: '2',
+                answers: [
+                    {id:1,text: 'Черный'},       
+                    {id:2,text: 'Синий'},       
+                    {id:3,text: 'Красный'},       
+                    {id:4,text: 'Зеленый'},       
+                ]
+            },
+            { 
+                id: 2,
+                question: 'В каком году основали Санкт-Петербург',
+                rightAnswerId: '3',
+                answers: [
+                    {id:1,text: '1700'},       
+                    {id:2,text: '1702'},       
+                    {id:3,text: '1703'},       
+                    {id:4,text: '1803'},       
+                ]
+            },            
+        ]        
+    }
 
+    onAswerClickHandler = answerId => {
+        if (this.state.answerState) { // исправление бага с двойным кликом
+            const key = Object.keys(this.state.answerState)[0]
+
+            if (this.state.answerStatep[key] === 'success') {
+                return;
+            }
+        }
+        
+
+        const question = this.state.quiz[this.state.activeQuestion]
+        
+        if (question.rightAnswerId !== answerId) {
+            this.setState({
+                answerState: {[answerId]: 'error'}
+            }) 
+        } else {
+            this.setState({
+                answerState: {[answerId]: 'success'}
+            })
+
+            const timeout = window.setTimeout(() => {
+                if (this.isQuizFinished()) {
+                    this.setState({
+                        isFinished: true
+                    })    
+                } else {
+                    this.setState({
+                        activeQuestion: this.state.activeQuestion + 1,
+                        answerState: null // обнуляем answerState для следующего вопроса
+                    })
+                }
+
+                window.clearTimeout(timeout)
+            }, 1000)               
+        }
+    }
+
+    isQuizFinished() {
+        return this.state.activeQuestion + 1 === this.state.quiz.length
+    }
+
+    render() {
         return (
             <div className={classes.Quiz}>
                 <div className={classes.QuizWrapper}>
-                    <h1>Quiz</h1>
-                    <ActiveQuiz />
+                    <h1>Ответьте на все вопросы</h1>
+
+
+                    {
+                        this.state.isFinished 
+                            ?   <p>Finished</p>
+                            :   <ActiveQuiz 
+                                    answers={this.state.quiz[this.state.activeQuestion].answers}
+                                    question={this.state.quiz[this.state.activeQuestion].question}
+                                    onAnswerClick={this.onAswerClickHandler}
+                                    quizLength={this.state.quiz.length}
+                                    answerNumber={this.state.activeQuestion + 1}
+                                    state={this.state.answerState}
+                                />
+                    }
                 </div>
             </div>
         )
@@ -1823,24 +1905,24 @@ export default Quiz
 // FOLDER /src/ создаем FOLDER ActiveQuiz/ а в ней FILE ActiveQuiz.js:
 import React from 'react'
 import classes from './ActiveQuiz.css'
+import AnswersList from './AnsersList/AnsersList'
 
 const ActiveQuiz = props => (
     <div className={classes.ActiveQuiz}>
         <p className={classes.Question}>
             <span>
-                <strong>2.</strong>&nbsp;
-                Как дела?
+                <strong>{ props.answerNumber }.</strong>&nbsp;
+                {props.question}
             </span>
 
-            <small>4 из 12</small>
+            <small>{ props.answerNumber } из { props.quizLength }</small>
         </p>
         
-        <ul>
-            <li>1</li>
-            <li>2</li>
-            <li>3</li>
-            <li>4</li>
-        </ul>  
+        <AnsersList
+            state={props.state}
+            answers={props.answers}
+            onAnswerClick={props.onAswerClick}
+        />
     </div>
 )
 
@@ -1862,3 +1944,97 @@ export default ActiveQuiz
     jusctify-content:space-between;
 }
 */
+
+
+
+
+
+/* #@ Список вопросов: @# */
+/* #@ Обработка клика: @# */
+
+// FOLDER /src/ActiveQuiz/ создаем FOLDER AnswersList а в ней FILE AnswersList.js:
+import React from 'react'
+import classes from './AnwersList.css'
+import AnswerItem from './AnswerItem/AnswerItem'
+
+const AnwersList = props => (
+    <ul className={classes.AnwersList}>
+        { props.answers.map((answer, index) => {
+            return (
+                <AnswerItem 
+                    key={index}
+                    answer={answer}
+                    onAnswerClick={props.onAnswerClick}
+                    state={!props.state ? null : props.state[answer.id]}
+                />
+            )
+        }) }
+    </ul>
+)
+
+export default AnwersList
+
+
+// FOLDER /src/ActiveQuiz/AnswersList/ создаем FILE AnswersList.css:
+/*
+.AnswersList {
+    list-style: none;
+    masrgin: 0;
+    padding: 0;
+}
+*/
+
+// FOLDER /src/ActiveQuiz/AnswersList/ создаем FOLDER AnswerItem а в нем FILE AnswerItem.js:
+import React from 'react'
+import classes from './AnswerItem.css'
+
+const AnswerItem = props => {
+    const cls = [classes.AnswerItem]
+
+    if (props.state) {
+        cls.push(classes[props.state]) // в classes[props.state] success || error
+    }
+
+    const clsList = cls.join(' ');
+
+    return (
+        <li 
+            className={clsList}
+            onClick={() => props.onAnswerClick(props.answer.id)}
+        >
+            { props.answer.text }        
+        </li>
+    )
+}
+
+export default AnswerItem
+
+
+// FOLDER /src/ActiveQuiz/AnswersList/AnswerItem/ создаем FILE AnswerItem.css:
+/*
+.AnswerItem {
+    boder: 1px solid #fff;
+    border-radius: 5px;
+    padding: 5px 10px;
+    margin-bottom: 5px;
+    cursor: pointer;
+}
+
+.AnswerItem:hover {
+    background: rgba(255, 255, 255,.2);
+    transition: background .3s ease-in-out;
+}
+
+.AnswerItem.success {
+    background: rgba(161, 240, 69, .7);
+}
+
+.AnswerItem.error {
+    background: rgba(240, 87, 108, .7);
+}
+*/
+
+
+
+
+

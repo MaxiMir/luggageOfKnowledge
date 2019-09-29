@@ -207,13 +207,19 @@ const starsElements = $('.user-rating__star');
 const errorResponseText = $('.error--rating');
 const app = {
     rating: null,
-    getSavedRating: () => app.rating,
-    checkOnSelectedRating: () => app.rating !== null,
-    saveRating: starNum => app.rating = starNum,
-    setRating: starNum => {
+    getSavedRating: function() {
+        return this.rating;
+    },
+    checkOnSelectedRating: function() {
+        return this.rating !== null;
+    },
+    saveRating: function(starNum) {
+        this.rating = starNum;
+    },
+    setRating: function(starNum) {
         const emptyStarClass = 'star-empty user-rating__star';
         const activeStarClass = 'star-voted user-rating__star';
-        const isSelectedRating = app.checkOnSelectedRating();
+        const isSelectedRating = this.checkOnSelectedRating();
 
         if (!isSelectedRating) {
             starsElements.attr('class', emptyStarClass);
