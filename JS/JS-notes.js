@@ -14,7 +14,13 @@
  
  * https://habr.com/ru/company/mailru/blog/335292/
 
+ * http://blog.csssr.ru/2018/08/16/candidates-mistakes
+
  */
+
+
+/* # Округление */
+~~9.7 === 9 // true <-> Math.floor(9.7)
 
 
 /* # Тип данных Символ (Symbol) */
@@ -2164,3 +2170,22 @@ users.splice(1, 1);
 
 console.log(visits.has(users[0])); // true
 console.log(visits.has(users[1])); // false
+
+
+
+
+// @ void:
+// интересный способ работы с немедленно вызываемыми функциями:
+void function() {
+    console.log('What')
+}();
+
+// без загрязнения глобального пространства имён:
+void function aRecursion(i) {
+    if (i > 0) {
+        console.log(i--)
+        aRecursion(i)
+    }
+}(3);
+
+console.log(typeof aRecursion) // undefined

@@ -1775,13 +1775,16 @@ export default Layout
 
 // FOLDER /src создаем containers/ - здесь будут хранится компоненты со cвоим state
 // FOLDER /src создаем components/ - здесь будут хранится функциональные компоненты
+
 // FOLDER /src/containers/ создаем FOLDER Quiz/ а в ней FILE: /Quiz.js:
 import React, {Component} from 'react'
 import classes from './Quiz.css'
 import ActiveQuiz from '../../components/ActiveQuiz/ActiveQuiz'
+import ActiveQuiz from '../../components/ActiveQuiz/FinishedQuiz'
 
 class Quiz extends Component {
     state = {
+        results: {}, // {[id]: success error} - для всех вопросов
         isFinished: false,
         activeQuestion: 0,
         answerState: null, // {[id]: 'success' || 'error'}
@@ -1811,7 +1814,7 @@ class Quiz extends Component {
         ]        
     }
 
-    onAswerClickHandler = answerId => {
+    onAnswerClickHandler = answerId => {
         if (this.state.answerState) { // исправление бага с двойным кликом
             const key = Object.keys(this.state.answerState)[0]
 
@@ -1822,13 +1825,22 @@ class Quiz extends Component {
         
 
         const question = this.state.quiz[this.state.activeQuestion]
+        const results = this.state.results
         
         if (question.rightAnswerId !== answerId) {
+            results[question.id] = 'error'
+
             this.setState({
+                results,
                 answerState: {[answerId]: 'error'}
             }) 
         } else {
+            if (!results[question.id]) { // на вопрос еще не отвечали
+                results[question.id] = 'success'
+            }
+
             this.setState({
+                results,
                 answerState: {[answerId]: 'success'}
             })
 
@@ -1853,6 +1865,15 @@ class Quiz extends Component {
         return this.state.activeQuestion + 1 === this.state.quiz.length
     }
 
+    retryHandler = () => { // чтобы не терять контекст
+        this.setState({
+           activeQuestion: 0,
+           answerState: null,
+           isFinished: false,
+           results: {} 
+        })
+    }
+
     render() {
         return (
             <div className={classes.Quiz}>
@@ -1862,7 +1883,11 @@ class Quiz extends Component {
 
                     {
                         this.state.isFinished 
-                            ?   <p>Finished</p>
+                            ?   <FinishedQuiz 
+                                    results={this.state.results}
+                                    quiz={this.state.quiz}
+                                    onRetry={this.retryHandler}
+                                />
                             :   <ActiveQuiz 
                                     answers={this.state.quiz[this.state.activeQuestion].answers}
                                     question={this.state.quiz[this.state.activeQuestion].question}
@@ -1951,6 +1976,7 @@ export default ActiveQuiz
 
 /* #@ Список вопросов: @# */
 /* #@ Обработка клика: @# */
+/* #@ Вывод результатов: @# */
 
 // FOLDER /src/ActiveQuiz/ создаем FOLDER AnswersList а в ней FILE AnswersList.js:
 import React from 'react'
@@ -2035,6 +2061,80 @@ export default AnswerItem
 */
 
 
+// FOLDER: /src/components/ cоздаем FOLDER FinishedQuiz а в нем FILE FinishedQuiz.js:
+import React from 'react'
+import classes from './FinishedQuiz.css'
+
+const FinishedQuiz = props => {
+    const successCount = Object.keys(props.results).reduce((total, key) => {
+        if (props.results[key] === 'success') {
+            total++
+        }
+
+        return total
+    }, 0)
+
+    return (
+        <div classes={classess.FinishedQuiz}>
+           <ul>
+               { props.quiz.map((quizItem, index) => {
+                    const cls = [
+                        'fa',
+                        props.results[quizItem.id] === 'error' ? 'fa-times' : 'fa-check',
+                        classes[props.results[quizItem.id]]    
+                    ]
+
+                    return (
+                        <li 
+                            key={index}
+                        >
+                            <strong>{index + 1}</strong>. &nbsp;  
+                            {quizItem.question}       
+                            <i className={cls.join('')} />   
+                        </li>     
+                    )
+               }) }
+           </ul>
+
+           <p>Правильно {successCount} из {props.quiz.length}</p>
+
+           <div>
+               <button onClick={props.onRetry}>Повторить</button>
+           </div>
+        </div>
+    )
+}
+
+export default FinishedQuiz
 
 
 
+// FOLDER: /src/components/FinishedQuiz/ cоздаем FILE FinishedQuiz.css: 
+/*
+.FinishedQuiz {
+    padding: 20px;
+    color: #fff;
+    border: 2px solid #fff;
+    border-radius: 5px;
+    box-sizing: border-box;
+    margin: 0 10px;
+}
+
+.FinishedQuiz ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.FinishedQuiz ul li i {
+    margin-left: 10px;
+}
+
+.success {
+    color: rgba(161, 240, 69, .7);
+}
+
+.error {
+    color: rgba(240, 87, 108, .7);
+}
+*/
