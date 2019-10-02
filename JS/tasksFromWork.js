@@ -205,34 +205,37 @@ const formForumResponse = $('.reviews-form');
 const starsElementsBlock = $('.user-rating__stars');
 const starsElements = $('.user-rating__star');
 const errorResponseText = $('.error--rating');
-const app = {
-    rating: null,
-    getSavedRating: function() {
-        return this.rating;
-    },
-    checkOnSelectedRating: function() {
-        return this.rating !== null;
-    },
-    saveRating: function(starNum) {
-        this.rating = starNum;
-    },
-    setRating: function(starNum) {
-        const emptyStarClass = 'star-empty user-rating__star';
-        const activeStarClass = 'star-voted user-rating__star';
-        const isSelectedRating = this.checkOnSelectedRating();
+const initRating = () => {
+    let value = null;
 
-        if (!isSelectedRating) {
-            starsElements.attr('class', emptyStarClass);
-
-            return;
+    return {
+        getSavedValue: () => {
+            return value;
+        },
+        checkOnSelected: () => {
+            return value !== null;
+        },
+        save: starNum => {
+            value = starNum;
+        },
+        set: function(starNum) {
+            const emptyStarClass = 'star-empty user-rating__star';
+            const activeStarClass = 'star-voted user-rating__star';
+            const isSelectedRating = value !== null;
+    
+            if (!isSelectedRating) {
+                starsElements.attr('class', emptyStarClass);
+    
+                return;
+            }
+    
+            starsElements.each((index, elem) => {
+                const classElem = index <= starNum ? activeStarClass : emptyStarClass;
+    
+                $(elem).attr('class', classElem);
+            });
         }
-
-        starsElements.each((index, elem) => {
-            const classElem = index <= starNum ? activeStarClass : emptyStarClass;
-
-            $(elem).attr('class', classElem);
-        });
-    }
+    };
 };
 
 const showRatingError = () => {
@@ -252,8 +255,9 @@ starsElements.on('click mouseenter', e => {
     const currStar = $(e.currentTarget);
     const starNum = currStar.index();
     const isDisplayedError = starsElementsBlock.hasClass('user-rating__stars-error');
-
-    app.setRating(starNum);
+    const rating = initRating();
+    
+    rating.set(starNum);
 
     if (isMouseEnter) {
         return;
@@ -263,20 +267,22 @@ starsElements.on('click mouseenter', e => {
         hideRatingError();
     }
 
-    app.saveRating(starNum);
+    rating.save(starNum);
 });
 
 
 starsElementsBlock.on('mouseleave', () => {
-    const savedRating = app.getSavedRating();
+    const rating = initRating();
+    const savedRating = rating.getSavedValue();
 
-    app.setRating(savedRating);
+    rating.set(savedRating);
 });
 
 
 formForumResponse.on('submit', () => {
-    const rating = app.getSavedRating();
-    const isSelectedRating = app.checkOnSelectedRating();
+    const rating = initRating();
+    const ratingValue = rating.getSavedValue();
+    const isSelectedRating = rating.checkOnSelected();
 
     if (!isSelectedRating) {
         return;
@@ -297,7 +303,7 @@ formForumResponse.on('submit', () => {
             prodID,
             sectionID,
             responseHTML,
-            rating
+            ratingValue
         },
         success: () => {},
         error: () => {
