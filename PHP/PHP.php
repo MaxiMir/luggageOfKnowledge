@@ -22,7 +22,7 @@
 	  */
 
 
-# >>>>> Введение <<<<<<<
+# >>>>> Введение <<<<<<< #
 	 
 	 /**
 	  * PHP — динамический, слабо-типизированный, интерпретируемый язык программирования.
@@ -42,30 +42,30 @@
 	  * Слабая типизация означает то, что PHP автоматически приводит типы там, где считает нужным (описано в спецификации). С одной стороны, слабая типизация позволяет писать более короткий код, но с другой, количество ошибок резко возрастает, так как вместо падения, код продолжает работать там, где он не должен работать.
 	  * Например, мы можем сложить число со строкой по ошибке и PHP молча выполнит эту операцию. В языках типа ruby/python подобное невозможно. Выполнение кода прекратится с сообщением о невозможности выполнить операцию для этих типов. Нужно стараться никогда не полагаться на эту особенность языка во избежания проблем.
 	  */
-
-
-// Comment - однострочный комментарий
+	 
+	 
+	 // Comment - однострочный комментарий
 	 
 	 /*
- * Multi
- * Line
- * Comment
-*/
-
-### Statements (перев. инструкции)
+	  * Multi
+	  * Line
+	  * Comment
+	 */
 	 
-	 /* namespace App; */; // пустая инструкция
+	 ### Statements (перев. инструкции)
 	 
+	 ; // пустая инструкция
 	 
 	 return 3; // выражение - вычисляется, инструкция выполняется
 	 return 5 + 5; // выражение
 	 $name = 'Max'; // инструкция с выражением
 
+	 
+	 
 
 # >>>>>  Арифметические операции <<<<<<<
-
-// Operator, Operand
 	 
+	 // Operator, Operand:
 	 7 * 9; // infix - Инфиксный оператор
 	 -1; // prefix - Префиксный оператор
 	 $i++; // postfix - Постфиксный оператор
@@ -78,7 +78,9 @@
 	 cos(pi()); // => -1
 
 
-# >>>>>  Функции <<<<<<<
+	 
+	 
+# >>>>>  Функции <<<<<<< #
 	 
 	 function hypotenuse($cathetus1, $cathetus2) // $cathetus1, $cathetus2 - формальные параметры
 	 {
@@ -88,7 +90,9 @@
 	 echo hypotenuse(3, 4); // 3, 4 - фактические параметры => 25
 
 
-# >>>>>  Включение файлов <<<<<<<
+	 
+	 
+# >>>>>  Включение файлов <<<<<<< #
 	 
 	 namespace 'Theory';
 	 
@@ -102,46 +106,45 @@
 	 echo include 'Anather.php'; // без * будет ошибка, поскольку подкл. файл лежит в '/tmp' => Hello World
 
 
-// Файл: theory/Example.php
+	// Файл: theory/Example.php
 	 return 1;
 
-// Файл: tmp/Anather.php
+	// Файл: tmp/Anather.php
 	 return 'Hello World';
 
 
 
 
-# >>>>>  Пространство имен <<<<<<<
+# >>>>>  Пространство имен <<<<<<< #
 	 /*
- * Проблематика
- * Отстутсвие пространств имен подобно отсутствию директорий в файловой системе
- * - Все глобальные идентификаторы должны быть уникальны: константы, функции, классы...
- * - В свою очередь это ведет к подобным именам: PHPUnit_Framework_TestCase
-
- * Решение
- * Пространства имен предоставляют возможность для группировки определений php
-*/
+	  * Проблематика:
+	  * Отстутсвие пространств имен подобно отсутствию директорий в файловой системе
+	  * - Все глобальные идентификаторы должны быть уникальны: константы, функции, классы...
+	  * - В свою очередь это ведет к подобным именам: PHPUnit_Framework_TestCase
+	 
+	  * Решение:
+	  * Пространства имен предоставляют возможность для группировки определений php
+	  */
 	 
 	 namespace App\Template;
 	 
 	 /*
- * Особенности
- * Могут быть вложенными
- * Не связаны с файловой структурой
- * В одном файле может быть несколько определений пространств
- * Определения находящихся в одном и том же пространстве имеют прямо доступ друг к другу
-*/
-	 
-	 
-	 /*
-Директории:
- * theory/
- *   Another.php
- *   Example.php
- *   main.php
-*/
+	  Особенности:
+	  * Могут быть вложенными
+	  * Не связаны с файловой структурой
+	  * В одном файле может быть несколько определений пространств
+	  * Определения находящихся в одном и том же пространстве имеют прямо доступ друг к другу
 
-// Файл main.php
+
+	  Директории:
+	  * theory/
+	  *   Another.php
+	  *   Example.php
+	  *   main.php
+     */
+
+	 
+	// Файл main.php
 	 namespace Theory;
 	 
 	 require_once 'Example.php';
@@ -153,16 +156,16 @@
 	 echo Example\iam(); // относительно текущего namespace Theory
 
 
-// Ниже задаются абсолютные пути, но без ведущего '/'
+	// Ниже задаются абсолютные пути, но без ведущего '/'
 	 use function Theory\Example\iam; // импортирование функции. бэкслеш вначале можно ставить, а можно нет (*)
 	 use function Theory\Example\iam as eiam; // задаем альтернативное имя функции
 	 use function Another\iam as aiam; // без задания альтернативного имени -> конфликт имен с (*)
-// => после этого можно обращаться к функции как-будто она была уже определена здесь:
+	// => после этого можно обращаться к функции как-будто она была уже определена здесь:
 	 echo iam();
 	 echo eiam();
 	 echo aiam();
 
-// Файл Another.php:
+	// Файл Another.php:
 	 namespace Another;
 	 
 	 function iam()
@@ -170,46 +173,49 @@
 		  return "another\n";
 	 }
 
-// Файл Example.php:
+	// Файл Example.php:
 	 namespace Theory\Example;
 	 
 	 // вложенный namespace
-	 
 	 function iam()
 	 {
 		  return "example\n";
 	 }
 
 
-// Настоятельно не рекомендуется при программировании комбинировать несколько пространств имен в один файл.  Основным применением этому может быть объединение нескольких PHP-файлов в один файл.
+	// Настоятельно не рекомендуется при программировании комбинировать несколько пространств имен в один файл.
+	 //  Основным применением этому может быть объединение нескольких PHP-файлов в один файл.
 	 
 	 namespace MyProject {
 		  
 		  const CONNECT_OK = 1;
+		  
 		  class Connection
-		  { /* ... */
+		  {
+		  	 /* ... */
 		  }
 		  
 		  function connect()
-		  { /* ... */
+		  {
+		  	 /* ... */
 		  }
 	 }
 	 
 	 namespace { // глобальный код
 		  session_start();
-		  $a = MyProject\connect();
-		  echo MyProject\Connection::start();
+		  $connect = MyProject\connect();
+		  echo $connect::start();
 	 }
 	 
 	 /*
-PHP-код не может находиться вне скобок конструкции пространства имен, кроме начального выражения declare.
-Значение константы __NAMESPACE__ - это строка, которая содержит имя текущего пространства имен.
-В глобальном пространстве, вне пространства имен, она содержит пустую строку.
+		PHP-код не может находиться вне скобок конструкции пространства имен, кроме начального выражения declare.
+		Значение константы __NAMESPACE__ - это строка, которая содержит имя текущего пространства имен.
+		В глобальном пространстве, вне пространства имен, она содержит пустую строку.
 
-Неймспейс задается с помощью ключевого слова namespace, за которым следует имя неймспейса. По стандарту, один файл должен соответствовать одному неймспейсу. В случае когда внутри неймспейса определяются только функции (а не классы) имя неймспейса должно соответстовать имени файла с учетом регистра, то есть для нашего примера имя файла math.php, следовательно имя неймспейса math. Теперь посмотрим на то, как использовать функции определенные в неймспейсе:
-*/
+		Неймспейс задается с помощью ключевого слова namespace, за которым следует имя неймспейса. По стандарту, один файл должен соответствовать одному неймспейсу. В случае когда внутри неймспейса определяются только функции (а не классы) имя неймспейса должно соответстовать имени файла с учетом регистра, то есть для нашего примера имя файла math.php, следовательно имя неймспейса math. Теперь посмотрим на то, как использовать функции определенные в неймспейсе:
+	*/
 
-// file: math.php:
+	// file: math.php:
 	 namespace math;
 	 
 	 function sum($a, $b)
@@ -217,30 +223,29 @@ PHP-код не может находиться вне скобок констр
 		  return $a + $b;
 	 }
 
-// file: index.php:
+	// file: index.php:
 	 require_once('math.php');
 	 
 	 \math\sum(5, 8); // 13
 	 
 	 
 	 /*
-Файловая структура практически любого проекта на PHP выглядит так:
+	 Файловая структура практически любого проекта на PHP выглядит так:
+	 
+	 src/
+		  Formatters/
+				Pretty.php
+				Generator.php
+	 
+	 tests/
+	 
+	 composer.json
+	 composer.lock
+	 .git
+	 README.md
+	*/
 
-src/
-	 Formatters/
-		  Pretty.php
-		  Generator.php
-
-tests/
-
-composer.json
-composer.lock
-.git
-README.md
-
-*/
-
-// file: Pretty.php:
+	// file: Pretty.php:
 	 namespace Formatters\Pretty;
 	 
 	 function render($data)
@@ -248,7 +253,7 @@ README.md
 		  // some code
 	 }
 
-// file: Generator.php
+	// file: Generator.php
 	 namespace Generator;
 	 
 	 function generate($data)
@@ -256,15 +261,15 @@ README.md
 		  return \Formatters\Pretty\render($data);
 	 }
 
-// Каждый проект или пакет принято помещать в одно общее пространство и не загрязнять глобальное пространство множеством неймспейсов. Это название выбирается на основе названия самого проекта, той директории внутри которой лежит src. В нашей структуре директорий это my-site. Это значит, что общим пространством для всех файлов внутри src будет MySite:
+	// Каждый проект или пакет принято помещать в одно общее пространство и не загрязнять глобальное пространство множеством неймспейсов. Это название выбирается на основе названия самого проекта, той директории внутри которой лежит src. В нашей структуре директорий это my-site. Это значит, что общим пространством для всех файлов внутри src будет MySite:
 
-// file: src/Formatters/Pretty.php
+	// file: src/Formatters/Pretty.php
 	 namespace MySite\Formatters\Pretty;
 	 
 	 // some code
 
 
-// C помошью механизма импорта функцию можно импортировать в текущий неймспейс так, как будто она определена прямо здесь:
+	// C помошью механизма импорта функцию можно импортировать в текущий неймспейс так, как будто она определена прямо здесь:
 	 namespace Generator;
 	 
 	 use function Formatters\Pretty\render;
@@ -275,7 +280,7 @@ README.md
 	 }
 
 
-// Изредка случаются ситуации, когда хочется импортировать функцию, но в текущем пространстве либо уже определена функция с таким именем, либо функция с таким именем была импортирована ранее из другого неймспейса. Сделать это можно через алиасы (псевдонимы), механизм позволяющий переименовывать импортируемые функции:
+	// Изредка случаются ситуации, когда хочется импортировать функцию, но в текущем пространстве либо уже определена функция с таким именем, либо функция с таким именем была импортирована ранее из другого неймспейса. Сделать это можно через алиасы (псевдонимы), механизм позволяющий переименовывать импортируемые функции:
 	 
 	 namespace Generator;
 	 
@@ -288,279 +293,282 @@ README.md
 	 }
 	 
 	 
-	 >>>>>
-	 Константы <<<<<<<
-
-namespace Theory;
-
-define('VERSION', 'version-1.5'); // global definition (глобальное определение) - игнорирует namespace, желательно использовать const
-const FOO = 7 ** 10;
-
-echo VERSION;
-echo FOO;
-echo \Theory\FOO;
-
-defined('\Theory\FOO'); // проверяет определена ли данная константа true
-// но!
-defined('\Theory\VERSION'); // false
-
-defined('\Theory\HI'); // false
-
-// Предопределенные константы, примеры:
-PHP_VERSION; // версия
-PHP_OS; // ОС
-PHP_BINDIR; // местонахождение исполняемого файла у PHP
-
-// Magic constants:
-__LINE__; // текущая строчка
-__FILE__; // текущий файл
-__DIR__; // текущая директория
-__FUNCTION__;
-__CLASS__;
-__TRAIT__;
-__METHOD__;
-__NAMESPACE__;
-
-constant('FOO'); //  возвратит значение константы, указанной параметром name. Используется, если вам необходимо запросить значение константы, но вам не известно её имя, если, например, она хранится в переменной или возвращается функцией.
-
-
-
->>>>>  Boolean <<<<<<<
-
-/*
- ! - Отрицание
- && - И (Конънкция)
- || - Или (Дизъюнкция)
- == Совпадение
- != Не совпадение
- xor - исключающее или
-
- * Правила логики:
- true != false
- true == !false
- true && true == true
- true && false == false
- false && false == false
- true || true == true
- true || false == true
- false || false == false
-
- * Ассоциативность:
- (a && b) && c = a && (b && c)
- (a || b) || c = a || (b || c)
- (a XOR b) XOR c = a XOR (b XOR c)
-
- * Коммутативность:
- a && b = b && a
- a || b = b || a
- a XOR b = b XOR a
-
- * Дистрибутивность:
- a && (b || c) = (a && b) || (a && c)
- a || (b && c) = (a || b) && (a || c)
-
- * Двойное отрицание:
-!!a = a
-
- * Законы Де Моргана:
- !(a && b) = (!a) && (!b)
- !(a || b || c) = (!a) || (!b) || (!c)
-
- Закон импликации:
- a->b = !b -> !a
-
- and, or - #! имеют пониженный приоритет лучше не использовать
-
-*/
-
-
-function isOdd($num) // проверка на нечетность
-{
-	 return $num % 2 != 0;
-}
-
-
-
->>>>>  Условие if <<<<<<<
-
-function lucky($num)
-{
-	 if ($num == rand(1, 3)) { //  генерирует случайное число
-		  return 'You are lucky!';
-	 } elseif ($num < 1 || $num > 3) {
-		  return 'Unexpected number';
-	 } else {
-		  return 'Sorry, you are not lucky!';
-	 }
-}
-
-function mod($num)
-{
-	 return $mod >= 0 ? $num : -$num; // тернарный оператор
-}
-
-
-/**@@@
- * Реализуйте функцию result, которая принимает на вход результат хоккейного матча и исход, который предполагался. Если счет был угадан верно, то функция должна вернуть 2, если исход был угадан верно (победа первой команды, ничья, поражение первой команды), то функция должна вернуть 1, во всех остальных случаях функция возвращает 0.
- */
-
-function result($a, $b, $c, $d)
-{
-	 if ($a == $c && $b == $d) {
-		  return 2;
-	 } elseif ($a > $b && $c > $d || $a < $b && $c < $d || $a == $b && $c == $d) {
-		  return 1;
-	 } else {
-		  return 0;
-	 }
-}
-
-
-
->>>>>  Переменные <<<<<<<
-
-function factorial($n)
-{
-	 $result = 1;
+	 # >>>>> Константы <<<<<<< #
 	 
-	 for ($i = 2; $i <= $n; $i++) {
-		  $result *= $i;
-	 }
+	 namespace Theory;
 	 
-	 return $result;
-}
+	 define('VERSION', 'version-1.5'); // global definition (глобальное определение) - игнорирует namespace, желательно использовать const
+	 const FOO = 7 ** 10;
+	 
+	 echo VERSION;
+	 echo FOO;
+	 echo \Theory\FOO;
+	 
+	 defined('\Theory\FOO'); // проверяет определена ли данная константа true
+	 // но!
+	 defined('\Theory\VERSION'); // false
+	 
+	 defined('\Theory\HI'); // false
 
-function isPrime($n) // проверка на простое число
-{
-	 for ($i = 2; $i = $n / 2; $i++) {
-		  if ($n % $i == 0) {
-				return false;
+	 // Предопределенные константы, примеры:
+	 PHP_VERSION; // версия
+	 PHP_OS; // ОС
+	 PHP_BINDIR; // местонахождение исполняемого файла у PHP
+	 
+	 // Magic constants:
+	 __LINE__; // текущая строчка
+	 __FILE__; // текущий файл
+	 __DIR__; // текущая директория
+	 __FUNCTION__;
+	 __CLASS__;
+	 __TRAIT__;
+	 __METHOD__;
+	 __NAMESPACE__;
+
+	constant('FOO'); // возвратит значение константы, указанной параметром name. Используется, если вам необходимо запросить значение константы, но вам не известно её имя, если, например, она хранится в переменной или возвращается функцией.
+
+	
+
+
+# >>>>>  Boolean <<<<<<< #
+
+	 /*
+	  ! - Отрицание
+	  && - И (Конънкция)
+	  || - Или (Дизъюнкция)
+	  == Совпадение
+	  != Не совпадение
+	  xor - исключающее или
+	 
+	  * Правила логики:
+	  true != false
+	  true == !false
+	  true && true == true
+	  true && false == false
+	  false && false == false
+	  true || true == true
+	  true || false == true
+	  false || false == false
+	 
+	  * Ассоциативность:
+	  (a && b) && c = a && (b && c)
+	  (a || b) || c = a || (b || c)
+	  (a XOR b) XOR c = a XOR (b XOR c)
+	 
+	  * Коммутативность:
+	  a && b = b && a
+	  a || b = b || a
+	  a XOR b = b XOR a
+	 
+	  * Дистрибутивность:
+	  a && (b || c) = (a && b) || (a && c)
+	  a || (b && c) = (a || b) && (a || c)
+	 
+	  * Двойное отрицание:
+	 !!a = a
+	 
+	  * Законы Де Моргана:
+	  !(a && b) = (!a) && (!b)
+	  !(a || b || c) = (!a) || (!b) || (!c)
+	 
+	  Закон импликации:
+	  a->b = !b -> !a
+	 
+	  and, or - #! имеют пониженный приоритет лучше не использовать
+	 */
+
+	 
+	 function isOdd($num) // проверка на нечетность
+	 {
+		  return $num % 2 != 0;
+	 }
+
+
+
+	#>>>>>  Условие if <<<<<<<#
+	 
+	 function lucky($num)
+	 {
+		  if ($num == rand(1, 3)) { //  генерирует случайное число
+				return 'You are lucky!';
+		  } elseif ($num < 1 || $num > 3) {
+				return 'Unexpected number';
+		  } else {
+				return 'Sorry, you are not lucky!';
 		  }
 	 }
 	 
-	 return true;
-}
-
-/**@@@
- * Напишите функцию sumDouble, которая принимает на вход два числа: начало последовательности и конец последовательности, а возвращает сумму возведенных в квадрат чисел последовательности с шагом 2. То есть из последовательности от 3 до 7 будут взяты числа 3, 5, 7.
- */
-
-function sumDouble($a, $b)
-{
-	 $result = 0;
-	 
-	 for ($i = $start; $i <= $finish; $i += 2) {
-		  $result += $i ** 2;
+	 function mod($num)
+	 {
+		  return $mod >= 0 ? $num : -$num; // тернарный оператор
 	 }
 	 
-	 return $result;
-}
+	 
+	 /**@@@
+	  * Реализуйте функцию result, которая принимает на вход результат хоккейного матча и исход, который предполагался. Если счет был угадан верно, то функция должна вернуть 2, если исход был угадан верно (победа первой команды, ничья, поражение первой команды), то функция должна вернуть 1, во всех остальных случаях функция возвращает 0.
+	  */
+	 
+	 function result($a, $b, $c, $d)
+	 {
+		  if ($a == $c && $b == $d) {
+				return 2;
+		  } elseif ($a > $b && $c > $d || $a < $b && $c < $d || $a == $b && $c == $d) {
+				return 1;
+		  } else {
+				return 0;
+		  }
+	 }
 
 
 
->>>>>  Именование в программировании <<<<<<<
-
-/*
-Нотация:
-* Верблюжья нотация (CamelCase): MyClass
-* Змеиная нотация (snake_case): my_const
-* Шашлычная нотация (kebab-case): my-data
-* Венгерская нотация https://ru.wikipedia.org/wiki/Венгерская_нотация
-
-# Сущность-Действие
-Имя функции должно быть глаголом, переменной - существительным.
-
-# Предикаты
-Предикат это функция-проверка, она всегда возвращает либо true, либо false.
-
-В большинстве языков предикаты предваряют префиксом is.
-isEmpty();
-isValid();
-isBusy();
-
-Но не все языки следуют этому правилу. В большинстве лиспов, а так же в ruby (который взял это из лиспов) используется знак ? в конце слова:
-empty?
-valid?
-busy?
-
-Если учесть что в указанных языках вызов функции не требует скобок в конце, то такая форма смотрится особенно естественной.
-
-# Вхождение
-Но не все предикаты можно выразить через is. Например, как задать вопрос если мы хотим узнать есть ли в списке чисел нечетное? В таких ситуациях принято использовать слово has:
-
-node.hasChildren();
-
-# Количество
-Если вам нужна переменная, в которой содержится количество чего-либо, то используйте комбинацию: сущность во множественном числе + count.
-
-symbolsCount
-peopleCount
-
-Это правило важнее даже в другом варианте, а именно, как не надо называть переменную обозначающую количество:
-errors;
-
-Такое именование гарантированно вводит в заблуждение. Сущность во множественном числе всегда должна обозначать только коллекцию.
-
-Примеры:
-*/
-
-// Нормализация данных
-normalizeDomainName('hexlet.io');
-
-// Извлечение части данных
-getName(user);
-getDomainFromEmail('support@hexlet.io');
-
-// Получение массива с ошибками
-const errors = validate(user);
-if (errors . length > 0) {
-	 // ...
-}
-
-// Подсчеты
-calculateDiff(first, second)
-
-// Допуск
-canSwim(user)
-canViewProfile(user)
-
-
->>>>>  Variable Scope - Область видимости переменной <<<<<<<
-
-// переменная доступна вне цикла for и if:
-for ($i = 0; $i < 3; $i++) {
-	 echo $i . "\n";
-}
-
-if (true) {
-	 $val = 'cat'
-}
-
-echo $i; // => 2
-echo $val; // => cat
-
-
-# Чистая функция - зависит только от своих аргументов и не делает побочных эффектов.
-# Детерминированная функция - функция, которая всегда производит тот же результат при одинаковых вводных даннных
-
-
-// #! Не использовать глобальные переменные в функции:
-$increment = 1;
-
-function increment($num)
-{
-	 global $increment; // <-> $_GLOBALS['increment']
-	 return $num + $increment;
-}
+	#>>>>>  Переменные <<<<<<< #
+	 
+	 function factorial($n)
+	 {
+		  $result = 1;
+		  
+		  for ($i = 2; $i <= $n; $i++) {
+				$result *= $i;
+		  }
+		  
+		  return $result;
+	 }
+	 
+	 function isPrime($n) // проверка на простое число
+	 {
+		  for ($i = 2; $i = $n / 2; $i++) {
+				if ($n % $i == 0) {
+					 return false;
+				}
+		  }
+		  
+		  return true;
+	 }
+	 
+	 
+	 /**@@@
+	  * Напишите функцию sumDouble, которая принимает на вход два числа: начало последовательности и конец последовательности, а возвращает сумму возведенных в квадрат чисел последовательности с шагом 2. То есть из последовательности от 3 до 7 будут взяты числа 3, 5, 7.
+	  */
+	 
+	 function sumDouble($a, $b)
+	 {
+		  $result = 0;
+		  
+		  for ($i = $start; $i <= $finish; $i += 2) {
+				$result += $i ** 2;
+		  }
+		  
+		  return $result;
+	 }
 
 
 
->>>>>  Строки <<<<<<<
+	 
+#>>>>>  Именование в программировании <<<<<<<#
 
-$value = 'text';
-echo "string \t with \n \\ escape sequence\n" . PHP_EOL; //  \\ - экранирование '\', PHP_EOL - константа конец  строки (в Unix системах - \n / в Windows \n\r)
+	 /*
+	 Нотация:
+	 * Верблюжья нотация (CamelCase): MyClass
+	 * Змеиная нотация (snake_case): my_const
+	 * Шашлычная нотация (kebab-case): my-data
+	 * Венгерская нотация https://ru.wikipedia.org/wiki/Венгерская_нотация
+	 
+	 # Сущность-Действие:
+	 Имя функции должно быть глаголом, переменной - существительным.
+	 
+	 # Предикаты:
+	 Предикат это функция-проверка, она всегда возвращает либо true, либо false.
+	 
+	 В большинстве языков предикаты предваряют префиксом is.
+	 isEmpty();
+	 isValid();
+	 isBusy();
+	 
+	 Но не все языки следуют этому правилу. В большинстве лиспов, а так же в ruby (который взял это из лиспов) используется знак ? в конце слова:
+	 empty?
+	 valid?
+	 busy?
+	 
+	 Если учесть что в указанных языках вызов функции не требует скобок в конце, то такая форма смотрится особенно естественной.
+	 
+	 # Вхождение:
+	 Но не все предикаты можно выразить через is. Например, как задать вопрос если мы хотим узнать есть ли в списке чисел нечетное? В таких ситуациях принято использовать слово has:
+	 
+	 node.hasChildren();
+	 
+	 # Количество:
+	 Если вам нужна переменная, в которой содержится количество чего-либо, то используйте комбинацию: сущность во множественном числе + count.
+	 
+	 symbolsCount
+	 peopleCount
+	 
+	 Это правило важнее даже в другом варианте, а именно, как не надо называть переменную обозначающую количество:
+	 errors;
+	 
+	 Такое именование гарантированно вводит в заблуждение. Сущность во множественном числе всегда должна обозначать только коллекцию.
+	 
+	 Примеры:
+	 */
+	 
+	 // Нормализация данных
+	 normalizeDomainName('hexlet.io');
+	 
+	 // Извлечение части данных
+	 getName(user);
+	 getDomainFromEmail('support@hexlet.io');
+	 
+	 // Получение массива с ошибками
+	 const errors = validate(user);
+	 if (errors.length > 0) {
+		  // ...
+	 }
+	 
+	 // Подсчеты
+	 calculateDiff(first, second);
 
-echo "interpolation example: $value" . PHP_EOL; // интерполяция
+	 // Допуск
+	 canSwim(user);
+	 canViewProfile(user);
+
+	 
+	 
+
+#>>>>>  Variable Scope - Область видимости переменной <<<<<<<#
+
+	 // переменная доступна вне цикла for и if:
+	 for ($i = 0; $i < 3; $i++) {
+		  echo $i . "\n";
+	 }
+	 
+	 if (true) {
+		  $val = 'cat';
+	 }
+	 
+	 echo $i; // => 2
+	 echo $val; // => cat
+
+
+	# Чистая функция - зависит только от своих аргументов и не делает побочных эффектов.
+	# Детерминированная функция - функция, которая всегда производит тот же результат при одинаковых вводных даннных
+
+
+	 // #! Не использовать глобальные переменные в функции:
+	 $increment = 1;
+	 
+	 function increment($num)
+	 {
+		  global $increment; // <-> $_GLOBALS['increment']
+		  return $num + $increment;
+	 }
+
+
+
+#>>>>>  Строки <<<<<<<#
+	 
+	 $value = 'text';
+	 echo "string \t with \n \\ escape sequence\n" . PHP_EOL; //  \\ - экранирование '\', PHP_EOL - константа конец  строки (в Unix системах - \n / в Windows \n\r)
+	 
+	 echo "interpolation example: $value" . PHP_EOL; // интерполяция
 
 function hereDoc($hello)
 {
@@ -581,212 +589,217 @@ function nowDoc()
 EOD;
 
 }
-
-
-$str = 'simple string';
-
-echo $str[0]; // => s
-echo $str[strlen($str) - 1]; // => g
-
-
-/**@@@
- * Реализуйте функцию reverse, которая переворачивает строку.
- */
-
-function reverse(String $str)
-{
-	 $result = [];
 	 
-	 for ($i = strlen($str) - 1; $i >= 0; $i--) {
-		  $result[] = $str[$i];
-	 }
 	 
-	 return implode('', $result);
-}
-
-
-/**@@@
- * Для определения является ли слово палиндромом, достаточно сравнивать попарно символ с обоих концов слова. Если они все равны, то это палиндром. Решите задачу без использования реверса строки. Примеры использования:
- */
-
-isPalindrome('radar'); // true
-isPalindrome('maam'); // true
-isPalindrome('a');     // true
-isPalindrome('abs');   // false
-
-function isPalindrome(string $word)
-{
-	 $charsCount = strlen($word) - 1;
+	 $str = 'simple string';
 	 
-	 for ($i = 0; $i < ceil($charsCount / 2); $i++) {
-		  if ($word[$i] !== $word[$charsCount - $i]) {
-				return false;
-		  }
-	 }
+	 echo $str[0]; // => s
+	 echo $str[strlen($str) - 1]; // => g
 	 
-	 return true;
-}
-
-
-/**@@@
- * Реализуйте функцию reverse, которая переворачивает цифры в переданном числе:
- */
-
-use function Number\reverse;
-
-reverse(13); // 31
-reverse(-123); // -321
-
-function reverse(int $num): int
-{
-	 $reverse = (int)strrev((string)abs($num));
 	 
-	 return $num > 0 ? $reverse : -$reverse;
-}
-
-
-
->>>>>  Массив <<<<<<<
-
-[1, 2, 3, 5] + [8, 1, 2]; // [1, 2, 3, 5]
-[] == []; // true. !# в JS => false
-[1] != [2]; // true
-
-sizeof($arr); // размер массива (кол-во элементов)
-in_array('apple', $arr); // проверяет наличие элемента в массиве
-empty($arr); // проверяет пустой ли массив
-end($arr); // возвращает последний элемент
-unset($arr[2]); // удаление элемента массива
-
-function myMax(Array $arr)
-{
-	 if (empty($arr)) {
-		  return;
-	 }
+	 /**@@@
+	  * Реализуйте функцию reverse, которая переворачивает строку.
+	  */
 	 
-	 $max = $arr[0];
-	 
-	 foreach ($arr as $val) {
-		  if ($max < $val) {
-				$max = $val;
-		  }
-	 }
-	 
-	 return $max;
-}
-
-
-/**@@@
- * Реализуйте функцию uniq, которая принимает, как аргумент, массив, и возвращает новый массив, в котором ни один элемент исходного массива не повторяется.
- */
-
-function uniq(Array $arr)
-{
-	 $res = [];
-	 
-	 foreach ($arr as $value) {
-		  if (!in_array($res, $value)) {
-				$res[] = $val;
-		  }
-	 }
-	 
-	 return $res;
-}
-
-
-
->>>>>  Ассоциативный массив <<<<<<<
-
-array_key_exists('undefined', $map); // проверяет присутствует ли данный ключ в ассоц. массиве
-
-$arr = [];
-$arr[] = 'val1';
-$arr['key'] = 'val2';
-$arr[] = 'val3';
-$arr['9'] = 'val4';
-$arr[] = 'val5';
-
-/* =>
-[0] => val
-[key] => val
-[1] => val
-[9] => val
-[10] => val // #! '9' - ключ был строкой
-*/
-
-
-/**@@@
- * Реализуйте функцию wordsCount, которая считает количество одинаковых слов в предложении. Результатом функции является ассоциативный массив, в ключах которого слова из исходного текста, а значения это количество повторений.
- */
-
-function wordsCount(String $sentence)
-{
-	 $words = explode(' ', $sentence);
-	 $countWords = [];
-	 
-	 foreach ($words as $word) {
-		  if (empty($word)) {
-				continue;
+	 function reverse(String $str)
+	 {
+		  $result = [];
+		  
+		  for ($i = strlen($str) - 1; $i >= 0; $i--) {
+				$result[] = $str[$i];
 		  }
 		  
-		  array_key_exists($word, $countWords) ? $countWords[$word]++ : $countWords[$word] = 1;
+		  return implode('', $result);
 	 }
 	 
-	 return $countWords;
-}
-
-
-
->>>>>  Аргументы <<<<<<<
-
-round(10.61234, 2); // 10.61
-round(1.55, 1); // 1.6
-round(1.55, 1, PHP_ROUND_HALF_DOWN); // округление вниз 1.5
-
-// float, string, bool, int, array
-
-function drop(Array $array, Int $count = 1) // возвращает обрезанный с начала массив на count элементов
-{
-	 $result = [];
 	 
-	 for ($i = $count; $i < sizeof($array); $i++) {
-		  $result[$i] = $array[$i];
+	 /**@@@
+	  * Для определения является ли слово палиндромом, достаточно сравнивать попарно символ с обоих концов слова. Если они все равны, то это палиндром. Решите задачу без использования реверса строки. Примеры использования:
+	  */
+	 
+	 isPalindrome('radar'); // true
+	 isPalindrome('maam'); // true
+	 isPalindrome('a');     // true
+	 isPalindrome('abs');   // false
+	 
+	 function isPalindrome(String $word)
+	 {
+		  $charsCount = strlen($word) - 1;
+		  
+		  for ($i = 0; $i < ceil($charsCount / 2); $i++) {
+				if ($word[$i] !== $word[$charsCount - $i]) {
+					 return false;
+				}
+		  }
+		  
+		  return true;
+	 }
+
+	 
+	 /**@@@
+	  * Реализуйте функцию reverse, которая переворачивает цифры в переданном числе:
+	  */
+	 
+	 use function Number\reverse;
+	 
+	 reverse(13); // 31
+	 reverse(-123); // -321
+	 
+	 function reverse(int $num): int
+	 {
+		  $reverse = (int)strrev((string)abs($num));
+		  
+		  return $num > 0 ? $reverse : -$reverse;
+	 }
+
+
+	 
+
+#>>>>>  Массив <<<<<<<#
+	 
+	 [1, 2, 3, 5] + [8, 1, 2]; // [1, 2, 3, 5]
+	 [] == []; // true. !# в JS => false
+	 [1] != [2]; // true
+	 
+	 sizeof($arr); // размер массива (кол-во элементов)
+	 in_array('apple', $arr); // проверяет наличие элемента в массиве
+	 empty($arr); // проверяет пустой ли массив
+	 end($arr); // возвращает последний элемент
+	 unset($arr[2]); // удаление элемента массива
+	 
+	 function myMax(Array $arr)
+	 {
+		  if (empty($arr)) {
+				return;
+		  }
+		  
+		  $max = $arr[0];
+		  
+		  foreach ($arr as $val) {
+				if ($max < $val) {
+					 $max = $val;
+				}
+		  }
+		  
+		  return $max;
+	 }
+
+
+		
+	 /**@@@
+	  * Реализуйте функцию uniq, которая принимает, как аргумент, массив, и возвращает новый массив, в котором ни один элемент исходного массива не повторяется.
+	  */
+	 
+	 function uniq(Array $arr)
+	 {
+		  $res = [];
+		  
+		  foreach ($arr as $value) {
+				if (!in_array($res, $value)) {
+					 $res[] = $val;
+				}
+		  }
+		  
+		  return $res;
 	 }
 	 
-	 return $result;
-}
-
-function sumArgs()
-{
-	 return array_sum(func_get_args()); // func_get_args() - возвращает массив переданных аргументов
-}
-
-function sumArgs1(...$numbers)
-{
-	 return array_sum($numbers); // $numbers - массив переданных аргументов
-}
-
-function sumArgs2($arg, ...$numbers) // $arg - можно задавать обязательные параметры
-{
-	 return array_sum($numbers); // $numbers - массив переданных аргументов
-}
-
-sumArgs2(10, 2, 4); // !!! => 6
 
 
+	 
+#>>>>>  Ассоциативный массив <<<<<<<#
+	 
+	 array_key_exists('undefined', $map); // проверяет присутствует ли данный ключ в ассоц. массиве
+	 
+	 $arr = [];
+	 $arr[] = 'val1';
+	 $arr['key'] = 'val2';
+	 $arr[] = 'val3';
+	 $arr['9'] = 'val4';
+	 $arr[] = 'val5';
+	 
+	 /* =>
+	 [0] => val
+	 [key] => val
+	 [1] => val
+	 [9] => val
+	 [10] => val // #! '9' - ключ был строкой
+	 */
 
-/**@@@
- * Реализуйте функцию multiArgs, которая возвращает произведение всех переданных аргументов. Вызванная без аргументов, должна вернуть null.
- */
+	 
+	 
+	 /**@@@
+	  * Реализуйте функцию wordsCount, которая считает количество одинаковых слов в предложении. Результатом функции является ассоциативный массив, в ключах которого слова из исходного текста, а значения это количество повторений.
+	  */
+	 
+	 function wordsCount(String $sentence)
+	 {
+		  $words = explode(' ', $sentence);
+		  $countWords = [];
+		  
+		  foreach ($words as $word) {
+				if (empty($word)) {
+					 continue;
+				}
+				
+				array_key_exists($word, $countWords) ? $countWords[$word]++ : $countWords[$word] = 1;
+		  }
+		  
+		  return $countWords;
+	 }
 
-function multiArgs(...$numbers)
-{
-	 return empty($numbers) ? null : array_product($numbers); // array_product - произведение элементов массива
-}
 
 
+#>>>>>  Аргументы <<<<<<<#
+	 
+	 round(10.61234, 2); // 10.61
+	 round(1.55, 1); // 1.6
+	 round(1.55, 1, PHP_ROUND_HALF_DOWN); // округление вниз 1.5
+	 
+	 // float, string, bool, int, array
+	 
+	 function drop(Array $array, Int $count = 1) // возвращает обрезанный с начала массив на count элементов
+	 {
+		  $result = [];
+		  
+		  for ($i = $count; $i < sizeof($array); $i++) {
+				$result[$i] = $array[$i];
+		  }
+		  
+		  return $result;
+	 }
+	 
+	 function sumArgs()
+	 {
+		  return array_sum(func_get_args()); // func_get_args() - возвращает массив переданных аргументов
+	 }
+	 
+	 function sumArgs1(...$numbers)
+	 {
+		  return array_sum($numbers); // $numbers - массив переданных аргументов
+	 }
+	 
+	 function sumArgs2($arg, ...$numbers) // $arg - можно задавать обязательные параметры
+	 {
+		  return array_sum($numbers); // $numbers - массив переданных аргументов
+	 }
+	 
+	 sumArgs2(10, 2, 4); // !!! => 6
+	 
+		
+	 
+	 /**@@@
+	  * Реализуйте функцию multiArgs, которая возвращает произведение всех переданных аргументов. Вызванная без аргументов, должна вернуть null.
+	  */
+	 
+	 function multiArgs(...$numbers)
+	 {
+		  return empty($numbers) ? null : array_product($numbers); // array_product - произведение элементов массива
+	 }
+	 
+	 
+	 
 
->>>>>  null <<<<<<<
+#>>>>>  null <<<<<<<#
 
 $var = null;
 is_null($var); // true
@@ -6227,32 +6240,32 @@ $smoothFunc = smooth(function ($sum) {
 }, 15);
 
 $smoothFunc(10) // ~ 0.438
-	 
-	 
-	 /*
-public function testSmooth($expected, $x, $dx, $func)
-  {
-		 $smoothFunc = Solution\smooth($func, $dx);
-		 $this->assertEquals($expected, $smoothFunc($x), '', 0.01);
-  }
 
-  public function additionProvider()
-  {
-	  return [
-				 [0.438, 10, 15, function ($num) {
-						return sin(rad2deg($num));
-				 }],
-				 [5, 0, 5, function ($num) {
-						return $num + 5;
-				 }],
-				 [4, 2, 0.00001, function ($num) {
-						return $num ** 2;
-				 }],
-				 [9, 3, 0.00001, function ($num) {
-						return $num ** 2;
-				 }]
-		 ];
-  }
+
+/*
+public function testSmooth($expected, $x, $dx, $func)
+{
+	$smoothFunc = Solution\smooth($func, $dx);
+	$this->assertEquals($expected, $smoothFunc($x), '', 0.01);
+}
+
+public function additionProvider()
+{
+ return [
+			[0.438, 10, 15, function ($num) {
+				  return sin(rad2deg($num));
+			}],
+			[5, 0, 5, function ($num) {
+				  return $num + 5;
+			}],
+			[4, 2, 0.00001, function ($num) {
+				  return $num ** 2;
+			}],
+			[9, 3, 0.00001, function ($num) {
+				  return $num ** 2;
+			}]
+	];
+}
 }
 */
 
@@ -12688,10 +12701,10 @@ use function App\Renderer\render;
 
 require_once '/composer/vendor/autoload.php';
 
-$opt = array(
+$opt = [
 	\PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION,
 	\PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_ASSOC,
-);
+];
 
 $pdo = new \PDO('sqlite:/var/tmp/db.sqlite', null, null, $opt);
 $repository = new CarRepository($pdo);
@@ -13050,10 +13063,10 @@ use function App\Renderer\render;
 
 require_once '/composer/vendor/autoload.php';
 
-$opt = array(
+$opt = [
 	\PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION,
 	\PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_ASSOC,
-);
+];
 
 $newCar = [
 	'pictures' => [],
