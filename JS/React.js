@@ -3,58 +3,57 @@
 /** Преимущества React:
 
  * МОЛНИЕНОСНЫЙ РЕНДЕРИНГ
-Многие схожие с React библиотеки работают с DOM напрямую. 
-А взаимодействие с DOM напрямую негативно отражается на скорости работы приложения. В React решили эту проблему, внедрив концепцию виртуального DOM. Виртуальный DOM — это легковесная копия обычного DOM. Такая работа с DOM оказывается гораздо эффективнее, чем работа из JavaScript напрямую.
+ Многие схожие с React библиотеки работают с DOM напрямую.
+ А взаимодействие с DOM напрямую негативно отражается на скорости работы приложения. В React решили эту проблему, внедрив концепцию виртуального DOM. Виртуальный DOM — это легковесная копия обычного DOM. Такая работа с DOM оказывается гораздо эффективнее, чем работа из JavaScript напрямую.
 
  * КОМПОНЕНТНО-ОРИЕНТИРОВАННЫЙ ПОДХОД
-Если говорить простыми словами, то компонент в Реакт — это кусок кода, который представляет какую-то часть на странице (поле для ввода данных, кнопку поиска и т.п.). Из более простых компонентов можно создавать сложные. Созданные в React компоненты вы легко можете переносить из проекта в проект, тем самым ускоряя веб-разработку.
+ Если говорить простыми словами, то компонент в Реакт — это кусок кода, который представляет какую-то часть на странице (поле для ввода данных, кнопку поиска и т.п.). Из более простых компонентов можно создавать сложные. Созданные в React компоненты вы легко можете переносить из проекта в проект, тем самым ускоряя веб-разработку.
 
  * УЛУЧШЕННОЕ SEO
-Итоговый HTML, который формируют компоненты, может формироваться как на стороне клиента, так и на стороне сервера, что позволяет создавать так называемые изоморфные приложения. Поисковые системы лучше индексируют страницы таких приложений.
+ Итоговый HTML, который формируют компоненты, может формироваться как на стороне клиента, так и на стороне сервера, что позволяет создавать так называемые изоморфные приложения. Поисковые системы лучше индексируют страницы таких приложений.
 
  * ВОЗМОЖНОСТЬ СОЗДАНИЯ МОБИЛЬНЫХ ПРИЛОЖЕНИЙ
-В React за разработку мобильных приложений отвечает платформа React Native. Код, который написан для создания сайта, может быть снова использован для создания мобильного приложения, что значительно сократит время на разработку, если вам нужно и мобильное приложение, и сайт. Библиотека относительно проста в освоении, имеет понятный, лаконичный синтаксис.
- */ 
-
+ В React за разработку мобильных приложений отвечает платформа React Native. Код, который написан для создания сайта, может быть снова использован для создания мобильного приложения, что значительно сократит время на разработку, если вам нужно и мобильное приложение, и сайт. Библиотека относительно проста в освоении, имеет понятный, лаконичный синтаксис.
+ */
 
 
 /* #@ Компоненты #@ */
 
 // FILE: index.html:
 <div id="root1"></div>
-<div id="root2"></div>
+    < div
+id = "root2" > < /div>
 
-<script type="text/babel">
+    <script type="text/babel">
     // #1:
     function Car(props) {
         return ( // JSX cинтаксис:
             <div className="car"> // class - зарезервированно
-                <h3>{props.name}</h3>
-                <p>Year: {props.year}</p>
-            </div>
-        )
-    }
-    
-    ReactDOM.render(
-        <Car name="Mazda" year="2019" />, // добавляем компонент + передаем параметры
-        document.querySelector('#root2') // место для вставки сгенерированного кода
-    )
-
-
-    // #2:
-    const App = (
-        <div> // элементы должны быть обернуты в корневой элемент
-            <Car name="Ford" year="2019" /> 
-            <Car name="Mazda" year="2017" />
+            <h3>{props.name}</h3>
+            <p>Year: {props.year}</p>
         </div>
     )
+    }
 
-    ReactDOM.render(
-        App, // App содержит JSX код, поэтому его не надо оборачивать в < />
-        document.querySelector('#root1') // место для вставки сгенерированного кода
-    )
+ReactDOM.render(
+<Car name="Mazda" year="2019"/>, // добавляем компонент + передаем параметры
+    document.querySelector('#root2') // место для вставки сгенерированного кода
+)
+
+
+// #2:
+const App = (
+    <div> // элементы должны быть обернуты в корневой элемент
+    <Car name="Ford" year="2019"/>
+    <Car name="Mazda" year="2017"/>
+    </div>
+)
+
+ReactDOM.render(
+    App, // App содержит JSX код, поэтому его не надо оборачивать в < />
+    document.querySelector('#root1') // место для вставки сгенерированного кода
+)
 </script>
-
 
 
 /* #@ Создание проекта @# */
@@ -75,7 +74,6 @@ $ npm install -g yarn # file yarn.lock - аналог npm (более оптим
 // FILE: /public/manifest.json - превращает приложение в Progressive Web Application
 
 
-
 // FILE: /src/index.js:
 import React from 'react' // импортируем библиотеку React
 import ReactDOM from 'react-dom' // импортируем библиотеку ReactDOM (ядро библиотеки React)
@@ -84,28 +82,27 @@ import App from './App' // импортируем компонент App
 import registerServiceWorker from './registerServiceWorker' // функционал для Progressive Web Application (например кэширование)
 
 
-ReactDOM.render(<App />, document.getElementById('root')) // генерируем и вставляем в элемент с ID = root
+ReactDOM.render(<App/>, document.getElementById('root')) // генерируем и вставляем в элемент с ID = root
 registerServiceWorker()
-
 
 
 /* #@ Cинтаксис JSX + Инлайн стили: @# */
 
 // FILE: /src/App.js:
-import React, { Component } from 'react'
+import React, {Component} from 'react'
 import './App.css'
 
 class App extends Component {
     render() {
         return (
             <div className="App">
-                <h1>Hello world!</h1>
-            </div>
-        )
-        
+            <h1>Hello world!</h1>
+        </div>
+    )
+
         // абстракция <->
-        
-        return React.createElement( 
+
+        return React.createElement(
             'div', // tag
             { // options:
                 className: 'App'
@@ -131,19 +128,18 @@ export default App
 class App extends Component {
     render() {
         const divStyle = { // создание инлайн стилей
-            textAlign : 'center' // ! cвойства в CamelCase
+            textAlign: 'center' // ! cвойства в CamelCase
         }
-        
+
         return (
-            <div className="App" style={divStyle}> // инлайн-стилей #1 
-                <h1 style={{color: 'blue', fontSize: '10px'}}>Hello world!</h1> // инлайн-стилей #2 
-            </div>
-            <p>Hello</p> // => Ошибка должен возвращаться один корневой элемент (испр. вложить в .App)
-        )
+            <div className="App" style={divStyle}> // инлайн-стилей #1
+            <h1 style={{color: 'blue', fontSize: '10px'}}>Hello world!</h1> // инлайн-стилей #2
+        </div>
+        < p > Hello < /p> /
+        / => Ошибка должен возвращаться один корневой элемент (испр. вложить в .App)
+    )
     }
 }
-
-
 
 
 /* #@ Создание компонентов: @# */
@@ -154,7 +150,6 @@ import React from 'react' // необходимо импортировать п�
 export default () => <h2>This is car component</h2> // Если возвращается несколько строк все оборачиваем в ()
 
 
-
 // FILE /src/App.js:
 import React, {Component} from 'react'
 import './App.css'
@@ -162,80 +157,74 @@ import Car from './Car/Car.js' // импортируем компонент Car
 
 class App extends Component {
     render() {
-        const divStyle = { 
-            textAlign : 'center'
+        const divStyle = {
+            textAlign: 'center'
         }
-        
+
         return (
-            <div style={divStyle}> 
-                <h1>Hello world!</h1> 
-                
-                <Car /> // вставка JSX кода компонента
-            </div>
-        
-        )
+            <div style={divStyle}>
+            <h1>Hello world!</h1>
+
+        <Car/> // вставка JSX кода компонента
+        </div>
+
+    )
     }
 }
-
-
 
 
 /* #@ Вывод динамических данных: @# */
 
 // FILE: /src/Car/Car.js:
-import React from 'react' 
+import React from 'react'
 
 export default () => (
     <div>
-        <p>This is car component</p>
-        <p><strong>Number: {Math.round(Math.random() * 100)}</strong></p> // {} - указывает, что внутри JS интерпритация
-    </div>
+    <p>This is car component</p>
+<p><strong>Number: {Math.round(Math.random() * 100)}</strong></p> // {} - указывает, что внутри JS интерпритация
+</div>
 )
-
-
 
 
 /* #@ Передача параметров и контента: @# */
 
 // FILE: /src/Car/Car.js:
-import React from 'react' 
+import React from 'react'
 
-export default props => ( 
+export default props => (
     <div>
-        <h3>Car name: {props.name}</h3>
-        <p>Year: <strong>{props.year}</strong></p>
-        {props.children} // вывод контента, переданного в компонент (#props.children)
-    </div>
+    <h3>Car name: {props.name}</h3>
+<p>Year: <strong>{props.year}</strong></p>
+{props.children} // вывод контента, переданного в компонент (#props.children)
+</div>
 )
 
 
 // FILE /src/App.js:
 import React, {Component} from 'react'
 import './App.css'
-import Car from './Car/Car.js' 
+import Car from './Car/Car.js'
 
 class App extends Component {
     render() {
-        const divStyle = { 
-            textAlign : 'center'
+        const divStyle = {
+            textAlign: 'center'
         }
-        
+
         return (
-            <div style={divStyle}> 
-                <h1>Hello world!</h1> 
-            
-                <Car name={'Ford'} year={2016} /> // передаем атрибуты
-                <Car name="Audi" year={2012} /> // передаем атрибут в виде обычной строки - {} не нужны
-                
-                <Car name={'Mazda'} year={2011}> 
-                    <p style="{{color: red}}">COLOR</p> // передача контента в компонент (#props.children)
-                </Car> 
-            </div>
-        )
+            <div style={divStyle}>
+            <h1>Hello world!</h1>
+
+        <Car name={'Ford'} year={2016}/> // передаем атрибуты
+        <Car name="Audi" year={2012}/> // передаем атрибут в виде обычной строки - {} не нужны
+
+        <Car name={'Mazda'} year={2011}>
+            <p style="{{color: red}}">COLOR</p> // передача контента в компонент (#props.children)
+        </Car>
+        </div>
+    )
     }
 }
-
-
 
 
 /* #@ State: @# */
@@ -243,74 +232,73 @@ class App extends Component {
 // FILE /src/App.js:
 import React, {Component} from 'react'
 import './App.css'
-import Car from './Car/Car.js' 
+import Car from './Car/Car.js'
 
 class App extends Component {
     state = { // задание State (класс должен наследоваться от Component) - описание состояния данного компонента
-        cars : [
+        cars: [
             {name: 'Ford', year: 2018},
             {name: 'Audi', year: 2012},
             {name: 'Mazda', year: 2011}
-        ], 
+        ],
         pageTitle: 'React Cars'
-    } 
-    
+    }
+
 
     changeTitleHandler = () => { // функция обработчик (cписок events: reactjs.org/docs/events.html)
         const oldTitle = this.state.pageTitle
         const newTitle = `${oldTitle} (changed)`
-    
+
         this.setState( // изменение State (заново вызывает метод render)
-            { pageTitle: newTitle }
-        ) 
-    }
-    
-    
-    render() {
-        const divStyle = { 
-            textAlign : 'center'
-        }
-        
-        const cars = this.state.cars // берем данные из State
-        
-        return (
-            <div style={divStyle}> 
-                <h1>{this.state.PageTitle}</h1> // выводит pageTitle из State
-                
-                <button onClick={this.changeTitleHandler}>Change Title</button> // обработчики в CamelCase и без ()
-                
-                <Car 
-                    name={cars[0].name}
-                    year={cars[0].year} 
-                /> 
-                <Car
-                    name={cars[1].name}
-                    year={cars[1].name} 
-                /> 
-                <Car
-                    name={cars[2].name}
-                    year={cars[2].name} 
-                /> 
-            </div>
-        
+            {pageTitle: newTitle}
         )
     }
+
+
+    render() {
+        const divStyle = {
+            textAlign: 'center'
+        }
+
+        const cars = this.state.cars // берем данные из State
+
+        return (
+            <div style={divStyle}>
+            <h1>{this.state.PageTitle}</h1> // выводит pageTitle из State
+
+        <button onClick={this.changeTitleHandler}>Change Title</button> // обработчики в CamelCase и без ()
+
+        <Car
+        name={cars[0].name}
+        year={cars[0].year}
+        />
+        <Car
+        name={cars[1].name}
+        year={cars[1].name}
+        />
+        <Car
+        name={cars[2].name}
+        year={cars[2].name}
+        />
+        </div>
+
+    )
+    }
 }
-
-
 
 
 /* #@ Передача параметров в функцию: @# */
 
 // FILE: /src/Car/Car.js:
-import React from 'react' 
+import React from 'react'
 
-export default props => ( 
+export default props => (
     <div>
-        <h3>Car name: {props.name}</h3>
-        <p>Year: <strong>{props.year}</strong></p>
+    <h3>Car name: {props.name}</h3>
+<p>Year: <strong>{props.year}</strong></p>
 
-        <button onClick={props.onChangeTitle}>Click</button> // привязываем переданный обработчик к элементу
+<button onClick={props.onChangeTitle}>Click</button>
+    // привязываем переданный обработчик к элементу
     </div>
 )
 
@@ -318,71 +306,70 @@ export default props => (
 // FILE /src/App.js:
 import React, {Component} from 'react'
 import './App.css'
-import Car from './Car/Car.js' 
+import Car from './Car/Car.js'
 
 class App extends Component {
-    state = { 
-        cars : [
+    state = {
+        cars: [
             {name: 'Ford', year: 2018},
             {name: 'Audi', year: 2012},
             {name: 'Mazda', year: 2011}
-        ], 
+        ],
         pageTitle: 'React Components'
-    } 
-    
+    }
+
     changeTitleHandler = newTitle => {
         this.setState(
-            { pageTitle: newTitle }
-        ) 
-    }
-    
-    handleInput = event => { // React передает в функцию событие 
-        this.setState({ 
-            pageTitle: event.target.value // event.target.value - текущее состояние input
-        }) 
-    }
-    
-    render() {
-        const divStyle = { 
-            textAlign : 'center'
-        }
-        
-        const cars = this.state.cars
-        
-        return (
-            <div style={divStyle}> 
-                <h1>{this.state.PageTitle}</h1> 
-                
-                <input type="text" onChange={this.handleInput} /> // прослушка изменений в input
-                
-                <button 
-                    onClick={this.changeTitleHandler.bind(this, 'Changed!')} // 1 аргумент - контекст, в котором должна быть вызвана функция, 2 и более параметры для функции 
-                > 
-                    Change Title
-                </button> 
-                
-            
-                <Car 
-                    name={cars[0].name}
-                    year={cars[0].year} 
-                    onChangeTitle = {this.changeTitleHandler.bind(this, cars[0].name)} // передача обработчика для кастомного компонента #1 cпособ (БОЛЕЕ ПРАВИЛЬНЫЙ - занимает меньше ресурсов у браузера)
-                /> 
-                <Car 
-                    name={cars[1].name}
-                    year={cars[1].name} 
-                    onChangeTitle = {() => this.changeTitleHandler(cars[1].name)} // передача обработчика для кастомного компонента #2 cпособ
-                /> 
-                <Car 
-                    name={cars[2].name}
-                    year={cars[2].name}
-                    onChangeTitle = {() => this.changeTitleHandler(cars[2].name)}
-                />     
-            </div>
-        
+            {pageTitle: newTitle}
         )
     }
-}
 
+    handleInput = event => { // React передает в функцию событие
+        this.setState({
+            pageTitle: event.target.value // event.target.value - текущее состояние input
+        })
+    }
+
+    render() {
+        const divStyle = {
+            textAlign: 'center'
+        }
+
+        const cars = this.state.cars
+
+        return (
+            <div style={divStyle}>
+            <h1>{this.state.PageTitle}</h1>
+
+            <input type="text" onChange={this.handleInput}/> // прослушка изменений в input
+
+        <button
+        onClick={this.changeTitleHandler.bind(this, 'Changed!')} // 1 аргумент - контекст, в котором должна быть вызвана функция, 2 и более параметры для функции
+            >
+            Change Title
+        </button>
+
+
+        <Car
+        name={cars[0].name}
+        year={cars[0].year}
+        onChangeTitle={this.changeTitleHandler.bind(this, cars[0].name)} // передача обработчика для кастомного компонента #1 cпособ (БОЛЕЕ ПРАВИЛЬНЫЙ - занимает меньше ресурсов у браузера)
+        />
+        <Car
+        name={cars[1].name}
+        year={cars[1].name}
+        onChangeTitle={() => this.changeTitleHandler(cars[1].name)} // передача обработчика для кастомного компонента #2 cпособ
+        />
+        <Car
+        name={cars[2].name}
+        year={cars[2].name}
+        onChangeTitle={() => this.changeTitleHandler(cars[2].name)}
+        />
+        </div>
+
+    )
+    }
+}
 
 
 /* #@ Работа со списком: @# */
@@ -390,67 +377,65 @@ class App extends Component {
 // FILE /src/App.js:
 import React, {Component} from 'react'
 import './App.css'
-import Car from './Car/Car.js' 
+import Car from './Car/Car.js'
 
 class App extends Component {
-    state = { 
-        cars : [
+    state = {
+        cars: [
             {name: 'Ford', year: 2018},
             {name: 'Audi', year: 2012},
             {name: 'Mazda', year: 2011}
-        ], 
+        ],
         pageTitle: 'React Components'
-    } 
-    
+    }
+
     changeTitleHandler = newTitle => {
-        this.setState({ 
+        this.setState({
             pageTitle: newTitle
-        }) 
+        })
     }
-    
-    handleInput = event => { // React передает событие event 
-        this.setState({ 
+
+    handleInput = event => { // React передает событие event
+        this.setState({
             pageTitle: event.target.value // меняем заголовок на введенное значение
-        }) 
+        })
     }
-    
+
     render() {
-        const divStyle = { 
-            textAlign : 'center'
+        const divStyle = {
+            textAlign: 'center'
         }
-        
+
         const cars = this.state.cars
-        
+
         return (
-            <div style={divStyle}> 
-                <h1>{this.state.PageTitle}</h1> 
-                
-                <input type="text" onChange={this.handleInput} /> 
-                
-                <button 
-                    onClick={this.changeTitleHandler.bind(this, 'Changed!')}
-                > 
-                    Change Title
-                </button> 
-                
-                { 
-                    this.state.cars.map((car, index) => { // cоздание списка 
-                        return (
-                            <Car
-                                key={index} // для каждого элемента списка необходимо определять уникальный key
-                                name={car.name}
-                                year={car.year}
-                                onChangeTitle={() => this.changeTitleHandler(car.name)}
-                            />
-                        )
-                    }) 
-                }
-            </div>    
-        )
+            <div style={divStyle}>
+            <h1>{this.state.PageTitle}</h1>
+
+            <input type="text" onChange={this.handleInput}/>
+
+        <button
+        onClick={this.changeTitleHandler.bind(this, 'Changed!')}
+            >
+            Change Title
+        </button>
+
+        {
+            this.state.cars.map((car, index) => { // cоздание списка
+                return (
+                    <Car
+                key={index} // для каждого элемента списка необходимо определять уникальный key
+                name={car.name}
+                year={car.year}
+                onChangeTitle={() => this.changeTitleHandler(car.name)}
+                />
+            )
+            })
+        }
+    </div>
+    )
     }
 }
-
-
 
 
 /* #@ Работа условными операторами: @# */
@@ -458,176 +443,172 @@ class App extends Component {
 // FILE /src/App.js:
 import React, {Component} from 'react'
 import './App.css'
-import Car from './Car/Car.js' 
+import Car from './Car/Car.js'
 
 class App extends Component {
-    state = { 
-        cars : [
+    state = {
+        cars: [
             {name: 'Ford', year: 2018},
             {name: 'Audi', year: 2012},
             {name: 'Mazda', year: 2011}
-        ], 
+        ],
         pageTitle: 'React Components',
         showCars: false // добавляем новое значение в состояние
-    } 
-    
+    }
+
     changeTitleHandler = pageTitle => {
         // если название аргумента (pageTitle) совпадает с названием поля из state можно записывать в сокр. виде:
-        this.setState({pageTitle}) 
+        this.setState({pageTitle})
     }
-    
+
     changeCarsHandler = () => { // меняем состояние showCars (булево значение на противоположное)
-        this.setState({ 
+        this.setState({
             showCars: !this.state.showCars
-        }) 
+        })
     }
-    
+
     render() {
-        const divStyle = { 
-            textAlign : 'center'
+        const divStyle = {
+            textAlign: 'center'
         }
-        
+
         let cars = null
-        
+
         if (this.state.showCars) {
-            cars = this.state.cars.map((car, index) => { 
+            cars = this.state.cars.map((car, index) => {
                 return (
                     <Car
-                        key={index}
-                        name={car.name}
-                        year={car.year}
-                        onChangeTitle={() => this.changeTitleHandler(car.name)}
-                    />
-                )
+                key={index}
+                name={car.name}
+                year={car.year}
+                onChangeTitle={() => this.changeTitleHandler(car.name)}
+                />
+            )
             })
         }
-        
+
         return (
-            <div style={divStyle}> 
-                <h1>{this.state.PageTitle}</h1> 
-                
-                <button onClick={this.changeCarsHandler}> // по клику меняем значение showCars в состоянии
-                    Tooggle Cars
-                </button> 
-                
-                { cars } // выводим список Сars или null
-            </div>    
-        )
+            <div style={divStyle}>
+            <h1>{this.state.PageTitle}</h1>
+
+            <button onClick={this.changeCarsHandler}> // по клику меняем значение showCars в состоянии
+            Tooggle Cars
+        </button>
+
+        {cars} // выводим список Сars или null
+    </div>
+    )
     }
 }
-
-
 
 
 /* #@ Динамические списки: @# */
 
 // FILE: /src/Car/Car.js:
-import React from 'react' 
+import React from 'react'
 
-export default props => ( 
-    <div 
-        style={{
-            border: '1px solid #ccc',
-            marginBottom: '10' // px - можно не прописывать
-        }}
-    >
-        <h3>Car name: {props.name}</h3>
-        <p>Year: <strong>{props.year}</strong></p>
-        <input type="text" onChange={props.onChangeName} value={props.name} /> // добавляем input c обработчиком
-        <button onClick={props.onDelete}>Delete</button> // добавляем кнопку с удалением элемента
-    </div>
+export default props => (
+    <div
+style={{
+    border: '1px solid #ccc',
+        marginBottom: '10' // px - можно не прописывать
+}}
+>
+<h3>Car name: {props.name}</h3>
+<p>Year: <strong>{props.year}</strong></p>
+<input type="text" onChange={props.onChangeName} value={props.name}/> // добавляем input c обработчиком
+<button onClick={props.onDelete}>Delete</button> // добавляем кнопку с удалением элемента
+</div>
 )
 
 
 // FILE /src/App.js:
 import React, {Component} from 'react'
 import './App.css'
-import Car from './Car/Car.js' 
+import Car from './Car/Car.js'
 
 
 class App extends Component {
-    state = { 
-        cars : [
+    state = {
+        cars: [
             {name: 'Ford', year: 2018},
             {name: 'Audi', year: 2012},
             {name: 'Mazda', year: 2011}
-        ], 
+        ],
         pageTitle: 'React Components',
-        showCars: false 
-    } 
-    
-    changeCarsHandler = () => { 
-        this.setState({ 
-            showCars: !this.state.showCars
-        }) 
+        showCars: false
     }
-    
+
+    changeCarsHandler = () => {
+        this.setState({
+            showCars: !this.state.showCars
+        })
+    }
+
     deleteHandler(index) { // другой вид объявления функции (ОТЛИЧИЕ: стрелочная функция не создает свой собственный контекст)
         // здесь функция создает свой контекст вызова и например, this.setState === undefined.
-        // чтобы можно было обратиться к this.setState, ее необходимо вызвать так: this.deleteHandler.bind(this, index) 
+        // чтобы можно было обратиться к this.setState, ее необходимо вызвать так: this.deleteHandler.bind(this, index)
         // или так: () => this.deleteHandler(value)
         const cars = [...this.state.cars]
         cars.splice(index, 1)
-        
+
         this.setState({cars})
     }
-    
-    onChangeName(name, index) { 
+
+    onChangeName(name, index) {
         const car = this.state.cars[index]
         car.name = name
-        
+
         const cars = [...this.state.cars]
         cars[index] = car
-        
+
         this.setState({
             cars
         })
     }
-    
+
 
     render() {
-        const divStyle = { 
-            textAlign : 'center'
+        const divStyle = {
+            textAlign: 'center'
         }
-        
+
         const cars = this.state.cars
-        
+
         let cars = null
-        
+
         if (this.state.showCars) {
-            cars = this.state.cars.map((car, index) => { 
+            cars = this.state.cars.map((car, index) => {
                 return (
                     <Car
-                        key={index}
-                        name={car.name}
-                        year={car.year}
-                        onChangeName={event => this.onChangeName(event.target.value, index)} // event - cобытие (автоматически передается React), event.target.value - значение из input, index -берется из map
-                        onDelete={this.deleteHandler.bind(this, index)}
-                    />
-                )
+                key={index}
+                name={car.name}
+                year={car.year}
+                onChangeName={event => this.onChangeName(event.target.value, index)} // event - cобытие (автоматически передается React), event.target.value - значение из input, index -берется из map
+                onDelete={this.deleteHandler.bind(this, index)}
+                />
+            )
             })
         }
-        
+
         return (
-            <div style={divStyle}> 
-                <h1>{this.state.PageTitle}</h1> 
-                
-                <button onClick={this.changeCarsHandler}> 
-                    Tooggle Cars
-                </button> 
-                
-                { cars } 
-            </div>    
-        )
+            <div style={divStyle}>
+            <h1>{this.state.PageTitle}</h1>
+
+            <button onClick={this.changeCarsHandler}>
+            Tooggle Cars
+        </button>
+
+        {cars}
+    </div>
+    )
     }
 }
 
 
-
-
 /* #@ Подключение CSS и Динамические классы: @# */
 
-// FOLDER: /src/Car/ создаем файл Car.css: 
+// FOLDER: /src/Car/ создаем файл Car.css:
 /*
 .Car {
     dispay: block
@@ -659,37 +640,35 @@ class App extends Component {
 */
 
 // FILE: /src/Car/Car.js:
-import React from 'react' 
+import React from 'react'
 import './Car.css' // подключаем файл стилей
 
 export default props => {
     const inputClasses = ['input']
-    const secInputClass = props.name === '' ? 'red': 'green';
+    const secInputClass = props.name === '' ? 'red' : 'green';
 
     inputClasses.push(secInputClass)
-    
+
     if (props.name.length > 4) {
         inputClasses.push('bold')
     }
 
     const currentInputClass = inputClasses.join(' ');
-    
-    return ( 
+
+    return (
         <div className="Car"> // указываем класс из файла стилей
-            <h3>Car name: {props.name}</h3>
-            <p>Year: <strong>{props.year}</strong></p>
-            <input 
-                type="text"
-                onChange={props.onChangeName}
-                value={props.name} 
-                className={currentInputClass}
-            /> 
-            <button onClick={props.onDelete}>Delete</button> 
+        <h3>Car name: {props.name}</h3>
+    <p>Year: <strong>{props.year}</strong></p>
+    <input
+    type="text"
+    onChange={props.onChangeName}
+    value={props.name}
+    className={currentInputClass}
+    />
+    <button onClick={props.onDelete}>Delete</button>
         </div>
-    )
+)
 }
-
-
 
 
 /* #@ Библиотека Radium: @# */
@@ -699,22 +678,22 @@ export default props => {
 
 
 // FILE: /src/Car/Car.js:
-import React from 'react' 
+import React from 'react'
 import Radium from 'radium' // подключаем библиотеку Radium
 import './Car.css' // подключаем файл стилей
 
 const Car = props => {
     const inputClasses = ['input']
-    const secInputClass = props.name === '' ? 'red': 'green';
+    const secInputClass = props.name === '' ? 'red' : 'green';
 
     inputClasses.push(secInputClass)
-    
+
     if (props.name.length > 4) {
         inputClasses.push('bold')
     }
 
     const currentInputClass = inputClasses.join(' ');
-    
+
     const style = {
         border: '1px solid #ccc',
         boxShadow: '0 4px 5px 0 rgba(0, 0, 0, .14)',
@@ -724,25 +703,23 @@ const Car = props => {
             cursor: 'pointer'
         }
     }
-    
-    return ( 
+
+    return (
         <div className="Car" style={style}>
-            <h3>Car name: {props.name}</h3>
-            <p>Year: <strong>{props.year}</strong></p>
-            <input 
-                type="text"
-                onChange={props.onChangeName}
-                value={props.name} 
-                className={currentInputClass}
-            /> 
-            <button onClick={props.onDelete}>Delete</button> 
+        <h3>Car name: {props.name}</h3>
+    <p>Year: <strong>{props.year}</strong></p>
+    <input
+    type="text"
+    onChange={props.onChangeName}
+    value={props.name}
+    className={currentInputClass}
+    />
+    <button onClick={props.onDelete}>Delete</button>
         </div>
-    )
+)
 }
 
 export default Radium(Car) // обрачиваем компонент Car в функционал пакета Radium
-
-
 
 
 /* #@ CSS-модули: @# (#css-loader) */
@@ -752,7 +729,9 @@ export default Radium(Car) // обрачиваем компонент Car в ф�
 // FILE: /config/webpack.config.dev.js найти module.exports -> module в нем:
 {
     test: /\.css$/,
-    use: [
+        use
+:
+    [
         require.resolve('style-loader'), // преобразовывает в css
         {
             loader: require.resolve('css-loader'), // для загрузки css
@@ -768,7 +747,9 @@ export default Radium(Car) // обрачиваем компонент Car в ф�
 // FILE: /config/webpack.config.prod.js найти module в нем:
 {
     test: /\.css$/,
-    loader: ExtractTextPlugin.extract(
+        loader
+:
+    ExtractTextPlugin.extract(
         Object.assign(
             {
                 fallback: {
@@ -800,8 +781,8 @@ export default Radium(Car) // обрачиваем компонент Car в ф�
 // Стили стали локальными, исправляем это:
 
 // FILE: /src/Car/Car.js:
-import React from 'react' 
-import Radium from 'radium' 
+import React from 'react'
+import Radium from 'radium'
 import classes from './Car.css' // сохраняем CSS классы в переменную
 
 const Car = props => {
@@ -809,7 +790,7 @@ const Car = props => {
     const secInputClass = props.name === '' ? classes.red : classes.green;  // добавляем стили .green или стили .red
 
     inputClasses.push(secInputClass)
-    
+
     if (props.name.length > 4) {
         inputClasses.push(classes.bold) // добавляем стили .bold
     }
@@ -819,31 +800,29 @@ const Car = props => {
     const style = {
         border: '1px solid #ccc',
         boxShadow: '0 4px 5px 0 rgba(0, 0, 0, .14)',
-        ':hover': { 
+        ':hover': {
             border: '1px solid #aaa',
             boxShadow: '0 4px 15px 0 rgba(0, 0, 0, .25)',
             cursor: 'pointer'
         }
     }
-    
-    return ( 
-        <div className="{classes.Car}" style={style}> 
-            // Конечный вид после преобразования в DOM - class="Car__Car__qfbwz"
-            // В CSS: Car__Car__qfbwz {...}
-            <h3>Car name: {props.name}</h3>
-            <p>Year: <strong>{props.year}</strong></p>
-            <input 
-                type="text"
-                onChange={props.onChangeName}
-                value={props.name} 
-                className={currentInputClass}
-            /> 
-            <button onClick={props.onDelete}>Delete</button> 
+
+    return (
+        <div className="{classes.Car}" style={style}>
+        // Конечный вид после преобразования в DOM - class="Car__Car__qfbwz"
+        // В CSS: Car__Car__qfbwz {...}
+        <h3>Car name: {props.name}</h3>
+    <p>Year: <strong>{props.year}</strong></p>
+    <input
+    type="text"
+    onChange={props.onChangeName}
+    value={props.name}
+    className={currentInputClass}
+    />
+    <button onClick={props.onDelete}>Delete</button>
         </div>
-    )
+)
 }
-
-
 
 
 /*@ Препроцессоры: @*/
@@ -858,11 +837,14 @@ const Car = props => {
 {
     test: /\.css$/,
     // ...
-},
+}
+,
 // добавляем новый loader:
-{ 
+{
     test: /\.scss$/,
-    use: [
+        use
+:
+    [
         require.resolve('style-loader'), // в конце style-loader
         require.resolve('css-loader'), // затем css-loader
         require.resolve('sass-loader'), // вначале будет работать sass-loader
@@ -873,14 +855,17 @@ const Car = props => {
 {
     test: /\.css$/,
     // ...
-},
+}
+,
 // добавляем новый loader:
-{ 
+{
     test: /\.scss$/,
-    use: [
-        require.resolve('style-loader'), 
-        require.resolve('css-loader'), 
-        require.resolve('sass-loader'), 
+        use
+:
+    [
+        require.resolve('style-loader'),
+        require.resolve('css-loader'),
+        require.resolve('sass-loader'),
     ]
 }
 
@@ -894,11 +879,11 @@ const Car = props => {
     padding: 8px 10px
     border: 1px solid #ccc
     font-weight: bold
-    
+
     &:focus, &:active {
         outline: none
     }
-    
+
     &:hover {
         background: #000
     }
@@ -908,68 +893,66 @@ const Car = props => {
 // FILE /src/App.js:
 import React, {Component} from 'react'
 import './App.scss' // импортируем App.scss
-import Car from './Car/Car.js' 
+import Car from './Car/Car.js'
 
 class App extends Component {
     // ...
-    
+
     render() {
         // ...
-        
+
         return (
-            <div style={divStyle}> 
-                <h1>{this.state.PageTitle}</h1> 
-                
-                <button 
-                    className={'AppButton'} // добавляем кнопке класс AppButton
-                    onClick={this.changeCarsHandler}
-                >Tooggle Cars</button> 
-                
-                { cars } 
-            </div>    
-        )
+            <div style={divStyle}>
+            <h1>{this.state.PageTitle}</h1>
+
+            <button
+        className={'AppButton'} // добавляем кнопке класс AppButton
+        onClick={this.changeCarsHandler}
+            >Tooggle Cars
+        </button>
+
+        {cars}
+    </div>
+    )
     }
 }
-
-
 
 
 /* #@ Передача параметров в компонент: @# */
 
 // FILE: /src/index.js:
-import React from 'react' 
-import ReactDOM from 'react-dom' 
-import './index.css' 
-import App from './App' 
-import serviceWorker from './serviceWorker' 
+import React from 'react'
+import ReactDOM from 'react-dom'
+import './index.css'
+import App from './App'
+import serviceWorker from './serviceWorker'
 
-ReactDOM.render(<App title={'I am from props'} />, document.getElementById('root')) // передаем параметр title 
+ReactDOM.render(<App title={'I am from props'}/>, document.getElementById('root')) // передаем параметр title
 
 
 // FILE /src/App.js:
 import React, {Component} from 'react'
 import './App.css'
-import Car from './Car/Car.js' 
+import Car from './Car/Car.js'
 
 class App extends Component {
     // ...
-    
+
     render() {
         // ...
-        
+
         return (
-            <div style={divStyle}> 
-                <h1>{this.props.title}</h1> // выводим переданный в App компонент параметр (! в классах через  this) 
-                <button onClick={this.changeCarsHandler}> 
-                    Tooggle Cars
-                </button> 
-                
-                { cars } 
-            </div>    
-        )
+            <div style={divStyle}>
+            <h1>{this.props.title}</h1> // выводим переданный в App компонент параметр (! в классах через this)
+        <button onClick={this.changeCarsHandler}>
+            Tooggle Cars
+        </button>
+
+        {cars}
+    </div>
+    )
     }
 }
-
 
 
 /* #@ Ининициализация State: @# */
@@ -977,27 +960,25 @@ class App extends Component {
 // FILE /src/App.js:
 import React, {Component} from 'react'
 import './App.css'
-import Car from './Car/Car.js' 
+import Car from './Car/Car.js'
 
 class App extends Component {
     constructor(props) { // в props попадают переданные параметры
         super(props) // вызов родительского конструктора
-        
+
         this.state = { // инициализируем State
-            cars : [
+            cars: [
                 {name: 'Ford', year: 2018},
                 {name: 'Audi', year: 2012},
                 {name: 'Mazda', year: 2011}
-            ], 
+            ],
             pageTitle: 'React Components',
-            showCars: false 
+            showCars: false
         }
     }
-    
+
     // ...
 }
-
-
 
 
 /* #@ Базовый жизненный цикл: @# */
@@ -1007,30 +988,28 @@ class App extends Component {
 // FILE /src/App.js:
 import React, {Component} from 'react'
 import './App.css'
-import Car from './Car/Car.js' 
+import Car from './Car/Car.js'
 
 
 class App extends Component {
     // ...
-    
+
     constructor(props) { // вызывается до жизнненых циклов компонента
         super(props)
     }
-    
-    componentWillMount() { // 1 жизненный цикл - вызывается при инициализации React компонента. 
-        
+
+    componentWillMount() { // 1 жизненный цикл - вызывается при инициализации React компонента.
+
     }
-    
+
     componentDidMount() { // 3 жизненный цикл - HTML в React готов
-        
+
     }
-    
+
     render() { // 2 жизненный цикл - формирует конечный JSX, который в конечном итоге будет представлен в HTML. Может вызываться несколько раз
         // ...
     }
 }
-
-
 
 
 /* #@ Создание Stateful компонента: @# */
@@ -1038,104 +1017,101 @@ class App extends Component {
 // Stateful компонент имеет доступ к жизненным циклам
 
 // FILE: /src/Car/Car.js:
-import React from 'react' 
-import Radium from 'radium' 
-import classes from './Car.css' 
+import React from 'react'
+import Radium from 'radium'
+import classes from './Car.css'
 
 // ! cтараться избегать частого создания компонентов наследников React.Component - лучше функциональные компоненты React
 
 class Car extends React.Component { // если import React,{Component} from 'react' -> extends Component
     render() {
-        const inputClasses = [classes.input] 
-    
+        const inputClasses = [classes.input]
+
         if (this.props.name != '') { // если class у props прописываем this
-            inputClasses.push(classes.green) 
+            inputClasses.push(classes.green)
         } else {
             inputClasses.push(classes.red)
         }
-        
-        if (this.props.name.length > 4) { 
-            inputClasses.push(classes.bold) 
+
+        if (this.props.name.length > 4) {
+            inputClasses.push(classes.bold)
         }
-        
+
         const style = {
             border: '1px solid #ccc',
             boxShadow: '0 4px 5px 0 rgba(0, 0, 0, .14)',
-            ':hover': { 
+            ':hover': {
                 border: '1px solid #aaa',
                 boxShadow: '0 4px 15px 0 rgba(0, 0, 0, .25)',
                 cursor: 'pointer'
             }
         }
-        
-        return ( 
-            <div className="{classes.Car}" style={style}> 
-                <h3>Car name: {this.props.name}</h3>
-                <p>Year: <strong>{this.props.year}</strong></p>
-                <input 
-                    type="text"
-                    onChange={this.props.onChangeName}
-                    value={this.props.name} 
-                    className={inputClasses.join(' ')}
-                /> 
-                <button onClick={this.props.onDelete}>Delete</button> 
+
+        return (
+            <div className="{classes.Car}" style={style}>
+            <h3>Car name: {this.props.name}</h3>
+        <p>Year: <strong>{this.props.year}</strong></p>
+        <input
+        type="text"
+        onChange={this.props.onChangeName}
+        value={this.props.name}
+        className={inputClasses.join(' ')}
+        />
+        <button onClick={this.props.onDelete}>Delete</button>
             </div>
-        )
+    )
     }
 }
 
 export default Radium(Car)
 
 
-
-
 /* #@ Жизненный цикл изменения/удаления: @# */
 
 // FILE: /src/Car/Car.js:
-import React from 'react' 
-import Radium from 'radium' 
-import classes from './Car.css' 
+import React from 'react'
+import Radium from 'radium'
+import classes from './Car.css'
 
-class Car extends React.Component { 
-    
+class Car extends React.Component {
+
     componentWillReceiveProps(nextProps) { // #1 для синхронизации локального State с входящими свойствами (version < 16.3)
-        
+
     }
-    
+
     shouldComponentUpdate(nextProps, nextState) { // #2 если возвращает true - необходимо перерисовывать компонент, false - нет
         // единственный из жизненных циклов, который что-то должен вернуть
         return nextProps.name.trim() !== this.props.name.trim()
     }
-    
+
     componentWillUpdate(nextProps, nextState) { // #3 подготавливаемся к изменению компонента, например, синхронизировать локальный State с входящими свойствами (version < 16.3)
-        
+
     }
-    
+
     static getDerivedStateFromProps(nextProps, prevState) { // <-> componentWillUpdate, но запрещает изменение State напрямую (исп. без componentWillReceiveProps и componentWillUpdate) (version > 16.3)
         return { // возвращаем результирующий State, который будет смержен с основным State
-            
+
         }
     }
-    
+
     componentDidUpdate() { // #5
-        
+
     }
-    
+
     getSnapshotBeforeUpdate() { // вызывается после Car render и перед componentDidUpdate - позволяет получить неизменное до обновления DOM дерево (version > 16.3)
-        
+
     }
-    
+
     componentWillUnmount() { // вызывается, когда идет разрушение компонента и он удаляется из DOM дерева
-        
+
     }
-    
+
     render() { // #4
         // ...
     }
 }
 
 export default Radium(Car)
-
 
 
 /* #@ ErrorBoundary (version > 16): @# */
@@ -1149,12 +1125,12 @@ export default class ErrorBoundary extends Component {
     }
 
     componentDidCatch(error, info) { // отлавливает Exception у детей
-        this.setState({hasError: true})    
+        this.setState({hasError: true})
     }
 
     render() {
         if (this.state.hasError) {
-            return <h1 style={{color:'red'}}>Something went wrong</h1>
+            return <h1 style={{color: 'red'}}>Something went wrong</h1>
         }
 
         return this.props.children  // иначе показываем сам компонент
@@ -1165,86 +1141,86 @@ export default class ErrorBoundary extends Component {
 // FILE /src/App.js:
 import React, {Component} from 'react'
 import './App.css'
-import Car from './Car/Car.js' 
+import Car from './Car/Car.js'
 import ErrorBoundary from './ErrorBoundary/ErrorBoundary.js' // импортируем компонент
 
 
-class App extends Component {    
-    constructor(props) { 
-        super(props) 
-        
-        this.state = { 
-            cars : [
+class App extends Component {
+    constructor(props) {
+        super(props)
+
+        this.state = {
+            cars: [
                 {name: 'Ford', year: 2018},
                 {name: 'Audi', year: 2012},
                 {name: 'Mazda', year: 2011}
-            ], 
+            ],
             pageTitle: 'React Components',
-            showCars: false 
+            showCars: false
         }
     }
 
-    onChangeName(name, index) { 
+    onChangeName(name, index) {
         const car = this.state.cars[index]
         car.name = name
-        
+
         const cars = [...this.state.cars]
         cars[index] = car
-        
+
         this.setState({
             cars
         })
     }
 
-    deleteHandler(index) { 
+    deleteHandler(index) {
         const cars = [...this.state.cars]
         cars.splice(index, 1)
-        
+
         this.setState({cars})
     }
-    
-    render() { 
+
+    render() {
         if (Math.random() > 0.7) { // генерация случайной ошибки
-            throw new Error('Car random failed')        
+            throw new Error('Car random failed')
         }
 
-        const divStyle = { 
-            textAlign : 'center'
+        const divStyle = {
+            textAlign: 'center'
         }
-        
+
         const cars = this.state.cars
-        
+
         let cars = null
-        
+
         if (this.state.showCars) {
-            cars = this.state.cars.map((car, index) => { 
+            cars = this.state.cars.map((car, index) => {
                 return (
-                    <ErrorBoundary key={index}> // оборачиваем компонент Car в ErrorBoundary + переносим key из Car в ErrorBoundary, тк он является корневым
-                        <Car
-                            name={car.name}
-                            year={car.year}
-                            onChangeName={event => this.onChangeName(event.target.value, index)} // event - cобытие (автоматически передается React), event.target.value - значение из input, index -берется из map
-                            onDelete={this.deleteHandler.bind(this, index)}
-                        />
-                    </ErrorBoundary>
-                )
+                    <ErrorBoundary key={index}> // оборачиваем компонент Car в ErrorBoundary + переносим key из Car в
+                    ErrorBoundary, тк он является корневым
+                <Car
+                name={car.name}
+                year={car.year}
+                onChangeName={event => this.onChangeName(event.target.value, index)} // event - cобытие (автоматически передается React), event.target.value - значение из input, index -берется из map
+                onDelete={this.deleteHandler.bind(this, index)}
+                />
+                </ErrorBoundary>
+            )
             })
         }
-        
+
         return (
-            <div style={divStyle}> 
-                <h1>{this.state.PageTitle}</h1> 
-                
-                <button onClick={this.changeCarsHandler}> 
-                    Tooggle Cars
-                </button> 
-                
-                { cars } 
-            </div>    
-        )
+            <div style={divStyle}>
+            <h1>{this.state.PageTitle}</h1>
+
+            <button onClick={this.changeCarsHandler}>
+            Tooggle Cars
+        </button>
+
+        {cars}
+    </div>
+    )
     }
 }
-
 
 
 /* #@ Фрагменты: @# */
@@ -1263,46 +1239,49 @@ export default class Counter extends Component {
         // })
 
         this.setState(prevState => { // БОЛЕЕ ПРАВИЛЬНЫЙ И БЕЗОПАСНЫЙ: защита от асинхронных изменений state
-           return {
-               counter: prevState.counter + 1
-           }     
+            return {
+                counter: prevState.counter + 1
+            }
         });
     }
+
     render() {
         // #1
         return (
             <div>
-                <h2>Counter {this.state.counter}</h2>
-                <button onClick={this.addCounter}>+</button>
-                <button onClick={() => this.setState({counter: this.state.counter - 1})}>-</button> // изменение State в JSX
-            </div>
-        )
+            <h2>Counter {this.state.counter}</h2>
+        <button onClick={this.addCounter}>+</button>
+            <button onClick={() => this.setState({counter: this.state.counter - 1})}>-</button>
+        // изменение State в JSX
+        </div>
+    )
 
-        // #2 без корневого элемента (version > 16)   
+        // #2 без корневого элемента (version > 16)
         return [
             <h2 key={'1'}>Counter {this.state.counter}</h2>,
-            <button 
-                key={'2'}
-                onClick={this.addCounter}
+        <button
+        key={'2'}
+        onClick={this.addCounter}
             >
-                +
+            +
             </button>,
-            <button 
-                key={'3'}
-                onClick={() => this.setState({counter: this.state.counter - 1})}
-            >
-                -
-            </button> 
-        ]
-        
+            <button
+        key={'3'}
+        onClick={() => this.setState({counter: this.state.counter - 1})}
+    >
+        -
+        </button>
+    ]
+
         // #3 НАИБОЛЕЕ ВАЛИДНЫЙ СПОСОБ:
         return (
             <React.Fragment> // скоро появится <></>
-                <h2>Counter {this.state.counter}</h2>
-                <button onClick={this.addCounter}>+</button>
-                <button onClick={() => this.setState({counter: this.state.counter - 1})}>-</button> // изменение State в JSX
-            </React.Fragment>
-        )
+            <h2>Counter {this.state.counter}</h2>
+        <button onClick={this.addCounter}>+</button>
+            <button onClick={() => this.setState({counter: this.state.counter - 1})}>-</button>
+        // изменение State в JSX
+        </React.Fragment>
+    )
     }
 }
 
@@ -1310,86 +1289,85 @@ export default class Counter extends Component {
 // FILE /src/App.js:
 import React, {Component} from 'react'
 import './App.css'
-import Car from './Car/Car.js' 
+import Car from './Car/Car.js'
 import Counter from './Counter/Counter.js' // импортируем компонент
 
 
-class App extends Component {    
-    constructor(props) { 
-        super(props) 
-        
-        this.state = { 
-            cars : [
+class App extends Component {
+    constructor(props) {
+        super(props)
+
+        this.state = {
+            cars: [
                 {name: 'Ford', year: 2018},
                 {name: 'Audi', year: 2012},
                 {name: 'Mazda', year: 2011}
-            ], 
+            ],
             pageTitle: 'React Components',
-            showCars: false 
+            showCars: false
         }
     }
 
-    onChangeName(name, index) { 
+    onChangeName(name, index) {
         const car = this.state.cars[index]
         car.name = name
-        
+
         const cars = [...this.state.cars]
         cars[index] = car
-        
+
         this.setState({
             cars
         })
     }
 
-    deleteHandler(index) { 
+    deleteHandler(index) {
         const cars = [...this.state.cars]
         cars.splice(index, 1)
-        
+
         this.setState({cars})
     }
-    
-    render() { 
-        const divStyle = { 
-            textAlign : 'center'
+
+    render() {
+        const divStyle = {
+            textAlign: 'center'
         }
-        
+
         const cars = this.state.cars
-        
+
         let cars = null
-        
+
         if (this.state.showCars) {
-            cars = this.state.cars.map((car, index) => { 
+            cars = this.state.cars.map((car, index) => {
                 return (
                     <Car
-                        name={car.name}
-                        year={car.year}
-                        onChangeName={event => this.onChangeName(event.target.value, index)} // event - cобытие (автоматически передается React), event.target.value - значение из input, index -берется из map
-                        onDelete={this.deleteHandler.bind(this, index)}
-                    />
-                )
+                name={car.name}
+                year={car.year}
+                onChangeName={event => this.onChangeName(event.target.value, index)} // event - cобытие (автоматически передается React), event.target.value - значение из input, index -берется из map
+                onDelete={this.deleteHandler.bind(this, index)}
+                />
+            )
             })
         }
-        
-        return (
-            <div style={divStyle}> 
-                <h1>{this.state.PageTitle}</h1> 
 
-                <Counter/> // вставляем компонент
-                
-                <button 
-                    style={{marginTop: 10}}
-                    className={'AppButton'}
-                    onClick={this.changeCarsHandler}
-                > 
-                    Tooggle Cars
-                </button> 
-                
-                { cars } 
-            </div>    
-        )
+        return (
+            <div style={divStyle}>
+            <h1>{this.state.PageTitle}</h1>
+
+            <Counter/> // вставляем компонент
+
+            <button
+        style={{marginTop: 10}}
+        className={'AppButton'}
+        onClick={this.changeCarsHandler}
+            >
+            Tooggle Cars
+        </button>
+
+        {cars}
+    </div>
+    )
     }
 }
-
 
 
 // в /src/ создаем папку hoc (high order components), а в ней FILE Auxiliary.js:
@@ -1420,15 +1398,14 @@ export default class Counter extends Component {
     render() {
         return (
             <Auxiliary> // через свой компонент
-                <h2>Counter {this.state.counter}</h2>
-                <button onClick={this.addCounter}>+</button>
-                <button onClick={() => this.setState({counter: this.state.counter - 1})}>-</button> // изменение State в JSX
-            </Auxiliary>
-        )
+            <h2>Counter {this.state.counter}</h2>
+        <button onClick={this.addCounter}>+</button>
+            <button onClick={() => this.setState({counter: this.state.counter - 1})}>-</button>
+        // изменение State в JSX
+        </Auxiliary>
+    )
     }
 }
-
-
 
 
 /* #@ Компоненты высшего порядка HIGH ORDER COMPONENTS: @# */
@@ -1445,34 +1422,33 @@ const withClass = (Component, className) => { // оборачивает Componen
     return props => {
         return (
             <section className={className}>
-               <Component {...props} /> // передаем в Component опции из App компонента
-            </section>
-        )        
+            <Component {...props} /> // передаем в Component опции из App компонента
+        </section>
+    )
     }
 }
 
 export default withClass
 
 
-
 // FILE: /src/Car/Car.js:
-import React from 'react' 
-import classes from './Car.css' 
+import React from 'react'
+import classes from './Car.css'
 import PropTypes from 'prop-types'
 import withClass from '../hoc/withClass'
 
-class Car extends React.Component { 
+class Car extends React.Component {
     componentDidMount() { // элемент зарендерен
         // До VERSION < 16 фокус через референции:
         this.inputRef.focus() // так будем фокусироваться на последнем input
 
-        /* для фокуса на первом input в App.js в Сar передаем index:        
+        /* для фокуса на первом input в App.js в Сar передаем index:
         <Car
             name={car.name}
             year={car.year}
             index={index}
             ...
-        />            
+        />
 
         А здесь:
         */
@@ -1488,40 +1464,40 @@ class Car extends React.Component {
     }
 
     constructor(props) {
-         // C VERSION 16 фокус:
+        // C VERSION 16 фокус:
         super(props)
 
         this.inputRef = React.createRef()
     }
 
     render() {
-        const inputClasses = [classes.input] 
-    
-        if (this.props.name != '') { 
-            inputClasses.push(classes.green) 
+        const inputClasses = [classes.input]
+
+        if (this.props.name != '') {
+            inputClasses.push(classes.green)
         } else {
             inputClasses.push(classes.red)
         }
-        
-        if (this.props.name.length > 4) { 
-            inputClasses.push(classes.bold) 
+
+        if (this.props.name.length > 4) {
+            inputClasses.push(classes.bold)
         }
-        
-        return ( 
+
+        return (
             <React.Fragment>
-                <h3>Car name: {this.props.name}</h3>
-                <p>Year: <strong>{this.props.year}</strong></p>
-                <input 
-                    ref={inputRef => this.inputRef = inputRef} // До VERSION < 16: записываем в свойство ref на элемент; атрибут не виден в HTML.
-                    ref={this.inputRef} // C VERSION 16
-                    type="text"
-                    onChange={this.props.onChangeName}
-                    value={this.props.name} 
-                    className={inputClasses.join(' ')}
-                /> 
-                <button onClick={this.props.onDelete}>Delete</button> 
+            <h3>Car name: {this.props.name}</h3>
+        <p>Year: <strong>{this.props.year}</strong></p>
+        <input
+        ref={inputRef => this.inputRef = inputRef} // До VERSION < 16: записываем в свойство ref на элемент; атрибут не виден в HTML.
+        ref={this.inputRef} // C VERSION 16
+        type="text"
+        onChange={this.props.onChangeName}
+        value={this.props.name}
+        className={inputClasses.join(' ')}
+        />
+        <button onClick={this.props.onDelete}>Delete</button>
             </React.Fragment>
-        )
+    )
     }
 }
 
@@ -1538,8 +1514,6 @@ export default withClass(Car, classes.Car); // используем hoc withClas
 // Референции используются при работе с svg, canvas, html5 (audio, video), обертка плагина
 
 
-
-
 /* #@ Context API: @# */
 // в /src/ создаем папку Counter2, а в ней FILE Сounter2.js:
 import React from 'react'
@@ -1547,19 +1521,19 @@ import {ClickedContext} from '../App'
 
 export default props => {
     return (
-        <div 
-            style={{
-                border: '1px solid #ccc',
-                width: 200,
-                margin: '0 auto'
-            }}
-        >
-            <h3>Counter 2</h3>
-            <ClickedContext.Consumer>
-                {clicked => clicked ? <p>Clicked</p> : null}
-            </ClickedContext.Consumer>
-        </div>
-    )
+        <div
+    style={{
+        border: '1px solid #ccc',
+            width: 200,
+            margin: '0 auto'
+    }}
+>
+<h3>Counter 2</h3>
+    <ClickedContext.Consumer>
+    {clicked => clicked ? <p>Clicked</p> : null}
+    </ClickedContext.Consumer>
+    </div>
+)
 }
 
 
@@ -1581,13 +1555,13 @@ export default class Counter extends Component {
 
     render() {
         return (
-            <Auxiliary> 
-                <h2>Counter {this.state.counter}</h2>
-                <Counter2 />
-                <button onClick={this.addCounter}>+</button>
-                <button onClick={() => this.setState({counter: this.state.counter - 1})}>-</button> 
-            </Auxiliary>
-        )
+            <Auxiliary>
+            <h2>Counter {this.state.counter}</h2>
+        <Counter2/>
+        <button onClick={this.addCounter}>+</button>
+            <button onClick={() => this.setState({counter: this.state.counter - 1})}>-</button>
+        </Auxiliary>
+    )
     }
 }
 
@@ -1595,102 +1569,95 @@ export default class Counter extends Component {
 // FILE /src/App.js:
 import React, {Component} from 'react'
 import './App.css'
-import Car from './Car/Car.js' 
-import Counter from './Counter/Counter.js' 
+import Car from './Car/Car.js'
+import Counter from './Counter/Counter.js'
 
 
 export const ClickedContext = React.createContext(false); // создаем контекст cо значением по умолчанию
 
-class App extends Component {    
-    constructor(props) { 
-        super(props) 
-        
-        this.state = { 
+class App extends Component {
+    constructor(props) {
+        super(props)
+
+        this.state = {
             clicked: false,
-            cars : [
+            cars: [
                 {name: 'Ford', year: 2018},
                 {name: 'Audi', year: 2012},
                 {name: 'Mazda', year: 2011}
-            ], 
+            ],
             pageTitle: 'React Components',
-            showCars: false 
+            showCars: false
         }
     }
 
-    onChangeName(name, index) { 
+    onChangeName(name, index) {
         const car = this.state.cars[index]
         car.name = name
-        
+
         const cars = [...this.state.cars]
         cars[index] = car
-        
+
         this.setState({
             cars
         })
     }
 
-    deleteHandler(index) { 
+    deleteHandler(index) {
         const cars = [...this.state.cars]
         cars.splice(index, 1)
-        
+
         this.setState({cars})
     }
-    
-    render() { 
-        const divStyle = { 
-            textAlign : 'center'
+
+    render() {
+        const divStyle = {
+            textAlign: 'center'
         }
-        
+
         const cars = this.state.cars
-        
+
         let cars = null
-        
+
         if (this.state.showCars) {
-            cars = this.state.cars.map((car, index) => { 
+            cars = this.state.cars.map((car, index) => {
                 return (
                     <Car
-                        name={car.name}
-                        year={car.year}
-                        onChangeName={event => this.onChangeName(event.target.value, index)} 
-                        onDelete={this.deleteHandler.bind(this, index)}
-                    />
-                )
+                name={car.name}
+                year={car.year}
+                onChangeName={event => this.onChangeName(event.target.value, index)}
+                onDelete={this.deleteHandler.bind(this, index)}
+                />
+            )
             })
         }
-        
+
         return (
-            <div style={divStyle}> 
-                <h1>{this.state.PageTitle}</h1> 
+            <div style={divStyle}>
+            <h1>{this.state.PageTitle}</h1>
 
-                <ClickedContext.Provider value="this.state.clicked"> 
-                    <Counter/> // оборачиваем компонент, в который необходимо передать ClickedContext
-                </ClickedContext.Provider>
-                
-                
-                <button 
-                    style={{marginTop: 10}}
-                    className={'AppButton'}
-                    onClick={this.changeCarsHandler}
-                > 
-                    Tooggle Cars
-                </button> 
+            <ClickedContext.Provider value="this.state.clicked">
+            <Counter/> // оборачиваем компонент, в который необходимо передать ClickedContext
+            </ClickedContext.Provider>
 
-                <button onClick={() => this.setState({clicked: true})}>
-                    Changed clicked
-                </button>
-                
-                { cars } 
-            </div>    
-        )
+
+            <button
+        style={{marginTop: 10}}
+        className={'AppButton'}
+        onClick={this.changeCarsHandler}
+            >
+            Tooggle Cars
+        </button>
+
+        <button onClick={() => this.setState({clicked: true})}>
+        Changed clicked
+        </button>
+
+        {cars}
+    </div>
+    )
     }
 }
-
-
-
-
-
-
-
 
 
 /* #@ ПРАКТИКА: @# */
@@ -1718,15 +1685,13 @@ class App extends Component {
     render() {
         return (
             <Layout>
-                <Quiz /> 
+            <Quiz/>
             </Layout>
-        )
+    )
     }
 }
 
 export default App;
-
-
 
 
 /* #@ Создание Layout: @# */
@@ -1738,11 +1703,11 @@ import classes from './Layout.css'
 
 class Layout extends Component {
     render() {
-        <div className={classes.Layout}>
+    <div className={classes.Layout}>
             <main>
-                { this.props.children }
+            {this.props.children}
             </main>
-        </div>
+            </div>
     }
 }
 
@@ -1768,8 +1733,6 @@ export default Layout
 // Настраиваем сss loader (#css-loader)
 
 
-
-
 /* #@ Создание главной страницы: @# */
 /* #@ Компонент активного вопроса @# */
 
@@ -1789,29 +1752,29 @@ class Quiz extends Component {
         activeQuestion: 0,
         answerState: null, // {[id]: 'success' || 'error'}
         quiz: [
-            { 
+            {
                 id: 1,
                 question: 'Какого цвета небо',
                 rightAnswerId: '2',
                 answers: [
-                    {id:1,text: 'Черный'},       
-                    {id:2,text: 'Синий'},       
-                    {id:3,text: 'Красный'},       
-                    {id:4,text: 'Зеленый'},       
+                    {id: 1, text: 'Черный'},
+                    {id: 2, text: 'Синий'},
+                    {id: 3, text: 'Красный'},
+                    {id: 4, text: 'Зеленый'},
                 ]
             },
-            { 
+            {
                 id: 2,
                 question: 'В каком году основали Санкт-Петербург',
                 rightAnswerId: '3',
                 answers: [
-                    {id:1,text: '1700'},       
-                    {id:2,text: '1702'},       
-                    {id:3,text: '1703'},       
-                    {id:4,text: '1803'},       
+                    {id: 1, text: '1700'},
+                    {id: 2, text: '1702'},
+                    {id: 3, text: '1703'},
+                    {id: 4, text: '1803'},
                 ]
-            },            
-        ]        
+            },
+        ]
     }
 
     onAnswerClickHandler = answerId => {
@@ -1822,18 +1785,18 @@ class Quiz extends Component {
                 return;
             }
         }
-        
+
 
         const question = this.state.quiz[this.state.activeQuestion]
         const results = this.state.results
-        
+
         if (question.rightAnswerId !== answerId) {
             results[question.id] = 'error'
 
             this.setState({
                 results,
                 answerState: {[answerId]: 'error'}
-            }) 
+            })
         } else {
             if (!results[question.id]) { // на вопрос еще не отвечали
                 results[question.id] = 'success'
@@ -1848,7 +1811,7 @@ class Quiz extends Component {
                 if (this.isQuizFinished()) {
                     this.setState({
                         isFinished: true
-                    })    
+                    })
                 } else {
                     this.setState({
                         activeQuestion: this.state.activeQuestion + 1,
@@ -1857,7 +1820,7 @@ class Quiz extends Component {
                 }
 
                 window.clearTimeout(timeout)
-            }, 1000)               
+            }, 1000)
         }
     }
 
@@ -1867,39 +1830,39 @@ class Quiz extends Component {
 
     retryHandler = () => { // чтобы не терять контекст
         this.setState({
-           activeQuestion: 0,
-           answerState: null,
-           isFinished: false,
-           results: {} 
+            activeQuestion: 0,
+            answerState: null,
+            isFinished: false,
+            results: {}
         })
     }
 
     render() {
         return (
             <div className={classes.Quiz}>
-                <div className={classes.QuizWrapper}>
-                    <h1>Ответьте на все вопросы</h1>
+            <div className={classes.QuizWrapper}>
+            <h1>Ответьте на все вопросы</h1>
 
 
-                    {
-                        this.state.isFinished 
-                            ?   <FinishedQuiz 
-                                    results={this.state.results}
-                                    quiz={this.state.quiz}
-                                    onRetry={this.retryHandler}
-                                />
-                            :   <ActiveQuiz 
-                                    answers={this.state.quiz[this.state.activeQuestion].answers}
-                                    question={this.state.quiz[this.state.activeQuestion].question}
-                                    onAnswerClick={this.onAswerClickHandler}
-                                    quizLength={this.state.quiz.length}
-                                    answerNumber={this.state.activeQuestion + 1}
-                                    state={this.state.answerState}
-                                />
-                    }
-                </div>
-            </div>
-        )
+        {
+            this.state.isFinished
+                ? <FinishedQuiz
+            results={this.state.results}
+            quiz={this.state.quiz}
+            onRetry={this.retryHandler}
+            />
+        : <ActiveQuiz
+            answers={this.state.quiz[this.state.activeQuestion].answers}
+            question={this.state.quiz[this.state.activeQuestion].question}
+            onAnswerClick={this.onAswerClickHandler}
+            quizLength={this.state.quiz.length}
+            answerNumber={this.state.activeQuestion + 1}
+            state={this.state.answerState}
+            />
+        }
+    </div>
+        </div>
+    )
     }
 }
 
@@ -1934,21 +1897,21 @@ import AnswersList from './AnsersList/AnsersList'
 
 const ActiveQuiz = props => (
     <div className={classes.ActiveQuiz}>
-        <p className={classes.Question}>
-            <span>
-                <strong>{ props.answerNumber }.</strong>&nbsp;
-                {props.question}
-            </span>
+    <p className={classes.Question}>
+    <span>
+    <strong>{props.answerNumber}.</strong>&nbsp;
+{props.question}
+</span>
 
-            <small>{ props.answerNumber } из { props.quizLength }</small>
-        </p>
-        
-        <AnsersList
-            state={props.state}
-            answers={props.answers}
-            onAnswerClick={props.onAswerClick}
-        />
-    </div>
+<small>{props.answerNumber} из {props.quizLength}</small>
+</p>
+
+<AnsersList
+state={props.state}
+answers={props.answers}
+onAnswerClick={props.onAswerClick}
+/>
+</div>
 )
 
 export default ActiveQuiz
@@ -1971,9 +1934,6 @@ export default ActiveQuiz
 */
 
 
-
-
-
 /* #@ Список вопросов: @# */
 /* #@ Обработка клика: @# */
 /* #@ Вывод результатов: @# */
@@ -1985,16 +1945,16 @@ import AnswerItem from './AnswerItem/AnswerItem'
 
 const AnwersList = props => (
     <ul className={classes.AnwersList}>
-        { props.answers.map((answer, index) => {
+    {props.answers.map((answer, index) => {
             return (
-                <AnswerItem 
-                    key={index}
-                    answer={answer}
-                    onAnswerClick={props.onAnswerClick}
-                    state={!props.state ? null : props.state[answer.id]}
-                />
-            )
-        }) }
+                <AnswerItem
+            key={index}
+            answer={answer}
+            onAnswerClick={props.onAnswerClick}
+            state={!props.state ? null : props.state[answer.id]}
+            />
+        )
+        })}
     </ul>
 )
 
@@ -2024,13 +1984,13 @@ const AnswerItem = props => {
     const clsList = cls.join(' ');
 
     return (
-        <li 
-            className={clsList}
-            onClick={() => props.onAnswerClick(props.answer.id)}
-        >
-            { props.answer.text }        
-        </li>
-    )
+        <li
+    className={clsList}
+    onClick={() => props.onAnswerClick(props.answer.id)}
+>
+    {props.answer.text}
+</li>
+)
 }
 
 export default AnswerItem
@@ -2064,6 +2024,7 @@ export default AnswerItem
 // FOLDER: /src/components/ cоздаем FOLDER FinishedQuiz а в нем FILE FinishedQuiz.js:
 import React from 'react'
 import classes from './FinishedQuiz.css'
+import Button from '../UI/Button/Button'
 
 const FinishedQuiz = props => {
     const successCount = Object.keys(props.results).reduce((total, key) => {
@@ -2076,40 +2037,50 @@ const FinishedQuiz = props => {
 
     return (
         <div classes={classess.FinishedQuiz}>
-           <ul>
-               { props.quiz.map((quizItem, index) => {
-                    const cls = [
-                        'fa',
-                        props.results[quizItem.id] === 'error' ? 'fa-times' : 'fa-check',
-                        classes[props.results[quizItem.id]]    
-                    ]
+        <ul>
+        {props.quiz.map((quizItem, index) => {
+                const cls = [
+                    'fa',
+                    props.results[quizItem.id] === 'error' ? 'fa-times' : 'fa-check',
+                    classes[props.results[quizItem.id]]
+                ]
 
-                    return (
-                        <li 
-                            key={index}
-                        >
-                            <strong>{index + 1}</strong>. &nbsp;  
-                            {quizItem.question}       
-                            <i className={cls.join('')} />   
-                        </li>     
-                    )
-               }) }
-           </ul>
+                return (
+                    <li
+                key={index}
+                    >
+                    <strong>{index + 1}</strong>. &nbsp;
+                {quizItem.question}
+            <i className={cls.join('')}/>
+                </li>
+            )
+            })}
+        </ul>
 
-           <p>Правильно {successCount} из {props.quiz.length}</p>
+        <p>Правильно {successCount} из {props.quiz.length}</p>
 
-           <div>
-               <button onClick={props.onRetry}>Повторить</button>
-           </div>
-        </div>
-    )
+    <div>
+    <Button
+    onClick={props.onRetry}
+    type="primary"
+        >
+        Повторить
+        </Button>
+        <Button
+    type="success"
+        >
+        Перейти в список тестов
+    </Button>
+
+    </div>
+    </div>
+)
 }
 
 export default FinishedQuiz
 
 
-
-// FOLDER: /src/components/FinishedQuiz/ cоздаем FILE FinishedQuiz.css: 
+// FOLDER: /src/components/FinishedQuiz/ создаем FILE FinishedQuiz.css:
 /*
 .FinishedQuiz {
     padding: 20px;
@@ -2138,3 +2109,292 @@ export default FinishedQuiz
     color: rgba(240, 87, 108, .7);
 }
 */
+
+
+// FOLDER: /src/components/ создаем FOLDER UI, затем FOLDER Button, а в ней Button.js:
+import React from 'react'
+import classes from './Button.css'
+
+const Button = props => {
+    const cls = [
+        classes.Button,
+        classes[props.type]
+    ]
+    const clsList = cls.join(' ')
+
+    return (
+        <button
+    onClick={props.onClick}
+    className={clsList}
+    disabled={props.disabled}
+        >
+        {props.children}
+        </button>
+)
+}
+
+
+// FOLDER: /src/components/UI/Button/ создаем Button.css:
+/*
+.Button {
+    display: inline-block
+    padding: 10px 20px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    color: #000;
+    margin-right: 15px;
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size: 12px;
+}
+
+.Button:focus {
+    outline: none;
+}
+
+.Button:active {
+    box-shadow: inset 2px 2px 1px rgba(0,0,0,.3);
+}
+
+.Button:disabled {
+    background: #ccc;
+    color: #000;
+    cursor:not-allowed;
+}
+
+.success {
+    color: rgba(161, 240, 69, 1);
+}
+
+.error {
+    color: rgba(240, 87, 108, 1);
+}
+
+.primary {
+    background: #2883f6;
+    color: #fff;
+}
+*/
+
+
+
+
+/* #@ Кнопка переключения меню: @# */
+// FOLDER: /src/components/ создаем FOLDER Navigation, затем FOLDER MenuToggle а в ней FILE: MenuToggle.js:
+import React from 'react'
+import classes from './MenuToggle.css'
+
+const MenuToggle = props => {
+    const cls = [
+        classes.MenuToggle,
+        'fa',
+    ]
+
+    if (!props.isOpen) {
+        cls.push('fa-bars')
+    } else {
+        cls.push('fa-times')
+        cls.push(classes.open)
+
+    }
+
+    const clsList = cls.join(' ')
+
+    return (
+        <i
+    className={clsList}
+    onClick={props.onToggle}
+    />
+)
+}
+
+export default MenuToggle
+
+// FOLDER: /src/components/Navigation/MenuToggle/ создаем FILE: MenuToggle.css:
+/*
+.MenuToggle {
+    position: fixed;
+    top: 40px;
+    left: 40px;
+    font-size: 20px;
+    cursor: pointer;
+    color: #fff;
+    transition: opacity, left .22s ease-in;
+    z-index: 100;
+}
+
+.MenuToggle:hover {
+    opacity: .7;
+}
+
+.MenuToggle.open {
+    left: 320px;
+}
+*/
+
+// FOLDER /src/hoc/Layout/Layout.js:
+
+import React, {Component} from 'react'
+import classes from './Layout.css'
+import MenuToggle from '../../components/Navigation/MenuToggle/MenuToggle'
+import Drawer from '../../components/Navigation/Drawer/Drawer'
+
+class Layout extends Component {
+
+    state = {
+        menu: false
+    }
+
+    toggleMenuHandler = () => {
+        this.setState({
+            menu: !this.state.menu
+        })
+    }
+
+    menuCloseHandler = () => {
+        this.setState({
+            menu: false
+        })
+    }
+
+    render() {
+    <div className={classes.Layout}>
+
+            <Drawer
+        isOpen={this.state.menu}
+        onClose={this.menuCloseHandler}
+        />
+
+        <MenuToggle
+        onToggle={this.toggleMenuHandler}
+        isOpen={this.state.menu}
+        />
+        <main>
+        {this.props.children}
+        </main>
+        </div>
+    }
+}
+
+export default Layout
+
+
+
+// FOLDER: /src/components/Navigation/ создаем FOLDER Drawer, а в ней FILE Drawer.js:
+import React, {Component} from 'react'
+import classes from './Drawer.css'
+import Backdrop from '../../UI/Backdrop/Backdrop'
+
+class Drawer extends Component {
+    const links = [
+        1, 2, 3
+    ]
+
+    renderLinks() {
+        return links.map((link, index) => {
+            return (
+                <li key={index}>
+                Link {link}
+        </li>
+        )
+        })
+    }
+
+    render() {
+        const cls = [classes.Drawer]
+
+        if (!this.props.isOpen) {
+            cls.push(classes.close)
+        }
+
+        const clsList = cls.join(' ')
+
+        return (
+            <ReactFragment>
+            <nav className={clsList}>
+            <ul>
+            <a>{ this.renderLinks()}</a>
+            </ul>
+            </nav>
+        { !this.props.isOpen ? null : <Backdrop onClick={props.onClose} /> }
+        </ReactFragment>
+        )
+    }
+}
+
+export default Drawer
+
+
+
+// FOLDER: /src/components/Navigation/Drawer/ создаем FILE Drawer.css:
+/*
+.Drawer {
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 80%;
+    max-width: 300px;
+    padding: 20px 10px;
+    box-sizing: border-box;
+    background: #fff;
+    transform: translateX(0px);
+    transition: transform .22s ease-in;
+    z-index: 90;
+}
+
+.Drawer.close {
+    transform: translateX(-300px);
+}
+
+.Drawer ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+.Drawer ul li {
+    margin-bottom: 15px;
+}
+
+.Drawer ul li a {
+    color: #363d54;
+    font-size: 30px;
+    text-decoration: none;
+    background: #fff;
+    position: relative;
+    padding: 0 20px 10px 20px;
+    transition: opacity .3s;
+}
+
+.Drawer ul li a:hover,
+.active {
+    opacity: .7;
+}
+*/
+
+
+
+
+/* #@ Компонент затемнения: @# */
+// FOLDER: /src/components/UI/ создаем FOLDER Backdrop, а в ней FILE Backdrop.js:
+import React from 'react'
+import classes from './Backdrop.css'
+
+const Backdrop = props => <div className={classes.Backdrop} onClick={this.props.onClick} />
+
+export default Backdrop
+
+// FOLDER: /src/components/UI/Backdrop/ создаем FILE Backdrop.css:
+/*
+.Backdrop {
+    z-index: 50;
+    background: rgba(0,0,0,.7);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+}
+ */
