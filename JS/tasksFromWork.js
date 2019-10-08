@@ -25,6 +25,102 @@ const getCountAnagram = (data, origStr) => {
 
 
 
+/* #@ Подзагрузка товаров: @#*/
+$(() => {
+    const delay = ms => {
+        return new Promise(r => setTimeout(() => r(), ms));
+    };
+
+    const initReloadingGoods = () => {
+        let data = {};
+        const paginationBlock = $('#yw1');
+
+        if (paginationBlock.length) {
+            const pageNum = + paginationBlock.find('.selected a').text();
+            const pagesCount = paginationBlock.children('.page').length;
+            const isLastPage = pageNum === pagesCount;
+
+            data = {pageNum, pagesCount, isLastPage};
+        }
+
+        return {
+            getData: () => {
+                return data;
+            },
+            getNextPageURN: nextPageNum => {
+                const urnData = location.pathname.split('/').filter(Boolean);
+                const isRootSection = urnData.length === 2;
+                const isNotPaginationNumInURN = isNaN(+urnData[urnData.length - 1]);
+
+                if (isRootSection || isNotPaginationNumInURN) {
+                    urnData.push(nextPageNum);
+                } else {
+                    urnData[urnData.length - 1] = nextPageNum;
+                }
+
+                return urnData.join('/') + '/';
+            },
+            createShowMoreBtn: (nextPageNum, pagesCount) => {
+                if (nextPageNum > pagesCount) {
+                    return;
+                }
+
+                $(`<div id="loadProductsContainer">\
+	                    <div id="loadProductsBtn" data-num="${nextPageNum}" data-count="${pagesCount}">\
+	                        Показать еще\
+	                    </div>\
+	                    <div class="loader">\
+	                        <img src="loader.gif" width="300"/>\
+	                    </div>\
+	                </div>`).insertBefore(paginationBlock);
+            },
+            initLoading: () => {
+                $('#loadProductsBtn').hide(1000, () => {
+                    $('.loader').show()
+                });
+            },
+            endLoading: () => {
+                $('#loadProductsContainer')
+                    .hide()
+                    .detach();
+            },
+            loadHandler: e => {
+                const loadBtn = $(e.currentTarget);
+                const productContainer = $('#bike-list .items');
+                const {num, count} = loadBtn.data();
+                const nextPageURN = reloadingGoods.getNextPageURN(num);
+
+                $.get({
+                    url: nextPageURN,
+                    dataType: 'html',
+                    beforeSend: () => reloadingGoods.initLoading(),
+                    success: data => {
+                        const elements = $(data).find('.wrap-card-it');
+
+                        delay(1500)
+                            .then(() => reloadingGoods.endLoading())
+                            .then(() => productContainer.append(elements))
+                            .then(() => reloadingGoods.createShowMoreBtn(num + 1, count));
+                    }
+                });
+            }
+        }
+    };
+
+    const reloadingGoods = initReloadingGoods();
+    const reloadingGoodsData = reloadingGoods.getData();
+
+    if (reloadingGoodsData) {
+        const {pageNum, pagesCount} = reloadingGoodsData;
+
+        reloadingGoods.createShowMoreBtn(pageNum + 1, pagesCount);
+    }
+
+    $(document).on('click', '#loadProductsBtn', reloadingGoods.loadHandler);
+});
+
+
+
 /* #@ Анимация у счетчиков при скролле до элемента @#*/
 const isMainPage = location.pathname === '/';
 
