@@ -2408,3 +2408,74 @@ export default Backdrop
 
 }
  */
+
+
+
+
+/* #@ React Router: @# */
+// Ctrl+C
+// $ yarn add react-router-dom
+// $ yarn start
+
+
+// FILE: /src/index.js:
+import React from 'react'
+import ReactDOM from 'react-dom'
+import './index.css'
+import App from './App'
+import {BrowserRouter} from 'react-router-dom' // импортируем компонент для роутинга
+import registerServiceWorker from './registerServiceWorker'
+
+сonst application = (
+    <BrowserRouter> // оборачиваем App в компонент роутинга
+        <App />
+    </BrowserRouter>
+)
+
+ReactDOM.render(application, document.getElementById('root'))
+registerServiceWorker()
+
+
+
+// FIL
+// FILE: /src/App.js:
+import React, {Component} from 'react'
+import './App.sccs'
+import {Route, NavLink} from 'react-router-dom' // импортируем компонент для регистрации роутов + компонент для навигации
+import About from './About/About'
+import Cars from './Cars/Cars'
+
+class App extends Component {
+    render() {
+        return (
+            <div>
+                <nav>
+                    <ul>
+                        <li>
+                            <NavLink to="/">Home</NavLink> // навигация без перезагрузки страницы
+                        </li> 
+                        <li>
+                            <NavLink to="/about">About</NavLink>
+                        </li>
+                        <li>
+                            <NavLink to="/cars">Cars</NavLink>
+                        </li>
+                    </ul>
+                </nav>
+
+                <hr />
+
+                <Route path="/" exact render={() => <h1>Home Page</h1>} /> // регистрируем роут для домашней страницы; exact - рендерить при полном совпадении с путем
+                <Route path="/about" component={About} /> // регистрируем роут + указываем какой компонент рендерить
+                <Route path="/cars" component={Cars} /> 
+            </div>
+        )
+    }
+}
+
+export default App
+
+
+// FILE: /src/App.scss:
+
+

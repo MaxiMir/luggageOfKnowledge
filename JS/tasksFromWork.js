@@ -33,11 +33,12 @@ $(() => {
 
     const initReloadingGoods = () => {
         let data = {};
-        const paginationBlock = $('#yw1');
+        const paginationBlockUp = $('#yw0');
+        const paginationBlockDown = $('#yw1');
 
-        if (paginationBlock.length) {
-            const pageNum = + paginationBlock.find('.selected a').text();
-            const pagesCount = paginationBlock.children('.page').length;
+        if (paginationBlockDown.length) {
+            const pageNum = +paginationBlockDown.find('.selected a').text();
+            const pagesCount = paginationBlockDown.children('.page').length;
             const isLastPage = pageNum === pagesCount;
 
             data = {pageNum, pagesCount, isLastPage};
@@ -66,22 +67,35 @@ $(() => {
                 }
 
                 $(`<div id="loadProductsContainer">\
-	                    <div id="loadProductsBtn" data-num="${nextPageNum}" data-count="${pagesCount}">\
-	                        Показать еще\
-	                    </div>\
-	                    <div class="loader">\
-	                        <img src="loader.gif" width="300"/>\
-	                    </div>\
-	                </div>`).insertBefore(paginationBlock);
+				                    <div id="loadProductsBtn" data-num="${nextPageNum}" data-count="${pagesCount}">\
+				                        Показать еще\
+				                    </div>\
+				                    <div class="loader">\
+				                        <img src="loader.gif" width="300"/>\
+				                    </div>\
+				                </div>`).insertBefore(paginationBlockDown);
+            },
+            paginationSwitchToNext: (nextPageNum, count) => {
+                if (nextPageNum > count) {
+                    return
+                }
+
+                for (let paginationBlock of [paginationBlockUp, paginationBlockDown]) {
+                    paginationBlock
+                        .children('.page')
+                        .removeClass('selected')
+                        .eq(nextPageNum - 1)
+                        .addClass('selected');
+                }
             },
             initLoading: () => {
-                $('#loadProductsBtn').hide(1000, () => {
+                $('#loadProductsBtn').fadeOut(1000, () => {
                     $('.loader').show()
                 });
             },
             endLoading: () => {
                 $('#loadProductsContainer')
-                    .hide()
+                    .fadeOut(1000)
                     .detach();
             },
             loadHandler: e => {
@@ -90,7 +104,8 @@ $(() => {
                 const {num, count} = loadBtn.data();
                 const nextPageURN = reloadingGoods.getNextPageURN(num);
 
-                $.get({
+                $.ajax({
+                    type: 'GET',
                     url: nextPageURN,
                     dataType: 'html',
                     beforeSend: () => reloadingGoods.initLoading(),
@@ -100,7 +115,8 @@ $(() => {
                         delay(1500)
                             .then(() => reloadingGoods.endLoading())
                             .then(() => productContainer.append(elements))
-                            .then(() => reloadingGoods.createShowMoreBtn(num + 1, count));
+                            .then(() => reloadingGoods.createShowMoreBtn(num + 1, count))
+                            .then(() => reloadingGoods.paginationSwitchToNext(num, count));
                     }
                 });
             }
