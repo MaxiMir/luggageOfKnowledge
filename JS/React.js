@@ -2426,27 +2426,109 @@ import App from './App'
 import {BrowserRouter} from 'react-router-dom' // импортируем компонент для роутинга
 import registerServiceWorker from './registerServiceWorker'
 
-сonst application = (
+сonst app = (
     <BrowserRouter> // оборачиваем App в компонент роутинга
         <App />
     </BrowserRouter>
 )
 
-ReactDOM.render(application, document.getElementById('root'))
+ReactDOM.render(app, document.getElementById('root'))
 registerServiceWorker()
 
 
 
-// FIL
-// FILE: /src/App.js:
+// FILE /src/App.js:
 import React, {Component} from 'react'
-import './App.sccs'
-import {Route, NavLink} from 'react-router-dom' // импортируем компонент для регистрации роутов + компонент для навигации
-import About from './About/About'
-import Cars from './Cars/Cars'
+import Layout from './hoc/Layout/Layout'
+import {Route, Switch} from 'react-router-dom' // Switch - позволяет загружать 1 нужный роут
+import Quiz from './containers/Quiz/Quiz.js'
 
 class App extends Component {
     render() {
+        return (
+            <Layout>
+                <Switch>
+                    <Route path="/auth" component={Quiz} />
+                    <Route path="/quiz-creator" component={Quiz} />
+                    <Route path="/quiz/:id" component={Quiz} />
+                    <Route path="/" component={Quiz} />
+                </Switch>
+            </Layout>
+        )
+    }
+}
+
+export default App
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* #@ React Router: @# */
+// Ctrl+C
+// $ yarn add react-router-dom
+// $ yarn start
+
+
+// FILE: /src/index.js:
+import React from 'react'
+import ReactDOM from 'react-dom'
+import './index.css'
+import App from './App'
+import {BrowserRouter} from 'react-router-dom' // импортируем компонент для роутинга
+import registerServiceWorker from './registerServiceWorker'
+
+сonst app = (
+    <BrowserRouter> // оборачиваем App в компонент роутинга
+        <App />
+    </BrowserRouter>
+)
+
+ReactDOM.render(app, document.getElementById('root'))
+registerServiceWorker()
+
+// FILE: /src/App.js:
+import React, {Component} from 'react'
+import './App.sccs'
+import {Route, NavLink, Switch, Redirect} from 'react-router-dom' // импортируем компонент для регистрации роутов + компонент для навигации + компонент для переключения по роутам + компонент редирект
+import About from './About/About'
+import Cars from './Cars/Cars'
+import CarDetail from './CarDetail/CarDetail' // импортируем компонент
+
+class App extends Component {
+    render() {
+        state = {
+            isLoggedIn: false
+        }
+
         return (
             <div>
                 <nav>
@@ -2465,9 +2547,22 @@ class App extends Component {
 
                 <hr />
 
-                <Route path="/" exact render={() => <h1>Home Page</h1>} /> // регистрируем роут для домашней страницы; exact - рендерить при полном совпадении с путем
-                <Route path="/about" component={About} /> // регистрируем роут + указываем какой компонент рендерить
-                <Route path="/cars" component={Cars} /> 
+                <div style={{textAlign: 'center'}}>
+                    <h3>Is logged in {this.state.isLoggedIn ? 'TRUE' : 'FALSE'}</h3>    
+                    <button onClick={() => this.setState({isLoggedIn: true})}>Login</button>
+                </div>
+                
+                <hr />
+
+                <Switch> // показывает 1-й компонент, который попался в списке 
+                    <Route path="/" exact render={() => <h1>Home Page</h1>} /> // регистрируем роут для домашней страницы; exact - рендерить при полном совпадении с путем
+                    { !this.state.isLoggedIn ? null : <Route path="/about" exact component={About} />} // добавление роута по условию; регистрируем роут + указываем какой компонент рендерить 
+                    
+                    <Route path="/cars/:name" component={CarDetail} /> // динамический роут
+                    <Route path="/cars" component={Cars} /> 
+                    <Redirect to={'/'} /> // редирект на главную
+                    <Route render={() => <h1 style={{color: 'red', textAlign: 'center'}}>404 not found</h1>} /> // страница 404
+                </Switch>
             </div>
         )
     }
@@ -2477,5 +2572,93 @@ export default App
 
 
 // FILE: /src/App.scss:
+/*
+    .nav {
+        a.active, a.wfm-active {
+            font-weight: bold;
+        }
+    }
+*/
 
 
+// FILE: /src/Cars/Cars.js:
+import React, {Component} from 'react'
+import Car from './Car/Car.js'
+
+export default class Cars extends Component {
+    state = {
+        cars: [
+            {name: 'Ford', year: 2018},
+            {name: 'Audi', year: 2016},
+            {name: 'Mazda', year: 2010}
+        ]
+    }
+
+    goToHomePage = () => {
+        this.props.history.push('/') // #1
+        this.props.history.push({ // #2
+            pathname: '/'
+        })
+    }
+
+    render() {
+        return (
+            <div style={{
+                width: 400,
+                margin: 'auto',
+                paddingTop: 20
+            }}>
+                <button onClick={this.goToHomePage}>Go to homepage</button> // по клику переход на главную
+                {
+                    this.state.cars.map((car, index) => { // cоздание списка
+                        return (
+                            <Car
+                                key={index} // для каждого элемента списка необходимо определять уникальный key
+                                name={car.name}
+                                year={car.year}
+                                onChangeTitle={() => this.changeTitleHandler(car.name)}
+                            />
+                        )
+                    })
+                }
+            </div>
+        )
+    }
+}
+
+
+// FILE: /src/Cars/Car/Car.js:
+import React from 'react'
+import './Car.scss'
+import {withRouter} from 'react-router-dom' // импортируем компонент
+
+const Car = props => {
+    return (
+        <div 
+            className={'Car'}
+            onClick={() => props.history.push('/cars/' + props.name.toLowerCase())}
+        >
+            <h3>Car name: {props.name}</h3>
+            <p>Year: <strong>{props.year}</strong></p>
+        </div>
+    )
+}
+
+export default withRouter(Car) // оборачиваем функциональный компонент в withRouter
+
+
+
+// FOLDER: /src/ создаем FOLDER CarDetail а в нем FILE CarDetail.js:
+import React from 'react'
+
+export default class CarDetail extends React.Component {
+    render() {
+        return (
+            <div
+                style={{textAlign: 'center'}}
+            >
+                <h1>{this.props.match.params.name}</h1>  // должно совпадать с /cars/:/name 
+            </div>
+        )
+    }
+}
