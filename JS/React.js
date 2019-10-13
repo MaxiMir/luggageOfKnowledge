@@ -2462,6 +2462,50 @@ export default App
 
 
 
+// FOLDER /src/containers/ создаем FOLDER Auth а в нем Auth.js:
+// live templates -> Выбрать язык reactcmp + tab
+   
+import React, {Component} from 'react'
+
+export default class Auth extends Component {
+    render() {
+        return (
+            <div>
+                <h1>Auth</h1>        
+            </div>
+        )
+    }
+}
+
+
+// FOLDER /src/containers/ создаем FOLDER QuizCreator а в нем QuizCreator.js:
+
+import React, {Component} from 'react'
+
+export default class QuizCreator extends Component {
+    render() {
+        return (
+            <div>
+                <h1>QuizCreator</h1>        
+            </div>
+        )
+    }
+}
+
+
+// FOLDER /src/containers/ создаем FOLDER QuizList а в нем QuizList.js:
+
+import React, {Component} from 'react'
+
+export default class QuizList extends Component {
+    render() {
+        return (
+            <div>
+                <h1>Quiz List</h1>        
+            </div>
+        )
+    }
+}
 
 
 
