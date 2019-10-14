@@ -5543,14 +5543,14 @@ EOD;
 		  reverse(cons(1, cons(2, cons(3, null)))); // =>
 		  
 		  $iter(cons(1, cons(2, cons(3, null))), null));
-	 $iter(cons(2, cons(3, null)), cons(1, null));
-	 $iter(cons(3, null), cons(2, cons(1, null)));
-	 $iter(null, cons(3, cons(2, cons(1, null))));
-	 cons(3, cons(2, cons(1, null)));
+		  $iter(cons(2, cons(3, null)), cons(1, null));
+		  $iter(cons(3, null), cons(2, cons(1, null)));
+		  $iter(null, cons(3, cons(2, cons(1, null))));
+		  cons(3, cons(2, cons(1, null)));
 	 
 	 
 	 
-	 >>>>>  Map <<<<<<<
+	 #>>>>>  Map <<<<<<<#
 	 
 	 /*
 	 map — функция высшего порядка, используемая во многих языках программирования, которая применяет данную функцию к каждому элементу списка, возвращая список результатов. При рассмотрении в функциональной форме она часто называется «применить-ко-всем».
@@ -5582,7 +5582,8 @@ EOD;
 	 
 	 $func = function ($item) {
 		  return $item * 3;
-	 }
+	 };
+	 
 	 echo listToString($map($func, $list)); // => 3,6,9
 	 
 	 
@@ -5603,13 +5604,14 @@ EOD;
 		  $iter = function ($list, $acc) use (&$iter, $func) {
 				return is_null($list) ? reverse($acc) : $iter(cdr($list), cons($func(car($list)), $acc));
 		  };
+		  
 		  return $iter($list, null);
 	 }
 	 
 	 
 	 
 	 
-	 >>>>>  Фильтрация <<<<<<<
+	 #>>>>>  Фильтрация <<<<<<<#
 	 
 	 $removeOdds = function ($list) use (&$removeOdds) { // по четным числам
 		  if ($list == null) {
@@ -5649,7 +5651,7 @@ EOD;
 	 
 	 
 	 
-	 >>>>>  Свертка <<<<<<<
+	 #>>>>>  Свертка <<<<<<<#
 	 
 	 function sum($list)
 	 {
@@ -5680,15 +5682,18 @@ EOD;
 	 $list = makeList(1, 5, 9);
 	 $func = function ($item, $acc) {
 		  return $acc + $item;
-	 }
+	 };
+	 
 	 echo accumulate($list, $func, 0); // => 15
+		
 	 $func = function ($item, $acc) {
 		  return cons($item * 2, $acc);
-	 }
+	 };
+	 
 	 echo listToString(accumulate($list, $func, null)); // => (18, 10, 2)
 	 
 	 
-	 /**
+	 /**@@
 	  * Реализуйте функцию solution которая принимает на вход список чисел и выполняет следующие действия:
 	  * округляет все числа в списке до верхней границы.
 	  * удаляет нечетные числа.
@@ -5725,8 +5730,9 @@ EOD;
 		  }
 		  
 		  
-		  >>>>>
-		  Деревья <<<<<<<
+		  
+		  
+		  #>>>>> Деревья <<<<<<<#
 	 
 	 /*
 	 Дерево — одна из наиболее широко распространённых структур данных в информатике, эмулирующая древовидную структуру в виде набора связанных узлов. Является связным графом, не содержащим циклы. Большинство источников также добавляют условие на то, что рёбра графа не должны быть ориентированными. В дополнение к этим трём ограничениям, в некоторых источниках указывается, что рёбра графа не должны быть взвешенными. https://ru.wikipedia.org/wiki/Дерево_(структура_данных)
@@ -5736,7 +5742,7 @@ EOD;
 	 */
 	 
 	 l(2, 3, 4); // => cons(2, cons(3, cons(4, null)));
-		  l(2, 3, l(4, 5)) // => cons(2, cons(3, cons(cons(4, cons(5, null)), null)));
+	 l(2, 3, l(4, 5)) ;// => cons(2, cons(3, cons(cons(4, cons(5, null)), null)));
 		  
 	 
 	 function treeMap($list, $func, $acc)
@@ -5755,6 +5761,7 @@ EOD;
 				}
 				return $iter(cdr($list), $newAcc);
 		  };
+		  
 		  return $iter($list, $acc);
 	 }
 	 
@@ -5765,7 +5772,7 @@ EOD;
 	 }, 0); // => 7
 	 
 	 
-	 /**
+	 /**@@
 	  * Реализуйте функцию reverse, которая переворачивает переданный на вход список рекурсивно.
 	  **/
 	 
@@ -5804,9 +5811,7 @@ EOD;
 	 
 	 
 	 
-	 
-	 
-	 >>>>>  Стандартные интерфейсы <<<<<<<
+	 #>>>>>  Стандартные интерфейсы <<<<<<<#
 	 
 	 
 	 $list = l(1, 4, 5, 8, 9, 100);
@@ -5841,7 +5846,7 @@ EOD;
 	 // В других языках реализованы "ленивые коллекции", которые не производят вычислений до их использования.
 	 
 	 
-	 /**
+	 /**@@
 	  * Реализуйте функцию solution, которая принимает на вход список чисел и выполняет следующие действия:
 	  *
 	  * удаляет все числа, не кратные трем.
@@ -5876,7 +5881,8 @@ EOD;
 	 
 	 
 	 
-	 >>>>>  Оператор присваивания <<<<<<<
+	 
+	 #>>>>>  Оператор присваивания <<<<<<<#
 	 
 	 # Процедурный стиль :
 	 
@@ -5895,6 +5901,7 @@ EOD;
 	 {
 		  return function ($amount) use (&$balance) {
 				$balance += $amount;
+				
 				return $balance;
 		  };
 	 }
@@ -5906,15 +5913,15 @@ EOD;
 	 
 	 
 	 
-	 /*
+	 /**@@
 	 Напишите функцию newWithdraw, которая снимает деньги со счета. При попытке снять больше денег, чем есть на счете, она должна возвращать too much.
 	 Пример:
-	 
+	 */
 	 $withdraw = newWithdraw(100);
 	 $withdraw(1000); // 'too much'
 	 $withdraw(50); // 50
 	 $withdraw(45); // 5
-	 */
+	 
 	 
 	 function newWithdraw($balance) // my
 	 {
@@ -5938,28 +5945,29 @@ EOD;
 	 
 	 
 	 
-	 >>>>>  Объекты <<<<<<<
+	 
+	 #>>>>>  Объекты <<<<<<<#
 	 
 	 function newAccount($balance)
 	 {
 		  $withdraw = function ($amount) use (&$balance) {
 				$balance -= $amount;
+				
 				return $balance;
 		  };
 		  
 		  $deposit = function ($amount) use (&$balance) {
 				$balance += $amount;
+				
 				return $balance;
-		  }
+		  };
 	 
 		 return function ($funcName, $amount) use ($withdraw, $deposit) { // стиль "передача сообщений"
 			  switch ($funcName) {
 					case "withdraw":
 						 return $withdraw($amount);
-						 break;
 					case "deposit":
 						 return $deposit($amount);
-						 break;
 			  }
 		 };
 	 }
@@ -5969,56 +5977,58 @@ EOD;
 	 echo $a("deposit", 100); // 10
 		  
 		  
-		  /**
-			* Измените функцию newAccount из видео так, чтобы она создавала счета, защищенные паролем.
-			*
-			* Пример:
-			*
-			* $acc = newAccount(100, "secret password");
-			* 110 == $acc("deposit", 10, "secret password");
-			* 60 == $acc("withdraw", 50, "secret password");
-			* "wrong password!" == $acc("deposit", 10, "wrong password");
-			**/
-		  
-		  namespace App;
-		  
-		  function newAccount($balance, $password)
-		  {
-				$isPass = function ($pass) use ($password) {
-					 return $pass === $password ? true : false;
-				};
-				
-				$withdraw = function ($amount) use (&$balance) {
-					 $balance -= $amount;
-					 return $balance;
-				};
-				
-				$deposit = function ($amount) use (&$balance) {
-					 $balance += $amount;
-					 return $balance;
-				};
-				
-				return function ($funcName, $amount, $pass) use ($isPass, $withdraw, $deposit) {
-					 if (!$isPass($pass)) {
-						  return "wrong password!";
-					 }
-					 
-					 switch ($funcName) {
-						  case "withdraw":
-								return $withdraw($amount);
-								break;
-						  case "deposit":
-								return $deposit($amount);
-								break;
-					 }
-				};
-		  }
-		  
-		  
-		  >>>>>
-		  Преимущества присваивания <<<<<<<
-	  
+	 /**@@
+	  * Измените функцию newAccount из видео так, чтобы она создавала счета, защищенные паролем.
+	  *
+	  * Пример:
+	  *
+	  * $acc = newAccount(100, "secret password");
+	  * 110 == $acc("deposit", 10, "secret password");
+	  * 60 == $acc("withdraw", 50, "secret password");
+	  * "wrong password!" == $acc("deposit", 10, "wrong password");
+	  **/
 	 
+	 namespace App;
+	 
+	 function newAccount($balance, $password)
+	 {
+		  $isPass = function ($pass) use ($password) {
+				return $pass === $password ? true : false;
+		  };
+		  
+		  $withdraw = function ($amount) use (&$balance) {
+				$balance -= $amount;
+				
+				return $balance;
+		  };
+		  
+		  $deposit = function ($amount) use (&$balance) {
+				$balance += $amount;
+				
+				return $balance;
+		  };
+		  
+		  return function ($funcName, $amount, $pass) use ($isPass, $withdraw, $deposit) {
+				if (!$isPass($pass)) {
+					 return "wrong password!";
+				}
+				
+				switch ($funcName) {
+					 case "withdraw":
+						  return $withdraw($amount);
+						  break;
+					 case "deposit":
+						  return $deposit($amount);
+						  break;
+				}
+		  };
+	 }
+		  
+		
+		  
+		  
+	 #>>>>> Преимущества присваивания <<<<<<<#
+		
 	 function random($seed) // псевдослучайные  числа
 	 {
 		  return function () use (&$seed) { // число, являющееся базовым значением для вычисления следующего случайного числа
@@ -6038,7 +6048,7 @@ EOD;
 	 echo $a(); // => 30
 	 
 	 
-	 /**
+	 /**@@
 	  * Измените функцию random из видео так, чтобы можно было обнулять сгенерированную последовательность.
 	  * Пример:
 	  **/
@@ -6077,7 +6087,8 @@ EOD;
 	 
 	 
 	 
-	 >>>>>  Недостатки присваивания <<<<<<<
+	 
+	 #>>>>>  Недостатки присваивания <<<<<<<#
 	 
 	 function makeDecrementer($balance) // чистая функция
 	 {
@@ -6098,6 +6109,7 @@ EOD;
 	 {
 		  return function ($amount) use (&$balance) {
 				$balance -= $amount;
+				
 				return $balance;
 		  };
 	 }
@@ -6119,7 +6131,8 @@ EOD;
 					 return $product;
 				} else {
 					 $product *= $counter;
-					 $couner += 1;
+					 $counter += 1;
+					 
 					 return $iter();
 				}
 		  };
@@ -6154,40 +6167,40 @@ EOD;
 	 
 	 
 	 // FILE: /app/src/App/Solution.php:
-		  namespace App\Solution;
+	 namespace App\Solution;
+	 
+	 function fib($num)
+	 {
+		  $tmp;
+		  $fib1 = 0;
+		  $fib2 = 1;
+		  $i = 0;
 		  
-		  function fib($num)
-		  {
-				$tmp;
-				$fib1 = 0;
-				$fib2 = 1;
-				$i = 0;
-				
-				$iter = function () use ($num, &$iter, &$fib1, &$fib2, &$i) {
-					 if ($i < $num) {
-						  $tmp = $fib1;
-						  $fib1 = $fib2;
-						  $fib2 = $tmp + $fib2;
-						  ++$i;
-						  $iter();
-					 }
-				};
-				
-				$iter();
-				
-				return $fib1;
-		  }
+		  $iter = function () use ($num, &$iter, &$fib1, &$fib2, &$i) {
+				if ($i < $num) {
+					 $tmp = $fib1;
+					 $fib1 = $fib2;
+					 $fib2 = $tmp + $fib2;
+					 ++$i;
+					 $iter();
+				}
+		  };
+		  
+		  $iter();
+		  
+		  return $fib1;
+	 }
 		  
 		  
-		  /**@@@
-			* Реализуйте функцию fringe, которая берет в качестве аргумента дерево (представленное в виде списка) и возвращает список, элементы которого - все листья дерева, упорядоченные слева направо.
-			*
-			* Пример:
-			**/
+	 /**@@@
+	  * Реализуйте функцию fringe, которая берет в качестве аргумента дерево (представленное в виде списка) и возвращает список, элементы которого - все листья дерева, упорядоченные слева направо.
+	  *
+	  * Пример:
+	  **/
 		  
-		  l(4, 3, 2, 1) == fringe(l(l(4, 3), l(2, 1)));
+	 l(4, 3, 2, 1) == fringe(l(l(4, 3), l(2, 1)));
 		  
-		  l() => l()
+	 l() => l()
 	 l(1, 2) => l(1, 2)
 	 l(4, 3, 2, 1) => l(l(4, 3), l(2, 1))
 	 l(4, null, 5, 7, 9, 1, 1) => l(l(4, l(null, 5)), l(l(7, 9), 1), 1)
@@ -6195,7 +6208,7 @@ EOD;
 	 
 	 
 	 
-	 /**
+	 /**@@
 	  * Пусть f и g — две одноаргументные функции. По определению, композиция (composition) f и g есть функция x → f ( g (x) ).
 	  * Solution.php
 	  *
@@ -6227,12 +6240,12 @@ EOD;
 	 
 	 
 	 
-	 /**
+	 /**@@
 	  * Определите функцию sameParity, которая принимает список построенный на парах и возвращает отфильтрованный список у которого четность каждого элемента совпадает с четностью первого элемента этого списка.
 	  * Пример:
 	  **/
 	 
-	 l(1, 3) == l(1, 10, 3, 2)
+	 l(1, 3) == l(1, 10, 3, 2);
 	 
 	 
 	 // Подсказки: Функция l это сокращенная запись для вложенных cons. Подробнее https://github.com/hexlet-components/php-pairs
@@ -6246,7 +6259,7 @@ EOD;
 	 
 	 
 	 
-	 /**
+	 /**@@--
 	  * Реализуйте функцию deepReverse, которая принимает список в качестве аргумента и возвращает в качестве значения список, где порядок элементов обратный и подсписки также обращены.
 	  *
 	  * Пример:
@@ -6263,7 +6276,7 @@ EOD;
 	 */
 	 
 	 
-	 /**
+	 /**@@--
 	  * Реализуйте функцию fib находящую положительные числа Фибоначчи. Аргументом функции является порядковый номер числа.
 	  *
 	  * Формула:
@@ -6288,7 +6301,7 @@ EOD;
 	  */
 	 
 	 
-	 /**
+	 /**@@--
 	  * Идея сглаживания (smoothing a function) играет важную роль в обработке сигналов. Если f — функция, а dx — некоторое малое число, то сглаженная версия f есть функция, значение которой в точке x есть среднее между f(x − dx), f(x) и f(x + dx).
 	  * Solution.php
 	  *
@@ -6301,40 +6314,39 @@ EOD;
 		  return sin(rad2deg($sum));
 	 }, 15);
 	 
-	 $smoothFunc(10) // ~ 0.438
+	 $smoothFunc(10); // ~ 0.438
 	 
 	 
 	 /*
-	 public function testSmooth($expected, $x, $dx, $func)
-	 {
-		 $smoothFunc = Solution\smooth($func, $dx);
-		 $this->assertEquals($expected, $smoothFunc($x), '', 0.01);
-	 }
-	 
-	 public function additionProvider()
-	 {
-	  return [
-				 [0.438, 10, 15, function ($num) {
-						return sin(rad2deg($num));
-				 }],
-				 [5, 0, 5, function ($num) {
-						return $num + 5;
-				 }],
-				 [4, 2, 0.00001, function ($num) {
-						return $num ** 2;
-				 }],
-				 [9, 3, 0.00001, function ($num) {
-						return $num ** 2;
-				 }]
-		 ];
-	 }
-	 }
+		  public function testSmooth($expected, $x, $dx, $func)
+		  {
+			  $smoothFunc = Solution\smooth($func, $dx);
+			  $this->assertEquals($expected, $smoothFunc($x), '', 0.01);
+		  }
+		  
+		  public function additionProvider()
+		  {
+			return [
+					  [0.438, 10, 15, function ($num) {
+							 return sin(rad2deg($num));
+					  }],
+					  [5, 0, 5, function ($num) {
+							 return $num + 5;
+					  }],
+					  [4, 2, 0.00001, function ($num) {
+							 return $num ** 2;
+					  }],
+					  [9, 3, 0.00001, function ($num) {
+							 return $num ** 2;
+					  }]
+			  ];
+		  }
 	 */
 	 
 	 
 	 ####################  Веб-разработка на PHP ######################
 		  
-		  /*
+	 /*
 	 Переход от написания скриптов (то что мы делали ранее) к созданию полноценных сайтов, сопровождается необходимостью знакомиться с большим числом понятий и инструментов выходящих далеко за рамки языка. Взаимодействие с внешним миром вовлекает в себя знание операционных систем, в частности сетей, работу с регистраторами, хостингом, деплоем сайта. На собеседованиях веб-программистов часто задают вопрос "Что происходит после того как в адресной строке браузера набирается сайт www.google.com и нажимается enter?". Очень подробный ответ на этот вопрос доступен здесь (https://github.com/alex/what-happens-when).
 	 Спрашивающий, в этот момент, хочет услышать от вас ключевые понятия связанные с веб-разработкой.
 	 
@@ -6359,9 +6371,11 @@ EOD;
 	 Как работает DNS https://habr.com/post/137587/
 	 Что такое веб-сервер? https://developer.mozilla.org/ru/docs/Learn/Что_такое_веб_сервер
 	 */
+		
+	 
+	 
 		  
-		  
-		  >>>>> Архитектура Веба <<<<<<
+	#>>>>> Архитектура Веба <<<<<<#
 	 
 	 /*
 	 Современные сайты разрабатываются на множестве языков используя совершенно разные технологии, но принципы их устройства одинаковые. То почему сайты внутри устроены похожим образом, определяется архитектурой веба. В его основе лежит протокол HTTP, с которым вы уже знакомы по одноименному курсу.
@@ -6376,18 +6390,19 @@ EOD;
 	 4. Браузер отрисовывает страницу сайта
 	 5. Пользователь кликает по ссылке на сайте и весь процесс повторяется снова.
 	 
-	 Каждый такой цикл включает в себя HTTP сессию: HTTP запрос и HTTP ответ. Проще всего увидеть HTTP сессию используя утилиту curl:
+	 Каждый такой цикл включает в себя HTTP сессию: HTTP запрос и HTTP ответ.
+	 Проще всего увидеть HTTP сессию используя утилиту curl:
 	 */
 	 
-	 $ curl - v--head http://code-basics.ru
+	 $ curl -v --head http://code-basics.ru
 	 * Rebuilt URL to: http://code-basics.ru/
 	 *   Trying 100.102.175.148...
 	 * TCP_NODELAY set
-		  * Connected to code - basics . ru(100.102.175.148) port 80 (#0)
-	 > HEAD / HTTP / 1.1
-	 > Host: code - basics . ru
-		  > User - Agent: curl / 7.54.0
-		  > Accept: */*
+	 * Connected to code-basics.ru(100.102.175.148) port 80 (#0)
+	 > HEAD / HTTP /1.1
+	 > Host: code-basics.ru
+	 > User-Agent: curl/7.54.0
+	 > Accept: */*
 	 >
 	 < HTTP/1.1 200 OK
 	 < Date: Wed, 04 Jul 2018 08:38:22 GMT
@@ -6399,12 +6414,12 @@ EOD;
 	 <
 	 * Connection #0 to host code-basics.ru left intact
 	 
+	 
 	 /*
 	 Как видно, принцип взаимодействия не зависит от того на чем написан сайт. С точки зрения сайта, всегда есть запрос который нужно обработать и вернуть ответ в виде, например, HTML. То каким будет HTML для конкретного запроса, определяется самим запросом, то есть запрошенной страницей и различными параметрами HTTP, такими как заголовки. В конечном итоге код сайта представляет из себя набор обработчиков разных страниц, которые принимают входящие запросы, формируют ответ и возвращают его. Ниже вы увидите примеры на разных языках. Даже не зная синтаксиса достаточно легко уловить общую структуру всех примеров кода: функция обработчик привязанная к конкретной странице.
 	 */
 	 
 	 // PHP
-	 
 	 $app = new Slim\App();
 	 
 	 $app->get('/', function ($request, $response) {
@@ -6421,46 +6436,41 @@ EOD;
 	 
 	 
 	 // Ruby
-	 
 	 require 'sinatra'
 	 get '/frank-says' do
 				'Put this in your pipe & smoke it!'
 	 end
 	 
 	 // Python
-	 
 	 from flask import Flask
 	 app = Flask(__name__)
 	 
-	 @app . route("/")
+	 @app.route("/")
 	 def hello():
 		return "Hello World!"
 	 
 	 // Java
+	 import static spark.Spark.*;
 	 
-	 import static spark . Spark .*;
-	 
-	 public class HelloWorld
-		  {
-				public static void main(String[] args) {
-	 get("/hello", (req, res) -> "Hello World");
-	 }
+	 public class HelloWorld {
+		  public static void main(String[] args) {
+			  get("/hello", (req, res) -> "Hello World");
+		  }
 	 }
 	 
 	 // JavaScript
-	 
 	 import Express from 'expressjs';
 	 const app = new Express();
 	 
-	 app . get('/', (req, res) => {
-				res . send('Hello World!');
-		  });
+	 app.get('/', (req, res) => {
+		  res.send('Hello World!');
+	 });
 	 
 	 /*
 	 Конечно реальные сайты устроены значительно сложнее, но в основе лежит та связка запрос-ответ, которая была описана в этом уроке.
 	 */
 	 
-	 /**@@@
+	 /**@@
 	  * src\Url.php
 	  * Реализуйте абстракцию для работы с урлами. Она должна извлекать и менять части адреса. Интерфейс:
 	  *
@@ -6518,6 +6528,7 @@ EOD;
 	 function setScheme($data, $scheme)
 	 {
 		  $data['scheme'] = $scheme;
+		  
 		  return $data;
 	 }
 	 
@@ -6574,7 +6585,9 @@ EOD;
 	 }
 	 
 	 
-	 >>>>> Веб - сервер <<<<<
+	 
+	 
+	 #>>>>> Веб - сервер <<<<<#
 	 /*
 	 
 	 # Процессы
@@ -6613,7 +6626,7 @@ EOD;
 	 
 	 
 	 
-	 >>>>> Встроенный в PHP веб - сервер <<<<<
+	 #>>>>> Встроенный в PHP веб - сервер <<<<<#
 	 
 	 /*
 	 PHP единственный язык программирования, в котором работа в CGI режиме встроена прямо в сам язык. А благодаря наличию встроенного веб-сервера, можно сразу видеть результат своей работы.
@@ -6628,14 +6641,15 @@ EOD;
 	 
 	 // Затем запустите веб сервер, например, на порту 8000.
 	 
-	 $  php - S localhost:8000
+	 $  php -S localhost:8000
 	 PHP 7.2.7 Development Server started at Wed Jul  4 15:28:08 2018
 	 Listening on http://localhost:8000
 	 Document root is /private/tmp
-	 Press Ctrl - C to quit .
+	 Press Ctrl-C to quit.
 	 
 	 /*
-	 После того как сервер будет запущен, он полностью забирает управление. Вкладка терминала больше не доступна для ввода команд. В отличии от обычных скриптов, которые выполняют свою задачу и заканчиваются, веб-сервера должны слушать порт непрерывно и сразу реагировать на входящие соединения. Поэтому однажды запустив сервер, он продолжит работать до тех пор пока его не остановят. Остановить сервер можно набрав Ctrl-C.
+	 После того как сервер будет запущен, он полностью забирает управление. Вкладка терминала больше не доступна для ввода команд. В отличии от обычных скриптов, которые выполняют свою задачу и заканчиваются, веб-сервера должны слушать порт непрерывно и сразу реагировать на входящие соединения.
+	 Поэтому однажды запустив сервер, он продолжит работать до тех пор пока его не остановят. Остановить сервер можно набрав Ctrl-C.
 	 
 	 Такой способ запуска удобен в разработке, но в реальном окружении сервера запускают в виде Демонов.
 	 Демон - процесс операционной системы работающий в фоне.
@@ -6655,26 +6669,26 @@ EOD;
 	 
 	 Теперь снова откройте файл index.php и добавьте ниже вывод echo 'Hello, world!';. Если теперь сделать f5 в браузере, то вы увидите что изменения применились автоматически. Так происходит потому что веб-сервер запускает файл на выполнение каждый раз заново.
 	 
-	 Дополнительные материалы
+	 # Дополнительные материалы
 	 Встроенный в PHP веб-сервер http://php.net/manual/ru/features.commandline.webserver.php
 	 Демон https://ru.wikipedia.org/Демон_(программа)
 	 */
 	 
 	 
 	 
-	 >>>>> PHP CGI <<<<<
+	 #>>>>> PHP CGI <<<<<#
 	 /*
 	 В предыдущем уроке мы создали сайт буквально из одного PHP файла, печатающего в STDOUT текущий год. Все необходимые HTTP заголовки ответа PHP отправил автоматически.
 	 */
 	 
-	 $ curl - v localhost:8000
-		  * Trying::1. ..
+	 $ curl -v localhost:8000
+		  * Trying::1...
 	 * TCP_NODELAY set
 		  * Connected to localhost(::1) port 8000 (#0)
-	 > GET / HTTP / 1.1
+	 > GET / HTTP/1.1
 	 > Host: localhost:8000
-		  > User - Agent: curl / 7.54.0
-		  > Accept: */*
+	 > User-Agent: curl/7.54.0
+	 > Accept: */*
 	 >
 	 < HTTP/1.1 200 OK
 	 < Host: localhost:8000
@@ -6686,9 +6700,9 @@ EOD;
 	 * Closing connection 0
 	 
 	 
-	 /*
-	 PHP об этом говорит прямо: X-Powered-By: PHP/7.2.7. Заголовки можно менять и добавлять используя функцию header.
-	 */
+	 
+	 // PHP об этом говорит прямо: X-Powered-By: PHP/7.2.7. Заголовки можно менять и добавлять используя функцию header.
+	 
 	 
 	 // file: index.php
 	 
@@ -6704,18 +6718,17 @@ EOD;
 	 Connection: close
 	 X - Powered - By: PHP / 7.2.7
 	 X - My - Header: hi!
-		  Content - type: text / html; charset = UTF - 8
+	 Content - type: text / html; charset = UTF - 8
 			  
-			  /*
-		 Как видно, заголовок появился в ответе. Помните, что функцию header можно вызывать только если клиенту еще не передавались данные. То есть она должна идти первой в выводе, перед ее вызовом не должно быть никаких HTML-тегов, пустых строк и т.п.
-		 */
-			  
-			  < p>hi </p >
-		  
-		  /* Этот пример приведет к ошибке. Обратите внимание
-	  * на тег вверху, который будет выведен до вызова header()
-	  */
-		  header('Location: http://www.example.com/');
+	 /*
+	 Как видно, заголовок появился в ответе. Помните, что функцию header можно вызывать только если клиенту еще не передавались данные. То есть она должна идти первой в выводе, перед ее вызовом не должно быть никаких HTML-тегов, пустых строк и т.п.
+		
+	<p>hi</p>
+	
+	Этот пример приведет к ошибке. Обратите внимание на тег вверху, который будет выведен до вызова header()
+	*/
+	
+	 header('Location: http://www.example.com/');
 	 
 	 /*
 	 Все что мы обсудили выше, касается HTTP ответа, но не менее важно уметь работать с данными HTTP запроса: посмотреть текущие заголовки, адрес, параметры запроса и его тело. Для этого в PHP реализованы суперглобальные переменные (массивы). Суперглобальность означает то, что они доступны из абсолютно любого места программы. К ним относятся:
@@ -6731,7 +6744,7 @@ EOD;
 	 $_ENV
 	 
 	 И хотя чисто технически это обычные массивы которые можно изменять, большинство из них, все же, предназначены только для чтения. Например массив $_SERVER содержит в себе все заголовки запроса:
-	 */
+	 
 	 
 	 Array
 	 (
@@ -6739,54 +6752,29 @@ EOD;
 		  [REMOTE_ADDR] => ::1
 		  [REMOTE_PORT] => 58667
 		  [SERVER_SOFTWARE] => PHP 7.2.7 Development Server
-		  [SERVER_PROTOCOL] => HTTP / 1.1
+		  [SERVER_PROTOCOL] => HTTP/1.1
 		  [SERVER_NAME] => localhost
 		  [SERVER_PORT] => 8000
 		  [REQUEST_URI] => /
 		  [REQUEST_METHOD] => GET
-		  [SCRIPT_NAME] => /index . php
-		  [SCRIPT_FILENAME] => /private/tmp / index . php
-		  [PHP_SELF] => /index . php
+		  [SCRIPT_NAME] => /index.php
+		  [SCRIPT_FILENAME] => /private/tmp/index.php
+		  [PHP_SELF] => /index.php
 		  [HTTP_HOST] => localhost:8000
-		  [HTTP_USER_AGENT] => curl / 7.54.0
-		  [HTTP_ACCEPT] => */*
+		  [HTTP_USER_AGENT] => curl/7.54.0
+		  [HTTP_ACCEPT] => * /*
 		  [REQUEST_TIME_FLOAT] => 1530772973.7628
 		  [REQUEST_TIME] => 1530772973
 	 )
 	 
-	 /*
+	 
 	 Обратите внимание на формат ключей. PHP автоматически переводит все имена заголовков в верхний регистр. Кроме заголовков этот массив содержит некоторые дополнительные параметры, например имя запущенного скрипта и версию PHP. Практически главный ключ в этом массиве REQUEST_URI. Он содержит адрес запрошенной страницы и на основе него выбирается подходящее действие.
 	 
 	 $_POST содержит данные отправленные методом POST. А вот $_GET вопреки своему названию, содержит Query Params, которые, если вы помните, можно отправить с любым глаголом. Кстати не все PHP программисты это знают и думают что существует понятие "гет параметры". Массив $_REQUEST содержит объединенные данные массивов $_POST и $_GET.
 	 
 	 С одной стороны, поддержка CGI внутри самого языка позволяет начать делать сайт буквально на коленке без особых знаний программирования и HTTP, что многие и делают. С другой, PHP толкает к созданию абсолютно не поддерживаемого кода, который не может никто прочитать кроме автора. Посмотрите сами:
-	 */
 	 
-	 <!DOCTYPE html >
-	 <html >
-	 <head >
-		<title > Upload your files </title >
-	 </head >
-	 <body >
-		<form enctype = "multipart/form-data" action = "upload.php" method = "POST" >
-		  <p > Upload your file </p >
-		  <input type = "file" name = "uploaded_file" ></input ><br />
-		  <input type = "submit" value = "Upload" ></input >
-		</form >
-	 </body >
-	 </html >
 	 
-	 //<?php
-		if (!empty($_FILES['uploaded_file'])) {
-			 $path = "uploads/";
-			 $path = $path . basename($_FILES['uploaded_file']['name']);
-			 if (move_uploaded_file($_FILES['uploaded_file']['tmp_name'], $path)) {
-				  echo "The file " . basename($_FILES['uploaded_file']['name']) . " has been uploaded";
-			 } else {
-				  echo "There was an error uploading the file, please try again!";
-			 }
-		}
-	 //?>
 	 <!DOCTYPE html>
 	 <html>
 	 <head>
@@ -6795,14 +6783,16 @@ EOD;
 	 <body>
 		<form enctype="multipart/form-data" action="upload.php" method="POST">
 		  <p>Upload your file</p>
-		  <input type="file" name="uploaded_file"></input><br />
+		  <input type="file" name="uploaded_file"></input ><br />
 		  <input type="submit" value="Upload"></input>
-		</form>
-	 </body>
-	 </html>
+		</form >
+	 </body >
+	 </html >
 	 
-	 //<?php
-		if (!empty($_FILES['uploaded_file'])) {
+	 <?php
+*/
+
+	 if (!empty($_FILES['uploaded_file'])) {
 			 $path = "uploads/";
 			 $path = $path . basename($_FILES['uploaded_file']['name']);
 			 if (move_uploaded_file($_FILES['uploaded_file']['tmp_name'], $path)) {
@@ -6810,8 +6800,8 @@ EOD;
 			 } else {
 				  echo "There was an error uploading the file, please try again!";
 			 }
-		}
-	 //?>
+	 }
+
 	 
 	 /*
 	 Такой способ программирования возможен только в PHP. Весь сайт начинает представлять из себя мешанину HTML и кода. Если количество разных страниц сайта достигнет хотя бы десятка (а их обычно сотни и больше), то поддержка уже станет невероятно сложной.
@@ -6820,7 +6810,7 @@ EOD;
 	 */
 	 
 	 
-	 /**
+	 /**@@
 	 Реализуйте микросайт, со следующими страницами:
 	 
 	 /. Содержимое:
@@ -6860,7 +6850,7 @@ EOD;
 	 
 	 
 	 
-	 >>>>> Микрофреймворк Slim <<<<<
+	 #>>>>> Микрофреймворк Slim <<<<<#
 	 
 	 /*
 	 Цикл запрос-обработка-ответ включает множество элементов, которые идентичны для всех сайтов. Поэтому возникли, так называемые, фреймворки, специализированные библиотеки, которые определяют структуру программы. В этом их отличие от обычных библиотек. Благодаря фреймворкам можно сосредоточиться на логике сайта, а не на продумывании базовой архитектуры или кодированию вспомогательных инструментов.
@@ -6896,11 +6886,11 @@ EOD;
 	 $app->get('/', function ($request, $response) {
 		  return $response->write('Welcome to Slim!');
 	 });
+	 
 	 $app->run();
 	 
-	 /*
-	 Создайте файл Makefile в корне проекта и добавьте туда задачу start:
-	 */
+	 
+	 // Создайте файл Makefile в корне проекта и добавьте туда задачу start:
 	 start:
 		  php -S localhost:8000 -t public public/index.php
 	 
@@ -6984,7 +6974,7 @@ EOD;
 	 Во фреймворках не подразумевается прямая работа с PHP в режиме CGI. Данные запроса берутся из объекта $request, ответ вместе с заголовками записывается в объект в $response. Конкретно для отправки тела вызывается функция write. Ее можно использовать множество раз в рамках одного обработчика.
 	 
 	 
-	 /**
+	 /**@@
 	 Пейджинг — механизм, позволяющий итерироваться по большим коллекциям небольшими порциями. Очень часто встречается в Интернете, например, в результатах запросов поисковых систем. Пейджинг с точки зрения пользователя выглядит как параметры запроса: page определяет текущую страницу, а per — количество элементов на страницу. Имена могут быть и другими, но обычно их называют так как показано выше. Запрос c page, равным 1, аналогичен запросу без указания page вообще.
 	 
 	 Реализуйте маршрут /companies, по которому отдаётся список компаний в виде json. Компании отдаются не все сразу, а только соответствующие текущей запрошенной странице. По умолчанию выдаётся 5 результатов на запрос.
@@ -7043,6 +7033,7 @@ EOD;
 		  $offset = ($page - 1) * $per;
 	 
 		  $sliceOfCompanies = array_slice($companies, $offset, $per);
+		  
 		  return $response->write(json_encode($sliceOfCompanies));
 	 });
 	 
@@ -7050,10 +7041,12 @@ EOD;
 	 
 	 
 	 
-	 >>>>> HTTP Сессия <<<<<
+	 
+	 #>>>>> HTTP Сессия <<<<<#
 	 
 	 /*
-	 Каждая HTTP сессия определяется двумя вещами - запросом и ответом. Запрос формируется клиентом, ответ кодом обработчика соответствующего маршрута. И запрос и ответ, в Slim представлены двумя объектами, которые передаются в каждый обработчик.
+	 Каждая HTTP сессия определяется двумя вещами - запросом и ответом.
+	 Запрос формируется клиентом, ответ кодом обработчика соответствующего маршрута. И запрос и ответ, в Slim представлены двумя объектами, которые передаются в каждый обработчик.
 	 */
 	 
 	 $app->get('/', function ($request, $response) {
@@ -7099,7 +7092,7 @@ EOD;
 	 
 	 
 	 
-	 >>>>> Динамические маршруты <<<<<
+	 #>>>>> Динамические маршруты <<<<<#
 	 
 	 /*
 	 До сих пор мы встречались только со статическими маршрутами. В статическом маршруте нет изменяемых частей: адрес точно совпадает с маршрутом и не меняется (поэтому называется "статический"). На практике чаще встречаются динамические маршруты. Проанализируем адреса курсов на Хекслете.
@@ -7131,6 +7124,7 @@ EOD;
 	 $app->get('/courses/{courseId}/lessons/{id}', function ($request, $response, array $args) {
 		 $courseId = $args['courseId'];
 		 $id = $args['id'];
+		 
 		 return $response->write("Course id: {$courseId}")
 		 ->write("Lesson id: {$id}");
 	 });
@@ -7142,7 +7136,7 @@ EOD;
 	 */
 	 
 	 
-	 /**
+	 /**@@
 	 Реализуйте Маршрут /companies/{id}, по которому отдается json представление компании. Компания извлекается из списка $companies. Каждая компания представлена массивом у которого есть текстовый (то есть тип данных - строка) ключ id.
 	 **/
 	 
@@ -7166,8 +7160,10 @@ EOD;
 		  $id = $args['id'];
 		  $companiesColl = collect($companies);
 		  $company = $companiesColl->firstWhere('id', '==', $id);
+		  
 		  return $response->write(json_encode($company));
 	 });
+	 
 	 $app->run();
 	 
 	 
@@ -7181,6 +7177,7 @@ EOD;
 	 $app->get('/courses/{name}', function ($request, $response, array $args) {
 		  $slug = $args['name'];
 		  $course = $courses[$slug];
+		  
 		  return $response->write("<h1>{$course->name}</h1>")
 			 ->write("<div>{$course->body}</div>");
 	 });
@@ -7209,8 +7206,10 @@ EOD;
 	 
 	 Далее добавьте еще один обработчик:
 	 */
+	 
 	 $app->get('/users/{id}', function ($request, $response, $args) {
 		 $params = ['id' => $args['id']];
+		 
 		 return $this->renderer->render($response, 'users/show.phtml', $params);
 	 });
 	 
@@ -7236,12 +7235,10 @@ EOD;
 	 
 	 <h1><?= $_GET['name'] ?></h1>
 	 
-	 
 	 Но делать так ни в коем случае нельзя. Такой код значительно сложнее в отладке и потенциально очень опасен (подробнее об этом дальше по курсу).
 	 
 	 # Собирая все вместе
 	 Теперь, когда мы добавили поддержку шаблонов во фреймворк, появляется способ создавать нетривиальные сайты. Ниже пример обработчика и шаблона для вывода курсов:
-	 
 	 
 	 # Обработчик
 	 */
@@ -7249,6 +7246,7 @@ EOD;
 		  $params = [
 				'courses' => $courses
 		  ];
+		  
 		  return $this->renderer->render($response, 'courses/index.phtml', $params);
 	 });
 	 
@@ -7257,17 +7255,10 @@ EOD;
 	 
 	 <table>
 		<?php foreach ($courses as $course): ?>
-				
-				
 				<?= $course['id'] ?>
-				
-				
 				<?= $course['name'] ?>
-		  
-		  
-		  <?php endforeach ?>
+	 	<?php endforeach ?>
 	 </table>
-	 <!-- END -->
 	 */
 	 
 	 
@@ -7323,28 +7314,21 @@ EOD;
 	 
 	 // file: app/templates/users/show.phtml :
 	 <?php foreach ($user as $key => $value): ?>
-				
-				<?= $key ?>  <?= $value ?>
-		  
-		  <?php endforeach ?>
+		  <?= $key ?>  <?= $value ?>
+	 <?php endforeach ?>
 	 
 	 
-	 // file: app/templates/users/index.phtml:
+	 <? // file: app/templates/users/index.phtml: ?>
 	 <a href="/users">Пользователи</a>
 	 
 	 <table>
 		<?php foreach ($users as $user): ?>
-				
-				
 				<?= $user['id'] ?>
-				
-				
-				<?= $user['id'] ?>  <?= $user['firstName'] ?>
-		  
-		  
+				<?= $user['firstName'] ?>
 		  <?php endforeach ?>
 	 </table>
 	 
+	 <?
 	 ## TESTS:
 	 namespace App\Tests;
 	 
@@ -7458,7 +7442,7 @@ EOD;
 	 
 	 
 	 
-	 >>>>> Поисковые формы <<<<<<<
+	 #>>>>> Поисковые формы <<<<<<<#
 	 
 	 /*
 	 HTML Формы - основной инструмент для создания интерактивных сайтов. Через них происходит регистрация пользователя, добавление в друзья, оплата покупок, фильтрация товара в магазине и тому подобное. Самые простые формы - поисковые. Они ничего не изменяют и не создают, а используются только для фильтрации данных. Такой поиск реализован на Хекслете на странице курсов https://ru.hexlet.io/courses. Аналогичная строка поиска используется и в поисковых системах.
@@ -7494,6 +7478,7 @@ EOD;
 		  $term = $request->getQueryParam('term', ''); // второй параметр - значение по-умолчанию
 		  $courses = /* filter courses by term */;
 		  $params = ['courses' => $courses];
+		  
 		  return $this->renderer->render($response, "./courses/index.phtml", $params);
 	 });
 	 
@@ -7510,9 +7495,10 @@ EOD;
 	 Для подобного поля ввода нужно указать аттрибут value и подставить туда текущее значение не забыв его преобразовать в безопасную форму.
 	 
 	 
-	 /*@@
+	 /**@@--
 	 public/index.php
-	 Реализуйте обработчик /users, который формирует список пользователей. Обработчик поддерживает фильтрацию через параметр term, в котором передается начало firstName. Список пользователей доступен в переменной $users.
+	 Реализуйте обработчик /users, который формирует список пользователей.
+	 Обработчик поддерживает фильтрацию через параметр term, в котором передается начало firstName. Список пользователей доступен в переменной $users.
 	 
 	 templates/users/index.phtml
 	 Реализуйте вывод списка пользователей и формы для фильтрации
@@ -7536,6 +7522,7 @@ EOD;
 	 $app = new \Slim\App($configuration);
 	 
 	 $container = $app->getContainer();
+	 
 	 $container['renderer'] = new \Slim\Views\PhpRenderer(__DIR__ . '/../templates');
 	 
 	 $app->get('/', function ($request, $response) {
@@ -7544,13 +7531,16 @@ EOD;
 	 
 	 $app->get('/users', function ($request, $response) use ($users) {
 		  $term = $request->getQueryParam('term', '');
+		  
 		  $result = collect($users)->filter(function ($user) use ($term) {
 				return s($user['firstName'])->startsWith($term, false);
 		  });
+		  
 		  $params = [
 				'users' => $result,
 				'term' => $term
 		  ];
+		  
 		  return $this->renderer->render($response, 'users/index.phtml', $params);
 	 });
 	 
@@ -7558,21 +7548,21 @@ EOD;
 	 
 	 
 	 // file: app/templates/users/index.phtml
+	 /*
 	 <a href="/users">Все Пользователи</a>
 	 
 	 <form action="/users">
 		<input type="search" name="term" value="<?= htmlspecialchars($term) ?>">
 		<input type="submit" value="Search">
 	 </form>
-	 
+	 */ ?>
+		
 	 <?php foreach ($users as $user): ?>
-				
-				<?= htmlspecialchars($user['firstName']) ?>
-		  
-		  <?php endforeach ?>
+			<?= htmlspecialchars($user['firstName']) ?>
+	 <?php endforeach ?>
 	 
 	 
-	 
+	 <?
 	 namespace App;
 	 
 	 require '/composer/vendor/autoload.php';
@@ -7604,7 +7594,7 @@ EOD;
 	 
 	 
 	 
-	 >>>>>  Персистентность <<<<<<<
+	 #>>>>>  Персистентность <<<<<<<#
 	 
 	 /*
 	 Среди сайтов выделяют такую категорию сайтов как "статические". Их особенность в том что такие сайты, по сути, представляют собой готовый набор HTML страничек. Например так сделаны наши гайды http://guides.hexlet.io/. Удобно, быстро, дешево. Статическим сайтам не нужна возможность куда-то сохранять информацию, его данные хранятся прямо в HTML.
@@ -7620,7 +7610,6 @@ EOD;
 	 */
 	 
 	 // Doctrine ORM
-	 
 	 $user = new User();
 	 $user->setName($newUsername);
 	 
@@ -7643,7 +7632,7 @@ EOD;
 	 
 	 
 	 
-	 >>>>>  Модифицирующие формы <<<<<<<
+	 #>>>>>  Модифицирующие формы <<<<<<<#
 	 
 	 /*
 	 Формы изменяющие данные, устроены сложнее как с клиентской стороны, так и с серверной. Для уверенной работы с ними необходимо разбираться в следующих вопросах:
@@ -7686,7 +7675,7 @@ EOD;
 				Подтверждение пароля
 		  <input type="password" required name="user[passwordConfirmation]">
 		  </label>
-		</div>
+		</div>e
 		<div>
 		  <label>
 			 Город
@@ -7706,7 +7695,7 @@ EOD;
 	 Еще один интересный момент в форме выше, то как задаются имена. Каждое имя определяется как ключ в массиве user. Такой способ определения имен не является обязательным, но он очень удобен для массовой обработки значений формы. Их изоляция в одном массиве позволяет избежать потенциальных пересечений с другими данными. В поисковых форма эта схема тоже удобна если количество элементов больше одного.
 	 
 	 Здесь стоит сказать, что с точки зрения HTTP не существует способа передавать массивы. Если не указано иного, то данные формы кодируются в теле запроса как application/x-www-form-urlencoded. Чисто технически это выглядит как query string, пары ключ-значения объединенные символом &.
-	 */
+	 
 	 
 	 POST /users HTTP/1.1
 	 Host: example.com
@@ -7715,27 +7704,29 @@ EOD;
 	 
 	 key=value&key2=value2&user%5Bname%5D%3Djon
 	 
-	 /*
+	
 	 В конце тела закодирован ключ user[name]. Превращение таких ключей в массив идет на уровне интерпретатора, в случае PHP, либо самого фреймворка в случае остальных языков.
 	 */
 	 
 	 # Обработка данных
-	 
-	 */
+	
 	 $repo = new Repository();
 	 
 	 $app->post('/users', function ($request, $response) use ($repo) {
 		 $validator = new Validator();
 		 $user = $request->getParsedBodyParam('user');
 		 $errors = $validator->validate($user);
+		 
 		 if (count($errors) === 0) {
 			$repo->save($user);
 			return $response->withRedirect('/');
 		 }
+		 
 		 $params = [
 			'user' => $user,
 			'errors' => $errors
 		 ];
+		 
 		 return $this->renderer->render($response, "users/new.phtml", $params);
 	 });
 	 
@@ -7752,17 +7743,18 @@ EOD;
 	 
 	 $errors = validate($user);
 	 
-	 // function validate($user)
-	 // {
-	 //     $errors = [];
-	 //     if (empty($user['name'])) {
-	 //         $errors['name'] = "Can't be blank"
-	 //     }
-	 //
-	 //     // ...
-	 //
-	 //     return $errors;
-	 // }
+	  function validate($user)
+	  {
+	      $errors = [];
+	      
+	      if (empty($user['name'])) {
+	          $errors['name'] = "Can't be blank";
+	      }
+	 
+	      // ...
+	 
+	      return $errors;
+	  }
 	 
 	 
 	 /*
@@ -7771,6 +7763,7 @@ EOD;
 	 
 	 if (count($errors) === 0) {
 		 $repo->save($user);
+		 
 		 return $response->withRedirect('/');
 	 }
 	 
@@ -7779,16 +7772,15 @@ EOD;
 	 Если в процессе обработки возникли ошибки, выполняется рендеринг формы из того же шаблона что мы использовали для /users/new. В этот шаблон передаются как данные формы так и список ошибок. Редиректа не проиcходит, в адресной строке остается адрес /users. Если попробовать в этот момент нажать f5, то браузер выдаст предупреждение о том что вы пытаетесь повторно отправить данные. Это сообщение предупреждает о том что метод POST не идемпотентен, и повторная отправка формы может привести к повторному созданию пользователя.
 	 */
 	 
-	 
 	 $params = [
 		 'user' => $user,
 		 'errors' => $errors
 	 ];
+	 
 	 return $this->renderer->render($response, "users/new.phtml", $params);
 	 
 	 /*
 	 Теперь давайте вернемся к нашей форме и изменим ее так чтобы в нее подставлялись как возникающие ошибки, так и значения полей введеные пользователем.
-	 */
 	 
 	 
 	 <!-- templates/users/new.phtml -->
@@ -7847,29 +7839,29 @@ EOD;
 	 В свою очередь такое изменение формы требует изменения обработчика /users/new. Необходимо передать в шаблон пустые массивы $errors и $user во избежании ошибок.
 	 */
 	 
-	 
 	 $app->get('/users/new', function ($request, $response) {
 		 $params = [
 			'user' => [],
 			'errors' => []
 		 ];
+		 
 		 return $this->renderer->render($response, "users/new.phtml", $params);
 	 }
 	 
 	 /*
 	 Обратите внимание на то, как увеличилась в размерах форма. На практике она будет еще больше из-за дополнительного оформления, например, отступов и подсветки ошибок. Сделав десяток форм вы быстро поймете что так жить нельзя. Ради простейшей обработки придется писать много практического идентичного кода в HTML. Эта работа требует автоматизации и, к счастью, давно автоматизирована. Для генерации форм используются специальные билдеры. По традиции, микрофреймворки не имеют встроенных билдеров, поэтому придется искать их самостоятельно. Довольно популярны формы (https://symfony.com/doc/current/components/form.html) из фреймворка Symfony. В этом компоненте каждая форма представлена своим собственным классом. Компонент поддерживает валидацию имеет встроенные механизмы защиты от некоторых атак и многое другое.
 	 
-	 
 	 Какое типичное поведение у страниц с формами, если ее данные не прошли валидацию?
 	 > Сервер возвращает страницу с формой и подставленными ошибками. В идеале отдает код 422, который как раз и предназначен для таких ситуаций.
 	 
 	 Какое типичное поведение у страниц с формами, если данные формы успешно обработаны?
 	 > Происходит редирект на какую-то страницу, на которой пишут об успешности операции
+	 
 	 */
 	 
 	 
 	 
-	 >>>>>  Именованные маршруты  <<<<<<<
+	 #>>>>>  Именованные маршруты  <<<<<<<#
 	 
 	 /*
 	 <form action="/users/<?= $user['id'] ?>" method="post">
