@@ -3113,7 +3113,7 @@
                 success: data => {
                     if (!data) {
                         delay(2000)
-                            .then(hideLoader)
+                            .then(hideLoader);
                         return;
                     }
 

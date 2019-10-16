@@ -518,12 +518,12 @@ const requestURL = 'https://jsonplaceholder.typeicode.com/users'
 
 const sendRequest = (method, url, body = null) => {
     return new Promise((resolve, reject) => {
-        const xhr = new XMLHttpRequest()
+        const xhr = new XMLHttpRequest();
 
         xhr.setRequestHeader('Content-Type', 'application/json') // устанавливаем заголовки для отправки
         xhr.responseType = 'json'; // устанавливаем тип получаемых данных
 
-        xhr.open(method, url)
+        xhr.open(method, url);
 
         xhr.onload = () =>  {
             if (xhr.status >= 400) { // ошибки
@@ -532,36 +532,36 @@ const sendRequest = (method, url, body = null) => {
                 resolve(xhr.response)
             }
             console.log(xhr.response)
-        }
+        };
 
         xhr.onerror = () => { // ошибка
             reject(xhr.response)
-        }
+        };
 
         xhr.send(JSON.stringify(body))
-    })
-}
+    });
+};
 
 sendRequest("GET", requestURL)
     .then(data => console.log(data))
-    .catch(err => console.log(err))
+    .catch(err => console.log(err));
 
 
 const body = {
     name: 'maxim',
     age: 26
-}
+};
 
 sendRequest("GET", requestURL, body)
     .then(data => console.log(data))
-    .catch(err => console.log(err))
+    .catch(err => console.log(err));
 
 
 // #3:
 const sendRequest = (method, url, body = null) => {
     const headers = {
         'Content-Type': 'application/json'
-    }
+    };
 
     return fetch(url, {
         method: method,
@@ -573,14 +573,14 @@ const sendRequest = (method, url, body = null) => {
         }
 
         return response.json().then(error => {
-            const e = new Error('Что-то пошло не так')
+            const e = new Error('Что-то пошло не так');
 
-            e.data = error
+            e.data = error;
 
-            throw e
+            throw e;
         })
-    })
-}
+    });
+};
 
 
 
