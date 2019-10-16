@@ -3071,3 +3071,142 @@
 		  
 		  return ['error' => $user->LAST_ERROR];
 	 }
+
+
+
+
+	#@@@ Изменение input: @@@#
+?>
+	 <script>
+        $(document).on('DOMSubtreeModified', e => {
+            const currElem = $(e.target);
+            const isCityInput = currElem.hasClass('bx-ui-sls-fake');
+
+            if (!isCityInput) {
+                return;
+            }
+
+            const deliveryInfo = $('.delivery-info');
+            const loaderBlock = $('.delivery-loader');
+            const cityName = currElem.val();
+            const isMskCity = cityName === "Москва";
+				
+            const delay = ms => new Promise(r => setTimeout(() => r(), ms));
+            const showDeliveryInfo = () => deliveryInfo.show();
+            const hideDeliveryInfo = () => deliveryInfo.hide();
+            const showLoader = () => loaderBlock.fadeIn();
+            const hideLoader = () => loaderBlock.fadeOut();
+
+            if (isMskCity) {
+                hideDeliveryInfo();
+                return;
+            }
+
+            $.post({
+                url: '/ajax/getCityData.php',
+                cache: false,
+                data: {cityName},
+                beforeSend: () => {
+                    hideDeliveryInfo();
+                    showLoader();
+                },
+                success: data => {
+                    if (!data) {
+                        delay(2000)
+                            .then(hideLoader)
+                        return;
+                    }
+
+                    const {inTown, deliveryPrice, deliveryTime} = JSON.parse(data);
+
+                    $('.inTown').text(inTown);
+                    $('.deliveryPrice').text(deliveryPrice);
+                    $('.deliveryTime').text(deliveryTime);
+
+                    delay(2000)
+                        .then(hideLoader)
+                        .then(showDeliveryInfo);
+                },
+                error: (jqXHR, exception) => {
+                    let errorInfo = '';
+
+                    if (jqXHR.status === 0) {
+                        errorInfo = 'Not connect.\n Verify Network.';
+                    } else if (jqXHR.status == 404) {
+                        errorInfo = 'Requested page not found. [404]';
+                    } else if (jqXHR.status == 500) {
+                        errorInfo = 'Internal Server Error [500].';
+                    } else if (exception === 'parsererror') {
+                        errorInfo = 'Requested JSON parse failed.';
+                    } else if (exception === 'timeout') {
+                        errorInfo = 'Time out error.';
+                    } else if (exception === 'abort') {
+                        errorInfo = 'Ajax request aborted.';
+                    } else {
+                        errorInfo = 'Uncaught Error.\n' + jqXHR.responseText;
+                    }
+
+                    console.error(errorInfo)
+                }
+            });
+        });
+	 </script>
+<?
+	 
+	 // FILE: /ajax/getCityData.php:
+	 
+	 use Bitrix\Main\Context;
+	 
+	 require "{$_SERVER['DOCUMENT_ROOT']}/bitrix/modules/main/include/prolog_before.php";
+	 
+	 const CITY_I_BLOCK_ID = 15;
+	 
+	 $context = Context::getCurrent();
+	 $request = $context->getRequest();
+	 
+	 if (!$request->isPost() && !$request->getPost("cityName")) {
+		  return;
+	 }
+	 
+	 ['cityName' => $cityName] = $request->getPostList()->toArray();
+	 $cityData = getCityDataByName($cityName);
+	 
+	 if (!$cityData) {
+		  return;
+	 }
+	 
+	 $response = [
+		 "inTown" => $cityData["PROPERTY_VS_VGOROD_VALUE"],
+		 "deliveryPrice" => $cityData["PROPERTY_VS_MIN_DELIVERY_PRICE_VALUE"],
+		 "deliveryTime" => $cityData["PROPERTY_VS_MIN_DELIVERY_VALUE"]
+	 ];
+	 
+	 echo json_encode($response);
+	 
+	 
+	 /**
+	  * @param $cityName
+	  * @return bool || данные по городу
+	  */
+	 function getCityDataByName($cityName)
+	 {
+		  $arFilter = [
+			  "IBLOCK_ID" => CITY_I_BLOCK_ID,
+			  "PROPERTY_VS_GOROD" => $cityName,
+			  "ACTIVE" => "Y"
+		  ];
+		  
+		  $arSelect = [
+			  "ID",
+			  "IBLOCK_ID",
+			  "PROPERTY_VS_VGOROD",
+			  "PROPERTY_VS_MIN_DELIVERY_PRICE",
+			  "PROPERTY_VS_MIN_DELIVERY"
+		  ];
+		  
+		  $cityDBData = CIBlockElement::GetList([], $arFilter, false, false, $arSelect);
+		  
+		  return $cityDBData->Fetch();
+	 }
+
+
