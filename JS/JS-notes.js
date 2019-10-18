@@ -513,6 +513,75 @@ function createFriendDOM(friend) {
     return div;
 }
 
+// #2:
+const requestURL = 'https://jsonplaceholder.typeicode.com/users'
+
+const sendRequest = (method, url, body = null) => {
+    return new Promise((resolve, reject) => {
+        const xhr = new XMLHttpRequest();
+
+        xhr.setRequestHeader('Content-Type', 'application/json') // устанавливаем заголовки для отправки
+        xhr.responseType = 'json'; // устанавливаем тип получаемых данных
+
+        xhr.open(method, url);
+
+        xhr.onload = () =>  {
+            if (xhr.status >= 400) { // ошибки
+                reject(xhr.response)
+            } else {
+                resolve(xhr.response)
+            }
+            console.log(xhr.response)
+        };
+
+        xhr.onerror = () => { // ошибка
+            reject(xhr.response)
+        };
+
+        xhr.send(JSON.stringify(body))
+    });
+};
+
+sendRequest("GET", requestURL)
+    .then(data => console.log(data))
+    .catch(err => console.log(err));
+
+
+const body = {
+    name: 'maxim',
+    age: 26
+};
+
+sendRequest("GET", requestURL, body)
+    .then(data => console.log(data))
+    .catch(err => console.log(err));
+
+
+// #3:
+const sendRequest = (method, url, body = null) => {
+    const headers = {
+        'Content-Type': 'application/json'
+    };
+
+    return fetch(url, {
+        method: method,
+        body: JSON.stringify(body),
+        headers: headers
+    }).then(response => {
+        if (response.ok) { // без ошибок
+            response.text() // или response.json
+        }
+
+        return response.json().then(error => {
+            const e = new Error('Что-то пошло не так');
+
+            e.data = error;
+
+            throw e;
+        })
+    });
+};
+
 
 
 // # Скролл по блокам:
@@ -2189,3 +2258,7 @@ void function aRecursion(i) {
 }(3);
 
 console.log(typeof aRecursion) // undefined
+
+
+
+
