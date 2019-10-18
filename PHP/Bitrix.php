@@ -3146,7 +3146,7 @@
                         errorInfo = 'Uncaught Error.\n' + jqXHR.responseText;
                     }
 
-                    console.error(errorInfo)
+                    console.error(errorInfo);
                 }
             });
         });
@@ -3210,3 +3210,479 @@
 	 }
 
 
+	 
+	 
+	 #@@@ Умный поиск: @@@#
+?>
+
+<div class="tips-list"></div>
+
+<script>
+    const inputBlock = $('#searchInput');
+    const searchInput = initSearchInput();
+
+    /**
+     * @ Search input change handler
+     */
+    inputBlock.keyup(e => {
+        const currElem = $(e.currentTarget);
+        const phrase = currElem.val();
+
+        searchInput.delaySearch(phrase);
+    });
+
+    function initSearchInput() {
+        let intervalID = null;
+        let lastPhrase = null;
+        const requestURL = '/ajax/search.php';
+        const responseBlock = $('.tips-list');
+        const intervalTime = 1000;
+
+        return {
+            getOldValue: function () {
+                return lastPhrase;
+            },
+            getNewValue: function () {
+                return inputBlock.val();
+            },
+            isNeedUpdate: function () {
+                return this.getOldValue() === this.getNewValue();
+            },
+            updateValue: function () {
+                this.lastPhrase = this.getNewValue();
+            },
+            delaySearch: function () {
+                if (intervalID && this.isNeedUpdate()) {
+                    this.updateValue();
+                }
+
+                if (!intervalID) {
+                    intervalID = setInterval(() => {
+                        if (this.isNeedUpdate()) {
+                            this.updateValue();
+                            return;
+                        }
+
+                        clearInterval(intervalID);
+                        intervalID = null;
+                        const newValue = this.getNewValue();
+                        console.log("ОТПРАВЛЯЕМ", newValue);
+                        this.generateResponseList(newValue);
+
+                    }, intervalTime);
+                }
+            },
+            generateResponseList: function (word) {
+                if (!word.length) {
+                    responseBlock.hide();
+
+                    return;
+                }
+
+                $.ajax({
+                    url: requestURL,
+                    data: {
+                        q: word,
+                        action: 'AJAX_SEARCH'
+                    },
+                    success: response => {
+                        if (!response) {
+                            responseBlock.hide();
+
+                            return
+                        }
+
+                        responseBlock.html(response).show();
+                    }
+                });
+            }
+        };
+    }
+</script>
+
+
+<?
+    // FILE: /ajax/search.php:
+
+	use Bitrix\Main\{Loader, Context};
+	
+	require_once "{$_SERVER["DOCUMENT_ROOT"]}/bitrix/modules/main/include/prolog_before.php";
+	
+	const CATALOG_I_BLOCK_ID = 28;
+	const COUNT_ELEMENT_IN_SEARCH_LIST = 5;
+	
+	$context = Context::getCurrent();
+	$request = $context->getRequest();
+	
+	
+	['q' => $searchPhrase, "action" => $action] = $request->getQueryList()->toArray();
+	
+	if (!$searchPhrase && $action !== "AJAX_SEARCH") {
+		return;
+	}
+	
+	Loader::includeModule("iblock");
+	
+	$sectionsData = getSectionsData($searchPhrase);
+	$sectionCount = sizeof($sectionsData);
+	$productIDs = getProductsID($searchPhrase);
+	$productCount = sizeof($productIDs);
+	
+	
+	$APPLICATION->IncludeComponent(
+		"adpro:catalog.section",
+		"ajax",
+		[
+			"IDS" => $productIDs,
+			"PRODUCT_COUNT" => $productCount,
+			"SECTIONS_DATA" => $sectionsData,
+			"SECTIONS_COUNT" => $sectionCount,
+			"SEARCH_PHRASE" => $searchPhrase,
+			"LIMIT" => COUNT_ELEMENT_IN_SEARCH_LIST,
+		]
+	);
+	
+	
+	/**
+	 * @param $searchPhrase
+	 * @return array
+	 */
+	function getSectionsData($searchPhrase)
+	{
+		$arSections = [];
+		
+		$obSection = new CIBlockSection();
+		
+		$dbRes = $obSection->GetList(
+			[],
+			[
+				"NAME" => "%{$searchPhrase}%",
+				"IBLOCK_ID" => CATALOG_I_BLOCK_ID,
+				"ACTIVE" => "Y"
+			],
+			false,
+			[
+				"ID",
+				"NAME",
+				"SECTION_PAGE_URL"
+			]
+		);
+		
+		while ($sectionData = $dbRes->GetNext()) {
+			$arSections[] = $sectionData;
+		}
+		
+		return $arSections;
+	}
+	
+	
+	/**
+	 * @param $searchPhrase
+	 * @return array
+	 */
+	function getProductsID($searchPhrase)
+	{
+		$arElements = [];
+		
+		$obElement = new CIBlockElement();
+		
+		$dbRes = $obElement->GetList(
+			[],
+			[
+				"NAME" => "%{$searchPhrase}%",
+				"IBLOCK_ID" => CATALOG_I_BLOCK_ID,
+				"ACTIVE" => "Y"
+			],
+			false,
+			false,
+			[
+				"ID"
+			]
+		);
+		
+		while (["ID" => $elemID] = $dbRes->Fetch()) {
+			$arElements[] = $elemID;
+		}
+		
+		return $arElements;
+	}
+	
+	
+	
+   // FILE: /local/components/adpro/catalog.section/class.php:
+	if (!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true) {
+		die();
+	}
+	
+	use \Bitrix\Main\Loader;
+	
+	Loader::includeModule('iblock');
+	
+	class CAdvertCatalogSection extends CBitrixComponent
+	{
+		private function getProducts($arIdProduct)
+		{
+			$obElement = new CIBlockElement();
+			
+			$navParams = [
+				"bShowAll" => false,
+			];
+			
+			if ($this->arParams["LIMIT"]) {
+				$navParams["nTopCount"] = $this->arParams["LIMIT"];
+			}
+			
+			if ($this->arParams["nPageSize"]) {
+				$navParams["nPageSize"] = $this->arParams["nPageSize"];
+			}
+			
+			$dbResElement = $obElement->GetList(
+				[],
+				[
+					"ID" => $arIdProduct
+				],
+				false,
+				$navParams,
+				[
+					"ID",
+					"NAME",
+					"PREVIEW_PICTURE",
+					"DETAIL_PICTURE",
+					"DETAIL_PAGE_URL",
+				]
+			);
+			
+			while ($arElement = $dbResElement->GetNext()) {
+				[
+					"ID" => $elemID,
+					"NAME" => $name,
+					"PREVIEW_PICTURE" => $previewPicture,
+					"DETAIL_PICTURE" => $detailPicture,
+				] = $arElement;
+				
+				$previewPicture = CFile::GetPath($previewPicture);
+				$detailPicture = CFile::GetPath($detailPicture);
+				
+				$imgSrc = $previewPicture ?? $detailPicture ?? "/images/no-photo_150.png";
+				
+				$arElement["IMG_SRC"] = $imgSrc;
+				$arElement["TITLE"] = $this->generateProductTitle($name);
+				$arElement["PRICE_DATA"] = $this->getProductPriceData($elemID);
+				
+				$this->arResult["ITEMS"][$elemID] = $arElement;
+			}
+			
+			$this->arResult["NAV"] = $dbResElement;
+		}
+		
+		private function generateProductTitle($productName)
+		{
+			$searchPhrase = $this->arParams["SEARCH_PHRASE"];
+			$searchPhraseStart = stripos($productName, $searchPhrase);
+			$searchPhraseFinish = strlen($searchPhrase);
+			$replacePhrase = substr($productName, $searchPhraseStart, $searchPhraseFinish);
+			
+			return mb_eregi_replace($searchPhrase, "<b>$replacePhrase</b>", $productName, "i");
+		}
+		
+		private function getProductPriceData($elemID)
+		{
+			$userGroupArray = $GLOBALS["USER"]->GetUserGroupArray();
+			
+			["RESULT_PRICE" => $resultPrice] = CCatalogProduct::GetOptimalPrice($elemID, 1, $userGroupArray, 'N');
+			
+			[
+				"DISCOUNT" => $discount,
+				"BASE_PRICE" => $basePrice,
+				"DISCOUNT_PRICE" => $discountPrice
+			] = $resultPrice;
+			
+			
+			if (!$discountPrice && !$basePrice) {
+				return;
+			}
+			
+			$price = $discount ? $discountPrice : $basePrice;
+			
+			return explode('.', (string) $price);
+		}
+		
+		public function executeComponent()
+		{
+			$arElemId = $this->arParams["IDS"];
+			
+			if ($arElemId) {
+				$this->getProducts($arElemId);
+			}
+			
+			$this->includeComponentTemplate();
+		}
+	}
+	
+	
+
+    // FILE: /local/components/adpro/catalog.section/templates/ajax/template.php:
+    
+	 if (!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true) {
+ 			die();
+	 }
+	 
+	 $this->setFrameMode(true);
+	 
+	 $items = $arResult["ITEMS"];
+	 
+	 [
+			"~PRODUCT_COUNT" => $productCount,
+			"~SEARCH_PHRASE" => $searchPhrase,
+			"~SECTIONS_COUNT" => $sectionsCount,
+			"~SECTIONS_DATA" => $sectionsData
+	 ] = $arParams;
+?>
+
+<? if(!$productCount && !$sectionsCount): ?>
+	 <div class="header-searched-title">
+		  <b>Ничего не найдено</b>
+	 </div>
+<? else: ?>
+	 <? if ($sectionsCount): ?>
+		  <div class="header-searched-sections">
+				<div>
+					 <b>Категории: </b><span class="header-searched-count"><?=$sectionsCount?></span>
+				</div>
+				<div class="header-searched-sections-links">
+					 <? foreach ($sectionsData as ["NAME" => $name, "SECTION_PAGE_URL" => $urn]): ?>
+						  <a href="<?= $urn ?>" class="header-searched-section-link"><?= $name ?></a>
+					 <? endforeach; ?>
+				</div>
+		  </div>
+		  <hr>
+	 <? endif; ?>
+	 
+	 <div class="header-searched-title">
+		  <? if ($productCount): ?>
+				<b>Товары: </b><span class="header-searched-count"><?=$productCount?></span>
+		  <? endif; ?>
+	 
+		  <a href="/search/?q=<?= $searchPhrase ?>" class="header-searched-link">показать все</a>
+	 </div>
+	 
+	 <? foreach ($items as $item): ?>
+		  <?
+				[
+					"IMG_SRC" => $imgSrc,
+					"DETAIL_PAGE_URL" => $elemURN,
+					"TITLE" => $title,
+					"PRICE_DATA" => [$priceMain, $priceSec]
+				] = $item;
+		  ?>
+	 
+		  <div class="header-searched-item">
+				<div class="header-searched-item-photo" style="background: url('<?= $imgSrc ?>') no-repeat; background-size: cover;">
+				</div>
+				<div class="header-searched-item-name">
+					 <a class="header-searched-item-link" href="<?= $elemURN ?>">
+						  <?= $title ?>
+					 </a>
+					 <div class="header-searched-item-price">
+						  <? if (!$priceMain): ?>
+								-
+						  <? else: ?>
+								<b>
+									 <?= $priceMain ?>
+									 <?= !$priceSec ? "" : "<sup>{$priceSec}</sup>" ?>
+									 ₽
+								</b>
+						  <? endif; ?>
+					 </div>
+				</div>
+		  </div>
+	 <? endforeach; ?>
+<? endif; ?>
+
+<style>
+	 .header-searched-link {
+		  color: #457ff7;
+		  text-decoration: none;
+		  border-bottom: 1px dashed #457ff7;
+	 }
+
+	 .header-searched-section-link {
+		  color: #808080;
+		  text-decoration: none;
+		  margin-left: 10px;
+	 }
+
+	 .header-searched-section-link:hover {
+		  border-bottom: 1px solid #808080;
+	 }
+
+	 .tips-list {
+		  width: 100%;
+		  position: absolute;
+		  top: 60px;
+		  z-index: 549;
+		  background: white;
+		  color: #3a3a3a;
+		  width: 50%;
+		  display: none;
+		  border: 1px solid #d4d3d3;
+	 }
+
+	 .tips-list--mobile {
+		  position: relative;
+		  top: 0;
+	 }
+
+	 .header-searched-count {
+		  margin: 0 5px;
+		  color: grey;
+		  font-size: 1.1rem;
+	 }
+
+	 .header-searched-title,
+	 .header-searched-item {
+		  display: flex;
+		  align-items: center;
+		  margin: 10px 15px;
+	 }
+
+	 .header-searched-item {
+		  padding-bottom: 10px;
+		  border-bottom: 1px dashed grey;
+	 }
+
+	 .header-searched-sections {
+		  margin: 10px 15px;
+	 }
+
+	 .header-searched-item-photo {
+		  height: 70px;
+		  width: 70px;
+		  margin: 0 30px 0 0;
+		  border: 1px solid black;
+		  background-size: cover;
+	 }
+
+	 .header-searched-item-link {
+		  color: #3a3a3a;
+		  text-decoration: none;
+	 }
+
+	 .header-searched-item-link:hover {
+		  text-decoration: underline;
+	 }
+
+	 .header-searched-item-name {
+		  max-width: 75%;
+	 }
+	 
+	 @media (max-width: 576px) {
+		  .tips-list {
+				width: 100%;
+		  }
+
+		  .header-searched-item-photo {
+				margin: 0 10px 0 0;
+		  }
+	 }
+</style>
