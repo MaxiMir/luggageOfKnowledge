@@ -7894,10 +7894,11 @@ EOD;
 	 
 	 
 	 
-	 >>>>>  Стандарт PSR7 <<<<<<<
+	 #>>>>>  Стандарт PSR7 <<<<<<<#
 	 
 	 /*
-	 Объекты запроса и ответа во фреймворке Slim имеют интерфейс соответствующий стандарту PSR7 (https://www.php-fig.org/psr/psr-7/). Пример на главной странице фреймворка как раз демонстрирует это.
+	 Объекты запроса и ответа во фреймворке Slim имеют интерфейс соответствующий стандарту PSR7 (https://www.php-fig.org/psr/psr-7/).
+	 Пример на главной странице фреймворка как раз демонстрирует это.
 	 */
 	 
 	 use \Psr\Http\Message\ServerRequestInterface as Request;
@@ -7906,10 +7907,13 @@ EOD;
 	 require 'vendor/autoload.php';
 	 
 	 $app = new \Slim\App;
+	 
 	 $app->get('/hello/{name}', function (Request $request, Response $response, array $args) {
 		 $name = $args['name'];
+		 
 		 return $response->getBody()->write("Hello, $name");
 	 });
+	 
 	 $app->run();
 	 
 	 /*
@@ -7942,7 +7946,7 @@ EOD;
 	 
 	 
 	 
-	 >>>>> Flash  <<<<<<<
+	 #>>>>> Flash  <<<<<<<#
 	 
 	 /*
 	 Работая на Хекслете вы не раз видели сообщение о результатах выполнения любого действия — будь то аутентификация, регистрация или вступление в курс.
@@ -8022,33 +8026,33 @@ EOD;
 	 $app->get('/', function ($request, $response) {
 		  $flash = $this->flash->getMessages();
 		  $params = ['flash' => $flash];
+		  
 		  return $this->renderer->render($response, 'index.phtml', $params);
 	 });
 	 
 	 $app->post('/courses', function ($request, $response) {
 		  $this->flash->addMessage('success', 'Course Added');
+		  
 		  return $response->withRedirect('/');
 	 });
 	 
 	 $app->run();
 	 
 	 
-	 // file: app/templates/index.phtml:
+	 // file: app/templates/index.phtml: ?>
 	 
 	 <form action="/courses" method="post">
 		<input type="submit" value="Create Course">
 	 </form>
 	 
 	 <?php if (count($flash) > 0): ?>
-				
-				<?php foreach ($flash as $messages): ?>
-					 <?php foreach ($messages as $message): ?>
-						  <?= $message ?>
-					 <?php endforeach ?>
+		  <?php foreach ($flash as $messages): ?>
+				<?php foreach ($messages as $message): ?>
+					 <?= $message ?>
 				<?php endforeach ?>
-		  
-		  <?php endif ?>
-	 
+		  <?php endforeach ?>
+	 <?php endif ?>
+	 <?
 	 ## TESTS:
 	 
 	 // file: app/tests/Test.php
@@ -8087,7 +8091,7 @@ EOD;
 	 
 	 
 	 
-	 >>>>> CRUD  <<<<<<<
+	 #>>>>> CRUD  <<<<<<<#
 	 
 	 /*
 	 Несмотря на огромное число разнообразных сайтов, практически всю веб разработку можно свести к CRUD https://ru.wikipedia.org/wiki/CRUD операциям.
@@ -8110,11 +8114,12 @@ EOD;
 	 
 	 Создание полного круда включает в себя следующие действия:
 	 
-	 Создание сущности в коде (как правило класса)
-	 Добавление таблицы в базу
-	 Написание тестов на обработчики
-	 Добавление обработчиков
-	 Прикручивание верстки
+	 > Создание сущности в коде (как правило класса)
+	 > Добавление таблицы в базу
+	 > Написание тестов на обработчики
+	 > Добавление обработчиков
+	 > Прикручивание верстки
+	 
 	 Новички тратят на создание такого круда не один день. У опытного разработчика, в прокаченном фреймворке, этот процесс занимает максимум часы. Slim, как и другие микрофреймворки, не предоставляет никаких средств автоматизации, поэтому придется многое делать руками. В целях обучения это оправданно, но в промышленной разработке, то что может быть автоматизировано, должно быть автоматизировано.
 	 
 	 Ниже мы пройдемся по всему процессу создания круда пользователя за исключением работы с базой данных и тестов. Начнем с роутинга. Полный круд пользователя включает минимум 7 маршрутов. Их может быть больше, так как любое из действий может повторяться не один раз.
@@ -8134,7 +8139,7 @@ EOD;
 	 */
 	 
 	 
-	 # Отображение (SHOW)
+	 #@ Отображение (SHOW)
 	 
 	 $app->get('/users/{id}', function ($request, $response, array $args) use ($repo) {
 		 $id = $args['id'];
@@ -8146,6 +8151,7 @@ EOD;
 	 
 		 return $this->renderer->render($response, "users/show.phtml", $params);
 	 });
+	 
 	 
 	 /*
 	 Чтение любой сущности происходит по одному и тому же сценарию
@@ -8168,12 +8174,13 @@ EOD;
 	 Но обычно механизм обработки таких ошибок построен через исключения.
 	 */
 	 
-	 # Удаление (DELETE)
+	 #@ Удаление (DELETE)
 	 
 	 $app->delete('/users/{id}', function ($request, $response, array $args) use ($repo) {
 		 $id = $args['id'];
 		 $repo->destroy($id);
 		 $this->flash->addMessage('success', 'User has been deleted');
+		 
 		 return $response->withRedirect('/users');
 	 });
 	 
@@ -8197,7 +8204,7 @@ EOD;
 	 */
 	 
 	 
-	 # Обновление (UPDATE/PATCH)
+	 #@ Обновление (UPDATE/PATCH)
 	 
 	 $app->get('/users/{id}/edit', function ($request, $response, array $args) use ($repo) {
 		 $id = $args['id'];
@@ -8206,6 +8213,7 @@ EOD;
 			'user' => $user,
 			'errors' => []
 		 ];
+		 
 		 return $this->renderer->render($response, 'users/edit.phtml', $params);
 	 });
 	 
@@ -8222,6 +8230,7 @@ EOD;
 		 if (count($errors) === 0) {
 			$this->flash->addMessage('success', 'User has been updated');
 			$repo->save($user);
+			
 			return $response->withRedirect("/users/{$user['id']}/edit");
 		 }
 	 
@@ -8236,8 +8245,10 @@ EOD;
 	 
 	 /*
 	 Обновление самое сложное действие из всех по объему действий. С точки зрения кода новое здесь только одно - процесс заполнения сущности данными формы: $user['name'] = $data['name'];. Этот процесс сильно изменится при использовании ORM, а пока мы будем проставлять каждое значение руками. Теоретически можно сделать и так $user = array_merge($user, $data), но у этого подхода есть один фатальный недостаток. Такой способ абсолютно не безопасен, так как пользователь может послать данные в обход формы, например количество денег на счету и array_merge изменит их значение. Эту проблему решают те же пакеты, которые предоставляют Form Builder и, обычно, они сразу встроены во фреймворки.
+	*/
 	 
-	 /**
+	 
+	 /**@@
 	 src/Validator.php
 	 Реализуйте класс валидатор, который проверяет данные курса. Реализация должна соответствовать интерфейсу ValidatorInterface.
 	 
@@ -8296,6 +8307,7 @@ EOD;
 				'course' => [],
 				'errors' => []
 		  ];
+		  
 		  return $this->renderer->render($response, 'courses/new.phtml', $params);
 	 });
 	 
@@ -8353,7 +8365,7 @@ EOD;
 	 }
 	 
 	 
-	 // file: app/templates/courses/new.phtml:
+	 // file: app/templates/courses/new.phtml: ?>
 	 <form action="/courses" method="post">
 		<div>
 		  <label>
@@ -8383,7 +8395,7 @@ EOD;
 	 
 	 
 	 
-	 
+	 <?
 	 /**@@@
 	 public/index.php
 	 Реализуйте следующие обработчики:
@@ -8440,30 +8452,33 @@ EOD;
 				'page' => $page,
 				'posts' => $sliceOfPosts
 		  ];
+		  
 		  return $this->renderer->render($response, 'posts/index.phtml', $params);
 	 })->setName('posts');
 	 
 	 $app->get('/posts/{id}', function ($request, $response, array $args) use ($posts) {
 		  $id = $args['id'];
 		  $post = collect($posts)->firstWhere('slug', $id);
+		  
 		  if (!$post) {
 				return $response->withStatus(404)->write('Page not found');
 		  }
+		  
 		  $params = [
 				'post' => $post,
 		  ];
+		  
 		  return $this->renderer->render($response, 'posts/show.phtml', $params);
 	 })->setName('post');
 	 
 	 $app->run();
 	 
 	 
-	 // FILE: /templates/posts/index.phtml
+	 // FILE: /templates/posts/index.phtml ?>
 	 <?php foreach ($posts as $post): ?>
-				
-				<?= $post['slug'] ?>  <?= htmlspecialchars($post['name']) ?>
-		  
-		  <?php endforeach ?>
+			<?= $post['slug'] ?>
+			<?= htmlspecialchars($post['name']) ?>
+	 <?php endforeach ?>
 	 
 	 <br>
 	 
@@ -8471,14 +8486,16 @@ EOD;
 	 <a href="?page=<?= $page < 2 ? 1 : $page - 1 ?>">Prev</a> <a href="?page=<?= $page + 1 ?>">Next</a>
 	 </div>
 	 
-	 // FILE: /templates/posts/show.phtml
+	 <!-- FILE: /templates/posts/show.phtml -->
 	 <h1><?= $post['name'] ?></h1>
 	 <div>
 		  <?= $post['body'] ?>
 	 </div>
+	 <?
 	 
 	 
-	 >>>>> CRUD: Создание  <<<<<
+	 
+	 #>>>>> CRUD: Создание  <<<<<#
 	 
 	 /*
 	 Создание сущности, включает в себя два действия: отображение формы и обработка данных формы. За каждое из этих действий отвечает свой собственный маршрут. Вот несколько примеров:
@@ -8508,10 +8525,11 @@ EOD;
 				'schoolData' => [],
 				'errors' => []
 		  ];
+		  
 		  return $this->renderer->render($response, 'schools/new.phtml', $params);
 	 })->setName('newSchool');
 	 
-	 // Шаблон
+	 // Шаблон ?>
 	 
 	 <form action="/schools" method="post">
 		  <div>
@@ -8526,9 +8544,10 @@ EOD;
 		  </div>
 		  <input type="submit" value="Create">
 	 </form>
+	 <?
 	 
 	 /*
-	 Содержимое обработчика очень сильно зависит от того, какой используется инструментарий. В тех местах где есть билдеры форм, в этом обработчике создается форма (как некоторый объект) и отправляется в шаблон. Билдер берет на себя огромное количество задач, он сам обрабатывает вывод ошибок, занимается валидацией и подготовкой данных. Особо умные билдеры знают про ту сущность с которой они рабоают и могут строить формы в полностью автоматическом режиме.
+	 Содержимое обработчика очень сильно зависит от того, какой используется инструментарий. В тех местах где есть билдеры форм, в этом обработчике создается форма (как некоторый объект) и отправляется в шаблон. Билдер берет на себя огромное количество задач, он сам обрабатывает вывод ошибок, занимается валидацией и подготовкой данных. Особо умные билдеры знают про ту сущность с которой они работают и могут строить формы в полностью автоматическом режиме.
 	 
 	 В нашем примере ничего такого нет, поэтому все действия делаются руками. Кроме непосредственно данных, в шаблон передается массив errors. Это нужно по той причине, что форма используется обоими обработчиками: одним только для отображения новой формы, другим для отображения формы в случае наличия ошибок.
 	 */
@@ -8563,7 +8582,7 @@ EOD;
 	 // Своего шаблона у таких обработчиков не делают. Если данные оказались не валидны, то этот обработчик рисует форму обработчика new и отправляет ее вместе с кодом ответа 422 (Unprocessable Entity).
 	 
 	 
-	 /**
+	 /**@@
 	 public/index.php
 	 Реализуйте следующие обработчики:
 	 
@@ -8671,7 +8690,7 @@ EOD;
 	 $app->run();
 	 
 	 
-	 // file: app/templates/posts/new.phtml
+	 // file: app/templates/posts/new.phtml ?>
 	 
 	 <a href="/posts">Посты</a>
 	 
@@ -8680,26 +8699,22 @@ EOD;
 	 <!-- END -->
 	 
 	 
-	 // file: app/templates/posts/index.phtml:
-	 
+	 <!-- file: app/templates/posts/index.phtml: -->
 	 <?php if (count($flash) > 0): ?>
-				
-				<?php foreach ($flash as $messages): ?>
-					 <?php foreach ($messages as $message): ?>
-						  <?= $message ?>
-					 <?php endforeach ?>
+		  <?php foreach ($flash as $messages): ?>
+				<?php foreach ($messages as $message): ?>
+					 <?= $message ?>
 				<?php endforeach ?>
-		  
-		  <?php endif ?>
+		  <?php endforeach ?>
+	 <?php endif ?>
 	 
 	 <a href="/posts/new">Новый пост</a>
 	 
 	 <?php foreach ($posts as $post): ?>
-				
-				<?= htmlspecialchars($post['name']) ?>
-		  
-		  <?php endforeach ?>
+	 	 <?= htmlspecialchars($post['name']) ?>
+	 <?php endforeach ?>
 	 
+	 <?
 	 /*
 	 Какой статус ответа отдается клиенту если данные не прошли валидацию?
 	 > 422
@@ -8763,6 +8778,7 @@ EOD;
 			'flash' => $flash,
 			'posts' => $repo->all()
 		 ];
+		 
 		 return $this->renderer->render($response, 'posts/index.phtml', $params);
 	 })->setName('posts');
 	 
@@ -8791,13 +8807,14 @@ EOD;
 				'errors' => $errors
 		  ];
 		  $response = $response->withStatus(422);
+		  
 		  return $this->renderer->render($response, 'posts/new.phtml', $params);
 	 });
 	 
 	 $app->run();
 	 
 	 
-	 // file: app/src/templates/new.phtml:
+	 // file: app/src/templates/new.phtml: ?>
 	 
 	 <a href="/posts">Посты</a>
 	 
@@ -8823,7 +8840,7 @@ EOD;
 		<input type="submit" value="Create">
 	 </form>
 	 
-	 
+	 <?
 	 // file: app/src/Repository.php:
 	 
 	 namespace App;
@@ -8859,9 +8876,11 @@ EOD;
 				 $json = json_encode($item);
 				 throw new \Exception("Wrong data: {$json}");
 			}
+			
 			if (!isset($item['id'])) {
 				 $item['id'] = uniqid();
 			}
+			
 			$_SESSION['posts'][$item['id']] = $item;
 		 }
 	 }
@@ -8890,7 +8909,7 @@ EOD;
 	 
 	 
 	 
-	 >>>>> CRUD: Обновление <<<<<<<
+	 #>>>>> CRUD: Обновление <<<<<<<#
 	 
 	 /*
 	 Обновление самое сложное действие из всех по объему действий. С точки зрения кода новое здесь только одно - заполнение сущности данными формы: $school['name'] = $data['name'];. Этот процесс сильно изменится при использовании ORM, а пока мы будем проставлять каждое значение руками.
@@ -8906,10 +8925,11 @@ EOD;
 			 'school' => $school,
 			 'errors' => []
 		 ];
+		 
 		 return $this->renderer->render($response, 'schools/edit.phtml', $params);
 	 });
 	 
-	 # Шаблон
+	 # Шаблон <?
 	 
 	 <form action="/schools" method="post">
 		  <input type="hidden" name="_METHOD" value="PATCH">
@@ -8926,6 +8946,7 @@ EOD;
 		  <input type="submit" value="Create">
 	 </form>
 	 
+	 <?
 	 # Обработчик действия
 	 
 	 $app->patch('/schools/{id}', function ($request, $response, array $args)  {
@@ -8943,6 +8964,7 @@ EOD;
 		 if (count($errors) === 0) {
 			$this->flash->addMessage('success', 'School has been updated');
 			$repo->save($school);
+			
 			return $response->withRedirect($this->router->pathFor('editSchool', ['id' => $school['id']]));
 		 }
 	 
@@ -8952,6 +8974,7 @@ EOD;
 		 ];
 	 
 		 $response = $response->withStatus(422);
+		 
 		 return $this->renderer->render($response, 'schools/edit.phtml', $params);
 	 });
 	 
@@ -8976,7 +8999,7 @@ EOD;
 	 > PUT
 	 */
 	 
-	 /**
+	 /**@@
 	 public/index.php
 	 Реализуйте следующие обработчики:
 	 
@@ -9027,6 +9050,7 @@ EOD;
 				'flash' => $flash,
 				'posts' => $repo->all()
 		  ];
+		  
 		  return $this->renderer->render($response, 'posts/index.phtml', $params);
 	 })->setName('posts');
 	 
@@ -9035,6 +9059,7 @@ EOD;
 				'postData' => [],
 				'errors' => []
 		  ];
+		  
 		  return $this->renderer->render($response, 'posts/new.phtml', $params);
 	 });
 	 
@@ -9047,6 +9072,7 @@ EOD;
 		  if (count($errors) === 0) {
 				$id = $repo->save($postData);
 				$this->flash->addMessage('success', 'Post has been created');
+				
 				return $response->withHeader('X-ID', $id)
 									 ->withRedirect($this->router->pathFor('posts'));
 		  }
@@ -9065,6 +9091,7 @@ EOD;
 				'post' => $post,
 				'postData' => $post
 		  ];
+		  
 		  return $this->renderer->render($response, 'posts/edit.phtml', $params);
 	 });
 	 
@@ -9094,7 +9121,7 @@ EOD;
 	 
 	 $app->run();
 	 
-	 // app/templates/posts/posts:
+	 // app/templates/posts/posts: ?>
 	 
 	 <a href="/posts">Посты</a>
 	 
@@ -9106,11 +9133,12 @@ EOD;
 	 
 	 
 	 <?
-	 >>>>>  CRUD: Удаление <<<<<
+	 #>>>>>  CRUD: Удаление <<<<<#
 	 
 	 /*
 	 Удаление устроено даже проще чем вывод, но включает в себя много ньюансов. Вместо привычных GET и POST удаление делается запросом DELETE. По спецификации HTTP этот глагол идемпотентный. Это означает, что поведение, в случае наличия или отсутствия сущности, должно быть одинаковое, другими словами HTTP ответ этого обработчика не зависит от того удалена уже сущность или еще нет.
 	 */
+	 
 	 $app->delete('/schools/{id}', function ($request, $response, array $args) {
 		  $repo = new SchoolRepository();
 		  $id = $args['id'];
@@ -9130,35 +9158,37 @@ EOD;
 	 
 	 И последний вопрос который осталось рассмотреть - отправка запроса на удаление. Как вы помните, HTML формы не поддерживают отправку методами отличными от GET и POST. Фреймворки выкручиваются из этой ситуации следующим образом. Если в форме задать скрытое поле с именем _METHOD и значением того глагола который нам нужен, то внутри фреймворка, до входа в обработчик, глагол будет заменен на то что был указан. Таким нехитрым способом фреймворки позволяют посылать любые запросы.
 	 */
+	 ?>
 	 
 	 <form action = "/users/<?= $user['id'] ?>" method = "post" >
 		<input type = "hidden" name = "_METHOD" value = "DELETE" >
 		<input type = "submit" value = "Remove" >
 	 </form >
-		  
-		  /*
+	
+	<?
+	/*
 	 Отдельно стоит сказать, что крайне важно соблюдать семантику HTTP. Ни в коем случае нельзя создавать HTML в котором удаление происходит GET запросом, например, по ссылке. Браузеры, их плагины и поисковые системы действуют в соответствии с семантикой HTTP. Если они видят обычную ссылку, то подразумевается что она не может выполнить деструктивных действий, а значит ее можно посетить. Даже если мы работаем в закрытой от поисковиков части сайта, в браузерах встроен механизм предзагрузки страниц, который с удовольствием вызовет все ссылки до которых сможет дотянуться на открытой странице. А плагины могут делать вообще все что угодно.
 	 Дополнительные материалы
 	 Библиотека для автоматизации фронтенд части (подстановка правильных глаголов, подтверждение) https://github.com/rails/jquery-ujs
 	 */
 		  
-		  /**
-			* public/index.php
-			* Реализуйте удаление поста (обработчик DELETE /posts/{id})
-			*
-			* После каждого успешного действия нужно добавлять флеш сообщение и выводить его на списке постов. Текст:
-			*
-			* Post has been removed
-			* templates/posts/index.phtml
-			* Реализуйте вывод списка постов и добавьте к каждому посту кнопку на удаление.
-			*
-			* Подсказки
-			* Для редиректов в обработчиках используйте именованный роутинг
-			**/
+	 /**@@
+	  * public/index.php
+	  * Реализуйте удаление поста (обработчик DELETE /posts/{id})
+	  *
+	  * После каждого успешного действия нужно добавлять флеш сообщение и выводить его на списке постов. Текст:
+	  *
+	  * Post has been removed
+	  * templates/posts/index.phtml
+	  * Реализуйте вывод списка постов и добавьте к каждому посту кнопку на удаление.
+	  *
+	  * Подсказки
+	  * Для редиректов в обработчиках используйте именованный роутинг
+	  **/
 	 
 	 // file: app/public/index.php:
 		  
-		  namespace App;
+	 namespace App;
 	 
 	 require '/composer/vendor/autoload.php';
 	 
@@ -9191,6 +9221,7 @@ EOD;
 			  'flash' => $flash,
 			  'posts' => $repo->all()
 		  ];
+		  
 		  return $this->renderer->render($response, 'posts/index.phtml', $params);
 	 })->setName('posts');
 	 
@@ -9199,6 +9230,7 @@ EOD;
 			  'postData' => [],
 			  'errors' => []
 		  ];
+		  
 		  return $this->renderer->render($response, 'posts/new.phtml', $params);
 	 });
 	 
@@ -9211,6 +9243,7 @@ EOD;
 		  if (count($errors) === 0) {
 				$id = $repo->save($postData);
 				$this->flash->addMessage('success', 'Post has been created');
+				
 				return $response->withHeader('X-ID', $id)
 					->withRedirect($this->router->pathFor('posts'));
 		  }
@@ -9226,38 +9259,34 @@ EOD;
 	 $app->delete('/posts/{id}', function ($request, $response, array $args) use ($repo) {
 		  $repo->destroy($args['id']);
 		  $this->flash->addMessage('success', 'Post has been deleted');
+		  
 		  return $response->withRedirect($this->router->pathFor('posts'));
 	 });
 	 
 	 $app->run();
 	 
-	 // file app/templates/posts/index.phtml:
+	 // file app/templates/posts/index.phtml: ?>
 	 
 	 <?php if (count($flash) > 0): ?>
-				
-				<?php foreach ($flash as $messages): ?>
-					 <?php foreach ($messages as $message): ?>
-						  <?= $message ?>
-					 <?php endforeach ?>
+		  <?php foreach ($flash as $messages): ?>
+				<?php foreach ($messages as $message): ?>
+					 <?= $message ?>
 				<?php endforeach ?>
-		  
-		  <?php endif ?>
+	 	 <?php endforeach ?>
+	 <?php endif ?>
 	 
 	 <a href="/posts/new">Новый пост</a>
 	 
 	 <?php foreach ($posts as $post): ?>
-				
-				<?= htmlspecialchars($post['name']) ?>
-				<?= $post['id'] ?>
-		  
-		  
-		  <?php endforeach ?>
+		  <?= htmlspecialchars($post['name']) ?>
+		  <?= $post['id'] ?>
+	 <?php endforeach ?>
 	 
 	 
 	 
 	 
 	 <?
-	 >>>>>  Model - View - Controller(MVC) <<<<<<<
+	 #>>>>>  Model - View - Controller(MVC) <<<<<<<#
 	 
 	 /*
 	 Архитектура веб-приложений, в первую очередь, определяется самой природой веба, тем, как работает HTTP. Последовательность запрос-обработка-ответ — базис, на который нанизывается все остальное. Фреймворки идут дальше и разделяют приложение на дополнительные слои уже внутри самого процесса обработки запроса. Такое разделение напрашивается само собой, без него код быстро превращается в мешанину из запросов к базе данных, формирований html и логики обработки данных.
