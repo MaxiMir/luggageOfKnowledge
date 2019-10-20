@@ -404,7 +404,7 @@
 	 }
 	 
 	 
-	 /**@@@
+	 /**@@
 	  * Реализуйте функцию result, которая принимает на вход результат хоккейного матча и исход, который предполагался. Если счет был угадан верно, то функция должна вернуть 2, если исход был угадан верно (победа первой команды, ничья, поражение первой команды), то функция должна вернуть 1, во всех остальных случаях функция возвращает 0.
 	  */
 	 
@@ -446,7 +446,7 @@
 	 }
 	 
 	 
-	 /**@@@
+	 /**@@
 	  * Напишите функцию sumDouble, которая принимает на вход два числа: начало последовательности и конец последовательности, а возвращает сумму возведенных в квадрат чисел последовательности с шагом 2. То есть из последовательности от 3 до 7 будут взяты числа 3, 5, 7.
 	  */
 	 
@@ -597,7 +597,7 @@ EOD;
 	 echo $str[strlen($str) - 1]; // => g
 	 
 	 
-	 /**@@@
+	 /**@@
 	  * Реализуйте функцию reverse, которая переворачивает строку.
 	  */
 	 
@@ -613,7 +613,7 @@ EOD;
 	 }
 	 
 	 
-	 /**@@@
+	 /**@@
 	  * Для определения является ли слово палиндромом, достаточно сравнивать попарно символ с обоих концов слова. Если они все равны, то это палиндром. Решите задачу без использования реверса строки. Примеры использования:
 	  */
 	 
@@ -636,7 +636,7 @@ EOD;
 	 }
 
 	 
-	 /**@@@
+	 /**@@
 	  * Реализуйте функцию reverse, которая переворачивает цифры в переданном числе:
 	  */
 	 
@@ -686,7 +686,7 @@ EOD;
 
 
 		
-	 /**@@@
+	 /**@@
 	  * Реализуйте функцию uniq, которая принимает, как аргумент, массив, и возвращает новый массив, в котором ни один элемент исходного массива не повторяется.
 	  */
 	 
@@ -727,7 +727,7 @@ EOD;
 
 	 
 	 
-	 /**@@@
+	 /**@@
 	  * Реализуйте функцию wordsCount, которая считает количество одинаковых слов в предложении. Результатом функции является ассоциативный массив, в ключах которого слова из исходного текста, а значения это количество повторений.
 	  */
 	 
@@ -787,7 +787,7 @@ EOD;
 	 
 		
 	 
-	 /**@@@
+	 /**@@
 	  * Реализуйте функцию multiArgs, которая возвращает произведение всех переданных аргументов. Вызванная без аргументов, должна вернуть null.
 	  */
 	 
@@ -814,7 +814,7 @@ EOD;
 	 }
 
 	 
-	 /**@@@
+	 /**@@
 	  * Реализуйте функцию compact которая принимает на вход массив и возвращает новый, полученный удалением элементов со значением null. Ключи оставшихся элементов (тех которые не были null) должны сохраняться.
 	  */
 	 
@@ -887,7 +887,7 @@ EOD;
 	 }
 	 
 	 
-	 /**@@@
+	 /**@@
 	  * Дано неотрицательное целое число num. Итеративно сложите все входящие в него цифры до тех пор, пока не останется одна цифра.
 	  *
 	  * Для числа 38 процесс будет выглядеть так:
@@ -909,7 +909,7 @@ EOD;
 	 }
 	 
 	 
-	 /**@@@
+	 /**@@
 	  * Реализуйте функцию binarySum, которая принимает на вход два бинарных числа (в виде строк) и возвращает их сумму.
 	  * Результат (вычисленная сумма) также должна быть бинарным числом в виде строки. Посмотрите примеры работы функции:
 	  * '11' == binarySum('10', '1');
@@ -925,7 +925,7 @@ EOD;
 	 
 	 
 	 
-	 /**@@@
+	 /**@@
 	  * Реализуйте функцию isPrime определяющую, является ли число простым. Пример:
 	  * echo isPrime(1); // → false
 	  * echo isPrime(7); // → true
@@ -949,7 +949,7 @@ EOD;
 	 
 	 
 	 
-	 /**@@@
+	 /**@@
 	  * Реализуйте функцию isPowerOfThree которая определяет, является ли переданное число натуральной степенью тройки. Например число 27 это третья степень (33), а 81 это четвертая (34). Пример:
 	  *
 	  * isPowerOfThree(1); // → true (3^0)
@@ -974,7 +974,7 @@ EOD;
 	 }
 	 
 	 
-	 /**@@@
+	 /**@@
 	  * Реализуйте функцию reverseInt, которая переворачивает цифры в переданном числе:
 	  * 31 == reverseInt(13);
 	  * -321 == reverseInt(-123);
@@ -1316,7 +1316,7 @@ EOD;
 	 
 	 #>>>>>  МАССИВЫ <<<<<<<#
 	 
-	 /**@@@
+	 /**@@
 	  * Реализуйте функцию addPrefix, которая добавляет каждому элементу в массиве переданный префикс.
 	  * Функция предназначена для работы со строковыми элементами. После префикса автоматически добавляется пробел.
 	  */
@@ -1343,7 +1343,7 @@ EOD;
 	 
 	 
 	 
-	 /**@@@
+	 /**@@
 	  * Реализуйте функцию reverse, которая располагает значения в обратном порядке без создания нового массива
 	  */
 	 
@@ -1364,7 +1364,7 @@ EOD;
 	 
 	 
 	 
-	 /**@@@
+	 /**@@
 	  * Реализуйте функцию swap, которая меняет местами два элемента относительно переданного индекса.
 	  * Например, если передан индекс 5, то функция меняет местами элементы, находящиеся по индексам 4 и 6.
 	  */
@@ -1439,7 +1439,7 @@ EOD;
 	 
 	 
 	 
-	 /**@@@
+	 /**@@
 	  * Реализуйте функцию calculateAverage, которая высчитывает среднее арифметическое элементов массива. В случае пустого массива функция должна вернуть значение null (используйте в коде для этого guard expression)
 	  */
 	 
@@ -1449,7 +1449,7 @@ EOD;
 	 }
 
 	 
-	 /**@@@
+	 /**@@
 	  * Реализуйте функцию isContinuousSequence, которая проверяет, является ли переданная последовательность целых чисел - возрастающей непрерывно (не имеющей пропусков чисел). Например, последовательность [4, 5, 6, 7] - непрерывная, а [0, 1, 3] - нет. Последовательность может начинаться с любого числа, главное условие - отсутствие пропусков чисел.
 	  */
 	 
@@ -1549,7 +1549,7 @@ EOD;
 	 
 	 
 	 
-	 /**@@@
+	 /**@@
 	  * Реализуйте функцию buildDefinitionList, которая генерирует html список определений (теги dl, dt и dd) и возвращает получившуюся строку.
 	  *
 	  * Параметры функции:
@@ -1628,7 +1628,7 @@ EOD;
 	 
 	 
 	 
-	 /**@@@
+	 /**@@
 	  * Реализуйте функцию makeCensored, которая заменяет каждое вхождение указанного слова в предложении на последовательность $#%! и возвращает полученную строку. Аргументы:
 	  * Текст / Слово
 	  * Словом считается любая непрерывная последовательность символов, включая любые спецсимволы.
@@ -1706,7 +1706,7 @@ EOD;
 	 
 	 
 	 
-	 /**@@@
+	 /**@@
 	  * Реализуйте функцию getSameCount, которая считает количество общих уникальных элементов для двух массивов.
 	  * Аргументы: Первый массив / Второй массив
 	  */
@@ -1785,7 +1785,7 @@ EOD;
 	 }
 	 
 	 
-	 /**@@@
+	 /**@@
 	  * Реализуйте функцию countUniqChars, которая считает количество уникальных символов в переданной строке.
 	  * Если передана пустая строка, то функция должна вернуть 0, т.к. пустая строка вообще не содержит символов.
 	  * Задание необходимо выполнить без использования функции array_unique.
@@ -1969,7 +1969,7 @@ EOD;
 	 Нарушается семантика. Инструменты нужно использовать по назначению, иначе рождается код, который декларирует одно, но в реальности делает другое. Любой опытный программист, который видит array_pop или array_push сразу считает, что массив в данной части программы используется как стек, но на самом деле он этого не делает. Подобный код заставляет напрягаться и анализировать его лишний раз для понимания сути.
 	  */
 	  
-	 /**@@@
+	 /**@@
 	  * Реализуйте функцию checkIfBalanced, которая проверяет балансировку круглых скобок в арифметических выражениях.
 	  */
 	 
@@ -2145,7 +2145,7 @@ EOD;
 	 
 	 
 	 
-	 /**@@@
+	 /**@@
 	  * Реализуйте функцию getIn, которая извлекает из массива (который может быть любой глубины вложенности) значение по указанным ключам.
 	  * Аргументы: Исходный массив / Массив ключей, по которым ведется поиск значения. В случае, когда добраться до значения невозможно, возвращается null.
 	  */
@@ -2197,7 +2197,7 @@ EOD;
 	 
 	 
 	 
-	 /**@@@
+	 /**@@
 	  * Реализуйте функцию pick, которая извлекает из переданного массива все элементы по указанным ключам и возвращает новый массив.
 	  * Аргументы: Исходный массив / Массив ключей, по которым должны быть выбраны элементы (ключ и значение) из исходного массива, и на основе выбранных данных сформирован новый массив
 	  */
@@ -6141,7 +6141,7 @@ EOD;
 	 }
 		  
 		  
-		  /**@@@
+		  /**@@
 			* Реализуйте функцию fib находящую числа Фибоначчи используя рекурсивно-итеративный процесс, но вместо аккумулятора параметров для вложенной функции $iter используйте переменные.
 			*
 			* Формула:
@@ -6192,7 +6192,7 @@ EOD;
 	 }
 		  
 		  
-	 /**@@@
+	 /**@@
 	  * Реализуйте функцию fringe, которая берет в качестве аргумента дерево (представленное в виде списка) и возвращает список, элементы которого - все листья дерева, упорядоченные слева направо.
 	  *
 	  * Пример:
@@ -7262,7 +7262,7 @@ EOD;
 	 */
 	 
 	 
-	 /**@@@
+	 /**@@
 	 Реализуйте обработчики для списка пользователей /users и вывода конкретного пользователя /users/{id}. Список пользователей генерируется в начале скрипта. Используйте пейджинг для вывода пользователей. По-умолчанию показывается 5 пользователей.
 	 
 	 templates/users/index.phtml
@@ -7990,7 +7990,7 @@ EOD;
 	 
 	 
 	 
-	 /**@@@
+	 /**@@
 	 public/index.php
 	 Реализуйте два обработчика:
 	 
@@ -8396,7 +8396,7 @@ EOD;
 	 
 	 
 	 <?
-	 /**@@@
+	 /**@@
 	 public/index.php
 	 Реализуйте следующие обработчики:
 	 
@@ -8724,7 +8724,7 @@ EOD;
 	 */
 	 
 	 
-	 /**@@@
+	 /**@@
 	 public/index.php
 	 Реализуйте следующие обработчики:
 	 
@@ -9309,7 +9309,9 @@ EOD;
 	 */
 	 
 	 
-	 >>>>> Cookies <<<<<<<
+	 
+	 
+	 #>>>>> Cookies <<<<<<<#
 	 
 	 /*
 	 Cookies - это механизм хранения данных браузером удаленной машины для отслеживания или идентификации возвращающихся посетителей. По сути единственный надежный способ понять что перед нами тот же самый пользователь (хотя если угнать чужие куки, то можно подделать запрос от другого пользователя). Куки использует не только сам сайт, но и всемозможные виджеты, которые встраиваются на разные странички. Именно благодаря кукам, гугл узнает вас и преследует рекламой того что вы недавно искали, на сайтах, которые вроде бы не должны знать о ваших предпочтениях.
@@ -9325,7 +9327,7 @@ EOD;
 	 
 	 $app->post('/example', function ($request, $response) {
 		  // Set-Cookie: <cookie-name>=<cookie-value>
-		  return $response->withHeader('Set-Cookie', "foo=bar")
+		  return $response->withHeader('Set-Cookie', "foo=bar");
 	 });
 	 
 	 
@@ -9353,9 +9355,7 @@ EOD;
 	 Обратите внимание на необходимость кодирования данных корзины. Кука с точки зрения HTTP содержит значение в виде строки, а значит для хранения составных структур нужно проводить ручное кодирование в строку и декодирование при извлечении. Иногда простого кодирования недостаточно, особенно если данные имеют повышенную важность и их желательно защитить. В таких случаях дополнительно применяют шифрование на стороне сервера.
 	 
 	 У кук существует ограничение на количество данных которые в них можно хранить, оно равно 4кб. Для корзины интернет магазины этого хватит с головой, но в других ситуациях может понадобится больше места и тогда придется воспользоваться сессией.
-	 */
-		  
-		  /*
+		
 	 Для каких целей можно использовать куки?
 	 > Хранение пользовательских данных, которые должны оставаться между запросами, например, корзина в интернет магазине
 	 > Аутентификация
@@ -9364,104 +9364,108 @@ EOD;
 	 > Через объект $request и его методы для получения кук
 	 */
 		  
-		  /**
-			* public/index.php
-			* Реализуйте два обработчика
-			*
-			* POST /cart-items для добавления товаров в корзину
-			* DELETE /cart-items для очистки корзины
-			* Корзина должна храниться на клиенте в куках. Кроме самого товара, необходимо хранить количество единиц. Повторное добавление того же товара приводит к увеличению счетчика и редиректу на главную. Подробнее смотрите в шаблоне. Для сериализации данных используйте json_encode.
-			**/
+	 /**@@
+	  * public/index.php
+	  * Реализуйте два обработчика
+	  *
+	  * POST /cart-items для добавления товаров в корзину
+	  * DELETE /cart-items для очистки корзины
+	  * Корзина должна храниться на клиенте в куках. Кроме самого товара, необходимо хранить количество единиц. Повторное добавление того же товара приводит к увеличению счетчика и редиректу на главную. Подробнее смотрите в шаблоне. Для сериализации данных используйте json_encode.
+	  **/
 	 
 	 // file: app/public/index.php:
 		  
-		  namespace App;
-		  
-		  require '/composer/vendor/autoload.php';
-		  
-		  use function Stringy\create as s;
-		  
-		  $repo = new Repository();
-		  
-		  $configuration = [
-			  'settings' => [
-				  'displayErrorDetails' => true,
-			  ]
+	 namespace App;
+	 
+	 require '/composer/vendor/autoload.php';
+	 
+	 use function Stringy\create as s;
+	 
+	 $repo = new Repository();
+	 
+	 $configuration = [
+		 'settings' => [
+			 'displayErrorDetails' => true,
+		 ]
+	 ];
+	 
+	 $app = new \Slim\App($configuration);
+	 
+	 $container = $app->getContainer();
+	 $container['renderer'] = new \Slim\Views\PhpRenderer(__DIR__ . '/../templates');
+	 
+	 $app->get('/', function ($request, $response) {
+		  $cart = json_decode($request->getCookieParam('cart', json_encode([])), true);
+		  $params = [
+			  'cart' => $cart
 		  ];
 		  
-		  $app = new \Slim\App($configuration);
+		  return $this->renderer->render($response, 'index.phtml', $params);
+	 });
+	 
+	 $app->post('/cart-items', function ($request, $response) {
+		  $item = $request->getParsedBodyParam('item');
+		  $cart = json_decode($request->getCookieParam('cart', json_encode([])), true);
 		  
-		  $container = $app->getContainer();
-		  $container['renderer'] = new \Slim\Views\PhpRenderer(__DIR__ . '/../templates');
+		  $id = $item['id'];
 		  
-		  $app->get('/', function ($request, $response) {
-				$cart = json_decode($request->getCookieParam('cart', json_encode([])), true);
-				$params = [
-					'cart' => $cart
-				];
-				return $this->renderer->render($response, 'index.phtml', $params);
-		  });
+		  if (isset($cart[$id])) {
+		  	 	$cart[$id]['count'] += 1;
+		  } else {
+				$cart[$id] = ['name' => $item['name'], 'count' => 1];
+		  }
 		  
-		  $app->post('/cart-items', function ($request, $response) {
-				$item = $request->getParsedBodyParam('item');
-				$cart = json_decode($request->getCookieParam('cart', json_encode([])), true);
-				
-				$id = $item['id'];
-				if (!isset($cart[$id])) {
-					 $cart[$id] = ['name' => $item['name'], 'count' => 1];
-				} else {
-					 $cart[$id]['count'] += 1;
-				}
-				
-				$encodedCart = json_encode($cart);
-				return $response->withHeader('Set-Cookie', "cart={$encodedCart}")
-					->withRedirect('/');
-		  });
+		  $encodedCart = json_encode($cart);
 		  
-		  $app->delete('/cart-items', function ($request, $response) {
-				$encodedCart = json_encode([]);
-				return $response->withHeader('Set-Cookie', "cart={$encodedCart}")
-					->withRedirect('/');
-		  });
+		  return $response->withHeader('Set-Cookie', "cart={$encodedCart}")
+			  ->withRedirect('/');
+	 });
+	 
+	 $app->delete('/cart-items', function ($request, $response) {
+		  $encodedCart = json_encode([]);
 		  
-		  $app->run();
+		  return $response->withHeader('Set-Cookie', "cart={$encodedCart}")
+			  ->withRedirect('/');
+	 });
+	 
+	 $app->run();
 	 
 	 // app/src/Repository.php:
 		  
-		  namespace App;
-		  
-		  class Repository
-		  {
-				public function __construct()
-				{
-					 session_start();
-				}
-				
-				public function all()
-				{
-					 return array_values($_SESSION);
-				}
-				
-				public function find(int $id)
-				{
-					 return $_SESSION[$id];
-				}
-				
-				public function save(array $item)
-				{
-					 if (empty($item['title']) || $item['paid'] == '') {
-						  $json = json_encode($item);
-						  throw new \Exception("Wrong data: {$json}");
-					 }
-					 $item['id'] = uniqid();
-					 $_SESSION[$item['id']] = $item;
-				}
-		  }
+	 namespace App;
 	 
-	 // file: app/templates/index.phtml:
+	 class Repository
+	 {
+		  public function __construct()
+		  {
+				session_start();
+		  }
 		  
-		  <
-		  form action = "/cart-items" method = "post" >
+		  public function all()
+		  {
+				return array_values($_SESSION);
+		  }
+		  
+		  public function find(int $id)
+		  {
+				return $_SESSION[$id];
+		  }
+		  
+		  public function save(array $item)
+		  {
+				if (empty($item['title']) || $item['paid'] == '') {
+					 $json = json_encode($item);
+					 
+					 throw new \Exception("Wrong data: {$json}");
+				}
+				
+				$item['id'] = uniqid();
+				$_SESSION[$item['id']] = $item;
+		  }
+	 }
+	 
+	 // file: app/templates/index.phtml: ?>
+	 <form action = "/cart-items" method = "post" >
 		  <input type = "hidden" name = "item[id]" value = "1" >
 		  <input type = "hidden" name = "item[name]" value = "One" >
 			  One
@@ -9482,20 +9486,17 @@ EOD;
 	 
 	 <?php if (count($cart) == 0): ?>
 		  
-		  <?php else: ?>
-				<?php foreach ($cart as $item): ?>
-					 
-					 <?= htmlspecialchars($item['name']) ?>  <?= htmlspecialchars($item['count']) ?>
-				
-				<?php endforeach ?>
-		  <?php endif ?>
+	 <?php else: ?>
+		  <?php foreach ($cart as $item): ?>
+				<?= htmlspecialchars($item['name']) ?>  <?= htmlspecialchars($item['count']) ?>
+		  <?php endforeach ?>
+	 <?php endif ?>
 	 
 	 
 	 
 	 
 	 <?
-	 
-	 >>>>> Сессия <<<<<<<
+	 #>>>>> Сессия <<<<<<<#
 	 
 	 /*
 	 Сессия, в отличие от кук, как понятие, не существует ни в браузере ни в HTTP. Это абстракция, созданная для удобной работы с индивидуальными пользователями. Сессии реализуются на уровне конкретных фреймворков и только в PHP сессии встроены в язык. Общий принцип работы сессии сводится к трем операциям:
@@ -9540,7 +9541,7 @@ EOD;
 	 });
 		  
 		  
-		  /*
+	 /*
 	 По сравнению с версией на куках, ушла значительная часть кода. Кодирование и декодирование в json, извлечение куки и перезапись куки.
 	 
 	 Иногда возникает задача уничтожать сессию, например при выполнении выхода из системы. Полное уничтожение сессии включает в себя три шага:
@@ -9555,129 +9556,127 @@ EOD;
 	 Сессии можно хранить в куках
 	 */
 		  
-		  /**@@@
-			* В этой практике необходимо реализовать систему аутентификации. В простейшем случае она состоит из двух маршрутов:
-			*
-			* POST /session - создает сессию
-			* DELETE /session - удаляет сессию
-			* После выполнения каждого из этих действий происходит редирект на главную.
-			*
-			* templates/index.phtml
-			* Если пользователь не аутентифицирован, то ему показывается форма с текстом "Sign In" полем для ввода имени и пароля. Если аутентифицирован, то его имя и форма с кнопкой "Sign Out".
-			*
-			* public/index.php
-			* Реализуйте указанные выше маршруты и дополнительно маршрут /
-			*
-			* Список пользователей с именами и паролями доступен в массиве $users. Обратите внимание на то что пароль хранится в зашифрованном виде (их не хранят в открытом виде). Это значит, что при сравнении необходимо шифровать пароль, приходящий от пользователя, и сравнивать хеши.
-			*
-			* Если имя или пароль неверные, то происходит редирект на главную, и показывается флеш сообщение Wrong password or name.
-			**/
+	 /**@@
+	  * В этой практике необходимо реализовать систему аутентификации. В простейшем случае она состоит из двух маршрутов:
+	  *
+	  * POST /session - создает сессию
+	  * DELETE /session - удаляет сессию
+	  * После выполнения каждого из этих действий происходит редирект на главную.
+	  *
+	  * templates/index.phtml
+	  * Если пользователь не аутентифицирован, то ему показывается форма с текстом "Sign In" полем для ввода имени и пароля. Если аутентифицирован, то его имя и форма с кнопкой "Sign Out".
+	  *
+	  * public/index.php
+	  * Реализуйте указанные выше маршруты и дополнительно маршрут /
+	  *
+	  * Список пользователей с именами и паролями доступен в массиве $users. Обратите внимание на то что пароль хранится в зашифрованном виде (их не хранят в открытом виде). Это значит, что при сравнении необходимо шифровать пароль, приходящий от пользователя, и сравнивать хеши.
+	  *
+	  * Если имя или пароль неверные, то происходит редирект на главную, и показывается флеш сообщение Wrong password or name.
+	  **/
 	 
 	 // file: app/public/index.php:
 		  
-		  namespace App;
-		  
-		  require '/composer/vendor/autoload.php';
-		  
-		  use function Stringy\create as s;
-		  
-		  $configuration = [
-			  'settings' => [
-				  'displayErrorDetails' => true,
-			  ],
+	 namespace App;
+	 
+	 require '/composer/vendor/autoload.php';
+	 
+	 use function Stringy\create as s;
+	 
+	 $configuration = [
+		 'settings' => [
+			 'displayErrorDetails' => true,
+		 ],
+	 ];
+	 
+	 session_start();
+	 
+	 $app = new \Slim\App($configuration);
+	 
+	 $container = $app->getContainer();
+	 $container['renderer'] = new \Slim\Views\PhpRenderer(__DIR__ . '/../templates');
+	 $container['flash'] = function () {
+		  return new \Slim\Flash\Messages();
+	 };
+	 
+	 $users = [
+		 ['name' => 'admin', 'passwordDigest' => hash('sha256', 'secret')],
+		 ['name' => 'mike', 'passwordDigest' => hash('sha256', 'superpass')],
+		 ['name' => 'kate', 'passwordDigest' => hash('sha256', 'strongpass')]
+	 ];
+	 
+	 $app->get('/', function ($request, $response) {
+		  $flash = $this->flash->getMessages();
+		  $params = [
+			  'currentUser' => $_SESSION['user'] ?? null,
+			  'flash' => $flash
 		  ];
 		  
-		  session_start();
-		  
-		  $app = new \Slim\App($configuration);
-		  
-		  $container = $app->getContainer();
-		  $container['renderer'] = new \Slim\Views\PhpRenderer(__DIR__ . '/../templates');
-		  $container['flash'] = function () {
-				return new \Slim\Flash\Messages();
-		  };
-		  
-		  $users = [
-			  ['name' => 'admin', 'passwordDigest' => hash('sha256', 'secret')],
-			  ['name' => 'mike', 'passwordDigest' => hash('sha256', 'superpass')],
-			  ['name' => 'kate', 'passwordDigest' => hash('sha256', 'strongpass')]
-		  ];
-		  
-		  $app->get('/', function ($request, $response) {
-				$flash = $this->flash->getMessages();
-				$params = [
-					'currentUser' => $_SESSION['user'] ?? null,
-					'flash' => $flash
-				];
-				return $this->renderer->render($response, 'index.phtml', $params);
-		  });
-		  
-		  $app->post('/session', function ($request, $response) use ($users) {
-				$userData = $request->getParsedBodyParam('user');
-				
-				$user = collect($users)->first(function ($user) use ($userData) {
-					 return $user['name'] == $userData['name']
-						 && hash('sha256', $userData['password']) == $user['passwordDigest'];
-				});
-				
-				if ($user) {
-					 $_SESSION['user'] = $user;
-				} else {
-					 $this->flash->addMessage('error', 'Wrong password or name');
-				}
-				return $response->withRedirect('/');
-		  });
-		  
-		  $app->delete('/session', function ($request, $response) {
-				session_unset();
-				session_destroy();
-				return $response->withRedirect('/');
-		  });
-		  
-		  $app->run();
+		  return $this->renderer->render($response, 'index.phtml', $params);
+	 });
 	 
-	 
-	 // file app/templates/index.phtml:
+	 $app->post('/session', function ($request, $response) use ($users) {
+		  $userData = $request->getParsedBodyParam('user');
 		  
-		  <?
-		  php if (count($flash) > 0): ?>
-				
-				<?php foreach ($flash as $messages): ?>
-					 <?php foreach ($messages as $message): ?>
-						  <?= $message ?>
-					 <?php endforeach ?>
+		  $user = collect($users)->first(function ($user) use ($userData) {
+				return $user['name'] == $userData['name']
+					&& hash('sha256', $userData['password']) == $user['passwordDigest'];
+		  });
+		  
+		  if ($user) {
+				$_SESSION['user'] = $user;
+		  } else {
+				$this->flash->addMessage('error', 'Wrong password or name');
+		  }
+		  
+		  return $response->withRedirect('/');
+	 });
+	 
+	 $app->delete('/session', function ($request, $response) {
+		  session_unset();
+		  session_destroy();
+		  
+		  return $response->withRedirect('/');
+	 });
+	 
+	 $app->run();
+
+	 
+	 // file app/templates/index.phtml: ?>
+	 <?php if (count($flash) > 0): ?>
+		  <?php foreach ($flash as $messages): ?>
+				<?php foreach ($messages as $message): ?>
+					 <?= $message ?>
 				<?php endforeach ?>
-		  
-		  <?php endif ?>
+		  <?php endforeach ?>
+	 <?php endif ?>
 	 
 	 <?php if ($currentUser): ?>
-				<?= $currentUser['name'] ?>
+			<?= $currentUser['name'] ?>
+	 <?php else: ?>
 		  
 		  
-		  <?php else: ?>
-		  
-		  
-		  <?php endif; ?>
+	 <?php endif; ?>
 	 <?
 	 
 	 
 	 
-	 >>>>>> Деплой <<<<<<<
+	 
+	 #>>>>>> Деплой <<<<<<<#
 	 /*
 	 После того как сайт написан, встает вопрос о том как выложить его в интернет. Стандартный путь включает три пункта:
 	 
-	 Покупка домена
-	 Покупка хостинга и его настройка
-	 Деплой
-	 Первый я пропущу (скоро мы его опишем в https://guides.hexlet.io), а вот про два других поговорим.
+	 > Покупка домена
+	 > Покупка хостинга и его настройка
+	 > Деплой
 	 
 	 Деплой - процесс выкладки новой версии сайта на сервер (или сервера). Этот процесс может быть довольно сложным и сильно зависит от используемых технологий. Во время деплоя выполняются следующие задачи (ниже всего лишь один из возможных вариантов, причем довольно примитивный):
 	 
-	 Код проекта скачивается на сервер (обычно через клонирование git)
-	 Ставятся все необходимые зависимости
-	 Выполняется процесс сборки, например собирается фронтенд часть
-	 Выполняются миграции. Миграции - sql скрипты, которые изменяют структуру базы данных
-	 Запускается новая версия кода.
+	 > Код проекта скачивается на сервер (обычно через клонирование git)
+	 > Ставятся все необходимые зависимости
+	 > Выполняется процесс сборки, например собирается фронтенд часть
+	 > Выполняются миграции. Миграции - sql скрипты, которые изменяют структуру базы данных
+	 > Запускается новая версия кода.
+	 
 	 Как это ни странно, но во многих компаниях прямо сейчас весь этот процесс выполняется руками. Программист заходит на сервер, запускает git pull и далее проходится по списку выше. Это худший способ деплоить. Деплой относится к тем задачам, которые должны быть автоматизированы от и до.
 	 
 	 Несмотря на разнообразие способов деплоя, есть одно важное правило общее для всех - деплоить можно только вперед! Деплой нельзя "откатывать" (в первую очередь это касается миграций, но про базы мы пока не говорим). Если после или во время деплоя что-то пошло не так, то правильно деплоить снова, но предыдущую версию.
@@ -9690,46 +9689,48 @@ EOD;
 	 
 	 Способ деплоя сильно зависит от используемого хостинга и даже способа настройки серверного окружения. Выделяют следующие типы хостингов:
 	 
-	 Shared Hosting - самый дешевый способ размещать сайт в интернете. Такая услуга включает в себя доступ на сервер с уже настроенным программным обеспечением под конкретный стек, например Linux + PHP + MySQL. Этот способ подходит для самых простых сайтов и требует минимальной настройки.
+	 > Shared Hosting - самый дешевый способ размещать сайт в интернете. Такая услуга включает в себя доступ на сервер с уже настроенным программным обеспечением под конкретный стек, например Linux + PHP + MySQL. Этот способ подходит для самых простых сайтов и требует минимальной настройки.
 	 
-	 VPS/VDS - наиболее сбалансированная услуга, в рамках которой предоставляет виртуальная машина. Плюс в том что такой вид хостинга позволяет задействовать больше серверных мощностей: цпу, память и диск. Предустановленного ПО нет, все нужно делать самостоятельно. По сравнению с Shared Hosting вы не ограничены в правах и можете настраивать сервер как вам угодно.
+	 > VPS/VDS - наиболее сбалансированная услуга, в рамках которой предоставляет виртуальная машина. Плюс в том что такой вид хостинга позволяет задействовать больше серверных мощностей: цпу, память и диск. Предустановленного ПО нет, все нужно делать самостоятельно. По сравнению с Shared Hosting вы не ограничены в правах и можете настраивать сервер как вам угодно.
 	 
-	 Dedicated Server - выделеный сервер (либо свой, либо арендованный). Такой хостинг требует больше всего участия, но зато вы получаете лучшее соотношение производительность/цена.
+	 > Dedicated Server - выделеный сервер (либо свой, либо арендованный). Такой хостинг требует больше всего участия, но зато вы получаете лучшее соотношение производительность/цена.
 	 
-	 IaaS - инфраструктура как сервис. Вид хостинга при котором большая часть возможностей представляется как сервис. Как пример Amazon Web Service (AWS).
+	 > IaaS - инфраструктура как сервис. Вид хостинга при котором большая часть возможностей представляется как сервис. Как пример Amazon Web Service (AWS).
 	 
-	 PaaS - платформа как сервис. Наиболее дорогой и самый автоматизированный способ из коробки по размещению сайтов. Выкладка сайта происходит буквально по команде git push. Кроме цены важно учитывать используемые технологии и подходы. PaaS обладает наибольшим числом ограничений по тому что и как можно делать, но в обмен вы получаете не просто автоматизированный хостинг, но и платформу которая автоматически "скейлится" (масштабируется) под нагрузку.
+	 > PaaS - платформа как сервис. Наиболее дорогой и самый автоматизированный способ из коробки по размещению сайтов. Выкладка сайта происходит буквально по команде git push. Кроме цены важно учитывать используемые технологии и подходы. PaaS обладает наибольшим числом ограничений по тому что и как можно делать, но в обмен вы получаете не просто автоматизированный хостинг, но и платформу которая автоматически "скейлится" (масштабируется) под нагрузку.
 	 Все способы деплоя можно грубо разбить на две большие категории. Деплой на PaaS и деплой на все остальное.
 	 
 	 # PaaS
 	 Самый простой способ начать деплоить. Большинство PaaS хостеров имеют бесплатные планы, достаточные для выкладки учебных проектов. Из плюсов, не придется покупать адрес, домен третьего уровня предоставляется бесплатно. Самое популярное PaaS решение на текущий день - Heroku. У Хероку прекрасная документация https://devcenter.heroku.com/start, следуя которой можно быстро выложить свой первый сайт. Пошаговый гайд описывающий выкладку сайта на PHP доступен по ссылке https://devcenter.heroku.com/articles/getting-started-with-php. Хероку используется на Хекслете для JavaScript и PHP проектов.
-	 */
+	 
 	 
 	 $ heroku create
-	 Creating sharp - rain - 871. .. done, stack is cedar - 14
+	 
+	 Creating sharp-rain-871... done, stack is cedar-14
 	 http://sharp-rain-871.herokuapp.com/ | https://git.heroku.com/sharp-rain-871.git
 	 Git remote heroku added
 	 
 	 $ git push heroku master
+	 
 	 remote: Building source:
 	 remote:
 	 remote: -----> PHP app detected
 	 remote: -----> Bootstrapping...
 	 remote: -----> Installing platform packages...
-	 remote:        NOTICE: No runtime required in composer . json; requirements
-	 remote:        from dependencies in composer . lock will be used for selection
-																								 remote: -php(7.1.3)
-	 remote:        -apache(2.4.20)
-	 remote:        -nginx(1.8.1)
+	 remote:        NOTICE: No runtime required in composer.json; requirements
+	 remote:        from dependencies in composer.lock will be used for selection
+	 remote:        - php (7.1.3)
+	 remote:        - apache (2.4.20)
+	 remote:        - nginx (1.8.1)
 	 remote: -----> Installing dependencies...
-	 remote:        Composer version 1.4.1 2017 - 03 - 10 09:29:45
+	 remote:        Composer version 1.4.1 2017-03-10 09:29:45
 	 remote:        Loading composer repositories with package information
 	 remote:        Installing dependencies from lock file
 	 remote:        Package operations: 12 installs, 0 updates, 0 removals
-	 remote:          -Installing psr / log(1.0.2): Loading from cache
-	 remote:          -Installing monolog / monolog(1.22.1): Loading from cache
+	 remote:          - Installing psr/log (1.0.2): Loading from cache
+	 remote:          - Installing monolog/monolog (1.22.1): Loading from cache
 	 ...
-	 remote:          -Installing symfony / twig - bridge(v3.2.7): Loading from cache
+	 remote:          - Installing symfony/twig-bridge (v3.2.7): Loading from cache
 	 remote:        Generating optimized autoload files
 	 remote: -----> Preparing runtime environment...
 	 remote: -----> Checking for additional extensions to install...
@@ -9742,43 +9743,44 @@ EOD;
 	 remote:        Released v17
 	 remote:        https://gsphpjon.herokuapp.com/ deployed to Heroku
 	 remote:
-	 remote: Verifying deploy... done .
-				To https://git.heroku.com/gsphpjon.git
-	  +264e577...4f2369c master -> master(forced update)
+	 remote: Verifying deploy... done.
+	 To https://git.heroku.com/gsphpjon.git
+	  + 264e577...4f2369c master -> master (forced update)
+
 	 
-	 /*
-	 Самостоятельная работа
+	 # Самостоятельная работа
 	 Выложите на Хероку тот код который вы делали на Slim в течении этого курса.
 	 
-	 Все остальное
+	 # Все остальное
 	 Если не брать в рассчет самый примитивный Shared Hosting, который не позволяет никак настраивать серверное окружение, все остальные виды хостингов имеют схожие задачи для выкладки.
 	 
 	 Самая первая задача - настроить окружение. Если в Shared Hosting всегда есть набор предустановленных программ, то во всех остальных видах хостинга нет ничего кроме голой операционной системы. Установка необходимого ПО такой же автоматизируемый процесс как процесс деплоя и у него есть даже собственное название - Configuration Management. Рекомендую использовать Ansible, популярное решение для настройки.
-	 - hosts: all
-	 
-		tasks:
-	 
-		  - lineinfile:
+
+	- hosts: all
+
+	tasks:
+
+    	- lineinfile:
 				create: yes
 				regexp: ~/.local
 				path: ~/.bash_profile
 				line: "export PATH=$PATH:~/.local/bin"
-	 
-		  - name: install packages
-			 apt: pkg=python3-pip state=latest update_cache=yes
-			 tags: pip
-			 become: yes
-	 
-		  - pip:
+
+    	- name: install packages
+				apt: pkg=python3-pip state=latest update_cache=yes
+				tags: pip
+				become: yes
+
+    	- pip:
 				name: pip
 				state: latest
-			 become: yes
+				become: yes
 	 
 	 Ключевое понятие Ansible - Playbook. Это файл (или файлы) описывающие в yaml, что нужно сделать на указанной машине. В каждом плейбуке используются готовые модули поставляемые вместе с Ansible. Этих модулей сотни, с помощью них можно делать практически все, начиная от установки программ, до настройки сети и управления правами файловой системы. Ansible универасальный инструмент, с его помощью можно не только настраивать окружение, но и собственно деплоить. Причем для деплоя есть готовый модуль - deploy helper https://docs.ansible.com/ansible/2.5/modules/deploy_helper_module.html.
 	 
 	 В более продвинутых случаях, там где используется, например, Docker, развертывание осуществляется системами оркестрации, среди которых выделяется Kubernetes https://kubernetes.io/.
 	 
-	 Дополнительные материалы
+	 # Дополнительные материалы
 	 Среды разработки https://ru.hexlet.io/blog/posts/environment
 	 DevOps https://ru.atlassian.com/devops
 	 Непрерывное развертывание https://en.wikipedia.org/wiki/Continuous_delivery
@@ -9788,9 +9790,10 @@ EOD;
 	 
 	 
 	 
+	 
 	 ############## PHP: Ввод и вывод ##############
 	 
-	 >>>>> Пути <<<<<<<
+	 #>>>>> Пути <<<<<<<#
 	 
 	 echo __FILE__ . PHP_EOL; // абсолютный путь к текущему файлу
 	 echo __DIR__ . PHP_EOL; // абсолютный путь к текущему каталогу <-> dirname(__FILE__)
@@ -9809,7 +9812,7 @@ EOD;
 	 echo $file->getExtansion() . PHP_EOL;
 	 
 	 
-	 /***
+	 /**@@
 	  * Реализуйте функцию cd, принимающую на вход два параметра: текущую директорию и путь для перехода. Функция должна вернуть директорию, в которую необходимо перейти.
 	  *
 	  * Пример использования:
@@ -9828,7 +9831,6 @@ EOD;
 	 
 	 function cd($current, $move)
 	 {
-		  // BEGIN (write your solution here)
 		  $paths = explode('/', $current);
 		  $stack = array_filter($paths, function ($path) {
 				return $path == '';
@@ -9841,11 +9843,9 @@ EOD;
 				}
 		  }
 		  return $stack;
-		  // END
 	 }
 	 
 	 // Tests:
-	 
 	 namespace App\Tests;
 	 
 	 use PHPUnit\Framework\TestCase;
@@ -9876,8 +9876,7 @@ EOD;
 	 }
 	 
 	 
-	 >>>>>
-	 Файловая система <<<<<<<
+	 #>>>>> Файловая система <<<<<<<#
 	 
 	 namespace Theory;
 	 
@@ -9910,10 +9909,8 @@ EOD;
 	 echo $info->isFile();
 	 
 	 
-	 /***
-	  *
+	 /**@@
 	  * Реализуйте функцию rrmdir, удаляющую директорию рекурсивно, то есть вместе со всем своим содержимым.
-	  *
 	  * Подсказка
 	  * Одна из возможных реализаций может использовать итераторы.
 	  * Воспользуйтесь функцией scandir вместо функции glob.
@@ -9925,6 +9922,7 @@ EOD;
 	 {
 		  $dirIterator = new \RecursiveDirectoryIterator($dir, \FilesystemIterator::SKIP_DOTS);
 		  $iterator = new \RecursiveIteratorIterator($dirIterator, \RecursiveIteratorIterator::CHILD_FIRST);
+		  
 		  foreach ($iterator as $filename => $fileInfo) {
 				if ($fileInfo->isDir()) {
 					 rmdir($filename);
@@ -9932,12 +9930,14 @@ EOD;
 					 unlink($filename);
 				}
 		  }
+		  
 		  rmdir($dir);
 	 }
 	 
 	 
-	 >>>>>
-	 Чтение файла <<<<<<<
+	 
+	 
+	 #>>>>> Чтение файла <<<<<<<#
 	 
 	 namespace Theory;
 	 
@@ -9951,7 +9951,7 @@ EOD;
 		  }
 		  
 		  #2
-		  $content = file_get_content(__FILE__);
+		  $content = file_get_contents(__FILE__);
 		  echo $content;
 		  
 		  // #1, #2 - подходят для маленьких файлов (тк. эти функции загружают все в память). Поэтому для больших файлов надо делать это потоково:
@@ -9985,8 +9985,7 @@ EOD;
 					 /* javier   argonout    pe */
 					 /* hiroshi  sculptor    jp */
 					 /* robert   slacker us*/
-					 while ($userinfo = fsconf($handle,
-						 "%s\t%s\t%s\n")) { // возвращает массив значений соотствующий этому паттерну
+					 while ($userinfo = fsconf($handle, "%s\t%s\t%s\n")) { // возвращает массив значений соотствующий этому паттерну
 						  list($name, $profession, $countrycode) = $userinfo;
 					 }
 				} finally {
@@ -10018,7 +10017,7 @@ EOD;
 	 }
 	 
 	 
-	 /**@@@
+	 /**@@
 	  * src/App/FileUtils.php
 	  * Реализуйте функцию grep, принимающую на вход два параметра: подстроку для сопоставления и шаблон в формате glob, по которому будет происходить поиск.
 	  *
@@ -10057,10 +10056,12 @@ EOD;
 	 }
 	 
 	 
-	 >>>>>
-	 Запись в файл <<<<<<<
+	 
+	 
+	 #>>>>> Запись в файл <<<<<<<#
 	 
 	 namespace Theory;
+	 
 	 $file = __DIR__ . DIRECTORY_SEPARATOR . 'temp';
 	 $data = "my data\n";
 	 
@@ -10068,11 +10069,12 @@ EOD;
 	 
 	 if (is_writable($file)) {
 		  $handle = fopen($file, 'ab'); // ab - добавление данных в конец; r - перезаписывать; a+ c
+		  
 		  if ($handle) {
 				try {
 					 fwrite($handle, $data);
 				} finally {
-					 fclose($handler);
+					 fclose($handle);
 				}
 		  }
 	 }
@@ -10081,7 +10083,7 @@ EOD;
 	 $file->fwrite($data);
 	 
 	 
-	 /**@@@
+	 /**@@
 	  * Сериализация — процесс перевода какой-либо структуры данных в последовательность битов. Обратной к операции сериализации является операция десериализации (структуризации) — восстановление начального состояния структуры данных из битовой последовательности.
 	  *
 	  * Функция serialize в php генерирует пригодное для хранения представление переменной. Это полезно для хранения или передачи значений PHP между скриптами без потери их типа и структуры. Для превращения сериализованной строки обратно в PHP-значение существует функция unserialize.
@@ -10091,6 +10093,7 @@ EOD;
 	  * Реализуйте функцию load, которая принимает на вход имя файла. После этого она читает содержимое файла и проводит десериализацию.
 	  * Пример:
 	  */
+	 
 	 Serializer\dump($file, $structure);
 	 $data = Serializer\load($file);
 	 
@@ -10103,18 +10106,19 @@ EOD;
 	 function load($file)
 	 {
 		  $data = file_get_contents($file);
+		  
 		  return unserialize($data);
 	 }
 	 
 	 function dump($file, $data)
 	 {
 		  $string = serialize($data);
+		  
 		  file_put_contents($file, $string);
 	 }
 	 
 	 
-	 >>>>>
-	 Манипуляция с файловыми указателями <<<<<<<
+	 #>>>>> Манипуляция с файловыми указателями <<<<<<<#
 	 
 	 namespace Theoty;
 	 
@@ -10125,9 +10129,10 @@ EOD;
 	 fseek($handle, 0); // rewind($handle); // перемещение указателя; 0 - в начало <-> rewind($handle)
 	 echo ftell($handle) . PHP_EOL; // => 0
 	 
+	 
 	 // SplFileObject
 	 
-	 /**@@@
+	 /**@@
 	  * Класс Db представляет собой простую реализацию NoSQL базы данных, основанной на файлах. Она обладает очень простым интерфейсом. Метод get принимает на вход ключ (любая строка) и возвращает значение этого ключа. Метод set принимает на вход ключ и значение (любая строка).
 	  *
 	  * Ограничения:
@@ -10156,8 +10161,6 @@ EOD;
 	 {
 		  const KEY_LENGTH = 8;
 		  const VALUE_LENGTH = 100;
-		  
-		  
 		  const ZERO = "\0";
 		  
 		  private $db;
@@ -10168,8 +10171,7 @@ EOD;
 					 touch($file);
 				}
 				
-				$this->db = new \SplFileObject($file,
-					'r+'); // r+ - открывает файл для чтения и записи; помещает указатель в начало файла.
+				$this->db = new \SplFileObject($file, 'r+'); // r+ - открывает файл для чтения и записи; помещает указатель в начало файла.
 		  }
 		  
 		  public function get($key)
@@ -10218,14 +10220,16 @@ EOD;
 	 }
 	 
 	 
-	 >>>>>
-	 Временный файл <<<<<<<
+	 
+	 
+	 #>>>>> Временный файл <<<<<<<#
 	 
 	 $dir = sys_get_temp_dir(); // возращает временную системную директорию
+	 $tmpfname = tempnam($dir, "HEXLET"); // создает пустой временный файл. В первом аргументе передается директория (здесь временная системная директория)
 	 
-	 $tmpfname = tempnam(sys_get_temp_dir(), "HEXLET"); // создает пустой временный файл. В первом аргументе передается директория (здесь временная системная директория)
 	 
 	 $temp = tmpfile(); // создает файловый дискриптор временного файла
+	 
 	 try {
 		  fwrite($temp, 'my data');
 		  fseek($temp, 0);
@@ -10237,7 +10241,7 @@ EOD;
 	 // SplTempFileObject
 	 
 	 
-	 /***
+	 /**@@
 	  * Реализуйте функцию tmpdir, принимающую на вход лямбда-функцию. tmpdir при этом должна создать временную директорию, а потом вызвать лямбду с переданным туда путем до директории. После вызова tmpdir должна удалить эту временную директорию. Функция tmpdir должна вернуть результат выполнения лямбда-функции.
 	  *
 	  * Пример:
@@ -10257,6 +10261,7 @@ EOD;
 	 {
 		  $dir = sys_get_temp_dir() . DIRECTORY_SEPARATOR . uniqid();
 		  mkdir($dir);
+		  
 		  try {
 				return $func($dir);
 		  } finally {
@@ -10355,16 +10360,17 @@ EOD;
 	 */
 	 
 	 
+	 
+	 
 	 ############## «PHP: Функциональное программирование» ##############
 	 
 	 
-	 >>>>>   Map:
-	 Отображение списков <<<<<<<
+	 #>>>>> Map: Отображение списков <<<<<<<#
 	 
-	 $result = array_map(function ($key, $value)){
+	 $result = array_map(function ($key, $value) {
 		 return $key . $value;
 	 }, array_keys($map), $map); // передаем ключи массива в array_map
-	 // не поддерживает итерируемые объекты
+	 // ! не поддерживает итерируемые объекты
 	 
 	 // Functional\map - поддерживает:
 	 $iterator = new \DirectoryIterator('..'); // .. - директория выше
@@ -10375,12 +10381,12 @@ EOD;
 	 
 	 
 	 
-	 >>>>>  Фильтрация коллекций <<<<<<<
+	 #>>>>>  Фильтрация коллекций <<<<<<<#
 	 
 	 $result = array_filter($array, function ($key) {
 		  return $key > 5;
 	 }, ARRAY_FILTER_USE_KEY); // передаем ключи в array_filter. ARRAY_FILTER_USE_BOTH - передать ключ и значение
-	 // не поддерживает итерируемые объекты
+	 // ! не поддерживает итерируемые объекты
 	 
 	 // Functional\select:
 	 $iterator = new \DirectoryIterator('..');
@@ -10389,10 +10395,11 @@ EOD;
 	 });
 	 
 	 /*
-	 Ссылки
+	 # Ссылки
 	 Итераторы - http://php.net/manual/en/language.oop5.iterations.php
-	 
-	 /**
+	*/
+	
+	 /**@@
 	 «Мощность строки» — выдуманное нами понятие, которое показывает ее силу ;-). Вычисляется оно как сумма ASCII кодов букв строки.
 	 Реализуйте функцию powerOfString, которая находит мощность строки.
 	 
@@ -10400,7 +10407,8 @@ EOD;
 	 Сумма элементов массива — array_sum.
 	 Преобразование строки в массив — str_split.
 	 Получить ASCII код символа — ord.
-	 **/
+	 */
+
 	 namespace App\Solution;
 	 
 	 require getenv('COMPOSER_HOME') . '/vendor/autoload.php';
@@ -10417,10 +10425,11 @@ EOD;
 		  return array_sum($result);
 	 }
 	 
-	 /**
+	 /**@@
 	  * Реализуйте функцию evenSquareSum, которая принимает на вход массив и возвращает сумму квадратов четных чисел.
 	  * [1, 2, 3, 8]; // 2^2 + 8^2 = 68
 	  **/
+	 
 	 namespace App\Solution;
 	 
 	 require getenv('COMPOSER_HOME') . '/vendor/autoload.php';
@@ -10442,8 +10451,7 @@ EOD;
 	 }
 	 
 	 
-	 >>>>>
-	 Функция zip <<<<<<<
+	 #>>>>> Функция zip <<<<<<<#
 	 
 	 namespace Theory;
 	 
@@ -10466,7 +10474,7 @@ EOD;
 	 // array_map
 	 $result = array_map(function ($a, $b) { // <-> array_map(null, range(1, 3), range(11, 13))
 		  return [$a, $b];
-	 }, range(1, 3), range(11, 13);
+	 }, range(1, 3),  range(11, 13));
 	 
 	 print_r($result);
 	 
@@ -10483,7 +10491,7 @@ EOD;
 		 }
 	 );
 	 
-	 /**@@@
+	 /**@@
 	  * Один из способов определения победителя в футболе это пенальти. Процесс идет так: В каждой попытке бьет игрок каждой из команд и определяется команда победитель этой попытки. Процесс продолжается до 5 попыток, хотя победитель может быть выявлен и раньше. Если после пяти попыток победитель не выявлен, то процесс продолжается до первой выигранной попытки.
 	  *
 	  * src/Solution.php
@@ -10529,8 +10537,9 @@ EOD;
 	 }
 	 
 	 
-	 >>>>>
-	 Функция reduce <<<<<<<
+	 
+	 
+	 #>>>>> Функция reduce <<<<<<<#
 	 
 	 namespace Theory;
 	 
@@ -10541,24 +10550,22 @@ EOD;
 	 $array = [1, 3, 2, 9, 8, 4];
 	 
 	 
-	 // as array
-	 
+	 // as array:
 	 $result = array_reduce($array, function ($acc, $item) { // наибольший элемент массива
 		  return $item > $acc ? $item : $acc;
 	 }, $array[0]);
 	 
 	 print_r($result);
 	 
-	 // Functional\reduce_left
-	 
-	 $result = reduce_left($array,
-		 function ($item, $index, $collection, $acc) { // left обход коллекции слева, right - справа
+	 // Functional\reduce_left:
+	 $result = reduce_left($array, function ($item, $index, $collection, $acc) { // left обход коллекции слева, right - справа
 			  return $item > $acc ? $item : $acc;
-		 }, $array[0]);
+	 }, $array[0]);
 	 
 	 print_r($result);
 	 
-	 /**
+	 
+	 /**@@
 	  * Реализуйте функцию wordsCount, которая принимает на вход массив слов и возвращает массив, в котором ключ это слово, а значение это количество раз, которое это слово встречалось в исходном массиве.
 	  * Пример:
 	  **/
@@ -10571,7 +10578,9 @@ EOD;
 				if (!array_key_exists($item, $acc)) {
 					 $acc[$item] = 0;
 				}
+				
 				$acc[$item]++;
+				
 				return $acc;
 		  }, []);
 		  
@@ -10580,7 +10589,7 @@ EOD;
 	 
 	 
 	 
-	 >>>>>   Функция sort <<<<<<<
+	 #>>>>> Функция sort <<<<<<<#
 	 
 	 namespace Theory;
 	 
@@ -10596,13 +10605,12 @@ EOD;
 	 // uksort, uasort - сохраняет ключи
 	 
 	 usort($collection2, function ($left, $right) { // usort - не сохраняет ключи
-		  return strcmp($left,
-			  $right); // возвращает отрицательное число, если str1 меньше str2, положительное число, если str1 больше str2, и 0, если строки равны.
+		  return strcmp($left, $right); // возвращает отрицательное число, если str1 меньше str2, положительное число, если str1 больше str2, и 0, если строки равны.
 	 });
 	 
 	 print_r($collection);
 	 
-	 // Sorts a collection alphabetically
+	 // Sorts a collection alphabetically:
 	 $result = fsort($collection, function ($left, $right) {
 		  return strcmp($left, $right);
 	 });
@@ -10611,17 +10619,17 @@ EOD;
 	 
 	 $users = [new User(10), new User(3), new User(4)];
 	 
-	 // Functional\sort. Sorts a collection of users by age
 	 
-	 $result = fsort($users, function ($user1, $users2) {
-		  if ($user->getAge() == $user2->getAge()) {
+	 // Functional\sort. Sorts a collection of users by age:
+	 $result = fsort($users, function ($user1, $user2) {
+		  if ($user1->getAge() == $user2->getAge()) {
 				return 0;
 		  }
 		  return ($user1->getAge() < $user2->getAge()) ? -1 : 1;
 	 });
 	 
 	 
-	 /**
+	 /**@@
 	  * Реализуйте функцию sortByBinary, которая сортирует переданную коллекцию и возвращает новую коллекцию. Сортировка происходит следующим образом:
 	  *
 	  * Сортируем по количеству единиц в бинарном представлении (порядок следования не важен).
@@ -10629,53 +10637,25 @@ EOD;
 	  * Пример:
 	  **/
 	 [1, 2, 4, 3] == sortByBinary([3, 4, 2, 1]);
-	 
+	
 	 function sortByBinary($collection)
 	 {
 		  return fsort($collection, function ($left, $right) {
 				$countBinOneL = substr_count(decbin($left), '1');
 				$countBinOneR = substr_count(decbin($right), '1');
+				
 				if ($countBinOneL == $countBinOneR) {
 					 return $left < $right ? -1 : 1;
 				}
+				
 				return $countBinOneL < $countBinOneR ? -1 : 1;
 		  });
 	 }
 	 
-	 # 2
-	 
-	 function sortByBinary($collection)
-	 {
-		  $onesCount = function ($number) {
-				$binary = decbin($number);
-				$bitsArray = str_split($binary);
-				return sizeof(array_filter($bitsArray, function ($bit) {
-					 return $bit == "1";
-				}));
-		  };
-		  
-		  $sorted = fsort($collection, function ($prev, $next) use ($onesCount) {
-				$result = bccomp($onesCount($prev), $onesCount($next));
-				if ($result === 0) {
-					 if ($prev > $next) {
-						  return 1;
-					 } else {
-						  if ($prev < $next) {
-								return -1;
-						  }
-					 }
-					 return 0;
-				}
-				return $result;
-		  });
-		  
-		  return $sorted;
-	 }
 	 
 	 
 	 
-	 >>>>>   Частичное применение функции <<<<<<<
-	 
+	 #>>>>>   Частичное применение функции <<<<<<<#
 	 
 	 namespace Theory;
 	 
@@ -10685,7 +10665,6 @@ EOD;
 	 use function Functional\partial_left;
 	 use function Functional\partial_any;
 	 use const Functional\...;
-	 
 	 
 	 $substractor = function ($a, $b) {
 		  return $a - $b;
@@ -10704,7 +10683,6 @@ EOD;
 	 echo $partiallyAppliedSubstractor(20); // => -10
 	 
 	 // Functional\partial
-	 
 	 $partiallyAppliedSubstractor = partial_left($substractor, 10);
 	 echo $partiallyAppliedSubstractor(20); // => -10
 	 
@@ -10719,22 +10697,24 @@ EOD;
 	 
 	 print_r($selected); //  => ['john', 'joe', 'joanna'];
 	 
-	 /**
+	 /**@@
 	  * Реализуйте функцию mapWithPower, которая принимает на вход массив и степень, и возвращает новый массив, в котором каждое значение возведено в переданную степень.
 	  *
 	  * Пример:
-	  **/
-	 [1, 1, 9, 100, 0] == mapWithPower([-1, 1, 3, 10, 0], 2)
+	  */
+	 
+	 [1, 1, 9, 100, 0] == mapWithPower([-1, 1, 3, 10, 0], 2);
 	 
 	 function mapWithPower($nums, $exp)
 	 {
 		  $func = partial_any('pow', …, $exp);
+		  
 		  return map($nums, $func);
 	 }
 	 
 	 
 	 
-	 >>>>>   Partition <<<<<<<
+	 #>>>>>   Partition <<<<<<<#
 	 
 	 namespace Theory;
 	 
@@ -10755,7 +10735,7 @@ EOD;
 	 print_r($users);
 	 
 	 
-	 /**
+	 /**@@
 	  * Реализуйте функцию separateEvenAndOddNumbers, которая принимает на вход массив чисел и возвращает массив, в котором первый элемент - это массив четных чисел, а второй элемент - это массив нечетных чисел, полученных из исходного массива.
 	  **/
 	 
@@ -10767,7 +10747,7 @@ EOD;
 	 }
 	 
 	 
-	 >>>>>   Группировка <<<<<<<
+	 #>>>>>   Группировка <<<<<<<#
 	 
 	 namespace Theory;
 	 
@@ -10781,10 +10761,10 @@ EOD;
 		 new User('english'),
 		 new User('spanish'),
 		 new User('russian'),
-		 new User('english');
+		 new User('english')
 	 ];
 	 
-	 $grupUser = group($array, function ($user) {
+	 $groupUser = group($array, function ($user) {
 		  return $user->getLang();
 	 });
 	 
@@ -10792,7 +10772,7 @@ EOD;
 	 
 	 
 	 
-	 /**
+	 /**@@
 	  * Реализуйте функцию ages, которая принимает на вход список пользователей и возвращает массив, в котором пользователи одинакового возраста расположены рядом. Порядок появления возрастов в массиве должен совпадать с порядком появления в исходном массиве.
 	  *
 	  * Пример:
@@ -10816,7 +10796,7 @@ EOD;
 	 }
 	 
 	 
-	 /**
+	 /**@@
 	  * Реализуйте функцию flatten, которая делает плоским массив любой вложенности.
 	  **/
 	 
@@ -10827,25 +10807,12 @@ EOD;
 	 function flatten($arr)
 	 {
 		  $iterator = new \RecursiveIteratorIterator(new \RecursiveArrayIterator($arr));
+		  
 		  return iterator_to_array($iterator, false);
 	 }
+
 	 
-	 # 2
-	 
-	 function flatten($value)
-	 {
-		  if (!is_array($value)) {
-				return [$value];
-		  } elseif (sizeof($value) == 0) {
-				return [];
-		  } elseif (sizeof($value) == 1) {
-				return flatten(end($value));
-		  }
-		  return array_merge(flatten(array_slice($value, 0, 1)), flatten(array_slice($value, 1)));
-	 }
-	 
-	 
-	 /**@@@
+	 /**@@
 	  * Solution.php
 	  * Реализуйте функцию arrangeBiggestNumber, которая составляет самое большое число из переданного массива чисел и возвращает его строковое представление. Например из чисел [3, 24, 4] мы можем составить такие: 3244, 3424, 2434, 2443, 4324, 4243 и самое больше из них это 4324.
 	  *
@@ -10874,6 +10841,8 @@ EOD;
 	 }
 	 
 	 
+	 
+	 
 	 ############## PHP: Автоматическое тестирование ##############
 	 
 	 /*
@@ -10883,7 +10852,9 @@ EOD;
 	 */
 	 
 	 
-	 >>>>> Ассерты <<<<<<<
+	 
+	 
+	 #>>>>> Ассерты <<<<<<<#
 	 
 	 /* factrorial() */
 	 assert(6) = factrorial(3)); // assert - утверждение
@@ -10924,10 +10895,11 @@ EOD;
 	 // assertContains(mixed $needle, Iterator|array $haystack)
 	 $this->assertContains('john', getNames());
 	 
-	 $ phpunit tests /    // запуск тестов из консоли. Каждый тест "." - все ок, F - резльтат о и д не совпадают. :11 - номер строчки с ошибкой
+	 
+	 // $ phpunit tests /    # запуск тестов из консоли. Каждый тест "." - все ок, F - результат о и д не совпадают. :11 - номер строчки с ошибкой
 	 
 	 
-	 /**
+	 /**@@
 	  * Напишите тесты на функцию isEven, которая принимает на вход целое число и возвращает true, если это число четное, и false в обратном случае.
 	  **/
 	 
@@ -10944,7 +10916,9 @@ EOD;
 	 }
 	 
 	 
-	 >>>>> Структура тестов <<<<<<<
+	 
+	 
+	 #>>>>> Структура тестов <<<<<<<#
 	 
 	 // file: teory/Leaf.php
 	 
@@ -11021,16 +10995,16 @@ EOD;
 				$leaf = new Leaf();
 				$node = new Node();
 				
-				$childen = $tree->getChildren();
+				$children = $tree->getChildren();
 				$this->assertCount(0, $children);
 				
 				$tree = addChild($leaf);
-				$children = $three->getChildren();
+				$children = $tree->getChildren();
 				$this->assertCount(1, $children);
 				$this->assertContains($leaf, $children); // $children содержит $leaf
 				
 				$tree->addChild($node);
-				$childen = $tree->getChildren();
+				$children = $tree->getChildren();
 				$this->assertCount(2, $children);
 				$this->assertContains($leaf, $children);
 				$this->assertContains($node, $children);
@@ -11048,7 +11022,7 @@ EOD;
 		  }
 	 }
 	 
-	 /**@@@
+	 /**@@
 	  * QueryBuilder это специальный класс для конструирования sql запросов. Подобная функциональность есть практически во всех ORM. Пример использования:
 	  */
 	 
@@ -11162,8 +11136,7 @@ EOD;
 	 }
 	 
 	 
-	 >>>>>
-	 Dataset <<<<<
+	 #>>>>> Dataset <<<<<#
 	 
 	 // FILE: /teory/tests/SolutionTest.php:
 	 namespace App;
@@ -11221,7 +11194,7 @@ EOD;
 	 */
 	 
 	 
-	 /**@@@
+	 /**@@
 	  * TestSolution.php
 	  * Напишите тесты на функцию hasEqualOnesCount, которая принимает на вход два числа и возвращает true если количество единиц в двоичном представлении у этих чисел совпадает и false если не совпадает.
 	  */
@@ -11269,6 +11242,7 @@ EOD;
 	 }
 	 
 	 // FILE: /app/Makefile:
+	 /*
 	 test:
 	 right wrong
 		 @echo "\n\nGreat job! \n\n"
@@ -11279,9 +11253,12 @@ EOD;
 	 wrong:
 		 suppressor fail 'phpunit --bootstrap implementations/has_equal_ones_count.wrong.1.php SolutionTest.php'
 		 suppressor fail 'phpunit --bootstrap implementations/has_equal_ones_count.wrong.2.php SolutionTest.php'
+	 */
 	 
 	 
-	 >>>>>> Тестирование исключений <<<<<<
+	 
+	 
+	 #>>>>>> Тестирование исключений <<<<<<#
 	 
 	 // FILE: /theory/tests/SolutionTest.php:
 	 namespace App;
@@ -11312,7 +11289,7 @@ EOD;
 	 }
 	 
 	 
-	 /**@@@
+	 /**@@
 	  * ACL (access control list) это механизм проверки доступа определенных ролей к действиям над определенными ресурсами.
 	  *
 	  * Включает понятия:
@@ -11351,14 +11328,14 @@ EOD;
 	 */
 	 
 	 // FILE: /app/tests/App/Tests/SolutionTest.php
-	  namespace App\Tests;
+	 namespace App\Tests;
 	 
-	  use PHPUnit\Framework\TestCase;
+	 use PHPUnit\Framework\TestCase;
 	  use App\Acl\Acl;
 	 
-	  require_once 'src/App/Acl/AccessDenied.php';
-	  require_once 'src/App/Acl/ResourceUndefined.php';
-	  require_once 'src/App/Acl/PrivilegeUndefined.php';
+	 require_once 'src/App/Acl/AccessDenied.php';
+	 require_once 'src/App/Acl/ResourceUndefined.php';
+	 require_once 'src/App/Acl/PrivilegeUndefined.php';
 	 
 	  class SolutionTest extends TestCase
 	  {
@@ -11395,6 +11372,7 @@ EOD;
 					  $acl->check('undefined resources', 'edit', 'manager');
 					  $this->fail('expected exception');
 				 } catch (\App\Acl\ResourceUndefined $e) {
+				 
 				 }
 			}
 		 
@@ -11411,7 +11389,7 @@ EOD;
 	  }
 	 
 	 
-	  /**@@@
+	  /**@@
 		* SolutionTest.php
 		* - Напишите тесты на класс Config, который принимает на вход вложенный массив и рекурсивно строит цепочку вложенных конфигов.
 		* - Напишите тесты на метод toArray класса Config, который возвращает массив значений для текущего уровня вложенности конфига.
@@ -11429,7 +11407,6 @@ EOD;
 	  $config = new Config($data);
 	 
 	 // how it works
-	 
 	  $config->key; // 'value'
 	  $config->deep->another; // => 7
 	 
@@ -11482,9 +11459,7 @@ EOD;
 	 }
 	 
 	 
-	 >>>>>>
-	 Stub <<<<<<
-	 
+	 #>>>>>> Stub <<<<<<#
 	 
 	 // FILE: /theory/Sender:
 	 /*
@@ -11556,9 +11531,7 @@ EOD;
 	 */
 	 
 	 
-	 >>>>>>
-	 Mock <<<<<<
-	 
+	 #>>>>>> Mock <<<<<<#
 	 
 	 // FILE: /theory/Http.php:
 	 namespace Theory;
@@ -11590,8 +11563,6 @@ EOD;
 	 }
 	 
 	 
-	 
-	 
 	 // FILE: /theory/tests/SenderTest.php:
 	 /*
 		 $http = new Http();
@@ -11615,11 +11586,11 @@ EOD;
 					->getMock();
 				
 				$http->expects($this->once()) // $this->once() - вызывается 1 раз
-				->method('post') // что вызывается 1 раз
-				->with( // параметры для метода
-					$this->equalTo($msg),
-					$this->anything()
-				);
+					->method('post') // что вызывается 1 раз
+					->with( // параметры для метода
+						$this->equalTo($msg),
+						$this->anything()
+					);
 				
 				$sender = new Sender($http);
 				$sender->send($msg);
@@ -11632,7 +11603,7 @@ EOD;
 	 */
 	 
 	 
-	 /**@@@
+	 /**@@
 	  * Существует подход для работы с базой данных, в котором сама сущность отвечает за свое сохранение в базу. Этот подход называется ActiveRecord. С точки зрения грамотной архитектуры это решение не очень хорошее, но благодаря простой реализации является весьма популярным среди программистов. Да и большинство фреймворков внутри себя содержат orm, реализованную именно как ActiveRecord.
 	  *
 	  * tests/SolutionTest.php
@@ -11747,8 +11718,7 @@ EOD;
 	 }
 	 
 	 
-	 >>>>>>
-	 Файловая система <<<<<<
+	 #>>>>>> Файловая система <<<<<<#
 	 
 	 // FILE: /theory/Solution.php:
 	 namespace Theory\Solution;
@@ -11861,9 +11831,10 @@ EOD;
 	 
 	 
 	 
+	 
 	 ############## PHP: Разработка микрофреймворка ##############
 	 
-	 /**@@@
+	 /**@@
 	  * public/index.php
 	  * Реализуйте маршрут /about, по которому будет отдаваться строка <h1>about company</h1>. Выполните сопоставление с REQUEST_URI используя регулярные выражения, так чтобы один маршрут обрабатывал и концевой слеш (/about/ тоже самое что /about), и различный регистр (/abOuT, /ABout, /about).
 	  *
@@ -11886,8 +11857,9 @@ EOD;
 	 echo server($_SERVER['REQUEST_URI']);
 	 
 	 
-	 >>>>>>
-	 Роутер <<<<<<<
+	 
+	 
+	 #>>>>>> Роутер <<<<<<<#
 	 
 	 // FILE: /theory/index.php:
 	 namespace Theory;
@@ -11928,12 +11900,14 @@ EOD;
 		  public function run()
 		  {
 				$uri = $_SERVER['REQUEST_URI'];
+				
 				foreach ($this->routers as $item) {
 					 list($route, $handler) = $item;
 					 $preparedRoute = preg_quote($route, '/');
 					 
 					 if (preg_match("/^$preparedRoute$/i", $uri)) {
 						  echo $handler();
+						  
 						  return;
 					 }
 				}
@@ -11947,7 +11921,7 @@ EOD;
 	 
 	 
 	 
-	 /**@@@
+	 /**@@
 	  * Другой способ добавлять обработчики маршрутов в App это использовать методы, названные по именам глаголов http. Например $app->get($path, $func).
 	  *
 	  * src/App/Application.php
@@ -12027,8 +12001,9 @@ EOD;
 	 }
 	 
 	 
-	 >>>>>>
-	 Шаблонизация <<<<<<
+	 
+	 
+	 #>>>>>> Шаблонизация <<<<<<#
 	 
 	 // FILE: /theory/index.php:
 	 namespace Theory;
@@ -12050,11 +12025,9 @@ EOD;
 	 <h1><?= $site ?></h1>
 	 
 	 <? if (!empty($subprojects)): ?>
-		  
 		  <? foreach ($subprojects as $project): ?>
 				<?= $project ?>
 		  <? endforeach; ?>
-	 
 	 <? endif; ?>
 	 <?
 	 
@@ -12073,7 +12046,7 @@ EOD;
 	 }
 	 
 	 
-	 /**@@@
+	 /**@@
 	  * В нашем фреймворке шаблоны лежат в папке resources/views.
 	  *
 	  * src/App/Template.php
@@ -12129,9 +12102,9 @@ EOD;
 	 function render($filepath, $params = [])
 	 {
 		  $parts = [getcwd(), 'resources', 'views', $filepath]; // getcwd()- имя текущего рабочего каталога.
-		  $templatepath = implode(DIRECTORY_SEPARATOR, $parts) . '.phtml';
+		  $templatePath = implode(DIRECTORY_SEPARATOR, $parts) . '.phtml';
 		  
-		  return \App\Template\render($templatepath, $params);
+		  return \App\Template\render($templatePath, $params);
 	 }
 	 
 	 
@@ -12148,8 +12121,9 @@ EOD;
 	 }
 	 
 	 
-	 >>>>>>
-	 Параметры <<<<<<<
+	 
+	 
+	 #>>>>>> Параметры <<<<<<<#
 	 
 	 // FILE: /app/theory/index.php:
 	 namespace App;
@@ -12179,13 +12153,15 @@ EOD;
 	 Путаница идет во многом из-за особенностей форм в html. По умолчанию формы отправляются с глаголом get и передают параметры через query string, если мы напишем method="post", то будет глагол post и параметры уйдут в body.
 	 */
 	 
-	 /**@@@
+	 
+	 /**@@
 	  * public/index.php
 	  * Реализуйте маршрут /, который может принимать параметр sort и выполнять сортировку $data в соответствии с содержимым этого параметра. Формат sort: field direction. field - название поля, direction - либо asc либо desc. Пример: id desc.
 	  *
 	  * Отдаваемые данные должны кодироваться в json с помощью функции json_encode.
 	  * Пример:
 	  */
+	 
 	 $data = [
 		 ['id' => 4, 'age' => 15],
 		 ['id' => 3, 'age' => 28],
@@ -12286,8 +12262,9 @@ EOD;
 	 $app->run();
 	 
 	 
-	 >>>>>>
-	 Динамические маршруты <<<<<<<
+	 
+	 
+	 #>>>>>> Динамические маршруты <<<<<<<#
 	 
 	 // FILE: /app/public/index.php:
 	 namespace App;
@@ -12350,7 +12327,7 @@ EOD;
 		  }
 	 }
 	 
-	 /**@@@
+	 /**@@
 	  * Другой способ работы с роутингом это плейсхолдеры. Пример: /users/:id. Плейсхолдеры это такие "заполнители", которые используются вместо написания регулярного выражения напрямую. Удобство заключается в том что их гораздо проще использовать и понимать.
 	  *
 	  * Пример:
@@ -12363,16 +12340,13 @@ EOD;
 	 });
 	 
 	 // Пример обращения к этому маршруту:
-	 $ curl localhost:8080 / users / 3
-	 {
-		  id:
-		  3}
-	 $ curl localhost:8080 / users / 5
-	 {
-		  id:
-		  3}
-	 
 	 /*
+	 $ curl localhost:8080 / users / 3
+	 { id: 3}
+	 $ curl localhost:8080 / users / 5
+	 { id: 3}
+	 
+
 	 То есть вместо :id можно подставить любое значение.
 	 
 	 Плейсхолдеры могут появляться внутри uri в любом месте. Например мы можем определить такой маршрут: /users/:userId/photos/:id.
@@ -12401,8 +12375,8 @@ EOD;
 		  
 		  private function append($method, $route, $handler)
 		  {
-				$updatedRoute = $route;
 				$matches = [];
+				$updatedRoute = $route;
 				
 				if (preg_match_all('/:([^\/]+)/', $route, $matches)) {
 					 $updatedRoute = array_reduce($matches[1], function ($acc, $value) {
@@ -12421,9 +12395,11 @@ EOD;
 				$method = $_SERVER['REQUEST_METHOD'];
 				
 				foreach ($this->handlers as $item) {
+					 $matches = [];
+					 
 					 list($route, $handlerMethod, $handler) = $item;
 					 $preparedRoute = str_replace('/', '\/', $route);
-					 $matches = [];
+					 
 					 if ($method == $handlerMethod && preg_match("/^$preparedRoute$/i", $uri, $matches)) {
 						  $arguments = array_filter($matches, function ($key) {
 								return !is_numeric($key);
@@ -12436,8 +12412,9 @@ EOD;
 	 }
 	 
 	 
-	 >>>>>>
-	 Заголовки HTTP <<<<<<
+	 
+	 
+	 #>>>>>> Заголовки HTTP <<<<<<#
 	 
 	 // FILE: /app/public/index.php:
 	 namespace App;
@@ -12463,7 +12440,7 @@ EOD;
 	 $app->run();
 	 
 	 
-	 /**@@@
+	 /**@@
 	  * Для формирования ответа очень часто использую специальный Response Builder, который накапливает в себе данные, которые должны быть отправлены клиенту. Это такие данные, как статус, различные заголовки и тело ответа.
 	  *
 	  * В данном упражнении необходимо реализовать интерфейс ResponseInterface в классе Response, описав логику накопления данных ответа, а так же реализовать логику разбора и отправки этих данных клиенту в классе Application.
@@ -12479,10 +12456,11 @@ EOD;
 		  if (!isset($params['email'])) {
 				return response('Expected email')->withStatus(400);
 		  }
+		  
 		  return response()->redirect('/');
 	 });
 	 
-	 /*
+	 /**@@
 	 src/App/Response.php
 	 Реализуйте интерфейс ResponseInterface в классе Response.
 	 
@@ -12491,7 +12469,6 @@ EOD;
 	 */
 	 
 	 // FILE: /app/public/index.php:
-	 <?php
 	 
 	 namespace App;
 	 
@@ -12517,6 +12494,7 @@ EOD;
 		  if (!isset($params['email'])) {
 				return response('Expected email')->withStatus(400);
 		  }
+		  
 		  return response()->redirect('/');
 	 });
 	 
@@ -12524,7 +12502,9 @@ EOD;
 		  if (!isset($users[$attributes['id']])) {
 				return response(['error' => 'message not found'])->withStatus(404)->format('json');
 		  }
+		  
 		  $response = response($users[$attributes['id']])->format('json');
+		  
 		  return $response;
 	 });
 	 
@@ -12564,10 +12544,12 @@ EOD;
 		  {
 				$uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 				$method = $_SERVER['REQUEST_METHOD'];
+				
 				foreach ($this->handlers as $item) {
+					 $matches = [];
 					 [$route, $handlerMethod, $handler] = $item;
 					 $preparedRoute = str_replace('/', '\/', $route);
-					 $matches = [];
+					 
 					 if ($method == $handlerMethod && preg_match("/^$preparedRoute$/i", $uri, $matches)) {
 						  $attributes = array_filter($matches, function ($key) {
 								return !is_numeric($key);
@@ -12585,6 +12567,7 @@ EOD;
 						  foreach ($response->getHeaderLines() as $header) {
 								header($header);
 						  }
+						  
 						  echo $response->getBody();
 						  
 						  return;
@@ -12599,6 +12582,7 @@ EOD;
 	 function render($filepath, $params = [])
 	 {
 		  $templatepath = 'resources/views' . DIRECTORY_SEPARATOR . $filepath . '.phtml';
+		  
 		  return \App\Template\Render($templatepath, $params);
 	 }
 	 
@@ -12643,6 +12627,7 @@ EOD;
 				if (is_string($body)) {
 					 $this->headers['Content-Length'] = mb_strlen($body);
 				}
+				
 				$this->body = $body;
 		  }
 		  
@@ -12657,6 +12642,7 @@ EOD;
 		  public function withStatus($status)
 		  {
 				$this->status = $status;
+				
 				return $this;
 		  }
 		  
@@ -12700,12 +12686,14 @@ EOD;
 		  extract($variables);
 		  ob_start();
 		  include $template;
+		  
 		  return ob_get_clean();
 	 }
 	 
 	 
-	 >>>>>>
-	 Формы <<<<<<
+	 
+	 
+	 #>>>>>> Формы <<<<<<#
 	 
 	 $pdo = new \PDO('sqlite:db.sqlite', null, null, $opt);
 	 $repository = new UserRepositiry($pdo);
@@ -12726,8 +12714,8 @@ EOD;
 	 });
 	 
 	 $app->post('/users', function ($meta, $params, $attributes) use ($repository) {
-		  $user = $params['user'];
 		  $errors = [];
+		  $user = $params['user'];
 		  
 		  if (!trim($user['email'])) {
 				$errors['email'] = "Email can`t be blank";
@@ -12750,7 +12738,7 @@ EOD;
 	 $app->run();
 	 
 	 
-	 /**@@@
+	 /**@@
 	  * Кроме get и post в http определено множество других глаголов. Например, для удаления — DELETE, а для частичного обновления — PATCH. Их поддерживают все распространенные веб-сервера, но, к сожалению, формы в html умеют делать отправку только get или post.
 	  *
 	  * Фреймворки нашли выход из этой ситуации: при генерации форм (а их обычно не руками выводят) добавляют специальное hidden поле с именем _method и со значением, которое определяет глагол, например, delete. Дальше фреймворк внутри себя проверяет, если текущий метод POST и существует значение для _method то используем его как имя глагола. Таким образом у нас начинают работать такие конструкции:
@@ -12796,6 +12784,7 @@ EOD;
 	 
 	 $app->get('/', function () use ($repository) {
 		  $cars = $repository->all();
+		  
 		  return response(render('index', ['cars' => $cars]));
 	 });
 	 
@@ -12805,12 +12794,13 @@ EOD;
 	 
 	 $app->delete('/cars/:id', function ($meta, $params, $attributes) use ($repository) {
 		  $repository->delete($attributes['id']);
+		  
 		  return response()->redirect('/');
 	 });
 	 
 	 $app->post('/cars', function ($meta, $params, $attributes) use ($repository) {
-		  $car = $params['car'];
 		  $errors = [];
+		  $car = $params['car'];
 		  
 		  if (!$car['model']) {
 				$errors['model'] = "Model can't be blank";
@@ -12818,6 +12808,7 @@ EOD;
 		  
 		  if (empty($errors)) {
 				$repository->insert($car);
+				
 				return response()->redirect('/');
 		  } else {
 				return response(render('cars/new', ['car' => $car, 'errors' => $errors]))
@@ -12828,18 +12819,13 @@ EOD;
 	 $app->run();
 	 
 	 
-	 // FILE: /app/resources/views/cars/new.phtml:
-	 ?>
-		  
-		  
-		  <?php if (isset($errors['model'])) : ?>
+	 // FILE: /app/resources/views/cars/new.phtml: ?>
+	 <?php if (isset($errors['model'])) : ?>
 		  <?= $errors['model'] ?>
 	 <?php endif ?>
 	 
 	 
 	 <?
-	 
-	 
 	 // FILE: /app/App/Renderer/Renderer.php:
 	 namespace App\Renderer;
 	 
@@ -12887,19 +12873,20 @@ EOD;
 		  private function append($method, $route, $handler)
 		  {
 				$updatedRoute = $route;
+				
 				if (preg_match_all('/:([^\/]+)/', $route, $matches)) {
 					 $updatedRoute = array_reduce($matches[1], function ($acc, $value) {
 						  $group = "(?P<$value>[\w-]+)";
 						  return str_replace(":{$value}", $group, $acc);
 					 }, $route);
 				}
+				
 				$this->handlers[] = [$updatedRoute, $method, $handler];
 		  }
 		  
 		  public function run()
 		  {
 				$uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-				
 				
 				if ($_SERVER['REQUEST_METHOD'] == 'POST' && array_key_exists('_method', $_POST)) {
 					 $method = strtoupper($_POST['_method']);
@@ -12908,9 +12895,9 @@ EOD;
 				}
 				
 				foreach ($this->handlers as $item) {
+					 $matches = [];
 					 list($route, $handlerMethod, $handler) = $item;
 					 $preparedRoute = str_replace('/', '\/', $route);
-					 $matches = [];
 					 if ($method == $handlerMethod && preg_match("/^$preparedRoute$/i", $uri, $matches)) {
 						  $attributes = array_filter($matches, function ($key) {
 								return !is_numeric($key);
@@ -12933,7 +12920,6 @@ EOD;
 				}
 		  }
 	 }
-	 
 	 
 	 
 	 // FILE: /app/src/App/CarRepository.php:
@@ -13073,13 +13059,13 @@ EOD;
 	 }
 	 
 	 
-	 >>>>>>
-	 Файлы <<<<<<
+	 
+	 #>>>>>> Файлы <<<<<<#
 	 
 	 // FILE: /app/public/index.php:
 	 $app->post('/user', function ($meta, $params, $attributes) use ($repository) {
-		  $user = $params['user'];
 		  $errors = [];
+		  $user = $params['user'];
 		  
 		  if (array_key_exists('user', $_FILES)) {
 				error_log(print_r($_FILES, true));
@@ -13112,17 +13098,16 @@ EOD;
 				
 				return response()->redirect('/');
 		  }
-		  
 	 });
 	 
 	 
-	 /**@@@
+	 /**@@
 	  * В форме создания новой машины есть два поля для загрузки файлов.
 	  */
-	 <
-	 input class="file" type = "file" name = "car[pictures][]" >
+	 ?>
 	 <input class="file" type = "file" name = "car[pictures][]" >
-	 
+	 <input class="file" type = "file" name = "car[pictures][]" >
+	 <?
 	 // После загрузки на сервер (обработчик POST /cars) происходит проверка на ошибки и готовится массив, содержащий список загруженных файлов:
 		 
 		 $pictures = [
@@ -13163,6 +13148,7 @@ EOD;
 	 
 	 $app->get('/', function () use ($repository) {
 		  $cars = $repository->all();
+		  
 		  return response(render('index', ['cars' => $cars]));
 	 });
 	 
@@ -13182,6 +13168,7 @@ EOD;
 		  if (array_key_exists('car', $_FILES)) {
 				$key = 'pictures';
 				$files = $_FILES['car'];
+				
 				foreach ($files['error'][$key] as $errorCode) {
 					 if ($errorCode !== UPLOAD_ERR_OK && $errorCode !== UPLOAD_ERR_NO_FILE) {
 						  $errors[$key] = 'Something was wrong';
@@ -13193,7 +13180,9 @@ EOD;
 						  if ($files['error'][$key][$index] === UPLOAD_ERR_NO_FILE) {
 								continue;
 						  }
+						  
 						  $newName = __DIR__ . DIRECTORY_SEPARATOR . 'images' . DIRECTORY_SEPARATOR . basename($tmpName);
+						  
 						  if (move_uploaded_file($tmpName, $newName)) {
 								$pictures[] = ['name' => basename($tmpName)];
 						  } else {
@@ -13205,6 +13194,7 @@ EOD;
 		  
 		  if (empty($errors)) {
 				$repository->insert($car, $pictures);
+				
 				return response()->redirect('/');
 		  } else {
 				return response(render('cars/new', ['car' => $car, 'errors' => $errors]))
@@ -13215,8 +13205,7 @@ EOD;
 	 $app->run();
 	 
 	 
-	 >>>>>>
-	 Куки <<<<<<
+	 #>>>>>> Куки <<<<<<#
 	 
 	 namespace Theory;
 	 
@@ -13247,7 +13236,7 @@ EOD;
 	 $app->run();
 	 
 	 
-	 /**@@@
+	 /**@@
 	  * Корзина товаров это стандартный механизм для магазинов в интернете. Один из способов ее организации это хранение в куках массива со списком добавленных туда товаров.
 	  *
 	  * Пример установки куки:
@@ -13293,18 +13282,22 @@ EOD;
 	 $app->post('/cart', function ($meta, $params, $attributes, $cookies) use ($goods) {
 		  $cart = array_key_exists('cart', $cookies) ? json_decode($cookies['cart'], true) : [];
 		  $good = $params['good'];
+		  
 		  if (array_key_exists($good, $cart)) {
 				$cart[$good]++;
 		  } else {
 				$cart[$good] = 1;
 		  }
+		  
 		  return response()->redirect('/cart')->withCookie('cart', json_encode($cart));
 	 });
 	 
 	 $app->delete('/cart', function ($meta, $params, $attributes, $cookies) use ($goods) {
 		  $cart = array_key_exists('cart', $cookies) ? json_decode($cookies['cart'], true) : [];
 		  $good = $params['good'];
+		  
 		  unset($cart[$good]);
+		  
 		  return response()->redirect('/cart')->withCookie('cart', json_encode($cart));
 	 });
 	 
@@ -13383,6 +13376,7 @@ EOD;
 						  }
 						  
 						  echo $response->getBody();
+						  
 						  return;
 					 }
 				}
@@ -13390,8 +13384,9 @@ EOD;
 	 }
 	 
 	 
-	 >>>>>>
-	 Сессия <<<<<<
+	 
+	 
+	 #>>>>>> Сессия <<<<<<#
 	 
 	 namespace Theory;
 	 
@@ -13404,11 +13399,13 @@ EOD;
 	 
 	 $app->get('/', function () {
 		  session_start();
+		  
 		  return response(print_r($_SESSION, true));
 	 });
 	 
 	 $app->get('/sessin/new', function ($meta, $params) {
 		  session_start();
+		  
 		  $_SESSION = $params;
 		  
 		  return response()->redirect('/');
@@ -13433,7 +13430,7 @@ EOD;
 	 */
 	 
 	 
-	 /**@@@
+	 /**@@
 	  * Реализуйте аутентификацию на сайте на основе nickname.
 	  *
 	  * src/App/Session.php
@@ -13471,12 +13468,14 @@ EOD;
 	 $app->post('/session', function ($meta, $params, $attributes, $cookies, $session) {
 		  $session->start();
 		  $session->set('nickname', $params['nickname']);
+		  
 		  return response()->redirect('/');
 	 });
 	 
 	 $app->delete('/session', function ($meta, $params, $attribute, $cookies, $session) {
 		  $session->start();
 		  $session->destroy();
+		  
 		  return response()->redirect('/');
 	 });
 	 
@@ -13525,10 +13524,12 @@ EOD;
 				} else {
 					 $method = $_SERVER['REQUEST_METHOD'];
 				}
+				
 				foreach ($this->handlers as $item) {
+					 $matches = [];
 					 list($route, $handlerMethod, $handler) = $item;
 					 $preparedRoute = str_replace('/', '\/', $route);
-					 $matches = [];
+					 
 					 if ($method == $handlerMethod && preg_match("/^$preparedRoute$/i", $uri, $matches)) {
 						  error_log($route);
 						  $attributes = array_filter($matches, function ($key) {
@@ -13544,9 +13545,11 @@ EOD;
 						  $session = new Session();
 						  $response = $handler($meta, array_merge($_GET, $_POST), $attributes, $_COOKIE, $session);
 						  http_response_code($response->getStatusCode());
+						  
 						  foreach ($response->getHeaderLines() as $header) {
 								header($header);
 						  }
+						  
 						  echo $response->getBody();
 						  return;
 					 }
@@ -13672,7 +13675,7 @@ EOD;
 	 }
 	 
 	 
-	 /**@@@
+	 /**@@
 	  * Пусть f и g — две одноаргументные функции. По определению, композиция (composition) f и g есть функция x → f ( g (x) ).
 	  *
 	  * Solution.php
@@ -13715,7 +13718,7 @@ EOD;
 	 }
 	 
 	 
-	 /**@@@
+	 /**@@
 	  * Solution.php
 	  * Реализуйте функцию fringe, которая берет в качестве аргумента дерево (представленное в виде списка) и возвращает список, элементы которого - все листья дерева, упорядоченные слева направо.
 	  *
@@ -13744,6 +13747,8 @@ EOD;
 	 }
 	 
 	 
+	 
+	 
 	 ######################### PHP: Погружаясь в классы #########################
 	 
 	 /*
@@ -13762,8 +13767,9 @@ EOD;
 	 */
 	 
 	 
-	 >>>>>>>
-	 Наследование <<<<<<
+	 
+	 
+	 #>>>>>>> Наследование <<<<<<#
 	 
 	 /*
 	 Наследование классов – механизм позволяющий создавать классы (говорят подклассы) на основе других классов (называемых базовыми или суперклассами). Подклассы, в таком случае, "наследуют" структуру базовых классов, то есть получают возможность использовать все, что определено в базовом классе.
@@ -13822,7 +13828,8 @@ EOD;
 				$attrLine = $this->stringifyAttributes();
 				// Родительский метод
 				$body = $this->getTextContent();
-				return "<a{$attrLine}>{$body}</a>"
+				
+				return "<a{$attrLine}>{$body}</a>";
 		  }
 	 }
 	 
@@ -13876,7 +13883,7 @@ EOD;
 	 https://en.wikipedia.org/wiki/Inheritance_(object-oriented_programming)
 	 */
 	 
-	 /**@@@
+	 /**@@
 	  * src\HTMLHrElement.php
 	  * Реализуйте класс HTMLHrElement (наследуется от HTMLElement), который отвечает за представление тега <hr>. Внутри класса определите функцию __toString(), которая возвращает текстовое представление тега.
 	  */
@@ -13886,7 +13893,7 @@ EOD;
 	 $hr = new HTMLHrElement(['class' => 'w-75', 'id' => 'wop']);
 	 echo $hr; // '<hr class="w-75" id="wop">';
 	 
-	 /*
+	 /**@@
 	 src\HTMLElement.php
 	 Реализуйте метод stringifyAttributes(), который формирует строчку для аттрибутов. Используйте этот метод в наследнике для формирования тега.
 	 
@@ -13911,11 +13918,13 @@ EOD;
 				if (count($this->attributes) == 0) {
 					 return '';
 				}
+				
 				$line = collect($this->attributes)
 					->map(function ($item, $key) {
 						 return "{$key}=\"{$item}\"";
 					})
 					->join(' ');
+				
 				return " {$line}";
 		  }
 	 }
@@ -13934,8 +13943,9 @@ EOD;
 	 }
 	 
 	 
-	 >>>>>>
-	 Модификаторы доступа <<<<<<
+	 
+	 
+	 #>>>>>> Модификаторы доступа <<<<<<#
 	 
 	 /*
 	 Видимость свойств влияет не только на внешнее поведение объектов, но и на отношения между наследуемыми классами. Публичные свойства и методы доступны всем наследникам. К ним можно обращаться внутри объекта, так и снаружи:
@@ -14067,7 +14077,7 @@ EOD;
 	 */
 	 
 	 
-	 /**@@@
+	 /**@@
 	  * src\HTMLElement.php
 	  * Реализуйте набор методов для работы с классами:
 	  *
@@ -14093,7 +14103,7 @@ EOD;
 	 $div->getAttribute('class'); // 'one'
 	 
 	 $div->toggleClass('small');
-	 $div->getAttribute('class')); // 'one small'
+	 $div->getAttribute('class'); // 'one small'
 	 
 	 
 	 // FILE /app/src/HTMLElement.php:
@@ -14112,7 +14122,6 @@ EOD;
 		  {
 				return $this->attributes[$key];
 		  }
-		  
 		  
 		  public function addClass($className)
 		  {
@@ -14150,8 +14159,9 @@ EOD;
 	 }
 	 
 	 
-	 >>>>>>>
-	 Позднее связывание <<<<<<
+	 
+	 
+	 #>>>>>>> Позднее связывание <<<<<<#
 	 
 	 /*
 	 Для понимания того, как соотносятся друг с другом внутренности классов которые связаны наследованием, нужно разобраться с таким понятием как позднее связывание (late binding).
@@ -14221,7 +14231,7 @@ EOD;
 	 {
 	 }
 	 
-	 new $obj = new A();
+	 $obj = new A();
 	 $obj->whereiam(); // B
 	 
 	 /*
@@ -14230,10 +14240,11 @@ EOD;
 	 */
 	 
 	 
-	 /**@@@
+	 /**@@
 	  * src\Base.php
 	  * Реализуйте метод isInstanceOf($className), который проверяет что объект принадлежит одному из классов в цепочке наследования.
 	  */
+	 
 	 // ChildOfChild extends FirstChild extends Base
 	 
 	 $obj = new \App\ChildOfChild();
@@ -14264,8 +14275,9 @@ EOD;
 	 }
 	 
 	 
-	 >>>>>>
-	 Шаблонный метод <<<<<<
+	 
+	 
+	 #>>>>>> Шаблонный метод <<<<<<#
 	 
 	 /*
 	 Позднее связывание приводит к одному интересному следствию. Из базового класса, можно вызывать методы и свойства, определенные в наследниках. Причем самих наследников может даже не существовать. Позднее связывание на то и позднее, что проверка происходит только в тот момент, когда этот код используется.
@@ -14315,7 +14327,7 @@ EOD;
 				// getTagName – метод, который должны реализовать все подклассы
 				$tagName = $this->getTagName(); // <== метод, который должны реализовывать наследники
 				// Создается одиночный тег
-				return "<{$tagName}{$attrLine}>"
+				return "<{$tagName}{$attrLine}>";
 		  }
 	 }
 	 
@@ -14334,7 +14346,7 @@ EOD;
 	 
 	 // Несмотря на различия в реализации __toString(), оба этих подкласса требуют от своих наследников реализации одного и того же метода getTagName().
 	 
-	 /**@@@
+	 /**@@
 	  * src\HTMLPairElement.php
 	  * Реализуйте класс HTMLPairElement (наследуется от HTMLElement), который отвечает за генерацию представления парных элементов и работу с телом. Реализуйте следующий интерфейс:
 	  */
@@ -14347,7 +14359,7 @@ EOD;
 	 src\HTMLDivElement.php
 	 Реализуйте класс HTMLDivElement, который описывает собой парный тег
 	 */
-	 div = new HTMLDivElement(['name' => 'div', 'data-toggle' => 'true']);
+	 $div = new HTMLDivElement(['name' => 'div', 'data-toggle' => 'true']);
 	 $div->setTextContent('Body');
 	 echo $div; // '<div name="div" data-toggle="true">Body</div>'
 	 
@@ -14418,8 +14430,7 @@ EOD;
 	 }
 	 
 	 
-	 >>>>>>
-	 Переопределение методов <<<<<<
+	 #>>>>>> Переопределение методов <<<<<<
 	 
 	 /*
 	 Устранение дублирование кода, не единственная задача наследования классов. Иногда оно применяется для изменения существующего поведения базового класса.
@@ -14523,7 +14534,7 @@ EOD;
 	 Принцип подстановки Лисков https://ru.wikipedia.org/wiki/Принцип_подстановки_Барбары_Лисков#Проектирование_по_контракту
 	 */
 	 
-	 /**@@@
+	 /**@@
 	  * В стандартной библиотеке PHP есть класс SplFileInfo. Объекты этого класса описывают собой файлы. С их помощью можно получать любую метаинформацию о файле.
 	  */
 	 $file = new SplFileInfo('/etc/hosts');
@@ -14562,8 +14573,7 @@ EOD;
 	 }
 	 
 	 
-	 >>>>>>
-	 Принцип подстановки Лисков <<<<<<<
+	 #>>>>>> Принцип подстановки Лисков <<<<<<<#
 	 
 	 /*
 	 Переопределение методов на техническом уровне ни чем не ограничено. Класс наследник может изменить поведние любого метода настолько, насколько это вообще возможно. С одной стороны, может показаться что это здорово, так как открывается большая свобода действий, но с другой, некоторые изменения, могут повлечь за собой серьезные архитектурные проблемы. Самая главная из них – сломанный полиморфизм.
@@ -14631,16 +14641,17 @@ EOD;
 	 Для любознательных. Этот принцип любят показывать на иерархиях наследования классов, но как вы видите из текста выше, этот принцип относится к интерфейсам, а не классам. Иерархии классов не обязаны следовать ему, хотя было бы неплохо.
 	 
 	 Для еще более любознательных. Почему вообще понадобился этот принцип? Почему бы не поручить эту работу языку? К сожалению, технически невозможно убедиться в соблюдении принципа Лисков. Поэтому его выполнение ложится на плечи разработчиков
-	 */
+
 	 
 	 # Правила проектирования иерархий типов
 	 
-	 /*
+
 	 Существует несколько правил, которые надо учитывать при работе с типами:
 	 
-	 Предусловия не могут быть усилены в подклассе
-	 Постусловия не могут быть ослаблены в подклассе
-	 Исторические ограничения
+	 > Предусловия не могут быть усилены в подклассе
+	 > Постусловия не могут быть ослаблены в подклассе
+	 
+	 # Исторические ограничения
 	 Предусловия – это ограничения на входные данные, а постусловия – на выходные. Причем в силу ограничений систем типов, многие из таких условий невозможно описать на уровне интерфейсов. Их либо придется описывать просто текстом, как это сделано в документации PSR, либо добавлять проверки в код (проектирование по контракту).
 	 
 	 Например в нашем логере (в интерфейсе LoggerInterface) предусловием является то, что метод log первым параметром принимает один из 8 уровней сообщений. Принцип Лисков утвержает, что мы не можем создать класс реализующий этот интерфейс, который может обрабатывать меньшее число уровней. Это и называется усилением предусловий, то есть требования становятся жестче. Вместо 8 уровней, например 5. Попытка использовать объект такого класса, закончится ошибкой, когда какая-то из систем попробует передать ему уровень, который не поддерживается. Причем не важно, приведет это к ошибке (исключению) или логгер молча проглотит это сообщение не записав его в журнал. Главное что поведение стало отличаться.
@@ -14655,7 +14666,7 @@ EOD;
 	 Circle-ellipse problem https://en.wikipedia.org/wiki/Circle-ellipse_problem
 	 */
 	 
-	 /**@@@
+	 /**@@
 	  * В этом задании вам придется написать код, который нарушает принцип Лисков. Запомните его и никогда так больше не делайте :D
 	  *
 	  * Представьте себе библиотеку, которая предоставляет абстракции для работы с хранилищами ключ-значение. Все они расширяют интерфейс StorageInterface состоящий из трех методов:
@@ -14704,8 +14715,7 @@ EOD;
 	 }
 	 
 	 
-	 >>>>>>
-	 Исключения <<<<<<
+	 #>>>>>> Исключения <<<<<<#
 	 
 	 /*
 	 Исключения – один из немногих примеров удачного использования наследования. В этом уроке мы научимся создавать свои исключения и перехватывать их.
@@ -14735,6 +14745,7 @@ EOD;
 	 
 	 Теперь посмотрим как этим можно воспользоваться:
 	 */
+	 
 	 try {
 		  // какой-то код
 	 } catch (MyException $e) { // Проверка instanceof
@@ -14806,7 +14817,7 @@ EOD;
 		  // вызовется в любом случае
 	 }
 	 
-	 /**@@@
+	 /**@@
 	  * src/File.php
 	  * Создайте класс File, который представляет собой абстракцию над файлом (упрощенная версия SplFileInfo). Реализуйте в этом классе метод read(). Этот метод проверяет можно ли прочитать файл и если да, то читает его, если нет, то бросает исключения двух видов:
 	  *
@@ -14871,8 +14882,7 @@ EOD;
 	 }
 	 
 	 
-	 >>>>>>
-	 Динамическая диспетчеризация <<<<<<
+	 #>>>>>> Динамическая диспетчеризация <<<<<<#
 	 
 	 /*
 	 В курсе "php: полиморфизм", мы разбирали как работает полиморфизм изнутри. Но тогда, мы еще не знали про наследование достаточно, чтобы раскрыть этот вопрос полностью. Теперь время пришло.
@@ -14883,11 +14893,12 @@ EOD;
 	 // Что происходит во время вызова: $obj->getName() => callMethod($obj, 'getName')
 	 function callMethod($data, $methodName, $args) // функция диспетчер
 	 {
-		  $className = $data['className']
+		  $className = $data['className'];
 		  // Специальная функция, которая хранит список классов и связанных с ними методов
 		  $methods = getClassMethods($className);
 		  // Берем нужный метод и вызываем его
-		  $method = $methods[$methodName]
+		  $method = $methods[$methodName];
+		  
 		  if ($method) {
 				$method($data, ...$args);
 		  } else {
@@ -14915,7 +14926,7 @@ EOD;
 	 */
 	 
 	 
-	 >>>>>> Абстрактные классы <<<<<<
+	 #>>>>>> Абстрактные классы <<<<<<#
 	 
 	 /*
 	 Может ли нам понадобится когда-нибудь создавать объекты класса HTMLElement? Наверняка нет. Вся работа строится на базе конкретных элементов, а значит, на практике, всегда используются его наследники.
@@ -14965,7 +14976,7 @@ EOD;
 	 */
 	 
 	 
-	 /**@@@
+	 /**@@
 	  * src\HTMLElement.php
 	  * Определите абстрактный метод getTagName()
 	  *
@@ -14997,11 +15008,10 @@ EOD;
 	 }
 	 
 	 
-	 >>>>>>
-	 Позднее статическое связывание <<<<<<
+	 #>>>>>> Позднее статическое связывание <<<<<<#
 	 
 	 /*
-	 В отличие от $this, обращение к статическим свойствам и метода через self работает по принципу раннего связывания (обратное позднему). Другими словами, self указыавет на тот класс, в котором идет обращение:
+	 В отличие от $this, обращение к статическим свойствам и метода через self работает по принципу раннего связывания (обратное позднему). Другими словами, self указывавет на тот класс, в котором идет обращение:
 	 */
 	 
 	 class A
@@ -15073,7 +15083,6 @@ EOD;
 	 
 	 class BaseEntity
 	 {
-		  
 		  public static function getTable()
 		  {
 				return self::$table;
@@ -15124,7 +15133,7 @@ EOD;
 	 */
 	 
 	 
-	 /**@@@
+	 /**@@
 	  * В DOM библиотеке, каждый класс наследник HTMLElement имеет определенный набор атрибутов, которые относятся ко всему типу в целом. Например имя тега, парность и другое. Эта информация хорошо ложится на статические свойства, а использоваться они будут в суперклассе для построения текстового представления тега.
 	  *
 	  * src\HTMLDivElement.php
@@ -15140,7 +15149,7 @@ EOD;
 	 }
 	 
 	 
-	 /*
+	 /**@@
 	 src\HTMLElement.php
 	 Реализуйте метод __toString(), который возвращает текстовое представление тега. Для этого он использует данные из статического свойства $params определенного в подклассах. Атрибуты в этой практике не предусмотрены. Если у объекта есть тело $this->body, то оно должно устанавливаться в между открывающим и закрывающим тегом.
 	 */
@@ -15150,7 +15159,7 @@ EOD;
 	 
 	 $element = new HTMLDivElement();
 	 $element->setTextContent('hello!');
-	 echo $element // => '<div>hello!</div>'
+	 echo $element; // => '<div>hello!</div>'
 	 
 	 
 	 // FILE: /app/HTMLBrElement.php:
@@ -15204,8 +15213,7 @@ EOD;
 	 }
 	 
 	 
-	 >>>>>>
-	 Композиция вместо наследования <<<<<<
+	 #>>>>>> Композиция вместо наследования <<<<<<#
 	 
 	 /*
 	 Наследование – одна из самых противоречивых вещей в ООП. Чем больше мы узнаем о нем, тем больше подводных камней встречается. Мало того, что оно добавляет в код невероятное количество новых понятий и особенностей поведения, так оно еще имеет фундаментальные изъяны. И если с первым все более менее понятно. На протяжении всех предыдущих уроков мы только и занимались тем, что переосмысливали работу с классами. То со вторым нужно разобраться.
@@ -15239,7 +15247,7 @@ EOD;
 	 */
 	 
 	 
-	 /**@@@
+	 /**@@
 	  * В программировании часто встречается задача очистки текста от мусора или потенциально опасных частей, например HTML тегов. В PHP для такой очистки подходят функции trim (отрезает концевые пробелы), strip_tags (удаляет теги) и другие.
 	  *
 	  * Представьте себе объекто-ориентированный интерфейс для очистки текста:
@@ -15262,7 +15270,7 @@ EOD;
 	 $sanitizer->sanitize('text   '); // 'text'
 	 $sanitizer->sanitize(' boom '); // 'boom'
 	 
-	 /*
+	 /**@@
 	 src\Sanitizer.php
 	 Создайте класс Sanitizer и реализуйте интерфейс SanitizerInteface. Метод sanitize($text) должен отрезать концевые пробелы и возвращать результат наружу.
 	 
@@ -15310,8 +15318,6 @@ EOD;
 	 
 	 
 	 
-	 
-	 
 	 // FILE /app/src/Sanitizer.php:
 	 namespace App;
 	 
@@ -15324,8 +15330,7 @@ EOD;
 	 }
 	 
 	 
-	 >>>>>>
-	 Трейты <<<<<<
+	 #>>>>>> Трейты <<<<<<#
 	 
 	 /*
 	 Трейты, альтренативный механизм переиспользования общего кода в разных классах. Он устраняет ограничения, которыми обладает наследование и заменяет его.
@@ -15448,16 +15453,16 @@ EOD;
 	 }
 	 
 	 // Использование
-	 
 	 $course = new Course();
 	 foreach ($course as $lesson) {
 		  echo $lesson . "\n";
 	 }
+	 
 	 // 'one'
 	 // 'two'
 	 // 'three'
 	 
-	 /**@@@
+	 /**@@
 	  * Один из самых красивых примеров использования трейтов – Enumerable. Он крайне популярен в языках с поддержкой миксинов (а трейты это разновидность миксинов).
 	  */
 	 public function maxBy(callable $fn);
@@ -15491,7 +15496,7 @@ EOD;
 	 print_r($lesson); // ('react component', 9)
 	 
 	 
-	 /*
+	 /**@@
 	 src/Course.php
 	 Подключите трейт Enumerable
 	 
@@ -15509,14 +15514,16 @@ EOD;
 		  public function maxBy(callable $fn)
 		  {
 				$items = $this->getIterator();
+				
 				if (!count($items)) {
 					 return null;
 				}
-				$result = array_reduce($items, function ($acc, $item) use ($fn) {
+				
+				return array_reduce($items, function ($acc, $item) use ($fn) {
 					 $value = $fn($acc, $item);
+					 
 					 return $value >= 0 ? $acc : $item;
 				}, $items[0]);
-				return $result;
 		  }
 	 }
 	 
