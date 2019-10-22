@@ -23,6 +23,7 @@
 ~~9.7 === 9 // true <-> Math.floor(9.7)
 
 
+
 /* # Тип данных Символ (Symbol) */
 const myPrivateMethod = Symbol();
 this[myPrivateMethod] = function() {/* */};
@@ -30,7 +31,6 @@ this[myPrivateMethod] = function() {/* */};
 /*
 Когда символ используется как идентификатор в присваивании свойства, свойство (например, символ) является анонимным; а также не исчислимым. Поскольку свойство не исчислимо, оно не будет отображаться в цикле «for (... in ...)», и поскольку свойство является анонимным, оно не будет отображаться в массиве результатов "Object.getOwnPropertyNames ()". Доступ к этому свойству можно получить с помощью исходного значения символа, создавшего его, или путем итерирования в массиве результатов «Object.getOwnPropertySymbols ()». В предыдущем примере кода доступ к свойству будет осуществляться через значение, которое было сохранено в переменной myPrivateMethod.
 */
-
 
 
 
@@ -43,11 +43,70 @@ if (~str.indexOf("верка")) { // если найдено , т.к. ~n = -(n+1
 }
 
 
+/* #@ Работа со строками: #@ */
+const string = "Hello!";
+string.startsWith("He"); // определяет, начинается ли строка с символов другой строки
+string.endsWith("He"); // определяет, заканчивается ли строка с символов другой строки
+string.includes('llo'); // определяет, содержит ли массив определённый элемент
+string.repeat(3); // конструирует и возвращает новую строку, содержащую указанное количество соединённых вместе копий строки
+string.trim(); //
+string.trimEnd(); //
+string.trimStart(); //
+str.padStart(10, '1234'); // заполняет текущую строку другой строкой => 12341Hello
+str.padStart(8, 'abc'); // => Helloabc
+
+
+
+/* #@ Работа с объектами: #@ */
+
+Object.is(20, 20); // проверяет на эквивалентность 2 значения => true
+
+const first = {a: 1};
+const second = {b: 2};
+const obj = Object.assign({}, first, second); // объединяет объект => {a: 1, b: 2}
+Object.entries(obj); // => [['a', 1], ['b', 2]]
+Object.keys(obj); // => ['a', 'b']
+Object.values(obj); // => [1, 2]
+
 
 
 /* @# Проверка на целое число: @# */
 const isInteger = num => (num ^ 0) === num; // ^ исключающее ИЛИ
 
+
+
+/* @# Модули #@*/
+
+// + FOLDER: modules
+
+// FOLDER: modules + FILE module.js:
+const privateVariable = 27;
+
+export const color = "#fff";
+
+export function sum(a, b) {
+    return a + b;
+}
+
+export default {
+   log() {
+       console.log(privateVariable)
+   }
+}
+
+// FOLDER: modules + FILE index.js
+import Logger, {color, sum} from "./module"; // #1
+import * as Module from './module'; // #2
+
+// #1:
+sum(1, 2);
+color;
+Logger.log(); // объект с методом log, экспортируемый по дефолту
+
+// #2:
+Module.sum(1, 2);
+Module.color;
+Module.default.log(); // объект с методом log, экспортируемый по дефолту
 
 
 
@@ -71,7 +130,6 @@ alert(9999999999999999); // выведет 10000000000000000
 
 
 
-
 /* #@ Генерация случайного целого числа между min и max: #@ */
 /*
 Напишите функцию randomInteger(min, max) для генерации случайного целого числа между min и max, включая min,max как возможные значения.
@@ -87,7 +145,6 @@ const randomInteger = (min, max) => {
 
 
 
-
 /* #@ Очередь и Стек: #@ */
 /*
  * Очередь - упорядоченная коллекция элементов, в которой новые элементы добавляются в конец, а обрабатываются – с начала.
@@ -95,9 +152,9 @@ const randomInteger = (min, max) => {
 */
 
 
+
 /* #@ new Array + join = Повторение строки  #@ */
 new Array(4).join("ля"); // ляляля
-
 
 
 
@@ -108,6 +165,7 @@ new Array(4).join("ля"); // ляляля
 Все переменные внутри функции – это свойства специального внутреннего объекта LexicalEnvironment (лексическое окружение).
 При запуске функция создает объект LexicalEnvironment, записывает туда аргументы, функции и переменные. Процесс инициализации выполняется в том же порядке, что и для глобального объекта, который, вообще говоря, является частным случаем лексического окружения.
 */
+
 function sayHi(name) {
     var phrase = "Привет, " + name;
     alert( phrase );
@@ -182,8 +240,8 @@ counter(); // 5
 
 
 
-
 /* #@ Приём проектирования «Модуль»: @# */
+
 // FILE: some-module.js:
 ;(function() { // Function Expression
     // глобальная переменная нашего скрипта
@@ -196,15 +254,14 @@ counter(); // 5
     showMessage();
 }());
 
-
 +function() { // показываем что здесь Function Expression
     alert('Вызов на месте');
 }();
 
 
 
-
 /* #@  Одалживание метода: @# */
+
 // #1:
 const printArgs = () => {
     arguments.join = [].join; // скопируем ссылку на функцию в переменную
@@ -228,10 +285,9 @@ printArgs('Привет', 'мой', 'мир'); // Привет, мой, мир
 // # Сумма переданных аргументов:
 const sumArgs = () => {
     return [].reduce.call(arguments, (a, b) => a + b);
-}
+};
   
 sumArgs(4, 5, 6); // 15
-
 
 
 
@@ -254,7 +310,7 @@ const typeCheck = (f, checks) => {
         
         return f.apply(this, arguments);
     }
-}
+};
 
 let sum = (a, b) => a + b;
 // обернём декоратор для проверки
@@ -266,7 +322,6 @@ sum(1, 2); // 3, все хорошо
 // а вот так - будет ошибка
 sum(true, null); // некорректный аргумент номер 0
 sum(1, ["array", "in", "sum?!?"]); // некорректный аргумент номер 1
-
 
 
 
@@ -420,7 +475,7 @@ leftBtn.addEventListener('click', e => {
 */
 
 const button = document.querySelector('#showModal');
-const remplate = document.querySelector('#modal-template').innerHTML; 
+const template = document.querySelector('#modal-template').innerHTML;
 const modal = createModal();
 
 button.addEventListener('click', e => {
@@ -463,7 +518,6 @@ function createModal() {
         }
     };
 }
-
 
 
 
@@ -630,6 +684,7 @@ const sendRequest = (method, url, body = null) => {
     </style>
 </body>    
 */
+
 const sections = $('.section');
 const display = $('.maincontent');
 
@@ -644,7 +699,7 @@ const switchActiveClassInSideMenu = menuItemIndex => {
         .addClass('active')
         .siblings()
         .removeClass('active');
-}
+};
 
 const performTransition = sectionEq => {
     if (inscroll) return;
@@ -742,7 +797,7 @@ const loadImage = url => {
         img.src = url;
         img.addEventListener('load', () => resolve());
     });
-}
+};
 
 loadButton.addEventListener('click', () => {
     loadImage(urls[0])
@@ -779,7 +834,6 @@ maxiMir.sayHello(); // => Hello!
 const maxCon = Object.create(maxiMir);
 maxCon.age = 30;
 maxCon.greet(); // Greet
-
 
 
 
@@ -866,7 +920,6 @@ bind(person2, logPerson)(); // Person: John, 23, SMM
 
 
 
-
 // >>>>>> Асинхронность. Event Loop. SetTimeout  <<<<<<
 
 setTimeout(() => { // Web Apis <-> window.setTimeout(...); 
@@ -921,7 +974,7 @@ const sleep = ms => {
     return new Promise(resolve => {
         setTimeout(() => resolve(), ms)
     });    
-} 
+};
     
 sleep(2000).then(() => console.log('After 2 sec'));
 sleep(3000).then(() => console.log('After 3 sec'));
@@ -973,7 +1026,7 @@ const person = Object.create(
 
 const person2 = { name: 'MaxiMir', birthYear: 1988 };
 
-for(let key in person) {
+for (let key in person) {
     if (person.hasOwnProperty(key)) { // собственный ключ объекта (не прототип)
         console.log('Key', key); // => #1 Ничего не выведет без enumerable
     }
@@ -987,7 +1040,7 @@ alert(data.text); // Привет
 alert(data.toString); // undefined
 
 
-for(let key in person2) {
+for (let key in person2) {
     console.log('Key', key); // => Key name \n Key birthYear
 }
 
@@ -1003,8 +1056,8 @@ person.calculateAge(); // => 30
 
 
 
+// >>>>>> Object.defineProperty <<<<<<
 
-// >>>>>> Object.defineProperty <<<<<< 
 // Свойство-константа
 const user = {};
 
@@ -1027,7 +1080,6 @@ for(var key in user) console.log(key);  // name
 
 Object.keys // возвращает только enumerable-свойства.
 Object.getOwnPropertyNames // возвращает все
-
 
 
 
@@ -1160,7 +1212,6 @@ box2.show(); // показываем элемент box2
 
 
 
-
 // >>>>>> Async, Await <<<<<<
 const delay = ms => {
 	return new Promise(r => setTimeout(() => r(), ms));
@@ -1200,7 +1251,6 @@ async function fetchAsyncTodos() {
 	} finally {
 
 	}
-	
 }
 
 fetchAsyncTodos();
@@ -1223,12 +1273,12 @@ function readFile() {
   
 document.getElementById("inp").addEventListener("change", readFile);
 
+
 /* --- HTML ---
 <input id="inp" type='file'>
 <p id="b64"></p>
 <img id="img" height="150"></img>
 */
-
 
 
 
@@ -1361,6 +1411,7 @@ position.z
 // 0
 
 
+
 // # Hidden properties:
 const withHiddenProps = (target, prefix = '_') => {
     return new Proxy(target, {
@@ -1395,7 +1446,6 @@ for(let key in data) console.log(key);
 
 Object.keys(data)
 // ['name', 'age']
-
 
 
 
@@ -2216,10 +2266,9 @@ cacheUser(alex);
 lena = null;
 
 // автоматически у WeakMap был удален объект + очищена память
-0
-cache.has(lena); // true0
-cache.has(alex); // true0
-0
+cache.has(lena); // true
+cache.has(alex); // true
+
 
 // @ WeakSet:
 const users = [
@@ -2257,8 +2306,4 @@ void function aRecursion(i) {
     }
 }(3);
 
-console.log(typeof aRecursion) // undefined
-
-
-
-
+console.log(typeof aRecursion); // undefined

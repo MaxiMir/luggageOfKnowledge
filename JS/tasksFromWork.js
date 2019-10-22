@@ -317,6 +317,7 @@ const formForumResponse = $('.reviews-form');
 const starsElementsBlock = $('.user-rating__stars');
 const starsElements = $('.user-rating__star');
 const errorResponseText = $('.error--rating');
+
 const initRating = () => {
     let value = null;
 
