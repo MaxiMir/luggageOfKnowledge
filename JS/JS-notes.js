@@ -1,7 +1,5 @@
 /** @@@ LEARN @@@
 
- * Портал Ильи Кантора: http://learn.javascript.ru/
-
  * Codewars: https://www.codewars.com/
  
  * Серия «You don't know JS»: https://github.com/azat-io/you-dont-know-js-ru
@@ -15,22 +13,68 @@
  * https://habr.com/ru/company/mailru/blog/335292/
 
  * http://blog.csssr.ru/2018/08/16/candidates-mistakes
+*/
 
- */
 
-
-/* # Округление */
+/* #@ Округление @# */
 ~~9.7 === 9 // true <-> Math.floor(9.7)
 
 
 
-/* # Тип данных Символ (Symbol) */
+
+/* #@ Тип данных Символ (Symbol) @#  */
+// #1:
 const myPrivateMethod = Symbol();
 this[myPrivateMethod] = function() {/* */};
 
-/*
-Когда символ используется как идентификатор в присваивании свойства, свойство (например, символ) является анонимным; а также не исчислимым. Поскольку свойство не исчислимо, оно не будет отображаться в цикле «for (... in ...)», и поскольку свойство является анонимным, оно не будет отображаться в массиве результатов "Object.getOwnPropertyNames ()". Доступ к этому свойству можно получить с помощью исходного значения символа, создавшего его, или путем итерирования в массиве результатов «Object.getOwnPropertySymbols ()». В предыдущем примере кода доступ к свойству будет осуществляться через значение, которое было сохранено в переменной myPrivateMethod.
-*/
+// Когда символ используется как идентификатор в присваивании свойства, свойство (например, символ) является анонимным; а также не исчислимым. Поскольку свойство не исчислимо, оно не будет отображаться в цикле «for (... in ...)», и поскольку свойство является анонимным, оно не будет отображаться в массиве результатов "Object.getOwnPropertyNames ()". Доступ к этому свойству можно получить с помощью исходного значения символа, создавшего его, или путем итерирования в массиве результатов «Object.getOwnPropertySymbols ()». В предыдущем примере кода доступ к свойству будет осуществляться через значение, которое было сохранено в переменной myPrivateMethod. 
+
+// #2:
+const symbol = Symbol('demo');
+const other = Symbol('demo');
+
+symbol === other; // => false
+
+const obj = {
+    name: 'Max',
+    [symbol]: 'meta'
+};
+
+obj[symbol]; // => meta
+
+
+// #3:
+const array = [1, 2, 3];
+const iter = array[Symbol.iterator](); // аналогично и для строк
+iter.next(); // => {value: 1, done: false}
+iter.next(); // => {value: 2, done: false}
+iter.next(); // => {value: 3, done: false}
+iter.next(); // => {value: undefined, done: true}
+
+// <-> for of для объектов, для которых определен Symbol.iterator
+
+const countries = {
+    values: ['ru', 'kz', 'ua'],
+    [Symbol.iterator]() { // описываем итератор для for of
+        let i = 0;
+
+        return {
+            next: () => {
+                const values = this.values[i];
+                i++;
+                return {
+                    done: i > this.values.length,
+                    value
+                }
+            }
+        }
+    }
+};
+
+for (let item of countries) {
+    console.log(item);
+}
+
 
 
 
@@ -41,6 +85,8 @@ const str = "Проверка";
 if (~str.indexOf("верка")) { // если найдено , т.к. ~n = -(n+1)
   alert( 'найдено!' );
 }
+
+
 
 
 /* #@ Работа со строками: #@ */
@@ -57,8 +103,8 @@ str.padStart(8, 'abc'); // => Helloabc
 
 
 
-/* #@ Работа с объектами: #@ */
 
+/* #@ Работа с объектами: #@ */
 Object.is(20, 20); // проверяет на эквивалентность 2 значения => true
 
 const first = {a: 1};
@@ -67,6 +113,7 @@ const obj = Object.assign({}, first, second); // объединяет объек
 Object.entries(obj); // => [['a', 1], ['b', 2]]
 Object.keys(obj); // => ['a', 'b']
 Object.values(obj); // => [1, 2]
+
 
 
 
@@ -110,6 +157,7 @@ Module.default.log(); // объект с методом log, экспортир�
 
 
 
+
 /* @# Неточные вычисления #@ */
 alert( 0.1 + 0.2 ); // 0.30000000000000004
 /*
@@ -130,6 +178,7 @@ alert(9999999999999999); // выведет 10000000000000000
 
 
 
+
 /* #@ Генерация случайного целого числа между min и max: #@ */
 /*
 Напишите функцию randomInteger(min, max) для генерации случайного целого числа между min и max, включая min,max как возможные значения.
@@ -145,6 +194,7 @@ const randomInteger = (min, max) => {
 
 
 
+
 /* #@ Очередь и Стек: #@ */
 /*
  * Очередь - упорядоченная коллекция элементов, в которой новые элементы добавляются в конец, а обрабатываются – с начала.
@@ -153,8 +203,10 @@ const randomInteger = (min, max) => {
 
 
 
+
 /* #@ new Array + join = Повторение строки  #@ */
 new Array(4).join("ля"); // ляляля
+
 
 
 
@@ -213,6 +265,8 @@ sayHi('Вася');
 */
 
 
+
+
 /* #@ Счетчик с установкой/сбросом значений: #@ */
 const makeCounter = () =>  {
     let currentCount = 1;
@@ -240,6 +294,7 @@ counter(); // 5
 
 
 
+
 /* #@ Приём проектирования «Модуль»: @# */
 
 // FILE: some-module.js:
@@ -260,8 +315,8 @@ counter(); // 5
 
 
 
-/* #@  Одалживание метода: @# */
 
+/* #@  Одалживание метода: @# */
 // #1:
 const printArgs = () => {
     arguments.join = [].join; // скопируем ссылку на функцию в переменную
@@ -288,6 +343,7 @@ const sumArgs = () => {
 };
   
 sumArgs(4, 5, 6); // 15
+
 
 
 
@@ -407,6 +463,7 @@ function openItem(item) {
     item.classList.add('active');
     content.style.height = `${reqHeight}`;   
 }
+
 
 
 
@@ -837,6 +894,7 @@ maxCon.greet(); // Greet
 
 
 
+
 // >>>>>> Что такое контекст. Как работает call, bind, apply <<<<<<
 
 function hello () {
@@ -917,6 +975,7 @@ function bind(context, fn) {
 
 bind(person1, logPerson)(); // Person: Maxim, 22, Frontend
 bind(person2, logPerson)(); // Person: John, 23, SMM
+
 
 
 
@@ -1056,6 +1115,7 @@ person.calculateAge(); // => 30
 
 
 
+
 // >>>>>> Object.defineProperty <<<<<<
 
 // Свойство-константа
@@ -1080,6 +1140,7 @@ for(var key in user) console.log(key);  // name
 
 Object.keys // возвращает только enumerable-свойства.
 Object.getOwnPropertyNames // возвращает все
+
 
 
 
@@ -1212,6 +1273,7 @@ box2.show(); // показываем элемент box2
 
 
 
+
 // >>>>>> Async, Await <<<<<<
 const delay = ms => {
 	return new Promise(r => setTimeout(() => r(), ms));
@@ -1257,7 +1319,7 @@ fetchAsyncTodos();
 
 
 
-// # Вставка загруженной картинки:
+// #@ Вставка загруженной картинки:
 function readFile() {
     if (this.files && this.files[0]) {
         const FileReader = new FileReader();
@@ -1335,7 +1397,50 @@ delete op.age;
 // 'Deleting... age
 
 
-// # Functions:
+// #2:
+сonst validator = {
+    get(target, prop) {
+        return prop in target ? target[prop] : `Поля ${prop} в объекте нет`
+    },
+    set(target, prop, value) {
+        if (value.length > 2) {
+            Reflect.set(target, prop, value)
+        } else {
+            console.log("Длина должна быть больше 2х символов")
+        }
+    }
+}
+
+сonst form = {
+    login: 'tester',
+    password: '12345'
+}
+
+const formProxy = new Proxy(form, validator) // cледим за объектом form + ловушки
+formProxy.login // tester
+formProxy.password // 12345
+formProxy['username'] // Поля username в объекте нет
+formProxy.password = '1' // Длина должна быть больше 2х символов
+
+// #3:
+function log(message) {
+   console.log(`[Log]: ${message}`) 
+}
+
+const proxy = new Proxy(log, {
+    apply(target, thisArg, argArray) { // вызывается при вызове функции log; thisArg - контекст; argArray - массив переметров
+        if (argArray.length === 1) {
+            Reflect.apply(target, thisArg, argArray) // вызываем фунцию
+        } else {
+            console.log("Количество аргументов не совпадает")
+        }
+    }
+})
+
+proxy('Custom log') // => Custom log
+proxy() // => Количество аргументов не совпадает
+
+// #@ Functions:
 const log = text = `Log: ${text}`;
 
 const fp = new Proxy(log, {
@@ -1355,7 +1460,7 @@ fn('TEST');
 // "LOG: TEST"
 
 
-// # Classes:
+// #@ Classes:
 class Person {
 	constructor(name, age) {
 		this.name = name;
@@ -1386,7 +1491,7 @@ p.name;
 // "Maxim"
 
 
-// # Wrapper
+// #@ Wrapper
 const withDefaultValue = (target, defaultValue = 0) => {
     return new Proxy(target, {
         get: (obj, prop) => (prop in obj ? obj[prop] : defaultValue)
@@ -1412,7 +1517,7 @@ position.z
 
 
 
-// # Hidden properties:
+// #@ Hidden properties:
 const withHiddenProps = (target, prefix = '_') => {
     return new Proxy(target, {
         has: (obj, prop) => (prop in obj) && (!prop.startWith(prefix)),
@@ -1506,7 +1611,7 @@ users.findById(7); // {id: 7, name: 'John', job: 'Student', age: 22}
 // # Генераторы. Symbol iterator, for of:
 
 // @1:
-function* strGenerator()
+function *strGenerator()
 {
     yield 'Y';
     yield 'E';
@@ -1521,7 +1626,7 @@ str.next(); // {value: undefined, done: true}
 
 
 // @2:
-function* numberGen(n = 10) {
+function *numberGen(n = 10) {
     for (let i = 0; i < n; i++) {
         yield i;
     }
@@ -1576,7 +1681,7 @@ for (let k of iter(6)) {
 // 5
 
 
-// # Методы массивов find и findIndex
+// #@ Методы массивов find и findIndex
 const people = [
     { name: "Макс", age: 25, budget: 40000},
     { name: "Игорь", age: 21, budget: 80000}
@@ -1736,7 +1841,7 @@ document.addEventListener("DOMContentLoaded", function() { // событие з�
 
 
 
-// #@ Debouncing: #@
+// #@ Debouncing: 
  
 // FILE: debounce.html:
 /*
@@ -1792,7 +1897,8 @@ searchBoxDom.addEventListener('input', () => {
 
 
 
-// # Throttling
+
+// #@ Throttling
 // FILE: throttling.html:
 /*
 <html>
@@ -2127,7 +2233,8 @@ console.log("Back to the first level");
 
 
 
-// # Map, Set, WeakMap, WeakSet
+
+// #@ Map, Set, WeakMap, WeakSet
 
 const obj = {
     name: 'Max',
@@ -2197,6 +2304,8 @@ const lastVisit = user => visits.get(user)
 lastVisit(user[1]); // 2019-09-26T08:33:21.696Z
 
 
+
+
 // @ Set:
 const set = new Set([1,2,3,3,4,4,5]); // остаются уникальные значения => {1,2,3,4,5}
 set
@@ -2217,6 +2326,8 @@ for (let value of set) {
 }
 
 const uniqValues = array => [...new Set(array)]; // <-> [Array.from(new Set(array))]
+
+
 
 
 // @ WeakMap:
@@ -2270,6 +2381,8 @@ cache.has(lena); // true
 cache.has(alex); // true
 
 
+
+
 // @ WeakSet:
 const users = [
     {name: 'Elena'},
@@ -2293,6 +2406,7 @@ console.log(visits.has(users[1])); // false
 
 
 // @ void:
+
 // интересный способ работы с немедленно вызываемыми функциями:
 void function() {
     console.log('What')
@@ -2307,3 +2421,34 @@ void function aRecursion(i) {
 }(3);
 
 console.log(typeof aRecursion); // undefined
+
+
+
+
+// @ reflect:
+
+class Student {
+    constructor(name) {
+        this.name = name
+    }
+
+    greet() {
+        console.log(`Hi! My name is ${this.name}`)
+    }
+}
+
+class ProtoStudent {
+    university = 'Oxford'
+}
+
+const student = Reflect.construct(Student, ['Igor']); // создаем инстанс объекта; можно передать 3-й параметр - класс протитотип
+
+Reflect.apply(student.greet, {name: 'Max'}, []) // вызываем метод класса student greet в контексте объекта {name: 'Max'}, 3 параметр аргументы
+// => Hi! My name is Max
+Reflect.ownKeys(student); // возвращает собственные ключи объекта => ['name']
+
+
+Reflect.preventExtensions(student); // блокируем модификацию объекта
+student.age = 25
+student // {name: 'Max'}
+Reflect.isExtensible(student) // проверяем на доступность для модификации объекта => false

@@ -5,6 +5,7 @@
 Список: "тест", "цифра", "отол", "оолт", "кекс" . Результат - 2.
 */
 
+// #1:
 const getCountAnagram = (data, origStr) => {
     let counter = 0;
 
@@ -25,6 +26,7 @@ const getCountAnagram = (data, origStr) => {
 
 
 
+
 /* #@ Подзагрузка товаров: @#*/
 $(() => {
     const delay = ms => {
@@ -35,51 +37,51 @@ $(() => {
         let data = {};
         const paginationBlockUp = $('#yw0');
         const paginationBlockDown = $('#yw1');
-
+    
         if (paginationBlockDown.length) {
             const pageNum = +paginationBlockDown.find('.selected a').text();
             const pagesCount = paginationBlockDown.children('.page').length;
             const isLastPage = pageNum === pagesCount;
-
+    
             data = {pageNum, pagesCount, isLastPage};
         }
-
+    
         return {
-            getData: () => {
+            getData() {
                 return data;
             },
-            getNextPageURN: nextPageNum => {
+            getNextPageURN(nextPageNum) {
                 const urnData = location.pathname.split('/').filter(Boolean);
                 const isRootSection = urnData.length === 2;
                 const isNotPaginationNumInURN = isNaN(+urnData[urnData.length - 1]);
-
+    
                 if (isRootSection || isNotPaginationNumInURN) {
                     urnData.push(nextPageNum);
                 } else {
                     urnData[urnData.length - 1] = nextPageNum;
                 }
-
+    
                 return urnData.join('/') + '/';
             },
-            createShowMoreBtn: (nextPageNum, pagesCount) => {
+            createShowMoreBtn (nextPageNum, pagesCount) {
                 if (nextPageNum > pagesCount) {
                     return;
                 }
-
+    
                 $(`<div id="loadProductsContainer">\
-				                    <div id="loadProductsBtn" data-num="${nextPageNum}" data-count="${pagesCount}">\
-				                        Показать еще\
-				                    </div>\
-				                    <div class="loader">\
-				                        <img src="loader.gif" width="300"/>\
-				                    </div>\
-				                </div>`).insertBefore(paginationBlockDown);
+                        <div id="loadProductsBtn" data-num="${nextPageNum}" data-count="${pagesCount}">\
+                            Показать еще\
+                        </div>\
+                        <div class="loader">\
+                            <img src="loader.gif" width="300"/>\
+                        </div>\
+                    </div>`).insertBefore(paginationBlockDown);
             },
-            paginationSwitchToNext: (nextPageNum, count) => {
+            paginationSwitchToNext (nextPageNum, count) {
                 if (nextPageNum > count) {
                     return
                 }
-
+    
                 for (let paginationBlock of [paginationBlockUp, paginationBlockDown]) {
                     paginationBlock
                         .children('.page')
@@ -88,35 +90,35 @@ $(() => {
                         .addClass('selected');
                 }
             },
-            initLoading: () => {
+            initLoading() {
                 $('#loadProductsBtn').fadeOut(1000, () => {
                     $('.loader').show()
                 });
             },
-            endLoading: () => {
+            endLoading() {
                 $('#loadProductsContainer')
                     .fadeOut(1000)
                     .detach();
             },
-            loadHandler: e => {
+            loadHandler(e) {
                 const loadBtn = $(e.currentTarget);
                 const productContainer = $('#bike-list .items');
                 const {num, count} = loadBtn.data();
-                const nextPageURN = reloadingGoods.getNextPageURN(num);
-
+                const nextPageURN = this.getNextPageURN(num);
+    
                 $.ajax({
                     type: 'GET',
                     url: nextPageURN,
                     dataType: 'html',
-                    beforeSend: () => reloadingGoods.initLoading(),
+                    beforeSend: () => this.initLoading(),
                     success: data => {
                         const elements = $(data).find('.wrap-card-it');
-
-                        delay(1500)
-                            .then(() => reloadingGoods.endLoading())
-                            .then(() => productContainer.append(elements))
-                            .then(() => reloadingGoods.createShowMoreBtn(num + 1, count))
-                            .then(() => reloadingGoods.paginationSwitchToNext(num, count));
+    
+                        await delay(1500)
+                        productContainer.append(elements);
+                        this.endLoading();
+                        this.createShowMoreBtn(num + 1, count);
+                        this.paginationSwitchToNext(num, count);
                     }
                 });
             }
@@ -424,3 +426,4 @@ formForumResponse.on('submit', () => {
         }
     });
 });
+

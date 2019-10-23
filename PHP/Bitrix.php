@@ -3239,19 +3239,19 @@
         const intervalTime = 1000;
 
         return {
-            getOldValue: function () {
+            getOldValue() {
                 return lastPhrase;
             },
-            getNewValue: function () {
+            getNewValue() {
                 return inputBlock.val();
             },
-            isNeedUpdate: function () {
+            isNeedUpdate() {
                 return this.getOldValue() === this.getNewValue();
             },
-            updateValue: function () {
+            updateValue() {
                 this.lastPhrase = this.getNewValue();
             },
-            delaySearch: function () {
+            delaySearch() {
                 if (intervalID && this.isNeedUpdate()) {
                     this.updateValue();
                 }
@@ -3272,10 +3272,9 @@
                     }, intervalTime);
                 }
             },
-            generateResponseList: function (word) {
+            generateResponseList(word) {
                 if (!word.length) {
                     responseBlock.hide();
-
                     return;
                 }
 
@@ -3686,3 +3685,28 @@
 		  }
 	 }
 </style>
+
+
+
+<? #@@@ Добавление значения свойств из HB: @@@#
+	 // ...
+	 if ($arrProperty["PROPERTY_TYPE"] === "S" && $arrProperty["USER_TYPE_SETTINGS"]) {
+	 	 $tableName = $arrProperty["USER_TYPE_SETTINGS"]["TABLE_NAME"];
+	 	 
+	 	 $hlData = array_pop(HighloadBlockTable::getList([
+	 	 	 'filter' => ['TABLE_NAME' => $arrProperty["USER_TYPE_SETTINGS"]["TABLE_NAME"]]
+	 	 ])->fetchAll());
+	 	 
+	 	 $entityClass = HighloadBlockTable::compileEntity($hlData)->getDataClass();
+		  
+		  $res = $entityClass::getList([
+				'select' => ['UF_NAME'],
+				'order' => ['ID' => 'ASC'],
+				'filter' => ['UF_XML_ID' => $arrProperty["VALUE"]]
+		  ])->fetchAll();
+		  
+	 	 if ($res) {
+	 	 	 $arr_prop[$arrProperties["CODE"]]["VALUE"] = $res[0]["UF_NAME"];
+	 	 }
+	 }
+	 
