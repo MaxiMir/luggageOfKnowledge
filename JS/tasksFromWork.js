@@ -34,96 +34,96 @@ $(() => {
     };
 
     const initReloadingGoods = () => {
-        let data = {};
-        const paginationBlockUp = $('#yw0');
-        const paginationBlockDown = $('#yw1');
-    
-        if (paginationBlockDown.length) {
-            const pageNum = +paginationBlockDown.find('.selected a').text();
-            const pagesCount = paginationBlockDown.children('.page').length;
-            const isLastPage = pageNum === pagesCount;
-    
-            data = {pageNum, pagesCount, isLastPage};
-        }
-    
-        return {
-            getData() {
-                return data;
-            },
-            getNextPageURN(nextPageNum) {
-                const urnData = location.pathname.split('/').filter(Boolean);
-                const isRootSection = urnData.length === 2;
-                const isNotPaginationNumInURN = isNaN(+urnData[urnData.length - 1]);
-    
-                if (isRootSection || isNotPaginationNumInURN) {
-                    urnData.push(nextPageNum);
-                } else {
-                    urnData[urnData.length - 1] = nextPageNum;
-                }
-    
-                return urnData.join('/') + '/';
-            },
-            createShowMoreBtn (nextPageNum, pagesCount) {
-                if (nextPageNum > pagesCount) {
-                    return;
-                }
-    
-                $(`<div id="loadProductsContainer">\
-                        <div id="loadProductsBtn" data-num="${nextPageNum}" data-count="${pagesCount}">\
-                            Показать еще\
-                        </div>\
-                        <div class="loader">\
-                            <img src="loader.gif" width="300"/>\
-                        </div>\
-                    </div>`).insertBefore(paginationBlockDown);
-            },
-            paginationSwitchToNext (nextPageNum, count) {
-                if (nextPageNum > count) {
-                    return
-                }
-    
-                for (let paginationBlock of [paginationBlockUp, paginationBlockDown]) {
-                    paginationBlock
-                        .children('.page')
-                        .removeClass('selected')
-                        .eq(nextPageNum - 1)
-                        .addClass('selected');
-                }
-            },
-            initLoading() {
-                $('#loadProductsBtn').fadeOut(1000, () => {
-                    $('.loader').show()
-                });
-            },
-            endLoading() {
-                $('#loadProductsContainer')
-                    .fadeOut(1000)
-                    .detach();
-            },
-            loadHandler(e) {
-                const loadBtn = $(e.currentTarget);
-                const productContainer = $('#bike-list .items');
-                const {num, count} = loadBtn.data();
-                const nextPageURN = this.getNextPageURN(num);
-    
-                $.ajax({
-                    type: 'GET',
-                    url: nextPageURN,
-                    dataType: 'html',
-                    beforeSend: () => this.initLoading(),
-                    success: data => {
-                        const elements = $(data).find('.wrap-card-it');
-    
-                        await delay(1500)
-                        productContainer.append(elements);
-                        this.endLoading();
-                        this.createShowMoreBtn(num + 1, count);
-                        this.paginationSwitchToNext(num, count);
-                    }
-                });
-            }
-        }
-    };
+               let data = {};
+               const paginationBlockUp = $('#yw0');
+               const paginationBlockDown = $('#yw1');
+
+               if (paginationBlockDown.length) {
+                   const pageNum = +paginationBlockDown.find('.selected a').text();
+                   const pagesCount = paginationBlockDown.children('.page').length;
+                   const isLastPage = pageNum === pagesCount;
+
+                   data = {pageNum, pagesCount, isLastPage};
+               }
+
+               return {
+                   getData: () => {
+                       return data;
+                   },
+                   getNextPageURN: nextPageNum => {
+                       const urnData = location.pathname.split('/').filter(Boolean);
+                       const isRootSection = urnData.length === 2;
+                       const isNotPaginationNumInURN = isNaN(+urnData[urnData.length - 1]);
+
+                       if (isRootSection || isNotPaginationNumInURN) {
+                           urnData.push(nextPageNum);
+                       } else {
+                           urnData[urnData.length - 1] = nextPageNum;
+                       }
+
+                       return urnData.join('/') + '/';
+                   },
+                   createShowMoreBtn: (nextPageNum, pagesCount) => {
+                       if (nextPageNum > pagesCount) {
+                           return;
+                       }
+
+                       $(`<div id="loadProductsContainer">\
+				                    <div id="loadProductsBtn" data-num="${nextPageNum}" data-count="${pagesCount}">\
+				                        Показать еще\
+				                    </div>\
+				                    <div class="loader">\
+				                        <img src="loader.gif" width="300"/>\
+				                    </div>\
+				                </div>`).insertBefore(paginationBlockDown);
+                   },
+                   paginationSwitchToNext: (nextPageNum, count) => {
+                       if (nextPageNum > count) {
+                           return
+                       }
+
+	                    for (let paginationBlock of [paginationBlockUp, paginationBlockDown]) {
+                           paginationBlock
+	                            .children('.page')
+	                            .removeClass('selected')
+	                            .eq(nextPageNum - 1)
+	                            .addClass('selected');
+	                    }
+                   },
+                   initLoading: () => {
+                       $('#loadProductsBtn').fadeOut(1000, () => {
+                           $('.loader').show()
+                       });
+                   },
+                   endLoading: () => {
+                       $('#loadProductsContainer')
+                           .fadeOut(1000)
+                           .detach();
+                   },
+                   loadHandler: e => {
+                       const loadBtn = $(e.currentTarget);
+                       const productContainer = $('#bike-list .items');
+                       const {num, count} = loadBtn.data();
+                       const nextPageURN = reloadingGoods.getNextPageURN(num);
+
+                       $.ajax({
+                           type: 'GET',
+                           url: nextPageURN,
+                           dataType: 'html',
+                           beforeSend: () => reloadingGoods.initLoading(),
+                           success: data => {
+                               const elements = $(data).find('.wrap-card-it');
+
+                               delay(1500)
+                                   .then(() => reloadingGoods.endLoading())
+                                   .then(() => productContainer.append(elements))
+                                   .then(() => reloadingGoods.createShowMoreBtn(num + 1, count))
+                                   .then(() => reloadingGoods.paginationSwitchToNext(num, count));
+                           }
+                       });
+                   }
+               }
+           };
 
     const reloadingGoods = initReloadingGoods();
     const reloadingGoodsData = reloadingGoods.getData();
