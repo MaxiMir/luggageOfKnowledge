@@ -461,7 +461,7 @@ function openItem(item) {
     const reqHeight = textBlock.getBoundingClientRect().height; // getBoundingClientRect - размер элемента + его позиция отн. окна
 
     item.classList.add('active');
-    content.style.height = `${reqHeight}`;   
+    content.style.height = `${reqHeight}px`;   
 }
 
 
@@ -515,6 +515,7 @@ leftBtn.addEventListener('click', e => {
 
 
 
+
 /* #@ Модальное окно: @#
 
 <button id="showModal">Show Modal</button>
@@ -552,11 +553,13 @@ function createModal() {
     const contentBlock = container.querySelector('.popup__content');
 
     const closeBtn = container.querySelector('.popup__close');
+    
     closeBtn.addEventListener('click', e => {
         document.body.removeChild(container);
     });
 
     const overlay = container.querySelector('.overlay');
+    
     overlay.addEventListener('click', e => { 
         if (e.target === overlay) {
             closeBtn.click();
@@ -575,6 +578,7 @@ function createModal() {
         }
     };
 }
+
 
 
 
@@ -631,7 +635,7 @@ const sendRequest = (method, url, body = null) => {
     return new Promise((resolve, reject) => {
         const xhr = new XMLHttpRequest();
 
-        xhr.setRequestHeader('Content-Type', 'application/json') // устанавливаем заголовки для отправки
+        xhr.setRequestHeader('Content-Type', 'application/json'); // устанавливаем заголовки для отправки
         xhr.responseType = 'json'; // устанавливаем тип получаемых данных
 
         xhr.open(method, url);
@@ -695,7 +699,9 @@ const sendRequest = (method, url, body = null) => {
 
 
 
-// # Скролл по блокам:
+
+/* #@ Скролл по блокам: #@
+
 /*
 <body>
     <div class="wrapper">
@@ -887,6 +893,7 @@ Object.prototype.sayHello = () => {
 maxiMir.sayHello(); // => Hello!
 
  
+
 // #2 один из вариантов наследования:
 const maxCon = Object.create(maxiMir);
 maxCon.age = 30;
@@ -961,7 +968,7 @@ Array.prototype.multBy = function(n) {
 nums.multBy(2); // [2, 4, 6, 8, 10]
 
 
-// Написать свою функцию bind
+// Написать свою функцию bind:
 function logPerson() {
     console.log(`Person: ${this.name}, ${this.age}, ${this.job}`);
 }
@@ -981,14 +988,15 @@ bind(person2, logPerson)(); // Person: John, 23, SMM
 
 // >>>>>> Асинхронность. Event Loop. SetTimeout  <<<<<<
 
-setTimeout(() => { // Web Apis <-> window.setTimeout(...); 
+setTimeout(() => { // Web API <-> window.setTimeout(...); 
     console.log('Inside timeout, after 2000 seconds');
 }, 2000); 
 
 // Call Stack
-// Web Apis
+// Web API
 // Event Loop
 // Callback Queue
+
 
 
 
@@ -1110,7 +1118,6 @@ delete person.birthYear // !#3 Нельзя будет удалить по кл�
 
 person.age; // => 30
 person.age = 100; 
-
 person.calculateAge(); // => 30
 
 
@@ -1118,7 +1125,7 @@ person.calculateAge(); // => 30
 
 // >>>>>> Object.defineProperty <<<<<<
 
-// Свойство-константа
+// Свойство-константа:
 const user = {};
 
 Object.defineProperty(user, "name", {
@@ -1127,12 +1134,13 @@ Object.defineProperty(user, "name", {
   configurable: false // запретить удаление "delete user.name"
 });
 
-// Помечаем toString как не подлежащий перебору в for..in
+
 const user = {
     name: "Вася",
     toString: function() { return this.name; }
 };
-  
+
+// Помечаем toString как не подлежащий перебору в for..in  
 Object.defineProperty(user, "toString", { enumerable: false }); // модифицируем настройки у существующего toString.
   
 for(var key in user) console.log(key);  // name
@@ -1319,7 +1327,14 @@ fetchAsyncTodos();
 
 
 
+
 // #@ Вставка загруженной картинки:
+
+/* --- HTML ---
+<input id="inp" type='file'>
+<p id="b64"></p>
+<img id="img" height="150"></img>
+*/
 function readFile() {
     if (this.files && this.files[0]) {
         const FileReader = new FileReader();
@@ -1336,12 +1351,6 @@ function readFile() {
 document.getElementById("inp").addEventListener("change", readFile);
 
 
-/* --- HTML ---
-<input id="inp" type='file'>
-<p id="b64"></p>
-<img id="img" height="150"></img>
-*/
-
 
 
 // >>>>>> Proxy. Объекты, функции, классы. <<<<<<
@@ -1357,7 +1366,6 @@ const op = new Proxy(person, {
 	get(target, prop) { // ловушка на метод get
 		console.log('Target', target);
 		console.log('Prop', prop);
-        console.log(`Getting prop ${prop}`);
         
 		return target[prop];
 	},
@@ -1382,7 +1390,6 @@ const op = new Proxy(person, {
 op.age; 
 // Target >  {name: Maxim, age: 25, job: Fullstack}
 // Prop age
-// 25
 
 op.qqq = 26;
 // No qqq field in target
@@ -1422,6 +1429,7 @@ formProxy.password // 12345
 formProxy['username'] // Поля username в объекте нет
 formProxy.password = '1' // Длина должна быть больше 2х символов
 
+
 // #3:
 function log(message) {
    console.log(`[Log]: ${message}`) 
@@ -1435,10 +1443,13 @@ const proxy = new Proxy(log, {
             console.log("Количество аргументов не совпадает")
         }
     }
-})
+});
 
 proxy('Custom log') // => Custom log
 proxy() // => Количество аргументов не совпадает
+
+
+
 
 // #@ Functions:
 const log = text = `Log: ${text}`;
@@ -1458,6 +1469,8 @@ fp();
 fn('TEST');
 // Calling fn...
 // "LOG: TEST"
+
+
 
 
 // #@ Classes:
@@ -1517,6 +1530,7 @@ position.z
 
 
 
+
 // #@ Hidden properties:
 const withHiddenProps = (target, prefix = '_') => {
     return new Proxy(target, {
@@ -1551,6 +1565,7 @@ for(let key in data) console.log(key);
 
 Object.keys(data)
 // ['name', 'age']
+
 
 
 
@@ -1608,6 +1623,7 @@ users.findById(7); // {id: 7, name: 'John', job: 'Student', age: 22}
 
 
 
+
 // # Генераторы. Symbol iterator, for of:
 
 // @1:
@@ -1623,7 +1639,6 @@ str.next(); // {value: Y, done: false}
 str.next(); // {value: E, done: false}
 str.next(); // {value: S, done: false}
 str.next(); // {value: undefined, done: true}
-
 
 // @2:
 function *numberGen(n = 10) {
@@ -1681,7 +1696,9 @@ for (let k of iter(6)) {
 // 5
 
 
-// #@ Методы массивов find и findIndex
+
+
+// #@ Методы массивов find и findIndex:
 const people = [
     { name: "Макс", age: 25, budget: 40000},
     { name: "Игорь", age: 21, budget: 80000}
@@ -1692,7 +1709,7 @@ const igorIndex = people.findIndex(person => person.name === 'Игорь'); // 1
 
 
 // # Object.fromEntries - метод возвращает массив собственных перечисляемых свойств указанного объекта в формате [key, value]
-let students = {
+const students = {
     amelia: 20,
     beatrice: 22,
     cece: 20,
@@ -1701,14 +1718,14 @@ let students = {
 };
   
 // convert to array in order to make use of .filter() function:
-let overTwentyOne = Object.entries(students).filter(([name, age]) => {
+const overTwentyOne = Object.entries(students).filter(([name, age]) => {
     return age >= 21
 }) 
 // => [ [ 'beatrice', 22 ], [ 'eloise', 21 ] ]
   
 
 // turn multidimensional array back into an object
-let DrinkingAgeStudents = Object.fromEntries(overTwentyOne); 
+const DrinkingAgeStudents = Object.fromEntries(overTwentyOne); 
 // => { beatrice: 22, eloise: 21 }
 
 /*
@@ -1718,14 +1735,14 @@ When using these functions make sure to be aware of the potential side effects.
 
 
 
-// # Array.prototype.flat - возвращает новый массив, в котором все элементы вложенных подмассивов были рекурсивно "подняты" на указанный уровень depth:
-let courseStudents = [
+// #@ Array.prototype.flat - возвращает новый массив, в котором все элементы вложенных подмассивов были рекурсивно "подняты" на указанный уровень depth:
+const courseStudents = [
     [ 'Janet', 'Martha', 'Bob', [ 'Phil', 'Candace' ] ],
     [ 'Wilson', 'Taylor' ],
     [ 'Edith', 'Jacob', 'Peter', 'Betty' ]
 ];
   
-let flattenOneLevel = courseStudents.flat()
+const flattenOneLevel = courseStudents.flat()
 console.log(flattenOneLevel)
 // [
 //   'Janet',
@@ -1740,7 +1757,7 @@ console.log(flattenOneLevel)
 //   'Betty'
 // ]
   
-let flattenTwoLevels = courseStudents.flat(2) // Infinity - для неизвестной глубины
+const flattenTwoLevels = courseStudents.flat(2) // Infinity - для неизвестной глубины
 console.log(flattenTwoLevels)
 // [
 //   'Janet',   'Martha',
@@ -1753,18 +1770,20 @@ console.log(flattenTwoLevels)
 
 
 
-// # Array.prototype.flatMap - сначала применяет функцию к каждому элементу, а затем преобразует полученный результат в плоскую структуру и помещает в новый массив.:
-let grades = [78, 62, 80, 64]
+// #@ Array.prototype.flatMap - сначала применяет функцию к каждому элементу, а затем преобразует полученный результат в плоскую структуру и помещает в новый массив:
+const grades = [78, 62, 80, 64]
 
-let flatMapped = grades.flatMap(grade => [grade, grade + 7]);
+const flatMapped = grades.flatMap(grade => [grade, grade + 7]);
 // [
 //  78, 85, 62, 69,
 //  80, 87, 64, 71
 // ]
 
 
-// # String.trimStart and String.trimEnd:
-let message = "   Welcome to CS 101    "
+
+
+// #@ String.trimStart and String.trimEnd:
+const message = "   Welcome to CS 101    "
 message.trimEnd()
 // '   Welcome to CS 101'
 message.trimStart()
@@ -1774,7 +1793,7 @@ message.trimEnd().trimStart()
 
 
 
-// access array item (with default value)
+// #@ access array item (with default value)
 const colors = [];
 const [, secondColor = 'black'] = colors;
 
@@ -1788,7 +1807,10 @@ const { foo, ...small } = big;
 foo = ''
 small; // => { bar: 'value Bar' }
 
-// destructuring iterables
+
+
+
+// #@ destructuring iterables
 const movies = {
    list: [
       { title: 'Heat' },
@@ -1812,9 +1834,11 @@ const [firstMovieTitle] = movies;
 console.log(firstMovieTitle); // => 'Heat'
 
 
-// destructuring dynamic properties
+
+// #@ destructuring dynamic properties
 function greet(obj, nameProp) {
    const { [nameProp]: name = 'Unknown' } = obj;
+
    return `Hello, ${name}!`;
 }
 
@@ -1823,7 +1847,8 @@ greet({ }, 'name'); // => 'Hello, Unknown!'
 
 
 
-// # Сохраняем данные формы на сайте при перезагрузке страницы, с помощью sessionStorage:
+
+// #@ Сохраняем данные формы на сайте при перезагрузке страницы, с помощью sessionStorage:
 document.addEventListener("DOMContentLoaded", function() { // событие загрузки страницы
     // выбираем на странице все элементы типа textarea и input
     document.querySelectorAll('textarea, input').forEach(e => {
@@ -1834,7 +1859,7 @@ document.addEventListener("DOMContentLoaded", function() { // событие з�
         e.addEventListener('input', () => {
             // и записываем в sessionStorage данные, в качестве имени используя атрибут name поля элемента ввода
             window.sessionStorage.setItem(e.name, e.value);
-        })
+        });
     })
 });
 
@@ -1862,15 +1887,15 @@ document.addEventListener("DOMContentLoaded", function() { // событие з�
 */
 
 // FILE: debounce.js:
-let  timerId;
-const  searchBoxDom  =  document.getElementById('search-box');
+let timerId;
+const searchBoxDom = document.getElementById('search-box');
 
 // This represents a very heavy method. Which takes a lot of time to execute
 const makeAPICall = () => {
-    const  debounceDom  =  document.getElementById('debounce-count');
-    const  debounceCount  =  debounceDom.innerHTML  ||  0;
+    const debounceDom = document.getElementById('debounce-count');
+    const debounceCount = debounceDom.innerHTML || 0;
 
-    debounceDom.innerHTML  =  parseInt(debounceCount) +  1
+    debounceDom.innerHTML = parseInt(debounceCount) + 1
 };
 
 // Debounce function: Input as function which needs to be debounced and delay is the debounced time in milliseconds
@@ -1879,17 +1904,17 @@ const debounceFunction = (func, delay) => {
     clearTimeout(timerId);
 
     // Executes the func after delay time.
-    timerId  =  setTimeout(func, delay)
+    timerId = setTimeout(func, delay)
 };
 
 // Event listener on the input box
 searchBoxDom.addEventListener('input', () => {
-    const  apiCallCountDom  =  document.getElementById('show-api-call-count');
-    let  apiCallCount  =  apiCallCountDom.innerHTML  ||  0;
-    apiCallCount  =  parseInt(apiCallCount) +  1;
+    const apiCallCountDom = document.getElementById('show-api-call-count');
+    let apiCallCount = apiCallCountDom.innerHTML || 0;
+    apiCallCount = parseInt(apiCallCount) + 1;
 
     // Updates the number of times makeAPICall method is called
-    apiCallCountDom.innerHTML  =  apiCallCount;
+    apiCallCountDom.innerHTML = apiCallCount;
 
     // Debounces makeAPICall method
     debounceFunction(makeAPICall, 200)
@@ -1929,15 +1954,15 @@ searchBoxDom.addEventListener('input', () => {
 </html>
 * */
 // FILE: throttling.js:
-let  timerID;
-const  divBodyDom  =  document.getElementById('div-body');
+let timerID;
+const divBodyDom = document.getElementById('div-body');
 
 // This represents a very heavy method which takes a lot of time to execute
 const makeAPICall = () => {
-    const  debounceDom  =  document.getElementById('debounc-count');
-    let  debounceCount  =  debounceDom.innerHTML  ||  0;
+    const debounceDom = document.getElementById('debounc-count');
+    let debounceCount = debounceDom.innerHTML || 0;
 
-    debounceDom.innerHTML  =  parseInt(debounceCount) +  1
+    debounceDom.innerHTML = parseInt(debounceCount) + 1;
 };
 
 // Throttle function: Input as function which needs to be throttled and delay is the time interval in milliseconds
@@ -1948,23 +1973,22 @@ const throttleFunction = (func, delay) => {
     }
 
     // Schedule a setTimeout after delay seconds
-    timerID  =  setTimeout(() => {
+    timerID = setTimeout(() => {
         func();
-
         // Once setTimeout function execution is finished, timerId = undefined so that in <br>
         // the next scroll event function execution can be scheduled by the setTimeout
-        timerID  =  undefined;
+        timerID = undefined;
     }, delay);
 };
 
 // Event listener on the input box
 divBodyDom.addEventListener('scroll', () => {
-    const apiCallCountDom  =  document.getElementById('show-api-call-count');
-    let apiCallCount  =  apiCallCountDom.innerHTML  ||  0;
-    apiCallCount  =  parseInt(apiCallCount) +  1;
+    const apiCallCountDom = document.getElementById('show-api-call-count');
+    let apiCallCount = apiCallCountDom.innerHTML || 0;
+    apiCallCount = parseInt(apiCallCount) + 1;
 
     // Updates the number of times makeAPICall method is called
-    apiCallCountDom.innerHTML  =  apiCallCount;
+    apiCallCountDom.innerHTML = apiCallCount;
 
     // Throttles makeAPICall method such that it is called once in every 200 milliseconds
     throttleFunction(makeAPICall, 200);
@@ -1973,7 +1997,7 @@ divBodyDom.addEventListener('scroll', () => {
 
 
 
-// #@ Убрать из массива переданные отстальными аргументами элементы: #@
+// #@ Убрать из массива переданные остальными аргументами элементы: #@
 const filterArr = (a, ...args) => a.filter(i => !args.includes(i));
 filterArr([1, 2, 3, 4, 5, 6, 7], 1, 3, 5, 6); // => [2, 4, 7]
 
@@ -1988,15 +2012,18 @@ $('#container');
 const $$ = document.querySelectorAll.bind(document);
 $$('p');
 
+
+
+
 // @ Добавление элементов:
 const link = document.createElement('a');
-a.setAttribute('href', '/home');
-a.className = 'active';
-a.textContent = 'Главная страница';
+link.setAttribute('href', '/home');
+link.className = 'active';
+link.textContent = 'Главная страница';
 
 document.body.appendChild(link);
 
-// @ Нативный эквивалент:
+// <-> нативный эквивалент:
 document.body.insertAdjacentHTML('beforeend', '<a href="/home" class="active">Главная страница</a>');
 /*
  * 'beforebegin': перед элементом.
@@ -2013,11 +2040,14 @@ document.body.insertAdjacentHTML('beforeend', '<a href="/home" class="active">Г
 <!-- afterend -->
 */
 
-// @ Вставляем текст:
-const link = document.createElement('a');
-const p = document.querySelector('p');
 
+
+
+// @ Вставляем текст:
+const p = document.querySelector('p');
 p.insertAdjacentText('afterbegin', 'foo');
+
+
 
 
 // @ Двигаем элементы:
@@ -2037,11 +2067,16 @@ const h2 = document.querySelector('h2');
 h1.insertAdjacentElement('afterend', h2); //  и <h2> вставляется после <h1> (он просто сдвигается, а не копируется)
 
 
+
+
 // @ Заменяем элементы:
 const h1 = document.querySelector('h1');
 const h2 = document.querySelector('h2');
 
 h1.replaceWith(h2); // заменой выступает новый элемент, созданный с помощью document.createElement, или элемент, который уже есть в том же документе (тогда он снова будет перемещён, а не скопирован
+
+
+
 
 // @ Создаём элемент из сырого HTML:
 /*
@@ -2056,6 +2091,9 @@ const createElement = domString => {
 };
 
 const a = createElement('<a href="/home" class="active">Главная страница</a>');
+
+
+
 
 // @ Инспектируем DOM:
 // Стандартный DOM API также предоставляет методы для инспекции DOM. Например, matches проверяет соответствие элемента определённому селектору:
@@ -2152,6 +2190,7 @@ A MutationRecordсодержит следующие свойства:
 
 Допустим, будем наблюдать изменения в атрибутах и ​​дочерних узлах:
 */
+
 const target = document.querySelector('#container');
 const callback = (mutations, observer) => {
   mutations.forEach(mutation => {
@@ -2189,19 +2228,21 @@ callback(mutations);
 observer.disconnect();
 
 
-// # КОНСОЛЬ:
+
+
+// #@ КОНСОЛЬ:
 
 // console.count(label) - выводит общее количество вызовов функции:
 const sayHello = name => {
-    console.count(name) // eсли label не указан, то отображается количество вызовов с параметром по умолчанию.
-    console.log(name)
+    console.count(name); // eсли label не указан, то отображается количество вызовов с параметром по умолчанию.
+    console.log(name);
 };
 
 
 // console.warn - выводит в консоли предупреждение:
 const sayHello = name => {
     if(!name) {
-      console.warn("No name given")
+      console.warn("No name given");
     }
 };
 
@@ -2212,8 +2253,8 @@ const pets = {
 };
   
 const person = {
-firstName: "Indrek",
-lastName: "Lasn"
+    firstName: "Indrek",
+    lastName: "Lasn"
 };
   
 console.table([pets, person]); // с группировкой
@@ -2234,7 +2275,7 @@ console.log("Back to the first level");
 
 
 
-// #@ Map, Set, WeakMap, WeakSet
+// #@ Map, Set, WeakMap, WeakSet:
 
 const obj = {
     name: 'Max',
@@ -2250,6 +2291,9 @@ const entries = [
 
 Object.entries(obj); // Объект в массив => [['name', 'Max'], ['age', 26], ['job', 'Fullstack']]
 Object.fromEntries(entries); // Массив в объект => { name: 'Max', age: 26, job: 'Fullstack' }
+
+
+
 
 // @ Map:
 const map = new Map(entries);
@@ -2343,7 +2387,6 @@ const arr = [obj];
 obj = null; // сборщик мусора удалил объект
 obj; // null
 arr; // {name: 'weakmap'}
-
 
 сonst weakMap = new WeakMap([ // позволяет избежать утечки памяти (ключи только объекты)
     [obj, 'obj Data']
@@ -2445,6 +2488,7 @@ const student = Reflect.construct(Student, ['Igor']); // создаем инст
 
 Reflect.apply(student.greet, {name: 'Max'}, []) // вызываем метод класса student greet в контексте объекта {name: 'Max'}, 3 параметр аргументы
 // => Hi! My name is Max
+
 Reflect.ownKeys(student); // возвращает собственные ключи объекта => ['name']
 
 
@@ -2452,3 +2496,4 @@ Reflect.preventExtensions(student); // блокируем модификацию
 student.age = 25
 student // {name: 'Max'}
 Reflect.isExtensible(student) // проверяем на доступность для модификации объекта => false
+
