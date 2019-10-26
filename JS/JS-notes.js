@@ -2497,3 +2497,4 @@ student.age = 25
 student // {name: 'Max'}
 Reflect.isExtensible(student) // проверяем на доступность для модификации объекта => false
 
+

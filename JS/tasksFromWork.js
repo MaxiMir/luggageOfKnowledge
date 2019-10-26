@@ -426,4 +426,3 @@ formForumResponse.on('submit', () => {
         }
     });
 });
-
