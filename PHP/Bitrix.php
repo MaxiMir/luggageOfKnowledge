@@ -28,6 +28,9 @@
 	 
 	 #@ Вывод свойства типа HTML/TEXT:
 	 echo htmlspecialcharsBack($arFields['PROPERTY_КОД_СВОЙСТВА_VALUE']["TEXT"]);
+	 
+	 #@ Настройка вывода цены:
+	 // URN: /bitrix/admin/currency_edit.php?ID=RUB&lang=ru&tabControl_active_tab=edit2
 ?>
 
 

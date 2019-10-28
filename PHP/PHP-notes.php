@@ -598,3 +598,28 @@
 	 } catch(UserException $e) {
 		  die($e->getMessage());
 	 }
+	 
+	 
+	 
+
+    #>>>>>> Рекурсивно собрать дерево файлов с каталогами <<<<<<<#
+
+    $directoryIter = new DirectoryIterator($dir);
+    $filesData = getTreeFilesData($directoryIter);
+    
+    function getTreeFilesData(DirectoryIterator $directoryIter)
+	 {
+		  $result = [];
+	 
+		  foreach ($directoryIter as $node) {
+				if ($node->isFile()) {
+					 $result[] = $node->getFilename();
+				} elseif ($node->isDir() && !$node->isDot()) {
+					 $fileName = $node->getFilename();
+					 $currentDirectoryIterator = new DirectoryIterator($node->getPathname());
+					 $result[$fileName] = getTreeFilesData($currentDirectoryIterator);
+				}
+		  }
+	 
+		  return $result;
+	 }
