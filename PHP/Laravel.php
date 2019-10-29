@@ -1127,7 +1127,6 @@ MIX_PUSHER_APP_CLUSTER="${PUSHER_APP_CLUSTER}"
 
 
 
-
 	# >>>>>>>>>>>> Модель <<<<<<<<<<< #
 	
 
@@ -1166,7 +1165,7 @@ MIX_PUSHER_APP_CLUSTER="${PUSHER_APP_CLUSTER}"
 		  }
 	 }
 	 
-/*
+/**
 	 Методы в контроллерах принято группировать по смысловой связи. Например все что относится к обычным страницам на сайте можно поместить в контроллер PageController, а CRUD статьи в контроллер ArticleController. Ниже пример структуры контроллеров из нашего открытого проекта hexlet-sicp:
 
 	 app/Http/Controllers/
@@ -1204,19 +1203,610 @@ MIX_PUSHER_APP_CLUSTER="${PUSHER_APP_CLUSTER}"
 
 
 
-/*
+/**@@@
+	Реализуйте рейтинг статей. Он должен быть доступен по ссылке /rating. На этой странице нужно вывести опубликованные статьи отсортированные по количеству лайков.
 
+	routes/web.php
+Реализуйте маршрут /rating и свяжите его с index экшеном контроллера RatingController.
+
+	app/Http/Controller/RatingController.php
+Создайте контроллер и экшен index. Извлеките из базы все статьи и выполните нужные преобразования (взять только опубликованные, отсортировать их) над коллекцией перед ее передачей в шаблон.
+	> Метод isPublished() у статьи позволяет узнать опубликована она или нет
+	> Количество лайков можно узнать обратившись к свойству likes_count
+
+	resources/views/rating/index.blade.php
+	Выведите статьи в табличном виде. Для каждой статьи нужно вывести количество лайков и название.
+
+	 
+	 Подсказки
+	 Коллекции возвращаемые Laravel из базы данных поддерживают интерфейс Collection
 */
 
 
+// FILE: /app/Http/Controllers/RatingController.php
+	 namespace App\Http\Controllers;
+	 
+	 use App\Article;
+	 
+	 class RatingController extends Controller
+	 {
+		  public function index()
+		  {
+				$articles = Article::all();
+				// in real life sorting should be done by sql
+				$articlesForRating = $articles->filter(function ($a) {
+					 return $a->isPublished();
+				})->sortByDesc('likes_count');
+				
+				return view('rating.index', ['articles' => $articlesForRating]);
+		  }
+	 }
+
+	// FILE: resources/views/rating/index.blade.php
+?>
+
+	 @extends('layouts.app')
+
+	 @section('content')
+		  <h1>Рейтинг</h1>
+		  <div>
+				<table>
+					 <thead>
+					 <tr>
+						  <td>Название</td>
+						  <td>Число лайков</td>
+					 </tr>
+					 </thead>
+					 <tbody>
+						  @foreach($articles as $article)
+								<tr>
+									 <td>{{$article->name}}</td>
+									 <td>{{$article->likes_count}}</td>
+								</tr>
+						  @endforeach
+					 </tbody>
+				</table>
+		  <div>
+	 @endsection
+		
+<?
+	 
+	 
+	 // FILE: /routes/web.php
+	 Route::get('/', function () {
+		  return view('welcome');
+	 });
+		
+	 Route::get('/rating', 'RatingController@index');
+
+	 
+	 
+	 
+
+	# >>>>>>>>>>>> Список (CRUD) <<<<<<<<<<< #
+	
+/**
+	 Любой CRUD начинается со списка сущностей представленных, как правило, в табличном виде. Для его реализации нам понадобится добавить маршрут, создать контроллер, реализовать обработчик и вывести данные в шаблоне. Еще обязательно нужны тесты и мы их обязательно добавим, но потом, когда разберемся с фреймворком.
+	 
+	 Начнем с маршрута:
+*/
+
+	 // Название сущности в URL во множественном числе, контроллер в единственном
+		  Route::get('/articles', 'ArticleController@index')
+			  ->name('articles.index'); // имя маршрута, нужно для того чтобы не создавать ссылки руками
+
+
+/**
+	Следующий шаг, сгенерировать контроллер. Контроллер создается пустым. Методы и шаблоны для них нужно добавлять самостоятельно.
+
+	$ php artisan make:controller ArticleController
+
+	Теперь добавим содержимое:
+*/
+	 
+	 namespace App\Http\Controllers;
+	 
+	 use App\Article;
+	 
+	 class ArticleController extends Controller
+	 {
+		  public function index()
+		  {
+				$articles = Article::paginate();
+				
+				// Статьи передаются в шаблон
+				return view('article.index', compact('articles'));
+		  }
+	 }
 
 /*
+	 Первой строкой из базы извлекаются статьи с учетом запрошенной страницы. Laravel автоматически определяет наличие параметра page в запросе и выполняет правильное смещение в SQL. Количество элементов, которые выводятся на странице равно пятнадцати. Это число можно изменить передав нужное значение в метод paginate($perPage).
 
+	Следующей строкой, вызывается шаблон, в который передается коллекция статей. Функция view($path, $params) вторым параметром принимает ассоциативный массив, который затем попадает в шаблон.
+
+	Осталось добавить шаблон resources/views/article/index.blade.php:
+*/
+?>
+@extends('layouts.app')
+
+@section('content')
+    <h1>Список статей</h1>
+    @foreach($articles as $article)
+        <h2>{{$article->name}}</h2>
+        {{-- Str::limit – функция-хелпер, которая обрезает текст до указанной длины --}}
+        {{-- Используется для очень длинных текстов, которые нужно сократить --}}
+        <div>{{Str::limit($article->body, 200)}}</div>
+    @endforeach
+@endsection
+
+<?
+
+/*
+	Массив параметров, которые были переданы в шаблон из контроллера, превращается в набор переменных. Именами становятся ключи, а содержимым значения этих ключей в массиве. В нашем примере это $articles. Обращаться к этим переменным можно двумя способами: либо в директивах напрямую, либо через интерполяцию {{}}. Последний вариант автоматически подставит вместо переменной ее значение.
+	
+	 Обход коллекции выполняется с помощью директивы @foreach, которая выглядит идентично foreach самого PHP.
+
+	Последний элемент в шаблоне – вывод пейджинга. Эту часть тоже берет на себя Laravel. Для вывода достаточно вызвать метод links() у коллекции, которую вернул метод paginate.
+
+
+	# Самостоятельная работа
+	1. Выполните все шаги из теории.
+	2. Убедитесь что при запросе страницы /articles у вас выводятся статьи, которые вы создали в Tinker ранее.
+	3. Добавьте в общий макет меню, в котором есть ссылка на articles. Воспользуйтесь хелпером route https://laravel.com/docs/6.x/helpers#urls для генерации ссылки.
+
+	# Дополнительные материалы
+	Pagination https://laravel.com/docs/6.x/pagination
 */
 
 
+/**@@@
+	 routes/web.php
+	 Реализуйте маршрут /article_categories и свяжите его с index экшеном контроллера ArticleCategoryController. Сделайте маршрут именованным.
 
-/*
+	app/Http/Controller/ArticleCategoryController.php
+	Создайте контроллер (используя artisan) и экшен index. Извлеките из базы все категории и передайте их в шаблон.
 
+	resources/views/article_category/index.blade.php
+	 Подключите макет
+	 Выведите категории любым удобным способом. Для каждой категории нужно вывести ее название и описание.
+
+	resources/views/layouts/app.blade.php
+	Добавьте ссылку (через хелпер route) ведущую на страницу категорий.
 */
 
+
+	// FILE: /app/Http/Controllers/ArticleCategoryController.php
+	 
+	 namespace App\Http\Controllers;
+	 
+	 use App\ArticleCategory;
+	 
+	 class ArticleCategoryController extends Controller
+	 {
+		  public function index()
+		  {
+				$articleCategories = ArticleCategory::all();
+				
+				return view('article_category.index', compact('articleCategories'));
+		  }
+	 }
+
+	
+	 // FILE: /resources/views/article_category/index.blade.php
+?>
+
+	 @extends('layouts.app')
+
+	 @section('content')
+		  <h1>Список категорий статей</h1>
+		  @foreach($articleCategories as $category)
+				<h2>{{$category->name}}</h2>
+				<div>{{$category->description}}</div>
+		  @endforeach
+	 @endsection
+		
+<?
+	 // FILE: /resources/views/layouts/app.blade.php
+?>
+<!doctype html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Laravel</title>
+    </head>
+    <body>
+        <div>
+            <a href="{{ route('articles.index') }}">Статьи</a>
+            <a href="{{ route('article_categories.index') }}">Категории статей</a>
+        </div>
+        <div>
+            @yield('content')
+        </div>
+    </body>
+</html>
+<?
+
+	// FILE: routes/web.php
+
+	 Route::get('/', function () {
+		  return view('welcome');
+	 });
+	 
+	 Route::get('/articles', 'ArticleController@index')
+		  ->name('articles.index');
+
+	 Route::get('/article_categories', 'ArticleCategoryController@index')
+		  ->name('article_categories.index');
+
+
+	 
+	 
+	# >>>>>>>>>>>> Просмотр (CRUD) <<<<<<<<<<< #
+	
+/**
+	После того как список готов, можно переходить к просмотру каждого элемента. Как обычно начинаем с роутинга:
+*/
+
+	# id – параметр, который зависит от конкретной статьи
+	# Фигурные скобки нужны для описания параметров маршрута
+	 Route::get('/articles/{id}', 'ArticleController@show')
+		->name('articles.show');
+
+	 
+/**
+	В этом месте у маршрута появляется динамическая часть, идентификатор статьи. Подобный маршрут обрабатывает все страницы, имеющие вид /articles/<идентификатор статьи>, пара примеров:
+	 /articles/1
+	 /articles/100
+	 /articles/what-is-js
+
+	 Этот идентификатор используется в обработчике, для выборки из базы нужной статьи.
+*/
+
+	 namespace App\Http\Controllers;
+
+	 use App\Article;
+	 
+	 class ArticleController extends Controller
+	 {
+		  // ... другие обработчики
+	 
+		  public function show($id)
+		  {
+				$article = Article::findOrFail($id);
+				
+				return view('article.show', compact('article'));
+		  }
+	 }
+
+/**
+	Параметр id определенный в маршруте, приходит в обработчик как аргумент. Имя этого аргумента может быть любым, для Laravel имеет значение только порядок. Если параметров в маршруте больше одного, то они передадутся в обработчик в том же порядке, в котором они определены в маршруте:
+*/
+
+	Route::get('/articles/{commentId}/comments/{id}', function ($commentId, $id) {
+    // ...
+});
+
+/**
+	 Затем, происходит выборка статьи из базы данных. Для нее используется метод findOrFail, а не find. Почему? Дело в том, что, в большинстве случаев, просмотр конкретной сущности должен вернуть ошибку 404 если самой сущности не существует. Метод find никак не помогает обработать эту ситуацию, он возвращает null. Дальше программисту придется делать проверку на существование и самому формировать правильный HTTP ответ. Но, так как, задача очень частая, то разработчики Laravel решили ее внутри фреймворка. С одной стороны они добавили метод findOrFail, который выбрасывает исключение в случае отсутствия записи. С другой, добавили специальную обработку данных исключений на уровне обработки запросов.
+	 
+	 И последний шаг, передача статьи в шаблон. Здесь ничего нового.
+
+	Шаблон:
+*/
+?>
+	 @extends('layouts.app')
+
+	 @section('content')
+		  <h1>{{$article->name}}</h1>
+		  <div>{{$article->body}}</div>
+	 @endsection
+<?
+
+/**
+	Самостоятельная работа
+	 1. Выполните все шаги из теории.
+	 2. Убедитесь что при запросе страницы /articles/<идентификатор> у вас выводится конкретная статья.
+	 3. Сделайте имя статьи в списке статей ссылкой на конкретную статью.
+*/
+
+
+/**@@@
+	В этом упражнении нужное реализовать страницу категории, на которой выводится список статей этой категории.
+
+	routes/web.php
+	Реализуйте маршрут /article_categories/{id} и свяжите его с show экшеном контроллера ArticleCategoryController. Сделайте маршрут именованным.
+
+	app/Http/Controller/ArticleCategoryController.php
+	Создайте экшен show.
+	Извлеките из базы текущую запрошенную категорию и выведите информацию о ней на странице.
+	Выведите список статей этой категории. Имя каждой статьи должно быть ссылкой на саму статью (маршрут подсмотрите в файле роутов).
+	
+	Список статей категории можно получить так: $category->articles
+
+	resources/views/article_category/show.blade.php
+	Подключите макет
+	Выведите имя и описание категории
+	Выведите список названий статей в виде <ol> списка. Если статей в категории нет, то тег <ol> не должен отображаться. Каждое название – ссылка на саму статью.
+
+	Проверка коллекции на пустоту: $category->articles->isEmpty()
+
+	resources/views/article/show.blade.php
+	Добавьте ссылку на категорию статьи рядом с именем статьи
+*/
+
+	 // FILE: app/Http/Controllers/ArticleCategoryController.php
+	 namespace App\Http\Controllers;
+	 
+	 use App\ArticleCategory;
+	 
+	 class ArticleCategoryController extends Controller
+	 {
+		  public function index()
+		  {
+				$articleCategories = ArticleCategory::all();
+				
+				return view('article_category.index', compact('articleCategories'));
+		  }
+		  
+		  public function show($id)
+		  {
+				$category = ArticleCategory::findOrFail($id);
+				
+				return view('article_category.show', compact('category'));
+		  }
+	 }
+
+    
+    // FILE: /resources/views/article/show.blade.php
+?>
+	<h1>{{$article->name}}</h1>
+    
+    <small>
+        <a href="{{route('article_categories.show', $article->category)}}">
+            {{ $article->category }}
+        </a>
+    </small>
+    
+    <div>{{$article->body}}</div>
+<?
+	 
+	 // FILE: /resources/views/article_category/show.blade.php
+?>
+		
+	 @extends('layouts.app')
+	 
+	 @section('content')
+		  <h1>{{$category->name}}</h1>
+		  <div>{{$category->description}}</div>
+	 
+		  @if(!$category->articles->isEmpty())
+				<h2>Статьи</h2>
+				<ol>
+					 @foreach($category->articles as $article)
+						  <li>
+								<a href="{{ route('articles.show', $article) }}">{{$article->name}}</a>
+						  </li>
+					 @endforeach
+				</ol>
+		  @endif
+	 @endsection
+		
+<?
+	 
+	 // FILE: /routes/web.php
+	 Route::get('/', function () {
+	 	 return view('welcome');
+	});
+
+	 Route::get('/articles', 'ArticleController@index')
+		  ->name('articles.index');
+	 
+	 Route::get('/articles/{id}', 'ArticleController@show')
+		  ->name('articles.show');
+	 
+	 Route::get('/article_categories', 'ArticleCategoryController@index')
+		  ->name('article_categories.index');
+	 
+	 Route::get('/article_categories/{id}', 'ArticleCategoryController@show')
+	 	 ->name('article_categories.show');
+
+
+
+
+	# >>>>>>>>>>>> Просмотр (CRUD) <<<<<<<<<<< #
+	
+/**
+	Для реализации создания и обновления сущности в CRUD, нужно научиться правильно работать с формами. Создавать формы самостоятельно, очень утомительное занятие. Сотни строк одинакового кода, обработка ошибок, защита от атак, все это придется делать снова и снова.
+	
+	Обычно фреймворки имеют встроенную поддержку генерации форм, которая состоит из набора функций, автоматизирующих рутину. В Laravel так было изначально, но затем формы выделели в отдельный компонент laravelcollective/html. В самом Laravel осталось буквально несколько элементов: защита от CSRF и поддержка дополнительных методов HTTP в HTML формах.
+*/
+
+	#@ LaravelCollective/HTML
+	
+/**
+	Для установки этого компонента выполните эту команду:
+	
+	$ composer require "laravelcollective/html"
+	
+	Затем внесите два исправления в файл config/app.php
+	
+	1. Добавьте новый провайдер в список провайдеров
+	
+	'providers' => [
+		  // ...
+		  Collective\Html\HtmlServiceProvider::class,
+		  // ...
+  	],
+	
+	2. Добавьте два алиаса в список алиасов:
+	
+	'aliases' => [
+		// ...
+		'Form' => Collective\Html\FormFacade::class,
+		'Html' => Collective\Html\HtmlFacade::class,
+		// ...
+	],
+*/
+
+
+	#@ Библиотечные функции
+
+/**
+	Эта библиотека включает в себя несколько десятков статических методов, формирующих различные элементы. Вот несколько примеров:
+*/
+	 
+	 
+	 // Не забудьте открыть Tinker и попробовать поэкспериментировать с этими функциями
+	 
+	 echo Form::submit('Click Me!');
+	 // <input type="submit" value="Click Me!">
+	 
+	 echo Form::radio('category_id', 1);
+	 // <input name="category_id" type="radio" value="1">
+	 
+	 echo Form::select('size', ['L' => 'Large', 'S' => 'Small']);
+	 // <select name="size">
+	 //     <option value="L">Large</option>
+	 //     <option value="S">Small</option>
+	 // </select>
+	 
+	 // Остальные элементы можно подсмотреть в официальной документации
+
+/*
+	Особняком стоит генерация самого тега формы. Из-за того что этот тег оборачивает все остальные элементы формы, он состоит из двух методов: один открывает форму, другой – закрывает:
+*/
+
+	 // По умолчанию, форме проставляется метод _POST_, но его можно изменить на любой другой:
+	 // В поисковых формах нужен GET
+	 {{Form::open(['url' => route('articles.index'), 'method' => 'GET'])}}
+		  {{Form::text('username')}}
+		  {{Form::submit('Click Me!')}}
+	 {{Form::close()}}
+
+	 # <form method="POST" action="http://localhost/foo/bar" accept-charset="UTF-8"><input name="_token" type="hidden">
+	 # </form>
+
+/**
+	 Наиболее интересная возможность в этом пакете – интеграция с ORM. В таком случае, форма берет на себя часть задач по обработке формы. Для этого вместо метода open используется метод model. Первым параметром в него передается тот объект, форма которого строится.
+*/
+
+	{{ Form::model($user, ['url' => route('users.store')]) }}
+    {{ Form::label('name', 'Имя') }}
+    {{ Form::text('name') }}
+    {{ Form::label('email', 'Email') }}
+    {{ Form::email('email') }}
+    {{ Form::submit('Создать') }}
+	{{ Form::close() }}
+
+
+/**
+	 Разница в том, что эта форма самостоятельно извлекает из объекта значения свойств и подставляет их в форму. Это полезно при редактировании или при выводе ошибок, когда не удалось выполнить нужное действие. В следующем уроке мы воспользуемся именно таким подходом, он значительно экономит время.
+*/
+
+	#@ Данные формы
+	
+/**
+	Любую информацию о HTTP-запросе, включая данные формы, можно получить из объекта $request. Laravel передает его в те экшены, которые явно указывают его в параметрах:
+*/
+	 
+	 namespace App\Http\Controllers;
+	 
+	 // Нужно импортировать класс и указывать его в экшене
+	 use Illuminate\Http\Request;
+	 
+	 class ArticleController extends Controller
+	 {
+		  public function index(Request $request)
+		  {
+				// Возвращает весь пользовательский ввод как из тела запроса (отправка форм)
+				// так и из параметров запроса (query string)
+				$input = $request->input();
+				$value = $request->input('key'); // возврат значения по указанному ключу
+				$value2 = $request->input('key2', 'default value'); // принимает значение по умолчанию
+		  }
+	 }
+
+/**
+	При реализации поисковых форм, данные формы должны оставаться внутри формы после запроса. Мы это наблюдаем повсеместно, особенно в поисковых системах. Для реализации такого поведения нужно выполнить два условия. Первое, передать данные в шаблон. Второе, подставить их в нужные места. Для этого, элементы библиотеки генерации формы принимают дополнительный параметр:
+*/
+?>
+		  {{Form::open(['url' => route('articles.index'), 'method' => 'GET'])}}
+		  {{-- Имя пользователя передано из экшена --}}
+		  {{Form::text('username', $username)}}
+		  {{Form::submit('Click Me!')}}
+		  {{Form::close()}}
+				
+<?
+/*
+	# Самостоятельная работа
+	1. Установите и настройте пакет
+	2. Убедитесь через Tinker что пакет работает
+
+	# Дополнительные материалы
+	Документация https://laravelcollective.com/docs/6.0/html
+*/
+
+
+/**@@@
+
+	 В этом упражнении нужное реализовать поисковую форму, которая позволяет отфильтровать статьи по слову, встречающемуся в названии статьи. Форма состоит из двух элементов: текстового поля (имя поля q, это важно для тестов) и кнопки "найти". Она ведет на тот же маршрут, который выводит список всех статей.
+
+	app/Http/Controller/ArticleController.php
+	 Реализуйте экшен index. Если клиент прислал запрос из формы, выполните необходимую фильтрацию данных через правильный запрос в базу данных.
+
+	resources/views/article/show.blade.php
+	Выведите форму. Убедитесь что она работает.
+	Реализуйте подстановку данных в форму после запроса.
+
+	Подсказки
+	Поисковые формы отправляются методом GET.
+	Для простой фильтрации (когда данных немного), подойдет Like-запрос.
+	Выполняется он так: Article::where('name', 'ilike' "%{$q}%"). Где $q – это запрос из формы.
+*/
+
+
+	// FILE: /app/Http/Controllers/ArticleController.php
+	 namespace App\Http\Controllers;
+	 
+	 use Illuminate\Http\Request;
+	 use App\Article;
+	 
+	 class ArticleController extends Controller
+	 {
+		  public function index(Request $request)
+		  {
+				$q = $request->input('q');
+				// Like has huge impact on the performance. Use them carefully. Learn indexes and full text search.
+				$articles = $q ? Article::where('name', 'ilike', "%{$q}%")->paginate() : Article::paginate();
+				
+				return view('article.index', compact('articles', 'q'));
+		  }
+		  
+		  public function show($id)
+		  {
+				$article = Article::findOrFail($id);
+				
+				return view('article.show', compact('article'));
+		  }
+	 }
+	 
+	 
+	 
+	 // FILE: /resources/views/article/index.blade.php
+?>
+	 @extends('layouts.app')
+
+	 @section('content')
+		  {{Form::open(['url' => route('articles.index'), 'method' => 'get'])}}
+		  {{Form::text('q', $q)}}
+		  {{Form::submit('Search')}}
+		  {{Form::close()}}
+		  <h1>Список статей</h1>
+		  @foreach($articles as $article)
+				<h2>{{$article->name}}</h2>
+				<div>{{Str::limit($article->body, 200)}}</div>
+		  @endforeach
+	 @endsection
+
+<?
