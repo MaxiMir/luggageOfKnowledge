@@ -15658,3 +15658,6 @@ EOD;
 				return $this->duration;
 		  }
 	 }
+
+	 
+	 
