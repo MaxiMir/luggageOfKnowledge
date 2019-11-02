@@ -2986,6 +2986,188 @@ $ npx babel script.js --out-file script-compiled.js --source-maps inline
 > Добавить babel src --out-dir dist --source-maps в значение ключа build секции scripts
 */
 
+/**@@
+
+ solution.test.js
+ Makefile
+ package.json
+ solution.js
+ README
+ OUTPUT
+ solution.js
+ solution.test.js
+ solution.js
+ Реализуйте и экспортируйте по умолчанию функцию reverseInt, которая переворачивает цифры в переданном числе и возвращает новое число.
+
+ reverseInt(13); // 31
+ reverseInt(-123); // -321
+ reverseInt(8900); // 98
+*/
+
+const reverseInt = num => {
+    const numAsStr = String(Math.abs(num));
+    let reversedStr = '';
+    let i = numAsStr.length - 1;
+
+    while (i >= 0) {
+        reversedStr += numAsStr[i];
+        i -= 1;
+    }
+
+    const reversedModule = Number(reversedStr);
+
+    return num < 0 ? -reversedModule : reversedModule;
+};
+
+export default reverseInt;
+
+
+/**@@
+invertCase.js
+Реализуйте и экспортируйте по умолчанию функцию invertCase, которая меняет в строке регистр каждой буквы на противоположный.
+*/
+
+invertCase('Hello, World!'); // hELLO, wORLD!
+invertCase('I loVe JS');     // i LOvE js
+
+
+const invertCase = (str) => {
+    let result = '';
+
+    for (let i = 0; i < str.length; i += 1) {
+        const upper = str[i] === str[i].toUpperCase();
+
+        result += upper ? str[i].toLowerCase() : str[i].toUpperCase();
+    }
+
+    return result;
+};
+
+export default invertCase;
+
+
+
+/**@@@
+areBracketsBalanced.js
+Реализуйте и экспортируйте функцию по умолчанию, которая принимает на вход строку, состоящую только из открывающих и закрывающих круглых скобок, и проверяет является ли эта строка корректной. Пустая строка (отсутствие скобок) считается корректной.
+
+Строка считается корректной (сбалансированной), если содержащаяся в ней скобочная структура соответствует требованиям:
+
+Скобки — это парные структуры. У каждой открывающей скобки должна быть соответствующая ей закрывающая скобка.
+Закрывающая скобка не должна идти впереди открывающей.
+*/
+
+import areBracketsBalanced from 'roundBracketsValidator';
+
+areBracketsBalanced('(())');  // true
+areBracketsBalanced('((())'); // false
+
+
+export default (str) => {
+    let acc = 0;
+
+    for (let i = 0; i < str.length; i += 1) {
+        const symbol = str[i];
+
+        acc = symbol === '(' ? acc + 1 : acc - 1;
+
+        if (acc < 0) {
+            return false;
+        }
+    }
+
+    return acc === 0;
+};
+
+/**@@@
+    formattedTime.js
+    Реализуйте и экспортируйте по умолчанию функцию, которая принимает на вход количество минут (прошедших с начала суток) и возвращает строку, являющуюся временем в формате чч:мм.
+    
+    Пример:
+*/
+
+formattedTime(5); // 00:05
+formattedTime(15); // 00:15
+formattedTime(60); // 01:00
+formattedTime(67); // 01:07
+formattedTime(175); // 02:55
+formattedTime(600); // 10:00
+formattedTime(754); // 12:34
+
+export default (rawMinutes) => {
+    const hours = Math.floor((rawMinutes / 60) % 24);
+    const formattedHours = hours >= 10 ? hours : `0${hours}`;
+
+    const minutes = rawMinutes % 60;
+    const formattedMinutes = minutes >= 10 ? minutes : `0${minutes}`;
+
+    return `${formattedHours}:${formattedMinutes}`;
+};
+
+
+/**@@
+Реализуйте и экспортируйте функцию по умолчанию, которая переворачивает строку задом наперед, используя рекурсию.
+
+Например:
+*/
+
+import reverse from './reverse';
+
+reverse('str');    // rts
+reverse('hexlet'); // telxeh
+
+
+const reverse = (str) => {
+    const len = str.length;
+
+    if (len === 0) {
+        return str;
+    }
+
+    return str[len - 1] + reverse(str.substr(0, len - 1));
+};
+
+export default reverse;
+
+
+
+/*
+sumSquareDifference.js
+Сумма квадратов первых десяти натуральных чисел это 12 + 22 + 32 + ... + 10 2 = 385.
+
+Квадрат суммы первых десяти натуральных чисел это (1 + 2 + 3 + ... + 10)2 = 552 = 3025.
+
+Разница между квадратом суммы и суммой квадратов первых десяти натуральных чисел: 3025 − 385 = 2640.
+
+Напишите функцию sumSquareDifference, которая принимает аргумент n и возвращает разницу между квадратом суммы и суммой квадратов первых n натуральных чисел.
+*/
+
+const sumOfSquares = (n) => {
+    let sum = 0;
+    let i = 1;
+    while (i <= n) {
+        sum += i * i;
+        i += 1;
+    }
+
+    return sum;
+};
+
+const squareOfSum = (n) => {
+    let sum = 0;
+    let i = 1;
+    while (i <= n) {
+        sum += i;
+        i += 1;
+    }
+
+    return sum * sum;
+};
+
+const sumSquareDifference = n => squareOfSum(n) - sumOfSquares(n);
+
+export default sumSquareDifference;
+
 
 
 

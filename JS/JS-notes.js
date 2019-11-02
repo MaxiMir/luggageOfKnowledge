@@ -16,8 +16,103 @@
 */
 
 
+
+
 /* #@ Округление @# */
 ~~9.7 === 9 // true <-> Math.floor(9.7)
+
+
+
+
+/* #@ Lookbehind-сопоставления (сопоставление с предыдущими символами) ES2018 @# */
+/*
+В тех средах исполнения, которые это поддерживают, вы теперь можете писать регулярные выражения, которые ищут символы до того, что вы сопоставляете. Например, чтобы найти все числа, перед которыми стоит знак доллара:
+*/
+const regex = /(?<=\$)\d+/;
+const text  = 'This cost $400';
+text.match(regex) === ['400']
+
+// Всё дело в новой lookbehind-группе, близнеце lookahead-групп:
+/*
+Look ahead:  (?=abc)
+Look behind: (?<=abc)
+
+Look ahead negative:  (?!abc)
+Look behind negative: (?<!abc)
+*/
+
+
+
+
+/* #@ Именованные группы захвата ES2018 @# */
+// Теперь регулярные выражения могут выбирать подвыборки и использовать для простого парсинга. До недавнего времени мы могли ссылаться на такие фрагменты только по числам, например:
+const getNameParts  = /(\w+)\s+(\w+)/g;
+const name          = "Weyland Smithers";
+const subMatches    = getNameParts.exec(name);
+
+subMatches[1]     === 'Weyland'
+subMatches[2]     === 'Smithers'
+
+// А теперь есть синтаксис присвоения имён этим подвыборкам (или группам записи): внутри скобок в начале ставим ?<titlе>, если хотим присвоить группе имя:
+
+const getNameParts  = /(?<first>\w+)\s(?<last>\w+)/g;
+const name          = "Weyland Smithers";
+const subMatches    = getNameParts.exec(name);
+
+const {first, last} = subMatches.groups
+first             === 'Weyland'
+last              === 'Smithers'
+
+
+
+
+/* #@ Двоичные и восьмеричные литералы в ES6 @# */
+const binaryZero = 0b0;
+const binaryOne  = 0b1;
+const binary255  = 0b11111111;
+const binaryLong = 0b111101011101101;
+
+// Pizza toppings
+const olives    = 0b0001;
+const ham       = 0b0010;
+const pineapple = 0b0100;
+const artechoke = 0b1000;
+
+const pizza_ham_pineapple = pineapple | ham;
+const pizza_four_seasons  = olives | ham | artechoke;
+
+
+/* #@ Неограниченные перехваты @# */
+// Теперь вы можете писать выражения try/catch без привязки к киданию ошибок:
+try {
+    // something throws
+} catch {
+// don't have to do catch(e)
+}
+
+// Кстати, перехваты, в которых вы не учитываете значение e, иногда называют обработкой исключений-покемонов. Потому что вы должны поймать их все!
+
+
+/* #@ Number.isNaN() @# */
+/*
+Не путать с window.isNaN(), это новый метод с гораздо более интуитивным поведением.
+У классического isNaN есть несколько интересных хитростей:
+*/
+isNaN(NaN)        === true
+isNaN(null)       === false
+isNaN(undefined)  === true
+isNaN({})         === true
+isNaN('0/0')      === true
+isNaN('hello')    === true
+
+// Эту проблему решает новый статический метод Number.isNaN(). Он раз и навсегда возвращает равенство аргументов, переданных ему и NaN. Это абсолютно однозначно:
+Number.isNaN(NaN)       === true
+Number.isNaN(null)      === false
+Number.isNaN(undefined) === false
+Number.isNaN({})        === false
+Number.isNaN('0/0')     === false
+Number.isNaN('hello')   === false
+
 
 
 

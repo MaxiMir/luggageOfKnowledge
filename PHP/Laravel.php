@@ -1810,3 +1810,1191 @@ MIX_PUSHER_APP_CLUSTER="${PUSHER_APP_CLUSTER}"
 	 @endsection
 
 <?
+
+
+	# >>>>>>>>>>>> Создание (CRUD) <<<<<<<<<<< #
+	
+/**
+	Создание сущности в CRUD требует наличия двух маршрутов: один для отображения формы, другой для обработки формы. Кроме того, важно понимать как взаимодействуют между собой эти маршруты, как обрабатываются ошибки и так далее. Начнем с того что у нас есть три состояния:
+	
+	> Отображение новой формы
+	> Отображение формы с подсвеченными ошибками валидации после ее отправки
+	> Редирект на какую-то страницу (обычно это редактирование сущности или список сущностей) после успешной обработки формы
+	
+	
+	Самое интересное здесь – вторая часть. Когда данные формы приходят в обработчик формы (пользователь нажал кнопку отправки), этот обработчик выполняет "валидацию", то есть проверку введенных данных. Например проверяет что данные в принципе есть, то есть они не пустые. Если данные корректные, то обработка завершается и пользователя отправляют в другое место, но если нет, то Laravel должен отработать эту ситуацию по особенному.
+	
+	С точки зрения пользователя, это выглядит просто. Сайт снова отображает форму с подставленными значениями, которые он ввел раньше. Кроме этого, на странице выводятся возникшие ошибки. Дальше пользователь их исправляет и отправляет форму заново. Этот процесс может повторяться много раз перед тем как пользователь сделает все правильно.
+	
+	
+	Технически, Laravel ведет себя так. Если пользователь ввел что-то некорректно, то происходит редирект на страницу с формой. Laravel автоматически записывает данные формы в сессию и, затем, использует эти данные для подстановки в форму (тут участвует Form::model).
+*/
+
+	#@ Форма
+
+
+	// Как обычно нам придется добавить три вещи: маршрут, обработчик маршрута, шаблон.
+	Route::get('/articles/create', 'ArticleController@create')
+		  ->name('articles.create');
+	
+	// Важно добавить этот маршрут до маршрута /articles/{id}. Иначе последний перехватит обращение к /articles/create, так как он соответствует шаблону.
+	
+	
+	#@ Обработчик
+	
+	namespace App\Http\Controllers;
+
+	 use App\Article;
+	 
+	 class ArticleController extends Controller
+	 {
+		  // Вывод формы
+		  public function create()
+		  {
+				// Передаем в шаблон вновь созданный объект. Он нужен для вывода формы через Form::model
+				$article = new Article();
+				return view('article.create', compact('article'));
+		  }
+	 }
+		
+	
+	 #@ Шаблон
+?>
+
+	 {{ Form::model($article, ['url' => route('articles.store')]) }}
+		  {{ Form::label('name', 'Название') }}
+		  {{ Form::text('name') }}<br>
+		  {{ Form::label('body', 'Содержание') }}
+		  {{ Form::textarea('body') }}<br>
+		  {{ Form::submit('Создать') }}
+	 {{ Form::close() }}
+<?
+
+	#@ Обработчик данных формы
+	#@ Маршрут
+	
+	// POST запрос
+	 Route::post('/articles', 'ArticleController@store')
+			->name('articles.store');
+	
+	 
+
+	 #@ Обработчик
+	 
+	 namespace App\Http\Controllers;
+	 
+	 use App\Article;
+	 // Нам понадобится объект запроса
+	 use Illuminate\Http\Request;
+	 
+	 class ArticleController extends Controller
+	 {
+		  // Здесь нам понадобится объект запроса, для извлечения данных
+		  public function store(Request $request)
+		  {
+				// Проверка введенных данных
+				// Если будут ошибки, то возникнет исключение
+				$this->validate($request, [
+					 'name' => 'required|unique:articles',
+					 'body' => 'required|min:1000',
+				]);
+	 
+				$article = new Article();
+				// Заполнение статьи данными из формы
+				$article->fill($request->all());
+				// При ошибках сохранения возникнет исключение
+				$article->save();
+	 
+				// Редирект на указанный маршрут с добавлением флеш сообщения
+				return redirect()
+					 ->route('articles.index');
+		  }
+	 }
+	 
+/**
+	Это первый обработчик, в котором нам понадобился доступ к объекту запроса. Любая информация о HTTP-запросе, любые данные отправленные по HTTP можно получить только через $request.
+	 
+	 Как и ранее тут может возникнуть вопрос, каким образом Laravel понимает что в этот метод надо передать объект запроса, а в другие ничего передавать не надо. Ответ кроется в метапрограммировании, которое в PHP делается через Reflection API. Это большая тема, которая разбирается в отдельном курсе
+	 
+	 Первым делом объект $request используется в валидации. Валидация в Laravel привязана к запросу. Она выполняется с помощью метода validate($request, $params), доступного в каждом контроллере. Второй аргумент в этом методе – массив, в котором ключ это название поля из формы, а значение, это набор "валидаторов", правил, которые применяются к значению для проверки его корректности. Валидаторы отделяются друг от друга вертикальной чертой. Вот что они означают:
+	 
+	> required – не может быть пустым
+	> min:1000 – минимум 1000 символов
+	> unique:articles – поле (name) должно быть уникально в таблице articles
+	 
+	 Метод validate ничего не делает если с данными все в порядке и выбрасывает исключение в случае ошибок. Затем Laravel перехватывает это исключение и выполняет всю остальную работу за нас. Он сохраняет данные формы, делает редирект на страницу отображения формы и формирует переменную $errors доступную в шаблоне. Самый простой способ вывести ошибки, добавить над формой такой код:
+*/
+?>
+	@if ($errors->any())
+		  <div>
+				<ul>
+					 @foreach ($errors->all() as $error)
+						  <li>{{ $error }}</li>
+					 @endforeach
+				</ul>
+		  </div>
+	@endif
+	
+<?
+	
+	 // Вернемся к нашему обработчику. Сразу после валидации выполняется создание сущности, наполнение ее данными формы и сохранение.
+	 
+	 $article = new Article();
+	 $article->fill($request->all());
+	 $article->save();
+
+/**
+	Метод all() возвращает все данные формы, а метод fill($params) выполняет, так называемый mass-assignment, то есть установку сразу всех значений через передачу ассоциативного массива. Такой способ удобнее чем копировать каждое значение индивидуально:
+*/
+
+	$article->name = $request->input('name');
+	$article->body = $request->input('body');
+
+/**
+	* Но mass-assignment обладает одним недостатком, который приходится обрабатывать отдельно. Такой способ установки значений опасен, так как пользователь может послать любые данные, включая те, которых нет в форме (это HTTP, пользователь может отправить все что угодно). Это значит что пользователь может переписать любые данные, включая пароли, идентификаторы и все что угодно, до чего он, по идее, не должен иметь доступ.
+
+	Разные фреймворки обрабатывают эту ситуацию по разному. Laravel предлагает создавать внутри модели массив, в котором перечисляются поля, доступные для mass-assignment. Все что там не перечислено будет игнорироваться:
+*/
+
+	 namespace App;
+	 
+	 use Illuminate\Database\Eloquent\Model;
+	 
+	 class Article extends Model
+	 {
+		  protected $fillable = ['name', 'body'];
+	 }
+	 
+	 
+	 
+	 // Это легко проверить в Tinker:
+		
+		
+		
+/**
+	 >>> $article = new Article();
+	 => App\Article {#3033}
+		
+	 >>> $article->fill(['name' => 'supername', 'wrongfield' => 'boom!']);
+	 => App\Article {#3033
+	  name: "supername",
+	 }
+		
+		
+	После того как объект сохранился в базе данных, осталось перенаправить пользователя в то место, куда мы хотим его отправить после успешного создания. Обычно отправка идет на список сущностей или страницу редактирования.
+ 
+ 	Обратите внимание, что у обработчика данных формы нет своего шаблона. Он в любом случае выполняет редирект: либо на исходную форму, либо на результирующую.
+*/
+
+	// Не забудьте сделать return
+	 return redirect()
+		  ->route('articles.index');
+
+/**
+	 # Дополнительные материалы
+	 Валидаторы https://laravel.com/docs/6.x/validation
+	 Flash-сообщения https://laravel.com/docs/6.x/session#flash-data
+*/
+
+
+
+/**@@@
+	 routes/web.php
+	 Добавьте маршруты для создания категории
+	 
+	 exercise/resources/views/article_category/index.blade.php
+	 Добавьте ссылку на создание категории
+	 
+	 app/Http/Controller/ArticleCategoryController.php
+	 Реализуйте экшены для создания категории. Добавьте следующие валидации:
+	 	Имя (name) – обязательно
+	 	Описание (description) – обязательно и должно быть минимум 200 знаков
+	 	Состояние (state) – может быть либо draft либо published
+  
+	resources/views/article_category/create.blade.php
+	Реализуйте форму создания категории. Добавьте три поля:
+	 	Имя
+	 	Описание
+	 	Состояние
+	 	Добавьте вывод ошибок
+*/
+
+
+	// FILE: app/Http/Controllers/ArticleCategoryController.php
+    namespace App\Http\Controllers;
+	 
+	 use Illuminate\Validation\Rule;
+	 use Illuminate\Http\Request;
+	 use App\ArticleCategory;
+	 
+	 class ArticleCategoryController extends Controller
+	 {
+		  public function index()
+		  {
+				$articleCategories = ArticleCategory::orderBy('id', 'desc')->get();
+				
+				return view('article_category.index', compact('articleCategories'));
+		  }
+	 
+		  public function show($id)
+		  {
+				$category = ArticleCategory::findOrFail($id);
+				return view('article_category.show', compact('category'));
+		  }
+		  
+		  public function create()
+		  {
+				$category = new ArticleCategory();
+				
+				return view('article_category.create', compact('category'));
+		  }
+	 
+		  public function store(Request $request)
+		  {
+				$this->validate($request, [
+					 'name' => 'required|unique:article_categories',
+					 'description' => 'required|min:200',
+					 'state' => [
+						  'required',
+						  Rule::in(['draft', 'published']),
+					 ]
+				]);
+	 
+				$category = new ArticleCategory();
+				$category->fill($request->all());
+				$category->save();
+	 
+				return redirect()
+					 ->route('article_categories.index');
+		  }
+	 }
+    
+    
+    // FILE: /resources/views/article_category/create.blade.php
+?>
+	 @extends('layouts.app')
+	 
+	 @section('content')
+		  
+		  @if ($errors->any())
+				<div>
+					 <ul>
+						  @foreach ($errors->all() as $error)
+								<li>{{ $error }}</li>
+						  @endforeach
+					 </ul>
+				</div>
+		  @endif
+		  
+		  {{ Form::model($category, ['url' => route('article_categories.store')]) }}
+				{{ Form::label('name', 'Название') }}
+				{{ Form::text('name') }}<br>
+				{{ Form::label('description', 'Описание') }}
+				{{ Form::textarea('description') }}<br>
+				{{ Form::select('state', ['draft' => 'Черновик', 'published' => 'Опубликован']) }}<br>
+				{{ Form::submit('Создать') }}
+		  {{ Form::close() }}
+		  
+	 @endsection
+    
+<?
+	 
+	 // FILE: /resources/views/article_category/index.blade.php
+?>
+	 <small><a href="{{ route('article_categories.create') }}">Создать категорию</a></small>
+	 
+<?
+	 // FILE: /routes/web.php
+	 
+	 Route::get('/', function () {
+		  return view('welcome');
+	 });
+	 
+	 Route::get('/articles', 'ArticleController@index')
+		  ->name('articles.index');
+	 
+	 Route::get('/articles/{id}', 'ArticleController@show')
+		  ->name('articles.show');
+	 
+	 Route::get('/article_categories/create', 'ArticleCategoryController@create')
+		->name('article_categories.create');
+	 
+	 Route::post('/article_categories', 'ArticleCategoryController@store')
+		->name('article_categories.store');
+	 
+	 Route::get('/article_categories', 'ArticleCategoryController@index')
+		  ->name('article_categories.index');
+	 
+	 Route::get('/article_categories/{id}', 'ArticleCategoryController@show')
+		  ->name('article_categories.show');
+
+	 
+// FILE: /tests/CreatesApplication.php
+
+	 namespace Tests;
+
+	 use Illuminate\Contracts\Console\Kernel;
+	 
+	 trait CreatesApplication
+	 {
+		  /**
+			* Creates the application.
+			*
+			* @return \Illuminate\Foundation\Application
+			*/
+		  public function createApplication()
+		  {
+				$app = require __DIR__.'/../bootstrap/app.php';
+	 
+				$app->make(Kernel::class)->bootstrap();
+	 
+				return $app;
+		  }
+	 }
+
+
+	// FILE: /tests/TestCase.php
+		
+	 namespace Tests;
+	 
+	 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
+	 
+	 abstract class TestCase extends BaseTestCase
+	 {
+		  use CreatesApplication;
+	 
+		  protected function setUp() : void
+		  {
+				parent::setUp();
+				$this->withoutExceptionHandling();
+		  }
+	 }
+
+
+
+	// FILE: /tests/Feature/ArticleCategoryControllerTest.php
+	 
+	 namespace Tests\Feature;
+	 
+	 use Illuminate\Foundation\Testing\RefreshDatabase;
+	 use Tests\TestCase;
+	 
+	 class ArticleCategoryControllerTest extends TestCase
+	 {
+		  use RefreshDatabase;
+	 
+		  public function testIndex()
+		  {
+				factory(\App\Article::class, 10)->create();
+				$response = $this->get(route('article_categories.index'));
+				$response->assertStatus(200);
+		  }
+	 
+		  public function testCreate()
+		  {
+				$response = $this->get(route('article_categories.create'));
+				$response->assertStatus(200);
+		  }
+	 
+		  public function testStoreWithValidationErrors()
+		  {
+				$this->expectException(\Illuminate\Validation\ValidationException::class);
+				$params = [
+					 'description' => 'b',
+					 'state' => 'draft'
+				];
+				$this->post(route('article_categories.store'), $params);
+		  }
+	 
+		  public function testStore()
+		  {
+				$params = [
+					 'name' => 'jopa',
+					 'description' => str_repeat('lala', 50),
+					 'state' => 'draft'
+				];
+				$response = $this->post(route('article_categories.store'), $params);
+				$response->assertStatus(302);
+	 
+				$this->assertDatabaseHas('article_categories', [
+					 'name' => 'jopa'
+				]);
+		  }
+	 }
+
+
+
+	# >>>>>>>>>>>> Обновление (CRUD) <<<<<<<<<<< #
+	
+/**
+	Обновление очень похоже на создание, с той лишь разницей, что мы не создаем сущность с нуля, а извлекаем ее из базы. Остальное практически без изменений.
+
+	 За скобками остается важный вопрос: права на изменение. Изменять что-то на сайте, обычно, может только автор, тот кто создал сущность. Механизм который отвечает за выдачу и проверку прав, называется авторизацией (не путать с аутентификацией). В Laravel авторизация встроена. Она не рассматривается в курсе, но про нее можно прочитать самостоятельно в документации.
+*/
+
+	#@ Форма
+	#@ Маршрут
+	
+	Route::get('/articles/{id}/edit', 'ArticleController@edit')
+  			->name('articles.edit');
+	
+	
+	#@ Обработчик
+	
+	use App\Article;
+	
+	public function edit($id)
+	{
+		$article = Article::findOrFail($id);
+		return view('article.edit', compact('article'));
+	}
+	
+	
+	#@ Шаблон
+		
+/**
+	 Шаблон редактирования практически один в один повторяет шаблон создания. Разными у них бывают только отдельные элементы, например текст кнопки отправки формы. Для таких случаев используют директиву @include($pathToTemplate), которая позволяет извлекать общие куски шаблонов в отдельные шаблоны и включать их там где нужно.
+	 
+	 Создайте в директории resources/views/article шаблон form.blade.php.
+*/
+?>
+
+	 @if ($errors->any())
+		  <div>
+				<ul>
+					 @foreach ($errors->all() as $error)
+						  <li>{{ $error }}</li>
+					 @endforeach
+				</ul>
+		  </div>
+	 @endif
+	 
+	 {{ Form::label('name', 'Название') }}
+	 {{ Form::text('name') }}<br>
+	 {{ Form::label('body', 'Содержание') }}
+	 {{ Form::textarea('body') }}<br>
+
+<?
+	// Теперь включите его в create.blade.php:
+?>
+
+	 {{ Form::model($article, ['url' => route('articles.store')]) }}
+	 @include('article.form')
+	 {{ Form::submit('Сохранить') }}
+	 {{ Form::close() }}
+	
+<?
+	// И практически тоже самое надо добавить в edit.blade.php. Создайте этот файл и вставьте в него код:
+?>
+		
+	 {{ Form::model($article, ['url' => route('articles.update', $article), 'method' => 'PATCH']) }}
+	 @include('article.form')
+	 {{ Form::submit('Обновить') }}
+	 {{ Form::close() }}
+	
+<?
+/**
+	 Основных изменений здесь три:
+	 > Другое имя кнопки
+	 > Метод отправки PATCH, так как происходит обновление
+	 > Адрес формы указывает на конкретную статью
+*/
+	#@ Обработчик формы
+	#@ Маршрут
+	
+	// Метод PATCH
+	 Route::patch('/articles/{id}', 'ArticleController@update')
+		->name('articles.update');
+	
+	 
+	 #@ Обработчик
+	 use Illuminate\Http\Request;
+	 use App\Article
+	 
+	 public function update(Request $request, $id)
+	 {
+		  $article = Article::findOrFail($id);
+		  $this->validate($request, [
+				// У обновления немного измененная валидация. В проверку уникальности добавляется название поля и id текущего объекта
+				// Если этого не сделать, Laravel будет ругаться на то что имя уже существует
+				'name' => 'required|unique:articles,name,' . $article->id,
+				'body' => 'required|min:100',
+		  ]);
+	 
+		  $article->fill($request->all());
+		  $article->save();
+		  
+		  return redirect()
+				->route('articles.index');
+	 }
+	 
+/**
+	Обработчик обновляющий сущность практически идентичен созданию сущности. Разница кроется в нескольких деталях. Во-первых мы работаем с существующей статьей, поэтому ее нужно извлечь из базы данных. Во-вторых, валидация на уникальность должна учитывать текущую статью при проверке. Иначе валидатор будет ругаться, что такое имя уже есть в базе данных.
+	 
+	 Можно заметить, что валидации повторяются практически один в один. Так происходит в подавляющем большинстве случаев. Те правила которые применяются к сущности при создании, должны применяться к ней и во время редактирования. При текущем подходе возникает дублирование, которого хотелось бы избежать. Это можно сделать с помощью Form Request.
+	 
+	 В остальном все тоже самое: объект заполняется значениями из формы, далее сохранение и редирект на список статей.
+*/
+
+
+
+/**@@@
+	 routes/web.php
+	 Добавьте маршруты для редактирования категории
+	 
+	 app/Http/Controller/ArticleCategoryController.php
+	 Реализуйте экшены для редактирования категории. Добавьте валидации аналогичные тем что были при создании.
+	 
+	 resources/views/article_category/edit.blade.php
+	 Реализуйте форму редактирования категории.
+	 
+	 resources/views/article_category/form.blade.php
+	 Вынесите сюда общие части для create и edit форм
+*/
+
+
+	// FILE: /app/Http/Controllers/ArticleCategoryController.php
+	 
+	 namespace App\Http\Controllers;
+	 
+	 use Illuminate\Validation\Rule;
+	 use Illuminate\Http\Request;
+	 use App\ArticleCategory;
+	 
+	 class ArticleCategoryController extends Controller
+	 {
+		  public function index()
+		  {
+				$articleCategories = ArticleCategory::orderBy('id', 'desc')->get();
+				return view('article_category.index', compact('articleCategories'));
+		  }
+	 
+		  public function show($id)
+		  {
+				$category = ArticleCategory::findOrFail($id);
+				return view('article_category.show', compact('category'));
+		  }
+		  
+		  public function edit($id)
+		  {
+				$category = ArticleCategory::findOrFail($id);
+				return view('article_category.edit', compact('category'));
+		  }
+	 
+		  public function update(Request $request, $id)
+		  {
+				$category = ArticleCategory::findOrFail($id);
+				$this->validate($request, [
+					 'name' => 'required|unique:article_categories,name,' . $category->id,
+					 'description' => 'required|min:200',
+					 'state' => [
+						  'required',
+						  Rule::in(['draft', 'published']),
+					 ]
+				]);
+	 
+				$category->fill($request->all());
+				$category->save();
+				return redirect()
+					 ->route('article_categories.index');
+		  }
+		  // END
+	 
+		  public function create()
+		  {
+				$category = new ArticleCategory();
+				return view('article_category.create', compact('category'));
+		  }
+	 
+		  public function store(Request $request)
+		  {
+				$this->validate($request, [
+					 'name' => 'required|unique:article_categories',
+					 'description' => 'required|min:200',
+					 'state' => [
+						  'required',
+						  Rule::in(['draft', 'published']),
+					 ]
+				]);
+	 
+				$category = new ArticleCategory();
+				$category->fill($request->all());
+				$category->save();
+	 
+				return redirect()
+					 ->route('article_categories.index');
+		  }
+	 }
+    
+    
+	// FILE: /resources/views/article_category/edit.blade.php
+?>
+	 @extends('layouts.app')
+
+	 @section('content')
+		  @if ($errors->any())
+				<div>
+					 <ul>
+						  @foreach ($errors->all() as $error)
+								<li>{{ $error }}</li>
+						  @endforeach
+					 </ul>
+				</div>
+		  @endif
+		  
+		  {{ Form::model($category, ['method' => 'PATCH', 'url' => route('article_categories.update', $category)]) }}
+				@include('article_category.form')
+				{{ Form::submit('Обновить') }}
+		  {{ Form::close() }}
+	 @endsection
+    
+    
+<?
+	// FILE: /resources/views/article_category/form.blade.php
+?>
+	 {{ Form::label('name', 'Название') }}
+	 {{ Form::text('name') }}<br>
+	 {{ Form::label('description', 'Описание') }}
+	 {{ Form::textarea('description') }}<br>
+	 {{ Form::select('state', ['draft' => 'Черновик', 'published' => 'Опубликован']) }}<br>
+<?
+
+
+	 // FILE: /routes/web.php
+	 
+	 Route::get('/', function () {
+		  return view('welcome');
+	 });
+	 
+	 Route::get('/articles', 'ArticleController@index')
+		  ->name('articles.index');
+	 
+	 Route::get('/articles/{id}', 'ArticleController@show')
+		  ->name('articles.show');
+	 
+	 Route::get('/article_categories/create', 'ArticleCategoryController@create')
+		  ->name('article_categories.create');
+	 
+	 Route::post('/article_categories', 'ArticleCategoryController@store')
+		  ->name('article_categories.store');
+	 
+	 Route::get('/article_categories/{id}/edit', 'ArticleCategoryController@edit')
+		  ->name('article_categories.edit');
+		  
+	 Route::patch('/article_categories/{id}', 'ArticleCategoryController@update')
+		  ->name('article_categories.update');
+	 
+	 
+	 Route::get('/article_categories', 'ArticleCategoryController@index')
+		  ->name('article_categories.index');
+	 
+	 Route::get('/article_categories/{id}', 'ArticleCategoryController@show')
+		  ->name('article_categories.show');
+
+
+
+	 
+	# >>>>>>>>>>>> Удаление (CRUD) <<<<<<<<<<< #
+
+/**
+	Удаление – самое простое действие в обычном CRUD. Ему не нужен шаблон, все удаление состоит из простого обработчика, в котором даже нет условных конструкций.
+	 
+	 Маршрут:
+*/
+
+	Route::delete('/articles/{id}', 'ArticleController@destroy')
+  		->name('articles.destroy');
+	
+	
+	#@ Обработчик:
+	 
+	 // Не забывайте про авторизацию (здесь не рассматривается)
+	 // Удаление должно быть доступно только тем, кто может его выполнять
+		
+	 public function destroy($id)
+	 {
+		  // DELETE идемпотентный метод, поэтому результат операции всегда один и тот же
+		  $article = Article::find($id);
+		  if ($article) {
+			 $article->delete();
+		  }
+		  return redirect()->route('articles.index');
+	 }
+		
+		
+/**
+	Самое интересное в удаление – это ссылка или кнопка удаления. Она не может быть обычной ссылкой. Почему? Потому что, с точки зрения HTTP, удаление это DELETE запрос. Эту семантику важно соблюдать, так как на нее ориентируются разные инструменты и поисковики при анализе страниц. Если сделать удаление обычной ссылкой, то любой автоматический инструмент может попробовать перейти по ней (например предзагрузка страниц в chrome). Это будет крайне неприятный сюрприз.
+	
+	Как минимум для разрешения подобных ситуаций нужно использовать аттрибут rel:
+	<a href="..." rel="nofollow">Удалить</a>
+	
+	Но этого недостаточно для отправки DELETE запроса. Правильно реализовать эту ссылку формой, которая не отправляет никаких данных, но шлет верный запрос. В принципе так и можно поступить, но возникает странная ситуация. Само удаление содержит меньше кода чем кнопка по удалению. Да и шаблоны становятся очень грязными.
+		
+		Избежать ручного создания такой формы можно с помощью библиотеки jquery-ujs, которая изначально была написана для Rails, но не ограничина этим фреймворком. Эта библиотека написана на js и подключается во фронтенд части. Она опирается на дата-атрибуты и сама превращает в форму все что ее попросят. Для ее установки, наберите в директории проекта:
+		
+	 # Убедитесь в том что у вас установлена Node.js
+	 $ npm install jquery-ujs
+	 # Для установки остальных пакетов
+	 $ npm install
+
+	Затем добавьте в файл resources/js/app.js строчку:
+	
+	// После строчки require('./bootstrap');
+	require('jquery-ujs');
+	
+	
+	И запустите сборку фронтенда:
+	$ npm run watch
+	
+	Теперь попробуем использовать эту библиотеку:
+	<a href="..." data-method="delete" rel="nofollow">Удалить</a>
+	
+	Библиотека подключенная к странице, проанализирует все ссылки с нужными дата-атрибутами и превратит их в формы отправляющие указанные запросы. Эти запросы могут быть любыми, хоть DELETE, хоть PATCH.
+	
+	Кроме того, с ее помощью можно блокировать кнопки и вызывать подтверждение:
+
+	<a href="..." data-confirm="Вы уверены?" data-method="delete" rel="nofollow">Удалить</a>
+	
+	<input type="submit" value="Сохранить" data-disable-with="Сохраняем">
+*/
+
+
+	#@ Зависимости
+
+/**
+	В реальной жизни удаление не такая простая операция. Обычно сущности не существут сами по себе, у них есть зависимости. Например у статьи есть комментарии, а у курса есть уроки. Как должна вести себя система при удалении родительской сущности? Что делать с зависимостями?
+	 
+	 Ответ будет разный для разных проектов и разных сущностей. Иногда нужно все удалить, иногда разорвать связи. В более сложных ситуациях удалять нельзя вообще и тогда используется "мягкое удаление". При таком подходе сущность просто помечается как удаленная и не выводится на сайте, но всегда есть возможность ее восстановить.
+	 
+	 # Дополнительные материалы
+	 Работа с фронтендом в Laravel https://laravel.com/docs/6.x/mix
+	 Мягкое удаление https://laravel.com/docs/6.x/eloquent#soft-deleting
+*/
+
+
+
+/**@@@
+	 routes/web.php
+	 Добавьте маршрут для удаления категории
+	 
+	 app/Http/Controller/ArticleCategoryController.php
+	 Реализуйте экшен для удаления категории
+	 
+	 resources/views/article_category/index.blade.php
+	 Выведите ссылку на удаление статьи. Добавьте подтверждение удаления и отправку данных методом DELETE.
+*/
+
+
+// FILE: /app/Http/Controllers/ArticleCategoryController.php
+    namespace App\Http\Controllers;
+	 
+	 use Illuminate\Validation\Rule;
+	 use Illuminate\Http\Request;
+	 use App\ArticleCategory;
+	 
+	 class ArticleCategoryController extends Controller
+	 {
+		  public function index()
+		  {
+				$articleCategories = ArticleCategory::orderBy('id', 'desc')->get();
+				return view('article_category.index', compact('articleCategories'));
+		  }
+	 
+		  public function show($id)
+		  {
+				$category = ArticleCategory::findOrFail($id);
+				return view('article_category.show', compact('category'));
+		  }
+	 
+		  public function edit($id)
+		  {
+				$category = ArticleCategory::findOrFail($id);
+				return view('article_category.edit', compact('category'));
+		  }
+	 
+		  public function update(Request $request, $id)
+		  {
+				$category = ArticleCategory::findOrFail($id);
+				$this->validate($request, [
+					 'name' => 'required|unique:article_categories,name,' . $category->id,
+					 'description' => 'required|min:200',
+					 'state' => [
+						  'required',
+						  Rule::in(['draft', 'published']),
+					 ]
+				]);
+	 
+				$category->fill($request->all());
+				$category->save();
+				return redirect()
+					 ->route('article_categories.index');
+		  }
+	 
+		  public function create()
+		  {
+				$category = new ArticleCategory();
+				return view('article_categories.create', compact('category'));
+		  }
+	 
+		  public function store(Request $request)
+		  {
+				$this->validate($request, [
+					 'name' => 'required|unique:article_categories',
+					 'description' => 'required|min:200',
+					 'state' => [
+						  'required',
+						  Rule::in(['draft', 'published']),
+					 ]
+				]);
+	 
+				$category = new ArticleCategory();
+				$category->fill($request->all());
+				$category->save();
+	 
+				return redirect()
+					 ->route('article_categories.index');
+		  }
+		  
+		  public function destroy($id)
+		  {
+				$category = ArticleCategory::find($id);
+				if ($category) {
+					 $category->delete();
+				}
+				return redirect()->route('article_categories.index');
+		  }
+	 }
+
+// FILE: /resources/views/article_category/index.blade.php
+?>
+	 @extends('layouts.app')
+	 
+	 @section('content')
+		  <small><a href="{{ route('article_categories.create') }}">Создать категорию</a></small>
+		  <h1>Список категорий статей</h1>
+		  @foreach($articleCategories as $category)
+				<h2>
+					 <a href="{{ route('article_categories.show', $category) }}">{{$category->name}}</a>
+					 (
+						  <a href="{{ route('article_categories.edit', $category) }}">Edit</a>
+						  
+						  <a href="{{ route('article_categories.destroy', $category) }}"
+								data-method="delete"
+								rel="nofollow"
+								data-confirm="Are you sure?">Delete</a>
+					 )
+				</h2>
+				<div>{{$category->description}}</div>
+		  @endforeach
+	 @endsection
+
+<?
+
+// FILE: /routes/web.php
+	 Route::get('/', function () {
+		  return view('welcome');
+	 });
+	 
+	 Route::get('/articles', 'ArticleController@index')
+		  ->name('articles.index');
+	 
+	 Route::get('/articles/{id}', 'ArticleController@show')
+		  ->name('articles.show');
+	 
+	 Route::get('/article_categories/create', 'ArticleCategoryController@create')
+		->name('article_categories.create');
+	 
+	 Route::post('/article_categories', 'ArticleCategoryController@store')
+		->name('article_categories.store');
+	 
+	 Route::get('/article_categories/{id}/edit', 'ArticleCategoryController@edit')
+		->name('article_categories.edit');
+	 
+	 Route::patch('/article_categories/{id}', 'ArticleCategoryController@update')
+		->name('article_categories.update');
+	 
+	 Route::delete('/article_categories/{id}', 'ArticleCategoryController@destroy')
+		->name('article_categories.destroy');
+	 
+	 Route::get('/article_categories', 'ArticleCategoryController@index')
+		  ->name('article_categories.index');
+	 
+	 Route::get('/article_categories/{id}', 'ArticleCategoryController@show')
+		  ->name('article_categories.show');
+
+	 
+	 
+
+	# >>>>>>>>>>>> Удаление (CRUD) <<<<<<<<<<< #
+	
+/**
+	 Фактически, любой круд состоит из 7 маршрутов, контроллера и шаблонов. Причем большая часть этого кода идентична, особенно маршруты. Они не содержат логики и всегда строятся по одному и тому же принципу.
+	 
+	 Laravel частично заимствовал из Rails еще один механизм, который называется "ресурсный роутинг". Он упрощает создание типичных крудов, за счет полной унификации всех маршрутов и способах их обработки. Вместо описания 7 разных маршрутов, ресурсный роутинг позволяет указать один метамаршрут:
+*/
+
+	Route::resource('/articles', 'ArticleController');
+	
+/**
+	Внутри себя он превращается в те самые семь маршрутов, которые мы реализовывали в предыдущих уроках. Их можно увидеть с помощью команды artisan:
+	 
+	 $ php artisan route:list
+	 +-----------+-------------------------+------------------+------------------------------------------------+
+	 | Method    | URI                     | Name             | Action                                         |
+	 +-----------+-------------------------+------------------+------------------------------------------------+
+	 | GET|HEAD  | /                       |                  | Closure                                        |
+	 | GET|HEAD  | articles                | articles.index   | App\Http\Controllers\ArticleController@index   |
+	 | POST      | articles                | articles.store   | App\Http\Controllers\ArticleController@store   |
+	 | GET|HEAD  | articles/create         | articles.create  | App\Http\Controllers\ArticleController@create  |
+	 | GET|HEAD  | articles/{article}      | articles.show    | App\Http\Controllers\ArticleController@show    |
+	 | PUT|PATCH | articles/{article}      | articles.update  | App\Http\Controllers\ArticleController@update  |
+	 | DELETE    | articles/{article}      | articles.destroy | App\Http\Controllers\ArticleController@destroy |
+	 | GET|HEAD  | articles/{article}/edit | articles.edit    | App\Http\Controllers\ArticleController@edit    |
+	 +-----------+-------------------------+------------------+------------------------------------------------+
+	 # Обратите внимание на имя плейсхолдера. Ниже станет понятно почему здесь article, а не id
+	
+		
+	 Довольно неплохо. В проектах где подобных крудов много (любой типичный веб-проект), ресурсный роутинг очень помогает. Он не просто сокращает количество кода, но и дает хорошую унификацию. Нужно меньше думать и меньше спорить. Все уже спроектировано.
+	
+	Следующий шаг – упрощение контроллера. Во-первых можно сразу сгенерировать контроллер, со всеми нужными обработчиками. Во-вторых, этот контроллер можно интегрировать с нужной моделью:
+	
+	$ php artisan make:controller ArticleController --resource --model=Article
+	
+	На выходе получим такой контроллер:
+*/
+
+	 namespace App\Http\Controllers;
+	 
+	 use App\Article;
+	 use Illuminate\Http\Request;
+	 
+	 class ArticleController extends Controller
+	 {
+		  /**
+			* Display a listing of the resource.
+			*
+			* @return \Illuminate\Http\Response
+			*/
+		  public function index()
+		  {
+				//
+		  }
+	 
+		  /**
+			* Show the form for creating a new resource.
+			*
+			* @return \Illuminate\Http\Response
+			*/
+		  public function create()
+		  {
+				//
+		  }
+	 
+		  /**
+			* Store a newly created resource in storage.
+			*
+			* @param  \Illuminate\Http\Request  $request
+			* @return \Illuminate\Http\Response
+			*/
+		  public function store(Request $request)
+		  {
+				//
+		  }
+	 
+		  /**
+			* Display the specified resource.
+			*
+			* @param  \App\Article  $article
+			* @return \Illuminate\Http\Response
+			*/
+		  public function show(Article $article)
+		  {
+				//
+		  }
+	 
+		  /**
+			* Show the form for editing the specified resource.
+			*
+			* @param  \App\Article  $article
+			* @return \Illuminate\Http\Response
+			*/
+		  public function edit(Article $article)
+		  {
+				//
+		  }
+	 
+		  /**
+			* Update the specified resource in storage.
+			*
+			* @param  \Illuminate\Http\Request  $request
+			* @param  \App\Article  $article
+			* @return \Illuminate\Http\Response
+			*/
+		  public function update(Request $request, Article $article)
+		  {
+				//
+		  }
+	 
+		  /**
+			* Remove the specified resource from storage.
+			*
+			* @param  \App\Article  $article
+			* @return \Illuminate\Http\Response
+			*/
+		  public function destroy(Article $article)
+		  {
+				//
+		  }
+	 }
+
+/**
+	 Обратите внимание на параметры обработчиков. Laravel самостоятельно находит нужную сущность и достает ее из базы данных. Это позволяет хоть немного, но сократить код.
+	 
+	 Ресурсы могут быть вложенными. Это дает возможность строить пути, отражающие зависимости между сущностями на сайте:
+
+	 
+	 # Примеры с хекслета
+	 
+	 # Урок /courses/{course}/lessons/{lesson}
+	 /courses/js-testing/lessons/asserts
+
+	 # Список пройденных курсов /u/{user}/courses
+	 /u/mokevnin/courses
+
+	Принцип построения адресов точно такой же как и для обычного ресурса, но с включением указания на родительский ресурс:
+	 
+	 # Список
+	 /entities/{entity}/subentities
+	 
+	 # Сущность
+	 /entities/{entity}/subentity/{subentity}
+	 
+	 # Все остальные маршруты строятся по такому же принципу.
+	 # Впереди добавляется /entities/{entity}.
+
+	Вложенный ресурс можно генерировать автоматически:
+
+	$ php artisan make:controller ArticleCommentController --resource --model=ArticleComment --parent Article
+
+	Например вот так выглядит ресурс комментарии к статьям:
+*/
+
+	Route::resource('/articles.comments', 'ArticleCommentController');
+	
+	// Для вложенного ресурса, в экшены, кроме самой сущности передается и родительская сущность:
+	
+	 # /articles/{article}/comments/{comment}
+	 # Обе сущности можно получить через параметры
+	 public function edit(Article $article, ArticleComment $comment)
+	 {
+		  return view('article_comment.edit', compact('article', 'comment'));
+	 }
+		
+	 
+	 // Немного по другому начинает работать хелпер route. Для построения ссылок, там где участвуют оба ресурса, нужно использовать массив для их передачи:
+		
+	route('article.comments.edit', [$article, $comment]);
+	
+/**
+	# Заключение
+		
+	 Ресурсный роутинг – удобный механизм позволяющий немного упростить создание крудов (CRUD). Он берет на себя много работы и дает программисту возможность сосредоточиться на логике.
+	 
+	 Существует негласное правило, о том насколько вложенным может быть вложенный роутинг. Считается, что не стоит делать более одного вложения. Иначе ссылки получаются очень длинными, а код начинает усложняться, так как приходится оперировать сразу тремя сущностями и более.
+	 
+	 # Самостоятельная работа
+	 Удалите все маршруты связанные со статьями
+	 Удалите контроллер статей (шаблоны оставьте)
+	 Добавьте ресурсный роутинг articles
+	 Сгенерируйте для него контроллер ArticleController
+	 Реализуйте CRUD
+	
+	# Дополнительные материалы
+	Ресурсный роутинг https://laravel.com/docs/6.x/controllers#resource-controllers
+*/
+
+/**@@@
+	 В этом уроке вам предстоит добавить вложенный ресурс – комментарий к статье. Его особенность в том, что список комментариев и создание комментария выводятся на странице самой статьи. Все остальное уже во вложенном ресурсе.
+	 
+	 В целях простоты в этом проекте не учитываются пользователи. В реалной жизни комментарии принадлежат пользователям и только они могут управлять ими. Поэтому придется делать авторизацию.
+	 
+	 app/Http/Controller/ArticleCommentController.php
+	 Сгенерируйте ресурсный контроллер. Добавьте все нужные экшены (кроме списка и формы создания)
+	 
+	 resources/views/article_comment/edit.blade.php
+	 Реализуйте редактирование комментария
+*/
+
+	// FILE: /app/Http/Controllers/ArticleCommentController.php
+	 
+	 namespace App\Http\Controllers;
+	 
+	 use App\Article;
+	 use App\ArticleComment;
+	 use Illuminate\Http\Request;
+	 
+	 class ArticleCommentController extends Controller
+	 {
+		  public function store(Article $article, Request $request)
+		  {
+				$this->validate($request, [
+					 'content' => 'required|min:10'
+				]);
+	 
+				$comment = $article->comments()->make();
+				$comment->fill($request->except('_token'));
+				$comment->save();
+	 
+				return redirect()
+					 ->route('articles.show', $article);
+		  }
+	 
+		  public function edit(Article $article, ArticleComment $comment)
+		  {
+				return view('article_comment.edit', compact('article', 'comment'));
+		  }
+	 
+		  public function update(Request $request, Article $article, ArticleComment $comment)
+		  {
+				$this->validate($request, [
+					 'content' => 'required|min:10'
+				]);
+	 
+				$comment->fill($request->except('_token'));
+				$comment->save();
+				
+				return redirect()
+					 ->route('articles.show', $article);
+		  }
+	 
+		  public function destroy(Article $article, ArticleComment $comment)
+		  {
+				$comment->delete();
+				
+				return redirect()->route('articles.show', $article);
+		  }
+	 }
+
+	 
+	 // FILE: /resources/views/article_comment/edit.blade.php
+?>
+	 @extends('layouts.app')
+
+	 @section('content')
+		  <h1>{{$article->name}}</h1>
+		  @if ($errors->any())
+				<div>
+					 <ul>
+						  @foreach ($errors->all() as $error)
+								<li>{{ $error }}</li>
+						  @endforeach
+					 </ul>
+				</div>
+		  @endif
+		  
+		  {{ Form::model($comment, ['method' => 'PATCH', 'url' => route('articles.comments.update', [$article, $comment])]) }}
+		  {{ Form::textarea('content') }}
+		  {{ Form::submit('Update') }}
+		  {{ Form::close() }}
+	 @endsection
+

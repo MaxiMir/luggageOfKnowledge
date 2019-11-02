@@ -765,6 +765,44 @@ CREATE TABLE products (
 Суррогатный ключ https://ru.wikipedia.org/wiki/Суррогатный_ключ
 */
 
+/**@@@
+	 solution.sql
+	 Создайте таблицу users со следующими полями:
+	 id - первичный ключ
+	 first_name - имя
+	 created_at - дата создания пользователя
+	 Добавьте в таблицу users одну произвольную запись.
+	 Создайте таблицу orders со следующими полями:
+	 id - первичный ключ
+	 user_first_name - при вставке записи здесь указывается имя пользователя из таблицы users
+	 months - количество покупаемых месяцев (обучение на Хекслете)
+	 created_at - дата создания заказа
+	 Добавьте в таблицу orders два заказа на созданного ранее пользователя
+	 Значения первичных ключей задайте самостоятельно. Автогенерация изучается дальше по курсу. Примеры вставки данных в эти таблицы:
+	 
+	 INSERT INTO users (id, first_name, created_at) VALUES (1, 'Tom', '1832-11-23');
+	 INSERT INTO orders (id, user_first_name, months, created_at) VALUES (1, 'Tom', 3, '2012-10-1');
+*/
+
+CREATE TABLE users (
+	id integer PRIMARY KEY,
+  first_name varchar(255),
+  created_at timestamp
+);
+
+CREATE TABLE orders (
+	id integer PRIMARY KEY,
+  user_first_name varchar(255),
+  months integer,
+  created_at timestamp
+);
+
+INSERT INTO users VALUES (1, 'Tom', '1832-11-23');
+
+INSERT INTO orders VALUES (1, 'Tom', 3, '2012-10-1');
+INSERT INTO orders VALUES (2, 'Tom', 3, '2012-10-1');
+
+
 
 
 >>>>>> Вторая нормальная форма <<<<<<
@@ -846,6 +884,45 @@ CREATE TABLE orders (
 */
 
 
+/**@@@
+	 В базе данных содержится таблица old_cars, в которой составной первичный ключ: model-brand.
+	 
+	 model	brand	price	discount
+	 m5	bmw	5500000	5
+	 almera	nissan	5500000	10
+	 x5m	bmw	6000000	5
+	 m1	bmw	2500000	5
+	 gt-r	nissan	5000000	10
+	 Цена (price) в этой таблице зависит от первичного ключа (model-brand), а вот скидка (discount) только от бренда (brand).
+	 
+	 solution.sql
+	 Создайте две таблицы cars и brands, в которых отобразите нормализованную структуру таблицы old_cars. Создайте суррогатный первичный ключ для каждой из таблиц. Не забудьте указать внешний ключ в таблице cars на таблицу brands. Поле, с именем brand в таблице old_cars, должно иметь название name в таблице brands.
+	 Добавьте в эти таблицы те же записи, что и в исходной таблице, но в нормализованной форме.
+*/
+
+CREATE TABLE brands (
+	id integer PRIMARY KEY,
+  name varchar(255),
+  discount integer
+);
+
+CREATE TABLE cars (
+	id integer PRIMARY KEY,
+  brand_id integer REFERENCES brands(id),
+  model varchar(255),
+  price integer
+);
+
+INSERT INTO brands VALUES (1, 'bmw', 5), (2, 'nissan', 10);
+INSERT INTO cars VALUES
+(1, 1, 'm5', 5500000),
+  (2, 1, 'x5m', 6000000),
+  (3, 1, 'm1', 2500000),
+  (4, 2, 'gt-r', 5000000),
+  (5, 2, 'almera', 5500000);
+
+
+
 
 >>>>> Третья нормальная форма <<<<<<<
 
@@ -906,6 +983,50 @@ id  user_id     address                     good_id
 
 Так, по крайней мере, мы бы поступили в теории. На практике же, неизвестно нужно ли выносить адрес или нет, все зависит от конкретной бизнес-логики конкретного приложения.
 */
+
+
+/**@@@
+	 В базе данных содержится таблица old_cities, следующей структуры
+	 
+	 country	region	city
+	 Россия	Татарстан	Бугульма
+	 Россия	Татарстан	Казань
+	 Россия	Самарская область	Тольятти
+	 Город в этой таблице зависит и от региона и от страны. Зависимость от региона прямая, а вот от страны город зависит косвенно, так как страна определяется регионом.
+	 
+	 solution.sql
+	 Создайте три таблицы countries, country_regions и country_region_cities, в которых отобразите нормализованную структуру исходной таблицы old_cities. Создайте суррогатный первичный ключ для каждой из таблиц. Не забудьте указать внешний ключ. Поле для имени сущности в каждой таблице назовите именем name. Все ключи должны иметь тип bigint.
+	 Добавьте в созданные таблицы те же записи, что и в исходной таблице, но в нормализованной форме.
+	 Подсказки
+	 Внешний ключ именуется как: имя таблицы в единственном числе плюс _id.
+	 Перед тем как писать запросы в файл, зайдите в psql и поэкспериментируйте как следует.
+*/
+
+CREATE TABLE countries (
+	id bigint PRIMARY KEY,
+  name varchar(255)
+);
+
+CREATE TABLE country_regions (
+	id bigint PRIMARY KEY,
+  country_id bigint REFERENCES countries(id),
+  name varchar(255)
+);
+
+CREATE TABLE country_region_cities (
+	id bigint PRIMARY KEY,
+  country_region_id bigint REFERENCES country_regions(id),
+  name varchar(255)
+);
+
+INSERT INTO countries VALUES (1, 'Россия');
+INSERT INTO country_regions VALUES (1, 1, 'Татарстан');
+INSERT INTO country_regions VALUES (2, 1, 'Самарская область');
+INSERT INTO country_region_cities VALUES (1, 1, 'Бугульма');
+INSERT INTO country_region_cities VALUES (2, 1, 'Казань');
+INSERT INTO country_region_cities VALUES (3, 2, 'Тольятти');
+
+
 
 >>>>> Автоинкремент <<<<<<<
 
@@ -1243,6 +1364,38 @@ CREATE TABLE order_items (
   price integer,
   item_id bigint REFERENCES goods(id)
 );
+
+
+/**@@@
+	 solution.sql
+	 Напишите запрос, создающий таблицу users со следующими полями:
+	 
+	 id — первичный автогенерируемый ключ.
+	 username — уникально и не может быть null.
+	 email — не может быть null.
+	 created_at — не может быть null.
+	 Напишите запрос, создающий таблицу topics со следующими полями:
+	 
+	 id — первичный автогенерируемый ключ.
+	 user_id — внешний ключ.
+	 body — не может быть null.
+	 created_at — не может быть null.
+*/
+
+CREATE TABLE users (
+	id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    username varchar(255) NOT NULL UNIQUE,
+    email varchar(255) NOT NULL,
+    created_at timestamp NOT NULL
+);
+
+CREATE TABLE topics (
+	id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    user_id bigint REFERENCES users(id),
+    body text NOT NULL,
+    created_at timestamp NOT NULL
+);
+
 
 
 >>>>>> Изменение структуры таблицы (ALTER) <<<<<<
