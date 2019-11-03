@@ -1,7 +1,7 @@
 /*####### JS #######*/
 
 
-my// <<<<< Введение >>>>>
+// <<<<< Введение >>>>>
 /*
 # При работе с естественными языками, код нужно оформлять определенным образом для того, чтобы он был более понятным и простым в поддержке. Конкретно в js самым распространенным стандартом является https://github.com/airbnb/javascript. Он был написан программистами компании airbnb и теперь используется повсеместно. Периодически просматривайте его и улучшайте свой код. Следование стандартам не только входит в практики экстремального программирования, но и является неотъемлемой частью при работе в команде.
 
@@ -151,7 +151,7 @@ addDigits(1259); // 8
 
 
 // FILE: /app/addDigits.js:
-import { length } from './strings'; 
+import { length } from './strings';
 
 const sum = (str) => {
   let result = 0;
@@ -230,7 +230,7 @@ undefined; // значение не определено
 3 % 0;
 0 * Infinity;
 -Infinity + Infinity;
-3 / 'qwerty'; 
+3 / 'qwerty';
 // NaN != NaN
 
 // # +0 -0
@@ -242,7 +242,7 @@ undefined; // значение не определено
 123000; // 1.23 * 10^5
 
 1.23e-5;
-0.0000123; // 123 * 10^-5 
+0.0000123; // 123 * 10^-5
 
 // # Округления
 Math.round(20.49); // 20
@@ -490,7 +490,7 @@ getSecondWeekday(); // 'Tuesday'
 // <<<<< Итеративный и рекурсивный процесс >>>>>
 
 const factorial = n => {
-  const iter = (current, acc) =>  
+  const iter = (current, acc) =>
     current === 0 ? acc : iter(current - 1, acc * current);
 
   return iter(n, 1);
@@ -746,7 +746,7 @@ foo('I'); // => a - I; b - undefined, c - undefined
 
 foo(); // => a - undefined; b - undefined, c - undefined
 
-/* 
+/*
 Бывают ситуации, когда заранее неизвестно будет ли вообще передан в ходе выполнения кода функции аргумент или будет ли переданный аргумент содержать осмысленное значение (отличное от значения undefined). В таких случаях удобно предусмотреть какое-нибудь дефолтное значение для параметра.
 
 Допустим, мы хотим, чтобы при вызове функции greeting без параметров, она выводила сообщение Hi, anonymous!.
@@ -859,7 +859,7 @@ export default (str, index = 0, substrLength = str.length) => {
   }
 
   let result = '';
-  
+
   for (let i = currentIndex; i <= lastIndex; i += 1) {
     result = `${result}${str[i]}`;
   }
@@ -959,7 +959,7 @@ const r4 = true || false && isEditing || isEmpty(data);
 const r5 = f1() || f2() && f3();
 
 /*
-Из-за слабой типизации подобный код работать будет вообще всегда, даже если функции возвращают не true или false, но пользоваться этим не стоит. 
+Из-за слабой типизации подобный код работать будет вообще всегда, даже если функции возвращают не true или false, но пользоваться этим не стоит.
 
 # Аргументы
 
@@ -983,7 +983,7 @@ const r5 = f(f1(f2(n3, f3(n1, n2))), f4());
 
 #  Порядок выполнения
 
-Осталось понять, в какой последовательности происходят эти вызовы. JavaScript считается энергичным языком, то есть языком с аппликативным порядком вычисления, а это значит, что аргументы вычисляются до того, как попадают внутрь функций.    
+Осталось понять, в какой последовательности происходят эти вызовы. JavaScript считается энергичным языком, то есть языком с аппликативным порядком вычисления, а это значит, что аргументы вычисляются до того, как попадают внутрь функций.
 */
 
 const f1 = () => console.log('called f1');
@@ -1062,7 +1062,7 @@ export default () => table(
 );
 
 // ## TESTS:
-// app/__tests__/buildHtml.test.js 
+// app/__tests__/buildHtml.test.js
 
 import { html } from 'js-beautify';
 import buildHtml from '../buildHtml';
@@ -1072,7 +1072,7 @@ test('htmlBuilder', () => {
 });
 
 
-// app/__tests__/__snapshots__/buildHtml.test.js.snap 
+// app/__tests__/__snapshots__/buildHtml.test.js.snap
 
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
@@ -1217,14 +1217,14 @@ apply(3, Math.sqrt, 256); // => 2
 apply(1, v => v ** 2, 3); // => 9
 apply(5, v => v + 10, 3); // => 53
 
-// file: app/apply.js 
+// file: app/apply.js
 const apply = (count, fn, value) => count === 0 ? value : apply(count - 1, fn, fn(value));
 
 export default apply;
 
 
 // ## TEST
-// file: app/__tests__/apply.js 
+// file: app/__tests__/apply.js
 
 import apply from '../apply';
 
@@ -1261,7 +1261,7 @@ showWarning('email'); // => verify your email, please
 
 В процессе выполнения функции значения переменных могут меняться, что сразу же отражается в лексическом окружении. После выполнения функции её лексическое окружение уничтожается, а занятая им память освобождается.
 
-Из этого поведения есть исключение — возврат функции. В следующем уроке мы рассмотрим связанный с ним механизм так называемых «замыканий». 
+Из этого поведения есть исключение — возврат функции. В следующем уроке мы рассмотрим связанный с ним механизм так называемых «замыканий».
 
 Окружение есть не только у функций. Любой идентификатор, определенный на уровне модуля, попадает в лексическое окружение модуля. Кроме того, существует и глобальное окружение. Благодаря ему мы с легкостью используем в JS такие функции, как console.log или Math.sqrt, даже особо не задумываясь, откуда они берутся.
 */
@@ -1383,7 +1383,7 @@ const f = (coll) => {
 // file: app/reverse.js
 export default (str) => {
   const lastIndex = str.length - 1;
-  
+
   const iter = (index, acc) => {
     if (index > lastIndex) {
       return acc;
@@ -1391,7 +1391,7 @@ export default (str) => {
 
     return iter(index + 1, `${str[index]}${acc}`);
   }
-  
+
   return iter(0, '');
 }
 
@@ -1411,7 +1411,7 @@ test('reverse', () => {
 
 
 
-// >>>>> Возврат функций из функций <<<<< 
+// >>>>> Возврат функций из функций <<<<<
 
 const identity = v => v;
 identity('wow'); // => wow
@@ -1507,7 +1507,7 @@ const sum = x => y => z => x + y + z;
     принимает z и возвращает функцию, которая
       возвращает сумму x + y + z
 
-Попробуем развить идею функции callTwice из предыдущего урока. Напишем функцию generate, которая не применяет функцию сразу, а генерирует новую.      
+Попробуем развить идею функции callTwice из предыдущего урока. Напишем функцию generate, которая не применяет функцию сразу, а генерирует новую.
 */
 
 const generate = f => arg => f(f(arg));
@@ -1544,11 +1544,11 @@ const f2 = generate(x => x ** 2);
 console.log(f1 === f2); // => false
 
 /*
-Поэтому про любую функцию, которая возвращает функцию можно сказать что она генерирует функцию. 
+Поэтому про любую функцию, которая возвращает функцию можно сказать что она генерирует функцию.
 Запомнить довольно просто, если вы где-то слышите или читаете что происходит генерация функций, значит кто-то их возвращает.
 
 # Замыкание
-Работа практически всех описанных примеров базировалась на одном интересном свойстве, которое называется «замыкание». 
+Работа практически всех описанных примеров базировалась на одном интересном свойстве, которое называется «замыкание».
 */
 
 const generateDouble = f => arg => f(f(arg));
@@ -1588,7 +1588,7 @@ const savePassword = password => passwordForCheck => password === passwordForChe
 [  ERROR] [2015-11-19 19:03:12.002127] accept: HTTP/1.1 GET - /info - 503, 829
 
 
-В js самой популярной библиотекой для логгирования считается Debug. 
+В js самой популярной библиотекой для логгирования считается Debug.
 
 Обратите внимание на левую часть каждой строки. Debug для каждой выводимой строчки использует так называемый неймспейс, некоторую строчку, которая указывает принадлежность выводимой строчки к определенной подсистеме или части кода. Он используется для фильтрации, когда логов становится много. Другими словами, можно указать "выводи сообщения только для http". А вот как это работает:
 */
@@ -1645,10 +1645,10 @@ wop(3, 2); // 8
 
 // file: app/flip.js
 // #1:
-const flip = f => (...args) => { // 
+const flip = f => (...args) => { //
   const revArgs = args.reverse();
 
-  return f(...revArgs);  
+  return f(...revArgs);
 }
 
 
@@ -1949,7 +1949,7 @@ const ConditionRFunction = If(False);
 ConditionRFunction('one')('two'); // => two
 
 
-// file: app/logic.js 
+// file: app/logic.js
 export const True = x => () => x;
 export const False = () => y => y;
 
@@ -2027,7 +2027,7 @@ test('compose', () => {
 });
 
 
-/** 
+/**
 Числа Черча
 В 30-х годах прошлого века перед математиками встала так называемая проблема разрешения (Entscheidungsproblem), сформулированная Давидом Гильбертом. Суть её в том, что вот есть у нас некий формальный язык, на котором можно написать какое-либо утверждение. Существует ли алгоритм, за конечное число шагов определяющий его истинность или ложность? Ответ был найден двумя великими учёными того времени Алонзо Чёрчем и Аланом Тьюрингом. Они показали (первый — с помощью изобретённого им λ-исчисления, а второй — теории машины Тьюринга), что для арифметики такого алгоритма не существует в принципе, т.е. Entscheidungsproblem в общем случае неразрешима.
 
@@ -2154,7 +2154,7 @@ $ node
 
 /*
 # Динамический
-В отличие от статических языков, проверка типов в js происходит в момент выполнения кода. А значит, если мы случайно ошиблись и, например, вызываем несуществующую функцию, то ошибка всплывет только во время вызова этой функции. В статических языках подобные ошибки отслеживаются на этапе анализа исходного текста без запуска кода на выполнение. Такие инструменты называются статическими анализаторами кода. Слово статический как раз означает, что программа не выполняется. Для динамических языков они тоже существуют, но отслеживают значительно меньшее число ошибок. 
+В отличие от статических языков, проверка типов в js происходит в момент выполнения кода. А значит, если мы случайно ошиблись и, например, вызываем несуществующую функцию, то ошибка всплывет только во время вызова этой функции. В статических языках подобные ошибки отслеживаются на этапе анализа исходного текста без запуска кода на выполнение. Такие инструменты называются статическими анализаторами кода. Слово статический как раз означает, что программа не выполняется. Для динамических языков они тоже существуют, но отслеживают значительно меньшее число ошибок.
 
 # Слабо типизированный
 Слабая типизация означает, что js автоматически приводит типы там, где считает нужным. Подробнее этот механизм описан в спецификации. С одной стороны, слабая типизация позволяет писать более короткий код. С другой стороны, количество ошибок резко возрастает, так как вместо остановки выполнения, код продолжает работать там, где он не должен работать. Например, мы можем сложить число со строкой по ошибке, и js молча выполнит эту операцию. В языках типа ruby/python подобное невозможно. Выполнение кода прекратится с сообщением о невозможности выполнить операцию для этих типов. Никогда не полагайтесь на эту особенность языка, во избежание проблем.
@@ -2502,7 +2502,7 @@ $ npm install --save-dev jest
 }
 
 /*
-К сожалению, на текущем этапе код, указанный выше, не будет работать в любом случае. Связано это с тем, что Node.js напрямую не поддерживает синтаксис импортов и для их использования нужно подключить пакет Babel. 
+К сожалению, на текущем этапе код, указанный выше, не будет работать в любом случае. Связано это с тем, что Node.js напрямую не поддерживает синтаксис импортов и для их использования нужно подключить пакет Babel.
 
 Сами зависимости не хранятся в git-репозитории и должны быть добавлены в .gitignore:
 */
@@ -2788,7 +2788,7 @@ Babel состоит из многих частей:
 
 Пакет @babel/cli обеспечивает возможность работы с бабелем через терминал. Предоставляет командную утилиту babel. Ниже рассматривается ее использование.
 
-Пакет @babel/node - еще одна утилита командной строки: babel-node. 
+Пакет @babel/node - еще одна утилита командной строки: babel-node.
 
 
 # Установка
@@ -2836,7 +2836,7 @@ module.exports = {
 
 # Использование
 
-При появлении в проекте Babel, изменяется файловая структура проекта. Так как код существует в двух состояниях: исходном и транслированном, то удобно создать две директории, под каждый набор исходников. 
+При появлении в проекте Babel, изменяется файловая структура проекта. Так как код существует в двух состояниях: исходном и транслированном, то удобно создать две директории, под каждый набор исходников.
 Исходный код, принято хранить в директории src в корне проекта, а код полученный в результате трансляции - в директории dist.
 
 # Команда babel предоставляется пакетом @babel/cli:
@@ -2952,7 +2952,7 @@ exports.default = function (router) {
 
 Для решения этой проблемы используется специальный механизм под названием "source map" или "маппинг". Его принцип действия следующий. При транспайлинге кода создается структура определенного формата, в которой описана связь сгенерированного кода с исходным кодом. Затем эта структура записывается либо в отдельный, либо прямо в сгенерированный файл в виде комментария (inline mode). Затем, во время выполнения программы, она используется интерпретатором для построения правильных стектрейсов и ссылок.
 
-Пример содержимого файла index.js.map с маппингом: 
+Пример содержимого файла index.js.map с маппингом:
 */
 {"version":3,"sources":["../src/index.js"],"names":["co","generator","args","iterator","enerator","next","result","value","Promise","resolve","done","then","res","throw","err","reject"],"mappings":";;;;;;AAEA;;;;AAEA;;;;;;;;;;;;;AAaA,IAAMA,KAAK,SAALA,EAAK,CAACC,SAAD,EAAyC;AAAA,oCAAdC,IAAc;AAAdA,QAAc;AAAA;;AAClD,MAAMC,WAAWC,6CAAYF,IAAZ,EAAjB;;AAEA,MAAMG,OAAO,SAAPA,IAAO,CAACC,MAAD,EAAY;AACvB,QAAMC,QAAQC,QAAQC,OAAR,CAAgBH,OAAOC,KAAvB,CAAd;AACA,QAAID,OAAOI,IAAX,EAAiB;AACf,aAAOH,KAAP;AACD;;AAED,WAAOA,MAAMI,IAAN,CACL;AAAA,aAAON,KAAKF,SAASE,IAAT,CAAcO,GAAd,CAAL,CAAP;AAAA,KADK,EAEL;AAAA,aAAOP,KAAKF,SAASU,KAAT,CAAeC,GAAf,CAAL,CAAP;AAAA,KAFK,CAAP;AAID,GAVD;;AAYA,MAAI;AACF,WAAOT,KAAKF,SAASE,IAAT,EAAL,CAAP;AACD,GAFD,CAEE,OAAOS,GAAP,EAAY;AACZ,WAAON,QAAQO,MAAR,CAAeD,GAAf,CAAP;AACD;AACF,CApBD;;kBAsBed,E","file":"index.js","sourcesContent":["// @flow\n\nimport 'source-map-support/register';\n\n/**\n * Generator based control flow\n * @name co\n * @example\n * co(function* () {\n *   const result = yield Promise.resolve(true);\n *   return result;\n * }).then(value => {\n *   console.log(value);\n * }, err => {\n *   console.error(err.stack);\n * });\n */\nconst co = (generator: () => void, ...args: any) => {\n  const iterator = enerator(...args);\n\n  const next = (result) => {\n    const value = Promise.resolve(result.value);\n    if (result.done) {\n      return value;\n    }\n\n    return value.then(\n      res => next(iterator.next(res)),\n      err => next(iterator.throw(err)),\n    );\n  };\n\n  try {\n    return next(iterator.next());\n  } catch (err) {\n    return Promise.reject(err);\n  }\n};\n\nexport default co;\n"]}
 
@@ -3082,7 +3082,7 @@ export default (str) => {
 /**@@@
     formattedTime.js
     Реализуйте и экспортируйте по умолчанию функцию, которая принимает на вход количество минут (прошедших с начала суток) и возвращает строку, являющуюся временем в формате чч:мм.
-    
+
     Пример:
 */
 
@@ -3379,7 +3379,7 @@ bash: babel-node: command not found
 
 
 
-############################### JS: Составные данные ############################### 
+############################### JS: Составные данные ###############################
 
 
 >>>>>> Точки <<<<<<
@@ -3411,7 +3411,7 @@ quadrant(point); // 1
 distance(point, point2); // 5
 
 /*
-# Итог: 
+# Итог:
 Абстрактные данные: Точка. Характеризуется двуся значениями (координатами): x и y.
 
 Конкретные данные: На текущий момент неизвестно как реализованы точки.
@@ -3583,7 +3583,7 @@ toString(findPrimitiveBox(pair2)); // (1, 5)
 */
 
 // FILE: sumOfPairs.js:
-import { cons, car, cdr, toString } from 'hexlet-pairs'; 
+import { cons, car, cdr, toString } from 'hexlet-pairs';
 
 const sumOfPairs = (pair1, pair2) => cons(car(pair1) + car(pair2), cdr(pair1) + cdr(pair2));
 
@@ -3591,7 +3591,7 @@ export default sumOfPairs;
 
 
 // FILE: reversePair.js:
-import { cons, car, cdr, toString } from 'hexlet-pairs'; 
+import { cons, car, cdr, toString } from 'hexlet-pairs';
 
 const reversePair = pair => cons(cdr(pair), car(pair));
 
@@ -3610,7 +3610,7 @@ const findPrimitiveBox = (pair) => {
   }
 
   const next = isPair(first) ? first : last;
-  
+
   return findPrimitiveBox(next);
 };
 
@@ -3830,7 +3830,7 @@ rectangles.js
       |
       |
 
-Основной интерфейс:      
+Основной интерфейс:
 makeRectangle (конструктор) - создаёт прямоугольник. Принимает параметры: левую-верхнюю точку, ширину и высоту.
 Селекторы getStartPoint, getWidth и getHeight
 
@@ -3947,7 +3947,7 @@ const pair = cons(5, 3);
 */
 export const cons = (x, y) => f => f(x, y);
 
-export const car = z => z(x => x); 
+export const car = z => z(x => x);
 export const cdr = z => z((x, y) => y);
 
 /*@@
@@ -4252,11 +4252,11 @@ describe('Pairs on strings', () => {
 
 
 
-############################### JS: Последовательности ###############################   
+############################### JS: Последовательности ###############################
 
 >>>>>> Введение <<<<<<
 
-/* 
+/*
 Документация функций по работе с парами https://github.com/hexlet-components/js-pairs/tree/master/docs
 
 Последовательность — упорядоченная совокупность объектов данных. Совокупность — некая единая сущность. Данные — любая информация: числа, строки, составные объекты вроде пар и так далее.
@@ -4377,7 +4377,7 @@ const numbers = l(3, 4, 5, 8);
 const numbers2 = l(3, 2, 9);
 concat(numbers, numbers2); // (3, 4, 5, 8, 3, 2, 9)
 
-import { l, cons, head, tail, isEmpty, toString as listToString } from 'hexlet-pairs-data'; 
+import { l, cons, head, tail, isEmpty, toString as listToString } from 'hexlet-pairs-data';
 
 export const has = (list, element) => {
   if (isEmpty(list)) {
@@ -4915,7 +4915,7 @@ const hasZero = (list) => {
   if (isEmpty(list)) {
     return false;
   }
-  
+
   const current = head(list);
   const rest = tail(list);
 
@@ -4926,7 +4926,7 @@ const hasZero = (list) => {
   } else if (hasZero(current)) {
     return true;
   }
-  
+
   return hasZero(rest);
 };
 
@@ -4945,7 +4945,7 @@ const searchZeros = (tree) => {
     if (isEmpty(list)) {
       return acc;
     }
-    
+
     const current = head(list);
     const rest = tail(list);
 
@@ -4956,7 +4956,7 @@ const searchZeros = (tree) => {
       return iter(rest, iter(current, acc));
     }
   };
-  
+
   return iter(tree, 0);
 };
 
@@ -5043,7 +5043,7 @@ select('p', dom);
 */
 
 // FILE: /app/select.js:
-import { 
+import {
   l, cons as consList, isList, isEmpty, head, tail, concat, toString as listToString,
 } from 'hexlet-pairs-data';
 
@@ -5629,7 +5629,7 @@ export default (list) => {
 
 
 
-############################### JS: Программирование, управляемое данными ###############################   
+############################### JS: Программирование, управляемое данными ###############################
 
 >>>>>> Введение <<<<<<
 /*
@@ -5700,7 +5700,7 @@ const run = (player1, player2, cards) => {
     if (health1 <= 0) {
       return consList(cons(car(head(log)), `${name1} был убит`), log);
     }
-    
+
     const card = random(cards);
     const cardName = car(card);
     const damage = cdr(card)();
@@ -6178,7 +6178,7 @@ getTotalArea(figures);
 В примере выше функция getArea сама по себе не занимается вычислением площади. Это вычисление реализовано для каждой фигуры совершенно независимо. Все, что делает getArea, это перенаправляет запрос на расчет площади в соответствующую функцию.
 
 Алгоритм диспетчеризации в примере выше следующий:
-1. getArea извлекает тип (его название) из фигуры. 
+1. getArea извлекает тип (его название) из фигуры.
 2. getArea обращается к глобальному хранилищу (виртуальная таблица) для поиска нужной реализации настоящей функции вычисления площади.
 3. Если реализация найдена, то getArea ее вызывает с нужными аргументами и возвращает результат наружу.
 
@@ -6495,7 +6495,7 @@ card['wrongKey']; // undefined
 };
 
 card.wrongKey; // unfined
-card.wrongKey = 'something'; 
+card.wrongKey = 'something';
 card.wrongKey; // something
 
 // ТуpeError: Assignment to constant variable
@@ -6574,7 +6574,7 @@ const user = { name, surname: 'Smith' };
 /*
 const name = 'age';
 const user = { [name]: 19 };
-console.log(user); 
+console.log(user);
 > => {age: 19}
 */
 
@@ -6762,7 +6762,7 @@ append(strings1, strings2); // (cat, dog, table, milk, phone)
 
 // # Ad-Hoс:
 // В зависимости от типов аргументов применяется разная разная реализация какой-либо операции
-1 + 1; // 2 
+1 + 1; // 2
 'cat' + 'dog'; // catdog
 
 console.log(1034.98);
@@ -6865,7 +6865,7 @@ const result = coll.orderBy(car => car.year, 'desc')
   .select(car => car.model)
   .toArray();
 
-// ['sorento', 'sportage']  
+// ['sorento', 'sportage']
 
 
 
@@ -7034,8 +7034,8 @@ uniq([2, 1, 2, 3]); // [2, 1, 3], a не [1, 2, 3] или не [3, 1, 2]
 export default coll => coll.reduce(
   (acc, value) => (
     acc.includes(value) ? acc : acc.concat(value)
-  ), 
-  [], 
+  ),
+  [],
 );
 
 // FILE: /app/__tests__/uniq.test.js:
@@ -7068,7 +7068,7 @@ person.lastName; // Kay
 const propName = 'lastName';
 person[propName]; // Kay
 
-person[propName] = 'King'; 
+person[propName] = 'King';
 person[propName]; // King
 
 // Итерации:
@@ -7520,7 +7520,7 @@ false && console.log('message'); // false
 сonst numbers = Lazy.generate(Math.random) // библиотека с Git Hub
   .map(e => Math.floor(e * 1000) + 1)
   .uniq()
-  .take(300); 
+  .take(300);
 
 numbers.each(e => console.log(e)); // выполение здесь
 
@@ -7528,7 +7528,7 @@ numbers.each(e => console.log(e)); // выполение здесь
 Ленивые коллекции позволяют работать с:
  - Бесконечные списки
  - Эффективная обработка при проходе
-*/  
+*/
 
 // LINQ
   constructor(collection, operations) {
@@ -7647,7 +7647,7 @@ coll = new Enumerable(cars);
 const result = coll.where(car => car.brand === 'kia')
   .where(car => car.year > 2011);
 
-result.length; // ???  
+result.length; // ???
 
 // # Обновление во время вычисления
 toArray() {
@@ -7667,7 +7667,7 @@ const result = coll
   .where(car => car.brand === 'kia')
   .where(car => car.year > 2011);
 
-result.length; // использование => 2  
+result.length; // использование => 2
 
 
 // # Повторные вычисления:
@@ -7815,7 +7815,7 @@ class Enumerable {
   toArray() {
     return this.getProcessedCollection().slice();
   }
-  
+
 }
 
 export default Enumerable;
@@ -7827,7 +7827,7 @@ export default Enumerable;
 // Разоблачение списков:
 const numbers = l(1, 10, 23, 234);
 
-export const l = (...elements) => 
+export const l = (...elements) =>
   // elements = [1, 10, 23, 234]
   elements.reverse().reduce((acc, item) => cons(item, acc), null);
 
@@ -8098,12 +8098,12 @@ const metadata = {
   url: '/en-US/docs/Tools/Scratchpad'
 };
 
-const { title: englishTitle, 
+const { title: englishTitle,
         translations: [{ title: localTitle }]
       } = metadata;
 
 console.log(englishTitle); // Scratchpad
-console.log(blocalTitle); // JavaScript-Umgebung      
+console.log(blocalTitle); // JavaScript-Umgebung
 
 
 /**@@@
@@ -8160,7 +8160,7 @@ export default (cars) => {
 
 
 
-############################### JS: Деревья ###############################  
+############################### JS: Деревья ###############################
 
 /*
 Дерево — одна из самых распространённых структур данных в информатике и естественный способ моделирования некоторых предметных областей. С деревьями (как структурой данных) встречаются так или иначе все люди, даже те, кто далёк не только от программирования, но и от компьютеров в целом. Самым очевидным примером служит генеалогическое древо, а из более специализированного — файловое дерево. Ну и, конечно, HTML (а так же json, xml и многое другое), он также имеет древовидную структуру. Любая иерархия является деревом по определению.
@@ -8209,7 +8209,7 @@ f1(3 * f2(f3() + 5));
 Соглашение здесь такое: первым элементом списка является функция (любые операции рассматриваются как функции), а всё остальное — её аргументы.
 
 Ещё один способ определения основан на ассоциативных массивах, а конкретно в javascript — на объектах:
-*/  
+*/
 {
   value: 5,
   children: [
@@ -8439,7 +8439,7 @@ JSON.stringify(dfs(tree));
 3. Пропустить ноду через эту функцию;
 */
 
-// В коде используются два разных map. Один самописный, другой на массиве. 
+// В коде используются два разных map. Один самописный, другой на массиве.
 const map = (f, tree) => {
   const [, children] = tree;
   const [newName] = f(tree);
@@ -8607,7 +8607,7 @@ const tree = ['a', [
 
 const result = filter(([name]) => name === name.toLowerCase(), tree);
 
-JSON.stringify(result); 
+JSON.stringify(result);
 
 // a
 // b
@@ -8951,7 +8951,7 @@ console.log(result);
  88K    package-lock.json
  22M    taxdome
 
-Перед тем как делать упражнение, обязательно попробуйте поиграйте с этой утилитой в терминале, посмотрите ее опции через man du. 
+Перед тем как делать упражнение, обязательно попробуйте поиграйте с этой утилитой в терминале, посмотрите ее опции через man du.
 
 du.js
 Реализуйте и экспортируйте по умолчанию функцию, которая принимает на вход директорию, а возвращает список узлов вложенных (директорий и файлов) в указанную директорию на один уровень и место которое они занимают. Размер файла задается в метаданных. Размер директории складывается из сумм всех размеров файлов находящихся внутри во всех подпапках. Сами папки размера не имеют.
@@ -9279,7 +9279,7 @@ user=> (html [:div#foo.bar.baz "bang"])
 
 Этот шаблонизатор встроен в rum, библиотеку для комфортной работы с React в ClojureScript.
 
-Лайвкодинг по проектированию данной библиотеки: https://www.youtube.com/watch?v=us8AMJKEzZg&ab_channel=Hexlet                       
+Лайвкодинг по проектированию данной библиотеки: https://www.youtube.com/watch?v=us8AMJKEzZg&ab_channel=Hexlet
 */
 
 /**@@@
@@ -9367,7 +9367,7 @@ export default buildHtml;
 
 >>>>>> Абстрактное синтаксическое дерево <<<<<<
 
-/* 
+/*
 Дерево использующееся в парсерах для промежуточного представления исходных данных (например, программы)
 
 # JS API
@@ -9409,7 +9409,7 @@ let x; // =>
 [ { name: 'title',
     attributes: {},
     body: 'hello, hexlet',
-    children: [] } ]        
+    children: [] } ]
 
 # HtmlBuilder API
 */
@@ -9524,7 +9524,7 @@ export const parse = (data) => {
 >>>>>>> Полиморфизм подтипов <<<<<<<
 
 /*
-# Типы 
+# Типы
 - SingleTag
 - PairedTag
 */
@@ -9571,7 +9571,7 @@ console.log(tag2.toString()); // <img src="/path/to/image.jpg">
 
 /**@@@
 buildNode.js
-Реализуйте и экспортируйте функцию по умолчанию, задача которой, создавать объект подходящего типа. Типы: SingleTag и PairedTag. 
+Реализуйте и экспортируйте функцию по умолчанию, задача которой, создавать объект подходящего типа. Типы: SingleTag и PairedTag.
 Список имен тегов, которые относятся к SingleTag: hr, br, img.
 
 PairedTag.js
@@ -9680,7 +9680,7 @@ class Node {
     constructor(name) {
         this.name = name;
     }
-    
+
     getName() {
         return this.name;
     }
@@ -9694,7 +9694,7 @@ class PairedTag extends Node {
         super(name); // вызываем конструктор базового класса
         this.body = body;
     }
-    
+
     toString() {
         return `<${this.getName()}>${this.body}</${$this.getName()}>`;
     }
@@ -9766,7 +9766,7 @@ export default class extends Node {
 const f = name => `hello, ${name}`;
 typeof f; // function
 f instanceof Object; // true
-f.length; // количество аргументов, которая принимает функция => 1 
+f.length; // количество аргументов, которая принимает функция => 1
 f.toString(); // возвращает тело функции => name => `hello, ${name}`
 f.wrongProperty; // undefined
 
@@ -9929,7 +9929,7 @@ obj2.setName('mike');
 
 // # Стрелочные функции:
 // this в стрелочной функции относится к внешнему окружению функции:
-const makeNode = (name) => { 
+const makeNode = (name) => {
 
   return {
     name,
@@ -10145,7 +10145,7 @@ F.prototype.color = 'green';
 
 const obj1 = new F();
 const obj2 = new F();
-obj2.color = 'red'; 
+obj2.color = 'red';
 
 console.log(obj1.color); // green
 console.log(obj2.color); // red
@@ -10409,7 +10409,7 @@ assert.ok(tree.hasChildren('home'));
 // # Дизайн:
 const node = tree.getChild('home')
     .getChild('config');
-    
+
 assert.equal(node.getKey(), 'config');
 assert.equal(node.getMeta(), 'data');
 
@@ -10421,11 +10421,11 @@ class Tree {
         this.meta = meta;
         this.children = new Map();
     }
-    
+
     addChild(key, meta) {
         const child = new Tree(key, meta, this);
         this.children.set(key, child);
-        
+
         return child;
     }
 }
@@ -10529,11 +10529,11 @@ class Tree {
   getDeepChild(keys) {
     const [key, ...rest] = keys;
     const node = this.getChild(key);
-    
+
     if (!node || rest.length === 0) {
       return node;
     }
-    
+
     return node.getDeepChild(rest);
   }
 
@@ -10615,7 +10615,7 @@ isFile(path)
 mkdirSync(path) - поведение этой функции должно соответствовать поведению утилиты mkdir в баше. Для ее работы должны существовать все родительские директории. Она не создает директории рекурсивно.
 touchSync(path) - создает пустой файл. На самом деле, в реальной файловой системе, команда touch меняет время последнего обращения к файлу, а побочным эффектом этой команды является создание файла в случае его отсутствия. По этой причине данной командой часто пользуются для создания файлов.
 Пример:
-*/ 
+*/
 
 files.isDirectory('/etc'); // false
 
@@ -10702,7 +10702,7 @@ return current & current.getMeta().type === 'file';
 
 // isDirectory, isSocket, isSymbolicLink
 
- 
+
 // # Объект со статистикой:
 // state.isFile()
 // stats.isDirectory()
@@ -10872,7 +10872,7 @@ files.rmdirSync(path);
 Ошибки времени выполнения возникающие в корректных программах
 
 - Ошибки программирования
-Баги в программе  
+Баги в программе
 
 
 # Обработка ошибок:
@@ -11307,7 +11307,7 @@ statSync(path) {
   return current.getMeta().getStats();
 }
 
-/* 
+/*
 # Эмпирическое правило:
 You throw an exception when your method is unable to do what it promises to - Jeff Richter
 "Нужно бросать эсключчение, тогда, когда функция не способна выполнить то, что обещает"
@@ -11427,7 +11427,7 @@ export default class extends Error {
     this.errno = errno;
     this.path = path;
   }
-}                                                                                                                      
+}
 
 
 ############################### JS: Асинхронное программирование ###############################
@@ -11669,7 +11669,7 @@ print('./myfile');
 // FILE: /app/printer.js:
 import fs from 'fs';
 
-export default filepath => 
+export default filepath =>
   fs.readFile(
     filepath,
     'utf-8',
@@ -11931,7 +11931,7 @@ ReferenceError: callUndefinedFunction is not defined
 Из вывода видно, что колбек вызвался в своем стеке вызовов, начавшимся внутри функции readFile. Фактически это означает, что использовать try/catch в асинхронном коде с колбеками — бесполезно, эта конструкция здесь просто неприменима.
 
 Подумайте над тем, что выведет на экран этот код:
-*/    
+*/
 
 import fs from 'fs';
 
@@ -11952,7 +11952,7 @@ try {
 
 fs.readFile('./directory', 'utf-8', (err, data) => {
   // Любые ошибки чтения файла: доступ, отсутствие файла, директория вместо файла
-  // null неявно приводится к false, поэтому достаточно такой проверки, 
+  // null неявно приводится к false, поэтому достаточно такой проверки,
   // любой другой ответ трактуется как true
   if (err) {
     console.log('error!');
@@ -12060,7 +12060,7 @@ fs.readFile - чтение файла
 fs.writeFile - запись в файл
 */
 
-// 
+//
 import fs from 'fs';
 
 export const move = (from, to, cb) => {
@@ -13115,7 +13115,7 @@ const promise = new Promise((resolve, reject) => {
 
 Эти функции принимают на вход ровно один аргумент, который затем передаётся либо в then (как данные), либо в catch (как ошибка). Причём достаточно, чтобы вызывалась хотя бы одна из этих функций. Вполне возможно, что понадобится создать промис, который всегда завершается успешно — и это легко сделать, никогда не вызывая reject.
 
-В конечном итоге конструкция new Promise() возвращает самый настоящий промис, с которым можно работать уже привычным для нас способом: 
+В конечном итоге конструкция new Promise() возвращает самый настоящий промис, с которым можно работать уже привычным для нас способом:
 */
 
 promise
@@ -13593,7 +13593,7 @@ P.S. Основные языки для роста: haskell, clojure, prolog, er
 Управляющие состояния
 > Их число не очень велико
 > Каждое из них имеет вполне определённый смысл и качественно отличается от других
-> Они определяют действия, которые совершает сущность 
+> Они определяют действия, которые совершает сущность
 
 Вычислительные состояния
 > Их число либо бесконечно, либо конечно, но очень велико
@@ -13842,7 +13842,7 @@ export default (text) => {
  - Включение/Выключение будильника
  - Отключение звонка будильника
 
-# Флаго-ориентированное программирование 
+# Флаго-ориентированное программирование
 */
 class AlarmClock {
   clickH() {
@@ -14256,6 +14256,8 @@ export const tryCancel = (order) => {
     order.cancel();
   }
 };
+
+
 
 
 ############################### JS: DOM API ###############################   
@@ -21848,3 +21850,7 @@ class Tree extends EventEmitter {
 }
 
 export default Tree;
+
+
+
+

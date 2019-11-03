@@ -2,14 +2,13 @@
 
 ####### Python #######
 
-
-# Документация
+#@ Документация
 /*
 Документация на русском (неофициальная, неполная) https://pythoner.name/documentation/reference
 Документация на английском (официальная, полная) https://docs.python.org/3/
 */
 
-# Типы данных и переменные
+#@ Типы данных и переменные
 
 # числа
 
@@ -30,12 +29,12 @@ x = True
 y = False
 
 
-# Преобразование типов
+#@ Преобразование типов
 one = int('234')
 two = str(34)
 
 
-# Операции
+#@ Операции
 
 # Арифметические операции
 1 + 5 - 8 * 3 / 2 % 4
@@ -147,6 +146,27 @@ class TestBinary(unittest.TestCase):
 
 
 
+/**@@@
+src/solution.py
+Реализуйте и функцию is_power_of_three, которая определяет, является ли переданное число натуральной степенью тройки. Например, число 27 — это третья степень: 3 ** 3, а 81 — это четвёртая: 3 ** 4.
+
+>>> is_power_of_three(1)
+True
+>>> is_power_of_three(2)
+False
+>>> is_power_of_three(9)
+True
+ */
+
+def is_power_of_three(number):
+    counter = 1  # 3 ** 0
+    while counter < number:
+		  counter *= 3
+    return counter == number
+	
+		 
+		 
+	
 >>>>>> Отладка <<<<<<
 
 /*
