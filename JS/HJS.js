@@ -14260,6 +14260,7 @@ export const tryCancel = (order) => {
 
 
 
+
 ############################### JS: DOM API ###############################   
 
 /*
@@ -21853,4 +21854,157 @@ export default Tree;
 
 
 
+
+
+
+
+
+
+import { EventEmitter } from "events";
+
+/*
+    1. Запускаем вычисление
+    2. Вычисляем небольшой кусок
+    3. Если отправлять больше нечего отдаем результат
+    4. Оставшиеся вычисления откладываем
+    5. Отрабатывают накопившиеся функции
+    6. Продолжаем вычисление, возвращаемся к п.2
+*/
+
+
+//  Асинхронная реализация:
+const asyncMap = (coll, fn, callback) => {
+    if (coll.length === 0) {
+        callback(cool);
+        return;
+    }
+
+    const iter = ([head, ...rest], acc) => {
+        const newAcc = [...acc, fn(head)];
+        
+        if (rest.length === 0) {
+            callback(newAcc);
+
+            return;
+        }
+
+        setTimeout(iter, 0, rest, newAcc);
+    };
+
+    iter(coll, [])
+}
+
+
+//  Cинхронная реализация:
+const map = (coll, fn) => {
+    if (coll.length === 0) {
+        return coll;
+    }
+
+    const iter = ([head, ...rest], accc) => {
+        const newAcc = [...acc, fn(head)];
+
+        if (rest.length === 0) {
+            return;
+        }
+        
+        return iter(rest, newAcc);
+    }
+
+    return iter(coll, []);
+}
+
+
+
+//  Асинхронный map:
+const coll = [4, 5, 10];
+asyncMap(coll, item => item * 2, result => {
+    console.log(result); // => [8, 10, 20]
+});
+
+
+
+// EventEmitter
+import  EventEmitter from 'events';
+
+class Clock extends EventEmitter {
+    start() {
+        let tic = true;
+
+        this.interval = setTimeout(() => {
+            const event = tic ? 'tic' : 'toc';
+
+            this.emit(event, Date.now());
+            tic = !tic;
+        }, 1000);
+    }
+
+    stop() {
+        clearInterval(this.interval);
+    }
+}
+
+// Использование:
+const clock = new Clock();
+clock.on('tic', t => console.log('tic: %d', t));
+clock.on('toc', t => console.log('toc: %d', t));
+clock.start();
+
+setTimeout(() => clock.stop, 4000);
+
+// tic: 1472210947325
+// toc: 1472210948337
+// tic: 1472210949344
+
+
+// Доставка событий
+const emitter = new EventEmitter();
+
+emitter.on('beep', () => console.log('beep'));
+emitter.on('beep', () => console.log('beep again'));
+
+console.log('before emit');
+emitter.emit('beep');
+console.log('after emit');
+
+// before emit
+// beep
+// beep again 
+// after emit
+
+
+
+// Реализация bind:
+function bind(context, ...args) {
+    return () => this.apply(context, args);
+}
+
+Function.prototype.bind = bind;
+
+
+// Ранее связывание:
+class User {
+    constructor(name) {
+        this.name = name;
+    }
+
+    printName = () => {
+        console.log(this.name);
+    }
+}
+
+const user = new User('Tony');
+user.printName(); // Tony
+setTimeout(user.printName, 100); // Tony
+
+// Wrapper:
+
+const user = {
+    name: "Tony",
+    printName() {
+        console.log(this.name);
+    }
+};
+
+setTimeout(() => user.printName(), 100); // Tony
 
