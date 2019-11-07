@@ -3221,63 +3221,85 @@
 <div class="tips-list"></div>
 
 <script>
-    const inputBlock = $('#searchInput');
+    const searchContainer = $('.search');
+    const responseBlock = $('.tips-list');
     const searchInput = initSearchInput();
 
     /**
-     * @ Search input change handler
+     * #@ Search handler
      */
-    inputBlock.keyup(e => {
+    $('.input-search').change(e => {
         const currElem = $(e.currentTarget);
-        const phrase = currElem.val();
 
-        searchInput.delaySearch(phrase);
+        searchInput.delaySearch(currElem);
+    });
+
+    /**
+     * #@ Close search
+     */
+    $('.popup_search .close').on('click', () => {
+        searchInput.cleanSearchListAndHide();
+    });
+
+    /**
+     * #@ Close search
+     */
+    $(document).on('click', e => {
+        const isActiveResponseBlock = responseBlock.hasClass('active');
+
+        if (isActiveResponseBlock) {
+            const elemClicked = e.target;
+
+            if (!searchContainer.is(elemClicked) && searchContainer.has(elemClicked).length === 0) {
+                searchInput.cleanSearchListAndHide();
+            }
+        }
     });
 
     function initSearchInput() {
         let intervalID = null;
-        let lastPhrase = null;
         const requestURL = '/ajax/search.php';
-        const responseBlock = $('.tips-list');
         const intervalTime = 1000;
 
         return {
-            getOldValue() {
-                return lastPhrase;
+            getOldValue: function () {
+                return this.lastPhrase;
             },
-            getNewValue() {
-                return inputBlock.val();
+            getNewValue: function () {
+                return this.inputBlock.val()
             },
-            isNeedUpdate() {
+            isNeedUpdate: function () {
                 return this.getOldValue() === this.getNewValue();
             },
-            updateValue() {
+            updateValue: function () {
                 this.lastPhrase = this.getNewValue();
             },
-            delaySearch() {
+            delaySearch: function (currElem) {
+                this.inputBlock = currElem;
+
                 if (intervalID && this.isNeedUpdate()) {
                     this.updateValue();
                 }
 
-                if (!intervalID) {
-                    intervalID = setInterval(() => {
-                        if (this.isNeedUpdate()) {
-                            this.updateValue();
-                            return;
-                        }
-
-                        clearInterval(intervalID);
-                        intervalID = null;
-                        const newValue = this.getNewValue();
-                        console.log("ОТПРАВЛЯЕМ", newValue);
-                        this.generateResponseList(newValue);
-
-                    }, intervalTime);
+                if (intervalID) {
+                    return;
                 }
+
+                intervalID = setInterval(() => {
+                    if (this.isNeedUpdate()) {
+                        this.updateValue();
+                        return;
+                    }
+
+                    clearInterval(intervalID);
+                    intervalID = null;
+                    const newValue = this.getNewValue();
+                    this.generateResponseList(newValue);
+                }, intervalTime);
             },
-            generateResponseList(word) {
+            generateResponseList: word => {
                 if (!word.length) {
-                    responseBlock.hide();
+                    this.cleanSearchListAndHide();
                     return;
                 }
 
@@ -3289,14 +3311,26 @@
                     },
                     success: response => {
                         if (!response) {
-                            responseBlock.hide();
-
-                            return
+                            this.cleanSearchListAndHide();
+                            return;
                         }
 
-                        responseBlock.html(response).show();
+                        responseBlock
+                            .html(response)
+                            .addClass('active')
+                            .show();
                     }
                 });
+            },
+            cleanSearchListAndHide: function () {
+                if (!this.inputBlock) {
+                    return;
+                }
+
+                responseBlock
+                    .empty()
+                    .removeClass('active')
+                    .hide();
             }
         };
     }
@@ -3415,111 +3449,211 @@
 	if (!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true) {
 		die();
 	}
-	
-	use \Bitrix\Main\Loader;
-	
-	Loader::includeModule('iblock');
-	
-	class CAdvertCatalogSection extends CBitrixComponent
-	{
-		private function getProducts($arIdProduct)
-		{
-			$obElement = new CIBlockElement();
-			
-			$navParams = [
-				"bShowAll" => false,
-			];
-			
-			if ($this->arParams["LIMIT"]) {
-				$navParams["nTopCount"] = $this->arParams["LIMIT"];
-			}
-			
-			if ($this->arParams["nPageSize"]) {
-				$navParams["nPageSize"] = $this->arParams["nPageSize"];
-			}
-			
-			$dbResElement = $obElement->GetList(
-				[],
-				[
-					"ID" => $arIdProduct
-				],
-				false,
-				$navParams,
-				[
-					"ID",
-					"NAME",
-					"PREVIEW_PICTURE",
-					"DETAIL_PICTURE",
-					"DETAIL_PAGE_URL",
-				]
-			);
-			
-			while ($arElement = $dbResElement->GetNext()) {
+	 
+	 use \Bitrix\Main\Loader;
+	 
+	 /**
+	  * @global CUser $USER
+	  * @global CMain $APPLICATION
+	  */
+	 class CAdvertCatalogSection extends \CBitrixComponent
+	 {
+		  private $iBlockID = 28;
+		  
+		  function __constructor()
+		  {
+				parent::__constructor();
+				
+				Loader::includeModule("iblock");
+		  }
+		  
+		  /**
+			* @param $arIdProduct
+			*/
+		  private function getProducts($arIdProduct)
+		  {
+				$obElement = new CIBlockElement();
+				
+				$navParams = [
+					"bShowAll" => false,
+				];
+				
+				if ($this->arParams["LIMIT"]) {
+					 $navParams["nTopCount"] = $this->arParams["LIMIT"];
+				}
+				
+				if ($this->arParams["nPageSize"]) {
+					 $navParams["nPageSize"] = $this->arParams["nPageSize"];
+				}
+				
+				$dbResElement = $obElement->GetList(
+					[],
+					[
+						"ID" => $arIdProduct
+					],
+					false,
+					$navParams,
+					[
+						"ID",
+						"NAME",
+						"PREVIEW_PICTURE",
+						"DETAIL_PICTURE",
+						"DETAIL_PAGE_URL",
+						"PROPERTY_MORE_PHOTO",
+					]
+				);
+				
+				while ($arElement = $dbResElement->GetNext()) {
+					 [
+						 "ID" => $elemID,
+						 "NAME" => $name
+					 ] = $arElement;
+					 
+					 $arElement["IMG_SRC"] = $this->getProductImage($arElement);
+					 $arElement["TITLE"] = $this->generateProductTitle($name);
+					 $arElement["PRICE_DATA"] = $this->getProductPriceData($elemID);
+					 
+					 $this->arResult["ITEMS"][$elemID] = $arElement;
+				}
+				
+				$this->arResult["NAV"] = $dbResElement;
+		  }
+		  
+		  /**
+			* @param $elemID
+			* @return array|void
+			*/
+		  public function getProductOffers($elemID)
+		  {
+				$offersData = [];
+				
+				$productInfo = CCatalogSKU::GetInfoByProductIBlock($this->iBlockID);
+				
+				if (!is_array($productInfo)) {
+					 return;
+				}
+				
+				['IBLOCK_ID' => $iBlockID, 'SKU_PROPERTY_ID' => $skuPropID] = $productInfo;
+				
+				$arrFilter = ['IBLOCK_ID' => $iBlockID, "PROPERTY_{$skuPropID}" => $elemID];
+				$offersDBData = CIBlockElement::GetList([], $arrFilter);
+				
+				while ($offerData = $offersDBData->GetNext()) {
+					 $offersData[] = $offerData;
+				}
+				
+				return $offersData;
+		  }
+		  
+		  /**
+			* @param $productName
+			* @return false|string
+			*/
+		  private function generateProductTitle($productName)
+		  {
+				$searchPhrase = $this->arParams["SEARCH_PHRASE"];
+				$searchPhraseStart = stripos($productName, $searchPhrase);
+				$searchPhraseFinish = strlen($searchPhrase);
+				$replacePhrase = substr($productName, $searchPhraseStart, $searchPhraseFinish);
+				
+				return mb_eregi_replace($searchPhrase, "<b>$replacePhrase</b>", $productName, "i");
+		  }
+		  
+		  /**
+			* @param $idImage
+			* @return mixed
+			*/
+		  public function getMiniImageSrc($idImage)
+		  {
+				$imgData = CFile::ResizeImageGet($idImage, ['width' => 70, 'height' => 70], BX_RESIZE_IMAGE_EXACT, true);
+				return $imgData["src"];
+		  }
+		  
+		  /**
+			* @param $arElement
+			* @return mixed|string|null
+			*/
+		  public function getProductImage($arElement)
+		  {
+				$imgSrc = null;
+				
 				[
 					"ID" => $elemID,
-					"NAME" => $name,
 					"PREVIEW_PICTURE" => $previewPicture,
 					"DETAIL_PICTURE" => $detailPicture,
+					"PROPERTY_MORE_PHOTO_VALUE" => $morePhotoData
 				] = $arElement;
 				
-				$previewPicture = CFile::GetPath($previewPicture);
-				$detailPicture = CFile::GetPath($detailPicture);
+				if ($previewPicture) {
+					 $imgSrc = $this->getMiniImageSrc($previewPicture);
+				} elseif ($detailPicture) {
+					 $imgSrc = $this->getMiniImageSrc($detailPicture);
+				} elseif ($morePhotoData) {
+					 $imageID = !is_array($morePhotoData) ? $morePhotoData : $morePhotoData[0];
+					 $imgSrc = $this->getMiniImageSrc($imageID);
+				} else {
+					 $offersData = $this->getProductOffers($elemID);
+					 
+					 foreach ($offersData as ["DETAIL_PICTURE" => $detailImgID, "PREVIEW_PICTURE" => $previewImgID]) {
+						  if ($previewImgID) {
+								$imgSrc = $this->getMiniImageSrc($previewImgID);
+								break;
+						  }
+						  
+						  if ($detailImgID) {
+								$imgSrc = $this->getMiniImageSrc($detailImgID);
+								break;
+						  }
+					 }
+				}
 				
-				$imgSrc = $previewPicture ?? $detailPicture ?? "/images/no-photo_150.png";
+				return $imgSrc ?? "/images/no-photo_150.png";
+		  }
+		  
+		  /**
+			* @param $elemID
+			* @return array|void
+			*/
+		  private function getProductPriceData($elemID)
+		  {
+				$userGroupArray = $GLOBALS["USER"]->GetUserGroupArray();
 				
-				$arElement["IMG_SRC"] = $imgSrc;
-				$arElement["TITLE"] = $this->generateProductTitle($name);
-				$arElement["PRICE_DATA"] = $this->getProductPriceData($elemID);
+				["RESULT_PRICE" => $resultPrice] = CCatalogProduct::GetOptimalPrice($elemID, 1, $userGroupArray, 'N');
 				
-				$this->arResult["ITEMS"][$elemID] = $arElement;
-			}
-			
-			$this->arResult["NAV"] = $dbResElement;
-		}
-		
-		private function generateProductTitle($productName)
-		{
-			$searchPhrase = $this->arParams["SEARCH_PHRASE"];
-			$searchPhraseStart = stripos($productName, $searchPhrase);
-			$searchPhraseFinish = strlen($searchPhrase);
-			$replacePhrase = substr($productName, $searchPhraseStart, $searchPhraseFinish);
-			
-			return mb_eregi_replace($searchPhrase, "<b>$replacePhrase</b>", $productName, "i");
-		}
-		
-		private function getProductPriceData($elemID)
-		{
-			$userGroupArray = $GLOBALS["USER"]->GetUserGroupArray();
-			
-			["RESULT_PRICE" => $resultPrice] = CCatalogProduct::GetOptimalPrice($elemID, 1, $userGroupArray, 'N');
-			
-			[
-				"DISCOUNT" => $discount,
-				"BASE_PRICE" => $basePrice,
-				"DISCOUNT_PRICE" => $discountPrice
-			] = $resultPrice;
-			
-			
-			if (!$discountPrice && !$basePrice) {
-				return;
-			}
-			
-			$price = $discount ? $discountPrice : $basePrice;
-			
-			return explode('.', (string) $price);
-		}
-		
-		public function executeComponent()
-		{
-			$arElemId = $this->arParams["IDS"];
-			
-			if ($arElemId) {
-				$this->getProducts($arElemId);
-			}
-			
-			$this->includeComponentTemplate();
-		}
-	}
+				[
+					"DISCOUNT" => $discount,
+					"BASE_PRICE" => $basePrice,
+					"DISCOUNT_PRICE" => $discountPrice
+				] = $resultPrice;
+				
+				
+				if (!$discountPrice && !$basePrice) {
+					 return;
+				}
+				
+				$price = $discount ? $discountPrice : $basePrice;
+				
+				return explode('.', (string)$price);
+		  }
+		  
+		  /**
+			* выполняет логику работы компонента
+			*/
+		  public function executeComponent()
+		  {
+				try {
+					 $arElemId = $this->arParams["IDS"];
+					 
+					 if ($arElemId) {
+						  $this->getProducts($arElemId);
+					 }
+					 
+					 $this->includeComponentTemplate();
+				} catch (Exception $e) {
+					 ShowError($e->getMessage());
+				}
+		  }
+	 }
 	
 	
 
