@@ -1,8 +1,10 @@
-/* ######## Vue ######### */
 <?
+
+/* ######## Vue ######### */
 
 # http://book.loftschool.com/vuejs
 # SERVER SITE RENDERING - фреймворк NUXT JS + node
+
 
 /** 
   @ ЗАЧЕМ?

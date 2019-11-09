@@ -426,3 +426,143 @@ formForumResponse.on('submit', () => {
         }
     });
 });
+
+
+
+
+
+
+// #@ Набросок логики для формы: @# */
+const formCalc = document.querySelector('.modal-request');
+const btnSbm = formCalc.querySelector('.form-modal__submit');
+
+
+/**
+ * Получаем заполненные опции
+ */
+const getOptionsData = () => {
+    const optionsData = {};
+    const optionsBlocks = document.querySelectorAll('.modal__option');
+
+    optionsBlocks.forEach(optionBlock => {
+        const [optionNameBlock, optionValueBlock] = optionBlock.children;
+        const name = optionNameBlock.innerText;
+        const value = optionValueBlock.innerText;
+
+        if (name && value) {
+            optionsData[name] = value;
+        }
+    });
+
+    return optionsData;
+};
+
+
+/**
+ * Посылает POST запрос с данными
+ * @param urn
+ * @param data
+ */
+const sendPostRequest = (urn, data) => {
+    return fetch(urn, {
+        method: 'POST',
+        body: data
+    });
+};
+
+
+/**
+ * Возвращает [
+ *  количество пустых полей,
+ *  массив с пустыми полями
+ * ]
+ * @param requiredFields
+ */
+const checkFormFields = requiredFields => {
+    const emptyFields = [];
+
+    for (let requiredField of requiredFields) {
+        if (!requiredField.value.trim()) {
+            emptyFields.push(requiredField);
+        }
+    }
+
+    return [
+        emptyFields.length === 0,
+        emptyFields
+    ];
+};
+
+
+/**
+ * Отображает ошибки у незаполненных полей
+ * @param form
+ * @param errorFields
+ */
+const showFormErrors = (form, errorFields) => {
+    for (let errorField of errorFields) {
+        errorField.classList.add('error');
+    }
+
+    showFormMessage(form, 'Не заполнены обязательные поля. Помеченные *');
+};
+
+
+/**
+ * Показывает сообщения у формы
+ * @param form
+ * @param msg
+ * @param isError
+ */
+const showFormMessage = (form, msg, isError = true) => {
+    const formResultBlock = form.querySelector('.result-data');
+    const addClass = isError ? 'error' : 'success';
+    const hiddenClass = isError ? 'success' : 'error';
+
+    if (!formResultBlock.classList.contains(addClass)) {
+        formResultBlock.classList.add(addClass);
+    }
+
+    if (!formResultBlock.classList.contains(hiddenClass)) {
+        formResultBlock.classList.remove(hiddenClass);
+    }
+
+    formResultBlock.innerText = msg
+};
+
+
+/**
+ * Обработчик события клика по кнопке отправить форму
+ */
+btnSbm.addEventListener('click', e => {
+    const pathToSend = "/ajax/form-handler.php";
+    const requiredFields = [
+        document.querySelector('.form-modal__name'),
+        document.querySelector('.form-modal__phone'),
+    ];
+
+    e.preventDefault();
+
+    const [isFilledForm, emptyFields] = checkFormFields(requiredFields);
+
+    if (!isFilledForm) {
+        showFormErrors(formCalc, emptyFields);
+        return;
+    }
+
+    const optionsData = getOptionsData();
+
+    sendPostRequest(pathToSend, optionsData)
+        .then(responseServer => responseServer.text())
+        .then(
+            response => {
+                const {result, msg} = response;
+                const isSuccess = result === 'success';
+                showFormMessage(formCalc, msg, isSuccess);
+            }
+        )
+        .catch(error => {
+            console.error(error);
+            showFormMessage(formCalc, "Возникла ошибка при отправке данных");
+        });
+});

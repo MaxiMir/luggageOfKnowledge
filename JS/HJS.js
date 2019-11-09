@@ -11,8 +11,6 @@ repl.it
 */
 
 
-
-
 // <<<<< Cтроки >>>>>
 
 const longString = "This is a very long \
@@ -407,7 +405,7 @@ export function getThirdWeekday () {
 }
 export const fourthWeekday = 'Thursday';
 const getFifthWeekday = () => 'Friday';
-export default getFifthWeekday // export default () => 'Friday'
+export default getFifthWeekday; // export default () => 'Friday'
 /* две функции ниже не будут экспортированы */
 const firstWeekendDay = 'Saturday';
 const getLastWeekendDay = () => 'Sunday';
@@ -416,9 +414,11 @@ const getLastWeekendDay = () => 'Sunday';
 аналогичный альтернативный вариант экспорта заключается в том, что не надо помечать функции и
 переменныe ключевым словом 'export' ('default export'), вместо этого достаточно написать
 следующее выражение (сформировать объект для экспорта):
+*/
+
 export { getFirstWeekday, getSecondWeekday, getThirdWeekday, fourthWeekday, getFifthWeekday as default };
 
-
+/*
 Теперь рассмотрим несколько вариантов, как можно импортировать эти переменные и функции (далее для краткости - функции) в модуль acceptor.js:
 
 ---> Импортируем все функции из donor.js в виде объекта, которому необходимо дать произвольный (соответствующий общим правилам именования переменных) псевдоним. Обращаемся к импортированным функциям как к свойствам этого объекта:
@@ -436,6 +436,7 @@ console.log(someName);
   default: [Function: getFifthWeekday]
 }
 */
+
 someName.getFirstWeekday(); // 'Monday'
 someName.getThirdWeekday(); // 'Wednesday'
 someName.fourthWeekday; // 'Thursday'
@@ -455,6 +456,7 @@ getFirstWeekday(); // 'Monday'
 getThirdWeekday(); // 'Wednesday'
 fourthDay; // 'Thursday'
 fourthWeekday; // 'This is Thursday'
+
 
 /*
 Импортируем из модуля donor.js значение по умолчанию. Для этого достаточно просто указать после ключевого слова import произвольное (наиболее подходящее и удобное) имя. В таком случае по этому имени можно будет обращаться к значению по умолчанию из импортируемого модуля:
@@ -484,6 +486,7 @@ import { default as nameOfDefault, getFirstWeekday, getSecondWeekday } from './d
 nameOfDefault(); // 'Friday'
 getFirstWeekday(); // 'Monday'
 getSecondWeekday(); // 'Tuesday'
+
 
 
 
