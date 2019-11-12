@@ -1,42 +1,42 @@
 /**
-    * UI Frameworks:
-        - https://ant.disign <-
-        - https://material-ui.com
-        - https://blueprintjs.com
-        - https: semantic-ui.com
-        - SASS / styled-components
+ * UI Frameworks:
+ - https://ant.disign <-
+ - https://material-ui.com
+ - https://blueprintjs.com
+ - https: semantic-ui.com
+ - SASS / styled-components
 
-    * JS библиотеки
-        - Redux
-        - Redux-thunk
-        - Socket.io
-        - axios
-        - Lodash
-        - Formik
-        - React Route
-        - classnames
+ * JS библиотеки
+ - Redux
+ - Redux-thunk
+ - Socket.io
+ - axios
+ - Lodash
+ - Formik
+ - React Route
+ - classnames
 
-    * Server
-        - NodeJS (ExpressJS)
-        - MongoDB / Mongoose
-        - Multer (для загрузки файлов на сервер)
-        - PassportJS (организация авторизации, в тч через соц. сети)
+ * Server
+ - NodeJS (ExpressJS)
+ - MongoDB / Mongoose
+ - Multer (для загрузки файлов на сервер)
+ - PassportJS (организация авторизации, в тч через соц. сети)
 
 
 
-    $ create-react-app chat
-    $ yarn start
+ $ create-react-app chat
+ $ yarn start
 
-    Удаляем:
-    > FILE: /src/App.css
-    > FILE: /src/App.test.js
-    > FILE: /src/logo.svg
-    > FILE: /src/serviceWorker.js
+ Удаляем:
+ > FILE: /src/App.css
+ > FILE: /src/App.test.js
+ > FILE: /src/logo.svg
+ > FILE: /src/serviceWorker.js
 
-    $ yarn eject
+ $ yarn eject
 
-    Frontend https://github.com/Archakov06/react-chat-tutorial
-    Backend https://github.com/Archakov06/backend-chat-tutorial
+ Frontend https://github.com/Archakov06/react-chat-tutorial
+ Backend https://github.com/Archakov06/backend-chat-tutorial
  */
 
 
@@ -68,14 +68,20 @@ resolve: {
  */
 
 // FILE: /src/index.js:
-import React from "./React";
+import React from "react";
 import ReactDOM from "react-dom";
+import { BrowserRouter as Router } from "react-router-dom";
 
 import App from './App';
 
 import './styles/index.scss';
 
-ReactDOM.render(<App />, document.getElementById('root'));
+ReactDOM.render(
+    <Router>
+        <App/>
+    </Router>,
+    document.getElementById('root')
+);
 
 
 /*
@@ -101,17 +107,19 @@ ReactDOM.render(<App />, document.getElementById('root'));
 // FILE: /src/components/Button/index.js
 import React from "react";
 import PropTypes from "prop-types";
-import { Button as BaseButton} from "antd";
-import classNames from 'classnames';
+import { Button as BaseButton } from "antd";
+import classNames from "classnames";
 
-import './Button.scss';
+import "./Button.scss";
 
 const Button = props => (
-    <BaseButton {...props } className={classNames('button', props.className, {
-        "button--large": props.size === 'large'
-    })} />
+    <BaseButton
+        {...props}
+        className={classNames("button", props.className, {
+            "button--large": props.size === "large"
+        })}
+    />
 );
-
 
 Button.propTypes = {
     className: PropTypes.string
@@ -130,12 +138,8 @@ export default Button;
  */
 
 
-
-
 // FILE /src/components/index.js
-export { default as Button } from './Button';
-
-
+export {default as Button} from './Button';
 
 
 /*
@@ -153,14 +157,14 @@ import "./Block.scss";
 
 const Block = ({ children, className }) => (
     <div className={classNames('block', className)}>
-        { children }
+        {children}
     </div>
 );
 
 export default Block;
 
 
-// FILE FILE /src/components/Block/Block.scss
+// FILE /src/components/Block/Block.scss
 /*
     .block {
         padding: 45px;
@@ -178,13 +182,15 @@ export { default as Block } from './Block';
 
 // FILE: /src/App.js:
 import React, { Component } from "react";
+import { Route } from "react-router-dom";
+
 import { Auth } from "pages";
 
 class App extends Component {
     render() {
         return (
             <div className="wrapper">
-                <Auth />
+                <Auth/>
             </div>
         )
     }
@@ -207,92 +213,27 @@ export default App;
 
 
 // FILE /src/pages/index.js
-export { default as Auth } from './Auth';
+export { default as Auth } from "./Auth";
+export { default as Home } from "./Home";
+
 
 
 // FILE /src/pages/Auth/index.jsx
-import React from 'react';
-import { Form, Icon, Input, Checkbox } from 'antd';
-import { Button, Block } from "components";
+import React from "react";
+import { Route } from "react-router-dom";
+
+import { LoginForm, RegisterForm } from "modules";
 
 import "./Auth.scss";
 
-
-
-class Auth extends  React.Component {
-    handleSubmit = e => {
-        e.preventDefault();
-
-        this.props.form.validateFields((err, values) => {
-            if (!err) {
-                console.log('Received values of form: ', values);
-            }
-        });
-    };
-
-    render() {
-        const {getFieldDecorator} = this.props.form;
-
-        return (
-            <section className="auth">
-                <div className="auth__content">
-                    <div className="auth__content">
-                        <h2>Войти в аккаунт</h2>
-                        <p>Пожалуйста, войдите в свой аккаунт</p>
-                    </div>
-                    <Block>
-                        <Form onSubmit={this.handleSubmit} className="login-form">
-                            <Form.Item>
-                                {getFieldDecorator('username', {
-                                    rules: [{required: true, message: 'Please input your username!'}],
-                                })(
-                                    <Input
-                                        prefix={<Icon type="user" style={{color: 'rgba(0,0,0,.25)'}}/>}
-                                        placeholder="Username"
-                                        size="large"
-                                    />,
-                                )}
-                            </Form.Item>
-                            <Form.Item>
-                                {getFieldDecorator('password', {
-                                    rules: [{required: true, message: 'Please input your Password!'}],
-                                })(
-                                    <Input
-                                        prefix={<Icon type="lock" style={{color: 'rgba(0,0,0,.25)'}}/>}
-                                        type="password"
-                                        placeholder="Password"
-                                        size="large"
-                                    />,
-                                )}
-                            </Form.Item>
-                            <Form.Item>
-                                <Button
-                                    type="primary"
-                                    size="large"
-                                >
-                                    Войти в аккаунт
-                                </Button>
-                            </Form.Item>
-                            <a href="#" className="auth__register-link">
-                                Зарегистрироваться
-                            </a>
-                        </Form>
-                        );
-                    </Block>
-                </div>
-            </section>
-        );
-    }
-}
-
-
-const Auth = props => {
-
-
-
-}
-
-const WrappedNormalLoginForm = Form.create({ name: 'normal_login' })(Auth);
+const Auth = () => (
+    <section className="auth">
+        <div className="auth__content">
+            <Route exact path={["/", "/login"]} component={LoginForm} />
+            <Route exact path="/register" component={RegisterForm} />
+        </div>
+    </section>
+);
 
 export default Auth;
 
@@ -328,6 +269,25 @@ export default Auth;
             letter-spacing: 0.1px;
         }
 
+        &__success_block {
+            dispay: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            text-align: center;
+            height: 400px;
+            h3 {
+                margin-top: 10px;
+            }
+            p {
+                color: #adadad;
+            }
+            svg {
+                width: 48px;
+                height: 48px;
+            }
+        }
+
         .button {
             text-transform: uppercase;
             font-weight: 500;
@@ -352,3 +312,222 @@ export default Auth;
         color: #202020;
     }
 */
+
+/*
+    + FOLDER: /src/modules/
+        + FOLDER: /src/modules/LoginForm/
+            + FOLDER: /src/modules/LoginForm/containers/
+                + FILE: /src/modules/LoginForm/containers/LoginForm.js
+
+            + FOLDER: /src/modules/LoginForm/components/
+                + FILE: /src/modules/LoginForm/components/LoginForm.jsx
+
+            + FILE: /src/modules/LoginForm/index.js
+ */
+
+
+// FILE: /src/modules/LoginForm/index.js
+import LoginForm from "./containers/LoginForm";
+
+export default LoginForm;
+
+
+// FILE: /src/modules/LoginForm/components/LoginForm.jsx
+import React, {Component} from "react";
+import { Form, Icon, Input } from 'antd';
+import { Link } from "react-router-dom";
+
+import { Button, Block } from "components";
+
+export default class LoginForm extends Component {
+    render() {
+        return (
+            <div>
+                <div className="auth__content">
+                    <h2>Войти в аккаунт</h2>
+                    <p>Пожалуйста, войдите в свой аккаунт</p>
+                </div>
+                <Block>
+                    <Form onSubmit={this.handleSubmit} className="login-form">
+                        <Form.Item>
+                            <Input
+                                prefix={<Icon type="user" style={{color: 'rgba(0,0,0,.25)'}}/>}
+                                placeholder="Username"
+                                size="large"
+                            />
+                        </Form.Item>
+                        <Form.Item>
+                            <Input
+                                prefix={<Icon type="lock" style={{color: 'rgba(0,0,0,.25)'}}/>}
+                                type="password"
+                                placeholder="Password"
+                                size="large"
+                            />
+                        </Form.Item>
+                        <Form.Item>
+                            <Button
+                                type="primary"
+                                size="large"
+                            >
+                                Войти в аккаунт
+                            </Button>
+                        </Form.Item>
+                        <Link to="/register" className="auth__register-link">
+                            Зарегистрироваться
+                        </Link>
+                    </Form>
+                </Block>
+            </div>
+        )
+    }
+}
+
+export default LoginForm;
+
+
+// FILE: /src/modules/LoginForm/containers/LoginForm.js
+import LoginForm from "./components/LoginForm";
+
+export default LoginForm;
+
+
+
+/*
+    $ yarn add react-router
+    $ yarn add react-router-dom
+*/
+
+
+/*
+    + FILE: /src/modules/index.js
+*/
+
+// FILE: /src/modules/index.js
+export { default as LoginForm } from "./LoginForm";
+export { default as RegisterForm } from "./RegisterForm";
+
+
+/*
+    + FOLDER: /src/modules/RegisterForm/
+        + FOLDER: /src/modules/RegisterForm/containers/
+            + FILE: /src/modules/RegisterForm/containers/RegisterForm.js
+
+        + FOLDER: /src/modules/RegisterForm/components/
+            + FILE: /src/modules/RegisterForm/components/RegisterForm.jsx
+
+        + FILE: /src/modules/RegisterForm/index.js
+ */
+
+
+// FILE: /src/modules/RegisterForm/index.js
+import RegisterForm from "./containers/RegisterForm";
+
+export default RegisterForm;
+
+
+// FILE: /src/modules/RegisterForm/components/RegisterForm.jsx
+import React, {Component} from "react";
+import { Form, Icon, Input } from 'antd';
+import { Link } from "react-router-dom";
+
+import { Button, Block } from "components";
+
+export default class RegisterForm extends Component {
+    render() {
+        const success = false;
+
+        return (
+            <div>
+                <div className="auth__content">
+                    <h2>Регистрация</h2>
+                    <p>Для входа в чат, Вам нужно зарегистрироваться</p>
+                </div>
+                <Block>
+                    { success
+                        ?
+                        <div className="auth_success-block">
+                            <div>
+                                <Icon type="info-circle" theme="twoTone" />
+                            </div>
+                            <h2>Подтвердите свой аккаунт</h2>
+                            <p>На Вашу почту отправлено письмо с ссылкой на подтверждение аккаунта.</p>
+                        </div>
+                        :
+                        <Form onSubmit={this.handleSubmit} className="login-form">
+                            <Form.Item>
+                                <Input
+                                    prefix={<Icon type="mail" style={{color: 'rgba(0,0,0,.25)'}}/>}
+                                    placeholder="E-mail"
+                                    size="large"
+                                />
+                            </Form.Item>
+                            <Form.Item>
+                                <Input
+                                    prefix={<Icon type="user" style={{color: 'rgba(0,0,0,.25)'}}/>}
+                                    type="password"
+                                    placeholder="Ваше имя"
+                                    size="large"
+                                />
+                            </Form.Item>
+                            <Form.Item>
+                                <Input
+                                    prefix={<Icon type="lock" style={{color: 'rgba(0,0,0,.25)'}}/>}
+                                    type="password"
+                                    placeholder="Ваш пароль"
+                                    size="large"
+                                />
+                            </Form.Item>                        <Form.Item>
+                            <Input
+                                prefix={<Icon type="lock" style={{color: 'rgba(0,0,0,.25)'}}/>}
+                                type="password"
+                                placeholder="Повторите пароль"
+                                size="large"
+                            />
+                        </Form.Item>
+                            <Form.Item>
+                                <Button
+                                    type="primary"
+                                    size="large"
+                                >
+                                    Зарегистрироваться
+                                </Button>
+                            </Form.Item>
+                            <Link to="/login" className="auth__register-link">
+                                Войти в аккаунт
+                            </Link>
+                        </Form>
+                    }
+                </Block>
+            </div>
+        )
+    }
+}
+
+export default RegisterForm;
+
+
+// FILE: /src/modules/RegisterForm/containers/RegisterForm.js
+
+
+
+/*
+    + FILE /src/pages/Home/index.jsx
+    + FILE /src/pages/Home/Home.scss
+ */
+
+
+// FILE /src/pages/Home/index.jsx
+import React from "react";
+import { Route } from "react-router-dom";
+
+import "./Home.scss";
+
+const Home = () => (
+  <section className="home">
+      <h1>Hellp</h1>
+  </section>
+);
+
+export default Home;
+
+// 15:15
