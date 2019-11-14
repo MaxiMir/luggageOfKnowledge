@@ -1816,7 +1816,7 @@ const students = {
 // convert to array in order to make use of .filter() function:
 const overTwentyOne = Object.entries(students).filter(([name, age]) => {
     return age >= 21
-}) 
+});
 // => [ [ 'beatrice', 22 ], [ 'eloise', 21 ] ]
   
 

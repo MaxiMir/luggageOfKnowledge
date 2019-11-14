@@ -442,20 +442,19 @@ window.addEventListener('load', () => {
      * Получаем заполненные опции
      */
     const getOptionsData = () => {
-        const optionsData = {};
         const optionsBlocks = document.querySelectorAll('.modal__option');
 
-        optionsBlocks.forEach(optionBlock => {
+        return [...optionsBlocks].reduce((acc, optionBlock) => {
             const [optionNameBlock, optionValueBlock] = optionBlock.children;
             const name = optionNameBlock.innerText;
             const value = optionValueBlock.innerText;
 
             if (name && value) {
-                optionsData[name] = value;
+                acc[name] = value;
             }
-        });
 
-        return optionsData;
+            return acc;
+        }, {});
     };
 
 
@@ -480,16 +479,11 @@ window.addEventListener('load', () => {
      * @param requiredFields
      */
     const checkFormFields = requiredFields => {
-        const emptyFields = [];
-
-        for (let requiredField of requiredFields) {
-            if (!requiredField.value.trim()) {
-                emptyFields.push(requiredField);
-            }
-        }
+        const emptyFields = requiredFields.filter(field => field.value.trim());
+        const isFilledForm = emptyFields.length === 0;
 
         return [
-            emptyFields.length === 0,
+            isFilledForm,
             emptyFields
         ];
     };
