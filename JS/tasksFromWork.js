@@ -433,10 +433,131 @@ formForumResponse.on('submit', () => {
 
 
 // #@ Набросок логики для формы: @# */
+
+class FormHandler {
+    classError = 'error';
+    classSuccess = 'success';
+    pathToSend = "/ajax/form-handler.php";
+    isFilledForm = false;
+    postData = {};
+
+    constructor(form, {postData} = {}) {
+        this.form = form;
+
+        if (postData) {
+            this.postData = postData;
+        }
+
+        this.form.addEventListener("submit", this.formSubmitHandler)
+    }
+
+
+    /**
+     * Возвращает {
+     *  empty [селекторы пустых полей]
+     *  completed [селекторы заполненных полей]
+     * }
+     */
+    checkFields() {
+        const requiredFields = this.form.querySelectorAll(".element--required");
+
+        if (!requiredFields) {
+            console.error("Обязательные поля не найдены");
+            return false;
+        }
+
+        return [...requiredFields].reduce((acc, field) => {
+            const key = !field.value.trim() ? "emptyFields" : "completedFields";
+            acc[key].push(field);
+
+            return acc;
+        }, {emptyFields: [], completedFields: []});
+    };
+
+
+    /**
+     * Добавляет класс ошибки или успеха для обязательных полей формы
+     */
+    showFilingResult() {
+        const {emptyFields, completedFields} = this.checkFields();
+
+        if (!emptyFields.length) {
+            this.isFilledForm = true;
+        }
+
+        for (let emptyField of emptyFields) {
+            const parentBlock = emptyField.parentNode;
+
+            parentBlock.classList.add(this.classError);
+            parentBlock.classList.remove(this.classSuccess);
+        }
+
+        for (let completedField of completedFields) {
+            const parentBlock = completedField.parentNode;
+
+            parentBlock.classList.add(this.classSuccess);
+            parentBlock.classList.remove(this.classError);
+        }
+    }
+
+
+    /**
+     * Показывает сообщение в форме + добавляет класс ошибки или успеха
+     * @param msg
+     * @param isError
+     */
+    showFormMessage(msg, isError = true) {
+        const formResultBlock = this.form.querySelector('.result-data');
+
+        if (!formResultBlock) {
+            console.error("Блок для результатов не найден");
+            return false;
+        }
+
+        const addClass = isError ? this.classError : this.classSuccess;
+        const hiddenClass = isError ? this.classSuccess : this.classError;
+
+        formResultBlock.classList.add(addClass);
+        formResultBlock.classList.remove(hiddenClass);
+
+        formResultBlock.innerText = msg
+    }
+
+
+    /**
+     * Обработчик события клика по кнопке отправить форму
+     */
+    formSubmitHandler(e) {
+        e.preventDefault();
+
+        this.showFilingResult();
+
+        if (!this.isFilledForm) {
+            return;
+        }
+
+        const formData = new FormData(this.form);
+        const postData = {...this.postData,...formData};
+
+        sendPostRequest(this.pathToSend, postData)
+            .then(responseServer => responseServer.text())
+            .then(
+                response => {
+                    const {result, msg} = response;
+                    const isSuccess = result === 'success';
+                    this.showFormMessage(msg, isSuccess);
+                }
+            )
+            .catch(error => {
+                console.error(error);
+                this.showFormMessage(formCalc, "Возникла ошибка при отправке данных");
+            });
+    }
+}
+
+
 window.addEventListener('load', () => {
     const formCalc = document.querySelector('.modal-request');
-    const btnSbm = formCalc.querySelector('.form-modal__submit');
-
 
     /**
      * Получаем заполненные опции
@@ -470,95 +591,7 @@ window.addEventListener('load', () => {
         });
     };
 
-
-    /**
-     * Возвращает [
-     *  количество пустых полей,
-     *  массив с пустыми полями
-     * ]
-     * @param requiredFields
-     */
-    const checkFormFields = requiredFields => {
-        const emptyFields = requiredFields.filter(field => field.value.trim());
-        const isFilledForm = emptyFields.length === 0;
-
-        return [
-            isFilledForm,
-            emptyFields
-        ];
-    };
-
-
-    /**
-     * Отображает ошибки у незаполненных полей
-     * @param form
-     * @param errorFields
-     */
-    const showFormErrors = (form, errorFields) => {
-        for (let errorField of errorFields) {
-            errorField.classList.add('error');
-        }
-
-        showFormMessage(form, 'Не заполнены обязательные поля. Помеченные *');
-    };
-
-
-    /**
-     * Показывает сообщения у формы
-     * @param form
-     * @param msg
-     * @param isError
-     */
-    const showFormMessage = (form, msg, isError = true) => {
-        const formResultBlock = form.querySelector('.result-data');
-        const addClass = isError ? 'error' : 'success';
-        const hiddenClass = isError ? 'success' : 'error';
-
-        if (!formResultBlock.classList.contains(addClass)) {
-            formResultBlock.classList.add(addClass);
-        }
-
-        if (!formResultBlock.classList.contains(hiddenClass)) {
-            formResultBlock.classList.remove(hiddenClass);
-        }
-
-        formResultBlock.innerText = msg
-    };
-
-
-    /**
-     * Обработчик события клика по кнопке отправить форму
-     */
-    btnSbm.addEventListener('click', e => {
-        const pathToSend = "/ajax/form-handler.php";
-        const requiredFields = [
-            document.querySelector('.form-modal__name'),
-            document.querySelector('.form-modal__phone'),
-        ];
-
-        e.preventDefault();
-
-        const [isFilledForm, emptyFields] = checkFormFields(requiredFields);
-
-        if (!isFilledForm) {
-            showFormErrors(formCalc, emptyFields);
-            return;
-        }
-
-        const optionsData = getOptionsData();
-
-        sendPostRequest(pathToSend, optionsData)
-            .then(responseServer => responseServer.text())
-            .then(
-                response => {
-                    const {result, msg} = response;
-                    const isSuccess = result === 'success';
-                    showFormMessage(formCalc, msg, isSuccess);
-                }
-            )
-            .catch(error => {
-                console.error(error);
-                showFormMessage(formCalc, "Возникла ошибка при отправке данных");
-            });
-    });
+    const postData = getOptionsData();
+    const formHandler = new FormHandler(formCalc, {postData});
 });
+

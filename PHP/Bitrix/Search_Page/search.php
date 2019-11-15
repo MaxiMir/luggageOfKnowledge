@@ -1,5 +1,6 @@
+
 <?
-	 require_once "search-engine.php";
+	 require_once "search_engine.php";
 ?>
 
 <div class="site-main">
@@ -45,19 +46,24 @@
 												<form action="">
 													 <div class="filter-unit">
 														  <div class="title active">Бренд</div>
-														  <div class="content">
-																
+														  <div class="content filter-content">
+																<div id="filterCounter" class="filter-counter">
+																	 Показать: <b id="filterCounterCount">0</b>
+																	 <b id="filterCounterText">товаров</b>
+																</div>
+																<? $brandIndex = 0; ?>
 																<? foreach ($brandsData as $brandID => ["NAME" => $brandName, "COUNT" => $productCount]): ?>
-																	 <? $attrChecked = !in_array($brandID,
-																		 $filterBrandIDs) ? "" : " checked" ?>
+																	 <? $attrChecked = !in_array($brandID, $filterBrandIDs) ? "" : " checked" ?>
 																	 <div class="checkbox-groupe">
 																		  <input
 																			  type="checkbox"
 																			  id="filter-brand-<?= $brandID ?>"
+																			  class="filter-content__input"
 																			  name="PROPERTY[BRAND][]"
 																			  value="<?= $brandID ?>"
-																			  data-brandcount="<?= $productCount ?>"
+																			  data-count="<?= $productCount ?>"
 																			  <?= $attrChecked ?>
+																			  data-index="<?= $brandIndex++ ?>"
 																		  >
 																		  <label for="filter-brand-<?= $brandID ?>">
 																				<?= $brandName ?>
@@ -304,3 +310,112 @@
 		  </div>
 	 </div>
 </div>
+
+
+<script>
+    window.addEventListener('load', () => {
+        const filterBrandInputs = document.querySelectorAll('.filter-content__input');
+        const filterCounter = document.getElementById('filterCounter');
+        const filterCounterCount = document.getElementById('filterCounterCount');
+        const filterCounterText = document.getElementById('filterCounterText');
+
+
+        /**
+         * Возвращает склонененное слово для цифры
+         * @param num
+         * @param textOptions
+         * @returns {boolean|*}
+         */
+        const wordNumDeclension = (num, textOptions) => {
+            if (textOptions.length !== 3) {
+                return false;
+            }
+
+            const restFrom100 = Math.abs(num) % 100;
+
+            if (restFrom100 > 10 && restFrom100 < 20)
+                return textOptions[2];
+
+            const restFrom10 = num % 10;
+
+            if (restFrom10 > 1 && restFrom10 < 5)
+                return textOptions[1];
+
+            if (restFrom10 == 1)
+                return textOptions[0];
+
+            return textOptions[2];
+        };
+
+        /**
+         * Возвращает количество отмеченных товаров в фильтре
+         */
+        const getFilterProdCount = () => {
+            return +filterCounterCount.innerText;
+        };
+
+        /**
+         * Показывает блок фильтра с количеством товаров c анимацией
+         */
+        const showFilterProdCount = (productNum, indexNum) => {
+            const upHeight = 50;
+
+            const currentCount = getFilterProdCount();
+            const newProductNum = productNum + currentCount;
+            const newText = wordNumDeclension(newProductNum, ['товар', 'товара', 'товаров']);
+
+            filterCounter.style.top = `${upHeight * indexNum + 20}px`;
+            filterCounterText.innerText = newText;
+            filterCounter.classList.add('active');
+
+            animateFilterProdCount(currentCount, newProductNum);
+        };
+
+        /**
+         * Скрывает блок фильтра с количеством товаров
+         */
+        const hideFilterProdCount = () => {
+            filterCounter.classList.remove('active');
+        };
+
+        /**
+         * Анимация увеличения/уменьшения цены
+         * @param oldProductNum
+         * @param newProductNum
+         */
+        const animateFilterProdCount = (oldProductNum, newProductNum) => {
+            const $filterCount = $("#filterCounterCount");
+
+            $({numberValue: oldProductNum}).animate(
+                {numberValue: newProductNum},
+                {
+                    duration: 500,
+                    easing: "linear",
+                    step: val => {
+                        $filterCount.html(Math.ceil(val));
+                    }
+                }
+            );
+        };
+
+
+        /**
+         * Обработчик события клика по input
+         * @param e
+         */
+        const inputBrandClickHandler = e => {
+            const input = e.currentTarget;
+            const {index, count} = input.dataset;
+            const indexNum = +index;
+            const productNum = +count;
+            const productNumWithSign = input.checked ? productNum : -productNum;
+            showFilterProdCount(productNumWithSign, indexNum);
+        };
+
+
+        // #@ Вешаем обработчик у input на клик:
+        for (let filterBrandInput of filterBrandInputs) {
+            filterBrandInput.addEventListener('click', inputBrandClickHandler)
+        }
+    });
+</script>

@@ -1,14 +1,15 @@
 <?
 	 
-	 use Bitrix\Main\{Application, Context, Loader};
+	 use \Bitrix\Main\{Application, Context, Loader};
 	 
 	 Loader::includeModule("iblock");
 	 Loader::includeModule("search");
 	 
-	 // #@ Параметры поиска
+	 
+	 // #@ Параметры:
 	 const START_SEARCH_PATH_URI = "/search/?";
-	 const CATALOG_I_BLOCK_ID = 28;
 	 const CATALOG_I_BLOCK = "iblock_1c_catalog";
+	 const CATALOG_I_BLOCK_ID = 28;
 	 const HL_FILTER_PROPS_ID = 80;
 	 const COMPONENT = "product";
 	 
@@ -32,7 +33,6 @@
 	 
 	 $productDBResult = getProductDBData($searchPhrase);
 	 [$allProductIDs, $sectionsData, $brandsData] = getPageData($productDBResult, $generateURIWithClosure);
-	 
 	 
 	 if ($allProductIDs) {
 		  $sortedSectionsData = sortSectionData($sectionsData, $searchPhrase);
@@ -64,10 +64,10 @@
 	  *   поисковая фраза
 	  *   номер страницы
 	  *   количество товаров на странице
-	  * 	название сортировки
+	  *   название сортировки
 	  *   данные по сортировке
-	  * 	ID фильтровых брендов
-	  * 	ID фильтрого раздела
+	  *   ID фильтровых брендов
+	  *   ID фильтрого раздела
 	  * ]
 	  */
 	 function getRequestPageData()
@@ -95,7 +95,7 @@
 	 /**
 	  * @return Closure [
 	  *   "add" - добавление Query Params в URI
-	  * 	по дефолту возвращает текущий URI
+	  *   по дефолту возвращает текущий URI
 	  * ]
 	  */
 	 function generateURI()
@@ -154,14 +154,14 @@
 	  */
 	 function getProductDBData($searchPhrase)
 	 {
+		  $selectedData = ["ID", "IBLOCK_SECTION_ID", "PROPERTY_CML2_MANUFACTURER"];
+		  
 		  $prodFilter = [
 			  "IBLOCK_ID" => CATALOG_I_BLOCK_ID,
 			  "NAME" => "%{$searchPhrase}%",
 			  "SECTION_ACTIVE" => "Y",
 			  "ACTIVE" => "Y"
 		  ];
-		  
-		  $selectedData = ["ID", "IBLOCK_SECTION_ID", "PROPERTY_CML2_MANUFACTURER"];
 		  
 		  return CIBlockElement::getList([], $prodFilter, false, false, $selectedData);
 	 }
@@ -221,7 +221,7 @@
 	 
 	 /**
 	  * @param $filterBrandIDs
-	  * @return mixed - символный код свойства фильтра
+	  * @return mixed - символный код свойства фильтра из HL блока
 	  */
 	 function getFilterPropSymbolCode($filterBrandIDs)
 	 {
