@@ -2529,6 +2529,88 @@
 				$this->assertEquals($name, $course->getName());
 		  }
 	 }
+	
+	
+	 /**@@
+	  В JavaScript, вместо ассоциативного массива, используется встроенный тип данных объект.
+	  Объекты поддерживают одновременно два способа обращения к ним: через точку (аналог -> в PHP) и через [], как в обычных массивах.
+	  В PHP тоже самое можно эмулировать через объект, который реализует интерфейс ArrayAccess https://www.php.net/manual/ru/class.arrayaccess.php.
+	  Кроме этого интерфейса, нужно реализовать магические методы __get и __set, которые дают обращаться к свойствам даже без их явного описания.
+	  */
+	 $items = [
+		 'key' => 'value',
+		 'key2' => [
+			 'key3' => 'value3'
+		 ]
+	 ];
+	 $obj = new Obj($items);
+	 $obj->key; // 'value'
+	 $obj->key2->key3; // 'value3'
+	 $obj['key']; // 'value'
+	 $obj['key2']['key3']; // 'value3'
+	
+	 $obj['undefinedKey']; // null
+	 $obj->undefinedKey; // null
+	 
+	 // Напишите класс Obj, который предоставляет к массиву (и всем вложенным массивам) объектный доступ. Класс должен реализовывать два интерфейса: App\ObjInterface и ArrayAccess.
+	 
+	 namespace App;
+	
+	 class Obj implements \ArrayAccess, ObjInterface
+	 {
+		  private $data = [];
+		 
+		  public function __construct(array $data)
+		  {
+				$this->data = $data;
+		  }
+		 
+		  public function __get($key)
+		  {
+				$result = $this->data[$key] ?? null;
+				
+				if (!is_array($result)) {
+					 return $result;
+				}
+				
+				$this->data[$key] = new self($result);
+				
+				return $this->data[$key];
+		  }
+		 
+		  public function __set($key, $value)
+		  {
+				$this->data[$key] = $value;
+		  }
+		  
+		  // Присваивает значение заданному смещению:
+		  public function offsetSet($offset, $value)
+		  {
+				if (is_null($offset)) {
+					 $this->data[] = $value;
+				} else {
+					 $this->data[$offset] = $value;
+				}
+		  }
+		  
+		  // Определяет, существует ли заданное смещение (ключ):
+		  public function offsetExists($offset)
+		  {
+				return isset($this->data[$offset]);
+		  }
+
+		  // Удаляет смещение:
+		  public function offsetUnset($offset)
+		  {
+				unset($this->data[$offset]);
+		  }
+		 
+		  // Возвращает заданное смещение (ключ):
+		  public function offsetGet($offset)
+		  {
+				return $this->data[$offset] ?? null;
+		  }
+	 }
 	 
 	 
 	 

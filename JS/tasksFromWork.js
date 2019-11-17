@@ -539,7 +539,7 @@ class FormHandler {
         const formData = new FormData(this.form);
         const postData = {...this.postData,...formData};
 
-        sendPostRequest(this.pathToSend, postData)
+        fetch(this.pathToSend, { method: "POST", body: postData })
             .then(responseServer => responseServer.text())
             .then(
                 response => {
@@ -550,7 +550,7 @@ class FormHandler {
             )
             .catch(error => {
                 console.error(error);
-                this.showFormMessage(formCalc, "Возникла ошибка при отправке данных");
+                this.showFormMessage(this.form, "Возникла ошибка при отправке данных");
             });
     }
 }
@@ -576,19 +576,6 @@ window.addEventListener('load', () => {
 
             return acc;
         }, {});
-    };
-
-
-    /**
-     * Посылает POST запрос с данными
-     * @param urn
-     * @param data
-     */
-    const sendPostRequest = (urn, data) => {
-        return fetch(urn, {
-            method: 'POST',
-            body: data
-        });
     };
 
     const postData = getOptionsData();
