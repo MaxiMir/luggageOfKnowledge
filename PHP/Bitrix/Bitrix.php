@@ -3328,9 +3328,9 @@
                 }
 
                 responseBlock
-                    .empty()
+                    .hide()
                     .removeClass('active')
-                    .hide();
+						  .empty();
             }
         };
     }

@@ -1,4 +1,3 @@
-
 <?
 	 require_once "search_engine.php";
 ?>
@@ -24,7 +23,7 @@
 																	 [
 																		 "NAME" => $sectionName,
 																		 "URN" => $sectionURN,
-																		 "PRODUCTS_COUNT" => $prodCount
+																		 "COUNT" => $prodCount
 																	 ] = $sectionData;
 																	 
 																	 $activeClass = $sectionID !== $filterCategoryID ? "" : " active-block";
@@ -43,12 +42,12 @@
 										  <? endif; ?>
 										  <? #@ БОКОВОЕ МЕНЮ БРЕНДЫ: @# ?>
 										  <? if ($brandsData): ?>
-												<form action="">
+												<form action="" id="brandFilter" class="brand-filter">
 													 <div class="filter-unit">
 														  <div class="title active">Бренд</div>
 														  <div class="content filter-content">
 																<div id="filterCounter" class="filter-counter">
-																	 Показать: <b id="filterCounterCount">0</b>
+																	 Показать: <b id="filterCounterCount"><?= $countBrandProducts ?></b>
 																	 <b id="filterCounterText">товаров</b>
 																</div>
 																<? $brandIndex = 0; ?>
@@ -57,25 +56,23 @@
 																	 <div class="checkbox-groupe">
 																		  <input
 																			  type="checkbox"
-																			  id="filter-brand-<?= $brandID ?>"
-																			  class="filter-content__input"
-																			  name="PROPERTY[BRAND][]"
+																			  class="brand-filter__input"
+																			  name="PROPERTY[CML2_MANUFACTURER][]"
 																			  value="<?= $brandID ?>"
 																			  data-count="<?= $productCount ?>"
 																			  <?= $attrChecked ?>
 																			  data-index="<?= $brandIndex++ ?>"
+																			  id="filter-brand-<?= $brandID ?>"
 																		  >
 																		  <label for="filter-brand-<?= $brandID ?>">
 																				<?= $brandName ?>
-																				(<?= $productCount ?>)
 																		  </label>
 																	 </div>
 																<? endforeach; ?>
 														  
 														  </div>
 													 </div>
-													 <input type="submit" value="Применить фильтры" name="SEND">
-													 <input type="hidden" name="SECTION_ID" value="1395">
+													 <input type="submit" id="brandFilterSbmBtn" value="Применить фильтры" data-urn="<?=$urnWithoutBrand ?>" name="SEND">
 												</form>
 										  <? endif; ?>
 									 </div>
@@ -91,7 +88,6 @@
 													 <input type="hidden" name="q" value="<?= $searchPhrase ?>"/>
 													 
 													 <? if ($filterBrandIDs): ?>
-														  <? var_dump($filterBrandIDs); ?>
 														  <input type="hidden" name="BRAND" value="<?= implode("-", $filterBrandIDs) ?>"/>
 													 <? endif; ?>
 													 
@@ -314,11 +310,11 @@
 
 <script>
     window.addEventListener('load', () => {
-        const filterBrandInputs = document.querySelectorAll('.filter-content__input');
+        const filterBrandInputs = document.querySelectorAll('.brand-filter__input');
         const filterCounter = document.getElementById('filterCounter');
         const filterCounterCount = document.getElementById('filterCounterCount');
         const filterCounterText = document.getElementById('filterCounterText');
-
+        const filterSbmBtn = document.getElementById('brandFilterSbmBtn');
 
         /**
          * Возвращает склонененное слово для цифры
@@ -341,7 +337,7 @@
             if (restFrom10 > 1 && restFrom10 < 5)
                 return textOptions[1];
 
-            if (restFrom10 == 1)
+            if (restFrom10 === 1)
                 return textOptions[0];
 
             return textOptions[2];
@@ -400,6 +396,19 @@
 
 
         /**
+         * Вовзращает массив с отмеченными ID брендов
+         */
+        const getCheckedBrandIDs = () => {
+            return [...filterBrandInputs]
+                .filter(input => input.checked)
+                .reduce((acc, input) => {
+                    acc.push(input.value);
+                    return acc;
+                }, []);
+        };
+
+
+        /**
          * Обработчик события клика по input
          * @param e
          */
@@ -413,9 +422,34 @@
         };
 
 
-        // #@ Вешаем обработчик у input на клик:
+        /**
+         * Обработчик события клика по "применить фильтры"
+         * @param e
+         */
+        const formBrandSubmitHandler = e => {
+            let brandURNPart = "";
+            const btnSmb = e.currentTarget;
+            e.preventDefault();
+
+            const urn = btnSmb.dataset.urn;
+            const brandsIDs = getCheckedBrandIDs();
+
+            if (brandsIDs) {
+                brandURNPart = `&BRAND=${brandsIDs.join('-')}`;
+            }
+
+            document.location.href = `${urn}${brandURNPart}`;
+        };
+
+
         for (let filterBrandInput of filterBrandInputs) {
             filterBrandInput.addEventListener('click', inputBrandClickHandler)
         }
+
+        filterSbmBtn.addEventListener('click', formBrandSubmitHandler);
+
+
+        /* СТАРОЕ */
+        $('footer').addClass('footer-transparent');
     });
 </script>

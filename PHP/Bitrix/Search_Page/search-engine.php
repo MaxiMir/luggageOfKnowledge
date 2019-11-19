@@ -17,8 +17,10 @@
 	 $productFilterData = [];
 	 
 	 
-	 $generateURIWithClosure = generateURI();
-	 $requestPageData = getRequestPageData();
+	 $request = getRequest();
+	 $generateURNWithClosure = generateURN($request);
+	 $urnWithoutBrand = $generateURNWithClosure(["BRAND"], "delete");
+	 $requestPageData = getRequestPageData($request);
 	 
 	 [
 		 "searchPhrase" => $searchPhrase,
@@ -32,18 +34,70 @@
 	 
 	 
 	 $productDBResult = getProductDBData($searchPhrase);
-	 [$allProductIDs, $sectionsData, $brandsData] = getPageData($productDBResult, $generateURIWithClosure);
+	 [$allProductIDs, $sectionsData, $brandsData] = getPageData($productDBResult, $generateURNWithClosure);
+	 
+	 $sectionsDataWithNames = addSectionNames($sectionsData);
+	 $brandsDataWithSymbolCode = addBrandsSymbolCode($brandsData);
+	 $countBrandProducts = getBrandProductCount($filterBrandIDs, $brandsDataWithSymbolCode);
 	 
 	 if ($allProductIDs) {
-		  $sortedSectionsData = sortSectionData($sectionsData, $searchPhrase);
-		  $productFilterData = getFilteredProductIDs($allProductIDs, $brandsData, $requestPageData);
+		  $sortedSectionsData = sortSectionData($sectionsDataWithNames, $searchPhrase);
+		  $productFilterData = getFilteredProductIDs($allProductIDs, $brandsDataWithSymbolCode, $requestPageData);
 	 }
+	 
+	 
+	 
+	 
+	 /**
+	  * @return mixed возвращает текущий Request
+	  */
+	 function getRequest(): Bitrix\Main\HttpRequest
+	 {
+		  return $request = Context::getCurrent()->getRequest();
+	 }
+	 
+	 
+	 /**
+	  * @param $request
+	  * @return Closure [
+	  *   "add" - добавление в URN
+	  *   "remove" - удаление из URN
+	  *   по дефолту возвращает текущий URN
+	  * ]
+	  */
+	 function generateURN(Bitrix\Main\HttpRequest $request): closure
+	 {
+		  $queryData = $request->getQueryList()->toArray();
+		  
+		  $buildURN = function ($queryData) {
+				return array_reduce(array_keys($queryData), function ($acc, $keyData) use ($queryData) {
+					 $valueData = $queryData[$keyData];
+					 $value = !is_array($valueData) ? $valueData : implode('-', $valueData);
+					 
+					 return "{$acc}&{$keyData}={$value}";
+				}, START_SEARCH_PATH_URI);
+		  };
+		  
+		  return function (array $data = [], $fnName = null) use ($queryData, $buildURN) {
+				switch ($fnName) {
+					 case "add":
+						  $newQueryData = array_merge($queryData, $data);
+						  return $buildURN($newQueryData);
+					 case "delete":
+						  $newQueryData = array_diff_key($queryData, array_flip($data));
+						  return $buildURN($newQueryData);
+					 default:
+						  return $buildURN($queryData);
+				}
+		  };
+	 }
+	 
 	 
 	 /**
 	  * @param $requestSort
 	  * @return array массив данных для сортировки товаров
 	  */
-	 function getProductSortArr($requestSort)
+	 function getProductSortArr($requestSort): array
 	 {
 		  $sortArr = ["SORT" => "ASC"];
 		  
@@ -60,6 +114,7 @@
 	 
 	 
 	 /**
+	  * @param $request
 	  * @return array [
 	  *   поисковая фраза
 	  *   номер страницы
@@ -70,10 +125,8 @@
 	  *   ID фильтрого раздела
 	  * ]
 	  */
-	 function getRequestPageData()
+	 function getRequestPageData(Bitrix\Main\HttpRequest $request): array
 	 {
-		  $request = Context::getCurrent()->getRequest();
-		  
 		  $searchPhrase = $request["q"];
 		  $pageNum = $request["PAGEN_1"] ?? 1;
 		  $viewProductNum = $request["VIEW"] ?? 12;
@@ -93,66 +146,10 @@
 	 
 	 
 	 /**
-	  * @return Closure [
-	  *   "add" - добавление Query Params в URI
-	  *   по дефолту возвращает текущий URI
-	  * ]
-	  */
-	 function generateURI()
-	 {
-		  $request = Context::getCurrent()->getRequest();
-		  $queryData = $request->getQueryList()->toArray();
-		  
-		  $buildURN = function ($queryData) {
-				return array_reduce(array_keys($queryData), function ($acc, $keyData) use ($queryData) {
-					 $valueData = $queryData[$keyData];
-					 $value = !is_array($valueData) ? $valueData : implode('-', $valueData);
-					 
-					 return "{$acc}&{$keyData}={$value}";
-				}, START_SEARCH_PATH_URI);
-		  };
-		  
-		  return function ($data = [], $fn = null) use ($queryData, $buildURN) {
-				switch ($fn) {
-					 case "add":
-						  $newQueryData = array_merge($queryData, $data);
-						  return $buildURN($newQueryData);
-					 default:
-						  return $buildURN($queryData);
-				}
-		  };
-	 }
-	 
-	 
-	 /**
-	  * @param $searchPhrase
-	  * @return array - массив найденных ID
-	  */
-	 function searchItems($searchPhrase)
-	 {
-		  $foundItems = [];
-		  
-		  $obSearch = new \CSearch();
-		  $obSearch->Search([
-			  "QUERY" => $searchPhrase,
-			  "SITE_ID" => LANG,
-			  "PARAM2" => CATALOG_I_BLOCK_ID,
-			  "MODULE_ID" => "iblock",
-		  ]);
-		  
-		  while (["ITEM_ID" => $id] = $obSearch->GetNext()) {
-				$foundItems[] = $id;
-		  }
-		  
-		  return $foundItems;
-	 }
-	 
-	 
-	 /**
 	  * @param $searchPhrase
 	  * @return mixed - CDBResult c товарами по поисковой фразе
 	  */
-	 function getProductDBData($searchPhrase)
+	 function getProductDBData(string $searchPhrase): CIBlockResult
 	 {
 		  $selectedData = ["ID", "IBLOCK_SECTION_ID", "PROPERTY_CML2_MANUFACTURER"];
 		  
@@ -168,13 +165,149 @@
 	 
 	 
 	 /**
+	  * @param $productDBResult
+	  * @param $generateURNWithClosure
+	  * @return array - [
+	  *   [ID товаров]
+	  *   [ID раздела => [
+	  *       URN => поисковый URN раздела,
+	  *       COUNT => количество найденных товаров
+	  *   ]],
+	  *   [ID бренда => [
+	  *       NAME => название бренда,
+	  *       COUNT => количество найденных товаров
+	  *    ]]
+	  * ]
+	  */
+	 function getPageData(CIBlockResult $productDBResult, closure $generateURNWithClosure): array
+	 {
+		  $allProductIDs = [];
+		  $sectionsData = [];
+		  $brandsData = [];
+		  
+		  if (!$productDBResult || !$productDBResult->SelectedRowsCount()) {
+				return [$allProductIDs, $sectionsData, $brandsData];
+		  }
+		  
+		  while ($arItem = $productDBResult->Fetch()) {
+				[
+					"ID" => $prodID,
+					"IBLOCK_SECTION_ID" => $sectionID,
+					"PROPERTY_CML2_MANUFACTURER_VALUE" => $brandName,
+					"PROPERTY_CML2_MANUFACTURER_ENUM_ID" => $brandID
+				] = $arItem;
+				
+				# данные по товарам:
+				$allProductIDs[] = $prodID;
+				
+				# данные по разделам:
+				if (!array_key_exists($sectionID, $sectionsData)) {
+					 $sectionSearchURN = $generateURNWithClosure(["CATEGORY" => $sectionID], "add");
+					 
+					 $sectionsData[$sectionID] = [
+						 "URN" => $sectionSearchURN,
+						 "COUNT" => 0,
+					 ];
+				}
+				
+				$sectionsData[$sectionID]["COUNT"]++;
+				
+				if (!$brandID || !$brandName) {
+					 continue;
+				}
+				
+				# данные по брендам:
+				if (!array_key_exists($brandID, $brandsData)) {
+					 $brandsData[$brandID] = ["NAME" => $brandName, "COUNT" => 0];
+				}
+				
+				$brandsData[$brandID]["COUNT"]++;
+		  }
+		  
+		  return [$allProductIDs, $sectionsData, $brandsData];
+	 }
+	 
+	 
+	 /**
+	  * @param $sectionsData
+	  * @return mixed - добаляет ключ NAME с названием раздела [
+	  *    ID раздела => [
+	  *       URN => поисковый URN раздела,
+	  *       COUNT - количество найденных товаров,
+	  *       NAME - название раздела
+	  *    ]
+	  * ]
+	  */
+	 function addSectionNames(array $sectionsData): array
+	 {
+		  $arSort = [];
+		  $arSelect = ["ID", "NAME"];
+		  $arFilter = ['IBLOCK_ID' => CATALOG_I_BLOCK_ID, "ID" => array_keys($sectionsData)];
+		  
+		  $dbResult = \CIBlockSection::GetList($arSort, $arFilter, false, $arSelect);
+		  
+		  while(["ID" => $id, "NAME" => $name] = $dbResult->Fetch()) {
+				$sectionsData[$id]["NAME"] = $name;
+		  }
+		  
+		  return $sectionsData;
+	 }
+	 
+	 
+	 /**
+	  * @param $brandsData
+	  * @return mixed добаляет ключ SYMBOL_CODE с кодом бренда [
+	  *    ID бренда => [
+	  *       NAME => название бренда
+	  *       COUNT => количество найденных товаров,
+	  *       SYMBOL_CODE => код свойства
+	  *    ]
+	  * ]
+	  */
+	 function addBrandsSymbolCode(array $brandsData): array
+	 {
+		  ["DATA" => $hlData, "TABLE" => $hlTable] = get_hlblock_data(HL_FILTER_PROPS_ID);
+		  
+		  $resultData = $hlData::getList([
+			  "order" => [],
+			  "filter" => ["UF_ID" => array_keys($brandsData)],
+			  "limit" => false,
+			  "select" => ["ID", "UF_CODE", "UF_ID"]
+		  ]);
+		  
+		  $resultDBData = new CDBResult($resultData, $hlTable);
+		  
+		  while (["UF_ID" => $brandID, "UF_CODE" => $symbolCode] = $resultDBData->Fetch()) {
+				$brandsData[$brandID]["SYMBOL_CODE"] = $symbolCode;
+		  }
+		  
+		  return $brandsData;
+	 }
+	 
+	 
+	 /**
+	  * @param $sectionsData
+	  * @param $searchPhrase
+	  * @return mixed - отсортированный по ключу NAME и $searchPhrase многомерный массив
+	  */
+	 function sortSectionData(array $sectionsData, string $searchPhrase): array
+	 {
+		  uasort($sectionsData, function ($first, $second) use ($searchPhrase) {
+				return !stristr($first['NAME'], $searchPhrase) && stristr($second['NAME'], $searchPhrase) ? 1 : -1;
+		  });
+		  
+		  return $sectionsData;
+	 }
+	 
+	 
+	 /**
 	  * @param $allProductIDs
 	  * @param $brandsData
 	  * @param $requestPageData
 	  * @param $withPagination
 	  * @return array - массив с отфильтрованными и отсортированными ID товаров
 	  */
-	 function getFilteredProductIDs($allProductIDs, $brandsData, $requestPageData, $withPagination = true)
+	 function getFilteredProductIDs(array $allProductIDs, array $brandsData, array $requestPageData, bool $withPagination = true): array
 	 {
 		  $filteredIDs = [];
 		  
@@ -221,115 +354,36 @@
 	 
 	 /**
 	  * @param $filterBrandIDs
-	  * @return mixed - символный код свойства фильтра из HL блока
+	  * @param $brandsDataWithSymbolCode
+	  * @return mixed - возвращает количество товаров отфильтрованных по бренду
 	  */
-	 function getFilterPropSymbolCode($filterBrandIDs)
+	 function getBrandProductCount(array $filterBrandIDs, array $brandsDataWithSymbolCode): int
 	 {
-		  ["DATA" => $hlData, "TABLE" => $hlTable] = get_hlblock_data(HL_FILTER_PROPS_ID);
+		  return array_reduce($filterBrandIDs, function ($acc, $brandID) use ($brandsDataWithSymbolCode) {
+				return $acc + $brandsDataWithSymbolCode[$brandID]["COUNT"];
+		  }, 0);
+	 }
+	 
+	 
+	 /**
+	  * @param $searchPhrase
+	  * @return array - массив найденных ID
+	  */
+	 function searchItems(string $searchPhrase): array
+	 {
+		  $foundItems = [];
 		  
-		  $resultData = $hlData::getList([
-			  "order" => [],
-			  "filter" => ["UF_ID" => $filterBrandIDs],
-			  "limit" => false,
-			  "select" => ["UF_CODE", "UF_ID"]
+		  $obSearch = new \CSearch();
+		  $obSearch->Search([
+			  "QUERY" => $searchPhrase,
+			  "SITE_ID" => LANG,
+			  "PARAM2" => CATALOG_I_BLOCK_ID,
+			  "MODULE_ID" => "iblock",
 		  ]);
 		  
-		  $resultDBData = new CDBResult($resultData, $hlTable);
-		  
-		  ["UF_CODE" => $symbolCode] = $resultDBData->Fetch();
-		  
-		  return $symbolCode;
-	 }
-	 
-	 
-	 /**
-	  * @param $productDBResult
-	  * @param $generateURIWithClosure
-	  * @return array [
-	  *   [ID товаров]
-	  *   [ID раздела => [название, URN, количество товаров]],
-	  *   [ID бренда => [название, количество товаров, символьный код]]
-	  * ]
-	  */
-	 function getPageData($productDBResult, $generateURIWithClosure)
-	 {
-		  $allProductIDs = [];
-		  $sectionsData = [];
-		  $brandsData = [];
-		  
-		  if (!$productDBResult || !$productDBResult->SelectedRowsCount()) {
-				return [$allProductIDs, $sectionsData, $brandsData];
+		  while (["ITEM_ID" => $id] = $obSearch->GetNext()) {
+				$foundItems[] = $id;
 		  }
 		  
-		  while ($arItem = $productDBResult->Fetch()) {
-				[
-					"ID" => $prodID,
-					"IBLOCK_SECTION_ID" => $sectionID,
-					"PROPERTY_CML2_MANUFACTURER_VALUE" => $brandName,
-					"PROPERTY_CML2_MANUFACTURER_ENUM_ID" => $brandID
-				] = $arItem;
-				
-				# данные по товарам:
-				$allProductIDs[] = $prodID;
-				
-				# данные по разделам:
-				if (!array_key_exists($sectionID, $sectionsData)) {
-					 ["NAME" => $sectionName] = getSectionByID($sectionID);
-					 $sectionSearchURN = $generateURIWithClosure(["CATEGORY" => $sectionID], "add");
-					 
-					 $sectionsData[$sectionID] = [
-						 "NAME" => $sectionName,
-						 "URN" => $sectionSearchURN,
-						 "PRODUCTS_COUNT" => 0,
-					 ];
-				}
-				
-				$sectionsData[$sectionID]["PRODUCTS_COUNT"]++;
-				
-				if (!$brandID || !$brandName) {
-					 continue;
-				}
-				
-				# данные по брендам:
-				if (!array_key_exists($brandID, $brandsData)) {
-					 $brandSymbolCode = getFilterPropSymbolCode($brandID);
-					 
-					 if (!$brandSymbolCode) {
-						  continue;
-					 }
-					 
-					 $brandsData[$brandID] = ["NAME" => $brandName, "COUNT" => 0, "SYMBOL_CODE" => $brandSymbolCode];
-				}
-				
-				$brandsData[$brandID]["COUNT"]++;
-		  }
-		  
-		  return [$allProductIDs, $sectionsData, $brandsData];
-	 }
-	 
-	 
-	 /**
-	  * @param $sectionID
-	  * @return mixed - Данные о разделе
-	  */
-	 function getSectionByID($sectionID)
-	 {
-		  $resDB = CIBlockSection::GetByID($sectionID);
-		  
-		  return $resDB->GetNext();
-	 }
-	 
-	 
-	 /**
-	  * @param $sectionsData
-	  * @param $searchPhrase
-	  * @return mixed - отсортированный по ключу NAME и $searchPhrase многомерный массив
-	  */
-	 function sortSectionData($sectionsData, $searchPhrase)
-	 {
-		  uasort($sectionsData, function ($first, $second) use ($searchPhrase) {
-				return !stristr($first['NAME'], $searchPhrase) && stristr($second['NAME'], $searchPhrase) ? 1 : -1;
-		  });
-		  
-		  return $sectionsData;
+		  return $foundItems;
 	 }
