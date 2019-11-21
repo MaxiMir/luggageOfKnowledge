@@ -1,5 +1,38 @@
 <?
 	 require_once "search_engine.php";
+	 
+	 $filteredProductID = [];
+	 $sortedSectionsData = [];
+	 $productFilterData = [];
+	 
+	 $request = getRequest();
+	 $generateURNWithClosure = generateURN($request);
+	 $urnWithoutBrand = $generateURNWithClosure(["BRAND"], "delete");
+	 $urnWithOnlySearch = $generateURNWithClosure(["BRAND", "CATEGORY", "PAGEN_2"], "delete");
+	 $requestPageData = getRequestPageData($request);
+	 
+	 [
+		 "searchPhrase" => $searchPhrase,
+		 "pageNum" => $pageNum,
+		 "viewProductNum" => $viewProductNum,
+		 "sortName" => $sortName,
+		 "sortData" => $sortData,
+		 "filterBrandIDs" => $filterBrandIDs,
+		 "filterCategoryID" => $filterCategoryID
+	 ] = $requestPageData;
+	 
+	 if ($searchPhrase) {
+		  $productDBResult = getProductDBData($requestPageData);
+		  [$productIDs, $sectionsData, $brandsData] = getPageData($productDBResult, $generateURNWithClosure);
+		  $sectionsDataWithNames = addSectionNames($sectionsData);
+		  $brandsDataWithSymbolCode = addBrandsSymbolCode($brandsData);
+		  $countBrandProducts = getBrandProductCount($filterBrandIDs, $brandsDataWithSymbolCode);
+		  $sortedSectionsData = sortSectionData($sectionsDataWithNames, $searchPhrase);
+		  $productIdOnCurrPage = getIDsForCurrPage($productIDs, $pageNum, $viewProductNum);
+		  $productCount = sizeof($productIDs);
+		  $isLessThanShown = $productCount <= $viewProductNum;
+		  $productCountOnPage = $pageNum * $viewProductNum;
+	 }
 ?>
 
 <div class="site-main">
@@ -8,12 +41,18 @@
 				<div class="search-results">
 					 <p class="search-results__title">Результаты поиска по запросу <b>"<?= $searchPhrase ?>"</b></p>
 					 
+					 <? if (!$productIDs): ?>
+						  <div class="search-results__top">Ничего не найдено. Возможно, вы допустили ошибку в
+								поисковом запросе или товар отсутствует у нас.
+						  </div>
+					 <? endif; ?>
+					 
 					 <div class="catalog-page">
 						  <div class="site-wrap">
 								<div class="middle-left">
 									 <div class="filters-block">
 										  <? #@ БОКОВОЕ МЕНЮ РАЗДЕЛЫ: @# ?>
-										  <? if ($sortedSectionsData): ?>
+										  <? if ($productIDs && $sortedSectionsData): ?>
 												<div class="filter-unit">
 													 <div class="title active">Категории</div>
 													 <div class="content">
@@ -41,18 +80,23 @@
 												</div>
 										  <? endif; ?>
 										  <? #@ БОКОВОЕ МЕНЮ БРЕНДЫ: @# ?>
-										  <? if ($brandsData): ?>
+										  <? if ($productIDs && $brandsData): ?>
 												<form action="" id="brandFilter" class="brand-filter">
 													 <div class="filter-unit">
 														  <div class="title active">Бренд</div>
 														  <div class="content filter-content">
-																<div id="filterCounter" class="filter-counter">
-																	 Показать: <b id="filterCounterCount"><?= $countBrandProducts ?></b>
+																<div id="filterCounter"
+																	  class="filter-counter"
+																	  data-all="<?= $productCount ?>"
+																	  data-last="<?= $productCount ?>"
+																>
+																	 Показать: <b id="filterCounterCount"><?= $productCount ?></b>
 																	 <b id="filterCounterText">товаров</b>
 																</div>
 																<? $brandIndex = 0; ?>
 																<? foreach ($brandsData as $brandID => ["NAME" => $brandName, "COUNT" => $productCount]): ?>
-																	 <? $attrChecked = !in_array($brandID, $filterBrandIDs) ? "" : " checked" ?>
+																	 <? $attrChecked = !in_array($brandID,
+																		 $filterBrandIDs) ? "" : " checked" ?>
 																	 <div class="checkbox-groupe">
 																		  <input
 																			  type="checkbox"
@@ -72,23 +116,26 @@
 														  
 														  </div>
 													 </div>
-													 <input type="submit" id="brandFilterSbmBtn" value="Применить фильтры" data-urn="<?=$urnWithoutBrand ?>" name="SEND">
+													 <a href="<?= $urnWithOnlySearch ?>" class="filter-button bg-grey mb-10">
+														  Сбросить фильтры
+													 </a>
+													 <button id="brandFilterSbmBtn" data-urn="<?= $urnWithoutBrand ?>" class="filter-button">
+														  Применить фильтры
+													 </button>
 												</form>
 										  <? endif; ?>
 									 </div>
 								</div>
 								<div class="middle-right">
-									 
-									 
-									 <? if ($allProductIDs): ?>
+									 <? if ($productIDs): ?>
 										  <div class="block-sorting">
 												<form action="./" method="GET">
-													 <? #@ ДОБАВЛЯЕМ QUERY PARAMS #@
-													 ?>
+													 <? #@ ДОБАВЛЯЕМ QUERY PARAMS #@ ?>
 													 <input type="hidden" name="q" value="<?= $searchPhrase ?>"/>
 													 
 													 <? if ($filterBrandIDs): ?>
-														  <input type="hidden" name="BRAND" value="<?= implode("-", $filterBrandIDs) ?>"/>
+														  <input type="hidden" name="BRAND"
+																	value="<?= implode("-", $filterBrandIDs) ?>"/>
 													 <? endif; ?>
 													 
 													 <? if ($filterCategoryID): ?>
@@ -144,177 +191,88 @@
 													 </div>
 												</form>
 										  </div>
-										  
+									 <? endif; ?>
+									 
+									 <? if ($productIDs): ?>
 										  <?
+										  $GLOBALS['catalogFilter'] = ["ID" => $productIdOnCurrPage];
+										  
 										  $APPLICATION->IncludeComponent(
-											  "bitrix:search.page",
-											  "new.search.page.template",
+											  "bitrix:catalog.order.section",
+											  "new-search",
 											  [
-												  "AJAX_MODE" => "N",
-													// Включить режим AJAX
-												  "AJAX_OPTION_ADDITIONAL" => "",
-													// Дополнительный идентификатор
-												  "AJAX_OPTION_HISTORY" => "N",
-													// Включить эмуляцию навигации браузера
-												  "AJAX_OPTION_JUMP" => "N",
-													// Включить прокрутку к началу компонента
-												  "AJAX_OPTION_SHADOW" => "Y",
-												  "AJAX_OPTION_STYLE" => "Y",
-													// Включить подгрузку стилей
-												  "CACHE_TIME" => "36000000",
-													// Время кеширования (сек.)
-												  "CACHE_TYPE" => "A",
-													// Тип кеширования
-												  "CHECK_DATES" => "N",
-													// Искать только в активных по дате документах
-												  "DEFAULT_SORT" => "rank",
-													// Сортировка по умолчанию
-												  "DISPLAY_BOTTOM_PAGER" => "Y",
-													// Выводить под результатами
-												  "DISPLAY_TOP_PAGER" => "N",
-													// Выводить над результатами
-												  "FILTER_NAME" => "productFilterData",
-													// Дополнительный фильтр
-												  "NAME_TEMPLATE" => "",
-												  "NO_WORD_LOGIC" => "N",
-													// Отключить обработку слов как логических операторов
-												  "PAGER_SHOW_ALWAYS" => "N",
-													// Выводить всегда
-												  "PAGER_TITLE" => "Результаты поиска",
-													// Название результатов поиска
-												  "PAGE_RESULT_COUNT" => "0",
-													// Количество результатов на странице
-												  "PATH_TO_SONET_MESSAGES_CHAT" => "/company/personal/messages/chat/#USER_ID#/",
-												  "PATH_TO_USER_PROFILE" => "",
-													// Шаблон пути к профилю пользователя
-												  "RATING_TYPE" => "",
-													// Вид кнопок рейтинга
-												  "RESTART" => "Y",
-													// Искать без учета морфологии (при отсутствии результата поиска)
-												  "SHOW_ITEM_DATE_CHANGE" => "N",
-													// Показывать дату изменения документа
-												  "SHOW_ITEM_TAGS" => "N",
-													// Показывать теги документа
-												  "SHOW_LOGIN" => "Y",
-												  "SHOW_ORDER_BY" => "N",
-													// Показывать сортировку
-												  "SHOW_RATING" => "",
-													// Включить рейтинг
-												  "SHOW_TAGS_CLOUD" => "N",
-													// Показывать облако тегов
-												  "SHOW_WHEN" => "N",
-													// Показывать фильтр по датам
-												  "SHOW_WHERE" => "N",
-													// Показывать выпадающий список "Где искать"
-												  "STRUCTURE_FILTER" => "structure",
-												  "USE_LANGUAGE_GUESS" => "Y",
-													// Включить автоопределение раскладки клавиатуры
-												  "USE_SUGGEST" => "N",
-													// Показывать подсказку с поисковыми фразами
-												  "USE_TITLE_RANK" => "N",
-													// При ранжировании результата учитывать заголовки
-												  "arrFILTER" => [   // Ограничение области поиска
-													  0 => CATALOG_I_BLOCK,
-												  ],
-												  "arrFILTER_forum" => [
-													  0 => "all",
-												  ],
-												  "arrFILTER_iblock_encyclopedia" => [
-													  0 => "all",
-												  ],
-												  "arrFILTER_iblock_1c_catalog" => [   // Искать в информационных блоках типа "iblock_1c_catalog"
-													  0 => "all",
-												  ],
-												  "arrFILTER_iblock_catalog" => [
-													  0 => "all",
-												  ],
-												  "arrFILTER_iblock_news" => [
-													  0 => "all",
-												  ],
-												  "arrFILTER_iblock_services" => [
-													  0 => "all",
-												  ],
-												  "arrFILTER_main" => "",
-												  "COMPONENT_TEMPLATE" => "clear",
-												  "TAGS_SORT" => "NAME",
-												  "TAGS_PAGE_ELEMENTS" => "150",
-												  "TAGS_PERIOD" => "",
-												  "TAGS_URL_SEARCH" => "",
-												  "TAGS_INHERIT" => "Y",
-												  "FONT_MAX" => "50",
-												  "FONT_MIN" => "10",
-												  "COLOR_NEW" => "000000",
-												  "COLOR_OLD" => "C8C8C8",
-												  "PERIOD_NEW_TAGS" => "",
-												  "SHOW_CHAIN" => "Y",
-												  "COLOR_TYPE" => "Y",
-												  "WIDTH" => "100%",
-												  "SEARCH_SECTION_NAME" => "",
-												  "SEARCH_SECTION_ID" => "",
-												  "SEARCH_IBLOCK_ID" => CATALOG_I_BLOCK_ID,
-												  "SEARCH_COMPONENT" => COMPONENT,
-												  "PAGER_TEMPLATE" => "load_more",
-												  "SEARCH_SORT" => []
+												  //...
+												  "IBLOCK_ID" => CATALOG_I_BLOCK_ID,
+												  "IBLOCK_TYPE" => CATALOG_I_BLOCK_TYPE,
+												  "FILTER_PRODUCT_ID" => $productIdOnCurrPage,
+												  "PAGE_ELEMENT_COUNT" => $viewProductNum
 											  ],
-											  false
+											  false,
+											  ["HIDE_ICONS" => "Y"]
 										  );
 										  ?>
+										  
+										  <div class="catalog-page">
+												<div class="middle-right">
+													 <div class="block-pagination">
+														  <div class="row">
+																<div class="cell">
+																	 <?
+																		  $productDBResult->NavStart($viewProductNum);
+																		  $productDBResult->NavPrint('страницы', false, "text",
+																			  "/include/pagination.php")
+																	 ?>
+																</div>
+																<div class="cell">
+																	 <div class="numeration">
+																		  Товары
+																		  <span>
+																		  		<?= $pageNum ?>
+																			</span>
+																		  -
+																		  <span>
+																			 <?=
+																				  $isLessThanShown
+																					  ?
+																					  $productCount
+																					  :
+																					  $productCountOnPage > $productCount ? $productCount : $productCountOnPage
+																			 ?>
+																			</span>
+																		  из
+																		  <span>
+																				<?= $productCount ?>
+																			</span>
+																	 </div>
+																</div>
+																
+																<div class="cell">
+																	 <? if (!$isLessThanShown && $productCountOnPage < $productCount): ?>
+																		  <div class="button">
+																				<a href="#">Показать еще</a>
+																		  </div>
+																	 <? endif; ?>
+																</div>
+														  </div>
+													 </div>
+												</div>
+										  </div>
 									 <? endif; ?>
-								</div>
-								
-								<? if ($searched == false && isset($searchPhrase) && $searchPhrase != ""): ?>
-									 <div class="search-results__top">Ничего не найдено. Возможно, вы допустили ошибку в
-										  поисковом запросе или товар отсутствует у нас.
-									 </div>
-								<? endif; ?>
-								
-								<div class="seo-text">
-									 <? $APPLICATION->IncludeFile(SITE_DIR . "include/footer_search_seo-text.php"); ?>
 								</div>
 						  </div>
 					 </div>
 	 </section>
-	 
-	 <div class="catalog-page">
-		  <div class="middle-right">
-				<div class="block-pagination">
-					 <div class="row">
-						  <div class="cell">
-								<? $product_count = sizeof($allProductIDs); ?>
-								<? if ($product_count > $viewProductNum) : ?>
-									 <?= $productDBResult->NavPrint('страницы', false, "text", "/include/pagination.php") ?>
-								<? else: ?>
-									 &nbsp;
-								<? endif; ?>
-						  </div>
-						  
-						  <div class="cell">
-								<div class="numeration">Товары <span><?= ((($pageNum - 1) * $viewProductNum) + 1) ?></span> -
-									 <span><?= ($product_count > $viewProductNum ? (($pageNum * $viewProductNum) > $product_count ? $product_count : ($pageNum * $viewProductNum)) : $product_count) ?></span>
-									 из <span><?= $product_count ?></span></div>
-						  </div>
-						  
-						  <div class="cell">
-								<? if ($product_count > $viewProductNum && ($pageNum * $viewProductNum) < $product_count) : ?>
-									 <div class="button"><a href="#">Показать еще</a></div>
-								<? else: ?>
-									 &nbsp;
-								<? endif; ?>
-						  </div>
-					 </div>
-				</div>
-		  </div>
-	 </div>
 </div>
 
 
 <script>
     window.addEventListener('load', () => {
+        let timerId;
         const filterBrandInputs = document.querySelectorAll('.brand-filter__input');
         const filterCounter = document.getElementById('filterCounter');
-        const filterCounterCount = document.getElementById('filterCounterCount');
         const filterCounterText = document.getElementById('filterCounterText');
         const filterSbmBtn = document.getElementById('brandFilterSbmBtn');
+
 
         /**
          * Возвращает склонененное слово для цифры
@@ -343,29 +301,64 @@
             return textOptions[2];
         };
 
+
         /**
-         * Возвращает количество отмеченных товаров в фильтре
+         * Возвращает текущее количество отмеченных товаров в фильтре
          */
-        const getFilterProdCount = () => {
-            return +filterCounterCount.innerText;
+        const getCurrentFilterProdCount = () => {
+            return [...filterBrandInputs]
+                .filter(input => input.checked)
+                .reduce((acc, input) => acc + +input.dataset.count, 0);
         };
 
+
         /**
-         * Показывает блок фильтра с количеством товаров c анимацией
+         * Возвращает количество всех товаров на странице
          */
-        const showFilterProdCount = (productNum, indexNum) => {
+        const getFilterAllProdCount = () => + filterCounter.dataset.all;
+
+
+        /**
+         * Возвращает последнее сохраненное количество отмеченных товаров в фильтре
+         */
+        const getLastSavedFilterProdCount = () => + filterCounter.dataset.last;
+
+
+        /**
+         * Записывает текущее количество отмеченных товаров в фильтре
+         */
+        const saveFilterProdCount = newValue => {
+            filterCounter.dataset.last = newValue;
+        };
+
+
+        /**
+         * Показывает и скрывает блок фильтра с количеством товаров c анимацией
+         */
+        const showAndHideFilterProdCount = indexNum => {
             const upHeight = 50;
 
-            const currentCount = getFilterProdCount();
-            const newProductNum = productNum + currentCount;
-            const newText = wordNumDeclension(newProductNum, ['товар', 'товара', 'товаров']);
+            const prevCount = getLastSavedFilterProdCount();
+            let newCount = getCurrentFilterProdCount();
+
+            if (!newCount) {
+                newCount = getFilterAllProdCount();
+            }
+
+            saveFilterProdCount(newCount);
+
+            const newText = wordNumDeclension(newCount, ['товар', 'товара', 'товаров']);
 
             filterCounter.style.top = `${upHeight * indexNum + 20}px`;
             filterCounterText.innerText = newText;
-            filterCounter.classList.add('active');
+            filterCounter.classList.add("active");
 
-            animateFilterProdCount(currentCount, newProductNum);
+            animateFilterProdCount(prevCount, newCount);
+
+            clearTimeout(timerId);
+            timerId = setTimeout(hideFilterProdCount, 3000);
         };
+
 
         /**
          * Скрывает блок фильтра с количеством товаров
@@ -373,6 +366,7 @@
         const hideFilterProdCount = () => {
             filterCounter.classList.remove('active');
         };
+
 
         /**
          * Анимация увеличения/уменьшения цены
@@ -414,11 +408,9 @@
          */
         const inputBrandClickHandler = e => {
             const input = e.currentTarget;
-            const {index, count} = input.dataset;
-            const indexNum = +index;
-            const productNum = +count;
-            const productNumWithSign = input.checked ? productNum : -productNum;
-            showFilterProdCount(productNumWithSign, indexNum);
+            const indexNum = + input.dataset.index;
+
+            showAndHideFilterProdCount(indexNum);
         };
 
 
@@ -428,10 +420,10 @@
          */
         const formBrandSubmitHandler = e => {
             let brandURNPart = "";
-            const btnSmb = e.currentTarget;
+
             e.preventDefault();
 
-            const urn = btnSmb.dataset.urn;
+            const urn = filterSbmBtn.dataset.urn;
             const brandsIDs = getCheckedBrandIDs();
 
             if (brandsIDs) {
@@ -447,9 +439,6 @@
         }
 
         filterSbmBtn.addEventListener('click', formBrandSubmitHandler);
-
-
-        /* СТАРОЕ */
-        $('footer').addClass('footer-transparent');
+        filterCounter.addEventListener('click', formBrandSubmitHandler);
     });
 </script>
