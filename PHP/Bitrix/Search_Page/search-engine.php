@@ -6,10 +6,9 @@
 	 Loader::includeModule("search");
 	 
 	 
-	 // #@ Параметры:
 	 const START_SEARCH_PATH_URI = "/search/?";
-	 const CATALOG_I_BLOCK_TYPE = "1c_catalog";
 	 const CATALOG_I_BLOCK_ID = 28;
+	 const OFFERS_I_BLOCK_ID = 29;
 	 const HL_FILTER_PROPS_ID = 80;
 	 
 	 
@@ -99,13 +98,17 @@
 		  $sortData = getProductSortArr($request["SORT"]);
 		  $filterBrandIDsString = $request["BRAND"] ?? "";
 		  $filterCategoryID = $request["CATEGORY"];
+		  $isAjax = $request["AJAX"];
 		  
-		  $pageNum = (int)$pageNum;
-		  $viewProductNum = (int)$viewProductNum;
-		  $filterCategoryID = (int)$filterCategoryID;
+		  $pageNum = (int) $pageNum;
+		  $viewProductNum = (int) $viewProductNum;
+		  $filterCategoryID = (int) $filterCategoryID ?: null;
 		  $filterBrandIDs = !$filterBrandIDsString ? [] : explode("-", $filterBrandIDsString);
 		  
-		  return compact("searchPhrase", "pageNum", "viewProductNum", "sortName", "sortData", "filterBrandIDs", "filterCategoryID");
+		  return compact(
+			  "searchPhrase", "pageNum", "viewProductNum", "sortName",
+			  "sortData", "filterBrandIDs", "filterCategoryID", "isAjax"
+		  );
 	 }
 	 
 	 
@@ -117,7 +120,6 @@
 	 {
 		  [
 			  "searchPhrase" => $searchPhrase,
-			  "sortData" => $sortData,
 			  "filterBrandIDs" => $filterBrandIDs,
 			  "filterCategoryID" => $filterCategoryID,
 		  ] = $requestPageData;
@@ -141,7 +143,7 @@
 				$prodFilter["PROPERTY_CML2_MANUFACTURER"] = array_flip(getBrandsSymbolCode($filterBrandIDs));
 		  }
 		  
-		  return CIBlockElement::getList($sortData, $prodFilter, false, false, $selectedData);
+		  return CIBlockElement::getList([], $prodFilter, false, false, $selectedData);
 	 }
 	 
 	 
@@ -322,16 +324,161 @@
 		  }, 0);
 	 }
 	 
+	 /**
+	  * Возвращает стоимость 1 EUR
+	  */
+	 function getEurPrice()
+	 {
+		  ["AMOUNT" => $amount] = CCurrency::GetByID('EUR');
+		  return $amount;
+	 }
+	 
 	 
 	 /**
-	  * @param $filteredProductID
-	  * @param $pageNum
-	  * @param $viewProductNum
-	  * @return mixed - массив с ID элементов c учетом $pageNum и $viewProductNum
+	  * @param $productID
+	  * @param $requestPageData
+	  * @return array - отсортированные данные товаров c ТП для текущей страницы
 	  */
-	 function getIDsForCurrPage($filteredProductID, $pageNum, $viewProductNum)
+	 function getProductDataForCurrPage($productID, $requestPageData)
 	 {
-		  return array_slice($filteredProductID, ($pageNum - 1) * $viewProductNum, $viewProductNum);
+		  $selectData = ["*"];
+		  
+		  [
+			  "sortData" => $sortData,
+			  "pageNum" => $pageNum,
+			  "viewProductNum" => $viewProductNum,
+		  ] = $requestPageData;
+		  
+		  $filterData = ["IBLOCK_ID" => CATALOG_I_BLOCK_ID, "ID" => $productID];
+		  $imageSizeArr = ['width' => 400, 'height' => 400];
+		  
+		  $result_products = CIBlockElement::GetList(
+			  $sortData,
+			  $filterData,
+			  false,
+			  ["nPageSize" => $viewProductNum, "iNumPage" => $pageNum],
+			  $selectData
+		  );
+		  
+		  while ($itemData = $result_products->GetNext()) {
+				[
+					"ID" => $prodID,
+					"DETAIL_PICTURE" => $detailPicture
+				] = $itemData;
+				
+				$itemData["DETAIL_PAGE_URL"] = get_product_link($itemData);
+				
+				$price = false;
+				$price_offer = false;
+				
+				$resultOffersDB = CIBlockElement::GetList(
+					["CATALOG_PRICE_3" => "ASC", "CATALOG_PRICE_4" => "ASC"],
+					[
+						"IBLOCK_ID" => OFFERS_I_BLOCK_ID,
+						"ACTIVE" => "Y",
+						"PROPERTY_CML2_LINK" => $prodID,
+						["LOGIC" => "OR", ["!CATALOG_PRICE_3" => false], ["!CATALOG_PRICE_4" => false]]
+					],
+					false,
+					["nTopCount" => 1],
+					["*"]
+				);
+				
+				if ($offerData = $resultOffersDB->GetNext()) {
+					 $price = get_price($offerData["ID"]);
+				}
+				
+				if (!$price) {
+					 $price = get_price($prodID);
+				}
+				
+				if ($price) {
+					 $itemData["PRICE"] = $price;
+					 $itemData["PRICE_FORMAT"] = generatePriceBlock($price, $price_offer);
+				}
+				
+				
+				$itemData["IMG"] = false;
+				
+				if ($itemData["DETAIL_PICTURE"]) {
+					 ["src" => $itemData["IMG"]] = CFile::ResizeImageGet($detailPicture, $imageSizeArr, BX_RESIZE_IMAGE_EXACT, true);
+				}
+				
+				if (!$itemData["IMG"]) {
+					 $resultOffersDB = CIBlockElement::GetList(
+						 ["CATALOG_PRICE_3" => "ASC", "CATALOG_PRICE_4" => "ASC"],
+						 [
+							 "IBLOCK_ID" => 29,
+							 "ACTIVE" => "Y",
+							 "PROPERTY_CML2_LINK" => $itemData["ID"],
+							 "!DETAIL_PICTURE" => false
+						 ],
+						 false,
+						 ["nTopCount" => 1],
+						 ["*"]
+					 );
+					 
+					 if ($offerData = $resultOffersDB->GetNext()) {
+						  ["src" => $itemData["IMG"]] = CFile::ResizeImageGet($offerData["DETAIL_PICTURE"], $imageSizeArr, BX_RESIZE_IMAGE_EXACT, true);
+					 } else {
+						  $itemData["IMG"] = '/upload/images/no-photo.png';
+					 }
+				}
+				
+				$itemData["COLORS"] = false;
+				
+				$arr_select = ["ID", "NAME", "IBLOCK_ID", "ACTIVE", "SORT", "CODE"];
+				$arr_property_code = [
+					"TSVET_VINILOVYY_SAYDING",
+					"TSVET_FIBROTSEMENTNYY_SAYDING",
+					"TSVET_KIRPICH",
+					"TSVET_KOMPOZITNAYA_CHEREPITSA",
+					"TSVET_OGRAZHDENIYA",
+					"TSVET_TSEMENTNO_PESCHANAYA_CHEREPITSA",
+					"TSVET",
+					"TSVET_POLOTENTSESUSHITELYA",
+					"TSVET_METALL_GRAND_LINE",
+					"TSVET_FASAD",
+					"TSVET_GIBKAYA_CHEREPITSA",
+					"TSVET_KOZYRKI_NAD_VKHODOM",
+				];
+				
+				foreach ($arr_property_code as $key => $value) {
+					 $arr_select[] = 'PROPERTY_' . $value;
+				}
+				
+				$resultOffersDB = CIBlockElement::GetList(
+					["CATALOG_PRICE_3" => "ASC", "CATALOG_PRICE_4" => "ASC"],
+					["IBLOCK_ID" => 29, "ACTIVE" => "Y", "PROPERTY_CML2_LINK" => $itemData["ID"]],
+					false,
+					false,
+					$arr_select
+				);
+				
+				while ($offerData = $resultOffersDB->GetNext()) {
+					 foreach ((array)$arr_property_code as $key => $value) {
+						  if ($offerData["PROPERTY_" . $value . "_VALUE"]) {
+								$itemData["COLORS"][$offerData["PROPERTY_" . $value . "_VALUE"]] = $offerData["PROPERTY_" . $value . "_VALUE"];
+						  }
+					 }
+				}
+				
+				if ($itemData["COLORS"]) {
+					 $itemData["COLORS"] = count($itemData["COLORS"]);
+				}
+				
+				if ($_COOKIE["DELAY"]) {
+					 $arr_delay = explode(',', $_COOKIE["DELAY"]);
+					 
+					 if ($arr_delay && in_array($itemData["ID"], $arr_delay)) {
+						  $itemData["DELAY"] = "Y";
+					 }
+				}
+				
+				$productsData[] = $itemData;
+		  }
+		  
+		  return $productsData;
 	 }
 	 
 	 
