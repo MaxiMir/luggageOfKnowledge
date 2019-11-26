@@ -1,5 +1,4 @@
 <?
-	 
 	 require_once "search_engine.php";
 	 
 	 $filteredProductID = [];
@@ -34,7 +33,6 @@
 		  $productsCount = sizeof($productIDs);
 	 }
 ?>
-
 
 <div class="site-main">
 	 <section class="middle">
@@ -196,13 +194,13 @@
 													 </form>
 												</div>
 												
+												<?
+												if ($isAjax) {
+													 $APPLICATION->RestartBuffer();
+												}
+												?>
 												<div class="block-goods">
-													 <div class="row">
-														  <?
-																if ($isAjax) {
-																	 $APPLICATION->RestartBuffer();
-																}
-														  ?>
+													 <div class="row" id="productContainer">
 														  <? foreach ($productDataForCurrPage as $key => $value): ?>
 																<div class="cell">
 																	 <div class="goods-unit transition">
@@ -263,31 +261,25 @@
 																	 </div>
 																</div>
 														  <? endforeach; ?>
-														  <?
-																if ($isAjax) {
-																	 die;
-																}
-														  ?>
 													 </div>
 												</div>
 												
 												<div class="block-pagination">
-													 <div class="row">
+													 <div class="row" id="paginationContainer">
 														  <div class="cell">
 																<?
 																	 $productsCount = sizeof($productIDs);
 																	 $isLessThanShown = $productsCount <= $viewProductNum;
 																	 $productsCountOnPage = $pageNum * $viewProductNum;
-																	 
 																	 $productDBResult->NavStart($viewProductNum);
-																	 $productDBResult->NavPrint('страницы', false, "text", "/include/pagination.php");
+																	 $productDBResult->NavPrint('страницы', false, "text", "/include/new_pagination.php");
 																?>
 														  </div>
 														  <div class="cell">
 																<div class="numeration">
 																	 Товары
 																	 <span>
-														 <?= $pageNum ?>
+														 <?= $productsCountOnPage - $viewProductNum ?: 1?>
 													 </span>
 																	 -
 																	 <span>
@@ -305,7 +297,6 @@
 													 </span>
 																</div>
 														  </div>
-														  
 														  <div class="cell">
 																<? if (!$isLessThanShown && $productsCountOnPage <= $productsCount): ?>
 																	 <div>
@@ -315,6 +306,12 @@
 														  </div>
 													 </div>
 												</div>
+												
+												<?
+												if ($isAjax) {
+													 die;
+												}
+												?>
 										  <? endif; ?>
 									 </div>
 								</div>
@@ -323,10 +320,3 @@
 				</div>
 	 </section>
 </div>
-
-
-<script>
-    $(() => {
-        $('footer').addClass('footer-transparent');
-    });
-</script>

@@ -10027,7 +10027,7 @@ node.body; // body
 
 Функция это объект
 Позднее связывание
-Побочные эффекты (apply)
+Побочные эффекты (apply) **
 Node.js
 Реализуйте базовый тип Node используя подход описанный в видео.
 
@@ -10040,6 +10040,10 @@ PairedTag.js, SingleTag.js
 1. Лишний расход памяти. Ведь достаточно создать одну функцию и использовать ее повторно.
 2. Сравнение объектов даже в случае deepEqual будет давать false. Ведь функция это объект, а объекты друг другу не равны (даже если структура одинаковая), если это не один и тот же объект. А это сильно затрудняет проверки на равенство деревьев (или поддеревьев), а также делает крайне сложным тестирование.
 По этим причинам функцию нужно описывать вне конструктора (выше в файле), а внутри присваивать ее соответствующему свойству.
+
+**
+Побочным эффектом называют любые действия, изменяющие среду выполнения. К ним относятся любые файловые операции, такие как запись в файл, отправка или приём данных по сети, даже вывод в консоль или чтение файла. Кроме того, побочными эффектами считаются обращения к глобальным переменным (как на чтение, так и запись) и изменение входных аргументов в случае, когда они передаются по ссылке. Вызов функции с побочными эффектами также считается побочным эффектом.
+
 */
 
 // FILE: /app/Node.js:
@@ -23573,7 +23577,7 @@ export default (params) => {
 };
 
 
-/**
+/**@@@
 arrays.js
 Реализуйте и экспортируйте по умолчанию функцию findWhere, которая принимает на вход массив (элементы которого — это ассоциативные массивы) и пары ключ-значение (тоже в виде массива), а возвращает первый элемент исходного массива, значения которого соответствуют переданным парам (всем переданным). Если совпадений не было, то функция должна вернуть null.
 */
@@ -23612,29 +23616,188 @@ const findWhere = (data, where) => {
 export default findWhere;
 
 
+/**@@@
+users.js
+Реализуйте функцию takeOldest, которая принимает на вход список пользователей и возвращает самых взрослых. Количество возвращаемых пользователей задается вторым параметром, который по умолчанию равен единице.
 
+Пример использования
+*/
+
+onst users = [
+  { name: 'Tirion', birthday: '1988-11-19' },
+  { name: 'Sam', birthday: '1999-11-22' },
+  { name: 'Rob', birthday: '1975-01-11' },
+  { name: 'Sansa', birthday: '2001-03-20' },
+  { name: 'Tisha', birthday: '1992-02-27' },
+  { name: 'Chris', birthday: 'Dec 25, 1995' },
+];
+
+takeOldest(users);
+// [
+//  { name: 'Rob', birthday: '1975-01-11' },
+// ];
+
+const takeOldest = (users, count = 1) => {
+  const sorted = sortBy(users, ({ birthday }) => Date.parse(birthday));
+  return sorted.slice(0, count);
+};
+
+export default takeOldest;
+
+
+/**@@@
+users.js
+Реализуйте функцию getMenCountByYear, которая принимает на вход список пользователей и возвращает объект, в котором ключ это год рождения, а значение это количество мужчин, родившихся в этот год.
+
+Пример использования
+*/
+
+const users = [
+  { name: 'Bronn', gender: 'male', birthday: '1973-03-23' },
+  { name: 'Reigar', gender: 'male', birthday: '1973-11-03' },
+  { name: 'Eiegon', gender: 'male', birthday: '1963-11-03' },
+  { name: 'Sansa', gender: 'female', birthday: '2012-11-03' },
+  { name: 'Jon', gender: 'male', birthday: '1980-11-03' },
+  { name: 'Robb', gender: 'male', birthday: '1980-05-14' },
+  { name: 'Tisha', gender: 'female', birthday: '2012-11-03' },
+  { name: 'Rick', gender: 'male', birthday: '2012-11-03' },
+  { name: 'Joffrey', gender: 'male', birthday: '1999-11-03' },
+  { name: 'Edd', gender: 'male', birthday: '1973-11-03' },
+];
+
+getMenCountByYear(users);
+// {
+//   1973: 3,
+//   1963: 1,
+//   1980: 2,
+//   2012: 1,
+//   1999: 1,
+// };
+
+
+
+const getMenCountByYear = (users) => {
+  const men = users.filter(({ gender }) => gender === 'male');
+
+  const years = men.map(({ birthday }) => {
+    const date = new Date(birthday);
+    return date.getFullYear();
+  });
+
+  return years.reduce((acc, year) => {
+    const count = acc[year] ? acc[year] + 1 : 1;
+    return { ...acc, [year]: count };
+  }, {});
+};
+
+export default getMenCountByYear;
 
 
 
 /**
+Предположим, что мы пишем функцию, которая принимает на вход список путей файловой системы, находит среди них файлы с расширением js без учёта регистра и возвращает имена этих файлов. Для решения этой задачи нам понадобятся следующие функции:
 
+fs.existsSync(filepath) — проверяет, существует ли файл по указанному пути
+fs.lstatSync(filepath).isFile() — проверяет, является ли объект обычным "регулярным" файлом (а не директорией, ссылкой или другим типом файлов)
+path.extname(filepath) — извлекает "расширение" из имени файла
+path.basename(filepath) — извлекает имя файла из полного пути
 */
+
+const getJsFileNames = paths => paths
+  .filter(filepath => fs.existsSync(filepath)) // отбираем реально существующие файлы
+  .filter(filepath => fs.lstatSync(filepath).isFile()) // отбор по типу файла
+  .filter(filepath => path.extname(filepath).toLowerCase() === '.js') // отбор по расширению
+  .map(filepath => path.basename(filepath), extension); // отображаем в имена (нам нужен массив с именами)
+
+const names = getJsFileNames(['index.js', 'wop.JS', 'nonexists', 'node_modules']);
+console.log(names); // => [index, wop]
+
+
 
 /**
+emails.js
+Реализуйте и экспортируйте по умолчанию функцию getFreeDomainsCount, которая принимает на вход список емейлов, а возвращает количество емейлов, расположенных на каждом бесплатном домене. Список бесплатных доменов хранится в константе freeEmailDomains.
 
+Пример использования
 */
 
-/**
+const emails = [
+  'info@gmail.com',
+  'info@yandex.ru',
+  'info@hotmail.com',
+  'mk@host.com',
+  'support@hexlet.io',
+  'key@yandex.ru',
+  'sergey@gmail.com',
+  'vovan@gmail.com',
+  'vovan@hotmail.com',
+];
 
+getFreeDomainsCount(emails);
+// {
+//   'gmail.com': 3,
+//   'yandex.ru': 2,
+//   'hotmail.com': 2,
+// };
+
+const freeEmailDomains = [
+  'gmail.com',
+  'yandex.ru',
+  'hotmail.com',
+];
+
+const getFreeDomainsCount = (emails) => emails
+  .map((email) => {
+    const [, domain] = email.split('@');
+    return domain;
+  })
+  .filter((domain) => freeEmailDomains.includes(domain))
+  .reduce((acc, domain) => {
+    const count = acc[domain] ? acc[domain] + 1 : 1;
+    return { ...acc, [domain]: count };
+  }, {});
+
+export default getFreeDomainsCount;
+
+
+
+
+/**@@@
+solution.js
+Реализуйте и экспортируйте по умолчанию функцию, которая обновляет query string в переданном адресе в соответствии с указанными значениями.
+
+Функция принимает на вход два параметра:
+
+адрес, который может содержать query string
+объект с параметрами, которые нужно проставить в query string
+import solution from './solution';
+const address = 'amazon.com/search?page=10&per=5';
+const actual = solution(address, { page: 100, per: 8, order: 'desc' });
+// amazon.com/search?page=100&per=8&order=desc
+Как видно параметры могут встречаться одновременно и в адресе, и в объекте.
+
+const address = 'amazon.com/search?page=10&per=5';
+const actual = solution(address, { order: 'desc', per: null });
+// amazon.com/search?page=10&order=desc
+Правила подстановки следующие:
+
+Если параметра не было, то он добавляется
+Если параметр уже был, то его значение заменяется тем, которое передано в объекте
+Если значение параметра null, то сам параметр должен отсутствовать в адресе, даже если он там был.
 */
+import url from 'url';
 
-/**
+export default (address, params) => {
+  const urlObject = url.parse(address, true);
+  const mergedQuery = { ...urlObject.query, ...params };
+  const query = Object.keys(mergedQuery)
+    .filter(key => mergedQuery[key] !== null)
+    .reduce((acc, key) => ({ ...acc, [key]: mergedQuery[key] }), {});
 
-*/
+  return url.format({ ...urlObject, query, search: null });
+};
 
-/**
 
-*/
 
 /**
 
