@@ -20030,8 +20030,8 @@ export { Film, CinemaHall, FilmScreening };
 
 
 
->>>>>>> Архитектура <<<<<<<
 
+// >>>>>>> Архитектура <<<<<<<
 
 /**
 При разработке приложений с богатой предметной областью во весь рост встаёт вопрос о том, как правильно организовать код приложения, а если смотреть шире, то какую выбрать архитектуру. О том, какие варианты может предложить вам индустрия мы сейчас и поговорим, но перед тем, как я расскажу про существующие подходы, важно запомнить несколько вещей.
@@ -20049,8 +20049,7 @@ The Clean Architecture
 Onion Architecture
 Hexagonal Architecture
 
-Все эти архитектуры сводятся так или иначе к тому, что наше приложение представляет из себя набор слоёв (тех самых абстракций), которые связаны друг с другом определённым образом и отвечают за определённые аспекты системы. Лучше всего начать анализ с красивой картинки:
-
+Все эти архитектуры сводятся так или иначе к тому, что наше приложение представляет из себя набор слоёв (тех самых абстракций), которые связаны друг с другом определённым образом и отвечают за определённые аспекты системы. 
 
 Начать стоит с того, что: Фреймворк — это не ваше приложение. Остановитесь на секундочку и хорошо обдумайте фразу. В типичных веб-приложениях фреймворк определяет вообще всё. Приложение на 100% переплетается с ним и становится его частью. Программист начинает мыслить в рамках возможностей фреймворка и его ограничений, и в его голове появляются несуществующие причинно-следственные связи.
 
@@ -20218,9 +20217,11 @@ export default class {
 
   find(id) {
     const result = this.data.find(entity => entity.id === id);
+
     if (!result) {
       throw new Error('Entity not found');
     }
+
     return result;
   }
 
@@ -20257,7 +20258,8 @@ export default class extends ApplicationService {
 
 
 
->>>>>> Валидация <<<<<<
+
+// >>>>>> Валидация <<<<<<
 
 const cinemaHall = new CinemaHall(undefined, -5, 0);
 cinemaHallRepository.save(cinemaHall);
@@ -20304,6 +20306,7 @@ const constraints = {
 # validate.js: check
 Дальше сконфигурированный объект с правилами передаётся в функцию validate вместе с проверяемым объектом. На выходе мы получаем либо массив с ошибками, либо undefined (в случае, если ошибок не было).
 */
+
 import validate from 'validate';
 
 validate({password: 'bad'}, constraints);
@@ -20452,7 +20455,6 @@ export default class Film extends ApplicationEntity {
     },
   };
 
-
   constructor(name, duration) {
     super();
     this.id = uuid.create().hex;
@@ -20461,6 +20463,7 @@ export default class Film extends ApplicationEntity {
     this.createdAt = new Date();
   }
 }
+
 
 // FILE: /app/entities/FilmScreening.js:
 import uuid from 'uuid-js';
@@ -20635,7 +20638,9 @@ export default class extends ApplicationService {
 }
 
 
->>>>>> Dependency Injection Container <<<<<<
+
+
+// >>>>>> Dependency Injection Container <<<<<<
 
 const repository = new UserRepository();
 repository.save(user);
@@ -20694,6 +20699,7 @@ class SendService {
     this.EmailKlass = EmailKlass;
     this.sender = sender;
   }
+
   sendEmail(subject, body) {
     const email = new this.EmailKlass(subject, body);
     this.sender.send(email);
@@ -20814,7 +20820,7 @@ export default class extends ApplicationService {
 
 
 
->>>>>> Предметная область <<<<<<
+// >>>>>> Предметная область <<<<<<
 
 /**
 Предметно-ориентированное проектирование (Domain-driven design) - это набор принципов и схем, направленных на создание оптимальных систем объектов. Сводится к созданию программных абстракций, которые называются моделями предметных областей. В эти модели входит бизнес-логика, устанавливающая связь между реальными условиями области применения продукта и кодом.
@@ -27064,4 +27070,5 @@ export default class PasswordGeneratorAdapter {
     return generator.generate(this.options);
   }
 }
+
 

@@ -5,8 +5,6 @@
 	 Loader::includeModule("iblock");
 	 Loader::includeModule("search");
 	 
-	 
-	 const START_SEARCH_PATH_URI = "/search/?";
 	 const CATALOG_I_BLOCK_ID = 28;
 	 const OFFERS_I_BLOCK_ID = 29;
 	 const HL_FILTER_PROPS_ID = 80;
@@ -32,26 +30,34 @@
 	 function generateURN(Bitrix\Main\HttpRequest $request): closure
 	 {
 		  $queryData = $request->getQueryList()->toArray();
+		  $initialValue = $request->getRequestedPageDirectory() . "/?";
+		  $currentData = $queryData;
 		  
-		  $buildURN = function ($queryData) {
-				return array_reduce(array_keys($queryData), function ($acc, $keyData) use ($queryData) {
-					 $valueData = $queryData[$keyData];
-					 $value = !is_array($valueData) ? $valueData : implode('-', $valueData);
+		  $buildURN = function ($currentData) use ($initialValue) {
+				$currentData = array_reduce(array_keys($currentData), function ($acc, $keyData) use ($currentData) {
+					 $valueData = $currentData[$keyData];
 					 
-					 return "{$acc}&{$keyData}={$value}";
-				}, START_SEARCH_PATH_URI);
+					 if ($valueData) {
+						  $value = !is_array($valueData) ? $valueData : implode('-', $valueData);
+						  $acc[] = "{$keyData}={$value}";
+					 }
+					 
+					 return $acc;
+				}, []);
+				
+				return $initialValue . implode("&", $currentData);
 		  };
 		  
-		  return function (array $data = [], $fnName = null) use ($queryData, $buildURN) {
+		  return function (array $data = [], $fnName = null) use ($currentData, $buildURN) {
 				switch ($fnName) {
 					 case "add":
-						  $newQueryData = array_merge($queryData, $data);
+						  $newQueryData = array_merge($currentData, $data);
 						  return $buildURN($newQueryData);
 					 case "delete":
-						  $newQueryData = array_diff_key($queryData, array_flip($data));
+						  $newQueryData = array_diff_key($currentData, array_flip($data));
 						  return $buildURN($newQueryData);
 					 default:
-						  return $buildURN($queryData);
+						  return $buildURN($currentData);
 				}
 		  };
 	 }
