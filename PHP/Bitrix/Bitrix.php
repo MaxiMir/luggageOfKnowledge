@@ -11,6 +11,9 @@
 		  die();
 	 }
 	 
+	 // К таким файлам относится все, что работает внутри продукта, например: шаблоны сайтов, шаблоны компонента, файлы .parameters.php и .description.php.
+	 
+	 
 	 #@ ТЕКУЩАЯ СТРАНИЦА:
 	 $APPLICATION->GetCurPage(false); // => относительный урл
 	 
@@ -31,6 +34,20 @@
 	 
 	 #@ Настройка вывода цены:
 	 // URN: /bitrix/admin/currency_edit.php?ID=RUB&lang=ru&tabControl_active_tab=edit2
+	 
+	 
+	 #@ Подключение классов в init.php:
+	 CModule::AddAutoloadClasses(
+		 '', // не указываем имя модуля
+		 [
+			  // ключ - имя класса, значение - путь относительно корня сайта к файлу с классом
+			 'CMyClassName1' => '/path/cmyclassname1file.php',
+			 'CMyClassName2' => '/path/cmyclassname2file.php',
+		 ]
+	 );
+	 
+	 
+	 
 ?>
 
 

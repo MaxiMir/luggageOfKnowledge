@@ -2,13 +2,16 @@
 
 /**
  $ npm init
- $ npm i gulp --save-dev
- $ npm i gulp-sass --save-dev
- $ npm i browser-sync --save-dev
+ $ npm i --save-dev gulp 
+ $ npm i --save-dev gulp-sass 
+ $ npm i --save-dev browser-sync
  $ npm i -g bower
- $ npm i gulp-concat gulp-uglifyjs --save-dev
- $ npm i gulp-cssnano gulp-rename
- $ npm i del --save-dev
+ $ npm i --save-dev gulp-concat gulp-uglifyjs
+ $ npm i --save-dev gulp-cssnano gulp-rename
+ $ npm i --save-dev del
+ $ npm i --save-dev gulp-imagemin imagemin-pngquant
+ $ npm i --save-dev gulp-cache
+ $ npm i --save-dev gulp-autoprefixer 
 
  // TREE:
  - app (исходники)
@@ -56,8 +59,6 @@
     @import "app/libs/magnific-popup/dist/magnific-popup" # если файл css расширение можно не указывать
 */
 
-
-
 // FILE: gulpfile.js
 const gulp = require('gulp');
 const sass = require('gulp-sass');
@@ -67,6 +68,10 @@ const uglify = require('gulp-uglifyjs');
 const cssnano = require('gulp-cssnano');
 const rename = require('gulp-rename');
 const del = require('del');
+const imagemin = require('gulp-imagemin');
+const pngquant = require('imagemin-pngquant');
+const cache = require('gulp-cache');
+const autoprefixer = require('gulp-autoprefixer');
 
 gulp.task('sass', () => { // создание таска sass
     return gulp
@@ -74,6 +79,7 @@ gulp.task('sass', () => { // создание таска sass
         // .src(['!app/sass/main.sass', 'app/sass/*.sass']) - все sass файлы кроме app/sass/main.sass
         // .src('app/sass/**/.*+(scss|sass)) - выбор нескольких расширений scss|sass в директориях и поддиректорияx app/sass/
         .pipe(sass()) // pipe - запуск плагина sass
+        .pipe(autoprefixer(['last 15 versions', '> 1%', 'ie 8', 'ie 7'], { cascade: true })) // добавление префиксов для браузеров
         .pipe(gulp.dest('app/css')) // gulp.dest - путь назначения для результирующих файлов
         .pipe(browserSync.reload({stream: true})) // инжектим
 });
@@ -107,7 +113,23 @@ gulp.task('browser-sync', () => {
 });
 
 gulp.task('clean', () => {
-    return del.sync('dist') // удаление папки dist
+    return del.sync('dist'); // удаление папки dist
+});
+
+gulp.task('clear', () => {
+    return cashe.clearAll(); // удаление кэша
+});
+
+
+gulp.task('img', () => {
+    return gulp.src('app/img/**/*') // выбираем абсолютно все
+        .pipe(cache(imagemin({ // сжимаем|оптимизацируем картинки + кэшируем изображения
+            interlaced: true,
+            progressive: true,
+            svgoPlugins: [{removeViewBox: false}],
+            une: [pngquant()]    
+        })))
+        .pipe(gulp.dest('dist/img'))
 });
 
 gulp.task('watch', ['browser-sync', 'css-libs', 'scripts'], () => { // в массиве список тасков, которые запустятся до таска watch
@@ -116,7 +138,7 @@ gulp.task('watch', ['browser-sync', 'css-libs', 'scripts'], () => { // в мас
     gulp.watch('app/js/*.js', browserSync.reload); // вотчим за js файлами и при изменении перезапускаем сервер
 });
 
-gulp.task('build', ['clean', 'sass', 'scripts'], () => {
+gulp.task('build', ['clean', 'img', 'sass', 'scripts'], () => {
     const buildCss = gulp.src([
         'app/css/main.css',
         'app/css/libs.min.css'
