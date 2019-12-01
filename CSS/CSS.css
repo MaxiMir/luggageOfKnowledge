@@ -16,7 +16,7 @@
 --- В JS --
 const rootCss = document.querySelector(':root'); 
 const CssRules = getComputedStyle(element);
-const color = CssRules.getPropertyValue('--color'); // получение свойства
+const color = rootCss.getPropertyValue('--color'); // получение свойства
 
 rootCss.style.setProperty('--color', 'green'); // изменение свойства
 */
