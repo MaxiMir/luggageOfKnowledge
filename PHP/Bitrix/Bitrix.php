@@ -3231,622 +3231,7 @@
 
 
 	 
-	 
-	 #@@@ Умный поиск: @@@#
-?>
-
-<div class="tips-list"></div>
-
-<script>
-    const searchContainer = $('.search');
-    const responseBlock = $('.tips-list');
-    const searchInput = initSearchInput();
-
-    /**
-     * #@ Search handler
-     */
-    $('.input-search').change(e => {
-        const currElem = $(e.currentTarget);
-
-        searchInput.delaySearch(currElem);
-    });
-
-    /**
-     * #@ Close search
-     */
-    $('.popup_search .close').on('click', () => {
-        searchInput.cleanSearchListAndHide();
-    });
-
-    /**
-     * #@ Close search
-     */
-    $(document).on('click', e => {
-        const isActiveResponseBlock = responseBlock.hasClass('active');
-
-        if (isActiveResponseBlock) {
-            const elemClicked = e.target;
-
-            if (!searchContainer.is(elemClicked) && searchContainer.has(elemClicked).length === 0) {
-                searchInput.cleanSearchListAndHide();
-            }
-        }
-    });
-
-    function initSearchInput() {
-        let intervalID = null;
-        const requestURL = '/ajax/search.php';
-        const intervalTime = 1000;
-
-        return {
-            getOldValue: function () {
-                return this.lastPhrase;
-            },
-            getNewValue: function () {
-                return this.inputBlock.val()
-            },
-            isNeedUpdate: function () {
-                return this.getOldValue() === this.getNewValue();
-            },
-            updateValue: function () {
-                this.lastPhrase = this.getNewValue();
-            },
-            delaySearch: function (currElem) {
-                this.inputBlock = currElem;
-
-                if (intervalID && this.isNeedUpdate()) {
-                    this.updateValue();
-                }
-
-                if (intervalID) {
-                    return;
-                }
-
-                intervalID = setInterval(() => {
-                    if (this.isNeedUpdate()) {
-                        this.updateValue();
-                        return;
-                    }
-
-                    clearInterval(intervalID);
-                    intervalID = null;
-                    const newValue = this.getNewValue();
-                    this.generateResponseList(newValue);
-                }, intervalTime);
-            },
-            generateResponseList: word => {
-                if (!word.length) {
-                    this.cleanSearchListAndHide();
-                    return;
-                }
-
-                $.ajax({
-                    url: requestURL,
-                    data: {
-                        q: word,
-                        action: 'AJAX_SEARCH'
-                    },
-                    success: response => {
-                        if (!response) {
-                            this.cleanSearchListAndHide();
-                            return;
-                        }
-
-                        responseBlock
-                            .html(response)
-                            .addClass('active')
-                            .show();
-                    }
-                });
-            },
-            cleanSearchListAndHide: function () {
-                if (!this.inputBlock) {
-                    return;
-                }
-
-                responseBlock
-                    .hide()
-                    .removeClass('active')
-						  .empty();
-            }
-        };
-    }
-</script>
-
-
-<?
-    // FILE: /ajax/search.php:
-	 use Bitrix\Main\{Loader, Context};
-	 
-	 require_once "{$_SERVER["DOCUMENT_ROOT"]}/bitrix/modules/main/include/prolog_before.php";
-	 
-	 const CATALOG_I_BLOCK_ID = 28;
-	 const LIMIT_SECTIONS_IN_SEARCH_LIST = 3;
-	 const LIMIT_ELEMENT_IN_SEARCH_LIST = 20;
-	 
-	 $context = Context::getCurrent();
-	 $request = $context->getRequest();
-	 
-	 
-	 ['q' => $searchPhrase, "action" => $action] = $request->getQueryList()->toArray();
-	 
-	 if (!$searchPhrase && $action !== "AJAX_SEARCH") {
-		  return;
-	 }
-	 
-	 Loader::includeModule("iblock");
-	 
-	 [$sectionsData, $sectionCount] = getSectionsData($searchPhrase);
-	 $productIDs = getProductsID($searchPhrase);
-	 $productCount = sizeof($productIDs);
-	 
-	 
-	 $APPLICATION->IncludeComponent(
-		 "adpro:catalog.section",
-		 "ajax",
-		 [
-			 "IDS" => $productIDs,
-			 "PRODUCT_COUNT" => $productCount,
-			 "SECTIONS_DATA" => $sectionsData,
-			 "SECTIONS_COUNT" => $sectionCount,
-			 "SEARCH_PHRASE" => $searchPhrase,
-			 "LIMIT" => LIMIT_ELEMENT_IN_SEARCH_LIST,
-		 ]
-	 );
-	 
-	 
-	 /**
-	  * @param $searchPhrase
-	  * @return array
-	  */
-	 function getSectionsData($searchPhrase)
-	 {
-		  $arSections = [];
-		  
-		  $obSection = new CIBlockSection();
-		  
-		  $dbRes = $obSection->GetList(
-			  [],
-			  [
-				  "NAME" => "%{$searchPhrase}%",
-				  "IBLOCK_ID" => CATALOG_I_BLOCK_ID,
-				  "ACTIVE" => "Y"
-			  ],
-			  false,
-			  [
-				  "ID",
-				  "NAME",
-				  "SECTION_PAGE_URL"
-			  ]
-		  );
-		  
-		  while ($sectionData = $dbRes->GetNext()) {
-				$arSections[] = $sectionData;
-		  }
-		  
-		  $countSections = sizeof($arSections);
-		  $returnSections = array_slice($arSections, 0, LIMIT_SECTIONS_IN_SEARCH_LIST);
-		  
-		  return [
-			  $returnSections,
-			  $countSections
-		  ];
-	 }
-	 
-	 /**
-	  * @param $searchPhrase
-	  * @return array
-	  */
-	 function getProductsID($searchPhrase)
-	 {
-		  $arElements = [];
-		  
-		  $obElement = new CIBlockElement();
-		  
-		  $dbRes = $obElement->GetList(
-			  [],
-			  [
-				  "NAME" => "%{$searchPhrase}%",
-				  "IBLOCK_ID" => CATALOG_I_BLOCK_ID,
-				  "ACTIVE" => "Y"
-			  ],
-			  false,
-			  false,
-			  [
-				  "ID"
-			  ]
-		  );
-		  
-		  while (["ID" => $elemID] = $dbRes->Fetch()) {
-				$arElements[] = $elemID;
-		  }
-		  
-		  return $arElements;
-	 }
-	 
-	 
-	 // FILE: /local/components/adpro/catalog.section/class.php:
-	if (!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true) {
-		die();
-	}
-	 
-	 use \Bitrix\Main\Loader;
-	 
-	 /**
-	  * @global CUser $USER
-	  * @global CMain $APPLICATION
-	  */
-	 class CAdvertCatalogSection extends \CBitrixComponent
-	 {
-		  private $iBlockID = 28;
-		  
-		  function __constructor()
-		  {
-				parent::__constructor();
-				
-				Loader::includeModule("iblock");
-		  }
-		  
-		  /**
-			* @param $arIdProduct
-			*/
-		  private function getProducts($arIdProduct)
-		  {
-				$obElement = new CIBlockElement();
-				
-				$navParams = [
-					"bShowAll" => false,
-				];
-				
-				if ($this->arParams["LIMIT"]) {
-					 $navParams["nTopCount"] = $this->arParams["LIMIT"];
-				}
-				
-				if ($this->arParams["nPageSize"]) {
-					 $navParams["nPageSize"] = $this->arParams["nPageSize"];
-				}
-				
-				$dbResElement = $obElement->GetList(
-					[],
-					[
-						"ID" => $arIdProduct
-					],
-					false,
-					$navParams,
-					[
-						"ID",
-						"NAME",
-						"PREVIEW_PICTURE",
-						"DETAIL_PICTURE",
-						"DETAIL_PAGE_URL",
-						"PROPERTY_MORE_PHOTO",
-					]
-				);
-				
-				while ($arElement = $dbResElement->GetNext()) {
-					 [
-						 "ID" => $elemID,
-						 "NAME" => $name
-					 ] = $arElement;
-					 
-					 $arElement["IMG_SRC"] = $this->getProductImage($arElement);
-					 $arElement["TITLE"] = $this->generateProductTitle($name);
-					 $arElement["PRICE_DATA"] = $this->getProductPriceData($elemID);
-					 
-					 $this->arResult["ITEMS"][$elemID] = $arElement;
-				}
-				
-				$this->arResult["NAV"] = $dbResElement;
-		  }
-		  
-		  /**
-			* @param $elemID
-			* @return array|void
-			*/
-		  public function getProductOffers($elemID)
-		  {
-				$offersData = [];
-				
-				$productInfo = CCatalogSKU::GetInfoByProductIBlock($this->iBlockID);
-				
-				if (!is_array($productInfo)) {
-					 return;
-				}
-				
-				['IBLOCK_ID' => $iBlockID, 'SKU_PROPERTY_ID' => $skuPropID] = $productInfo;
-				
-				$arrFilter = ['IBLOCK_ID' => $iBlockID, "PROPERTY_{$skuPropID}" => $elemID];
-				$offersDBData = CIBlockElement::GetList([], $arrFilter);
-				
-				while ($offerData = $offersDBData->GetNext()) {
-					 $offersData[] = $offerData;
-				}
-				
-				return $offersData;
-		  }
-		  
-		  /**
-			* @param $productName
-			* @return false|string
-			*/
-		  private function generateProductTitle($productName)
-		  {
-				$searchPhrase = $this->arParams["SEARCH_PHRASE"];
-				$searchPhraseStart = stripos($productName, $searchPhrase);
-				$searchPhraseFinish = strlen($searchPhrase);
-				$replacePhrase = substr($productName, $searchPhraseStart, $searchPhraseFinish);
-				
-				return mb_eregi_replace($searchPhrase, "<b>$replacePhrase</b>", $productName, "i");
-		  }
-		  
-		  /**
-			* @param $idImage
-			* @return mixed
-			*/
-		  public function getMiniImageSrc($idImage)
-		  {
-				$imgData = CFile::ResizeImageGet($idImage, ['width' => 70, 'height' => 70], BX_RESIZE_IMAGE_EXACT, true);
-				return $imgData["src"];
-		  }
-		  
-		  /**
-			* @param $arElement
-			* @return mixed|string|null
-			*/
-		  public function getProductImage($arElement)
-		  {
-				$imgSrc = null;
-				
-				[
-					"ID" => $elemID,
-					"PREVIEW_PICTURE" => $previewPicture,
-					"DETAIL_PICTURE" => $detailPicture,
-					"PROPERTY_MORE_PHOTO_VALUE" => $morePhotoData
-				] = $arElement;
-				
-				if ($previewPicture) {
-					 $imgSrc = $this->getMiniImageSrc($previewPicture);
-				} elseif ($detailPicture) {
-					 $imgSrc = $this->getMiniImageSrc($detailPicture);
-				} elseif ($morePhotoData) {
-					 $imageID = !is_array($morePhotoData) ? $morePhotoData : $morePhotoData[0];
-					 $imgSrc = $this->getMiniImageSrc($imageID);
-				} else {
-					 $offersData = $this->getProductOffers($elemID);
-					 
-					 foreach ($offersData as ["DETAIL_PICTURE" => $detailImgID, "PREVIEW_PICTURE" => $previewImgID]) {
-						  if ($previewImgID) {
-								$imgSrc = $this->getMiniImageSrc($previewImgID);
-								break;
-						  }
-						  
-						  if ($detailImgID) {
-								$imgSrc = $this->getMiniImageSrc($detailImgID);
-								break;
-						  }
-					 }
-				}
-				
-				return $imgSrc ?? "/images/no-photo_150.png";
-		  }
-		  
-		  /**
-			* @param $elemID
-			* @return array|void
-			*/
-		  private function getProductPriceData($elemID)
-		  {
-				$userGroupArray = $GLOBALS["USER"]->GetUserGroupArray();
-				
-				["RESULT_PRICE" => $resultPrice] = CCatalogProduct::GetOptimalPrice($elemID, 1, $userGroupArray, 'N');
-				
-				[
-					"DISCOUNT" => $discount,
-					"BASE_PRICE" => $basePrice,
-					"DISCOUNT_PRICE" => $discountPrice
-				] = $resultPrice;
-				
-				
-				if (!$discountPrice && !$basePrice) {
-					 return;
-				}
-				
-				$price = $discount ? $discountPrice : $basePrice;
-				
-				return explode('.', (string)$price);
-		  }
-		  
-		  /**
-			* выполняет логику работы компонента
-			*/
-		  public function executeComponent()
-		  {
-				try {
-					 $arElemId = $this->arParams["IDS"];
-					 
-					 if ($arElemId) {
-						  $this->getProducts($arElemId);
-					 }
-					 
-					 $this->includeComponentTemplate();
-				} catch (Exception $e) {
-					 ShowError($e->getMessage());
-				}
-		  }
-	 }
-	
-	
-
-    // FILE: /local/components/adpro/catalog.section/templates/ajax/template.php:
-    
-	 if (!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true) {
- 			die();
-	 }
-	 
-	 $this->setFrameMode(true);
-	 
-	 $items = $arResult["ITEMS"];
-	 
-	 [
-			"~PRODUCT_COUNT" => $productCount,
-			"~SEARCH_PHRASE" => $searchPhrase,
-			"~SECTIONS_COUNT" => $sectionsCount,
-			"~SECTIONS_DATA" => $sectionsData
-	 ] = $arParams;
-?>
-
-<? if(!$productCount && !$sectionsCount): ?>
-	 <div class="header-searched-title">
-		  <b>Ничего не найдено</b>
-	 </div>
-<? else: ?>
-	 <? if ($sectionsCount): ?>
-		  <div class="header-searched-sections">
-				<div>
-					 <b>Категории: </b><span class="header-searched-count"><?=$sectionsCount?></span>
-					 <a href="/search/?q=<?= $searchPhrase ?>" class="header-searched-link">показать все</a>
-				</div>
-				<div class="header-searched-sections-links">
-					 <? foreach ($sectionsData as ["NAME" => $name, "SECTION_PAGE_URL" => $urn]): ?>
-						  <a href="<?= $urn ?>" class="header-searched-section-link"><?= $name ?></a>
-					 <? endforeach; ?>
-				</div>
-		  </div>
-		  <hr>
-	 <? endif; ?>
-	 
-	 <div class="header-searched-title">
-		  <? if ($productCount): ?>
-				<b>Товары: </b><span class="header-searched-count"><?=$productCount?></span>
-		  <? endif; ?>
-	 
-		  <a href="/search/?q=<?= $searchPhrase ?>" class="header-searched-link">показать все</a>
-	 </div>
-	 
-	 <? foreach ($items as $item): ?>
-		  <?
-				[
-					"IMG_SRC" => $imgSrc,
-					"DETAIL_PAGE_URL" => $elemURN,
-					"TITLE" => $title,
-					"PRICE_DATA" => [$priceMain, $priceSec]
-				] = $item;
-		  ?>
-	 
-		  <div class="header-searched-item">
-				<div class="header-searched-item-photo" style="background: url('<?= $imgSrc ?>') no-repeat; background-size: cover;">
-				</div>
-				<div class="header-searched-item-name">
-					 <a class="header-searched-item-link" href="<?= $elemURN ?>">
-						  <?= $title ?>
-					 </a>
-					 <div class="header-searched-item-price">
-						  <? if (!$priceMain): ?>
-								-
-						  <? else: ?>
-								<b>
-									 <?= $priceMain ?>
-									 <?= !$priceSec ? "" : "<sup>{$priceSec}</sup>" ?>
-									 ₽
-								</b>
-						  <? endif; ?>
-					 </div>
-				</div>
-		  </div>
-	 <? endforeach; ?>
-<? endif; ?>
-
-<style>
-	 .header-searched-link {
-		  color: #457ff7;
-		  text-decoration: none;
-		  border-bottom: 1px dashed #457ff7;
-	 }
-
-	 .header-searched-section-link {
-		  color: #808080;
-		  text-decoration: none;
-		  margin-left: 10px;
-	 }
-
-	 .header-searched-section-link:hover {
-		  border-bottom: 1px solid #808080;
-	 }
-
-	 .tips-list {
-		  width: 100%;
-		  position: absolute;
-		  top: 60px;
-		  z-index: 549;
-		  background: white;
-		  color: #3a3a3a;
-		  width: 50%;
-		  display: none;
-		  border: 1px solid #d4d3d3;
-	 }
-
-	 .tips-list--mobile {
-		  position: relative;
-		  top: 0;
-	 }
-
-	 .header-searched-count {
-		  margin: 0 5px;
-		  color: grey;
-		  font-size: 1.1rem;
-	 }
-
-	 .header-searched-title,
-	 .header-searched-item {
-		  display: flex;
-		  align-items: center;
-		  margin: 10px 15px;
-	 }
-
-	 .header-searched-item {
-		  padding-bottom: 10px;
-		  border-bottom: 1px dashed grey;
-	 }
-
-	 .header-searched-sections {
-		  margin: 10px 15px;
-	 }
-
-	 .header-searched-item-photo {
-		  height: 70px;
-		  width: 70px;
-		  margin: 0 30px 0 0;
-		  border: 1px solid black;
-		  background-size: cover;
-	 }
-
-	 .header-searched-item-link {
-		  color: #3a3a3a;
-		  text-decoration: none;
-	 }
-
-	 .header-searched-item-link:hover {
-		  text-decoration: underline;
-	 }
-
-	 .header-searched-item-name {
-		  max-width: 75%;
-	 }
-	 
-	 @media (max-width: 576px) {
-		  .tips-list {
-				width: 100%;
-		  }
-
-		  .header-searched-item-photo {
-				margin: 0 10px 0 0;
-		  }
-	 }
-</style>
-
-
-
-<? #@@@ Добавление значения свойств из HB: @@@#
+	#@@@ Добавление значения свойств из HB: @@@#
 	 // ...
 	 if ($arrProperty["PROPERTY_TYPE"] === "S" && $arrProperty["USER_TYPE_SETTINGS"]) {
 	 	 $tableName = $arrProperty["USER_TYPE_SETTINGS"]["TABLE_NAME"];
@@ -3870,22 +3255,71 @@
 	 
 	 
 	 
+	 #@@@ Обрабочик при обновлении раздела 1С: @@@#
+	 
+	 // FILE: local/php_interface/init.php:
+	 require_once "classes/IBlockSectionUpdate/IBlockSectionUpdate.php";
+	 
+	 #@ Обработчик события до обновления раздела: @#
+	 AddEventHandler(
+    	"iblock",
+    	"OnBeforeIBlockSectionUpdate",
+    	["IBlockSectionUpdate", "OnBeforeIBlockSectionUpdate"]
+	 );	 
+	 
+	
+	// FILE: /local/php_interface/classes/IBlockSectionUpdate/IBlockSectionUpdate.php: 
+	use \Bitrix\Main\{Application, Context, Loader};
+	
+	class IBlockSectionUpdate
+	{
+		
+		function OnBeforeIBlockSectionUpdate(&$arFields)
+		{
+			$request = Context::getCurrent()->getRequest();
+			
+			// #1:
+			if ($request["type"] === "catalog") { // обновление TIMESTAMP у раздела после 1С
+				$sectionID = $arFields["IBLOCK_SECTION_ID"];
+				
+				$ciSection = new CIBlockSection;
+				$arFields = ['TIMESTAMP_X' => date( "d.m.Y H:m:s" , time())];
+				$ciSection->Update($sectionID, $arFields);
+			}
+			
+			// #2:
+			if ($request["type"] === "catalog") { // обновление только определенных полей 1С
+				$fieldsLeft = [
+					"ACTIVE",
+					"NAME",
+					"IBLOCK_SECTION_ID"
+				];
+				
+				$arFields = array_filter($arFields, function ($key) use ($fieldsLeft) {
+					return in_array($key, $fieldsLeft);
+				}, ARRAY_FILTER_USE_KEY);
+			}
+			
+		}
+	}	 
+	 
+	 
+	 
 	 
 	 #@@@ Обновление свойства заказа: @@@#
 	 
-	 // FILE: local/php_interface/init.php
-	 
+	 // FILE: local/php_interface/init.php:
 	 #@ подлючаем класс обработчика @#
 	 require_once "classes/CSaleHandlers/CSaleHandlers.php";
 	 
 	 
 	 // ...
-	 #@ Обработчик события после после создания заказа: @#
-	 AddEventHandler(
-		 'sale',
-		 'OnSaleComponentOrderOneStepComplete',
-		 ['CSaleHandlers', 'OnSaleComponentOrderOneStepCompleteHandler']
-	 );
+	#@ Обработчик события после создания заказа: @#
+	AddEventHandler(
+		'sale',
+		'OnSaleComponentOrderOneStepComplete',
+		['CSaleHandlers', 'OnSaleComponentOrderOneStepCompleteHandler']
+	);
 	 
 	 /**
 	  * @param $orderID
@@ -3893,75 +3327,68 @@
 	  */
 	 function getFullNameData($orderID)
 	 {
-		  $propNameID = null;
-		  
-		  $fullNameData = [
-			  "NAME" => "",
-			  "LAST_NAME" => ""
-		  ];
-		  
-		  $rsProp = CSaleOrderPropsValue::GetList([], ['ORDER_ID' => $orderID]);
-		  
-		  while ($arProp = $rsProp->Fetch()) {
-				['ID' => $propID, 'CODE' => $propCode, 'VALUE' => $propValue] = $arProp;
-				
-				$isName = $propCode == 'FIO' || $propCode == 'NAME_UR';
-				$isLastName = $propCode == 'LAST_NAME' || $propCode == 'LASTNAME_UR';
-				
-				$propValueTrimmed = trim($propValue);
-				
-				if ($isLastName) {
-					 $fullNameData['LAST_NAME'] = $propValueTrimmed;
-				} elseif ($isName) {
-					 $propNameID = $propID;
-					 $fullNameData['NAME'] = $propValueTrimmed;
-				}
-		  }
-		  
-		  $fullName = "{$fullNameData['LAST_NAME']} {$fullNameData['NAME']}";
-		  
-		  return compact('fullName', 'propNameID');
+		$propNameID = null;
+		
+		$fullNameData = [
+			"NAME" => "",
+			"LAST_NAME" => ""
+		];
+		
+		$rsProp = CSaleOrderPropsValue::GetList([], ['ORDER_ID' => $orderID]);
+		
+		while ($arProp = $rsProp->Fetch()) {
+			['ID' => $propID, 'CODE' => $propCode, 'VALUE' => $propValue] = $arProp;
+			
+			$isName = $propCode == 'FIO' || $propCode == 'NAME_UR';
+			$isLastName = $propCode == 'LAST_NAME' || $propCode == 'LASTNAME_UR';
+			
+			$propValueTrimmed = trim($propValue);
+			
+			if ($isLastName) {
+				$fullNameData['LAST_NAME'] = $propValueTrimmed;
+			} elseif ($isName) {
+				$propNameID = $propID;
+				$fullNameData['NAME'] = $propValueTrimmed;
+			}
+		}
+		
+		$fullName = "{$fullNameData['LAST_NAME']} {$fullNameData['NAME']}";
+		
+		return compact('fullName', 'propNameID');
 	 }
 	 
-	 
-	 
-	 
 	 // FILE: local/php_interface/classes/CSaleHandlers/CSaleHandlers.php
-	 
-	 /**
-	  * Class CSaleHandlers
-	  */
 	 class CSaleHandlers
 	 {
-		  /**
-			* @param $ID
-			* @param $arFields
-			*/
-		  public static function OnSaleComponentOrderOneStepCompleteHandler($ID, $arFields)
-		  {
-				$namePersonData = [
-					"1" => "FIO", # физическое лицо
-					"2" => "NAME_UR" # юридическое лицо
-				];
-				
-				[
-					'ID' => $orderID,
-					'USER_ID' => $userID,
-					'PERSON_TYPE_ID' => $personTypeID
-				] = $arFields;
-				
-				if (!isset($orderID, $userID, $personTypeID)) {
-					 return;
-				}
-				
-				$nameCode = $namePersonData[(string) $personTypeID];
-				
-				['fullName' => $fullName, 'propNameID' => $propNameID] = getFullNameData($orderID);
-				
-				if (!$fullName && !$propNameID) {
-					 return;
-				}
-				
-				CSaleOrderPropsValue::Update($propNameID, ["CODE" => $nameCode, "VALUE" => $fullName]);
-		  }
+		/**
+		 * @param $ID
+		 * @param $arFields
+		 */
+		public static function OnSaleComponentOrderOneStepCompleteHandler($ID, $arFields)
+		{
+			$namePersonData = [
+				"1" => "FIO", # физическое лицо
+				"2" => "NAME_UR" # юридическое лицо
+			];
+			
+			[
+				'ID' => $orderID,
+				'USER_ID' => $userID,
+				'PERSON_TYPE_ID' => $personTypeID
+			] = $arFields;
+			
+			if (!isset($orderID, $userID, $personTypeID)) {
+				return;
+			}
+			
+			$nameCode = $namePersonData[(string) $personTypeID];
+			
+			['fullName' => $fullName, 'propNameID' => $propNameID] = getFullNameData($orderID);
+			
+			if (!$fullName && !$propNameID) {
+				return;
+			}
+
+			CSaleOrderPropsValue::Update($propNameID, ["CODE" => $nameCode, "VALUE" => $fullName]);
+		}
 	 }

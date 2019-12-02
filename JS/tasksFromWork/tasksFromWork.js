@@ -26,7 +26,6 @@ const getCountAnagram = (data, origStr) => {
 
 
 
-
 /* #@ Подзагрузка товаров: @#*/
 $(() => {
     const delay = ms => {
