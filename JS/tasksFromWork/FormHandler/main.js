@@ -29,6 +29,7 @@ document.addEventListener("DOMContentLoaded", () => {
             pathToSend: "/includes/request.php"
         };
 
+        // инициализируем обработчик для формы:
         formCalc.initHandler(formSettings);
     });
 });

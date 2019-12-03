@@ -1,10 +1,22 @@
-/* Форма заполняется: */
+[class^="form--"] {
+    --_color-success: #0d8052;
+    --_color-error: #8b0000;
+    --_color-loader: #669900;
+}
+
+/* @ Форма заполняется: */
 .form--filled {
 
 }
 
-/* Форма отправляется: */
-.form--sending *:not(.form__loader){
+/* @ Форма отправляется: */
+.form--sending {
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+}
+
+.form--sending *:not(.form__loader) {
     display: none;
 }
 
@@ -12,25 +24,46 @@
     display: inline-block;
 }
 
-/* Форма данные с сервера получены: */
+/* @ Форма данные с сервера получены (ERROR): */
+.form--error {
+
+}
+
+.form--error .response-data {
+    border: 1px solid var(--_color-error);
+}
+
+/* @ Форма данные с сервера получены (SUCCESS): */
+.form--finish {
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+}
+
 .form--finish *:not(.response-data) {
     display: none;
 }
 
+.form--finish .response-data {
+    border: 1px solid var(--_color-success);
+}
+
 /* Поля: */
 .field--error {
-    border-color: darkred;
+    border-color: var(--_color-error);
+}
+
+/* Блоки: */
+.response-data {
+    width: 80%;
+    height: 60%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .field--success {
-    border-color: greenyellow;
-}
-
-/* Кнопка submit */
-.button--disabled {
-    pointer-events: none;
-    cursor: default;
-    color: #888;
+    border-color: var(--_color-success);
 }
 
 /* Loader: */
@@ -50,7 +83,7 @@
     margin: 8px;
     box-sizing: border-box;
     border: 32px solid #fff;
-    border-color: #fff transparent #fff transparent;
+    border-color: var(--_color-loader) transparent var(--_color-loader) transparent;
     animation: form__loaders 1.2s infinite;
 }
 

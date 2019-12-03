@@ -4,10 +4,10 @@ HTMLFormElement.prototype.initHandler = function (userSettings) {
     const classSuccess = 'field--success';
     const formResultBlock = form.querySelector('.response-data');
     const formSbmBtn = form.querySelector('[type=submit]');
-    const steps = ["form--filled", "form--sending", "form--finish"];
+    const steps = ["form--filled", "form--sending", "form-error", "form--finish"];
     const settings = {
         postData: {},
-        showLoaderTime: 1500,
+        showLoaderTime: 3000,
         ...userSettings
     };
 
@@ -59,11 +59,27 @@ HTMLFormElement.prototype.initHandler = function (userSettings) {
 
 
     /**
-     * Обновление State
+     * Проверяет есть ли измененения в state
+     * @param newState
+     */
+    const componentNeedUpdate = newState => {
+        return JSON.stringify(state) !== JSON.stringify(newState);
+    };
+
+
+    /**
+     * Обновление State и в случае изменений запускает перерендеринг компонента:
      * @param newState
      */
     const setState = newState => {
-        state = {...state, ...newState};
+        const newMergingState = {...state, ...newState};
+
+        if (!componentNeedUpdate(newMergingState)) {
+            return;
+        }
+
+        state = newMergingState;
+        setTimeout(() => render(state), 0);
     };
 
 
@@ -91,40 +107,49 @@ HTMLFormElement.prototype.initHandler = function (userSettings) {
 
 
     /**
-     * Рендерит результат заполнения формы
+     * Сохраняет в state результат заполнения формы:
      */
     const showFilingResult = () => {
         const {emptyFields, completedFields} = checkFields();
 
         setState({isFilledForm: !emptyFields.length, emptyFields, completedFields});
-
-        render(state);
     };
 
 
     /**
-     * Посылает и записывает в state результат запроса
+     * Посылает и записывает в state результат запроса:
      * @param sentData
      * @returns {Promise<string>}
      */
     const processPostData = async sentData => {
-        return fetch(pathToSend, {method: "POST", body: sentData})
-            .then(responseServer => responseServer.text())
-            .then(response => {
-                    const {result, msg} = response;
-                    const isSuccess = result === 'success';
+        const request = new XMLHttpRequest();
 
-                    setState({message: {text: msg, isError: isSuccess}});
+        request.open("POST", pathToSend, true);
+        request.responseType = "json";
+        request.onreadystatechange = () => {
+            let isError = true;
+            let text = "Не удалось отправить данные";
+
+            if (request.status === 200) {
+                try {
+                    const {result, msg} = request.response;
+                    text = msg;
+                    isError = result === 'error';
+                } catch (e) {
+                     console.error("Не удалось обработать данные с сервера");
                 }
-            ).catch(error => {
-                console.error(error);
-                setState({message: {text: "Возникла ошибка при отправке данных", isError: true}});
-            });
+            }
+
+            const step = isError ? steps[2] : steps[3];
+            setState({step, message: {text, isError}});
+        };
+
+        request.send(sentData);
     };
 
 
     /**
-     * Обработчик события клика по кнопке отправить форму
+     * Обработчик события клика по кнопке отправить форму:
      * @param e
      * @returns {Promise<void>}
      */
@@ -138,25 +163,23 @@ HTMLFormElement.prototype.initHandler = function (userSettings) {
         }
 
         setState({step: steps[1]});
-        render(state);
 
         const formData = new FormData(form);
-        const sentData = {...postData, ...formData};
 
-        await processPostData(sentData);
+        if (postData) {
+            formData.append("secondData", JSON.stringify(postData));
+        }
+
         await delay(showLoaderTime);
-
-        setState({step: steps[2]});
-        render(state);
+        await processPostData(formData);
     };
 
 
     /**
-     * Рендеринг содержимого формы
+     * Рендеринг содержимого компонета:
      */
     const render = state => {
-        console.log(state);
-        const {isFilledForm, step, emptyFields, completedFields, message: {text, isError}} = state;
+        const {step, emptyFields, completedFields, message: {text, isError}} = state;
 
         // Добавляем класс для формы с текущим шагом:
         if (!form.classList.contains(step)) {
@@ -165,13 +188,6 @@ HTMLFormElement.prototype.initHandler = function (userSettings) {
             }
 
             form.classList.add(step);
-        }
-
-        // Добавляем класс для кнопки отправки:
-        if (isFilledForm) {
-            formSbmBtn.classList.add("button--disabled");
-        } else {
-            formSbmBtn.classList.remove("button--disabled");
         }
 
         // Добавляем классы для незаполненных обязательных полей:
@@ -187,19 +203,10 @@ HTMLFormElement.prototype.initHandler = function (userSettings) {
         }
 
         // Скрываем/Выводим сообщение:
-        if (!text) {
-            formResultBlock.innerText = "";
-        } else {
-            const addClassResult = isError ? classError : classSuccess;
-            const hiddenClassResult = isError ? classSuccess : classError;
-
-            formResultBlock.classList.add(addClassResult);
-            formResultBlock.classList.remove(hiddenClassResult);
-
-            formResultBlock.innerText = text;
-        }
+        formResultBlock.innerText = !text ? "" : text;
     };
 
+    
 
     const {postData, pathToSend, showLoaderTime} = settings;
     const errors = getErrorsInSettings(settings, formResultBlock);
@@ -211,3 +218,4 @@ HTMLFormElement.prototype.initHandler = function (userSettings) {
 
     formSbmBtn.addEventListener('click', formSubmitHandler);
 };
+
