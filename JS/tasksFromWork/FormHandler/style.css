@@ -1,7 +1,7 @@
-[class^="form--"] {
-    --_color-success: #0d8052;
-    --_color-error: #8b0000;
-    --_color-loader: #669900;
+:root {
+	--_color-success: #0d8052;
+	--_color-error: #8b0000;
+	--_color-loader: #669900;
 }
 
 /* @ Форма заполняется: */

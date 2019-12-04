@@ -4,7 +4,7 @@ HTMLFormElement.prototype.initHandler = function (userSettings) {
     const classSuccess = 'field--success';
     const formResultBlock = form.querySelector('.response-data');
     const formSbmBtn = form.querySelector('[type=submit]');
-    const steps = ["form--filled", "form--sending", "form-error", "form--finish"];
+    const steps = ["form--filled", "form--sending", "form--error", "form--finish"];
     const settings = {
         postData: {},
         showLoaderTime: 3000,
@@ -135,9 +135,7 @@ HTMLFormElement.prototype.initHandler = function (userSettings) {
                     const {result, msg} = request.response;
                     text = msg;
                     isError = result === 'error';
-                } catch (e) {
-                     console.error("Не удалось обработать данные с сервера");
-                }
+                } catch (e) {}
             }
 
             const step = isError ? steps[2] : steps[3];
@@ -206,7 +204,7 @@ HTMLFormElement.prototype.initHandler = function (userSettings) {
         formResultBlock.innerText = !text ? "" : text;
     };
 
-    
+
 
     const {postData, pathToSend, showLoaderTime} = settings;
     const errors = getErrorsInSettings(settings, formResultBlock);
@@ -218,4 +216,3 @@ HTMLFormElement.prototype.initHandler = function (userSettings) {
 
     formSbmBtn.addEventListener('click', formSubmitHandler);
 };
-
