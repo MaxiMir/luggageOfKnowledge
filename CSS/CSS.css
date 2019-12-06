@@ -8,7 +8,7 @@
     color: var(--color, blue); /* blue - цвет по умолч. */
 }
 
-.elements__item{
+.elements__item {
     width: var(--width);
 }
 
@@ -94,7 +94,6 @@ body {
     top: 0;
     height: 100%;
     width: 100%;
-
     position: absolute;
     background: rgba(0, 0, 0, 0.7);
 }
