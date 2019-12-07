@@ -24,7 +24,7 @@ $ code . // открыть текущую директорию в MVC
 */
 
 // FILE gulpfile.js:
-const {src, dest, series, watch} = require('gulp') // series - позволяет вызывать последовательно несколько задач
+const {src, dest, series, watch} = require('KNOWLEDGE/JS/GULP') // series - позволяет вызывать последовательно несколько задач
 const sass = require('gulp-sass')
 const csso = require('gulp-csso')
 const include = require('gulp-file-include') // пакет отвечает за соединение данных файлов

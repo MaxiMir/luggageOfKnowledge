@@ -76,7 +76,7 @@ $ npm install -g yarn # file yarn.lock - аналог npm (более оптим
 
 
 // FILE: /src/index.js:
-import React from 'react' // импортируем библиотеку React
+import React from 'KNOWLEDGE/JS/React/React' // импортируем библиотеку React
 import ReactDOM from 'react-dom' // импортируем библиотеку ReactDOM (ядро библиотеки React)
 import './index.css' // импортируем стили
 import App from './App' // импортируем компонент App
@@ -90,7 +90,7 @@ registerServiceWorker()
 /* #@ Cинтаксис JSX + Инлайн стили: @# */
 
 // FILE: /src/App.js:
-import React, {Component} from 'react'
+import React, {Component} from 'KNOWLEDGE/JS/React/React'
 import './App.css'
 
 class App extends Component {
@@ -146,13 +146,13 @@ class App extends Component {
 /* #@ Создание компонентов: @# */
 
 // FOLDER: /src/ cоздаем папку Car и файл Car.js:
-import React from 'react' // необходимо импортировать при использовании JSX cинтаксиса
+import React from 'KNOWLEDGE/JS/React/React' // необходимо импортировать при использовании JSX cинтаксиса
 
 export default () => <h2>This is car component</h2> // Если возвращается несколько строк все оборачиваем в ()
 
 
 // FILE /src/App.js:
-import React, {Component} from 'react'
+import React, {Component} from 'KNOWLEDGE/JS/React/React'
 import './App.css'
 import Car from './Car/Car.js' // импортируем компонент Car
 
@@ -176,7 +176,7 @@ class App extends Component {
 /* #@ Вывод динамических данных: @# */
 
 // FILE: /src/Car/Car.js:
-import React from 'react'
+import React from 'KNOWLEDGE/JS/React/React'
 
 export default () => (
     <div>
@@ -190,7 +190,7 @@ export default () => (
 /* #@ Передача параметров и контента: @# */
 
 // FILE: /src/Car/Car.js:
-import React from 'react'
+import React from 'KNOWLEDGE/JS/React/React'
 
 export default props => (
     <div>
@@ -202,7 +202,7 @@ export default props => (
 
 
 // FILE /src/App.js:
-import React, {Component} from 'react'
+import React, {Component} from 'KNOWLEDGE/JS/React/React'
 import './App.css'
 import Car from './Car/Car.js'
 
@@ -232,7 +232,7 @@ class App extends Component {
 /* #@ State: @# */
 
 // FILE /src/App.js:
-import React, {Component} from 'react'
+import React, {Component} from 'KNOWLEDGE/JS/React/React'
 import './App.css'
 import Car from './Car/Car.js'
 
@@ -289,7 +289,7 @@ class App extends Component {
 /* #@ Передача параметров в функцию: @# */
 
 // FILE: /src/Car/Car.js:
-import React from 'react'
+import React from 'KNOWLEDGE/JS/React/React'
 
 export default props => (
     <div>
@@ -302,7 +302,7 @@ export default props => (
 
 
 // FILE /src/App.js:
-import React, {Component} from 'react'
+import React, {Component} from 'KNOWLEDGE/JS/React/React'
 import './App.css'
 import Car from './Car/Car.js'
 
@@ -372,7 +372,7 @@ class App extends Component {
 /* #@ Работа со списком: @# */
 
 // FILE /src/App.js:
-import React, {Component} from 'react'
+import React, {Component} from 'KNOWLEDGE/JS/React/React'
 import './App.css'
 import Car from './Car/Car.js'
 
@@ -439,7 +439,7 @@ class App extends Component {
 /* #@ Работа условными операторами: @# */
 
 // FILE /src/App.js:
-import React, {Component} from 'react'
+import React, {Component} from 'KNOWLEDGE/JS/React/React'
 import './App.css'
 import Car from './Car/Car.js'
 
@@ -504,7 +504,7 @@ class App extends Component {
 /* #@ Динамические списки: @# */
 
 // FILE: /src/Car/Car.js:
-import React from 'react'
+import React from 'KNOWLEDGE/JS/React/React'
 
 export default props => (
     <div
@@ -524,7 +524,7 @@ style={{
 
 
 // FILE /src/App.js:
-import React, {Component} from 'react'
+import React, {Component} from 'KNOWLEDGE/JS/React/React'
 import './App.css'
 import Car from './Car/Car.js'
 
@@ -641,7 +641,7 @@ class App extends Component {
 */
 
 // FILE: /src/Car/Car.js:
-import React from 'react'
+import React from 'KNOWLEDGE/JS/React/React'
 import './Car.css' // подключаем файл стилей
 
 export default props => {
@@ -680,7 +680,7 @@ export default props => {
 
 
 // FILE: /src/Car/Car.js:
-import React from 'react'
+import React from 'KNOWLEDGE/JS/React/React'
 import Radium from 'radium' // подключаем библиотеку Radium
 import './Car.css' // подключаем файл стилей
 
@@ -783,7 +783,7 @@ export default Radium(Car) // обрачиваем компонент Car в ф�
 // Стили стали локальными, исправляем это:
 
 // FILE: /src/Car/Car.js:
-import React from 'react'
+import React from 'KNOWLEDGE/JS/React/React'
 import Radium from 'radium'
 import classes from './Car.css' // сохраняем CSS классы в переменную
 
@@ -895,7 +895,7 @@ const Car = props => {
 */
 
 // FILE /src/App.js:
-import React, {Component} from 'react'
+import React, {Component} from 'KNOWLEDGE/JS/React/React'
 import './App.scss' // импортируем App.scss
 import Car from './Car/Car.js'
 
@@ -927,7 +927,7 @@ class App extends Component {
 /* #@ Передача параметров в компонент: @# */
 
 // FILE: /src/index.js:
-import React from 'react'
+import React from 'KNOWLEDGE/JS/React/React'
 import ReactDOM from 'react-dom'
 import './index.css'
 import App from './App'
@@ -937,7 +937,7 @@ ReactDOM.render(<App title={'I am from props'}/>, document.getElementById('root'
 
 
 // FILE /src/App.js:
-import React, {Component} from 'react'
+import React, {Component} from 'KNOWLEDGE/JS/React/React'
 import './App.css'
 import Car from './Car/Car.js'
 
@@ -965,7 +965,7 @@ class App extends Component {
 /* #@ Ининициализация State: @# */
 
 // FILE /src/App.js:
-import React, {Component} from 'react'
+import React, {Component} from 'KNOWLEDGE/JS/React/React'
 import './App.css'
 import Car from './Car/Car.js'
 
@@ -994,7 +994,7 @@ class App extends Component {
 // ! доступны для классов наследников от базового класса (Component)
 
 // FILE /src/App.js:
-import React, {Component} from 'react'
+import React, {Component} from 'KNOWLEDGE/JS/React/React'
 import './App.css'
 import Car from './Car/Car.js'
 
@@ -1026,7 +1026,7 @@ class App extends Component {
 // Stateful компонент имеет доступ к жизненным циклам
 
 // FILE: /src/Car/Car.js:
-import React from 'react'
+import React from 'KNOWLEDGE/JS/React/React'
 import Radium from 'radium'
 import classes from './Car.css'
 
@@ -1079,7 +1079,7 @@ export default Radium(Car)
 /* #@ Жизненный цикл изменения/удаления: @# */
 
 // FILE: /src/Car/Car.js:
-import React from 'react'
+import React from 'KNOWLEDGE/JS/React/React'
 import Radium from 'radium'
 import classes from './Car.css'
 
@@ -1128,7 +1128,7 @@ export default Radium(Car)
 /* #@ ErrorBoundary (version > 16): @# */
 
 // В /src/ создаем FOLDER ErrorBoundary, а в нем FILE ErrorBoundary.js:
-import React, {Component} from 'react'
+import React, {Component} from 'KNOWLEDGE/JS/React/React'
 
 export default class ErrorBoundary extends Component {
     state = {
@@ -1152,7 +1152,7 @@ export default class ErrorBoundary extends Component {
 
 
 // FILE /src/App.js:
-import React, {Component} from 'react'
+import React, {Component} from 'KNOWLEDGE/JS/React/React'
 import './App.css'
 import Car from './Car/Car.js'
 import ErrorBoundary from './ErrorBoundary/ErrorBoundary.js' // импортируем компонент
@@ -1240,7 +1240,7 @@ class App extends Component {
 /* #@ Фрагменты: @# */
 
 // в /src/ создаем папку Counter, а в нем FILE Сounter.js:
-import React, {Component} from 'react'
+import React, {Component} from 'KNOWLEDGE/JS/React/React'
 
 export default class Counter extends Component {
     state = {
@@ -1298,7 +1298,7 @@ export default class Counter extends Component {
 }
 
 // FILE /src/App.js:
-import React, {Component} from 'react'
+import React, {Component} from 'KNOWLEDGE/JS/React/React'
 import './App.css'
 import Car from './Car/Car.js'
 import Counter from './Counter/Counter.js' // импортируем компонент
@@ -1381,7 +1381,7 @@ class App extends Component {
 
 
 // в /src/ создаем папку hoc (high order components), а в нем FILE Auxiliary.js:
-import React from 'react'
+import React from 'KNOWLEDGE/JS/React/React'
 
 const Auxiliary = props => {
     return props.children
@@ -1391,7 +1391,7 @@ export default Auxiliary
 
 
 // FILE Сounter.js:
-import React, {Component} from 'react'
+import React, {Component} from 'KNOWLEDGE/JS/React/React'
 import Auxiliary from '..hoc/Auxiliary'
 
 export default class Counter extends Component {
@@ -1425,7 +1425,7 @@ export default class Counter extends Component {
 // $ yarn start
 
 // FOLDER: /src/hoc/ создаем файл withClass.js:
-import React from 'react'
+import React from 'KNOWLEDGE/JS/React/React'
 
 const withClass = (Component, className) => { // оборачивает Component в section c классом className
     return props => {
@@ -1441,7 +1441,7 @@ export default withClass
 
 
 // FILE: /src/Car/Car.js:
-import React from 'react'
+import React from 'KNOWLEDGE/JS/React/React'
 import classes from './Car.css'
 import PropTypes from 'prop-types'
 import withClass from '../hoc/withClass'
@@ -1528,7 +1528,7 @@ export default withClass(Car, classes.Car); // используем hoc withClas
 
 /* #@ Context API: @# */
 // в /src/ создаем FOLDER Counter2, а в нем FILE Сounter2.js:
-import React from 'react'
+import React from 'KNOWLEDGE/JS/React/React'
 import {ClickedContext} from '../App'
 
 export default props => {
@@ -1550,7 +1550,7 @@ export default props => {
 
 
 // FILE: /src/Counter/Counter.js:
-import React, {Component} from 'react'
+import React, {Component} from 'KNOWLEDGE/JS/React/React'
 import Auxiliary from '..hoc/Auxiliary'
 import Counter2 from '../Counter2/Counter2'
 
@@ -1579,7 +1579,7 @@ export default class Counter extends Component {
 
 
 // FILE /src/App.js:
-import React, {Component} from 'react'
+import React, {Component} from 'KNOWLEDGE/JS/React/React'
 import './App.css'
 import Car from './Car/Car.js'
 import Counter from './Counter/Counter.js'
@@ -1688,7 +1688,7 @@ class App extends Component {
 
 
 // FILE /src/App.js:
-import React, {Component} from 'react'
+import React, {Component} from 'KNOWLEDGE/JS/React/React'
 import Layout from './hoc/Layout/Layout'
 import Quiz from './containers/Quiz/Quiz.js'
 
@@ -1710,7 +1710,7 @@ export default App
 
 // FOLDER /src создаем hoc/Layout/ а в нем FILE Layout.js:
 
-import React, {Component} from 'react'
+import React, {Component} from 'KNOWLEDGE/JS/React/React'
 import classes from './Layout.css'
 
 class Layout extends Component {
@@ -1752,7 +1752,7 @@ export default Layout
 // FOLDER /src создаем components/ - здесь будут хранится функциональные компоненты
 
 // FOLDER /src/containers/ создаем FOLDER Quiz/ а в нем FILE: /Quiz.js:
-import React, {Component} from 'react'
+import React, {Component} from 'KNOWLEDGE/JS/React/React'
 import classes from './Quiz.css'
 import ActiveQuiz from '../../components/ActiveQuiz/ActiveQuiz'
 import ActiveQuiz from '../../components/ActiveQuiz/FinishedQuiz'
@@ -1901,7 +1901,7 @@ export default Quiz
 
 
 // FOLDER /src/ создаем FOLDER ActiveQuiz/ а в нем FILE ActiveQuiz.js:
-import React from 'react'
+import React from 'KNOWLEDGE/JS/React/React'
 import classes from './ActiveQuiz.css'
 import AnswersList from './AnsersList/AnsersList'
 
@@ -1949,7 +1949,7 @@ export default ActiveQuiz
 /* #@ Вывод результатов: @# */
 
 // FOLDER /src/ActiveQuiz/ создаем FOLDER AnswersList а в нем FILE AnswersList.js:
-import React from 'react'
+import React from 'KNOWLEDGE/JS/React/React'
 import classes from './AnwersList.css'
 import AnswerItem from './AnswerItem/AnswerItem'
 
@@ -1983,7 +1983,7 @@ export default AnwersList
 */
 
 // FOLDER /src/ActiveQuiz/AnswersList/ создаем FOLDER AnswerItem а в нем FILE AnswerItem.js:
-import React from 'react'
+import React from 'KNOWLEDGE/JS/React/React'
 import classes from './AnswerItem.css'
 
 const AnswerItem = props => {
@@ -2034,7 +2034,7 @@ export default AnswerItem
 
 
 // FOLDER: /src/components/ cоздаем FOLDER FinishedQuiz а в нем FILE FinishedQuiz.js:
-import React from 'react'
+import React from 'KNOWLEDGE/JS/React/React'
 import classes from './FinishedQuiz.css'
 import Button from '../UI/Button/Button'
 
@@ -2124,7 +2124,7 @@ export default FinishedQuiz
 
 
 // FOLDER: /src/components/ создаем FOLDER UI, затем FOLDER Button, а в нем Button.js:
-import React from 'react'
+import React from 'KNOWLEDGE/JS/React/React'
 import classes from './Button.css'
 
 const Button = props => {
@@ -2193,7 +2193,7 @@ const Button = props => {
 
 /* #@ Кнопка переключения меню: @# */
 // FOLDER: /src/components/ создаем FOLDER Navigation, затем FOLDER MenuToggle а в нем FILE: MenuToggle.js:
-import React from 'react'
+import React from 'KNOWLEDGE/JS/React/React'
 import classes from './MenuToggle.css'
 
 const MenuToggle = props => {
@@ -2245,7 +2245,7 @@ export default MenuToggle
 
 // FOLDER /src/hoc/Layout/Layout.js:
 
-import React, {Component} from 'react'
+import React, {Component} from 'KNOWLEDGE/JS/React/React'
 import classes from './Layout.css'
 import MenuToggle from '../../components/Navigation/MenuToggle/MenuToggle'
 import Drawer from '../../components/Navigation/Drawer/Drawer'
@@ -2292,7 +2292,7 @@ export default Layout
 
 
 // FOLDER: /src/components/Navigation/ создаем FOLDER Drawer, а в нем FILE Drawer.js:
-import React, {Component} from 'react'
+import React, {Component} from 'KNOWLEDGE/JS/React/React'
 import classes from './Drawer.css'
 import Backdrop from '../../UI/Backdrop/Backdrop'
 
@@ -2389,7 +2389,7 @@ export default Drawer
 
 /* #@ Компонент затемнения: @# */
 // FOLDER: /src/components/UI/ создаем FOLDER Backdrop, а в нем FILE Backdrop.js:
-import React from 'react'
+import React from 'KNOWLEDGE/JS/React/React'
 import classes from './Backdrop.css'
 
 const Backdrop = props => <div className={classes.Backdrop} onClick={this.props.onClick} />
@@ -2420,7 +2420,7 @@ export default Backdrop
 
 
 // FILE: /src/index.js:
-import React from 'react'
+import React from 'KNOWLEDGE/JS/React/React'
 import ReactDOM from 'react-dom'
 import './index.css'
 import App from './App'
@@ -2439,7 +2439,7 @@ registerServiceWorker()
 
 
 // FILE /src/App.js:
-import React, {Component} from 'react'
+import React, {Component} from 'KNOWLEDGE/JS/React/React'
 import Layout from './hoc/Layout/Layout'
 import {Route, Switch} from 'react-router-dom' // Switch - позволяет загружать 1 нужный роут
 import Quiz from './containers/Quiz/Quiz.js'
@@ -2500,7 +2500,7 @@ export default App
 
 
 // FILE: /src/index.js:
-import React from 'react'
+import React from 'KNOWLEDGE/JS/React/React'
 import ReactDOM from 'react-dom'
 import './index.css'
 import App from './App'
@@ -2517,7 +2517,7 @@ ReactDOM.render(app, document.getElementById('root'))
 registerServiceWorker()
 
 // FILE: /src/App.js:
-import React, {Component} from 'react'
+import React, {Component} from 'KNOWLEDGE/JS/React/React'
 import './App.sccs'
 import {Route, NavLink, Switch, Redirect} from 'react-router-dom' // импортируем компонент для регистрации роутов + компонент для навигации + компонент для переключения по роутам + компонент редирект
 import About from './About/About'
@@ -2583,7 +2583,7 @@ export default App
 
 
 // FILE: /src/Cars/Cars.js:
-import React, {Component} from 'react'
+import React, {Component} from 'KNOWLEDGE/JS/React/React'
 import Car from './Car/Car.js'
 
 export default class Cars extends Component {
@@ -2629,7 +2629,7 @@ export default class Cars extends Component {
 
 
 // FILE: /src/Cars/Car/Car.js:
-import React from 'react'
+import React from 'KNOWLEDGE/JS/React/React'
 import './Car.scss'
 import {withRouter} from 'react-router-dom' // импортируем компонент
 
@@ -2650,7 +2650,7 @@ export default withRouter(Car) // оборачиваем функциональ�
 
 
 // FOLDER: /src/ создаем FOLDER CarDetail а в нем FILE CarDetail.js:
-import React from 'react'
+import React from 'KNOWLEDGE/JS/React/React'
 
 export default class CarDetail extends React.Component {
     render() {

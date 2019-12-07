@@ -131,7 +131,7 @@
 									 <div class="block-wrap">
 										  <? if ($productIDs): ?>
 												<div class="block-sorting">
-													 <form action="./" method="GET">
+													 <form action="" method="GET">
 														  <? #@ ДОБАВЛЯЕМ QUERY PARAMS #@ ?>
 														  <input type="hidden" name="q" value="<?= $searchPhrase ?>"/>
 														  

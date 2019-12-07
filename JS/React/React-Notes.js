@@ -8,7 +8,7 @@
  Вначале нужно сделать так, чтобы всё приложение имело доступ к Context. Для этого в index.js нужно обернуть всё приложение в ThemeContext.Provider.
  Ещё стоит передать ему свойство value. В нём будет храниться состояние: день или ночь.
  */
-import React from "react";
+import React from "KNOWLEDGE/JS/React/React";
 import ReactDOM from "react-dom";
 import { ThemeContextProvider } from "./themeContext";
 
@@ -24,7 +24,7 @@ ReactDOM.render(
 
 // # Получение свойств от Context через contextType
 // FILE: App.js:
-import React from "react";
+import React from "KNOWLEDGE/JS/React/React";
 import Image from "./Image";
 
 class App extends React.Component {
@@ -48,7 +48,7 @@ export default App;
  // FILE: Image.js:
  */
 
-import React from "react";
+import React from "KNOWLEDGE/JS/React/React";
 import Button from "./Button";
 import ThemeContext from "./themeContext";
 
@@ -78,7 +78,7 @@ Image.contextType = ThemeContext;
  // FILE: Image.js:
  */
 
-import React from "react";
+import React from "KNOWLEDGE/JS/React/React";
 import Button from "./Button";
 import ThemeContext from "./themeContext";
 
@@ -107,7 +107,7 @@ export default Image;
 // <Button /> тоже нужно обернуть в <ThemeContext.Consumer> — в будущем это добавит функциональности кнопке.
 
 // FILE: Button.js:
-import React from "react";
+import React from "KNOWLEDGE/JS/React/React";
 import ThemeContext from "./themeContext";
 
 function Button(props) {
@@ -140,7 +140,7 @@ export default Button;
  // FILE: themeContext.js:
  */
 
-import React, { Component } from "react";
+import React, { Component } from "KNOWLEDGE/JS/React/React";
 const { Provider, Consumer } = React.createContext();
 
 class ThemeContextProvider extends Component {
@@ -157,7 +157,7 @@ export { ThemeContextProvider, Consumer as ThemeContextConsumer };
 
  // FILE: index.js
  */
-import React from "react";
+import React from "KNOWLEDGE/JS/React/React";
 import Button from "./Button";
 import { ThemeContextConsumer } from "./themeContext";
 
@@ -183,7 +183,7 @@ export default Image;
 // # Изменение Context
 // Чтобы подвязать кнопку, сначала нужно добавить состояния state в ThemeContextProvider:
 // FILE: ThemeContextProvider.js
-import React, { Component } from "react";
+import React, { Component } from "KNOWLEDGE/JS/React/React";
 const { Provider, Consumer } = React.createContext();
 
 // Примечание: ещё вы можете использовать хуки, чтобы определять состояние
@@ -205,7 +205,7 @@ export { ThemeContextProvider, Consumer as ThemeContextConsumer };
 
 
 // FILE: ThemeContextProvider.js
-import React, { Component } from "react";
+import React, { Component } from "KNOWLEDGE/JS/React/React";
 const { Provider, Consumer } = React.createContext();
 
 class ThemeContextProvider extends Component {
@@ -241,7 +241,7 @@ export { ThemeContextProvider, Consumer as ThemeContextConsumer };
  И под конец на кнопку нужно повесить слушатель события onClick. При нажатии кнопки должен вызываться context.toggleTheme — в таком случае будут обновляться Consumer’ы, которые используют состояние от Provider’ов. Код кнопки будет выглядеть примерно так:
  */
 
-import React from "react";
+import React from "KNOWLEDGE/JS/React/React";
 import { ThemeContextConsumer } from "./themeContext";
 
 function Button(props) {

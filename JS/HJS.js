@@ -16258,7 +16258,7 @@ application.js
 */
 
 import _ from 'lodash';
-import $ from 'jquery';
+import $ from 'KNOWLEDGE/JS/jQuery';
 
 export default () => {
   const carousels = $('[data-ride="carousel"]');

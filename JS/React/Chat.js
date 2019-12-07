@@ -68,7 +68,7 @@ resolve: {
  */
 
 // FILE: /src/index.js:
-import React from "react";
+import React from "KNOWLEDGE/JS/React/React";
 import ReactDOM from "react-dom";
 import { BrowserRouter as Router } from "react-router-dom";
 
@@ -105,7 +105,7 @@ ReactDOM.render(
 
 
 // FILE: /src/components/Button/index.js
-import React from "react";
+import React from "KNOWLEDGE/JS/React/React";
 import PropTypes from "prop-types";
 import { Button as BaseButton } from "antd";
 import classNames from "classnames";
@@ -150,7 +150,7 @@ export {default as Button} from './Button';
 
 
 // FILE /src/components/Block/index.js
-import React from "react";
+import React from "KNOWLEDGE/JS/React/React";
 import classNames from "classnames";
 
 import "./Block.scss";
@@ -181,7 +181,7 @@ export { default as Block } from './Block';
 
 
 // FILE: /src/App.js:
-import React, { Component } from "react";
+import React, { Component } from "KNOWLEDGE/JS/React/React";
 import { Route } from "react-router-dom";
 
 import { Auth } from "pages";
@@ -219,7 +219,7 @@ export { default as Home } from "./Home";
 
 
 // FILE /src/pages/Auth/index.jsx
-import React from "react";
+import React from "KNOWLEDGE/JS/React/React";
 import { Route } from "react-router-dom";
 
 import { LoginForm, RegisterForm } from "modules";
@@ -333,7 +333,7 @@ export default LoginForm;
 
 
 // FILE: /src/modules/LoginForm/components/LoginForm.jsx
-import React, {Component} from "react";
+import React, {Component} from "KNOWLEDGE/JS/React/React";
 import { Form, Icon, Input } from 'antd';
 import { Link } from "react-router-dom";
 
@@ -426,7 +426,7 @@ export default RegisterForm;
 
 
 // FILE: /src/modules/RegisterForm/components/RegisterForm.jsx
-import React, {Component} from "react";
+import React, {Component} from "KNOWLEDGE/JS/React/React";
 import { Form, Icon, Input } from 'antd';
 import { Link } from "react-router-dom";
 
@@ -517,7 +517,7 @@ export default RegisterForm;
 
 
 // FILE /src/pages/Home/index.jsx
-import React from "react";
+import React from "KNOWLEDGE/JS/React/React";
 import { Route } from "react-router-dom";
 
 import "./Home.scss";
