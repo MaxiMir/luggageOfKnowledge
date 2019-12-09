@@ -1,0 +1,182 @@
+.sectionData {
+    margin-bottom: 20px;
+}
+.response-panel {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    padding: 1rem;
+    margin-bottom: 15px;
+}
+
+.response-panel__sort {
+    width: 350px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.response__item {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 1em 0.5rem;
+    border-bottom: 1px solid #b0b0b04d;
+    margin-bottom: 20px;
+}
+
+.response__item--main {
+    flex-wrap: nowrap;
+    padding: 1rem;
+    border-radius: 7px 0 0 7px;
+    background: #F8F8F8;
+    text-align: center;
+    margin-bottom: 20px;
+    border-bottom: none;
+}
+
+.response__img {
+    flex: 1 1 25%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.response__text {
+    flex: 1 1 25%;
+    padding: 1rem;
+}
+
+.response__info,
+.response__count {
+    flex: 1 1 15%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem;
+}
+
+.response__info--main,
+.response__count--main {
+    justify-content: center;
+}
+
+.link--disabled {
+    pointer-events: none;
+    cursor: default;
+    color: #888;
+}
+
+.response__author {
+    white-space: nowrap;
+    color: #007DC5;
+}
+
+.response__link-with-img {
+    background: url(/img/content-imgs/chat_rev2.png) no-repeat left;
+    padding: 3px 0 8px 37px;
+    display: block;
+    text-decoration: none;
+    color: #000;
+    margin-right: 0;
+    font-size: 12px;
+}
+
+
+/* ВЫПАДАЮЩИЙ СПИСОК */
+.sectionData span.msg,
+.sectionData span.choose {
+    color: #555;
+    padding: 5px 0 10px;
+    display: inherit
+}
+
+.sectionData .dropdown {
+    width: 300px;
+    display: inline-block;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 0 2px rgb(204, 204, 204);
+    transition: all .5s ease;
+    position: relative;
+    font-size: 14px;
+    color: #474747;
+    height: 100%;
+    text-align: left
+}
+
+.sectionData .dropdown .select {
+    cursor: pointer;
+    display: block;
+    padding: 10px
+}
+
+.sectionData .dropdown .select > i {
+    font-size: 13px;
+    color: #888;
+    cursor: pointer;
+    transition: all .3s ease-in-out;
+    float: right;
+    line-height: 20px
+}
+
+.sectionData .dropdown:hover {
+    box-shadow: 0 0 4px rgb(204, 204, 204)
+}
+
+.sectionData .dropdown:active {
+    background-color: #f8f8f8
+}
+
+.sectionData .dropdown.active:hover,
+.sectionData .dropdown.active {
+    box-shadow: 0 0 4px rgb(204, 204, 204);
+    border-radius: 5px 5px 0 0;
+    background-color: #f8f8f8
+}
+
+.sectionData .dropdown.active .select > i {
+    transform: rotate(-90deg)
+}
+
+.sectionData .dropdown .dropdown-menu {
+    position: absolute;
+    background-color: #fff;
+    width: 100%;
+    left: 0;
+    margin-top: 1px;
+    box-shadow: 0 1px 2px rgb(204, 204, 204);
+    border-radius: 0 1px 5px 5px;
+    overflow: hidden;
+    display: none;
+    max-height: 144px;
+    overflow-y: auto;
+    z-index: 9
+}
+
+.dropdown-menu__elem {
+    display: block;
+    padding: 10px;
+    transition: all .2s ease-in-out;
+    cursor: pointer;
+    color: #5f5a54;
+}
+
+.sectionData .dropdown .dropdown-menu {
+    padding: 0;
+    list-style: none
+}
+
+.sectionData .dropdown-menu__elem:hover {
+    background-color: #f2f2f2
+}
+
+.sectionData .dropdown-menu__elem:active {
+    background-color: #e2e2e2
+}
+
+
+@media all and (max-width: 768px) {
+    .response__item--main {
+        display: none;
+    }
+}

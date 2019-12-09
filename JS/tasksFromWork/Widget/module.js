@@ -3,7 +3,7 @@
 
 
     /**
-     * Вставляет в parentSelector версткуgit s и стили виджета
+     * Вставляет в parentSelector верстку и стили виджета
      * @param parentSelector
      */
     const generateWidget = parentSelector => {
@@ -18,7 +18,7 @@
                                 <div class="ai-wgt__current-data">
                                     <div class="account">
                                         <div class="account__photo horizontal-center"></div>
-                                        <div class="ai-title text-center mb-20">Наталия</div>
+                                        <div class="ai-title text-center mb-25">Наталия</div>
                                         <div class="account__pages fl-column-center">
                                             <div class="ai-wgt__link ai-wgt__link--big mb-20 bg--search">
                                                 Поиск
@@ -60,7 +60,6 @@
                     left: 0;
                     bottom: 0;
                     z-index: 7777;
-                    border-radius: 0 15px 0 0;
                 }
                 
                 .ai-block__container {
@@ -95,6 +94,7 @@
                 }
                 
                 .ai-title {
+                    margin-top: 75px;
                     font-size: 18px;
                     line-height: 25px;
                     font-weight: bold;
@@ -170,7 +170,7 @@
                 .ai-wgt.open {
                     background: rgba(255, 255, 255, 0.6);
                     backdrop-filter: blur(10px);
-                
+                    border-radius: 0 15px 0 0; 
                     animation: open-modal 0.5s cubic-bezier(1, 0.4, 0.27, 1.55);
                     transform-origin: bottom;
                 }
@@ -207,16 +207,17 @@
                 
                 /* STATE => PAGE ACCOUNT */
                 .account {
-                    padding-top: 75px;
+                    
                 }
                 
                 .account__photo {
                     position: absolute;
                     top: -52px;
-                    width: 104px;
-                    height: 104px;
+                    width: 94px;
+                    height: 94px;
                     border-radius: 50%;
                     background-color: bisque;
+                    border: 10px solid #ffff;
                 }
                 
                 .account .ai-wgt__account,
@@ -250,8 +251,13 @@
                 .text-center {
                     text-align: center;
                 }
+                
                 .mb-20 {
                     margin-bottom: 20px;
+                }
+                
+                .mb-25 {
+                    margin-bottom: 25px;
                 }
                 
                 .mb-30 {
