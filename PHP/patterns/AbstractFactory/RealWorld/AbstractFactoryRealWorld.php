@@ -146,7 +146,7 @@ class TwigPageTemplate extends BasePageTemplate
             $renderedTitle
             <article class="content">{{ content }}</article>
         </div>
-        HTML;
+HTML;
     }
 }
 
@@ -164,7 +164,7 @@ class PHPTemplatePageTemplate extends BasePageTemplate
             $renderedTitle
             <article class="content"><?= $content; ?></article>
         </div>
-        HTML;
+HTML;
     }
 }
 

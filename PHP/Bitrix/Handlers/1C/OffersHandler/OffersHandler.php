@@ -4,23 +4,27 @@
 
 	class OffersHandler
 	{
-		public function init()
+		/**
+		 * Инициализация обработчика
+		 * @param $arParams
+		 * @param $arFields
+		 */
+		public function initBeforeSuccess($arParams, $arFields)
 		{
 			$errorMessages = "";
-
 			$isOffers = strpos($_REQUEST['filename'], 'offers') !== false;
 
 			if (!$isOffers) {
 				return;
 			}
 
-			$groupOffersExCML2LINK = self::getGroupOffersExBinding();
+			$groupOffersExBinding = self::getGroupOffersExBinding();
 
 			[
 				"isError" => $isErrorAddProdID,
 				"data" => $groupOffers,
 				"errors" => $errorsAddProdID
-			] = self::addProdIDInGroupOffers($groupOffersExCML2LINK);
+			] = self::addProdIDInGroupOffers($groupOffersExBinding);
 
 			if ($isErrorAddProdID) {
 				$errorMessages .= implode("\n", $errorsAddProdID);
@@ -29,7 +33,7 @@
 			[
 				"isError" => $isErrorUpd,
 				"errors" => $errorsUpd
-			] = self::updateCML2LINKForGroupOffers($groupOffers);
+			] = self::updateBindingForGroupOffers($groupOffers);
 
 			if ($isErrorUpd) {
 				$errorMessages .= implode("\n", $errorsUpd);
@@ -44,7 +48,7 @@
 		/**
 		 * @return array [
 		 *    название товара => [
-		 *       "OFFERS_ID" => ID-шники ТП без CML2_LINK
+		 *       "OFFERS_ID" => ID ТП без CML2_LINK
 		 *    ],
 		 * ]
 		 */
@@ -73,47 +77,49 @@
 		}
 
 		/**
-		 * @param $groupOffersExCML2LINK
+		 * @param $groupOffersExBinding
 		 * @return array [
 		 *    isError => завершено с ошибками,
 		 *    errors => масссив с ошибками,
 		 *    data => название товара => [
-		 *          "OFFERS_ID" => ID-шники ТП без CML2_LINK
-		 *          "PRODUCT_ID" => ID товара || null
+		 *          "OFFERS_ID" => ID ТП без CML2_LINK
+		 *          "PRODUCT_ID" => ID товара, к которому привязываем ТП
 		 *    ]
 		 * ]
 		 */
-		private static function addProdIDInGroupOffers($groupOffersExCML2LINK)
+		private static function addProdIDInGroupOffers($groupOffersExBinding)
 		{
 			$result = [
 				"errors" => [],
 			];
 			$arFilter = [
-				'IBLOCK_ID' => OFFERS_I_BLOCK_ID,
-				'NAME' => array_keys($groupOffersExCML2LINK),
+				'NAME' => array_keys($groupOffersExBinding),
+				'IBLOCK_ID' => CATALOG_I_BLOCK_ID
 			];
+			$arSelect = ["ID", "NAME"];
 
-			$resDB = CIBlockElement::GetList([], $arFilter, false, false, ["NAME", "PROPERTY_CML2_LINK"]);
+			$resDB = CIBlockElement::GetList([], $arFilter, false, false, $arSelect);
 
-			while (['NAME' => $name, "PROPERTY_CML2_LINK_VALUE" => $productID] = $resDB->Fetch()) {
-				if (!$productID) { // привязка к товару не проставлена
-					$productID = self::getProductIDByName($name);
-
-					if (!$productID) { // товар не существует
-						["isError" => $isError, "msg" => $msg, "ID" => $id] = self::createProduct($name);
-
-						if (!$isError) {
-							$productID = $id;
-						} else {
-							$result["errors"][] = $msg;
-						}
-					}
-				}
-
-				$groupOffersExCML2LINK[$name]["PRODUCT_ID"] = $productID;
+			while (['NAME' => $name, "ID" => $productID] = $resDB->Fetch()) {
+				$groupOffersExBinding[$name]["PRODUCT_ID"] = $productID;
 			}
 
-			$result["data"] = $groupOffersExCML2LINK;
+			foreach ($groupOffersExBinding as $prodName => ["PRODUCT_ID" => $productID]) {
+				if ($productID) {
+					continue;
+				}
+
+				["isError" => $isError, "msg" => $msg, "ID" => $newProductID] = createProduct($name);
+
+				if ($isError) {
+					$result["errors"][] = $msg;
+					continue;
+				}
+
+				$groupOffersExBinding[$name]["PRODUCT_ID"] = $newProductID;
+			}
+
+			$result["data"] = $groupOffersExBinding;
 			$result["isError"] = !empty($result["errors"]);
 
 			return $result;
@@ -126,14 +132,14 @@
 		 *    errors => массив с ошибками
 		 * ]
 		 */
-		private static function updateCML2LINKForGroupOffers($groupOffers)
+		private static function updateBindingForGroupOffers($groupOffers)
 		{
 			$result = [
 				"errors" => []
 			];
 
 			foreach ($groupOffers as $productName => ["PRODUCT_ID" => $productID, "OFFERS_ID" => $offersID]) {
-				["isError" => $isError, "msg" => $msg] = self::updateOffersCML2LINK($offersID, $productID);
+				["isError" => $isError, "msg" => $msg] = self::updateOffersBinding($offersID, $productID);
 
 				if ($isError) {
 					$result["errors"][] = $msg;
@@ -145,55 +151,9 @@
 			return $result;
 		}
 
-		private static function getProductIDByName($productName)
-		{
-			$ID = null;
-			$arrProdFilter = [
-				"IBLOCK_ID" => CATALOG_I_BLOCK_ID,
-				"NAME" => $productName,
-			];
-			$arrSelect = [
-				"ID"
-			];
-
-			$resDB = CIBlockElement::GetList([], $arrProdFilter, false, ['nTopCount' => 1], $arrSelect);
-
-			while (["ID" => $prodID] = $resDB->Fetch()) {
-				$ID = $prodID;
-			}
-
-			return $ID;
-		}
-
 
 		/**
-		 * Создание товара в корне
-		 * @param $productName
-		 * @return mixed ID товара в случае успеха || false
-		 */
-		private static function createProduct($productName)
-		{
-			$productData = [
-				"IBLOCK_ID" => CATALOG_I_BLOCK_ID,
-				"NAME" => $productName,
-				"IBLOCK_SECTION_ID" => false,
-				"ACTIVE" => "Y",
-			];
-
-			$element = new CIBlockElement;
-			$productID = $element->Add($productData);
-			return $productID ?
-				["isError" => false, "ID" => $productID]
-				:
-				[
-					"isError" => true,
-					"msg" => $element->LAST_ERROR
-				];
-		}
-
-
-		/**
-		 * Обновляет CML2LINK у выбранных ТП
+		 * Обновляет свойство CML2_LINK у выбранных ТП
 		 * @param $offersID
 		 * @param $productID
 		 * @return array [
@@ -201,7 +161,7 @@
 		 *    msg => ошибка || null
 		 * ]
 		 */
-		private static function updateOffersCML2LINK($offersID, $productID)
+		private static function updateOffersBinding($offersID, $productID)
 		{
 			if (!$productID) {
 				$offersIDList = implode(", ", $offersID);

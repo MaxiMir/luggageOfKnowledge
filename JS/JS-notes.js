@@ -31,7 +31,7 @@
 */
 const regex = /(?<=\$)\d+/;
 const text  = 'This cost $400';
-text.match(regex) === ['400']
+text.match(regex) === ['400'];
 
 // Всё дело в новой lookbehind-группе, близнеце lookahead-групп:
 /*
