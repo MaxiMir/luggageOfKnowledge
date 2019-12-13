@@ -22,37 +22,37 @@
 
 // FILE: index.html:
 <div id="root1"></div>
-    <div id="root2"></div>
+<div id="root2"></div>
 
-    <script type="text/babel">
+<script type="text/babel">
     // #1:
     function Car(props) {
         return ( // JSX cинтаксис:
             <div className="car"> // class - зарезервированно
-            <h3>{props.name}</h3>
-            <p>Year: {props.year}</p>
-        </div>
-    )
+                <h3>{props.name}</h3>
+                <p>Year: {props.year}</p>
+            </div>
+        )
     }
 
-ReactDOM.render(
-<Car name="Mazda" year="2019"/>, // добавляем компонент + передаем параметры
-    document.querySelector('#root2') // место для вставки сгенерированного кода
-)
+    ReactDOM.render(
+        <Car name="Mazda" year="2019"/>, // добавляем компонент + передаем параметры
+        document.querySelector('#root2') // место для вставки сгенерированного кода
+    )
 
 
-// #2:
-const App = (
-    <div> // элементы должны быть обернуты в корневой элемент
-    <Car name="Ford" year="2019"/>
-    <Car name="Mazda" year="2017"/>
-    </div>
-)
+    // #2:
+    const App = (
+        <div> // элементы должны быть обернуты в корневой элемент
+            <Car name="Ford" year="2019"/>
+            <Car name="Mazda" year="2017"/>
+        </div>
+    )
 
-ReactDOM.render(
-    App, // App содержит JSX код, поэтому его не надо оборачивать в < />
-    document.querySelector('#root1') // место для вставки сгенерированного кода
-)
+    ReactDOM.render(
+        App, // App содержит JSX код, поэтому его не надо оборачивать в < />
+        document.querySelector('#root1') // место для вставки сгенерированного кода
+    )
 </script>
 
 
@@ -76,7 +76,7 @@ $ npm install -g yarn # file yarn.lock - аналог npm (более оптим
 
 
 // FILE: /src/index.js:
-import React from 'KNOWLEDGE/JS/React/React' // импортируем библиотеку React
+import React from '/React' // импортируем библиотеку React
 import ReactDOM from 'react-dom' // импортируем библиотеку ReactDOM (ядро библиотеки React)
 import './index.css' // импортируем стили
 import App from './App' // импортируем компонент App
@@ -90,16 +90,16 @@ registerServiceWorker()
 /* #@ Cинтаксис JSX + Инлайн стили: @# */
 
 // FILE: /src/App.js:
-import React, {Component} from 'KNOWLEDGE/JS/React/React'
+import React, {Component} from '/React'
 import './App.css'
 
 class App extends Component {
     render() {
         return (
             <div className="App">
-            <h1>Hello world!</h1>
-        </div>
-    )
+                <h1>Hello world!</h1>
+            </div>
+        )
 
         // абстракция <->
 
@@ -134,10 +134,10 @@ class App extends Component {
 
         return (
             <div className="App" style={divStyle}> // инлайн-стили #1
-            <h1 style={{color: 'blue', fontSize: '10px'}}>Hello world!</h1> // инлайн-стили #2
-        </div>
-        <p>Hello</p> // => Ошибка должен возвращаться один корневой элемент (испр. вложить в .App)
-    )
+                <h1 style={{color: 'blue', fontSize: '10px'}}>Hello world!</h1> // инлайн-стили #2
+            </div>
+            <p>Hello</p> // => Ошибка должен возвращаться один корневой элемент (испр. вложить в .App)
+        )
     }
 }
 
@@ -146,13 +146,13 @@ class App extends Component {
 /* #@ Создание компонентов: @# */
 
 // FOLDER: /src/ cоздаем папку Car и файл Car.js:
-import React from 'KNOWLEDGE/JS/React/React' // необходимо импортировать при использовании JSX cинтаксиса
+import React from '/React' // необходимо импортировать при использовании JSX cинтаксиса
 
 export default () => <h2>This is car component</h2> // Если возвращается несколько строк все оборачиваем в ()
 
 
 // FILE /src/App.js:
-import React, {Component} from 'KNOWLEDGE/JS/React/React'
+import React, {Component} from '/React'
 import './App.css'
 import Car from './Car/Car.js' // импортируем компонент Car
 
@@ -164,10 +164,10 @@ class App extends Component {
 
         return (
             <div style={divStyle}>
-            <h1>Hello world!</h1>
-        <Car/> // вставка JSX кода компонента
-        </div>
-    )
+                <h1>Hello world!</h1>
+                <Car/> // вставка JSX кода компонента
+            </div>
+        )
     }
 }
 
@@ -176,13 +176,13 @@ class App extends Component {
 /* #@ Вывод динамических данных: @# */
 
 // FILE: /src/Car/Car.js:
-import React from 'KNOWLEDGE/JS/React/React'
+import React from '/React'
 
 export default () => (
     <div>
-    <p>This is car component</p>
-<p><strong>Number: {Math.round(Math.random() * 100)}</strong></p> // {} - указывает, что внутри JS интерпритация
-</div>
+        <p>This is car component</p>
+        <p><strong>Number: {Math.round(Math.random() * 100)}</strong></p> // {} - указывает, что внутри JS интерпритация
+    </div>
 )
 
 
@@ -190,19 +190,19 @@ export default () => (
 /* #@ Передача параметров и контента: @# */
 
 // FILE: /src/Car/Car.js:
-import React from 'KNOWLEDGE/JS/React/React'
+import React from '/React'
 
 export default props => (
     <div>
-    <h3>Car name: {props.name}</h3>
-<p>Year: <strong>{props.year}</strong></p>
-{props.children} // вывод контента, переданного в компонент (#props.children)
-</div>
+        <h3>Car name: {props.name}</h3>
+        <p>Year: <strong>{props.year}</strong></p>
+        {props.children} // вывод контента, переданного в компонент (#props.children)
+    </div>
 )
 
 
 // FILE /src/App.js:
-import React, {Component} from 'KNOWLEDGE/JS/React/React'
+import React, {Component} from '/React'
 import './App.css'
 import Car from './Car/Car.js'
 
@@ -214,16 +214,16 @@ class App extends Component {
 
         return (
             <div style={divStyle}>
-            <h1>Hello world!</h1>
+                <h1>Hello world!</h1>
 
-        <Car name={'Ford'} year={2016} /> // передаем атрибуты
-        <Car name="Audi" year={2012} /> // передаем атрибут в виде обычной строки - {} не нужны
+                <Car name={'Ford'} year={2016} /> // передаем атрибуты
+                <Car name="Audi" year={2012} /> // передаем атрибут в виде обычной строки - {} не нужны
 
-        <Car name={'Mazda'} year={2011}>
-            <p style="{{color: red}}">COLOR</p> // передача контента в компонент (#props.children)
-        </Car>
-        </div>
-    )
+                <Car name={'Mazda'} year={2011}>
+                    <p style="{{color: red}}">COLOR</p> // передача контента в компонент (#props.children)
+                </Car>
+            </div>
+        )
     }
 }
 
@@ -232,7 +232,7 @@ class App extends Component {
 /* #@ State: @# */
 
 // FILE /src/App.js:
-import React, {Component} from 'KNOWLEDGE/JS/React/React'
+import React, {Component} from '/React'
 import './App.css'
 import Car from './Car/Car.js'
 
@@ -264,23 +264,23 @@ class App extends Component {
 
         return (
             <div style={divStyle}>
-            <h1>{this.state.PageTitle}</h1> // выводит pageTitle из State
-        <button onClick={this.changeTitleHandler}>Change Title</button> // обработчики в CamelCase и без ()
+                <h1>{this.state.PageTitle}</h1> // выводит pageTitle из State
+                <button onClick={this.changeTitleHandler}>Change Title</button> // обработчики в CamelCase и без ()
 
-        <Car
-        name={cars[0].name}
-        year={cars[0].year}
-        />
-        <Car
-        name={cars[1].name}
-        year={cars[1].name}
-        />
-        <Car
-        name={cars[2].name}
-        year={cars[2].name}
-        />
-        </div>
-    )
+                <Car
+                    name={cars[0].name}
+                    year={cars[0].year}
+                />
+                <Car
+                    name={cars[1].name}
+                    year={cars[1].name}
+                />
+                <Car
+                    name={cars[2].name}
+                    year={cars[2].name}
+                />
+            </div>
+        )
     }
 }
 
@@ -289,20 +289,19 @@ class App extends Component {
 /* #@ Передача параметров в функцию: @# */
 
 // FILE: /src/Car/Car.js:
-import React from 'KNOWLEDGE/JS/React/React'
+import React from '/React'
 
 export default props => (
     <div>
-    <h3>Car name: {props.name}</h3>
-<p>Year: <strong>{props.year}</strong></p>
-
-<button onClick={props.onChangeTitle}>Click</button> // привязываем переданный обработчик к элементу
-</div>
+        <h3>Car name: {props.name}</h3>
+        <p>Year: <strong>{props.year}</strong></p>
+        <button onClick={props.onChangeTitle}>Click</button> // привязываем переданный обработчик к элементу
+    </div>
 )
 
 
 // FILE /src/App.js:
-import React, {Component} from 'KNOWLEDGE/JS/React/React'
+import React, {Component} from '/React'
 import './App.css'
 import Car from './Car/Car.js'
 
@@ -337,31 +336,29 @@ class App extends Component {
 
         return (
             <div style={divStyle}>
-            <h1>{this.state.PageTitle}</h1>
+                <h1>{this.state.PageTitle}</h1>
+                <input type="text" onChange={this.handleInput}/> // прослушка изменений в input
+                <button
+                    onClick={this.changeTitleHandler.bind(this, 'Changed!')} // 1 аргумент - контекст, в котором должна быть вызвана функция, 2 и более параметры для функции
+                >
+                    Change Title
+                </button>
 
-            <input type="text" onChange={this.handleInput}/> // прослушка изменений в input
-
-        <button
-        onClick={this.changeTitleHandler.bind(this, 'Changed!')} // 1 аргумент - контекст, в котором должна быть вызвана функция, 2 и более параметры для функции
-            >
-            Change Title
-        </button>
-
-        <Car
-        name={cars[0].name}
-        year={cars[0].year}
-        onChangeTitle={this.changeTitleHandler.bind(this, cars[0].name)} // передача обработчика для кастомного компонента #1 cпособ (БОЛЕЕ ПРАВИЛЬНЫЙ - занимает меньше ресурсов у браузера)
-        />
-        <Car
-        name={cars[1].name}
-        year={cars[1].name}
-        onChangeTitle={() => this.changeTitleHandler(cars[1].name)} // передача обработчика для кастомного компонента #2 cпособ
-        />
-        <Car
-        name={cars[2].name}
-        year={cars[2].name}
-        onChangeTitle={() => this.changeTitleHandler(cars[2].name)}
-        />
+                <Car
+                    name={cars[0].name}
+                    year={cars[0].year}
+                    onChangeTitle={this.changeTitleHandler.bind(this, cars[0].name)} // передача обработчика для кастомного компонента #1 cпособ (БОЛЕЕ ПРАВИЛЬНЫЙ - занимает меньше ресурсов у браузера)
+                />
+                <Car
+                    name={cars[1].name}
+                    year={cars[1].name}
+                    onChangeTitle={() => this.changeTitleHandler(cars[1].name)} // передача обработчика для кастомного компонента #2 cпособ
+                />
+                <Car
+                    name={cars[2].name}
+                    year={cars[2].name}
+                    onChangeTitle={() => this.changeTitleHandler(cars[2].name)}
+                />
         </div>
     )
     }
@@ -372,7 +369,7 @@ class App extends Component {
 /* #@ Работа со списком: @# */
 
 // FILE /src/App.js:
-import React, {Component} from 'KNOWLEDGE/JS/React/React'
+import React, {Component} from '/React'
 import './App.css'
 import Car from './Car/Car.js'
 
@@ -407,26 +404,25 @@ class App extends Component {
 
         return (
             <div style={divStyle}>
-            <h1>{this.state.PageTitle}</h1>
+                <h1>{this.state.PageTitle}</h1>
+                <input type="text" onChange={this.handleInput}/>
 
-            <input type="text" onChange={this.handleInput}/>
-
-        <button
-        onClick={this.changeTitleHandler.bind(this, 'Changed!')}
-            >
-            Change Title
-        </button>
+                <button
+                    onClick={this.changeTitleHandler.bind(this, 'Changed!')}
+                >
+                    Change Title
+                </button>
 
         {
             this.state.cars.map((car, index) => { // cоздание списка
                 return (
                     <Car
-                key={index} // для каждого элемента списка необходимо определять уникальный key
-                name={car.name}
-                year={car.year}
-                onChangeTitle={() => this.changeTitleHandler(car.name)}
-                />
-            )
+                        key={index} // для каждого элемента списка необходимо определять уникальный key
+                        name={car.name}
+                        year={car.year}
+                        onChangeTitle={() => this.changeTitleHandler(car.name)}
+                    />
+                )
             })
         }
     </div>
@@ -439,7 +435,7 @@ class App extends Component {
 /* #@ Работа условными операторами: @# */
 
 // FILE /src/App.js:
-import React, {Component} from 'KNOWLEDGE/JS/React/React'
+import React, {Component} from '/React'
 import './App.css'
 import Car from './Car/Car.js'
 
@@ -476,26 +472,24 @@ class App extends Component {
             cars = this.state.cars.map((car, index) => {
                 return (
                     <Car
-                key={index}
-                name={car.name}
-                year={car.year}
-                onChangeTitle={() => this.changeTitleHandler(car.name)}
-                />
-            )
+                        key={index}
+                        name={car.name}
+                        year={car.year}
+                        onChangeTitle={() => this.changeTitleHandler(car.name)}
+                    />
+                )
             })
         }
 
         return (
             <div style={divStyle}>
-            <h1>{this.state.PageTitle}</h1>
-
-            <button onClick={this.changeCarsHandler}> // по клику меняем значение showCars в состоянии
-            Tooggle Cars
-        </button>
-
-        {cars} // выводим список Сars или null
-    </div>
-    )
+                <h1>{this.state.PageTitle}</h1>
+                <button onClick={this.changeCarsHandler}> // по клику меняем значение showCars в состоянии
+                    Tooggle Cars
+                </button>
+                {cars} // выводим список Сars или null
+            </div>
+        )
     }
 }
 
@@ -504,27 +498,27 @@ class App extends Component {
 /* #@ Динамические списки: @# */
 
 // FILE: /src/Car/Car.js:
-import React from 'KNOWLEDGE/JS/React/React'
+import React from '/React'
 
 export default props => (
     <div
-style={{
-    border: '1px solid #ccc',
-        marginBottom: '10' // px - можно не прописывать
-}}
->
-<h3>Car name: {props.name}</h3>
-<p>Year: <strong>{props.year}</strong></p>
-<input type="text" onChange={props.onChangeName} value={props.name}/> // добавляем input c обработчиком
-<button onClick={props.onDelete}> // добавляем кнопку с удалением элемента
-    Delete
-    </button>
+        style={{
+            border: '1px solid #ccc',
+            marginBottom: '10' // px - можно не прописывать
+        }}
+    >
+        <h3>Car name: {props.name}</h3>
+        <p>Year: <strong>{props.year}</strong></p>
+        <input type="text" onChange={props.onChangeName} value={props.name}/> // добавляем input c обработчиком
+        <button onClick={props.onDelete}> // добавляем кнопку с удалением элемента
+            Delete
+        </button>
     </div>
 )
 
 
 // FILE /src/App.js:
-import React, {Component} from 'KNOWLEDGE/JS/React/React'
+import React, {Component} from '/React'
 import './App.css'
 import Car from './Car/Car.js'
 
@@ -572,36 +566,32 @@ class App extends Component {
         const divStyle = {
             textAlign: 'center'
         }
-
-        const cars = this.state.cars
-
+        
         let cars = null
 
         if (this.state.showCars) {
             cars = this.state.cars.map((car, index) => {
                 return (
                     <Car
-                key={index}
-                name={car.name}
-                year={car.year}
-                onChangeName={event => this.onChangeName(event.target.value, index)} // event - cобытие (автоматически передается React), event.target.value - значение из input, index -берется из map
-                onDelete={this.deleteHandler.bind(this, index)}
-                />
-            )
+                        key={index}
+                        name={car.name}
+                        year={car.year}
+                        onChangeName={event => this.onChangeName(event.target.value, index)} // event - cобытие (автоматически передается React), event.target.value - значение из input, index -берется из map
+                        onDelete={this.deleteHandler.bind(this, index)}
+                    />
+                )
             })
         }
 
         return (
             <div style={divStyle}>
-            <h1>{this.state.PageTitle}</h1>
-
-            <button onClick={this.changeCarsHandler}>
-            Tooggle Cars
-        </button>
-
-        {cars}
-    </div>
-    )
+                <h1>{this.state.PageTitle}</h1>
+                <button onClick={this.changeCarsHandler}>
+                    Tooggle Cars
+                </button>
+                {cars}
+            </div>
+        )
     }
 }
 
@@ -641,7 +631,7 @@ class App extends Component {
 */
 
 // FILE: /src/Car/Car.js:
-import React from 'KNOWLEDGE/JS/React/React'
+import React from '/React'
 import './Car.css' // подключаем файл стилей
 
 export default props => {
@@ -658,15 +648,15 @@ export default props => {
 
     return (
         <div className="Car"> // указываем класс из файла стилей
-        <h3>Car name: {props.name}</h3>
-    <p>Year: <strong>{props.year}</strong></p>
-    <input
-    type="text"
-    onChange={props.onChangeName}
-    value={props.name}
-    className={currentInputClass}
-    />
-    <button onClick={props.onDelete}>Delete</button>
+            <h3>Car name: {props.name}</h3>
+            <p>Year: <strong>{props.year}</strong></p>
+            <input
+                type="text"
+                onChange={props.onChangeName}
+                value={props.name}
+                className={currentInputClass}
+            />
+            <button onClick={props.onDelete}>Delete</button>
         </div>
 )
 }
@@ -680,7 +670,7 @@ export default props => {
 
 
 // FILE: /src/Car/Car.js:
-import React from 'KNOWLEDGE/JS/React/React'
+import React from '/React'
 import Radium from 'radium' // подключаем библиотеку Radium
 import './Car.css' // подключаем файл стилей
 
@@ -708,19 +698,19 @@ const Car = props => {
 
     return (
         <div className="Car" style={style}>
-        <h3>Car name: {props.name}</h3>
-    <p>Year: <strong>{props.year}</strong></p>
-    <input
-    type="text"
-    onChange={props.onChangeName}
-    value={props.name}
-    className={currentInputClass}
-    />
-    <button onClick={props.onDelete}>
-        Delete
-        </button>
+            <h3>Car name: {props.name}</h3>
+            <p>Year: <strong>{props.year}</strong></p>
+            <input
+                type="text"
+                onChange={props.onChangeName}
+                value={props.name}
+                className={currentInputClass}
+            />
+            <button onClick={props.onDelete}>
+                Delete
+            </button>
         </div>
-)
+    )
 }
 
 export default Radium(Car) // обрачиваем компонент Car в функционал пакета Radium
@@ -783,7 +773,7 @@ export default Radium(Car) // обрачиваем компонент Car в ф�
 // Стили стали локальными, исправляем это:
 
 // FILE: /src/Car/Car.js:
-import React from 'KNOWLEDGE/JS/React/React'
+import React from '/React'
 import Radium from 'radium'
 import classes from './Car.css' // сохраняем CSS классы в переменную
 
@@ -811,22 +801,21 @@ const Car = props => {
 
     return (
         <div className="{classes.Car}" style={style}>
-        // Конечный вид после преобразования в DOM - class="Car__Car__qfbwz"
-        // В CSS: Car__Car__qfbwz {...}
-        <h3>Car name: {props.name}</h3>
-    <p>Year: <strong>{props.year}</strong></p>
-
-    <input
-    type="text"
-    onChange={props.onChangeName}
-    value={props.name}
-    className={currentInputClass}
-    />
-    <button onClick={props.onDelete}>
-        Delete
-        </button>
+            // Конечный вид после преобразования в DOM - class="Car__Car__qfbwz"
+            // В CSS: Car__Car__qfbwz {...}
+            <h3>Car name: {props.name}</h3>
+            <p>Year: <strong>{props.year}</strong></p>
+            <input
+                type="text"
+                onChange={props.onChangeName}
+                value={props.name}
+                className={currentInputClass}
+            />
+            <button onClick={props.onDelete}>
+                Delete
+            </button>
         </div>
-)
+    )
 }
 
 
@@ -895,7 +884,7 @@ const Car = props => {
 */
 
 // FILE /src/App.js:
-import React, {Component} from 'KNOWLEDGE/JS/React/React'
+import React, {Component} from '/React'
 import './App.scss' // импортируем App.scss
 import Car from './Car/Car.js'
 
@@ -907,18 +896,17 @@ class App extends Component {
 
         return (
             <div style={divStyle}>
-            <h1>{this.state.PageTitle}</h1>
+                <h1>{this.state.PageTitle}</h1>
 
-            <button
-        className={'AppButton'} // добавляем кнопке класс AppButton
-        onClick={this.changeCarsHandler}
-            >
-            Tooggle Cars
-        </button>
-
-        {cars}
-    </div>
-    )
+                <button
+                    className={'AppButton'} // добавляем кнопке класс AppButton
+                    onClick={this.changeCarsHandler}
+                >
+                    Tooggle Cars
+                </button>
+                {cars}
+            </div>
+        )
     }
 }
 
@@ -927,7 +915,7 @@ class App extends Component {
 /* #@ Передача параметров в компонент: @# */
 
 // FILE: /src/index.js:
-import React from 'KNOWLEDGE/JS/React/React'
+import React from '/React'
 import ReactDOM from 'react-dom'
 import './index.css'
 import App from './App'
@@ -937,7 +925,7 @@ ReactDOM.render(<App title={'I am from props'}/>, document.getElementById('root'
 
 
 // FILE /src/App.js:
-import React, {Component} from 'KNOWLEDGE/JS/React/React'
+import React, {Component} from '/React'
 import './App.css'
 import Car from './Car/Car.js'
 
@@ -949,14 +937,13 @@ class App extends Component {
 
         return (
             <div style={divStyle}>
-            <h1>{this.props.title}</h1> // выводим переданный в App компонент параметр (! в классах через this)
-        <button onClick={this.changeCarsHandler}>
-            Tooggle Cars
-        </button>
-
-        {cars}
-    </div>
-    )
+                <h1>{this.props.title}</h1> // выводим переданный в App компонент параметр (! в классах через this)
+                <button onClick={this.changeCarsHandler}>
+                    Tooggle Cars
+                </button>
+                {cars}
+            </div>
+        )
     }
 }
 
@@ -965,7 +952,7 @@ class App extends Component {
 /* #@ Ининициализация State: @# */
 
 // FILE /src/App.js:
-import React, {Component} from 'KNOWLEDGE/JS/React/React'
+import React, {Component} from '/React'
 import './App.css'
 import Car from './Car/Car.js'
 
@@ -994,7 +981,7 @@ class App extends Component {
 // ! доступны для классов наследников от базового класса (Component)
 
 // FILE /src/App.js:
-import React, {Component} from 'KNOWLEDGE/JS/React/React'
+import React, {Component} from '/React'
 import './App.css'
 import Car from './Car/Car.js'
 
@@ -1026,7 +1013,7 @@ class App extends Component {
 // Stateful компонент имеет доступ к жизненным циклам
 
 // FILE: /src/Car/Car.js:
-import React from 'KNOWLEDGE/JS/React/React'
+import React from '/React'
 import Radium from 'radium'
 import classes from './Car.css'
 
@@ -1058,17 +1045,17 @@ class Car extends React.Component { // если import React,{Component} from 'r
 
         return (
             <div className="{classes.Car}" style={style}>
-            <h3>Car name: {this.props.name}</h3>
-        <p>Year: <strong>{this.props.year}</strong></p>
-        <input
-        type="text"
-        onChange={this.props.onChangeName}
-        value={this.props.name}
-        className={inputClasses.join(' ')}
-        />
-        <button onClick={this.props.onDelete}>Delete</button>
+                <h3>Car name: {this.props.name}</h3>
+                <p>Year: <strong>{this.props.year}</strong></p>
+                <input
+                    type="text"
+                    onChange={this.props.onChangeName}
+                    value={this.props.name}
+                    className={inputClasses.join(' ')}
+                />
+                <button onClick={this.props.onDelete}>Delete</button>
             </div>
-    )
+        )
     }
 }
 
@@ -1079,7 +1066,7 @@ export default Radium(Car)
 /* #@ Жизненный цикл изменения/удаления: @# */
 
 // FILE: /src/Car/Car.js:
-import React from 'KNOWLEDGE/JS/React/React'
+import React from '/React'
 import Radium from 'radium'
 import classes from './Car.css'
 
@@ -1128,7 +1115,7 @@ export default Radium(Car)
 /* #@ ErrorBoundary (version > 16): @# */
 
 // В /src/ создаем FOLDER ErrorBoundary, а в нем FILE ErrorBoundary.js:
-import React, {Component} from 'KNOWLEDGE/JS/React/React'
+import React, {Component} from '/React'
 
 export default class ErrorBoundary extends Component {
     state = {
@@ -1152,7 +1139,7 @@ export default class ErrorBoundary extends Component {
 
 
 // FILE /src/App.js:
-import React, {Component} from 'KNOWLEDGE/JS/React/React'
+import React, {Component} from '/React'
 import './App.css'
 import Car from './Car/Car.js'
 import ErrorBoundary from './ErrorBoundary/ErrorBoundary.js' // импортируем компонент
@@ -1210,28 +1197,26 @@ class App extends Component {
                 return (
                     <ErrorBoundary key={index}> // оборачиваем компонент Car в ErrorBoundary + переносим key из Car в
                     ErrorBoundary, тк он является корневым
-                <Car
-                name={car.name}
-                year={car.year}
-                onChangeName={event => this.onChangeName(event.target.value, index)} // event - cобытие (автоматически передается React), event.target.value - значение из input, index -берется из map
-                onDelete={this.deleteHandler.bind(this, index)}
-                />
-                </ErrorBoundary>
-            )
+                        <Car
+                            name={car.name}
+                            year={car.year}
+                            onChangeName={event => this.onChangeName(event.target.value, index)} // event - cобытие (автоматически передается React), event.target.value - значение из input, index -берется из map
+                            onDelete={this.deleteHandler.bind(this, index)}
+                        />
+                    </ErrorBoundary>
+                )
             })
         }
 
         return (
             <div style={divStyle}>
-            <h1>{this.state.PageTitle}</h1>
-
-            <button onClick={this.changeCarsHandler}>
-            Tooggle Cars
-        </button>
-
-        {cars}
-    </div>
-    )
+                <h1>{this.state.PageTitle}</h1>
+                <button onClick={this.changeCarsHandler}>
+                Tooggle Cars
+                </button>
+                {cars}
+            </div>
+        )
     }
 }
 
@@ -1240,7 +1225,7 @@ class App extends Component {
 /* #@ Фрагменты: @# */
 
 // в /src/ создаем папку Counter, а в нем FILE Сounter.js:
-import React, {Component} from 'KNOWLEDGE/JS/React/React'
+import React, {Component} from '/React'
 
 export default class Counter extends Component {
     state = {
@@ -1263,42 +1248,42 @@ export default class Counter extends Component {
         // #1
         return (
             <div>
-            <h2>Counter {this.state.counter}</h2>
-        <button onClick={this.addCounter}>+</button>
-            <button onClick={() => this.setState({counter: this.state.counter - 1})}>-</button> // изменение State в JSX
-        </div>
-    )
+                <h2>Counter {this.state.counter}</h2>
+                <button onClick={this.addCounter}>+</button>
+                <button onClick={() => this.setState({counter: this.state.counter - 1})}>-</button> // изменение State в JSX
+            </div>
+        )
 
         // #2 без корневого элемента (version > 16)
         return [
             <h2 key={'1'}>Counter {this.state.counter}</h2>,
-        <button
-        key={'2'}
-        onClick={this.addCounter}
+            <button
+                key={'2'}
+                onClick={this.addCounter}
             >
-            +
+                +
             </button>,
             <button
-        key={'3'}
-        onClick={() => this.setState({counter: this.state.counter - 1})}
-    >
-        -
-        </button>
-    ]
+                key={'3'}
+                onClick={() => this.setState({counter: this.state.counter - 1})}
+            >
+                -
+            </button>
+        ]
 
         // #3 НАИБОЛЕЕ ВАЛИДНЫЙ СПОСОБ:
         return (
             <React.Fragment> // скоро появится <></>
-            <h2>Counter {this.state.counter}</h2>
-        <button onClick={this.addCounter}>+</button>
-            <button onClick={() => this.setState({counter: this.state.counter - 1})}>-</button>
-        </React.Fragment>
-    )
+                <h2>Counter {this.state.counter}</h2>
+                <button onClick={this.addCounter}>+</button>
+                <button onClick={() => this.setState({counter: this.state.counter - 1})}>-</button>
+            </React.Fragment>
+        )
     }
 }
 
 // FILE /src/App.js:
-import React, {Component} from 'KNOWLEDGE/JS/React/React'
+import React, {Component} from '/React'
 import './App.css'
 import Car from './Car/Car.js'
 import Counter from './Counter/Counter.js' // импортируем компонент
@@ -1342,46 +1327,41 @@ class App extends Component {
             textAlign: 'center'
         }
 
-        const cars = this.state.cars
-
         let cars = null
 
         if (this.state.showCars) {
             cars = this.state.cars.map((car, index) => {
                 return (
                     <Car
-                name={car.name}
-                year={car.year}
-                onChangeName={event => this.onChangeName(event.target.value, index)}
-                onDelete={this.deleteHandler.bind(this, index)}
-                />
-            )
+                        name={car.name}
+                        year={car.year}
+                        onChangeName={event => this.onChangeName(event.target.value, index)}
+                        onDelete={this.deleteHandler.bind(this, index)}
+                    />
+                )
             })
         }
 
         return (
             <div style={divStyle}>
-            <h1>{this.state.PageTitle}</h1>
-
-            <Counter/> // вставляем компонент
-
-            <button
-        style={{marginTop: 10}}
-        className={'AppButton'}
-        onClick={this.changeCarsHandler}
-            >
-            Tooggle Cars
-        </button>
-
-        {cars}
-    </div>
-    )
+                <h1>{this.state.PageTitle}</h1>
+                <Counter/> // вставляем компонент
+                <button
+                    style={{marginTop: 10}}
+                    className={'AppButton'}
+                    onClick={this.changeCarsHandler}
+                >
+                    Tooggle Cars
+                </button>
+                {cars}
+            </div>
+        )
     }
 }
 
 
 // в /src/ создаем папку hoc (high order components), а в нем FILE Auxiliary.js:
-import React from 'KNOWLEDGE/JS/React/React'
+import React from '/React'
 
 const Auxiliary = props => {
     return props.children
@@ -1391,7 +1371,7 @@ export default Auxiliary
 
 
 // FILE Сounter.js:
-import React, {Component} from 'KNOWLEDGE/JS/React/React'
+import React, {Component} from '/React'
 import Auxiliary from '..hoc/Auxiliary'
 
 export default class Counter extends Component {
@@ -1408,11 +1388,11 @@ export default class Counter extends Component {
     render() {
         return (
             <Auxiliary> // через свой компонент
-            <h2>Counter {this.state.counter}</h2>
-        <button onClick={this.addCounter}>+</button>
-            <button onClick={() => this.setState({counter: this.state.counter - 1})}>-</button>
-        </Auxiliary>
-    )
+                <h2>Counter {this.state.counter}</h2>
+                <button onClick={this.addCounter}>+</button>
+                <button onClick={() => this.setState({counter: this.state.counter - 1})}>-</button>
+            </Auxiliary>
+        )
     }
 }
 
@@ -1425,15 +1405,15 @@ export default class Counter extends Component {
 // $ yarn start
 
 // FOLDER: /src/hoc/ создаем файл withClass.js:
-import React from 'KNOWLEDGE/JS/React/React'
+import React from '/React'
 
 const withClass = (Component, className) => { // оборачивает Component в section c классом className
     return props => {
         return (
             <section className={className}>
-            <Component {...props} /> // передаем в Component опции из App компонента
-        </section>
-    )
+                <Component {...props} /> // передаем в Component опции из App компонента
+            </section>
+        )
     }
 }
 
@@ -1441,7 +1421,7 @@ export default withClass
 
 
 // FILE: /src/Car/Car.js:
-import React from 'KNOWLEDGE/JS/React/React'
+import React from '/React'
 import classes from './Car.css'
 import PropTypes from 'prop-types'
 import withClass from '../hoc/withClass'
@@ -1495,20 +1475,20 @@ class Car extends React.Component {
         return (
             <React.Fragment>
             <h3>Car name: {this.props.name}</h3>
-        <p>Year: <strong>{this.props.year}</strong></p>
-        <input
-        ref={inputRef => this.inputRef = inputRef} // До VERSION < 16: записываем в свойство ref на элемент; атрибут не виден в HTML.
-        ref={this.inputRef} // C VERSION 16
-        type="text"
-        onChange={this.props.onChangeName}
-        value={this.props.name}
-        className={inputClasses.join(' ')}
-        />
-        <button onClick={this.props.onDelete}>
-            Delete
+            <p>Year: <strong>{this.props.year}</strong></p>
+            <input
+                ref={inputRef => this.inputRef = inputRef} // До VERSION < 16: записываем в свойство ref на элемент; атрибут не виден в HTML.
+                ref={this.inputRef} // C VERSION 16
+                type="text"
+                onChange={this.props.onChangeName}
+                value={this.props.name}
+                className={inputClasses.join(' ')}
+            />
+            <button onClick={this.props.onDelete}>
+                Delete
             </button>
             </React.Fragment>
-    )
+        )
     }
 }
 
@@ -1528,29 +1508,29 @@ export default withClass(Car, classes.Car); // используем hoc withClas
 
 /* #@ Context API: @# */
 // в /src/ создаем FOLDER Counter2, а в нем FILE Сounter2.js:
-import React from 'KNOWLEDGE/JS/React/React'
+import React from '/React'
 import {ClickedContext} from '../App'
 
 export default props => {
     return (
         <div
-    style={{
-        border: '1px solid #ccc',
-            width: 200,
-            margin: '0 auto'
-    }}
->
-<h3>Counter 2</h3>
-    <ClickedContext.Consumer>
-    {clicked => clicked ? <p>Clicked</p> : null}
-    </ClickedContext.Consumer>
-    </div>
-)
+            style={{
+                border: '1px solid #ccc',
+                width: 200,
+                margin: '0 auto'
+            }}
+        >
+            <h3>Counter 2</h3>
+            <ClickedContext.Consumer>
+                {clicked => clicked ? <p>Clicked</p> : null}
+            </ClickedContext.Consumer>
+        </div>
+    )
 }
 
 
 // FILE: /src/Counter/Counter.js:
-import React, {Component} from 'KNOWLEDGE/JS/React/React'
+import React, {Component} from '/React'
 import Auxiliary from '..hoc/Auxiliary'
 import Counter2 from '../Counter2/Counter2'
 
@@ -1568,18 +1548,18 @@ export default class Counter extends Component {
     render() {
         return (
             <Auxiliary>
-            <h2>Counter {this.state.counter}</h2>
-        <Counter2 />
-        <button onClick={this.addCounter}>+</button>
-            <button onClick={() => this.setState({counter: this.state.counter - 1})}>-</button>
-        </Auxiliary>
-    )
+                <h2>Counter {this.state.counter}</h2>
+                <Counter2 />
+                <button onClick={this.addCounter}>+</button>
+                <button onClick={() => this.setState({counter: this.state.counter - 1})}>-</button>
+            </Auxiliary>
+        )
     }
 }
 
 
 // FILE /src/App.js:
-import React, {Component} from 'KNOWLEDGE/JS/React/React'
+import React, {Component} from '/React'
 import './App.css'
 import Car from './Car/Car.js'
 import Counter from './Counter/Counter.js'
@@ -1626,46 +1606,43 @@ class App extends Component {
             textAlign: 'center'
         }
 
-        const cars = this.state.cars
-
         let cars = null
 
         if (this.state.showCars) {
             cars = this.state.cars.map((car, index) => {
                 return (
                     <Car
-                name={car.name}
-                year={car.year}
-                onChangeName={event => this.onChangeName(event.target.value, index)}
-                onDelete={this.deleteHandler.bind(this, index)}
-                />
-            )
+                        name={car.name}
+                        year={car.year}
+                        onChangeName={event => this.onChangeName(event.target.value, index)}
+                        onDelete={this.deleteHandler.bind(this, index)}
+                    />
+                )
             })
         }
 
         return (
             <div style={divStyle}>
-            <h1>{this.state.PageTitle}</h1>
+                <h1>{this.state.PageTitle}</h1>
 
-            <ClickedContext.Provider value="this.state.clicked">
-            <Counter/> // оборачиваем компонент, в который необходимо передать ClickedContext
-            </ClickedContext.Provider>
+                <ClickedContext.Provider value="this.state.clicked">
+                    <Counter/> // оборачиваем компонент, в который необходимо передать ClickedContext
+                </ClickedContext.Provider>
 
-            <button
-        style={{marginTop: 10}}
-        className={'AppButton'}
-        onClick={this.changeCarsHandler}
-            >
-            Tooggle Cars
-        </button>
+                <button
+                    style={{marginTop: 10}}
+                    className={'AppButton'}
+                    onClick={this.changeCarsHandler}
+                >
+                    Tooggle Cars
+                </button>
 
-        <button onClick={() => this.setState({clicked: true})}>
-        Changed clicked
-        </button>
-
-        {cars}
-    </div>
-    )
+                <button onClick={() => this.setState({clicked: true})}>
+                    Changed clicked
+                </button>
+                {cars}
+            </div>
+        )
     }
 }
 
@@ -1688,7 +1665,7 @@ class App extends Component {
 
 
 // FILE /src/App.js:
-import React, {Component} from 'KNOWLEDGE/JS/React/React'
+import React, {Component} from '/React'
 import Layout from './hoc/Layout/Layout'
 import Quiz from './containers/Quiz/Quiz.js'
 
@@ -1696,9 +1673,9 @@ class App extends Component {
     render() {
         return (
             <Layout>
-            <Quiz/>
+                <Quiz/>
             </Layout>
-    )
+        )
     }
 }
 
@@ -1710,16 +1687,18 @@ export default App
 
 // FOLDER /src создаем hoc/Layout/ а в нем FILE Layout.js:
 
-import React, {Component} from 'KNOWLEDGE/JS/React/React'
+import React, {Component} from '/React'
 import classes from './Layout.css'
 
 class Layout extends Component {
     render() {
-    <div className={classes.Layout}>
-            <main>
-            {this.props.children}
-            </main>
+        return (
+            <div className={classes.Layout}>
+                <main>
+                    {this.props.children}
+                </main>
             </div>
+        )
     }
 }
 
@@ -1752,7 +1731,7 @@ export default Layout
 // FOLDER /src создаем components/ - здесь будут хранится функциональные компоненты
 
 // FOLDER /src/containers/ создаем FOLDER Quiz/ а в нем FILE: /Quiz.js:
-import React, {Component} from 'KNOWLEDGE/JS/React/React'
+import React, {Component} from '/React'
 import classes from './Quiz.css'
 import ActiveQuiz from '../../components/ActiveQuiz/ActiveQuiz'
 import ActiveQuiz from '../../components/ActiveQuiz/FinishedQuiz'
@@ -1851,28 +1830,28 @@ class Quiz extends Component {
     render() {
         return (
             <div className={classes.Quiz}>
-            <div className={classes.QuizWrapper}>
-            <h1>Ответьте на все вопросы</h1>
+                <div className={classes.QuizWrapper}>
+                    <h1>Ответьте на все вопросы</h1>
 
-        {
-            this.state.isFinished
-                ?   <FinishedQuiz
-            results={this.state.results}
-            quiz={this.state.quiz}
-            onRetry={this.retryHandler}
-            />
-        :   <ActiveQuiz
-            answers={this.state.quiz[this.state.activeQuestion].answers}
-            question={this.state.quiz[this.state.activeQuestion].question}
-            onAnswerClick={this.onAswerClickHandler}
-            quizLength={this.state.quiz.length}
-            answerNumber={this.state.activeQuestion + 1}
-            state={this.state.answerState}
-            />
-        }
-    </div>
-        </div>
-    )
+                    {
+                        this.state.isFinished
+                            ?   <FinishedQuiz
+                                    results={this.state.results}
+                                    quiz={this.state.quiz}
+                                    onRetry={this.retryHandler}
+                                />
+                            :   <ActiveQuiz
+                                    answers={this.state.quiz[this.state.activeQuestion].answers}
+                                    question={this.state.quiz[this.state.activeQuestion].question}
+                                    onAnswerClick={this.onAswerClickHandler}
+                                    quizLength={this.state.quiz.length}
+                                    answerNumber={this.state.activeQuestion + 1}
+                                    state={this.state.answerState}
+                                />
+                    }
+                </div>
+            </div>
+        )
     }
 }
 
@@ -1901,27 +1880,27 @@ export default Quiz
 
 
 // FOLDER /src/ создаем FOLDER ActiveQuiz/ а в нем FILE ActiveQuiz.js:
-import React from 'KNOWLEDGE/JS/React/React'
+import React from '/React'
 import classes from './ActiveQuiz.css'
 import AnswersList from './AnsersList/AnsersList'
 
 const ActiveQuiz = props => (
     <div className={classes.ActiveQuiz}>
-    <p className={classes.Question}>
-    <span>
-    <strong>{props.answerNumber}.</strong>&nbsp;
-{props.question}
-</span>
+        <p className={classes.Question}>
+            <span>
+                <strong>{props.answerNumber}.</strong>&nbsp;
+                {props.question}
+            </span>
 
-<small>{props.answerNumber} из {props.quizLength}</small>
-</p>
+            <small>{props.answerNumber} из {props.quizLength}</small>
+        </p>
 
-<AnsersList
-state={props.state}
-answers={props.answers}
-onAnswerClick={props.onAswerClick}
-/>
-</div>
+        <AnsersList
+            state={props.state}
+            answers={props.answers}
+            onAnswerClick={props.onAswerClick}
+        />
+    </div>
 )
 
 export default ActiveQuiz
@@ -1949,24 +1928,24 @@ export default ActiveQuiz
 /* #@ Вывод результатов: @# */
 
 // FOLDER /src/ActiveQuiz/ создаем FOLDER AnswersList а в нем FILE AnswersList.js:
-import React from 'KNOWLEDGE/JS/React/React'
+import React from '/React'
 import classes from './AnwersList.css'
 import AnswerItem from './AnswerItem/AnswerItem'
 
 const AnwersList = props => (
     <ul className={classes.AnwersList}>
-    {
-        props.answers.map((answer, index) => {
-            return (
-                <AnswerItem
-            key={index}
-            answer={answer}
-            onAnswerClick={props.onAnswerClick}
-            state={!props.state ? null : props.state[answer.id]}
-            />
-        )
-        })
-    }
+        {
+            props.answers.map((answer, index) => {
+                return (
+                    <AnswerItem
+                        key={index}
+                        answer={answer}
+                        onAnswerClick={props.onAnswerClick}
+                        state={!props.state ? null : props.state[answer.id]}
+                    />
+                )
+            })
+        }
     </ul>
 )
 
@@ -1983,7 +1962,7 @@ export default AnwersList
 */
 
 // FOLDER /src/ActiveQuiz/AnswersList/ создаем FOLDER AnswerItem а в нем FILE AnswerItem.js:
-import React from 'KNOWLEDGE/JS/React/React'
+import React from '/React'
 import classes from './AnswerItem.css'
 
 const AnswerItem = props => {
@@ -1997,12 +1976,12 @@ const AnswerItem = props => {
 
     return (
         <li
-    className={clsList}
-    onClick={() => props.onAnswerClick(props.answer.id)}
->
-    {props.answer.text}
-</li>
-)
+            className={clsList}
+            onClick={() => props.onAnswerClick(props.answer.id)}
+        >
+            {props.answer.text}
+        </li>
+    )
 }
 
 export default AnswerItem
@@ -2034,7 +2013,7 @@ export default AnswerItem
 
 
 // FOLDER: /src/components/ cоздаем FOLDER FinishedQuiz а в нем FILE FinishedQuiz.js:
-import React from 'KNOWLEDGE/JS/React/React'
+import React from '/React'
 import classes from './FinishedQuiz.css'
 import Button from '../UI/Button/Button'
 
@@ -2049,42 +2028,42 @@ const FinishedQuiz = props => {
 
     return (
         <div classes={classess.FinishedQuiz}>
-        <ul>
-        {
-            props.quiz.map((quizItem, index) => {
-                const cls = [
-                    'fa',
-                    props.results[quizItem.id] === 'error' ? 'fa-times' : 'fa-check',
-                    classes[props.results[quizItem.id]]
-                ]
+            <ul>
+                {
+                    props.quiz.map((quizItem, index) => {
+                        const cls = [
+                            'fa',
+                            props.results[quizItem.id] === 'error' ? 'fa-times' : 'fa-check',
+                            classes[props.results[quizItem.id]]
+                        ]
 
-                return (
-                    <li
-                key={index}
-                    >
-                    <strong>{index + 1}</strong>. &nbsp;
-                {quizItem.question}
-            <i className={cls.join('')}/>
-                </li>
-            )
-            })
-        }
-        </ul>
+                        return (
+                            <li
+                                key={index}
+                            >
+                                <strong>{index + 1}</strong>. &nbsp;
+                                {quizItem.question}
+                                <i className={cls.join('')}/>
+                            </li>
+                        )
+                    })
+                }
+            </ul>
 
-        <p>Правильно {successCount} из {props.quiz.length}</p>
-    <div>
-    <Button
-    onClick={props.onRetry}
-    type="primary"
-        >
-        Повторить
-        </Button>
-        <Button
-    type="success"
-        >
-        Перейти в список тестов
-    </Button>
-    </div>
+            <p>Правильно {successCount} из {props.quiz.length}</p>
+            <div>
+                <Button
+                    onClick={props.onRetry}
+                    type="primary"
+                >
+                    Повторить
+                </Button>
+                <Button
+                    type="success"
+                >
+                    Перейти в список тестов
+                </Button>
+            </div>
     </div>
 )
 }
@@ -2124,7 +2103,7 @@ export default FinishedQuiz
 
 
 // FOLDER: /src/components/ создаем FOLDER UI, затем FOLDER Button, а в нем Button.js:
-import React from 'KNOWLEDGE/JS/React/React'
+import React from '/React'
 import classes from './Button.css'
 
 const Button = props => {
@@ -2136,13 +2115,13 @@ const Button = props => {
 
     return (
         <button
-    onClick={props.onClick}
-    className={clsList}
-    disabled={props.disabled}
+            onClick={props.onClick}
+            className={clsList}
+            disabled={props.disabled}
         >
-        {props.children}
+            {props.children}
         </button>
-)
+    )
 }
 
 
@@ -2193,7 +2172,7 @@ const Button = props => {
 
 /* #@ Кнопка переключения меню: @# */
 // FOLDER: /src/components/ создаем FOLDER Navigation, затем FOLDER MenuToggle а в нем FILE: MenuToggle.js:
-import React from 'KNOWLEDGE/JS/React/React'
+import React from '/React'
 import classes from './MenuToggle.css'
 
 const MenuToggle = props => {
@@ -2213,10 +2192,10 @@ const MenuToggle = props => {
 
     return (
         <i
-    className={clsList}
-    onClick={props.onToggle}
-    />
-)
+            className={clsList}
+            onClick={props.onToggle}
+        />
+    )
 }
 
 export default MenuToggle
@@ -2245,7 +2224,7 @@ export default MenuToggle
 
 // FOLDER /src/hoc/Layout/Layout.js:
 
-import React, {Component} from 'KNOWLEDGE/JS/React/React'
+import React, {Component} from '/React'
 import classes from './Layout.css'
 import MenuToggle from '../../components/Navigation/MenuToggle/MenuToggle'
 import Drawer from '../../components/Navigation/Drawer/Drawer'
@@ -2269,21 +2248,22 @@ class Layout extends Component {
     }
 
     render() {
-    <div className={classes.Layout}>
+        return (
+            <div className={classes.Layout}>
+                    <Drawer
+                        isOpen={this.state.menu}
+                        onClose={this.menuCloseHandler}
+                    />
 
-            <Drawer
-        isOpen={this.state.menu}
-        onClose={this.menuCloseHandler}
-        />
-
-        <MenuToggle
-        onToggle={this.toggleMenuHandler}
-        isOpen={this.state.menu}
-        />
-        <main>
-        {this.props.children}
-        </main>
-        </div>
+                    <MenuToggle
+                        onToggle={this.toggleMenuHandler}
+                        isOpen={this.state.menu}
+                    />
+                <main>
+                    {this.props.children}
+                </main>
+            </div>
+        )
     }
 }
 
@@ -2292,7 +2272,7 @@ export default Layout
 
 
 // FOLDER: /src/components/Navigation/ создаем FOLDER Drawer, а в нем FILE Drawer.js:
-import React, {Component} from 'KNOWLEDGE/JS/React/React'
+import React, {Component} from '/React'
 import classes from './Drawer.css'
 import Backdrop from '../../UI/Backdrop/Backdrop'
 
@@ -2305,9 +2285,9 @@ class Drawer extends Component {
         return links.map((link, index) => {
             return (
                 <li key={index}>
-                Link {link}
-        </li>
-        )
+                    Link {link}
+                </li>
+            )
         })
     }
 
@@ -2322,13 +2302,13 @@ class Drawer extends Component {
 
         return (
             <ReactFragment>
-            <nav className={clsList}>
-            <ul>
-            <a>{ this.renderLinks()}</a>
-            </ul>
-            </nav>
-        { !this.props.isOpen ? null : <Backdrop onClick={props.onClose} /> }
-        </ReactFragment>
+                <nav className={clsList}>
+                    <ul>
+                        <a>{ this.renderLinks()}</a>
+                    </ul>
+                </nav>
+                { !this.props.isOpen ? null : <Backdrop onClick={props.onClose} /> }
+            </ReactFragment>
         )
     }
 }
@@ -2389,7 +2369,7 @@ export default Drawer
 
 /* #@ Компонент затемнения: @# */
 // FOLDER: /src/components/UI/ создаем FOLDER Backdrop, а в нем FILE Backdrop.js:
-import React from 'KNOWLEDGE/JS/React/React'
+import React from '/React'
 import classes from './Backdrop.css'
 
 const Backdrop = props => <div className={classes.Backdrop} onClick={this.props.onClick} />
@@ -2420,7 +2400,7 @@ export default Backdrop
 
 
 // FILE: /src/index.js:
-import React from 'KNOWLEDGE/JS/React/React'
+import React from '/React'
 import ReactDOM from 'react-dom'
 import './index.css'
 import App from './App'
@@ -2429,7 +2409,7 @@ import registerServiceWorker from './registerServiceWorker'
 
 сonst app = (
     <BrowserRouter> // оборачиваем App в компонент роутинга
-    <App />
+        <App />
     </BrowserRouter>
 )
 
@@ -2439,7 +2419,7 @@ registerServiceWorker()
 
 
 // FILE /src/App.js:
-import React, {Component} from 'KNOWLEDGE/JS/React/React'
+import React, {Component} from '/React'
 import Layout from './hoc/Layout/Layout'
 import {Route, Switch} from 'react-router-dom' // Switch - позволяет загружать 1 нужный роут
 import Quiz from './containers/Quiz/Quiz.js'
@@ -2448,36 +2428,18 @@ class App extends Component {
     render() {
         return (
             <Layout>
-            <Switch>
-            <Route path="/auth" component={Quiz} />
-        <Route path="/quiz-creator" component={Quiz} />
-        <Route path="/quiz/:id" component={Quiz} />
-        <Route path="/" component={Quiz} />
-        </Switch>
-        </Layout>
-    )
+                <Switch>
+                    <Route path="/auth" component={Quiz} />
+                    <Route path="/quiz-creator" component={Quiz} />
+                    <Route path="/quiz/:id" component={Quiz} />
+                    <Route path="/" component={Quiz} />
+                </Switch>
+            </Layout>
+        )
     }
 }
 
 export default App
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -2500,7 +2462,7 @@ export default App
 
 
 // FILE: /src/index.js:
-import React from 'KNOWLEDGE/JS/React/React'
+import React from '/React'
 import ReactDOM from 'react-dom'
 import './index.css'
 import App from './App'
@@ -2509,7 +2471,7 @@ import registerServiceWorker from './registerServiceWorker'
 
 сonst app = (
     <BrowserRouter> // оборачиваем App в компонент роутинга
-    <App />
+        <App />
     </BrowserRouter>
 )
 
@@ -2517,7 +2479,7 @@ ReactDOM.render(app, document.getElementById('root'))
 registerServiceWorker()
 
 // FILE: /src/App.js:
-import React, {Component} from 'KNOWLEDGE/JS/React/React'
+import React, {Component} from '/React'
 import './App.sccs'
 import {Route, NavLink, Switch, Redirect} from 'react-router-dom' // импортируем компонент для регистрации роутов + компонент для навигации + компонент для переключения по роутам + компонент редирект
 import About from './About/About'
@@ -2532,40 +2494,36 @@ class App extends Component {
 
         return (
             <div>
-            <nav>
-            <ul>
-            <li>
-            <NavLink to="/">Home</NavLink> // навигация без перезагрузки страницы
-        </li>
-        <li>
-        <NavLink to="/about">About</NavLink>
-            </li>
-            <li>
-            <NavLink to="/cars">Cars</NavLink>
-            </li>
-            </ul>
-            </nav>
+                <nav>
+                    <ul>
+                        <li>
+                                <NavLink to="/">Home</NavLink> // навигация без перезагрузки страницы
+                        </li>
+                        <li>
+                            <NavLink to="/about">About</NavLink>
+                        </li>
+                        <li>
+                            <NavLink to="/cars">Cars</NavLink>
+                        </li>
+                    </ul>
+                </nav>
+                <hr />
 
-            <hr />
-
-            <div style={{textAlign: 'center'}}>
-    <h3>Is logged in {this.state.isLoggedIn ? 'TRUE' : 'FALSE'}</h3>
-        <button onClick={() => this.setState({isLoggedIn: true})}>Login</button>
-        </div>
-
-        <hr />
-
-        <Switch> // показывает 1-й компонент, который попался в списке
-        <Route path="/" exact render={() => <h1>Home Page</h1>} /> // регистрируем роут для домашней страницы; exact - рендерить при полном совпадении с путем
-        { !this.state.isLoggedIn ? null : <Route path="/about" exact component={About} />} // добавление роута по условию; регистрируем роут + указываем какой компонент рендерить
-
-        <Route path="/cars/:name" component={CarDetail} /> // динамический роут
-        <Route path="/cars" component={Cars} />
-        <Redirect to={'/'} /> // редирект на главную
-        <Route render={() => <h1 style={{color: 'red', textAlign: 'center'}}>404 not found</h1>} /> // страница 404
-        </Switch>
-        </div>
-    )
+                <div style={{textAlign: 'center'}}>
+                    <h3>Is logged in {this.state.isLoggedIn ? 'TRUE' : 'FALSE'}</h3>
+                    <button onClick={() => this.setState({isLoggedIn: true})}>Login</button>
+                </div>
+                <hr />
+                <Switch> // показывает 1-й компонент, который попался в списке
+                    <Route path="/" exact render={() => <h1>Home Page</h1>} /> // регистрируем роут для домашней страницы; exact - рендерить при полном совпадении с путем
+                    { !this.state.isLoggedIn ? null : <Route path="/about" exact component={About} />} // добавление роута по условию; регистрируем роут + указываем какой компонент рендерить
+                    <Route path="/cars/:name" component={CarDetail} /> // динамический роут
+                    <Route path="/cars" component={Cars} />
+                    <Redirect to={'/'} /> // редирект на главную
+                    <Route render={() => <h1 style={{color: 'red', textAlign: 'center'}}>404 not found</h1>} /> // страница 404
+                </Switch>
+            </div>
+        )
     }
 }
 
@@ -2583,7 +2541,7 @@ export default App
 
 
 // FILE: /src/Cars/Cars.js:
-import React, {Component} from 'KNOWLEDGE/JS/React/React'
+import React, {Component} from '/React'
 import Car from './Car/Car.js'
 
 export default class Cars extends Component {
@@ -2605,44 +2563,44 @@ export default class Cars extends Component {
     render() {
         return (
             <div style={{
-            width: 400,
+                width: 400,
                 margin: 'auto',
                 paddingTop: 20
-        }}>
-    <button onClick={this.goToHomePage}>Go to homepage</button> // по клику переход на главную
-        {
-            this.state.cars.map((car, index) => { // cоздание списка
-                return (
-                    <Car
-                key={index} // для каждого элемента списка необходимо определять уникальный key
-                name={car.name}
-                year={car.year}
-                onChangeTitle={() => this.changeTitleHandler(car.name)}
-                />
-            )
-            })
-        }
-    </div>
-    )
+            }}>
+                <button onClick={this.goToHomePage}>Go to homepage</button> // по клику переход на главную
+                {
+                    this.state.cars.map((car, index) => { // cоздание списка
+                        return (
+                            <Car
+                                key={index} // для каждого элемента списка необходимо определять уникальный key
+                                name={car.name}
+                                year={car.year}
+                                onChangeTitle={() => this.changeTitleHandler(car.name)}
+                            />
+                        )
+                    })
+                }
+            </div>
+        )
     }
 }
 
 
 // FILE: /src/Cars/Car/Car.js:
-import React from 'KNOWLEDGE/JS/React/React'
+import React from '/React'
 import './Car.scss'
 import {withRouter} from 'react-router-dom' // импортируем компонент
 
 const Car = props => {
     return (
         <div
-    className={'Car'}
-    onClick={() => props.history.push('/cars/' + props.name.toLowerCase())}
->
-<h3>Car name: {props.name}</h3>
-    <p>Year: <strong>{props.year}</strong></p>
-    </div>
-)
+            className={'Car'}
+            onClick={() => props.history.push('/cars/' + props.name.toLowerCase())}
+        >
+            <h3>Car name: {props.name}</h3>
+            <p>Year: <strong>{props.year}</strong></p>
+        </div>
+    )
 }
 
 export default withRouter(Car) // оборачиваем функциональный компонент в withRouter
@@ -2650,16 +2608,16 @@ export default withRouter(Car) // оборачиваем функциональ�
 
 
 // FOLDER: /src/ создаем FOLDER CarDetail а в нем FILE CarDetail.js:
-import React from 'KNOWLEDGE/JS/React/React'
+import React from '/React'
 
 export default class CarDetail extends React.Component {
     render() {
         return (
             <div
-        style={{textAlign: 'center'}}
-    >
-    <h1>{this.props.match.params.name}</h1>  // должно совпадать с /cars/:/name
-        </div>
-    )
+                style={{textAlign: 'center'}}
+            >
+                <h1>{this.props.match.params.name}</h1>  // должно совпадать с /cars/:/name
+            </div>
+        )
     }
 }

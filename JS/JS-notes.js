@@ -1242,8 +1242,8 @@ Object.defineProperty(user, "toString", { enumerable: false }); // модифи�
 for(var key in user) console.log(key);  // name
 
 
-Object.keys // возвращает только enumerable-свойства.
-Object.getOwnPropertyNames // возвращает все
+Object.keys; // возвращает только enumerable-свойства.
+Object.getOwnPropertyNames; // возвращает все
 
 
 
@@ -1520,10 +1520,10 @@ delete op.age;
 }
 
 const formProxy = new Proxy(form, validator) // cледим за объектом form + ловушки
-formProxy.login // tester
-formProxy.password // 12345
-formProxy['username'] // Поля username в объекте нет
-formProxy.password = '1' // Длина должна быть больше 2х символов
+formProxy.login; // tester
+formProxy.password; // 12345
+formProxy['username']; // Поля username в объекте нет
+formProxy.password = '1'; // Длина должна быть больше 2х символов
 
 
 // #3:
@@ -1541,8 +1541,8 @@ const proxy = new Proxy(log, {
     }
 });
 
-proxy('Custom log') // => Custom log
-proxy() // => Количество аргументов не совпадает
+proxy('Custom log'); // => Custom log
+proxy(); // => Количество аргументов не совпадает
 
 
 
@@ -2582,11 +2582,10 @@ class ProtoStudent {
 
 const student = Reflect.construct(Student, ['Igor']); // создаем инстанс объекта; можно передать 3-й параметр - класс протитотип
 
-Reflect.apply(student.greet, {name: 'Max'}, []) // вызываем метод класса student greet в контексте объекта {name: 'Max'}, 3 параметр аргументы
+Reflect.apply(student.greet, {name: 'Max'}, []); // вызываем метод класса student greet в контексте объекта {name: 'Max'}, 3 параметр аргументы
 // => Hi! My name is Max
 
 Reflect.ownKeys(student); // возвращает собственные ключи объекта => ['name']
-
 
 Reflect.preventExtensions(student); // блокируем модификацию объекта
 student.age = 25
