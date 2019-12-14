@@ -1,11 +1,11 @@
 const initInputHandler = input => {
-    const steps = ["initial", "forbiddenLength", "correctValue"];
+    const stepClasses = ["initial", "forbiddenLength", "correctValue"];
     const regCleanSigns = /[^\d\.\,]/g;
     const regMarks = /[\.\,)]/g;
     const maxInputValueLength = 4;
 
     let state = {
-        step: steps[0],
+        stepClass: stepClasses[0],
         valueData: {
             isIntegerVal: null,
             typeValue: null,
@@ -98,20 +98,20 @@ const initInputHandler = input => {
      * Обработчик события
      */
     const changeInputHandler = () => {
-        let step = steps[2];
+        let stepClass = stepClasses[2];
 
         if (!input.value.length) {
-            step = steps[0];
+            stepClass = stepClasses[0];
         } else {
             bringInputValueToValid(input.value);
 
             if (!isNotForbiddenLength(input.value)) {
-                step = steps[1];
+                stepClass = stepClasses[1];
             }
         }
 
         const valueData = getTransformedValue(input.value);
-        setState({step, valueData});
+        setState({stepClass, valueData});
     };
 
 
@@ -142,12 +142,11 @@ const initInputHandler = input => {
 
     /**
      * Рендиринг компонента
-     * @param step
+     * @param stepClass
      */
-    const render = ({step}) => {
-        console.log(state);
-        input.classList.remove(...steps);
-        input.classList.add(step);
+    const render = ({stepClass}) => {
+        input.classList.remove(...stepClasses);
+        input.classList.add(stepClass);
     };
 
     input.addEventListener("keyup", changeInputHandler);

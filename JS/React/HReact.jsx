@@ -17,9 +17,11 @@ React is a javascript library for building user interfaces
 Самый простой способ попрактиковаться с Реактом – это сервис codepen. После регистрации вы сможете создать pen — изолированную среду разработки, подключив туда Реакт. Результаты кода отображаются там же, в соседней панели.
 
 Сodepen позволяет вставлять пены прямо в свой сайт, чем я и буду пользоваться для демонстрации. Вы можете не только проанализировать такой код, но запустить и даже поправить его.
+*/
 
+// # create-react-app
 
-# create-react-app
+/**
 Разработчики в Фейсбуке, понимая как сложно настроить с нуля экосистему для старта фронтенд проектов, создали проект под названием create-react-app. Это npm-библиотека, которая позволяет стартануть с нулевой конфигурацией:
 
 $ npm install -g create-react-app
@@ -30,13 +32,15 @@ $ npm start
 
 
 Дальше просто открывайте localhost:3000 и наслаждайтесь.
+*/
 
-
-# babel-preset-react
+// # babel-preset-react
+/**
 Если вы все же решитесь делать все самостоятельно, то не забудьте подключить пресет (preset) babel-preset-react к вашей конфигурации Babel. Реакт расширяет JS и не может работать с Babel без этого пресета.
+*/
 
-
-# Отладка
+// # Отладка
+/**
 Так как Реакт отрабатывает на фронтенде, то и ошибки будут появляться там же. Не забывайте всегда держать открытой консоль (например, в developer tools в Хроме) и внимательно читать все, что там написано. Большая часть ошибок будет выводиться именно там.
 
 Также не забудьте поставить React Developer Tools. Это расширение для браузера, которое дает очень удобную панель для анализа происходящего с Реактом в вашем приложении. 
@@ -52,7 +56,7 @@ $ npm start
 */
 
 // HTML
-<div id="react-root"></div>
+// <div id="react-root"></div>
 
 
 // Babel
@@ -67,16 +71,13 @@ ReactDOM.render(<Hello />, mountNode);
 
 /**
 Центральное понятие в Реакте - компонент. Более того, это единственная сущность, которую он содержит. Вся остальная функциональность построена вокруг компонентов.
-
 В примере выше создан компонент, который добавляет в DOM на странице <div>Hello!</div>.
-
 Вот как выглядит получившийся html:
-*/
 
 <div id="react-root">
   <div>Hello!</div>
 </div>
-
+*/
 
 // # Импорты
 // CodePen импортирует Реакт автоматически (его нужно указать в подключаемых библиотеках), но в своем коде импорты пропускать нельзя:
@@ -108,10 +109,10 @@ export default class Hello extends React.Component {
 */
 
 // # Неочевидные тезисы
-// Самое поразительное происходит в этой строчке:
+/**
+Самое поразительное происходит в этой строчке:
 <div>Hello</div>;
 
-/**
 Здравый смысл подсказывает, что такая запись синтаксически невозможна в JS. И он будет прав. То, что вы видите, называется JSX и является расширением языка (добавляется с помощью Babel). Кардинальное решение для фреймворка, не правда ли? В процессе вы поймете, что это не такая уж и плохая идея.
 
 Главное сейчас запомнить то, что в конечном итоге любой компонент Реакта возвращает кусок DOM (на самом деле – virtual DOM).
@@ -145,7 +146,7 @@ JSX – это xml-like расширение js, созданное специа
 Так же как и в html, из компонентов можно строить композиции, например такую:
 */
 
-const vdom = (
+const virtualDom = (
   <div className="card">
     <div className="card-body">
       <h4 className="card-title">Card title</h4>
@@ -197,7 +198,7 @@ React.createElement(
 /**@@@
 src/Card.jsx
 Реализуйте компонент Card, возвращающий следующий jsx:
-*/
+
 <div className="card">
   <div className="card-body">
     <h4 className="card-title">Card title</h4>
@@ -205,7 +206,7 @@ src/Card.jsx
     <button type="button" className="btn btn-primary">Go somewhere</button>
   </div>
 </div>
-
+*/
 
 /**
 src/index.jsx
@@ -241,7 +242,7 @@ ReactDOM.render(
 
 
 // FILE: /app/public/index.html:
-/**
+/*
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -272,9 +273,9 @@ ReactDOM.render(
 const name = 'Eva';
 const cname = 'container';
 
-const vdom1 = <div>Hello, {name}</div>;
-const vdom2 = <div>Hello, {name.repeat(3)}</div>;
-const vdom3 = <div className={cname}>Hello!</div>;
+const virtualDom1 = <div>Hello, {name}</div>;
+const virtualDom2 = <div>Hello, {name.repeat(3)}</div>;
+const virtualDom3 = <div className={cname}>Hello!</div>;
 
 /**
 Как видно, вставка (по сути – интерполяция) происходит за счет использования фигурных скобок, причем внутри них может быть любое выражение. Эта схема работает одинаково как для содержимого тегов, так и для аттрибутов.
@@ -283,11 +284,11 @@ const vdom3 = <div className={cname}>Hello!</div>;
 */
 
 const name = 'Mike';
-const vdom = block ? <div>hello, {name}</div> : <span>i am span</span>;
+const virtualDom = block ? <div>hello, {name}</div> : <span>i am span</span>;
 
 // Теперь давайте соберем все вместе. Сам jsx – это выражение, а чтобы встроить выражение на JS внутрь jsx нужно использовать фигурные скобки. Следовательно, мы можем встроить jsx внутрь jsx пока мы пишем jsx:
 
-const vdom = <div>
+const virtualDom = <div>
     {isAdmin ? <p><a href="#">{text}</a></p> : <p>{text}</p>}
     <Hello />
   </div>;
@@ -323,7 +324,7 @@ return (
 Как мы помним из предыдущего урока, все "теги" Реакта по сути являются встроенными компонентами, которые работают точно так же, как и определенные нами. А значит все, что применимо к самописным компонентам, также применимо и ко встроенным. Обратное тоже верно. На практике это означает, например, возможность комбинирования компонентов:
 */
 
-const vdom = (
+const virtualDom = (
   <div>
     <Hello />
     <Hello />
@@ -331,7 +332,7 @@ const vdom = (
       <p>What is love</p>
     </AnotherComponent>
   </div>
-  );
+);
 
 /**
 В примере выше компоненты, записанные с заглавной буквы – самописные, остальные – встроенные. Это разделение не случайно: Реакт требует, чтобы вновь создаваемые компоненты начинались с большой буквы, что кстати соответствует стандарту именования классов в JS.
@@ -343,7 +344,7 @@ const vdom = (
 
 const header = text ? <h1>{text}</h1> : null;
 
-const vdom = (
+const virtualDom = (
   <div>
     {header}
     <Hello />
@@ -351,7 +352,7 @@ const vdom = (
   );
 
 // либо так:
-const vdom = (
+const virtualDom = (
   <div>
     {text ? <h1>{text}</h1> : null}
     <Hello />
@@ -359,7 +360,7 @@ const vdom = (
   );  
 
 // То есть null – это допустимое значение, которое рассматривается Реактом как пустой компонент. Точно также интерпретируются false, true и undefined. Поэтому пример выше можно переписать еще короче.
-const vdom = (
+const virtualDom = (
   <div>
     {text && <h1>{text}</h1>}
     <Hello />
@@ -448,7 +449,7 @@ ReactDOM.render(
 Как видно, снаружи свойства передаются как атрибуты в html, а внутри компонента доступны по свойству (то же самое слово, но обозначает другое) props объекта. Причем такая передача свойств для нас уже не в новинку. Встроенные компоненты точно так же принимают на вход свойства, такие как className и другие.
 */
 
-const vdom = (
+const virtualDom = (
   <div className="row">
     <div className="col-6">
       <HelloMessage name="Kate" />
@@ -472,13 +473,13 @@ const params = {
   title: 'name',
 };
 const name = 'Eva';
-const vdom = <div id="container" {...params}>
+const virtualDom = <div id="container" {...params}>
 	  	Hello, {name}
 	</div>;
 
 // Код выше эквивалентен следующему примеру:
 const name = 'Eva';
-const vdom = <div id="container" className="row" title="name">
+const virtualDom = <div id="container" className="row" title="name">
   Hello, {name}
 </div>;
 
@@ -517,13 +518,14 @@ const text = 'text 1';
 ReactDOM.render(<Card title={title} text={text} />);
 
 // вывод
+/*
 <div className="card">
   <div className="card-body">
     <h4 className="card-title">title 1</h4>
     <p className="card-text">text 1</p>
   </div>
 </div>
-
+*/
 
 // FILE: /app/src/Card.jsx:
 import React from 'react';
@@ -691,6 +693,8 @@ class Article extends React.Component {
 
 /**
 Допустим ли такой код?
+ */
+
 class Component extends React.Component {
   render() {
     return [
@@ -699,6 +703,8 @@ class Component extends React.Component {
     ];
   }
 }
+
+/**
 > Да
 */
 
@@ -841,7 +847,7 @@ ReactDOM.render(
 
 Каким будет результирующий HTML?
 const content = '<p>clojure mmm</p>';
-const vdom = <div>{content}</div>;
+const virtualDom = <div>{content}</div>;
 > <div>&lt;p&gt;clojure mmm&lt;/p&gt;</div>
 
 Как правильно задавать стили в JSX?
@@ -854,6 +860,7 @@ src/Progress.js
 
 Использование:
 */
+
 <Progress percentage={40} />;
 
 // Результат:
@@ -870,7 +877,6 @@ src/Progress.js
 // FILE: /app/Makefile:
 test:
 	npm test -s
-
 
 
 // FILE: /app/__tests__/test.jsx
@@ -894,41 +900,41 @@ test('Progress 2', () => {
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Progress 1 1`] = `
-<div
-  className="progress"
->
   <div
-    aria-valuemax="100"
-    aria-valuemin="0"
-    aria-valuenow={25}
-    className="progress-bar"
-    role="progressbar"
-    style={
-      Object {
-        "width": "25%",
+    className="progress"
+  >
+    <div
+      aria-valuemax="100"
+      aria-valuemin="0"
+      aria-valuenow={25}
+      className="progress-bar"
+      role="progressbar"
+      style={
+        Object {
+          "width": "25%",
+        }
       }
-    }
-  />
-</div>
+    />
+  </div>
 `;
 
 exports[`Progress 2 1`] = `
-<div
-  className="progress"
->
   <div
-    aria-valuemax="100"
-    aria-valuemin="0"
-    aria-valuenow={100}
-    className="progress-bar"
-    role="progressbar"
-    style={
-      Object {
-        "width": "100%",
+    className="progress"
+  >
+    <div
+      aria-valuemax="100"
+      aria-valuemin="0"
+      aria-valuenow={100}
+      className="progress-bar"
+      role="progressbar"
+      style={
+        Object {
+          "width": "100%",
+        }
       }
-    }
-  />
-</div>
+    />
+  </div>
 `;
 
 // FILE: /app/src/index.jsx:
@@ -985,7 +991,7 @@ class Button extends React.Component {
 
     return <button className={btnClass}>{label}</button>;
   }
-};
+}
 
 /**
 Для решения этой задачи создатели Реакта рекомендуют использовать пакет classnames. Принцип его работы прост: вместо манипулирования строчкой напрямую нужно сформировать правильный объект, который уже будет преобразован в строку.
@@ -1063,7 +1069,7 @@ export default class Alert extends React.Component {
 // >>>>>> Children <<<<<<
 
 // UI-элементы имеют иерархическую структуру. Например, компонент card в Бутстрапе:
-/**
+/*
 <div class="card">
   <img class="card-img-top" src="..." alt="Card image cap">
   <div class="card-body">
@@ -1072,56 +1078,64 @@ export default class Alert extends React.Component {
     <a href="#" class="btn btn-primary">Go somewhere</a>
   </div>
 </div>
+*/
 
-
+/**
 Блок карточки может содержать внутри себя картинку и тело. Тело, в свою очередь, может состоять из заголовка и текста, а текст может быть чем угодно. Не удивлюсь, если в теле карты получится разместить другие карты.
 
 То же самое применимо как к самым простым элементам самого html, например, тегу div, так и к остальным компонентам Бутстрапа, таким как модальные окна и навигация.
 
 Html соответствует природе ui и естественным образом позволяет строить композиции элементов за счет вкладывания тегов друг в друга. Точно так же работает и jsx. Пока мы использовали этот факт только для встроенных компонентов. Теперь пришла пора попробовать реализовать подобное поведение в самописных компонентах. Возьмем alert из bootstrap.
+*/
 
+/*
 <div class="alert alert-success" role="alert">
   <h4 class="alert-heading">Well done!</h4>
   <p>Aww yeah, you successfully read this important alert message. This example text is going to run a bit longer so that you can see how spacing within an alert works with this kind of content.</p>
   <hr>
   <p class="mb-0">Whenever you need to, be sure to use margin utilities to keep things nice and tidy.</p>
 </div>
+*/
 
-
+/**
 В примере выше обязательной частью является только основной div. Содержимое зависит от конкретной ситуации. Подставляется оно с помощью свойства children.
 */
 
 class Alert extends React.Component {
   render() {
-    return (<div className="alert alert-primary">
-      {this.props.children}
-    </div>);
+    return (
+        <div className="alert alert-primary">
+          {this.props.children}
+        </div>
+    );
   }
 }
 
-const vdom = <Alert>
+const virtualDom = <Alert>
   <p>Aww yeah, you successfully read this important alert message. This example text is going to run a bit longer so that you can see how spacing within an alert works with this kind of content.</p>
   <hr />
   <p class="mb-0">Whenever you need to, be sure to use margin utilities to keep things nice and tidy.</p>
 </Alert>;
 
 ReactDOM.render(
-  vdom,
+  virtualDom,
   document.getElementById('react-root'),
 );
 
 // Обратите внимание на то, что компонент стал использоваться как парный тег в jsx:
-const vdom = <Alert>
+const virtualDom = <Alert>
   <p>Whenever you need to, be sure to use margin utilities to keep things nice and tidy.</p>
 </Alert>;
 
-/*
+/**
 ! Все, что находится между открывающим и закрывающим тегом, попадает внутрь свойства children.
 
 Но будьте бдительны: тип данных свойства children зависит от содержимого. В простейшем случае, когда тег используется как одиночный <div />, это свойство будет равно undefined.
 
 Если этим содержимым является строчка, то именно она окажется внутри children. Правда, после некоторой обработки. JSX удаляет концевые пробелы и пустые строки. Следующие примеры будут отображены одинаково:
+*/
 
+/*
 <div>Hello World</div>
 
 <div>
@@ -1137,8 +1151,9 @@ const vdom = <Alert>
 
   Hello World
 </div>
+*/
 
-/*
+/**
 Любой одиночный дочерний компонент также будет представлен сам собой в children. Во всех остальных случаях children будет содержать массив.
 
 Если внимательно посмотреть на документацию Реакта, то можно увидеть следующее определение children: "children are an opaque data structure" (свойство children - непрозрачная структура данных). Другими словами, нельзя однозначно полагаться на тип этого свойства, так как снаружи можно передать все что угодно.
@@ -1148,28 +1163,33 @@ const vdom = <Alert>
 class IgnoreFirstChild extends React.Component {
   render() {
     const children = this.props.children;
-    return (<div>
-        {React.Children.map(children, (child, i) => {
-          // Ignore the first child
-          if (i < 1) return
 
-          return child
-        })}
-      </div>);
+    return (
+        <div>
+          {
+            React.Children.map(children, (child, i) => {
+              // Ignore the first child
+              if (i < 1) return
+
+              return child
+            })
+          }
+        </div>
+    );
   }
 }
 
-const vdom = <IgnoreFirstChild>
+const virtualDom = <IgnoreFirstChild>
   <h1>First</h1>
   <h1>Second</h1>
 </IgnoreFirstChild>;
 
 ReactDOM.render(
-  vdom,
+  virtualDom,
   document.getElementById('react-root'),
 );
 
-/*
+/**
 Точно так же во избежание конфузов для определения количества элементов внутри children нужно пользоваться специализированной функцией Реакта. Например, у children со значением "Hello World!" длина будет 12. Совсем не то что мы ожидали.
 */
 
@@ -1179,16 +1199,19 @@ class ChildrenCounter extends React.Component {
   }
 }
 
+/**
 // Renders "1"
 <ChildrenCounter>
   Second!
 </ChildrenCounter>
+
 
 // Renders "2"
 <ChildrenCounter>
   <p>First</p>
   <ChildComponent />
 </ChildrenCounter>
+
 
 // Renders "3"
 <ChildrenCounter>
@@ -1197,7 +1220,7 @@ class ChildrenCounter extends React.Component {
   <p>Third!</p>
 </ChildrenCounter>
 
-/*
+
 Кроме перечисленного выше, бывает необходимо обработать детей перед выводом, изменив часть свойств. 
 Конечно же, напрямую этого сделать нельзя, ведь свойства неизменяемы. 
 ! Такого поведения можно добиться, клонируя элементы функцией React.cloneElement.
@@ -1218,12 +1241,12 @@ class ChildrenCounter extends React.Component {
 </ListGroup>;
 
 // Результат:
-
+/*
 <ul class="list-group">
   <li class="list-group-item"><p>one</p></li>
   <li class="list-group-item"><p>two</p></li>
 </ul>
-
+*/
 
 // FILE: /app/src/ListGroup.js:
 import React from 'react';
@@ -1232,15 +1255,19 @@ export default class ListGroup extends React.Component {
   render() {
     return (
       <ul className="list-group">
-        {React.Children.map(this.props.children, item =>
-          <li className="list-group-item">{item}</li>)}
+        {
+          React.Children.map(this.props.children, item =>
+              <li className="list-group-item">{item}</li>)
+        }
       </ul>
     );
   }
 }
 
 
->>>>>> Состояние <<<<<<
+
+
+// >>>>>> Состояние <<<<<<
 
 class Counter extends React.Component {
   state = { count: 0 };
@@ -1262,7 +1289,7 @@ ReactDOM.render(
   document.getElementById('react-root'),
 );
 
-/*
+/**
 Компоненты, которые мы создавали раньше, были stateless, то есть не содержали никакого состояния и могли только отрисовывать переданные свойства. Компонент в примере выше является stateful, так как сохраняет внутри себя состояние счетчика. По порядку:
 
 1. Внутри компонента определяется начальное состояние state = { count: 0 }, с которым будет инициализирован компонент после отрисовки. Единственное требование к состоянию, которое предъявляет Реакт - тип данных: он должен быть объектом. То, что хранится внутри, определяется самим приложением.
@@ -1279,7 +1306,7 @@ class Component extends React.Component {
 
 // Обратите внимание на то, что это единственное место, где state может изменяться напрямую (точнее, создаваться). Во всех остальных местах this.state должен использоваться только для чтения! 
 
-/*
+/**
 2. Функция render использует данные из state для отрисовки. Здесь никаких сюрпризов.
 
 3. На кнопку вешается обработчик на клик. В отличие от html, в свойство onClick передается функция и она вызовется автоматически в момент срабатывания события. Внутри обработчика читается текущее значение счетчика, к нему прибавляется единица и далее идет установка нового состояния. Повторюсь: крайне важно не изменять state напрямую. Для установки нового состояния в реакте предусмотрена функция setState. Именно ее вызов приводит к тому, что компонент, в конце концов, перерисуется. Происходит это не сразу, то есть setState работает асинхронно и внутренняя магия пытается оптимизировать процесс рисования.
@@ -1294,7 +1321,7 @@ class Counter extends React.Component {
   };
 }
 
-/*
+/**
 Но такой подход плохо работает в Реакте по двум причинам:
 
 Первая заключается в том, что обработчики вызываются асинхронно, а методы в классах — это обычные функции с поздним связыванием. Поэтому мы не можем просто так повесить обработчик, так как он потеряет this. С таким определением придется постоянно писать подобный код: onClick={this.onClick.bind(this)} либо такой onClick={() => this.onClick()}.
@@ -1309,12 +1336,13 @@ class Counter extends React.Component {
   };
 }
 
-/*
+/**
 По большому счету, описанный выше механизм открывает практически все двери. Теперь вы с легкостью можете создавать интерактивные компоненты и оживлять ваш UI. Все остальное — это тонкости, предусмотренные для различных ситуаций.
+*/
 
+// # Инициализация
 
-# Инициализация
-
+/**
 Предположим, что в компоненте, созданном выше, нужно инициализировать счетчик со свойством count, переданным снаружи. И только в его отсутствие ставить 0. Для решения этой задачи нужно добавить две вещи:
 
 1. Использовать свойство count как начальное значение счетчика.
@@ -1343,17 +1371,17 @@ class Counter extends React.Component {
   }
 }
 
-const vdom = <div>
+const virtualDom = <div>
   <Counter />
   <Counter count={5} />
 </div>;
 
 ReactDOM.render(
-  vdom,
+  virtualDom,
   document.getElementById('react-root'),
 );
 
-# setState
+// # setState
 // Усложним компонент и реализуем две кнопки, каждая их которых управляет своим состоянием.
 class Buttons extends React.Component {
   state = { count: 1, primary: false };
@@ -1398,11 +1426,11 @@ this.setState({ count: count + 1 });
 // вторая кнопка
 this.setState({ primary: !primary });
 
-/*
+/**
 Функция setState не просто принимает на вход новое состояние. Она заменяет значения ключей в предыдущем состоянии на значения этих же ключей в новом состоянии. То, что передано не было - не трогается. То есть, в нашем случае мы передавали только то, что изменяли. На практике это поведение крайне удобно, иначе пришлось бы каждый раз выполнять работу по слиянию старого состояния с новым руками.
 */
 
-# Структура объекта состояния
+// # Структура объекта состояния
 
 // Существует множество способов организации данных внутри состояния. Скорее всего, вы захотите хранить их как-то так:
 const blogPosts = [
@@ -1436,9 +1464,9 @@ const blogPosts = [
     ]
   }
   // and repeat many times
-]
+];
 
-/*
+/**
 При таком подходе сущности, зависимые от других, находятся внутри. Если брать пример выше то это означает что каждый пост содержит внутри себя как автора, так и список комментариев, а каждый комментарий, в свою очередь, содержит внутри свои связанные сущности того же автора. При таком подходе получается что состояние представляет из себя дерево зависимостей. Хотя этот способ организации кажется вполне естественным, работать с ним крайне тяжело. Во-первых, одни и те же данные начнут дублироваться в разных местах и вам придется синхронизировать изменения в них, что создает космические проблемы на пустом месте. Во-вторых, обновления таких данных (особенно в иммутабельном стиле) становятся сложными и многословными. В-третьих, так как все состояние это один большой кусок, то любое обновление приведет к его полному копированию, что может быть дорогой операцией (в зависимости от размера состояния и количества обновлений в единицу времени).
 
 Общая рекомендация, которую дают разработчики Реакта, это делать структуру максимально плоской, похожей на то, как мы храним данные в базе данных. Причем, желательно, в хорошо нормализованном виде. Другими словами, не нужно дублировать данные в состоянии. Пример того как правильно это делать:
@@ -1447,7 +1475,7 @@ const blogPosts = [
 const state = {
   articles: [/*...*/],
   comments: [/*...*/],
-}
+};
 
 /**@@@
 src/BtnGroup.js
@@ -1458,11 +1486,12 @@ src/BtnGroup.js
 <BtnGroup />
 
 // Результат:
-
+/*
 <div class="btn-group" role="group">
   <button type="button" class="btn btn-secondary left">Left</button>
   <button type="button" class="btn btn-secondary right">Right</button>
 </div>
+*/
 
 // После нажатия на левую кнопку, добавляется класс active. В результате список классов выглядит так: btn btn-secondary left active. У правой кнопки поведение соответствующее.
 
@@ -1523,9 +1552,9 @@ ReactDOM.render(
 
 
 
->>>>>> События <<<<<<<
+// >>>>>> События <<<<<<<
 
-/*
+/**
 На первый взгляд может показаться, что в Реакте используются обычные браузерные события, но это не так. Реакт самостоятельно перехватывает все события, возникающие в DOM, и транслирует их во внутреннюю систему.
 
 В любой обработчик события при вызове передается объект типа SyntheticEvent, кроссбраузерный враппер (обертка) над нативным объектом события. Интерфейсно он не отличается от нативного, кроме того, что работает одинаково во всех браузерах.
@@ -1550,7 +1579,7 @@ class Component extends React.Component {
   // ...
 }
 
-/*
+/**
 Поэтому правильно сохранять в стейте не сам объект события, а его свойства.
 
 Как правило, само событие используется не часто. Например, при кликах обычно важен сам факт клика, а не его параметры, такие как координаты места возникновения. С другой стороны, событие нужно часто для предотвращения действия по умолчанию. Действительно, если ничего не предпринимать, то после клика страница будет перезагружена. В этом смысле ничего нового. И без Реакта все работает так же. Ниже правильный способ обработки такой ситуации:
@@ -1574,8 +1603,7 @@ ReactDOM.render(
   document.getElementById('react-root'),
 );
 
-/*
-
+/**
 В обычном html подобное поведение можно получить и другим способом. Для этого достаточно вернуть false из обработчика. В Реакте такой вариант не пройдет.
 
 Точно так же нужно поступать при необходимости предотвратить всплытие события. Только вместо preventDefault вызывается функция stopPropagation.
@@ -1595,6 +1623,8 @@ src/Carousel.jsx
  - Первая картинка становится активной. Порядок картинок и их отображение должны сохраняться.
  - Начальная вёрстка с данными, которые прогружаются в файле src/index.jsx:
 */
+
+/*
  <div id="carousel" class="carousel slide" data-ride="carousel">
   <div class="carousel-inner">
     <div class="carousel-item active">
@@ -1616,6 +1646,7 @@ src/Carousel.jsx
     <span class="sr-only">Next</span>
   </a>
 </div>
+*/
 
 // Хотя вёрстка и не тривиальная, единственное, что меняется в ней — класс active.
 
@@ -1641,6 +1672,7 @@ export default class Carousel extends React.Component {
 
   setNext = (e) => {
     e.preventDefault();
+
     const { images } = this.props;
     const { currentIdx } = this.state;
     const nextIdx = ((currentIdx + 1) % images.length);
@@ -1649,6 +1681,7 @@ export default class Carousel extends React.Component {
 
   setPrev = (e) => {
     e.preventDefault();
+
     const { images } = this.props;
     const { currentIdx } = this.state;
     const prevIdx = ((currentIdx + (images.length - 1)) % images.length);
@@ -1658,11 +1691,13 @@ export default class Carousel extends React.Component {
   renderItems() {
     const { currentIdx } = this.state;
     const { images } = this.props;
+
     return images.map((url, id) => {
       const classes = cn({
         'carousel-item': true,
         active: currentIdx === id,
       });
+
       return (
         <div key={url} className={classes}>
           <img alt="" className="d-block w-100" src={url} />
@@ -1693,7 +1728,7 @@ export default class Carousel extends React.Component {
 
 
 
->>>>>> Автоматное программирование <<<<<<
+// >>>>>> Автоматное программирование <<<<<<
 
 /*
 Тема конечных автоматов занимает центральную роль во фронтенд разработке. Интерактивные элементы всегда вовлечены в процессы, связанные с изменением состояний. Модальные окна бывают открытые и скрытые, кнопка нажата, отжата или заблокирована (например, во время ajax-запроса). Примеров бесконечное множество. Нередко эти автоматы зависят друг от друга, что порождает иерархию автоматов. Например, возможность взаимодействовать с элементом на экране может появляться только после нажатия кнопки "редактировать".
@@ -2499,7 +2534,7 @@ class Alert extends React.Component {
   }
 }
 
-const vdom = (
+const virtualDom = (
   <Alert>
     <p>Paragraph 1</p>
     <hr />
@@ -2508,7 +2543,7 @@ const vdom = (
 );
 
 ReactDOM.render(
-  vdom,
+  virtualDom,
   document.getElementById('react-root'),
 );
 
@@ -2823,14 +2858,14 @@ class Card extends React.Component {
   }
 }
 
-const vdom = (<Card>
+const virtualDom = (<Card>
   <Card.Body>
     <Card.Title>What is love?</Card.Title>
   </Card.Body>
 </Card>);
 
 ReactDOM.render(
-  vdom,
+  virtualDom,
   document.getElementById('react-root'),
 );
 
