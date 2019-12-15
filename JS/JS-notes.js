@@ -2565,7 +2565,6 @@ console.log(typeof aRecursion); // undefined
 
 
 // @ reflect:
-
 class Student {
     constructor(name) {
         this.name = name
@@ -2591,5 +2590,33 @@ Reflect.preventExtensions(student); // блокируем модификацию
 student.age = 25
 student // {name: 'Max'}
 Reflect.isExtensible(student) // проверяем на доступность для модификации объекта => false
+
+
+
+// @ Chaining styles with a JavaScript Proxy
+const styleProxy = {
+    get: (object, property) => {
+        return (value) => {
+            if (value) {
+                object[property] = value;
+                return new Proxy(object, styleProxy);
+            }
+            
+            return object[property];
+        }
+    }
+};
+
+const style = (selector) => {
+    let element = document.querySelector(selector);
+    
+    return new Proxy(element.style, styleProxy);
+};
+
+// use:
+style(".menu")      // Returns the style object in a Proxy
+   .color("#fff")           // Updates color and returns a Proxy
+   .backgroundColor("#000") // Updates bgColor and returns a Proxy
+   .opacity("1");           // ... and so on so forth
 
 

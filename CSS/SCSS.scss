@@ -129,3 +129,60 @@ html {
         color: red; 
     }
 }
+
+
+// Пример #2:
+// Исходим из базового размера шрифта указанного в "px"
+$font-size: 16px;
+
+// Пересчет пикселей в rem на основании базового размера шрифта:
+@function pixelsConvert($list, $unit) {
+    $units: (rem, em);
+    @if (index($units, $unit) == null) {
+        @error "Преобразование в \"#{unit}\" недоступно, доступны: #{$units}";
+    }
+
+    @if (unit($font-size) != "px") {
+        @error "Значение глобальной переменной $font-size должно быть задано в пикселях";
+    }
+
+    $result: ();
+    @each $value in $list {
+        @if (type-of($value) == number and $value != 0) {
+            $value: if(unit($value) == "", $value * 1px, $value);
+            @if (unit($value) == "px") {
+                $value: ($value / $font-size) + $unit;
+            }
+        }
+
+        $result: append($result, $value);
+    }
+
+    @return $result;
+}
+
+@function rem($list) {
+    @return pixelsConvert($list, rem);
+}
+
+@function em($list) {
+    @return pixelsConvert($list, em);
+}
+
+.test {
+    width: rem(16);
+    height: rem(128px !important);
+    margin: rem(16px 32 auto 10%);
+    padding: em(64px 50% 0 inherit);
+    box-shadow: rem(0 20px 20px -20px rgba(0, 0, 0, 0.4));
+}
+
+// =>
+.test {
+    width: 1rem;
+    height: 8rem !important;
+    margin: 1rem 2rem auto 10%;
+    padding: 4rem 50% 0 inherit;
+    box-shadow: 0 1.25rem 1.25rem -1.25rem rgba(0, 0, 0, 0.4);
+}
+
