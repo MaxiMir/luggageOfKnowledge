@@ -41,6 +41,7 @@
                       <div class="ai-wgt__toggle-visible-btn ai-wgt__circle"></div>
                   </div>
               </div>
+              
               <style>
                   .ai-block {
                       width: 440px;

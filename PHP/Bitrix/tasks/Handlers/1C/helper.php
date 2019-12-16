@@ -48,3 +48,40 @@
 				"msg" => $element->LAST_ERROR
 			];
 	}
+
+
+	/**
+	 * @param $orderID
+	 * @return array ['fullName' => value, 'propNameID' => value]
+	 */
+	function getFullNameData($orderID)
+	{
+		$propNameID = null;
+
+		$fullNameData = [
+			"NAME" => "",
+			"LAST_NAME" => ""
+		];
+
+		$rsProp = CSaleOrderPropsValue::GetList([], ['ORDER_ID' => $orderID]);
+
+		while ($arProp = $rsProp->Fetch()) {
+			['ID' => $propID, 'CODE' => $propCode, 'VALUE' => $propValue] = $arProp;
+
+			$isName = $propCode == 'FIO' || $propCode == 'NAME_UR';
+			$isLastName = $propCode == 'LAST_NAME' || $propCode == 'LASTNAME_UR';
+
+			$propValueTrimmed = trim($propValue);
+
+			if ($isLastName) {
+				$fullNameData['LAST_NAME'] = $propValueTrimmed;
+			} elseif ($isName) {
+				$propNameID = $propID;
+				$fullNameData['NAME'] = $propValueTrimmed;
+			}
+		}
+
+		$fullName = "{$fullNameData['LAST_NAME']} {$fullNameData['NAME']}";
+
+		return compact('fullName', 'propNameID');
+	}

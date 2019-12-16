@@ -2,6 +2,8 @@
 
 	require_once "OffersHandler/OffersHandler.php";
 	require_once "OffersPropsHandler/OffersPropsHandler.php";
+	require_once "CSaleHandlers/CSaleHandlers.php";
+	require_once "IBlockSectionUpdate/IBlockSectionUpdate.php";
 	require_once "helper.php";
 
 	// Обработчик вызывающийся перед обновлением элементов каталога:
@@ -17,3 +19,20 @@
 		'OnSuccessCatalogImport1C',
 		["OffersHandler", "initBeforeSuccess"]
 	);
+
+
+	// Обработчик события после создания заказа: @#
+	AddEventHandler(
+		'sale',
+		'OnSaleComponentOrderOneStepComplete',
+		['CSaleHandlers', 'OnSaleComponentOrderOneStepCompleteHandler']
+	);
+
+
+	// Обработчик события до обновления раздела: @#
+	AddEventHandler(
+		"iblock",
+		"OnBeforeIBlockSectionUpdate",
+		["IBlockSectionUpdate", "OnBeforeIBlockSectionUpdate"]
+	);
+
