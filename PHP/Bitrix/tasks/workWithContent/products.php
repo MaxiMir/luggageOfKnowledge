@@ -1,7 +1,8 @@
 <?php
 
-	require($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/main/include/prolog_before.php");
+	#@ Замена значений в свойствах #@
 
+	require($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/main/include/prolog_before.php");
 	require_once "./helper.php";
 
 

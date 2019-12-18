@@ -1,6 +1,7 @@
 <?php
 
 	#@@@  ОБНОВЛЕНИЕ ПРИВЯЗКИ К РАЗДЕЛАМ @@@#
+	
 	use Bitrix\Main\Loader;
 	use \Bitrix\Iblock\PropertyIndex\Manager;
 
