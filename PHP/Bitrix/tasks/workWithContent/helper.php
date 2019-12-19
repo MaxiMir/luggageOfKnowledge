@@ -1013,7 +1013,8 @@
 		$ACTIVE = "Y";
 		$personalNotesData = [];
 		$GROUP_ID = [AUTH_USERS_GROUP];
-		$PASSWORD = $CONFIRM_PASSWORD = "toBeStrong"; // randString(COUNT_SIGNS)
+		$PASSWORD = $CONFIRM_PASSWORD = $UF_NEW_PASSWORD = randString(6);
+
 		$fieldsName = [
 			"LOGIN",
 			"LAST_NAME",
@@ -1030,7 +1031,8 @@
 			"LID",
 			"PERSONAL_NOTES",
 			"UF_WHOLESALE_BUYER",
-			"UF_CREAT_UN_TIME"
+			"UF_CREAT_UN_TIME",
+			"UF_NEW_PASSWORD"
 		];
 
 		[

@@ -1,5 +1,5 @@
 <?
-	 require_once "search_engine.php";
+	 require_once "./search-engine.php";
 	 
 	 $filteredProductID = [];
 	 $sortedSectionsData = [];

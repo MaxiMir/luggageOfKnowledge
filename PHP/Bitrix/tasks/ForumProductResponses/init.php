@@ -1,6 +1,10 @@
 <?
 
-	### получаем SECTION_CODE раздела каталога: ###
+	/**
+	 * Получаем SECTION_CODE раздела каталога на странице отзывы
+	 * @param $urn
+	 * @return mixed|string
+	 */
 	function getCurrentSectionCodeInReviews($urn)
 	{
 		$requestUrnData = explode('/', $urn);
@@ -11,8 +15,11 @@
 		return count($urnData) != 2 ? '' : $urnData[2];
 	}
 	
-	
-	###  проверяем на необходимость сортировки по количеству отзывов к товару: ###
+
+	/**
+	 * Проверяем на необходимость сортировки по количеству отзывов к товарам
+	 * @return bool
+	 */
 	function isSortByCount()
 	{
 		$request = Context::getCurrent()->getRequest();
@@ -20,8 +27,13 @@
 		return $request->getQuery("sort") === "count";
 	}
 	
-	
-	###  все разделы инфоблока: ###
+
+	/**
+	 * Все разделы ИБ
+	 * @param $params
+	 * @return array
+	 * @throws Exception
+	 */
 	function getAllSections($params)
 	{
 		$sectionsData = [];
@@ -53,8 +65,12 @@
 		return $sectionsData;
 	}
 	
-	
-	###  все разделы из кэша: ###
+
+	/**
+	 * Все разделы ИБ из кэша
+	 * @param $params
+	 * @return bool
+	 */
 	function getAllSectionsFromCache($params)
 	{
 		$cacheTime = 3600 * 6;
@@ -63,8 +79,12 @@
 		return returnResultCache($cacheTime, $cacheID, 'getAllSections', $params);
 	}
 	
-	
-	###  данные товаров в нужном формате для работы с отзывами: ###
+
+	/**
+	 * Данные товаров в нужном формате для работы с отзывами
+	 * @param $itemsData
+	 * @return mixed
+	 */
 	function getProdsDataForResponse($itemsData)
 	{
 		return array_reduce($itemsData, function ($acc, $item) {
@@ -81,8 +101,12 @@
 		}, []);
 	}
 	
-	
-	###  данные отзывов с текущими товарами: ###
+
+	/**
+	 * Данные отзывов с текущими товарами
+	 * @param $itemsData
+	 * @return array
+	 */
 	function getResponseDataWithProds($itemsData)
 	{
 		$responsesData = [];
@@ -117,8 +141,13 @@
 		return $responsesData;
 	}
 	
-	
-	###  данные отзывов с текущими товарами из кэша: ###
+
+	/**
+	 * Данные отзывов с текущими товарами из кэша
+	 * @param $prodsDataForResponse
+	 * @param $sectionCode
+	 * @return bool
+	 */
 	function getResponseDataWithProdsFromCache($prodsDataForResponse, $sectionCode)
 	{
 		$cacheTime = 3600;
@@ -127,8 +156,12 @@
 		return returnResultCache($cacheTime, $cacheID, 'getResponseDataWithProds', $prodsDataForResponse);
 	}
 	
-	
-	### отсортированные по убыванию количества отзывов к товарам данные отзывов: ###
+
+	/**
+	 * отсортированные по убыванию количества отзывов к товарам данные отзывов
+	 * @param $itemsData
+	 * @return mixed
+	 */
 	function sortResponseDataWithProdsByCount($itemsData)
 	{
 		usort($itemsData, function ($a, $b) {
@@ -138,8 +171,12 @@
 		return $itemsData;
 	}
 	
-	
-	### данные отзывов о товаре: ###
+
+	/**
+	 * Данные отзывов о товаре
+	 * @param $productID
+	 * @return array
+	 */
 	function getProductResponseData($productID)
 	{
 		$prodResponses = [];
@@ -169,8 +206,12 @@
 		return $prodResponses;
 	}
 	
-	
-	###  количество отзывов к товару: ###
+
+	/**
+	 * Количество отзывов к товару
+	 * @param $productID
+	 * @return mixed
+	 */
 	function getProductResponseCount($productID)
 	{
 		$arSort = [];

@@ -10,7 +10,10 @@
 
 	###### @ HELPERS @ ######
 
-	### распечатываем любое количество аргументов ###
+	/**
+	 * Распечатываем любое количество аргументов
+	 * @param mixed ...$args
+	 */
 	function dbg(...$args)
 	{
 		echo '<pre>';
@@ -26,14 +29,27 @@
 	}
 
 
-	### обрезаем строку на заданную длину с добавлением маркера ###
+	/**
+	 * Обрезаем строку на заданную длину с добавлением маркера
+	 * @param $str
+	 * @param int $length
+	 * @param string $trimMarker
+	 * @return string
+	 */
 	function getTrimLine($str, $length = 100, $trimMarker = '...')
 	{
 		return mb_strimwidth($str, 0, $length, $trimMarker);
 	}
 
 
-	###  данные из кэша (при истекшем $timeSeconds - добавляет в кэш): ###
+	/**
+	 * Данные из кэша (при истекшем $timeSeconds - добавляет в кэш)
+	 * @param $timeSeconds
+	 * @param $cacheId
+	 * @param $funcName
+	 * @param array $arCallbackParams
+	 * @return bool
+	 */
 	function returnResultCache($timeSeconds, $cacheId, $funcName, $arCallbackParams = [])
 	{
 		$result = false;
@@ -51,7 +67,12 @@
 		return $result;
 	}
 
-	### массив данных из СSV файла: ###
+
+	/**
+	 * Массив данных из СSV файла
+	 * @param $fileName
+	 * @return array
+	 */
 	function getCSVData($fileName)
 	{
 		$csvData = [];
@@ -80,9 +101,14 @@
 	}
 
 
+
 	###### @ BREADCRUMBS @ ######
 
-	###  CODE раздела || false: ###
+	/**
+	 *  CODE раздела || false
+	 * @param $urn
+	 * @return mixed
+	 */
 	function getCurrentSection($urn)
 	{
 		$requestUrnData = explode('/', $urn);
@@ -94,7 +120,11 @@
 	}
 
 
-	###  ID раздела по символьному коду: ###
+	/**
+	 * ID раздела по символьному коду
+	 * @param $urn
+	 * @return bool
+	 */
 	function getSectionIDByUrn($urn)
 	{
 		$code = getCurrentSection($urn);
@@ -120,14 +150,22 @@
 	}
 
 
-	### проверяет на "искусственный" раздел: ###
+	/**
+	 * Проверяет на "искусственный" раздел
+	 * @param $sectionID
+	 * @return bool
+	 */
 	function isMadeSection($sectionID)
 	{
 		return in_array($sectionID, MADE_CATALOG_IDS);
 	}
 
 
-	###  ID родительского "искусственного" раздела || false: ###
+	/**
+	 * ID родительского "искусственного" раздела || false
+	 * @param $sectionID
+	 * @return bool
+	 */
 	function getParentMadeSectionID($sectionID)
 	{
 		$arSort = [];
@@ -151,7 +189,12 @@
 	}
 
 
-	### подразделы с учетом "искусственных" разделов: ###
+	/**
+	 * Подразделы с учетом "искусственных" разделов
+	 * @param $sectionID
+	 * @param array $excludedIDs
+	 * @return array
+	 */
 	function getSubsectionsData($sectionID, $excludedIDs = [])
 	{
 		$sectionsData = [];
@@ -185,7 +228,11 @@
 	}
 
 
-	### данные раздела: ###
+	/**
+	 * Данные раздела
+	 * @param $sectionID
+	 * @return mixed
+	 */
 	function getSectionDataByID($sectionID)
 	{
 		$sectionDBData = CIBlockSection::GetByID($sectionID);
@@ -194,7 +241,13 @@
 	}
 
 
-	### данные элемента: ###
+	/**
+	 * Данные элемента
+	 * @param $iBlockID
+	 * @param $elementID
+	 * @param array $props
+	 * @return mixed
+	 */
 	function getElementDataByID($iBlockID, $elementID, $props = [])
 	{
 		if ( ! $props) {
@@ -217,9 +270,14 @@
 	}
 
 
+
 	###### @ MAIN MENU AND LEFT MENU @ ######
 
-	### данные для меню каталога (корневые разделы): ###
+	/**
+	 * Данные для меню каталога (корневые разделы)
+	 * @param bool $isMainMenu
+	 * @return mixed
+	 */
 	function getMainCatalogLinks($isMainMenu = true)
 	{
 		global $APPLICATION;
@@ -256,7 +314,11 @@
 	}
 
 
-	### привязывает "искусственные" разделы: ###
+	/**
+	 * Привязывает "искусственные" разделы:
+	 * @param $catalogLinksData
+	 * @return mixed
+	 */
 	function linkCatalogLinks($catalogLinksData)
 	{
 		return array_reduce($catalogLinksData, function ($acc, $linkData) {
@@ -282,7 +344,10 @@
 	}
 
 
-	### данные для top меню каталога DEPTH 2,3: ###
+	/**
+	 * Данные для top меню каталога DEPTH 2,3:
+	 * @return array
+	 */
 	function getMadeCatalogChildLinks()
 	{
 		$menuData = [];
@@ -338,7 +403,12 @@
 	}
 
 
-	### данные для top меню каталога DEPTH 3: ###
+	/**
+	 * Данные для top меню каталога DEPTH 3:
+	 * @param $sectionID
+	 * @param $fromBlock
+	 * @return array
+	 */
 	function getMadeCatalogChildLinks3Lvl($sectionID, $fromBlock)
 	{
 		$menuData = [];
@@ -378,7 +448,10 @@
 	}
 
 
-	### полные данные для top меню каталога: ###
+	/**
+	 * Полные данные для top меню каталога:
+	 * @return array
+	 */
 	function getCatalogTopMenuLinks()
 	{
 		$menuLinks = [];
@@ -401,7 +474,11 @@
 	}
 
 
-	### данные для left меню каталога DEPTH 2 (без "искусственных" разделов): ###
+	/**
+	 * Данные для left меню каталога DEPTH 2 (без "искусственных" разделов)
+	 * @param $linksData
+	 * @return array
+	 */
 	function getCatalogChildLinks2Lvl($linksData)
 	{
 		$menuData = [];
@@ -416,7 +493,12 @@
 	}
 
 
-	### добавляет данные по дочерним разделам: ###
+	/**
+	 * Добавляет данные по дочерним разделам
+	 * @param $linksData
+	 * @param $childLinksData
+	 * @return mixed
+	 */
 	function appendCatalogChild($linksData, $childLinksData)
 	{
 
@@ -431,7 +513,11 @@
 		return $linksData;
 	}
 
-	### полные данные для left меню каталога: ###
+
+	/**
+	 * Полные данные для left меню каталога
+	 * @return mixed
+	 */
 	function getCatalogLeftMenuLinks()
 	{
 		$linksData = getMainCatalogLinks(false);
@@ -441,7 +527,10 @@
 	}
 
 
-	### данные по брендам: ###
+	/**
+	 * Данные по брендам
+	 * @return array
+	 */
 	function getBrands()
 	{
 		$brands = [];
@@ -467,7 +556,10 @@
 	}
 
 
-	### данные меню по брендам: ###
+	/**
+	 * Данные меню по брендам
+	 * @return mixed
+	 */
 	function getBrandsLinks()
 	{
 		$brandLink = [
@@ -502,7 +594,10 @@
 	}
 
 
-	### данные меню: ###
+	/**
+	 * Данные меню
+	 * @return array
+	 */
 	function getMenuLinks()
 	{
 		$aMenuLinksExt = getCatalogTopMenuLinks();
@@ -512,30 +607,11 @@
 	}
 
 
-	###### @ REVIEWS @ ######
-
-	### получаем SECTION_CODE раздела каталога: ###
-	function getCurrentSectionCodeInReviews($urn)
-	{
-		$requestUrnData = explode('/', $urn);
-		$urnData = array_filter($requestUrnData, function ($partUrb) {
-			return $partUrb != '';
-		});
-
-		return count($urnData) != 2 ? '' : $urnData[2];
-	}
-
-
-	###  проверяем на необходимость сортировки по количеству отзывов к товару: ###
-	function isSortByCount()
-	{
-		$request = Context::getCurrent()->getRequest();
-
-		return $request->getQuery("sort") === "count";
-	}
-
-
-	###  товары выбранного раздела ###
+	/**
+	 * Товары выбранного раздела
+	 * @param $sectionCode
+	 * @return array
+	 */
 	function getSectionProducts($sectionCode)
 	{
 		$productsData = [];
@@ -569,154 +645,11 @@
 	}
 
 
-	###  все разделы инфоблока: ###
-	function getAllSections($params)
-	{
-		$sectionsData = [];
-		$arSort = [];
-		$functionName = __FUNCTION__;
-
-		[
-			"iBlockID" => $iBlockID,
-			"arSelect" => $arSelect,
-		]
-			= $params;
-
-		if ( ! $iBlockID) {
-			throw new Exception("Необходимо передать iBlockID в {$functionName}!");
-		}
-
-		$arSelect = $arSelect ?? ["ID", "NAME", "SECTION_PAGE_URL"];
-
-		$arFilter = [
-			"IBLOCK_ID" => $iBlockID,
-			"GLOBAL_ACTIVE" => "Y",
-			"ACTIVE" => "Y"
-		];
-
-		$sectionsDBData = CIBlockSection::GetList($arSort, $arFilter, false, $arSelect);
-
-		while ($sectionData = $sectionsDBData->Fetch()) {
-			$sectionsData[] = $sectionData;
-		}
-
-		return $sectionsData;
-	}
-
-
-	###  данные товаров в нужном формате для работы с отзывами: ###
-	function getProdsDataForResponse($itemsData)
-	{
-		return array_reduce($itemsData, function ($acc, $item) {
-			[
-				'ID' => $id,
-				'NAME' => $name,
-				'DETAIL_PAGE_URL' => $urn,
-				'PREVIEW_PICTURE' => ['SRC' => $src],
-			]
-				= $item;
-
-			$acc[$id] = compact('id', 'name', 'urn', 'src');
-
-			return $acc;
-		}, []);
-	}
-
-
-	###  данные отзывов с текущими товарами: ###
-	function getResponseDataWithProds($itemsData)
-	{
-		$responsesData = [];
-		$arSort = ["ID" => "DESC"];
-		$productsID = array_keys($itemsData);
-		$arFilter = [
-			"FORUM_ID" => FORUM_ID,
-			"APPROVED" => "Y",
-			"@PARAM2" => $productsID,
-		];
-
-		$responseDBData = CForumMessage::GetListEx($arSort, $arFilter);
-
-		while ($responseData = $responseDBData->Fetch()) {
-			[
-				"PARAM2" => $id,
-				"AUTHOR_NAME" => $author,
-				"POST_MESSAGE_HTML" => $message,
-				"POST_DATE" => $postDate,
-			]
-				= $responseData;
-
-			if ( ! array_key_exists($id, $responsesData)) {
-				$responsesData[$id] = [];
-				$responsesData[$id]['product'] = $itemsData[$id];
-				$responsesData[$id]['response'] = compact('author', 'message', 'postDate');
-				$responsesData[$id]['responseCount'] = -1;
-			}
-
-			$responsesData[$id]['responseCount']++;
-		}
-
-		return $responsesData;
-	}
-
-
-	### отсортированные по убыванию количества отзывов к товарам данные отзывов: ###
-	function sortResponseDataWithProdsByCount($itemsData)
-	{
-		usort($itemsData, function ($a, $b) {
-			return $b['responseCount'] - $a['responseCount'];
-		});
-
-		return $itemsData;
-	}
-
-
-	###  количество отзывов к товару: ###
-	function getProductResponseCount($productID)
-	{
-		$arSort = [];
-		$arFilter = [
-			"FORUM_ID" => FORUM_ID,
-			"APPROVED" => "Y",
-			"@PARAM2" => $productID,
-		];
-
-		return CForumMessage::GetListEx($arSort, $arFilter, true);
-	}
-
-
-	### данные отзывов о товаре: ###
-	function getProductResponseData($productID)
-	{
-		$prodResponses = [];
-		$arSelect = [
-			"ID",
-			"IBLOCK_ID",
-			"NAME",
-			"PREVIEW_TEXT",
-			"PROPERTY_USER_ID",
-			"PROPERTY_USER_NAME",
-			"PROPERTY_RATING",
-			"PROPERTY_PRODUCT",
-			"PROPERTY_CATALOG_SECTION"
-		];
-		$arFilter = [
-			"IBLOCK_ID" => RESPONSE_I_BLOCK_ID,
-			"ACTIVE" => "Y",
-			"PROPERTY_PRODUCT" => $productID
-		];
-
-		$prodResponseDBData = CIBlockElement::GetList([], $arFilter, false, false, $arSelect);
-
-		while ($prodResponse = $prodResponseDBData->GetNext()) {
-			$prodResponses[] = $prodResponse;
-		}
-
-		return $prodResponses;
-	}
-
-
-	### рейтинг товара: ###
+	/**
+	 * Рейтинг товара
+	 * @param $productID
+	 * @return false|float|void
+	 */
 	function getProductRating($productID)
 	{
 		$productResponseData = getProductResponseData($productID);
@@ -738,7 +671,10 @@
 
 	### @ FUNCTIONS WITH CACHE @ ###
 
-	### данные меню из кэша: ###
+	/**
+	 * Данные меню из кэша:
+	 * @return bool
+	 */
 	function getMenuLinksFromCache()
 	{
 		$cacheTime = 3600 * 6;
@@ -747,7 +683,11 @@
 		return returnResultCache($cacheTime, $cacheID, 'getMenuLinks');
 	}
 
-	### данные для left меню из кэша: ###
+
+	/**
+	 * Данные для left меню из кэша:
+	 * @return bool
+	 */
 	function getCatalogLeftMenuLinksFromCache()
 	{
 		$cacheTime = 3600 * 6;
@@ -757,27 +697,10 @@
 	}
 
 
-	###  все разделы из кэша: ###
-	function getAllSectionsFromCache($params)
-	{
-		$cacheTime = 3600 * 6;
-		$cacheID = "allCatalogSections";
-
-		return returnResultCache($cacheTime, $cacheID, 'getAllSections',
-			$params);
-	}
-
-
-	###  данные отзывов с текущими товарами из кэша: ###
-	function getResponseDataWithProdsFromCache($prodsDataForResponse, $sectionCode)
-	{
-		$cacheTime = 3600;
-		$cacheID = "responseDataWithProds{$sectionCode}";
-
-		return returnResultCache($cacheTime, $cacheID, 'getResponseDataWithProds', $prodsDataForResponse);
-	}
-
-	###  ID активных складов: ###
+	/**
+	 * ID активных складов:
+	 * @return array
+	 */
 	function getStoresIDs()
 	{
 		$storesID = [];
@@ -792,30 +715,6 @@
 		return $storesID;
 	}
 
-
-	/**
-	 * @param $productName
-	 * @return null || ID товара
-	 */
-	function getProductIDByName($productName)
-	{
-		$ID = null;
-		$arrProdFilter = [
-			"IBLOCK_ID" => CATALOG_I_BLOCK_ID,
-			"NAME" => $productName,
-		];
-		$arrSelect = [
-			"ID"
-		];
-
-		$resDB = CIBlockElement::GetList([], $arrProdFilter, false, ['nTopCount' => 1], $arrSelect);
-
-		while (["ID" => $prodID] = $resDB->Fetch()) {
-			$ID = $prodID;
-		}
-
-		return $ID;
-	}
 
 	/**
 	 * Создание товара в корне

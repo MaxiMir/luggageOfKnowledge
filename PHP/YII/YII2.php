@@ -1,6 +1,6 @@
 <?
 // УСТАНОВКА
-	 $ composer create - project yiisoft / yii2 - app - basic treasure 2.0.10 // treasure название проекта
+// $ composer create - project yiisoft / yii2 - app - basic treasure 2.0.10 // treasure название проекта
 
 /* В СЛУЧАЕ ОШИБКИ invalid Configuration -yii\base\InvalidConfigException:
  * file: config/web.php находим строку:
@@ -412,16 +412,16 @@ AppAsset::register($this); // регистрация объекта AppAsset
 }
 
 // folder: /views/post создаем show.php:
-	 $this->title = 'Одна статья'; // задание title в views (2 способ)
-	 ?>
+ $this->title = 'Одна статья'; // задание title в views (2 способ)
+ ?>
 		  
-		  <!-- создаем блок (после этого можно вывести в шаблоне, например, basic.php) *1* -->
+<!-- создаем блок (после этого можно вывести в шаблоне, например, basic.php) *1* -->
 <? $this->beginBlock('head-block'): ?>
 		  <h1>Заголовок страницы</h1>
 <? $this->endBlock(); ?>
 		  
-		  <h1>Show Action</h1>
-		  <button>Click</button>
+<h1>Show Action</h1>
+<button>Click</button>
 		  
 		  
 <? // запрос *3* при ленивой загрузке:
@@ -453,7 +453,7 @@ use yii\widgets\ActiveForm;
 use yii\helpers\Html;
 ?>
 		  
-		  <h1>Test Action</h1>
+<h1>Test Action</h1>
 		  
 <?php if (Yii:$app->session->hasFlash('success')): // если есть flash сообщение ?>
 		  <div class="alert alert-success" role="alert">
@@ -571,13 +571,13 @@ return [
 	 }
 	 
 	 
-	 /** @ ОТЛОЖЕННАЯ И ЖАДНАЯ ЗАГРУЗКА ДАННЫХ
-	  * folder: models создаем файл Product.php:
-	  */
+/** @ ОТЛОЖЕННАЯ И ЖАДНАЯ ЗАГРУЗКА ДАННЫХ
+ * folder: models создаем файл Product.php:
+*/
 	 
-	 namespace app\models;
+namespace app\models;
 	 
-	 use yii\db\ActiveRecord
+use yii\db\ActiveRecord;
 
 class Product extends ActiveRecord
 {
@@ -619,10 +619,10 @@ CREATE TABLE `posts` (
 ) ENGINE = InnoDB DEFAULT CHARSET = utf - 8;
 
 // file: models/TestForm.php изменяем:
-	 namespace app\models;
-	 
-	 use yii\db\ActiveRecord;
-	 
+    namespace app\models;
+
+    use yii\db\ActiveRecord;
+
 	 class TestForm extends ActiveRecord
 	 {
 		  // при использовании ActiveRecord в отличие от Model, объявлять свойства с полями не нужно
