@@ -140,13 +140,13 @@
 	{
 		$csvData = [];
 
-		if (!file_exists($fileName)) {
+		if ( ! file_exists($fileName)) {
 			throw new Exception('Файл не найден');
 		}
 
 		$csvFile = new SplFileObject($fileName);
 
-		while (!$csvFile->eof()) {
+		while ( ! $csvFile->eof()) {
 			try {
 				$data = $csvFile->fgetcsv(';');
 
@@ -193,11 +193,12 @@
 
 
 	/**
-	 * @return array [
+	 * [
 	 *    данные по товарам, имеющими дубли,
 	 *    данные по дублями,
 	 *    символьные кода товаров
 	 * ]
+	 * @return array
 	 */
 	function getCatalogDoublesData()
 	{
@@ -247,13 +248,14 @@
 
 
 	/**
-	 * @param $origElementsWithDoubles
-	 * @param $doublesElements
-	 * @param $doubleElemCodes
-	 * @return mixed * @return mixed [
+	 * [
 	 *    'toDel' => данные товаров для удаления,
 	 *    'toSave' => данные товаров, которые оставляем
 	 * ] (исходя из глубины вложенности товара)
+	 * @param $origElementsWithDoubles
+	 * @param $doublesElements
+	 * @param $doubleElemCodes
+	 * @return mixed
 	 */
 	function splitCatalogDoublesData($origElementsWithDoubles, $doublesElements, $doubleElemCodes)
 	{
@@ -271,13 +273,14 @@
 	}
 
 	/**
-	 * @param $toDelProducts
-	 * @param $toSaveProducts
-	 * @param $doubleElemCodes
-	 * @return array [
+	 * [
 	 * 'redirects' => данные по проставленным редиректам
 	 * 'errors' => не добавленные редиректы
 	 * ]
+	 * @param $toDelProducts
+	 * @param $toSaveProducts
+	 * @param $doubleElemCodes
+	 * @return array
 	 */
 	function addRedirectsForCatalogDoubles($toDelProducts, $toSaveProducts, $doubleElemCodes)
 	{
@@ -312,11 +315,12 @@
 	}
 
 	/**
-	 * @param $toDelProducts
-	 * @return array [
+	 * [
 	 * 'deletedIDs' => удаленные ID
 	 * 'errors' => не удаленные ID
 	 * ]
+	 * @param $toDelProducts
+	 * @return array
 	 */
 	function deleteCatalogDoubles($toDelProducts)
 	{
@@ -339,8 +343,9 @@
 
 
 	/**
+	 * Возвращает ассоциативный массив из массивов с 2 элементами
 	 * @param $data
-	 * @return mixed ассоциативный массив из массивов с 2 элементами
+	 * @return mixed
 	 */
 	function convertToAssocArr($data)
 	{
@@ -353,13 +358,13 @@
 	}
 
 	/**
-	 * @param       $newsAllData
-	 * @param array $newsSectionData
-	 *
-	 * @return array [
+	 * [
 	 *   'errors' => массив с ошибками,
 	 *   'createdCount' => количество созданных новостей
 	 * ]
+	 * @param $newsAllData
+	 * @param array $newsSectionData
+	 * @return array
 	 */
 	function createAllNews($newsAllData, $newsSectionData = [])
 	{
@@ -387,13 +392,13 @@
 	}
 
 	/**
-	 * @param $newsData
-	 * @param $newsSectionData
-	 *
-	 * @return array [
+	 * [
 	 *    'id' => созданной новости || false,
 	 *    'error' => ошибка при создании || null
 	 * ]
+	 * @param $newsData
+	 * @param $newsSectionData
+	 * @return array
 	 */
 	function createNews($newsData, $newsSectionData)
 	{
@@ -436,9 +441,10 @@
 	}
 
 
-
-
-	### NAME и LAST_NAME пользователя ###
+	/**
+	 * Возвращает NAME и LAST_NAME пользователя
+	 * @return string
+	 */
 	function getUserFullName()
 	{
 		global $USER;
@@ -452,7 +458,12 @@
 	}
 
 
-	### ID созданного отзыва || ошибку ###
+	/**
+	 * ID созданного отзыва || ошибку
+	 * @param $responseData
+	 * @param $userFullName
+	 * @return array|void
+	 */
 	function createResponse($responseData, $userFullName)
 	{
 		[
@@ -494,7 +505,10 @@
 	}
 
 
-	### обновление количества отзывов о товаре: ###
+	/**
+	 * Обновление количества отзывов о товаре
+	 * @param $prodID
+	 */
 	function increasePropCountResponse($prodID)
 	{
 		$responseCount = getProductResponseCount($prodID);
@@ -504,7 +518,10 @@
 	}
 
 
-	### обновление рейтинга товара: ###
+	/**
+	 * Обновление рейтинга товара
+	 * @param $prodID
+	 */
 	function updateRatingProduct($prodID)
 	{
 		$productRating = getProductRating($prodID);
@@ -514,11 +531,12 @@
 
 
 	/**
-	 * @param $responsesData
-	 * @return array [
+	 * [
 	 *   'errors' => ошибки,
 	 *   'createdCount' => количество созданных отзывов
 	 * ]
+	 * @param $responsesData
+	 * @return array
 	 */
 	function addAllResponses($responsesData)
 	{
@@ -547,8 +565,9 @@
 	}
 
 	/**
+	 * Создан отзыв с обновленной датой
 	 * @param $data
-	 * @return bool - создан отзыв с обновленной датой
+	 * @return bool
 	 */
 	function addResponseFormResult($data)
 	{
@@ -577,6 +596,10 @@
 
 
 	//**@@ Разделы:
+	/**
+	 * @param $fileName
+	 * @return mixed
+	 */
 	function getSectionsData($fileName)
 	{
 		$sectionsData = [];
@@ -623,6 +646,10 @@
 		return sortByNested($sectionsData); // сортировка по вложенности раздела
 	}
 
+	/**
+	 * @param $sectionsData
+	 * @param $blockID
+	 */
 	function createNewSections($sectionsData, $blockID)
 	{
 		foreach ($sectionsData as $sectionName => $sectionData) {
@@ -640,6 +667,12 @@
 		}
 	}
 
+	/**
+	 * @param $sectionCODE
+	 * @param $nesting
+	 * @param $blockID
+	 * @return bool|void
+	 */
 	function getSectionIDByCode($sectionCODE, $nesting, $blockID)
 	{
 
@@ -659,6 +692,10 @@
 		return false;
 	}
 
+	/**
+	 * @param $name
+	 * @param $blockID
+	 */
 	function getSectionIDByName($name, $blockID)
 	{
 		if ( ! isset($name, $blockID)) {
@@ -677,6 +714,12 @@
 		return CIBlockSection::GetList([], $arFilter, false, false, $arSelect)->GetNext()["ID"];
 	}
 
+	/**
+	 * @param $sectionID
+	 * @param $sectionCODE
+	 * @param $blockID
+	 * @return mixed
+	 */
 	function isSectionExists($sectionID, $sectionCODE, $blockID)
 	{
 		$arSFilter = ["IBLOCK_ID" => $blockID, "CODE" => $sectionCODE];
@@ -688,6 +731,12 @@
 		return CIBlockSection::GetCount($arSFilter);
 	}
 
+	/**
+	 * @param $sectionName
+	 * @param $parentSectionID
+	 * @param $sectionCODE
+	 * @param $blockID
+	 */
 	function createSection($sectionName, $parentSectionID, $sectionCODE, $blockID)
 	{
 		$bSection = new CIBlockSection;
@@ -708,6 +757,9 @@
 		}
 	}
 
+	/**
+	 * @param $data
+	 */
 	function updateSections($data)
 	{
 		foreach ($data as $itemData) {
@@ -724,7 +776,12 @@
 	}
 
 
-//**@@ Элементы:
+	//**@@ Элементы:
+	/**
+	 * @param $fileName
+	 * @param string $type
+	 * @return array
+	 */
 	function createElements($fileName, $type = 'catalog')
 	{
 		$counter = 0;
@@ -765,6 +822,11 @@
 		return ['count' => $counter, 'error' => 0];
 	}
 
+
+	/**
+	 * @param $data
+	 * @return array
+	 */
 	function createProduct($data)
 	{
 		$imgFolder = "{$_SERVER['DOCUMENT_ROOT']}/productUploader/img/products/";
@@ -850,6 +912,10 @@
 
 	}
 
+	/**
+	 * @param $data
+	 * @return array
+	 */
 	function createStone($data)
 	{
 		$imgFolder = "{$_SERVER['DOCUMENT_ROOT']}/productUploader/img/stones/";
@@ -918,6 +984,10 @@
 		}
 	}
 
+	/**
+	 * @param $name
+	 * @param $blockID
+	 */
 	function getElementIDByName($name, $blockID)
 	{
 		if ( ! isset($name, $blockID)) {
@@ -937,8 +1007,12 @@
 	}
 
 
-
 	//**@@ HELPERS:
+
+	/**
+	 * @param $urn
+	 * @return array
+	 */
 	function getURNData($urn)
 	{
 		$partsURN = explode('/', $urn);
@@ -948,6 +1022,10 @@
 		}, ARRAY_FILTER_USE_KEY);
 	}
 
+	/**
+	 * @param $sectionsData
+	 * @return mixed
+	 */
 	function sortByNested($sectionsData)
 	{
 		uasort($sectionsData, function ($a, $b) {
@@ -963,7 +1041,6 @@
 
 		return $urnData[count($urnData) - 2];
 	}
-
 
 
 	/**
@@ -1075,13 +1152,13 @@
 	}
 
 
-
 	/**
-	 * @param $discountCardsData
-	 * @return array [
+	 * [
 	 *    'errors' => ошибки при создании купонов,
 	 *    'createdCount' => количество созданных купонов
 	 * ]
+	 * @param $discountCardsData
+	 * @return array
 	 */
 	function addCoupons($discountCardsData)
 	{

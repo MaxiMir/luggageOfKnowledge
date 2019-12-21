@@ -16,28 +16,28 @@
 	const CATALOG_IBLOCK_ID = 26;
 	const PALETTE_IBLOCK_ID = 27;
 
-	//**@@ Читаем файл и генерируем данные по разделам каталога:
+	# Читаем файл и генерируем данные по разделам каталога:
 	$sectionsCData = getSectionsData(FILE_CATALOG);
 
-	//**@@ Читаем файл и генерируем данные по по разделам палитры:
+	# Читаем файл и генерируем данные по по разделам палитры:
 	$sectionsPData = getSectionsData(FILE_PALETTE);
 
-	//**@@ Создаем новые разделы Каталог:
+	# Создаем новые разделы Каталог:
 	createNewSections($sectionsCData, CATALOG_IBLOCK_ID);
 
-	//**@@ Создаем новые разделы Палитра:
+	# Создаем новые разделы Палитра:
 	createNewSections($sectionsPData, PALETTE_IBLOCK_ID);
 
-	//**@@ Создаем новые камни:
+	# Создаем новые камни:
 	$createData = createElements(FILE_STONES, 'palitra');
 
-	//**@@ Создаем новые товары:
+	# Создаем новые товары:
 	$createData = createElements(FILE_PRODUCTS);
 	$countProducts = $createData['count'];
 	$error = is_null($createData['error']) ? 0 : $createData['error'];
 
 	echo "Создано {$countProducts} <br> Ошибки: {$error}";
 
-	//**@@ Меты для разделов:
+	# Меты для разделов:
 	$seoData = getCSVData(FILE_META);
 	updateSections($seoData);

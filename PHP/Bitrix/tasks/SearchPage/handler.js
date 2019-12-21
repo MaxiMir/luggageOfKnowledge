@@ -33,7 +33,7 @@ const toggleLoader = () => {
 
 
 /**
- * парсит текст и возвращает HTML для товаров и пагинации
+ * Парсит текст и возвращает HTML для товаров и пагинации
  * @param text
  */
 const getProductsAndPaginationFromText = text => {

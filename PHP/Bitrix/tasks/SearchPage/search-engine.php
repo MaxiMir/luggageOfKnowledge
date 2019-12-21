@@ -1,5 +1,6 @@
-<?
-	 
+<?php
+	 declare(strict_types=1);
+
 	 use \Bitrix\Main\{Application, Context, Loader};
 	 
 	 Loader::includeModule("iblock");
@@ -11,7 +12,8 @@
 	 
 	 
 	 /**
-	  * @return mixed возвращает текущий Request
+	  * Возвращает текущий Request
+	  * @return mixed
 	  */
 	 function getRequest(): Bitrix\Main\HttpRequest
 	 {
@@ -20,12 +22,14 @@
 	 
 	 
 	 /**
-	  * @param $request
-	  * @return Closure [
+	  *   Возвращает замыкание для дальнейшей работы с URN
+	  *   $fnName:
 	  *   "add" - добавление в URN
 	  *   "remove" - удаление из URN
 	  *   по дефолту возвращает текущий URN
-	  * ]
+	  *
+	  * @param $request
+	  * @return Closure
 	  */
 	 function generateURN(Bitrix\Main\HttpRequest $request): closure
 	 {
@@ -64,8 +68,9 @@
 	 
 	 
 	 /**
+	  * Массив данных для сортировки товаров
 	  * @param $requestSort
-	  * @return array массив данных для сортировки товаров
+	  * @return array
 	  */
 	 function getProductSortArr($requestSort): array
 	 {
@@ -84,8 +89,7 @@
 	 
 	 
 	 /**
-	  * @param $request
-	  * @return array [
+	  * [
 	  *   поисковая фраза
 	  *   номер страницы
 	  *   количество товаров на странице
@@ -94,6 +98,8 @@
 	  *   ID фильтровых брендов
 	  *   ID фильтрого раздела
 	  * ]
+	  * @param $request
+	  * @return array
 	  */
 	 function getRequestPageData(Bitrix\Main\HttpRequest $request): array
 	 {
@@ -119,8 +125,9 @@
 	 
 	 
 	 /**
+	  * CDBResult c товарами по поисковой фразе с учетом фильтров
 	  * @param $requestPageData
-	  * @return mixed - CDBResult c товарами по поисковой фразе с учетом фильтров
+	  * @return mixed
 	  */
 	 function getProductDBData($requestPageData): CIBlockResult
 	 {
@@ -154,9 +161,7 @@
 	 
 	 
 	 /**
-	  * @param $productDBResult
-	  * @param $generateURNWithClosure
-	  * @return array - [
+	  * [
 	  *   [ID товаров]
 	  *   [ID раздела => [
 	  *       URN => поисковый URN раздела,
@@ -167,6 +172,9 @@
 	  *       COUNT => количество найденных товаров
 	  *    ]]
 	  * ]
+	  * @param $productDBResult
+	  * @param $generateURNWithClosure
+	  * @return array
 	  */
 	 function getPageData(CIBlockResult $productDBResult, closure $generateURNWithClosure): array
 	 {
@@ -218,9 +226,10 @@
 	 
 	 
 	 /**
+	  * Массив c ID и символьным кодом брендов
 	  * @param $brandsID
 	  * @param $inArray
-	  * @return mixed - CDBResult || массив c ID и символьным кодом брендов
+	  * @return mixed
 	  */
 	 function getBrandsSymbolCode(array $brandsID, $inArray = true)
 	 {
@@ -250,14 +259,15 @@
 	 
 	 
 	 /**
-	  * @param $sectionsData
-	  * @return mixed - добаляет ключ NAME с названием раздела [
+	  * добаляет ключ NAME с названием раздела [
 	  *    ID раздела => [
 	  *       URN => поисковый URN раздела,
 	  *       COUNT - количество найденных товаров,
 	  *       NAME - название раздела
 	  *    ]
 	  * ]
+	  * @param $sectionsData
+	  * @return mixed
 	  */
 	 function addSectionNames(array $sectionsData): array
 	 {
@@ -277,14 +287,15 @@
 	 
 	 
 	 /**
-	  * @param $brandsData
-	  * @return mixed добаляет ключ SYMBOL_CODE с кодом бренда [
+	  * Добаляет ключ SYMBOL_CODE с кодом бренда [
 	  *    ID бренда => [
 	  *       NAME => название бренда
 	  *       COUNT => количество найденных товаров,
 	  *       SYMBOL_CODE => код свойства
 	  *    ]
 	  * ]
+	  * @param $brandsData
+	  * @return mixed
 	  */
 	 function addBrandsSymbolCode(array $brandsData): array
 	 {
@@ -300,9 +311,10 @@
 	 
 	 
 	 /**
+	  * Возвращает отсортированный по ключу NAME и $searchPhrase многомерный массив
 	  * @param $sectionsData
 	  * @param $searchPhrase
-	  * @return mixed - отсортированный по ключу NAME и $searchPhrase многомерный массив
+	  * @return mixed
 	  */
 	 function sortSectionData(array $sectionsData, string $searchPhrase): array
 	 {
@@ -319,9 +331,10 @@
 	 
 	 
 	 /**
+	  * Возвращает количество товаров отфильтрованных по бренду и разделам
 	  * @param $filterBrandIDs
 	  * @param $brandsDataWithSymbolCode
-	  * @return mixed - возвращает количество товаров отфильтрованных по бренду и разделам
+	  * @return mixed
 	  */
 	 function getBrandProductCount(array $filterBrandIDs, array $brandsDataWithSymbolCode): int
 	 {
@@ -341,151 +354,31 @@
 	 
 	 
 	 /**
+	  * Возвращает отсортированные данные товаров c ТП для текущей страницы
 	  * @param $productID
 	  * @param $requestPageData
-	  * @return array - отсортированные данные товаров c ТП для текущей страницы
+	  * @return array
 	  */
 	 function getProductDataForCurrPage($productID, $requestPageData)
 	 {
-		  $selectData = ["*"];
-		  
+		  $arrProducts = [];
+
 		  [
 			  "sortData" => $sortData,
 			  "pageNum" => $pageNum,
 			  "viewProductNum" => $viewProductNum,
 		  ] = $requestPageData;
-		  
-		  $filterData = ["IBLOCK_ID" => CATALOG_I_BLOCK_ID, "ID" => $productID];
-		  
-		  $priceInEur = getEurPrice();
-		  
-		  $result_products = CIBlockElement::GetList(
-			  $sortData,
-			  $filterData,
-			  false,
-			  ["nPageSize" => $viewProductNum, "iNumPage" => $pageNum],
-			  $selectData
-		  );
-		  
-		  while ($itemData = $result_products->GetNext()) {
-				[
-					"ID" => $prodID,
-					"DETAIL_PICTURE" => $detailPicture
-				] = $itemData;
-				
-				$itemData["DETAIL_PAGE_URL"] = get_product_link($itemData);
-				
-				$price = false;
-				$price_offer = false;
-				
-				$resultOffersDB = CIBlockElement::GetList(
-					["CATALOG_PRICE_3" => "ASC", "CATALOG_PRICE_4" => "ASC"],
-					[
-						"IBLOCK_ID" => OFFERS_I_BLOCK_ID,
-						"ACTIVE" => "Y",
-						"PROPERTY_CML2_LINK" => $prodID,
-						["LOGIC" => "OR", ["!CATALOG_PRICE_3" => false], ["!CATALOG_PRICE_4" => false]]
-					],
-					false,
-					["nTopCount" => 1],
-					["*"]
-				);
-				
-				if ($offerData = $resultOffersDB->GetNext()) {
-					 $price = get_price($offerData["ID"]);
-					 
-					 if (!$price) {
-						  $price = get_price_euro($offerData["ID"]);
-						  
-						  if ($price) {
-								$price = $price * $priceInEur;
-						  }
-					 }
-					 
-					 if ($price) {
-						  $price_offer = true;
-					 }
-				}
-				
-				if (!$price) {
-					 $price = get_price($prodID);
-					 
-					 if (!$price) {
-						  $price = get_price_euro($prodID);
-						  
-						  if ($price) {
-								$price = $price * $priceInEur;
-						  }
-					 }
-				}
-				
-				if ($price) {
-					 $itemData["PRICE"] = $price;
-					 $itemData["PRICE_FORMAT"] = generatePriceBlock($price, $price_offer);
-				}
-				
-				$itemData["IMG"] = getProductImage($itemData);
-				
-				$itemData["COLORS"] = false;
-				
-				$arr_select = ["ID", "NAME", "IBLOCK_ID", "ACTIVE", "SORT", "CODE"];
-				$arr_property_code = [
-					"TSVET_VINILOVYY_SAYDING",
-					"TSVET_FIBROTSEMENTNYY_SAYDING",
-					"TSVET_KIRPICH",
-					"TSVET_KOMPOZITNAYA_CHEREPITSA",
-					"TSVET_OGRAZHDENIYA",
-					"TSVET_TSEMENTNO_PESCHANAYA_CHEREPITSA",
-					"TSVET",
-					"TSVET_POLOTENTSESUSHITELYA",
-					"TSVET_METALL_GRAND_LINE",
-					"TSVET_FASAD",
-					"TSVET_GIBKAYA_CHEREPITSA",
-					"TSVET_KOZYRKI_NAD_VKHODOM",
-				];
-				
-				foreach ($arr_property_code as $key => $value) {
-					 $arr_select[] = 'PROPERTY_' . $value;
-				}
-				
-				$resultOffersDB = CIBlockElement::GetList(
-					["CATALOG_PRICE_3" => "ASC", "CATALOG_PRICE_4" => "ASC"],
-					["IBLOCK_ID" => 29, "ACTIVE" => "Y", "PROPERTY_CML2_LINK" => $itemData["ID"]],
-					false,
-					false,
-					$arr_select
-				);
-				
-				while ($offerData = $resultOffersDB->GetNext()) {
-					 foreach ((array)$arr_property_code as $key => $value) {
-						  if ($offerData["PROPERTY_" . $value . "_VALUE"]) {
-								$itemData["COLORS"][$offerData["PROPERTY_" . $value . "_VALUE"]] = $offerData["PROPERTY_" . $value . "_VALUE"];
-						  }
-					 }
-				}
-				
-				if ($itemData["COLORS"]) {
-					 $itemData["COLORS"] = count($itemData["COLORS"]);
-				}
-				
-				if ($_COOKIE["DELAY"]) {
-					 $arr_delay = explode(',', $_COOKIE["DELAY"]);
-					 
-					 if ($arr_delay && in_array($itemData["ID"], $arr_delay)) {
-						  $itemData["DELAY"] = "Y";
-					 }
-				}
-				
-				$arr_products[] = $itemData;
-		  }
-		  
-		  return $arr_products;
+
+		  // some logic...
+
+		  return $arrProducts;
 	 }
 	 
 	 
 	 /**
+	  * Возвращает массив найденных ID элементов по поисковой фразе
 	  * @param $searchPhrase
-	  * @return array - массив найденных ID
+	  * @return array
 	  */
 	 function searchItems(string $searchPhrase): array
 	 {
@@ -508,10 +401,11 @@
 	 
 	 
 	 /**
+	  * Возвращает относительный путь до изображения ТП || false
 	  * @param $prodID
-	  * @return mixed - относительный путь до изображения товара || false
+	  * @return mixed
 	  */
-	 function getOfferImage(int $prodID)
+	 function getOfferImage(string $prodID)
 	 {
 		  $offerImageSrc = false;
 		  $imageSettings = [
@@ -542,8 +436,9 @@
 	 
 	 
 	 /**
+	  * Возвращает относительный путь до изображения товара
 	  * @param array $arItem
-	  * @return string - относительный путь до изображения товара
+	  * @return string
 	  */
 	 function getProductImage(array $arItem): string
 	 {

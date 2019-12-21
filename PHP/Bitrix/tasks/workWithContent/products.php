@@ -5,7 +5,6 @@
 	require($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/main/include/prolog_before.php");
 	require_once "./helper.php";
 
-
 	#1:
 	const SPARES_SECTION_ID = 544;
 	const FILE_SPARES = "spares.csv";

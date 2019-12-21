@@ -1,8 +1,7 @@
 <?php
 	
 	require($_SERVER["DOCUMENT_ROOT"] . "/bitrix/header.php");
-	$APPLICATION->SetPageProperty("title", "Последние отзывы о спортивном питании");
-	
+	$APPLICATION->SetPageProperty("title", "Последние отзывы");
 	$APPLICATION->SetTitle("Последние отзывы о товарах");
 	
 	
