@@ -21,35 +21,6 @@
 		echo '</pre>';
 	}
 
-
-	/**
-	 * @param array $params
-	 * @return array
-	 */
-	function getProducts($params)
-	{
-		$products = [];
-		$arFilterDefault = [
-			"ACTIVE" => "Y",
-			"IBLOCK_ID" => CATALOG_I_BLOCK_ID,
-			"INCLUDE_SUBSECTIONS" => "Y"
-		];
-
-		["SELECT" => $arSelect, "FILTER" => $arFilter] = $params;
-
-		$arSelect = $arSelect ?: ["*"];
-		$arFilter = ! $arFilter ? $arFilterDefault : array_replace($arFilterDefault, $arFilter);
-
-		$productDBData = CIBlockElement::Getlist([], $arFilter, false, false, $arSelect);
-
-		while ($product = $productDBData->GetNext()) {
-			$products[] = $product;
-		}
-
-		return $products;
-	}
-
-
 	/**
 	 * @param int $iBlockID
 	 * @param bool $getAllData

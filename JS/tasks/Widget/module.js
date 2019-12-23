@@ -20,6 +20,7 @@
 				like: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACEAAAAeCAYAAACiyHcXAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAFQSURBVHgBzZeNbYMwEEY/M0FGIBvQCeoRukEZwRswQpoJ2k0gE8AG7gbJBte72lEpDcK4Mc6TTkYWdp7/yBm4ARGVHA1Hz3Emh5QtR82xm2m34zD+vXE76ecg/WIJ38mBlrEiM2mrff0S77MyfvQhnYxpfNuG1mFvitB6gSstxWHJL2txHQkXJeLQiKPkMPKg/LRY5OHCsZeZ0MiHLIcRiVfk5VkkSuSlkj1ByEyBB0AkLsiMSAzIyyASJ+TlJBId8vJRKKU65BPp+PcHJU98SjUXLbZnzxKf30fUz8YR23IUgV815BKanrbB0ig7UxORkose7o8lFfJdevozCxMRTWmpEAK5ZDYFNdaQQKRGDNzwhX5S91jO0QIjkYrik2BLoXsgQCTmOmAp5LKzUkS+I2+BAvJeumNO7po3t0+k3mALZpanvfv0B8oYL/Ov0X8BUUJjCwLQCPAAAAAASUVORK5CYII=",
 				dislike: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACQAAAAhCAYAAACxzQkrAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAFQSURBVHgB7ZjhUYNAEIXfOf6XEighJcQKtAStwHQQrSBJB1qB6QCsQK1AOhArON/q4RBmDHdwN7c/8s08IBmOeSx7twvGWlsAWGCcxhjTyIEbU1IFpvN3vQN48cr6s6SuqU8bh83Qzxm1hD9yrkRzTmT6rOQmMTCUm4Oby22opd76f2iI0IKPrex+5DYkj+uZqjpTGiIklNRWDrQYEi5ko8nQk2w0GfqZ/ufQw4aJrSpCwlqbIXUR2omhNmBAg3iFdcgD25F7Sepb6s5jwDu1p66QhjWT+sMgENcuVEhDG5xDDGvN3Q5pKIIj1MFIvcKv9Q3hcY6hkjsxNZbkNfx4gSuwk6Gpm5GeOVWuHTW11WaokOkay9DslZqzThbWS4QtsP8SpXS4F74oS0HMWlYjAqdqP0ZqQ18IJLWhPXLh1qP+V5EVciP1zf5+spncxH0DULw5HsfWQ+4AAAAASUVORK5CYII=",
 				purchasesCount: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACIAAAAqCAYAAADWFImvAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAKXSURBVHgBzZg/b9NAFMDfsxOJDSNQ1a3uN2jXKJWcPaIRXyBBgRUywMbQSmywlImhFeYbuKg7Ea1Qt/YjeEQIpIyI9nzcnX31n6S5O0N8/KTTXeKX+Jfn83tyEGrQ7Y8CdN0hAA0A0OfvIcAlZQMIOT49CSMwBE2Cg8HIJ9T9wJeK0PgKSe88CmPQxNEN7AxGW0ziIpWgM4q4f4XtzdPjI+SDoLMNSB+zYzGL8dsstjN4uqX7/VoZyTLBJTyg8NF1yGQahbNbYr3rxN1DhOfs5YxlZlsnMy3QgEl85hKUwsHZp6PJsthMcLLzcOyxnzlsp5eyBwqUl2anPx6wyecpbzlkDzThWWMTlwq6/SeBKl69R1zYFTPC/m2XYxE8liI9EB916VAVrxRht6TYcASSSzCkBUmYLQNVrFIEM5GvUWgsMs03qa+K1b59V81/I1KqI93d8YW8FE1ACfbOTg6nfO1UrBqT4CSY+HJ9I8IrIjSMgzAvArx8Nw715kSuNW6xfw2icxeqIlagcA+qIkgcHxqGdegNqIokbvN7hBb2ZZ6RpJ7Il+hQjJosEAHqQ/PMi9DCDm6SzqPxRkkErdSRnDwjlkSc37hZEsFClVvG+toDMeoeryL7TaGgoa/6ED/Bu9cv2Xix8GSq48sQIqYNLz1h+WRSYn3tPpggG5/MiJbIt+8/4NmrN2z+eSMjkRJpzFsx65FuCSFi0vCqMpJ6Ennjq9X0ijLl98wkBFnjEyJ1Gl5RprYE5I1PPHJStmGM/haoyMh1HWT90nr2Vcn8JflmtdTw5kVsNTwJb3xZRuw2PE6aEdudlzU+mREfLIIt6hmV+FVBCBOx8YRXhTc+mRHtf4JWAToQi4LKs/IL7ljLzHn0Pv4DnlL2bqlu2NYAAAAASUVORK5CYII=",
+				purchasesCountMini: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAQCAYAAAAmlE46AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAC3SURBVHgBnZLvDYIwEMWvhO/UDTqCIzCCI8gGbsQKOoEjOELdoDpBfSUP07SUAr/kweV6f7ijIgneew2NkKOCbaQGgqzPedaSegZadjbQi74+jm2TXMP3G7oVzrJOljOVcIy5hJwmqailjGbMOU40sh1dS3xA9wV/Fx6tlHGQWvCf1joO0Bf60M46ToQfnGxwpH++RTF27VOvCPjbydm0HMXKVnZsVoEmrrKVMMKhRNDNMw6yD/UDCg+0CZpLwZgAAAAASUVORK5CYII=",
 				search: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACEAAAAeCAMAAACVFoclAAAAAXNSR0IB2cksfwAAAE5QTFRFAAAAz5+f36ej3qei3aeh3aih3KWf16ef3aeh26ef35+f3Kaf3aWh3aah3Kei26Wf3Kef26Of36ef3aeh3aag3Keg26ef35+f3aaf26aftUPhCQAAABp0Uk5TABB/v//PYCDfQBBQgM+/gGBAII/Pv4AfcHCzDfh5AAAAtElEQVR4nKWS2RKDIAxFQSMEUve6/f+PlmgXZZjSTO8buQfIptQurYuihKCqMkallCOsRYSPEK0VE+wjOu+VIjoOWkYYwyG2d3nPzO1M1DUA0SngHEApIzj9S1reR5HfCH2tTkw0DYBzpwBRmI+MaNu9ia9/tOaOdTLiaDMisdv3ibnkCaWGIdqPcYxWJE+wuu7O7jTN87KEC4lFix5NLqOECAxmX8kSz/rW9R+CmW375r+JB6a0C5We5aaGAAAAAElFTkSuQmCC",
 				progress: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA0AAAALCAYAAACksgdhAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAA8SURBVHgBvY9BDQAwCAPLMg+zMifTOCdYQQW8eEMIoa9+mrsSkvks6n2hkNJoI1B591ALafBT5N9GmhsZrmsLc2NdyPkAAAAASUVORK5CYII=",
 				things: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAAOCAYAAADNGCeJAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAFZSURBVHgBlZNBbsIwEEW/nVTd5gjtCZrcgKjqnhsAJ2hZIwQIoS5pTwA3KN22C6cnCJygHCF7knG/IypRKU5hJCujzPj5z3is0GLz/LOjdbikG3NtIRiMknTry9e+wHNubgh6E+BLBCnXO7PNNDeRb0/oC1SQroLej+/Sp+OvbLEzvRDSp/9yESyA3lBNcaqUKiMeUPj2KJxhx96tnH8QJNMkbQTq/0CuRwQZWGRtoLNg1xqP7qus7NpAdY4vcFJa5FQxM64DIrNRcr8+C+YgQRBOrEXMC3iteHNOkbuACnaqtOoxbStSDsfJQ9YIO4F0qGR9sBg2lfUHqphXYca8fQ1zQRtgSUiXKystBr/BNmuCKg7iN2MFS6LsNMOFNs8Ne4uVUti7oY3obICyLrVpg+vNIv+IBarhKZVQKtywqr5a5KbPAZnw743n8ILzdXul4SrwvcvCCmY/lMCmkbWbWV8AAAAASUVORK5CYII=",
@@ -30,8 +31,6 @@
 				hanger: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADcAAAAoCAYAAABaW2IIAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAOfSURBVHgB1ZlNbtpAFMffDLTd0huQAzSNT1DcqOv0BklOkLBsPhSsCKXL5ATACaqsq8rkBIZeoD6CtxV4pu8ZQwZjsClvIPlLFsqY4PnNm3lfFmBRrcCvvavCmdbQwOsAh2p4RULAQMeqNwLZbzluCJYkwJK+D/2zGPlgArRMoVDq4cI5vAcLsgLX/u13QMNJ2e+jJe8v9t0mMIsd7m7o36iJxUyFSqlH/Izwqkkpj/CzPjcRpZrcFmSFuwv8upLwxxzTCppXjrsw6dvAb0kJN+bYSMEe5xmUwChVmZ/sMjDSteO20JoP5lhFqnNgFCscnrOG8Ve4DGyqGGQLJls1nUyyXdnEBkduH8xzpPSw8H8cN8KD0TeG6unvsIjXcoYVlNQh7Fh8lkMr4BnzMFgP8OrHSpbzfJPgPlWUWJNJ1oJ4GaWBfrYIGrfo1b7rApO4t2Vp3QY/G3EmHooYesCorVuOoCqV6o2e96yk8PKjuweMqsKWRF7wLcZBhDrHK6sQAzjbdpxqa3AI9iPHWkDOZ6zh1EZ1sBU42oo5YIl3LQr0m2grcJh51OcGNHRHGpqcbj//uTtQrNWTbTCSdTiqFISYzxmrFXmEDqYOlmUtFExbDEot1HYzYcnT+juGnq1WAzucAUXlS5kk2FqrgQ2uBFRE9RtW4ceQqcJThaCUd+kcdoFJLHAFzSCEggfKIadOJK3CrUNuBNcOfp3gwaHqu55zewHKFDmaMcBJttVgaGPI/4JbkR+SVkJlRZAx6JaQ4jjvPnbG+nE89q6dL31YU2vBFUDhQoNXFiqrIkicaXcUg7eOZy0FVwSVZhweh0vnhBRFD0o6WksarDaT3gRSQAe3ZSP3CyUgc+HM8iTvPkHhhefA7YNloWdtoNPpQL7TWpkIzMEVxaptQmXVDnz0zLDMM4cI2f32wfXMwRncqli1S6isiiDN8JHALenvJ19GK56+BKisVkHSViUrijQQdzL3cQUAV8DtwgvXsmwHjeJKLEeOM4Me9jOc1wBGoncOEkFo3uZ4BR2iaA/953aN0o+Xzuev8EqFLAF+TJu8ERWrz9mEFJ84e/U70Nzcq4La38+BsvZGQtAe+H1gkpb4DhybrbjNB9MxynhwJRvAqIUXmko/oUPxD9DrBGBZeI7fU86Z94LS0vP2ZLKi6O7B3J4WVEnPgipXnW8mNUkJkwYReUb0OI5WukdvaYBXEQLNEgBaTHoO8CuiBB4MT/8P0Rv62bmmiAEAAAAASUVORK5CYII=",
 			},
 		};
-		const statefulClasses = ["tutorial", "clothes", "question", "account", "open", "closed", "loading", "error"];
-		
 		
 		/**
 		 * Возвращает из LocalStorage SessionKey
@@ -87,12 +86,66 @@
 		const saveTutorialIsDone = () => localStorage.setItem("_garderoboAssistantTutorialDone", "1");
 		
 		/**
+		 * Проверяет есть ли измененения в state
+		 * @param newState
+		 * @returns {boolean}
+		 */
+		const componentNeedUpdate = newState => {
+			return JSON.stringify(state) !== JSON.stringify(newState);
+		};
+		
+		/**
+		 * Обновление State (в случае изменений делает перендеринг):
+		 * @param newState
+		 */
+		const setState = newState => {
+			const newMergingState = {...state, ...newState};
+			
+			if (!componentNeedUpdate(newMergingState)) {
+				return;
+			}
+			
+			state = newMergingState;
+			console.log("STATE:", state);
+			setTimeout(() => render(state), 0);
+		};
+		
+		/**
+		 * Отправляет запрос на сервер:
+		 * @param uri
+		 * @param isGetRequest
+		 * @param sentData
+		 * @returns {Promise<any>}
+		 */
+		const getResponseInJson = async (uri, isGetRequest = true, sentData = null) => {
+			let fetchSettings = {
+				method: isGetRequest ? "GET" : "POST",
+				headers: {
+					'Accept': 'application/json',
+					//'HTTP_X_API_KEY': settings.keyMagazine,
+					//'HTTP_AUTHORIZATION': "Bearer <ключ сессии>"
+				}
+			};
+			
+			if (sentData) {
+				fetchSettings.body = JSON.stringify(sentData);
+			}
+			
+			if (uri !== settings.uriForRequest.authorization) {
+				//settings.headers["HTTP_AUTHORIZATION"] = settings.sessionKey;
+			}
+			
+			const response = await fetch(uri, fetchSettings);
+			return await response.json();
+		};
+		
+		/**
 		 * Вставляет верстку, стили и обработчики виджета в DOM
 		 */
-		const generateWidget = () => {
+		const generateWidgetCarcass = () => {
 			document.body.insertAdjacentHTML(
-			"beforeend",
-			`
+				"beforeend",
+				`
 					<div class="ai-block">
 					   <div class="ai-block__container">
 					       <div class="ai-wgt fl-column-center closed">
@@ -114,12 +167,10 @@
 						    bottom: 0;
 						    z-index: 7777;
 						}
-						
 						.ai-block__container {
 						    height: 100%;
 						    position: relative;
 						}
-						
 						.ai-wgt {
 						    padding-top: 60px;
 						    height: 100%;
@@ -127,13 +178,11 @@
 						    font-style: normal;
 						    font-weight: normal;
 						}
-						
 						.ai-wgt__body {
 						    display: flex;
 						    justify-content: center;
 						    align-items: center;
 						}
-						
 						.ai-wgt__content {
 						    width: 280px;
 						    height: 420px;
@@ -141,14 +190,12 @@
 						    position: relative;
 						    box-sizing: border-box;
 						}
-						
 						.ai-wgt__title {
 						    margin-top: 75px;
 						    font-size: 18px;
 						    line-height: 25px;
 						    font-weight: bold;
 						}
-						
 						.ai-wgt__link {
 						    width: 150px;
 						    height: 40px;
@@ -161,11 +208,9 @@
 						    cursor: pointer;
 						    transition: all 1s ease-out;
 						}
-						
 						.ai-wgt__link:hover {
 						    transform: scale(1.1);
 						}
-						
 						.ai-wgt__link--big {
 						    box-sizing: border-box;
 						    width: 240px;
@@ -176,14 +221,10 @@
 						    font-size: 14px;
 						    line-height: 19px;
 						}
-						
 						.ai-wgt__text {
 						    font-size: 14px;
 						    line-height: 19px;
 						}
-						
-						
-						
 						.ai-wgt__toggle-visible-btn {
 						    position: absolute;
 						    bottom: 20px;
@@ -193,7 +234,6 @@
 						    transition: all 0.5s ease-in-out;
 						    animation-delay: 0.5s;
 						}
-						
 						.ai-wgt__toggle-visible-btn:after,
 						.ai-wgt__toggle-visible-btn:before {
 						    width: 2px;
@@ -210,11 +250,9 @@
 						    transition: all 0.5s ease-in-out;
 						    animation-delay: 1s;
 						}
-						
 						.ai-wgt__toggle-visible-btn:before {
 						    transform: rotate(45deg);
 						}
-						
 						.ai-wgt__toggle-visible-btn:after {
 						    transform: rotate(-45deg);
 						}
@@ -233,16 +271,13 @@
 						.ai-wgt.closed .ai-wgt__account {
 						    display: none;
 						}
-						
 						.ai-wgt.closed + .ai-wgt__toggle-visible-btn {
 						    transform: scaleX(-1);
 						    animation: pulse infinite 1.5s;
 						}
-						
 						.ai-wgt.closed + .ai-wgt__toggle-visible-btn:before {
 						    transform: rotate(90deg);
 						}
-						
 						.ai-wgt.closed + .ai-wgt__toggle-visible-btn:after {
 						    transform: rotate(0deg);
 						}
@@ -271,45 +306,36 @@
 						    background-position: center;
 						    transition: all 1s ease-out;
 						}
-						
 						.ai-wgt__circle:hover {
 						    transform: scale(1.1);
 						}
-						
 						.text--center {
 						    text-align: center;
 						}
-						
 						.mb-15 {
 						    margin-bottom: 15px;
 						}
-						
 						.mb-20 {
 						    margin-bottom: 20px;
 						}
-						
 						.mb-25 {
 						    margin-bottom: 25px;
 						}
-						
 						.mb-30 {
 						    margin-bottom: 30px;
 						}
-						
 						.fl-column-center {
 						    display: flex;
 						    flex-wrap: wrap;
 						    flex-direction: column;
 						    align-items: center;
 						}
-						
 						.horizontal-center {
 						    margin-left: auto;
 						    margin-right: auto;
 						    left: 0;
 						    right: 0;
 						}
-						
 						.bg {
 						    background-repeat: no-repeat;
 						}
@@ -323,7 +349,6 @@
 						        transform: scale(1);
 						    }
 						}
-						
 						@keyframes pulse {
 						    0% {
 						        -moz-transform: scale(0.9);
@@ -346,6 +371,18 @@
 						        box-shadow: 0 0 0 0 rgba(90, 153, 212, 0);
 						    }
 						}
+						
+						/* MEDIA */
+						@media all and (max-width: 575px) and (orientation: portrait) {
+							.ai-block {
+								width: 100vw;
+								height: 100vh;
+							}
+							
+							.ai-wgt {
+								padding-top: 50%;
+							}
+						}
 					</style>
              `
 			);
@@ -354,61 +391,7 @@
 			const toggleVisibleBtn = document.querySelector(".ai-wgt__toggle-visible-btn");
 			
 			// Обработчики:
-			toggleVisibleBtn.addEventListener('click', toggleVisibleHandler);
-		};
-		
-		/**
-		 * Проверяет есть ли измененения в state
-		 * @param newState
-		 * @returns {boolean}
-		 */
-		const componentNeedUpdate = newState => {
-			return JSON.stringify(state) !== JSON.stringify(newState);
-		};
-		
-		/**
-		 * Обновление State (в случае изменений делает перендеринг):
-		 * @param newState
-		 */
-		const setState = newState => {
-			const newMergingState = {...state, ...newState};
-			
-			if (!componentNeedUpdate(newMergingState)) {
-				return;
-			}
-			
-			state = newMergingState;
-			
-			setTimeout(() => render(state), 0);
-		};
-		
-		/**
-		 *
-		 * @param uri
-		 * @param isGetRequest
-		 * @param sentData
-		 * @returns {Promise<any>}
-		 */
-		const getResponseInJson = async (uri, isGetRequest = true, sentData = null) => {
-			let fetchSettings = {
-				method: isGetRequest ? "GET" : "POST",
-				headers: {
-					'Accept': 'application/json',
-					//'HTTP_X_API_KEY': settings.keyMagazine,
-					//'HTTP_AUTHORIZATION': "Bearer <ключ сессии>"
-				}
-			};
-			
-			if (sentData) {
-				fetchSettings.body = JSON.stringify(sentData);
-			}
-			
-			if (uri !== settings.uriForRequest.authorization) {
-				//settings.headers["HTTP_AUTHORIZATION"] = settings.sessionKey;
-			}
-			
-			const response = await fetch(uri, fetchSettings);
-			return await response.json();
+			toggleVisibleBtn.addEventListener('click', toggleWidgetVisibility);
 		};
 		
 		/**
@@ -438,8 +421,8 @@
 			const statusWidget = isOpen ? "open" : "closed";
 			
 			// устанавливаем классы:
-			container.classList.remove(...statefulClasses);
-			container.classList.add(page, statusWidget);
+			container.classList.remove(...["open", "closed"]);
+			container.classList.add(statusWidget);
 			
 			// устанавливаем контент:
 			try {
@@ -459,7 +442,7 @@
 		 * Рендеринг открыть/закрыть модальное окно:
 		 * Если была установлена задержка перед показом виджета - убирает ее
 		 */
-		const toggleVisibleHandler = () => {
+		const toggleWidgetVisibility = () => {
 			if (delayTimerID) {
 				clearTimeout(delayTimerID);
 			}
@@ -469,10 +452,23 @@
 		
 		/**
 		 * Рендеринг "Приветствие":
-		 * @param tutorialStep
 		 */
-		const showTutorial = (tutorialStep = 1) => {
-			setState({page: "tutorial", tutorialStep});
+		const showGreeting = () => {
+			setState({page: "greeting"});
+		};
+		
+		/**
+		 * Рендеринг "Инструкция лайк/дизлайк"
+		 */
+		const showInstructionActions = () => {
+			setState({page: "demoActions"});
+		};
+		
+		/**
+		 * Рендеринг "Инструкция Мои вещи"
+		 */
+		const showInstructionClothes = () => {
+			setState({page: "demoClothes"});
 		};
 		
 		/**
@@ -493,12 +489,19 @@
 		/* ### ГЕНЕРАЦИЯ HTML И ОБРАБОТЧИКОВ ### */
 		
 		/**
-		 * Возвращает HTML и обработчики для страницы
+		 * Возвращает HTML и обработчики для выбранной страницы
 		 * @param page
 		 * @returns {*}
 		 */
 		const getPageData = async page => {
 			let data;
+			const wrapStart = `
+				<div class="ai-wgt__body mb-30">
+					<div class="ai-wgt__content">
+			`;
+			const wrapEnd = `
+				</div>
+			`;
 			
 			if (page in settings.uriForRequest) {
 				const uri = settings.uriForRequest[page];
@@ -506,170 +509,64 @@
 			}
 			
 			const pageContentMap = {
-				tutorial: getTutorialData,
+				greeting: getGreetingData,
+				demoActions: getDemoActionsData,
+				demoClothes: getDemoClothesData,
 				account: getAccountHTML,
 				clothes: getClothesHTML,
 				question: getQuestionHTML
 			};
 			
-			if (!data) {
-				return pageContentMap[page]();
-			}
+			const {html, handlers} = !data ? pageContentMap[page]() : pageContentMap[page](data);
+			const htmlWithWrapper = `${wrapStart}${html}${wrapEnd}`;
 			
-			return pageContentMap[page](data);
+			return {
+				html: htmlWithWrapper,
+				handlers
+			};
 		};
 		
 		/**
-		 * HTML и обработчики для страниц "Приветствие":
+		 * Возвращает HTML и обработчики для страницы "Приветствие"
 		 * @returns {*}
 		 */
-		const getTutorialData = () => {
-			let nextPageBtnHandler;
-			const {tutorialStep} = state;
-			
-			let html = `
-				<div class="ai-wgt__body mb-30">
-					<div class="ai-wgt__content">
-						<div class="fl-column-center ai-wgt__text">
-			`;
-			
-			if (tutorialStep === 1) {
-				html += `
-							<div class="bg bg--greeting mb-20"></div>
-							<div class="text--center mb-25">
-								Привет. Отличный выбор!
-								Я — искусственный интеллект, призванный помочь в выборе одежды.
-							</div class="text--center mb-25">
-							<div class="text--center mb-25">Мы будем задавать вам вопросы и предлагать вещи, попутно узнавая о ваших предпочтениях все больше и больше.</div>
-							<div class="text--center mb-25">На вопросы нет неправильных ответов, поэтому не бойтесь отвечать как вам по душе.</div>
-				`;
-
-				nextPageBtnHandler = () => showTutorial(2);
-			}
-			
-			if (tutorialStep === 2) {
-				html += `
-							<div class="ai-wgt__example-card bg bg--example mb-20">
-								<div class="ai-wgt__dislike--mini ai-wgt__circle--mini"></div>
-		                  <div class="ai-wgt__like--mini ai-wgt__circle--mini"></div>
-		                  <div class="ai-wgt__purchases-count--mini ai-wgt__circle--mini"></div>
-							</div>
-							<div class="text--center mb-15">
-								Отмечайте “сердечком” вещи, которые вам нравятся
-							</div>
-							<div class="text--center mb-15">
-								Ставьте “палец вниз” вещам, которые вам не подходят
-							</div>
-							<div class="text--center mb-15">
-								Добавляйте в корзину то, что планируете купить
-							</div>
-				`;
-				
-				nextPageBtnHandler = () => showTutorial(3);
-			}
-			
-			if (tutorialStep === 3) {
-				html += `
-							<div class="bg bg--hanger mb-20"></div>
-							<div class="text--center mb-25">Вы всегда можете просмотреть список понравившихся вещей, для этого нажмите кнопку</div class="text--center mb-25">
-							<div class="ai-wgt__link--example mb-30">Мои вещи</div>
-							<div class="ai-wgt__call">Ну что, начнем?</div>
-				`;
-
-				nextPageBtnHandler = () => {
-					saveTutorialIsDone();
-					showClothes();
-				}
-			}
-			
-			html += `
-							<div class="ai-wgt__progress">
-							<div class="ai-wgt__progress-line"></div>
-							<div class="ai-wgt__progress-line"></div>
-							<div class="ai-wgt__progress-line"></div>
-						</div>
-						</div>
-						<div class="ai-wgt__next-page ai-wgt__circle"></div>
+		const getGreetingData = () => {
+			const html = `
+				<div class="fl-column-center ai-wgt__text">
+				<div class="bg bg--greeting mb-20"></div>
+					<div class="text--center mb-25">
+						Привет. Отличный выбор!
+						Я — искусственный интеллект, призванный помочь в выборе одежды.
+					</div class="text--center mb-25">
+					<div class="text--center mb-25">Мы будем задавать вам вопросы и предлагать вещи, попутно узнавая о ваших предпочтениях все больше и больше.</div>
+					<div class="text--center mb-25">На вопросы нет неправильных ответов, поэтому не бойтесь отвечать как вам по душе.</div>
+					<div class="ai-wgt__progress">
+						<div class="ai-wgt__progress-line"></div>
+						<div class="ai-wgt__progress-line"></div>
+						<div class="ai-wgt__progress-line"></div>
 					</div>
 				</div>
+				<div class="ai-wgt__next-page ai-wgt__circle"></div>
 				<style>
 					.ai-wgt__content {
 						background-color: #FFFFFF;
 						box-shadow: 0px 14px 32px rgba(0, 0, 0, 0.24);
 						padding: 20px 25px;
 					}
-					
 					.bg {
 						height: 45px;
 					}
-			
 					.bg--greeting {
 						width: 45px;
-						background-image:url(${settings.bgImages.greeting});
+						background-image: url(${settings.bgImages.greeting});
 					}
-					
-					.bg--example {
-						width: 214px;
-						height: 185px;
-						background-image:url(${settings.bgImages.example});
-						background-position: center;
-					}
-					
-					.ai-wgt__example-card {
-						position: relative;
-						filter: blur(5px);
-					}
-					
-					.ai-wgt__circle--mini {
-						width: 38px;
-						height: 38px;
-						border-radius: 50%;
-						background-size: 20px 19px;
-						background-repeat: no-repeat;
-						background-position: center;
-						top: 0;
-						bottom: 0;
-						margin: auto;
-					}
-					
-					.ai-wgt__like--mini {
-						position: absolute;
-						left: 5px;
-						background-color: #E54243;
-						background-image:url(${settings.bgImages.like});
-					}
-		
-					.ai-wgt__dislike--mini {
-						position: absolute;
-						right: 5px;
-						background-color: #252525;
-						background-image:url(${settings.bgImages.dislike});
-					}
-			
-					.ai-wgt__purchases-count--mini {
-						position: absolute;
-						top: initial;
-						left: 0;
-	               right: 0;
-	               bottom: -10px;
-						background-color: #FFFFFF;
-						background-image:url(${settings.bgImages.purchasesCount});
-						background-size: 23px 33px;
-					}
-					
-					.bg--hanger {
-						width: 55px;
-						background-image:url(${settings.bgImages.hanger});
-					}
-					
 					.ai-wgt__next-page {
 						position: absolute;
 						top: 324px;
 						right: -32px;
 						background-color: #FFFFFF;
-						background-image:url(${settings.bgImages.nextPage});
+						background-image: url(${settings.bgImages.nextPage});
 					}
-					
 					.ai-wgt__progress {
 						width: 230px;
 						display: flex;
@@ -678,18 +575,228 @@
 						bottom: 20px;
 						margin: 0 auto;
 					}
-					
 					.ai-wgt__progress-line {
 						width: 70px;
 						height: 2px;
 						background: #DBDBDB;
 						border-radius: 4px;
 					}
-					
-					.ai-wgt__progress-line:nth-child(${tutorialStep}) {
+					.ai-wgt__progress-line:first-child {
 						background: #9ABD93;
 					}
-					
+				</style>
+			`;
+			
+			return {
+				html,
+				handlers: {".ai-wgt__next-page": showInstructionActions}
+			};
+		};
+		
+		/**
+		 * Возвращает HTML и обработчики для страницы "Инструкция лайк/дизлайк"
+		 * @returns {*}
+		 */
+		const getDemoActionsData = () => {
+			const html = `
+				<div class="fl-column-center ai-wgt__text">
+					<div class="ai-wgt__example-card bg bg--example mb-20">
+						<div class="ai-wgt__dislike--medium ai-wgt__circle--medium"></div>
+                  <div class="ai-wgt__like--medium ai-wgt__circle--medium"></div>
+                  <div class="ai-wgt__purchases-count--medium ai-wgt__circle--medium"></div>
+					</div>
+					<div class="ai-wgt__block mb-15">
+						<div class="ai-wgt__like--small ai-wgt__circle--small"></div>
+						Отмечайте “сердечком” вещи, которые вам нравятся
+					</div>
+					<div class="ai-wgt__block mb-15">
+						<div class="ai-wgt__dislike--small ai-wgt__circle--small"></div>
+						Ставьте “палец вниз” вещам, которые вам не подходят
+					</div>
+					<div class="ai-wgt__block mb-15">
+						<div class="ai-wgt__purchases-count--small ai-wgt__circle--small"></div>
+						Добавляйте в корзину то, что планируете купить
+					</div>
+					<div class="ai-wgt__progress">
+						<div class="ai-wgt__progress-line"></div>
+						<div class="ai-wgt__progress-line"></div>
+						<div class="ai-wgt__progress-line"></div>
+					</div>
+				</div>
+				<div class="ai-wgt__next-page ai-wgt__circle"></div>
+				<style>
+					.ai-wgt__content {
+						background-color: #FFFFFF;
+						box-shadow: 0px 14px 32px rgba(0, 0, 0, 0.24);
+						padding: 20px 25px;
+					}
+					.bg {
+						height: 45px;
+					}
+					.bg--example {
+						width: 214px;
+						height: 185px;
+						background-image: url(${settings.bgImages.example});
+						background-position: center;
+					}
+					.ai-wgt__example-card {
+						position: relative;
+						filter: blur(5px);
+					}
+					.ai-wgt__block {
+						position: relative;
+						padding-left: 35px;
+						font-size: 12px;
+						line-height: 16px;
+					}
+					.ai-wgt__circle--medium {
+						width: 38px;
+						height: 38px;
+						background-size: 20px 19px;
+						top: 0;
+						bottom: 0;
+						margin: auto;
+						border-radius: 50%;
+						background-repeat: no-repeat;
+						background-position: center;
+					}
+					.ai-wgt__circle--small {
+						position: absolute;
+						width: 24px;
+						height: 24px;
+						top: 0;
+						bottom: 0;
+						left: 5px;
+						margin: auto;
+						border-radius: 50%;
+						background-repeat: no-repeat;
+						background-position: center;
+					}
+					.ai-wgt__like--medium {
+						position: absolute;
+						left: 5px;
+						background-color: #E54243;
+						background-image: url(${settings.bgImages.like});
+					}
+					.ai-wgt__like--small {
+						background-size: 12px 12px;
+						background-color: #E54243;
+						background-image: url(${settings.bgImages.like});
+					}
+					.ai-wgt__dislike--medium {
+						position: absolute;
+						right: 5px;
+						background-color: #252525;
+						background-image: url(${settings.bgImages.dislike});
+					}
+					.ai-wgt__dislike--small {
+						background-size: 12px 13px;
+						background-color: #252525;
+						background-image: url(${settings.bgImages.dislike});
+					}
+					.ai-wgt__purchases-count--medium {
+						position: absolute;
+						top: initial;
+						left: 0;
+						right: 0;
+						bottom: -10px;
+						background-color: #FFFFFF;
+						background-image: url(${settings.bgImages.purchasesCount});
+						background-size: 23px 33px;
+					}
+					.ai-wgt__purchases-count--small {
+						background-size: 12px 15px;
+						background-color: #3D4F63;
+						background-image: url(${settings.bgImages.purchasesCountMini});
+					}
+					.ai-wgt__next-page {
+						position: absolute;
+						top: 324px;
+						right: -32px;
+						background-color: #FFFFFF;
+						background-image: url(${settings.bgImages.nextPage});
+					}
+					.ai-wgt__progress {
+						width: 230px;
+						display: flex;
+						justify-content: space-between;
+						position: absolute;
+						bottom: 20px;
+						margin: 0 auto;
+					}
+					.ai-wgt__progress-line {
+						width: 70px;
+						height: 2px;
+						background: #DBDBDB;
+						border-radius: 4px;
+					}
+					.ai-wgt__progress-line:nth-child(2) {
+						background: #9ABD93;
+					}
+			</style>
+			`;
+			
+			return {
+				html,
+				handlers: {".ai-wgt__next-page": showInstructionClothes}
+			};
+		};
+		
+		/**
+		 * Возвращает HTML и обработчики для страницы "Инструкция Мои вещи"
+		 * @returns {*}
+		 */
+		const getDemoClothesData = () => {
+			const html = `
+				<div class="fl-column-center ai-wgt__text">
+					<div class="bg bg--hanger mb-20"></div>
+					<div class="text--center mb-25">Вы всегда можете просмотреть список понравившихся вещей, для этого нажмите кнопку</div class="text--center mb-25">
+					<div class="ai-wgt__link--example mb-30">Мои вещи</div>
+					<div class="ai-wgt__call">Ну что, начнем?</div>
+					<div class="ai-wgt__progress">
+						<div class="ai-wgt__progress-line"></div>
+						<div class="ai-wgt__progress-line"></div>
+						<div class="ai-wgt__progress-line"></div>
+					</div>
+				</div>
+				<div class="ai-wgt__next-page ai-wgt__circle"></div>
+				<style>
+					.ai-wgt__content {
+						background-color: #FFFFFF;
+						box-shadow: 0px 14px 32px rgba(0, 0, 0, 0.24);
+						padding: 20px 25px;
+					}
+					.bg {
+						height: 45px;
+					}
+					.bg--hanger {
+						width: 55px;
+						background-image: url(${settings.bgImages.hanger});
+					}
+					.ai-wgt__next-page {
+						position: absolute;
+						top: 324px;
+						right: -32px;
+						background-color: #FFFFFF;
+						background-image: url(${settings.bgImages.nextPage});
+					}
+					.ai-wgt__progress {
+						width: 230px;
+						display: flex;
+						justify-content: space-between;
+						position: absolute;
+						bottom: 20px;
+						margin: 0 auto;
+					}
+					.ai-wgt__progress-line {
+						width: 70px;
+						height: 2px;
+						background: #DBDBDB;
+						border-radius: 4px;
+					}
+					.ai-wgt__progress-line:last-child {
+						background: #9ABD93;
+					}
 					.ai-wgt__link--example {
 						width: 150px;
 						height: 40px;
@@ -700,7 +807,6 @@
 						justify-content: center;
 						align-items: center;
 					}
-					
 					.ai-wgt__call {
 						margin-top: 130px;
 						font-weight: 600;
@@ -709,7 +815,12 @@
 					}
 				</style>
 			`;
-	
+			
+			const nextPageBtnHandler = () => {
+				saveTutorialIsDone();
+				showClothes();
+			};
+			
 			return {
 				html,
 				handlers: {".ai-wgt__next-page": nextPageBtnHandler}
@@ -915,14 +1026,14 @@
 			tutorialDone: checkOnTutorialIsDone()
 		};
 		
-		generateWidget();
+		generateWidgetCarcass();
 		
-		const prepareFirstPage = state.tutorialDone ? showClothes : showTutorial;
+		const prepareFirstPage = state.tutorialDone ? showClothes : showGreeting;
 		prepareFirstPage();
 		
 		// Если в настройках задано показать виджет через ms:
 		if (settings.delay) {
-			delayTimerID = setTimeout(toggleVisibleHandler, + settings.delay);
+			delayTimerID = setTimeout(toggleWidgetVisibility, + settings.delay);
 		}
 	};
 	
