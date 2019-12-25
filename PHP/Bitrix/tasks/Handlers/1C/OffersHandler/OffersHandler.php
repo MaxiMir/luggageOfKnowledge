@@ -6,6 +6,7 @@
 	{
 		/**
 		 * Инициализация обработчика
+         *
 		 * @param $arParams
 		 * @param $arFields
 		 */

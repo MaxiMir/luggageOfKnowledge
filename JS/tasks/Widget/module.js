@@ -373,14 +373,37 @@
 						}
 						
 						/* MEDIA */
-						@media all and (max-width: 575px) and (orientation: portrait) {
+						@media (max-width: 575px) and (orientation: portrait) {
 							.ai-block {
 								width: 100vw;
 								height: 100vh;
 							}
-							
 							.ai-wgt {
 								padding-top: 50%;
+							}
+						}
+						
+						@media (max-height: 450px) and (max-width: 996px) {
+							.ai-block {
+								width: 100vw;
+								height: 100vh;
+							}
+							.ai-wgt {
+								padding-top: 0;
+								justify-content: center;
+							}
+							.ai-wgt__content {
+								height: 95%;
+								min-height: 300px;
+							}
+							.ai-wgt__next-page {
+								top: 70%;
+							}
+							.ai-wgt__block {
+								width: 300px;
+							}
+							.ai-wgt__body {
+								margin-bottom: 0;
 							}
 						}
 					</style>
@@ -584,6 +607,14 @@
 					.ai-wgt__progress-line:first-child {
 						background: #9ABD93;
 					}
+					@media (max-height: 450px) and (max-width: 996px) {
+						.ai-wgt__next-page {
+							top: 260px;
+						}
+						.ai-block .ai-wgt__content {
+							width: 420px;
+						}
+					}
 				</style>
 			`;
 			
@@ -733,6 +764,18 @@
 					.ai-wgt__progress-line:nth-child(2) {
 						background: #9ABD93;
 					}
+					@media (max-height: 450px) and (max-width: 996px) {
+						.ai-wgt__next-page {
+							top: 260px;
+						}
+						.bg--example {
+							width: 130px;
+                     height: 151px;
+						}
+						.ai-block .ai-wgt__content {
+							width: 420px;
+						}
+					}
 			</style>
 			`;
 			
@@ -813,6 +856,17 @@
 						font-size: 16px;
 						line-height: 22px;
 					}
+					@media (max-height: 450px) and (max-width: 996px) {
+						.ai-wgt__next-page {
+							top: 260px;
+						}
+						.ai-block .ai-wgt__content {
+							width: 420px;
+						}
+						.ai-wgt__call {
+							margin-top: initial;
+						}
+					}
 				</style>
 			`;
 			
@@ -841,6 +895,9 @@
 					<div class="ai-wgt__content">
 				      <div class="ai-wgt__dislike ai-wgt__circle"></div>
 				      <div class="ai-wgt__like ai-wgt__circle"></div>
+				      <div class="stage">
+						  <div class="heart is-active"></div>
+						</div>
 				      <div class="ai-wgt__purchases-count ai-wgt__circle horizontal-center"></div>
 				   </div>
 				</div>
@@ -851,7 +908,6 @@
 					.ai-wgt__content {
 					    background-image:url(${mainImage});
 					}
-					
 					.ai-wgt__like {
 					    position: absolute;
 					    top: 250px;
@@ -860,7 +916,6 @@
 					    background-image:url(${settings.bgImages.like});
 					    background-size: 33px 30px;
 					}
-					
 					.ai-wgt__dislike {
 					    position: absolute;
 					    top: 250px;
@@ -869,7 +924,6 @@
 					    background-image:url(${settings.bgImages.dislike});
 					    background-size: 33px 30px;
 					}
-					
 					.ai-wgt__purchases-count {
 					    position: absolute;
 					    bottom: -10px;
@@ -877,13 +931,46 @@
 					    background-image:url(${settings.bgImages.purchasesCount});
 					    background-size: 33px 41px;
 					}
-					
 					.ai-wgt__footer {
-						    width: 100%;
-						    height: 110px;
-						    display: flex;
-						    justify-content: center;
+						 width: 100%;
+						 height: 110px;
+						 display: flex;
+						 justify-content: center;
+					}
+					@media (max-height: 450px) and (max-width: 996px) {
+						.ai-wgt .ai-wgt__content {
+							 width: 200px;
+							 height: 250px;
+							 min-height: 250px;
+							 background-size: contain;
+							 background-repeat: no-repeat;
+							 background-position: center;
 						}
+						.ai-wgt .ai-wgt__circle {
+						    width: 45px;
+						    height: 45px;
+						}
+						.ai-wgt__like,
+						.ai-wgt__dislike {
+							top: 150px;
+							background-size: 21px 20px;
+						}
+						.ai-wgt__dislike {
+							left: -3px;
+						}
+						.ai-wgt__purchases-count {
+							background-size: 20px 24px;
+						}
+						.ai-wgt__like {
+							right: -1px;
+						}
+						.horizontal-center {
+							 bottom: 5px;
+						}
+						.ai-wgt__link {
+							margin-top: 10px;
+						}
+					}
             </style>
          `;
 			
@@ -964,6 +1051,20 @@
 					.bg--bows {
 					    background-image: url(${settings.bgImages.bows});
 					}
+					@media (max-height: 450px) and (max-width: 996px) {
+						.ai-wgt .ai-wgt__title {
+							 margin-top: 55px;
+							 margin-bottom: 15px;
+						}
+						.ai-wgt__account-photo {
+							top: -30px;
+                     width: 60px;
+                     height: 60px;
+						}
+						.ai-wgt .ai-wgt__link {
+							margin-bottom: 10px;
+						}
+					}
             </style>
         `;
 			
@@ -988,7 +1089,12 @@
                   bottom: 32px;
                   right: -32px;
                   background-color: darkgreen;
-                }
+               }
+               @media (max-height: 450px) and (max-width: 996px) {
+						.ai-wgt__next-page {
+							top: 260px;
+						}
+					}
 				</style>
 			`;
 		};
@@ -1036,7 +1142,6 @@
 			delayTimerID = setTimeout(toggleWidgetVisibility, + settings.delay);
 		}
 	};
-	
 	
 	// Дожидаемся полной загрузки и инициализируем виджет:
 	document.readyState === 'complete' ?

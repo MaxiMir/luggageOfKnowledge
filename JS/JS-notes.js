@@ -2587,9 +2587,9 @@ Reflect.apply(student.greet, {name: 'Max'}, []); // вызываем метод 
 Reflect.ownKeys(student); // возвращает собственные ключи объекта => ['name']
 
 Reflect.preventExtensions(student); // блокируем модификацию объекта
-student.age = 25
-student // {name: 'Max'}
-Reflect.isExtensible(student) // проверяем на доступность для модификации объекта => false
+student.age = 25;
+student; // {name: 'Max'}
+Reflect.isExtensible(student); // проверяем на доступность для модификации объекта => false
 
 
 
@@ -2619,4 +2619,21 @@ style(".menu")      // Returns the style object in a Proxy
    .backgroundColor("#000") // Updates bgColor and returns a Proxy
    .opacity("1");           // ... and so on so forth
 
+
+
+
+// @ Отличие getElementsBy* от querySelectorAll:
+/**
+Результаты поиска getElementsBy* – живые! При изменении документа – изменяется и результат запроса.
+Например, найдём все div при помощи querySelectorAll и getElementsByTagName , а потом изменим документ:
+*/
+const resultGet = document.getElementsByTagName('div');
+const resultQuery = document.querySelectorAll('div');
+resultQuery.length; // => 1
+resultGet.length; // => 1
+
+document.body.innerHTML = '';
+
+resultQuery.length; // => 1
+resultGet.length; // => 0
 

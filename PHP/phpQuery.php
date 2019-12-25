@@ -1,6 +1,6 @@
 <?php
 	
-	#>>>>> PHPQUERY <<<<<#
+	#>>>>> PHPQuery <<<<<#
 
 	header('Content-type:text/html; charset=utf-8');
 
@@ -93,7 +93,6 @@
 
 	# >>>>> АВТОРИЗАЦИЯ <<<<< #
 
-
 	function getContent($url, $data = [])
 	{
 		$ch = curl_init($url); // инициализируем соединение
@@ -123,8 +122,7 @@
 
 
 	# >>>>> ООП <<<<< #
-
-	class Parser 
+	class Parser
 	{
 		private $url;
 		private $ch;
@@ -157,7 +155,6 @@
 			curl_close($this->ch);
 		}
 	}
-
 
 	// Использование:
 	$parser = new Parser();

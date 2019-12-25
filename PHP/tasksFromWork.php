@@ -1,5 +1,5 @@
 <?
-	 /*@@@
+	 /**
 	  Дан список слов неограниченной длины. Необходимо максимально быстрым способом найти количество анаграмм этого
 	  слова. Пример: слово - "лото".
 	  Список: "тест", "цифра", "отол", "оолт", "кекс" . Результат - 2.
@@ -74,7 +74,12 @@
 	 
 	 
 	 
-	 #@@@ Возвращает URN с учетом редиректа:
+	/**
+	 * Возвращает URN с учетом редиректа:
+	 * @param $url
+	 * @param $urn
+	 * @return bool|string|string[]
+	 */
 	 function getCurrURN($url, $urn)
 	 {
 		  $uri = "{$url}{$urn}";
@@ -82,7 +87,9 @@
 		  
 		  if ($headers[0] == "HTTP/1.1 404 Not Found") {
 				return false;
-		  } elseif ($headers[0] == "HTTP/1.1 301 Moved Permanently") {
+		  }
+		  
+		  if ($headers[0] == "HTTP/1.1 301 Moved Permanently") {
 				$location = $headers['Location'];
 				$newURN = !is_array($location) ? $location : $location[1];
 				$urn = str_replace($url, '', $newURN);
@@ -90,3 +97,20 @@
 		  
 		  return $urn;
 	 }
+	 
+	 
+	 
+	/**
+	* Сортировка по ключам многомерного массива: @#
+	* @param $array
+	* @return bool
+	*/
+	function recursiveKeySort(&$array) {
+		foreach ($array as &$value) {
+			if (is_array($value)) {
+				recursiveKeySort($value);
+			}
+		}
+		
+		return ksort($array);
+	}

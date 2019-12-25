@@ -607,6 +607,10 @@
     $directoryIter = new DirectoryIterator($dir);
     $filesData = getTreeFilesData($directoryIter);
     
+    /**
+     * @param DirectoryIterator $directoryIter
+     * @return array
+     */
     function getTreeFilesData(DirectoryIterator $directoryIter)
 	 {
 		  $result = [];
