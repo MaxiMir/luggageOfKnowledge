@@ -1,10 +1,17 @@
-;(widgetSettings => {
+;(window => {
 	"use strict";
+	
+	/** TODO:
+	 * Обработка result: result': 'error'
+	 * open closed
+	 */
 	
 	/**
 	 * Инициализация виджета
+	 * @param widgetSettings
+	 * @returns {Promise<void>}
 	 */
-	const initWidget = async () => {
+	const initWidget = async (widgetSettings) => {
 		let container;
 		let delayTimerID;
 		let settings = {
@@ -13,7 +20,7 @@
 			uriForRequest: {
 				authorization: "https://slim.xppx.ru/ai.php?page=authorization", // "https://api.garderobo.ai/api/v3/widget/start_session/"
 				checkState: "https://slim.xppx.ru/ai.php?page=check-state", // https://api.garderobo.ai/api/v3/widget/assistant/check_state/
-				clothes: "https://slim.xppx.ru/ai.php?page=clothes",
+				feed: "https://slim.xppx.ru/ai.php?page=feed", // https://api.garderobo.ai/api/v3/widget/assistant/feed/
 				account: "https://slim.xppx.ru/ai.php?page=account",
 			},
 			bgImages: {
@@ -32,50 +39,25 @@
 			},
 		};
 		
+		// LOCAL STORAGE:
+		
 		/**
 		 * Возвращает из LocalStorage SessionKey
+		 *
 		 * @returns {string}
 		 */
 		const getSessionKey = () => localStorage.getItem("_garderoboSessionKey");
 		
 		/**
 		 * Сохраняет в LocalStorage SessionKey
+		 *
 		 * @param sessionKey
 		 */
 		const saveSessionKey = sessionKey => localStorage.setItem("_garderoboSessionKey", sessionKey);
 		
 		/**
-		 * Посылает запрос на сервер для генерации SessionKey
-		 * @returns {Promise<*>}
-		 */
-		const createSessionKey = async () => {
-			const uri = settings.uriForRequest.authorization;
-			const {session} = await getResponseInJson(uri, false);
-			
-			return session;
-		};
-		
-		/**
-		 * Посылает запрос для определения нужно ли показывать виджет
-		 */
-		const checkToShowWidget = async () => {
-			const uri = new URL(settings.uriForRequest.checkState);
-			
-			const {product_id, category_id} = settings;
-			
-			if (product_id) {
-				uri.searchParams.append("product_id", product_id);
-			} else if (category_id) {
-				uri.searchParams.append("category_id", category_id);
-			}
-			
-			const {show} = await getResponseInJson(uri);
-			
-			return show === 1;
-		};
-		
-		/**
-		 * Проверяет прошел ли пользователь tutorial
+		 * Проверяет прошел ли пользователь туториал
+		 *
 		 * @returns {boolean}
 		 */
 		const checkOnTutorialIsDone = () => localStorage.getItem("_garderoboAssistantTutorialDone") === "1";
@@ -85,33 +67,11 @@
 		 */
 		const saveTutorialIsDone = () => localStorage.setItem("_garderoboAssistantTutorialDone", "1");
 		
-		/**
-		 * Проверяет есть ли измененения в state
-		 * @param newState
-		 * @returns {boolean}
-		 */
-		const componentNeedUpdate = newState => {
-			return JSON.stringify(state) !== JSON.stringify(newState);
-		};
+		// RESPONSES:
 		
 		/**
-		 * Обновление State (в случае изменений делает перендеринг):
-		 * @param newState
-		 */
-		const setState = newState => {
-			const newMergingState = {...state, ...newState};
-			
-			if (!componentNeedUpdate(newMergingState)) {
-				return;
-			}
-			
-			state = newMergingState;
-			console.log("STATE:", state);
-			setTimeout(() => render(state), 0);
-		};
-		
-		/**
-		 * Отправляет запрос на сервер:
+		 * Посылает запрос на сервер
+		 *
 		 * @param uri
 		 * @param isGetRequest
 		 * @param sentData
@@ -134,13 +94,204 @@
 			if (uri !== settings.uriForRequest.authorization) {
 				//settings.headers["HTTP_AUTHORIZATION"] = settings.sessionKey;
 			}
-			
+			console.log("GET RESPONSE ON", uri);
 			const response = await fetch(uri, fetchSettings);
 			return await response.json();
 		};
 		
 		/**
-		 * Вставляет верстку, стили и обработчики виджета в DOM
+		 * Посылает запрос на сервер для генерации SessionKey
+		 *
+		 * @returns {Promise<*>}
+		 */
+		const createSessionKey = async () => {
+			const uri = settings.uriForRequest.authorization;
+			const {session} = await getResponseInJson(uri, false);
+			
+			return session;
+		};
+		
+		/**
+		 * Посылает запрос для получения данных о следующей странице (вопрос|одежда)
+		 *
+		 * @returns {Promise<any>}
+		 */
+		const getFeedData = async () => {
+			const uri = new URL(settings.uriForRequest.feed);
+			
+			const {product_id, category_id} = settings;
+			
+			if (product_id) {
+				uri.searchParams.append("product_id", product_id);
+			}
+			
+			if (category_id) {
+				uri.searchParams.append("category_id", category_id);
+			}
+			
+			return await getResponseInJson(uri);
+		};
+		
+		/**
+		 * Посылает запрос для определения нужно ли показывать виджет
+		 */
+		const checkToShowWidget = async () => {
+			const uri = new URL(settings.uriForRequest.checkState);
+			
+			const {product_id, category_id} = settings;
+			
+			if (product_id) {
+				uri.searchParams.append("product_id", product_id);
+			}
+			
+			if (category_id) {
+				uri.searchParams.append("category_id", category_id);
+			}
+			
+			const {show} = await getResponseInJson(uri);
+			
+			return show === 1;
+		};
+		
+		// RENDERING:
+		
+		/**
+		 * Проверяет есть ли измененения в state
+		 *
+		 * @param newState
+		 * @returns {boolean}
+		 */
+		const componentNeedUpdate = newState => {
+			return JSON.stringify(state) !== JSON.stringify(newState);
+		};
+		
+		/**
+		 * Обновление State (в случае изменений делает перендеринг)
+		 *
+		 * @param newState
+		 */
+		const setState = async newState => {
+			const newMergingState = {...state, ...newState};
+			
+			if (!componentNeedUpdate(newMergingState)) {
+				return;
+			}
+			
+			state = newMergingState;
+			
+			const {pageName} = state;
+			const {html, handlers} = await getPageData(pageName);
+			
+			console.table(state);
+			setTimeout(() => render(html, handlers), 0);
+		};
+		
+		/**
+		 * Рендеринг содержимого виджета
+		 *
+		 * @param html
+		 * @param handlers
+		 */
+		const render = (html, handlers) => {
+			const {isOpen} = state;
+			const statusWidget = isOpen ? "open" : "closed";
+			
+			// устанавливаем классы:
+			container.classList.remove(...["open", "closed"]);
+			container.classList.add(statusWidget);
+			
+			// устанавливаем контент:
+			container.innerHTML = "";
+			container.insertAdjacentHTML("afterbegin", html);
+			initHandlers(handlers);
+		};
+		
+		/**
+		 * Привязывает обработчики событий к элементам
+		 *
+		 * @param elemHandlers
+		 */
+		const initHandlers = elemHandlers => {
+			if (!elemHandlers) {
+				return;
+			}
+			
+			for (let [selector, cb] of Object.entries(elemHandlers)) {
+				const elem = document.querySelector(selector);
+				
+				if (elem) {
+					elem.addEventListener('click', cb);
+				}
+			}
+		};
+		
+		// STATE:
+		
+		/**
+		 * Показывает следующую страницу (вопрос|одежда)
+		 *
+		 * @returns {Promise<void>}
+		 */
+		const switchToFeed = async () => {
+			const pageData = await getFeedData();
+			const isQuestion = pageData.type === "1";
+			const pageName = isQuestion ? "question" : "clothes";
+			
+			await setState({pageName, pageData});
+		};
+		
+		/**
+		 * Открывает/закрывает модальное окно
+		 *
+		 * Если была установлена задержка перед показом виджета - убирает ее
+		 */
+		const toggleWidgetVisibility = () => {
+			if (delayTimerID) {
+				clearTimeout(delayTimerID);
+			}
+			
+			setState({isOpen: !state.isOpen});
+		};
+		
+		/**
+		 * Показывает страницу "Приветствие":
+		 */
+		const switchToGreeting = () => {
+			setState({pageName: "greeting"});
+		};
+		
+		/**
+		 * Показывает страницу "Инструкция лайк/дизлайк"
+		 */
+		const switchToDemoActions = () => {
+			setState({pageName: "demoActions"});
+		};
+		
+		/**
+		 * Показывает страницу "Инструкция Мои вещи"
+		 */
+		const switchToDemoClothes = () => {
+			setState({pageName: "demoClothes"});
+		};
+		
+		/**
+		 * Показывает страницу "Аккаунт"
+		 *
+		 * @returns {Promise<void>}
+		 */
+		const switchToAccount = async () => {
+			const pageName = "account";
+			const uri = settings.uriForRequest[pageName];
+			const pageData = await getResponseInJson(uri);
+			
+			console.log("pageData", pageData);
+			await setState({pageName, pageData});
+		};
+		
+		// HTML AND HANDLERS:
+		
+		/**
+		 * Вставляет скелет верстки со стилями и обработчиками в DOM
 		 */
 		const generateWidgetCarcass = () => {
 			document.body.insertAdjacentHTML(
@@ -149,7 +300,7 @@
 					<div class="ai-block">
 					   <div class="ai-block__container">
 					       <div class="ai-wgt fl-column-center closed">
-					           <div class="ai-wgt__body mb-30">
+					           <div class="ai-wgt__body fl-center mb-30">
 					               <div class="ai-wgt__content"></div>
 					           </div>
 					       </div>
@@ -324,6 +475,11 @@
 						.mb-30 {
 						    margin-bottom: 30px;
 						}
+						.fl-center {
+						    display: flex;
+						    justify-content: center;
+						    align-items: center;
+						}
 						.fl-column-center {
 						    display: flex;
 						    flex-wrap: wrap;
@@ -418,129 +574,29 @@
 		};
 		
 		/**
-		 * Привязывает обработчики событий к элементам:
-		 * @param elemHandlers
-		 */
-		const initHandlers = elemHandlers => {
-			if (!elemHandlers) {
-				return;
-			}
-			
-			for (let [selector, cb] of Object.entries(elemHandlers)) {
-				const elem = document.querySelector(selector);
-				
-				if (elem) {
-					elem.addEventListener('click', cb);
-				}
-			}
-		};
-		
-		/**
-		 * Рендеринг содержимого виджета
-		 * @param state
-		 */
-		const render = async state => {
-			const {page, isOpen} = state;
-			const statusWidget = isOpen ? "open" : "closed";
-			
-			// устанавливаем классы:
-			container.classList.remove(...["open", "closed"]);
-			container.classList.add(statusWidget);
-			
-			// устанавливаем контент:
-			try {
-				const {html, handlers} = await getPageData(page);
-				container.innerHTML = "";
-				container.insertAdjacentHTML("afterbegin", html);
-				initHandlers(handlers);
-			} catch (error) {
-				setState({page: "error"});
-			}
-		};
-		
-		
-		/* ### РЕНДЕРИНГ СТРАНИЦ ### */
-		
-		/**
-		 * Рендеринг открыть/закрыть модальное окно:
-		 * Если была установлена задержка перед показом виджета - убирает ее
-		 */
-		const toggleWidgetVisibility = () => {
-			if (delayTimerID) {
-				clearTimeout(delayTimerID);
-			}
-			
-			setState({isOpen: !state.isOpen});
-		};
-		
-		/**
-		 * Рендеринг "Приветствие":
-		 */
-		const showGreeting = () => {
-			setState({page: "greeting"});
-		};
-		
-		/**
-		 * Рендеринг "Инструкция лайк/дизлайк"
-		 */
-		const showInstructionActions = () => {
-			setState({page: "demoActions"});
-		};
-		
-		/**
-		 * Рендеринг "Инструкция Мои вещи"
-		 */
-		const showInstructionClothes = () => {
-			setState({page: "demoClothes"});
-		};
-		
-		/**
-		 * Рендеринг страницы "Выбор одежды"
-		 */
-		const showClothes = () => {
-			setState({page: "clothes"});
-		};
-		
-		/**
-		 * Рендеринг страницы "Аккаунт"
-		 */
-		const showAccount = () => {
-			setState({page: "account"});
-		};
-		
-		
-		/* ### ГЕНЕРАЦИЯ HTML И ОБРАБОТЧИКОВ ### */
-		
-		/**
 		 * Возвращает HTML и обработчики для выбранной страницы
-		 * @param page
+		 * @param pageName
 		 * @returns {*}
 		 */
-		const getPageData = async page => {
-			let data;
+		const getPageData = async pageName => {
 			const wrapStart = `
-				<div class="ai-wgt__body mb-30">
+				<div class="ai-wgt__body fl-center mb-30">
 					<div class="ai-wgt__content">
 			`;
 			const wrapEnd = `
 				</div>
 			`;
 			
-			if (page in settings.uriForRequest) {
-				const uri = settings.uriForRequest[page];
-				data = await getResponseInJson(uri);
-			}
-			
 			const pageContentMap = {
 				greeting: getGreetingData,
 				demoActions: getDemoActionsData,
 				demoClothes: getDemoClothesData,
-				account: getAccountHTML,
-				clothes: getClothesHTML,
-				question: getQuestionHTML
+				account: getAccountData,
+				clothes: getClothesData,
+				question: getQuestionData
 			};
-			
-			const {html, handlers} = !data ? pageContentMap[page]() : pageContentMap[page](data);
+
+			const {html, handlers} = pageContentMap[pageName]();
 			const htmlWithWrapper = `${wrapStart}${html}${wrapEnd}`;
 			
 			return {
@@ -551,6 +607,7 @@
 		
 		/**
 		 * Возвращает HTML и обработчики для страницы "Приветствие"
+		 *
 		 * @returns {*}
 		 */
 		const getGreetingData = () => {
@@ -560,7 +617,7 @@
 					<div class="text--center mb-25">
 						Привет. Отличный выбор!
 						Я — искусственный интеллект, призванный помочь в выборе одежды.
-					</div class="text--center mb-25">
+					</div>
 					<div class="text--center mb-25">Мы будем задавать вам вопросы и предлагать вещи, попутно узнавая о ваших предпочтениях все больше и больше.</div>
 					<div class="text--center mb-25">На вопросы нет неправильных ответов, поэтому не бойтесь отвечать как вам по душе.</div>
 					<div class="ai-wgt__progress">
@@ -620,12 +677,13 @@
 			
 			return {
 				html,
-				handlers: {".ai-wgt__next-page": showInstructionActions}
+				handlers: {".ai-wgt__next-page": switchToDemoActions}
 			};
 		};
 		
 		/**
 		 * Возвращает HTML и обработчики для страницы "Инструкция лайк/дизлайк"
+		 *
 		 * @returns {*}
 		 */
 		const getDemoActionsData = () => {
@@ -781,20 +839,21 @@
 			
 			return {
 				html,
-				handlers: {".ai-wgt__next-page": showInstructionClothes}
+				handlers: {".ai-wgt__next-page": switchToDemoClothes}
 			};
 		};
 		
 		/**
 		 * Возвращает HTML и обработчики для страницы "Инструкция Мои вещи"
+		 *
 		 * @returns {*}
 		 */
 		const getDemoClothesData = () => {
 			const html = `
 				<div class="fl-column-center ai-wgt__text">
 					<div class="bg bg--hanger mb-20"></div>
-					<div class="text--center mb-25">Вы всегда можете просмотреть список понравившихся вещей, для этого нажмите кнопку</div class="text--center mb-25">
-					<div class="ai-wgt__link--example mb-30">Мои вещи</div>
+					<div class="text--center mb-25">Вы всегда можете просмотреть список понравившихся вещей, для этого нажмите кнопку</div>
+					<div class="ai-wgt__link--example fl-center mb-30">Мои вещи</div>
 					<div class="ai-wgt__call">Ну что, начнем?</div>
 					<div class="ai-wgt__progress">
 						<div class="ai-wgt__progress-line"></div>
@@ -846,9 +905,6 @@
 						background-color: #FFFFFF;
 						box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.08);
 						border-radius: 90px;
-						display: flex;
-						justify-content: center;
-						align-items: center;
 					}
 					.ai-wgt__call {
 						margin-top: 130px;
@@ -870,9 +926,10 @@
 				</style>
 			`;
 			
-			const nextPageBtnHandler = () => {
+			const nextPageBtnHandler = async () => {
 				saveTutorialIsDone();
-				showClothes();
+				
+				await switchToFeed();
 			};
 			
 			return {
@@ -882,31 +939,112 @@
 		};
 		
 		/**
-		 * HTML и обработчики для страницы "Выбор одежды":
-		 * @param data
+		 * @param data HTML для страницы "Вопрос"
+		 *
 		 * @returns {*}
 		 */
-		const getClothesHTML = data => {
-			let html;
-			const {mainImage} = data;
+		const getQuestionData = () => {
+			const {text} = state.pageData;
 			
-			html = `
-				<div class="ai-wgt__body mb-30">
-					<div class="ai-wgt__content">
-				      <div class="ai-wgt__dislike ai-wgt__circle"></div>
-				      <div class="ai-wgt__like ai-wgt__circle"></div>
-				      <div class="stage">
-						  <div class="heart is-active"></div>
-						</div>
-				      <div class="ai-wgt__purchases-count ai-wgt__circle horizontal-center"></div>
-				   </div>
+			const html = `
+				<div class="fl-column-center ai-wgt__text">
+					<div class="text--center mb-25">${text}</div>
+				</div>
+				<div class="ai-wgt__next-page ai-wgt__circle"></div>
+				<style>
+					.ai-wgt__content {
+						background-color: #FFFFFF;
+						box-shadow: 0px 14px 32px rgba(0, 0, 0, 0.24);
+						padding: 20px 25px;
+					}
+					.bg {
+						height: 45px;
+					}
+					.bg--hanger {
+						width: 55px;
+						background-image: url(${settings.bgImages.hanger});
+					}
+					.ai-wgt__next-page {
+						position: absolute;
+						top: 324px;
+						right: -32px;
+						background-color: #FFFFFF;
+						background-image: url(${settings.bgImages.nextPage});
+					}
+					.ai-wgt__progress {
+						width: 230px;
+						display: flex;
+						justify-content: space-between;
+						position: absolute;
+						bottom: 20px;
+						margin: 0 auto;
+					}
+					.ai-wgt__progress-line {
+						width: 70px;
+						height: 2px;
+						background: #DBDBDB;
+						border-radius: 4px;
+					}
+					.ai-wgt__progress-line:last-child {
+						background: #9ABD93;
+					}
+					
+					.ai-wgt__call {
+						margin-top: 130px;
+						font-weight: 600;
+						font-size: 16px;
+						line-height: 22px;
+					}
+					@media (max-height: 450px) and (max-width: 996px) {
+						.ai-wgt__next-page {
+							top: 260px;
+						}
+						.ai-block .ai-wgt__content {
+							width: 420px;
+						}
+						.ai-wgt__call {
+							margin-top: initial;
+						}
+					}
+				</style>
+			`;
+			
+			const nextPageBtnHandler = async () => {
+				await switchToFeed();
+			};
+			
+			return {
+				html,
+				handlers: {".ai-wgt__next-page": nextPageBtnHandler}
+			};
+		};
+		
+		/**
+		 * HTML и обработчики для страницы "Выбор одежды"
+		 *
+		 * @returns {*}
+		 */
+		const getClothesData = () => {
+			const {img_src, price} = state.pageData;
+			
+			const html = `
+						<div class="ai-wgt__content">
+							<div class="ai-wgt__price">${price}</div>
+					      <div class="ai-wgt__dislike ai-wgt__circle"></div>
+					      <div class="ai-wgt__like ai-wgt__circle"></div>
+					      <div class="stage">
+							  <div class="heart is-active"></div>
+							</div>
+					      <div class="ai-wgt__purchases-count ai-wgt__circle horizontal-center"></div>
+					   </div>
+					</div>
 				</div>
 				<div class="ai-wgt__footer">
 					<div class="ai-wgt__link ai-wgt__account">Мой аккаунт</div>
 				</div>
             <style>
 					.ai-wgt__content {
-					    background-image:url(${mainImage});
+					    background-image:url(${img_src});
 					}
 					.ai-wgt__like {
 					    position: absolute;
@@ -977,47 +1115,47 @@
 			return {
 				html,
 				handlers: {
-					".ai-wgt__like": () => {console.log("like")},
-					".ai-wgt__dislike": () => {console.log("dislike")},
-					".ai-wgt__purchases-count": () => {console.log("purchases-count")},
-					".ai-wgt__account": showAccount
+					".ai-wgt__like": () => {
+						console.log("like")
+					},
+					".ai-wgt__dislike": () => {
+						console.log("dislike")
+					},
+					".ai-wgt__purchases-count": () => {
+						console.log("purchases-count")
+					},
+					".ai-wgt__account": switchToAccount
 				}
 			}
 		};
 		
 		/**
 		 * HTML и обработчики для страницы "Аккаунт":
-		 * @param data
 		 */
-		const getAccountHTML = data => {
-			let html;
-			const {userName, userProgress, userThingsCount, accountPhoto} = data;
+		const getAccountData = () => {
+			const {userName, userProgress, userThingsCount, accountPhoto} = state.pageData;
 			
-			html = `
-				<div class="ai-wgt__body mb-30">
-					<div class="ai-wgt__content">
-                  <div class="ai-wgt__account-photo horizontal-center"></div>
-                  <div class="ai-wgt__title text--center mb-25">${userName}</div>
-                  <div class="account__pages fl-column-center">
-              <div class="ai-wgt__link ai-wgt__link--big mb-20 bg bg--search">
-                  Поиск
-              </div>
-              <div class="ai-wgt__link ai-wgt__link--big mb-20 bg bg--progress">
-                  Мои достижения
-                  <span>
-                      <span class="user-progress">${userProgress}</span class="progress">
-                      /
-                      <span class="all-progress">10</span>
-                  </span>
-              </div>
-              <div class="ai-wgt__link ai-wgt__link--big mb-20 bg bg--things">
-                  Мои вещи
-                  <span class="user-things-count">${userThingsCount}</span>
-              </div>
-              <div class="ai-wgt__link ai-wgt__link--big mb-20 bg bg--bows">
-                  Луки звезд
-              </div>
-          </div>
+			const html = `
+					<div class="ai-wgt__account-photo horizontal-center"></div>
+					<div class="ai-wgt__title text--center mb-25">${userName}</div>
+					<div class="account__pages fl-column-center">
+					<div class="ai-wgt__link ai-wgt__link--big mb-20 bg bg--search">
+					   Поиск
+					</div>
+					<div class="ai-wgt__link ai-wgt__link--big mb-20 bg bg--progress">
+					   Мои достижения
+					   <span>
+					       <span class="user-progress">${userProgress}</span class="progress">
+					       /
+					       <span class="all-progress">10</span>
+					   </span>
+					</div>
+					<div class="ai-wgt__link ai-wgt__link--big mb-20 bg bg--things">
+					   Мои вещи
+					   <span class="user-things-count">${userThingsCount}</span>
+					</div>
+					<div class="ai-wgt__link ai-wgt__link--big mb-20 bg bg--bows">
+					   Луки звезд
 					</div>
 				</div>
             <style>
@@ -1071,34 +1209,6 @@
 			return {html}
 		};
 		
-		/**
-		 * @param data HTML для страницы "Цвет настроения"
-		 */
-		const getColorsHTML = data => {
-			return "";
-		};
-		
-		/**
-		 * @param data HTML для страницы "Вопросы"
-		 */
-		const getQuestionHTML = data => {
-			return `
-				<style>
-					.ai-wgt__next-page {
-               	position: absolute;
-                  bottom: 32px;
-                  right: -32px;
-                  background-color: darkgreen;
-               }
-               @media (max-height: 450px) and (max-width: 996px) {
-						.ai-wgt__next-page {
-							top: 260px;
-						}
-					}
-				</style>
-			`;
-		};
-		
 		
 		
 		// Переданные данные для виджета:
@@ -1129,24 +1239,24 @@
 		// Инициализируем первоначальный state:
 		let state = {
 			isOpen: false,
-			tutorialDone: checkOnTutorialIsDone()
 		};
+		const tutorialIsDone = checkOnTutorialIsDone();
 		
 		generateWidgetCarcass();
 		
-		const prepareFirstPage = state.tutorialDone ? showClothes : showGreeting;
-		prepareFirstPage();
-		
 		// Если в настройках задано показать виджет через ms:
 		if (settings.delay) {
-			delayTimerID = setTimeout(toggleWidgetVisibility, + settings.delay);
+			delayTimerID = setTimeout(toggleWidgetVisibility, +settings.delay);
 		}
+		
+		if (!tutorialIsDone) {
+			switchToGreeting();
+			return;
+		}
+		
+		await switchToFeed();
 	};
 	
-	// Дожидаемся полной загрузки и инициализируем виджет:
-	document.readyState === 'complete' ?
-		initWidget()
-		:
-		window.addEventListener('load', initWidget, false);
-	
-})({'key': 1, 'category_id': 777, 'delay': 3000});
+	window._garderoboAssistantWidget = {};
+	_garderoboAssistantWidget.init = initWidget;
+})(window);

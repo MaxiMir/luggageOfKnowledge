@@ -2678,3 +2678,11 @@ for (let j = 0; j < 10000; j++) {
 
 console.log("Result", total);
 console.timeEnd("This");
+
+
+// Выполнение фукнции после загрузки страницы:
+document.readyState === 'complete' ?
+   someFunction()
+   :
+   window.addEventListener('load', someFunction, false);
+

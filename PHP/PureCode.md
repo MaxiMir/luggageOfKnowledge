@@ -269,6 +269,14 @@ $userName = "Johny";
 $userGreeting = "Hello, {$userName}";
 ```
 
+
+### НАЧИНАЕМ ИСПОЛЬЗОВАТЬ: ОПЕРАТОР ОБЪЕДИНЕНИЯ С NULL
+
+```php
+$imageSrc = $product['img'] ?? '/image/default.jpg'; // если $product['img'] NULL, то в $imageSrc будет /image/default.jpg
+$username = $_GET['user'] ?? $_POST['user'] ?? 'nobody'; // данный оператор можно использовать в цепочке.
+```
+
 ### НАЧИНАЕМ ИСПОЛЬЗОВАТЬ: GUARD EXPRESSION
 > Дословно - "защитное выражение", некоторая проверка на входе в функцию, например:
 ```php
