@@ -4,7 +4,7 @@
 	/** TODO:
 	 * программная обработка result: result': 'error'
 	 * open|closed CSS
-	 * название ассистента при наведении
+	 * название при наведении
 	 */
 	
 	window._garderoboAssistantWidget = {};
@@ -20,6 +20,7 @@
 				checkState: "https://slim.xppx.ru/ai.php?page=check-state", // https://api.garderobo.ai/api/v3/widget/assistant/check_state/
 				feed: "https://slim.xppx.ru/ai.php?page=feed", // https://api.garderobo.ai/api/v3/widget/assistant/feed/
 				account: "https://slim.xppx.ru/ai.php?page=account",
+				myClothes: "",
 			},
 			bgImages: {
 				like: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACEAAAAeCAYAAACiyHcXAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAFQSURBVHgBzZeNbYMwEEY/M0FGIBvQCeoRukEZwRswQpoJ2k0gE8AG7gbJBte72lEpDcK4Mc6TTkYWdp7/yBm4ARGVHA1Hz3Emh5QtR82xm2m34zD+vXE76ecg/WIJ38mBlrEiM2mrff0S77MyfvQhnYxpfNuG1mFvitB6gSstxWHJL2txHQkXJeLQiKPkMPKg/LRY5OHCsZeZ0MiHLIcRiVfk5VkkSuSlkj1ByEyBB0AkLsiMSAzIyyASJ+TlJBId8vJRKKU65BPp+PcHJU98SjUXLbZnzxKf30fUz8YR23IUgV815BKanrbB0ig7UxORkose7o8lFfJdevozCxMRTWmpEAK5ZDYFNdaQQKRGDNzwhX5S91jO0QIjkYrik2BLoXsgQCTmOmAp5LKzUkS+I2+BAvJeumNO7po3t0+k3mALZpanvfv0B8oYL/Ov0X8BUUJjCwLQCPAAAAAASUVORK5CYII=",
@@ -88,7 +89,6 @@
 			
 			if (sentData) {
 				fetchSettings.body = JSON.stringify(sentData);
-				console.log(sentData)
 			}
 			
 			if (uri !== settings.uriForRequest.authorization) {
@@ -233,20 +233,7 @@
 			}
 		};
 		
-		// STATE:
-		
-		/**
-		 * Показывает следующую страницу (вопрос|одежда)
-		 *
-		 * @returns {Promise<void>}
-		 */
-		const switchToFeed = async () => {
-			const pageData = await getFeedData();
-			const isQuestion = pageData.type === "1";
-			const pageName = isQuestion ? "question" : "clothes";
-			
-			await setState({pageName, pageData});
-		};
+		// PAGES:
 		
 		/**
 		 * Открывает/закрывает модальное окно
@@ -259,6 +246,19 @@
 			}
 			
 			setState({isOpen: !state.isOpen});
+		};
+		
+		/**
+		 * Показывает следующую страницу (вопрос|одежда)
+		 *
+		 * @returns {Promise<void>}
+		 */
+		const switchToFeed = async () => {
+			const pageData = await getFeedData();
+			const isQuestion = pageData.type === "1";
+			const pageName = isQuestion ? "question" : "choiceOfClothes";
+			
+			await setState({pageName, pageData});
 		};
 		
 		/**
@@ -292,7 +292,19 @@
 			const uri = settings.uriForRequest[pageName];
 			const pageData = await getResponseInJson(uri);
 			
-			console.log("pageData", pageData);
+			await setState({pageName, pageData});
+		};
+		
+		/**
+		 * Показывает страницу "Мои вещи"
+		 *
+		 * @returns {Promise<void>}
+		 */
+		const switchToMyClothes = async () => {
+			const pageName = "myClothes";
+			const uri = settings.uriForRequest[pageName];
+			const pageData = await getResponseInJson(uri);
+			
 			await setState({pageName, pageData});
 		};
 		
@@ -603,8 +615,9 @@
 				demoActions: getDemoActionsData,
 				demoClothes: getDemoClothesData,
 				account: getAccountData,
-				clothes: getClothesData,
-				question: getQuestionData
+				choiceOfClothes: getChoiceOfClothesData,
+				question: getQuestionData,
+				myClothes: getMyClothesData
 			};
 
 			const {html, handlers} = pageContentFnMap[pageName]();
@@ -955,7 +968,7 @@
 		const getQuestionData = () => {
 			const {text, type, id} = state.pageData;
 			const html = `
-				<div class="fl-column-center ai-wgt__text">
+						<div class="fl-column-center ai-wgt__text">
 					<div class="ai-wgt__header text--big text--center">Пожалуйста,</div>
 					<div class="ai-wgt__header text--big text--center mb-15">ответьте на вопрос</div>
 					<div class="text--big text--center mb-25">${text}</div>
@@ -965,7 +978,12 @@
 						<div class="ai-wgt__answer ai-wgt__link mb-15" data-answer-id="0">Не знаю</div>
 					</div>
 				</div>
-				<div class="ai-wgt__next-page ai-wgt__circle" data-action=""></div>
+						<div class="ai-wgt__next-page ai-wgt__circle" data-action=""></div>
+					</div>
+				</div>
+				<div class="ai-wgt__footer">
+					<div class="ai-wgt__link ai-wgt__account">Мои вещи</div>
+				</div>
 				<style>
 					.ai-wgt__content {
 						background-color: #FFFFFF;
@@ -983,6 +1001,11 @@
 						width: 55px;
 						background-image: url(${settings.bgImages.hanger});
 					}
+					.ai-wgt__answer.active,
+					.ai-wgt__answer:hover {
+						background: #74A858;
+						color: #fff;
+					}
 					.ai-wgt__next-page {
 						position: absolute;
 						top: 324px;
@@ -999,15 +1022,37 @@
 					.ai-wgt__answers {
 						width: 230px;
 					}
+					.ai-wgt__footer {
+						 width: 100%;
+						 height: 110px;
+						 display: flex;
+						 justify-content: center;
+					}
 					@media (max-height: 450px) and (max-width: 996px) {
+						.ai-block .ai-wgt {
+    						padding-top: 3%;
+						}
 						.ai-wgt__next-page {
 							top: 260px;
 						}
 						.ai-block .ai-wgt__content {
 							width: 420px;
+							min-height: 250px;
+						}
+						.ai-wgt .ai-wgt__answers {
+							width: 100%;
+							flex-direction: row;
+							justify-content: space-evenly;
+						}
+						.ai-wgt__answers .ai-wgt__answer {
+							width: 100px;
 						}
 						.ai-wgt__call {
 							margin-top: initial;
+						}
+						.ai-wgt__footer {
+							height: 100px;
+							align-items: center;
 						}
 					}
 				</style>
@@ -1050,6 +1095,7 @@
 				html,
 				handlers: {
 					".ai-wgt__answer": answerBtnHandler,
+					".ai-wgt__account": switchToAccount
 				}
 			};
 		};
@@ -1059,8 +1105,8 @@
 		 *
 		 * @returns {*}
 		 */
-		const getClothesData = () => {
-			const {img_src, price} = state.pageData;
+		const getChoiceOfClothesData = () => {
+			const {type, id, img_src, price} = state.pageData;
 			const formattedPrice = price.split(".").join(" ");
 			
 			const html = `
@@ -1074,7 +1120,7 @@
 					</div>
 				</div>
 				<div class="ai-wgt__footer">
-					<div class="ai-wgt__link ai-wgt__account">Мой аккаунт</div>
+					<div class="ai-wgt__link ai-wgt__account">Мои вещи</div>
 				</div>
             <style>
 					.ai-wgt__content {
@@ -1160,17 +1206,23 @@
             </style>
          `;
 			
+			const userActionHandler = action => {
+				const postData = {type, id, action};
+				sendUserData(postData);
+				switchToFeed();
+			};
+			
 			return {
 				html,
 				handlers: {
 					".ai-wgt__like": () => {
-						console.log("like")
+						userActionHandler(1);
 					},
 					".ai-wgt__dislike": () => {
-						console.log("dislike")
+						userActionHandler(2);
 					},
 					".ai-wgt__purchases-count": () => {
-						console.log("purchases-count")
+						userActionHandler(3);
 					},
 					".ai-wgt__account": switchToAccount
 				}
@@ -1178,7 +1230,7 @@
 		};
 		
 		/**
-		 * HTML и обработчики для страницы "Аккаунт":
+		 * HTML и обработчики для страницы "Аккаунт"
 		 */
 		const getAccountData = () => {
 			const {userName, userProgress, userThingsCount, accountPhoto} = state.pageData;
@@ -1257,7 +1309,12 @@
 			return {html}
 		};
 		
+		/**
+		 * HTML и обработчики для страницы "Мои вещи"
+		 */
+		const getMyClothesData = () => {
 		
+		};
 		
 		// Переданные данные для виджета:
 		const {key: keyMagazine, category_id = null, product_id = null, delay = null} = widgetSettings;
