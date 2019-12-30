@@ -1517,9 +1517,9 @@ delete op.age;
 сonst form = {
     login: 'tester',
     password: '12345'
-}
+};
 
-const formProxy = new Proxy(form, validator) // cледим за объектом form + ловушки
+const formProxy = new Proxy(form, validator); // cледим за объектом form + ловушки
 formProxy.login; // tester
 formProxy.password; // 12345
 formProxy['username']; // Поля username в объекте нет
@@ -1720,7 +1720,7 @@ users.findById(7); // {id: 7, name: 'John', job: 'Student', age: 22}
 
 
 
-// # Генераторы. Symbol iterator, for of:
+// #@ Генераторы. Symbol iterator, for of:
 
 // @1:
 function *strGenerator()
@@ -1900,7 +1900,7 @@ const big = {
 };
 
 const { foo, ...small } = big;
-foo = ''
+foo = '';
 small; // => { bar: 'value Bar' }
 
 
@@ -2048,7 +2048,8 @@ searchBoxDom.addEventListener('input', () => {
 
 	<script  src="throttling.js">  </script>
 </html>
-* */
+*/
+
 // FILE: throttling.js:
 let timerID;
 const divBodyDom = document.getElementById('div-body');
@@ -2240,6 +2241,8 @@ h2.compareDocumentPosition(h1);
 
 Поскольку устанавливается не один бит, в приведённом выше примере container.compareDocumenPosition(h1)возвращает 20, когда ожидалось 16, ведь h1 содержится в container. Но h1 также следует за элементом container(4), поэтому полученное значение равно 16 + 4 = 20.
 */
+
+
 
 // #@ Отслеживание изменений  в любом узле DOM: #@
 /*
