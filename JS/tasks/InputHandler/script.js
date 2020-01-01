@@ -152,7 +152,5 @@ const initInputHandler = input => {
     input.addEventListener("keyup", changeInputHandler);
 };
 
-
-
 const lengthInput = document.querySelector(".roof-length__input");
 initInputHandler(lengthInput);

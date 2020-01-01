@@ -5,6 +5,7 @@
 	 * программная обработка result: result': 'error'
 	 * open|closed CSS
 	 * название при наведении
+	 * IPHONE 5
 	 */
 	
 	window._garderoboAssistantWidget = {};
@@ -38,7 +39,8 @@
 				hanger: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTUiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA1NSA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMjcuNDY5NSAwQzIyLjc2OTEgMCAxOC45MjM0IDMuNjQ3MDUgMTguOTIzNCA4LjExNzY0QzE4LjkyMzQgOS4xMTc2NCAxOS43MTcgOS44ODIzNSAyMC43NTQ3IDkuODgyMzVDMjEuNzkyNSA5Ljg4MjM1IDIyLjU4NiA5LjExNzY0IDIyLjU4NiA4LjExNzY0VjguMDU4NzlDMjIuNTg2IDUuNDcwNTYgMjQuNzIyNSAzLjQ3MDU3IDI3LjQ2OTUgMy40NzA1N0MzMC4yMTY0IDMuNDcwNTcgMzIuMzUyOSA1LjUyOTM4IDMyLjM1MjkgOC4wNTg3OUMzMi4zNTI5IDkuNDExNzQgMzEuNzQyNSAxMC41ODgyIDMwLjgyNjkgMTEuNDcwNkMyOS44NTAyIDEyLjIzNTMgMjguOTM0NSAxMi41ODgyIDI3Ljk1NzggMTMuMTE3NkMyNy40Njk1IDEzLjM1MjkgMjYuOTIwMSAxMy43MDU5IDI2LjQzMTcgMTQuMjM1M0MyNS45NDM0IDE0LjgyMzUgMjUuNjM4MiAxNS42NDcgMjUuNjM4MiAxNi40MTE3VjE4LjI5NDFMMy4wNTIxNiAzMC4yMzUzQzEuMjgxOTEgMzEuMTc2NSAwLjA2MTA0MzMgMzIuODgyMyAwIDM0Ljc2NDdDMCAzNy42NDcgMi41MDI3NyAzOS45NDEyIDUuNDkzOSAzOS45NDEySDI0LjQxNzNDMjUuNDU1IDM5Ljk0MTIgMjYuMjQ4NiAzOS4xNzY0IDI2LjI0ODYgMzguMTc2NEMyNi4yNDg2IDM3LjE3NjQgMjUuNDU1IDM2LjQxMTcgMjQuNDE3MyAzNi40MTE3SDI0LjM1NjNINS40OTM5QzQuNDU2MTYgMzYuNDExNyAzLjY2MjYgMzUuNjQ3IDMuNjYyNiAzNC43NjQ3QzMuNjYyNiAzNC4yMzUzIDMuOTY3ODEgMzMuNzA1OSA0Ljc2MTM4IDMzLjI5NDFMMjcuNDY5NSAyMS40MTE3TDUwLjE3NzYgMzMuMzUyOUM1MC45NzExIDMzLjc2NDcgNTEuMjc2NCAzNC4yOTQxIDUxLjI3NjQgMzQuODIzNUM1MS4yNzY0IDM1LjcwNTkgNTAuNTQzOCAzNi40NzA2IDQ5LjQ0NTEgMzYuNDcwNkgzMC41MjE2QzI5LjQ4MzkgMzYuNDcwNiAyOC42OTAzIDM3LjIzNTMgMjguNjkwMyAzOC4yMzUzQzI4LjY5MDMgMzkuMjM1MyAyOS40ODM5IDQwIDMwLjUyMTYgNDBIMzAuNTgyN0g0OS41MDYxQzUyLjQ5NzIgNDAgNTUgMzcuNzA1OSA1NSAzNC44MjM1QzU0LjkzOSAzMi45NDEyIDUzLjc3OTEgMzEuMjM1MyA1MS45NDc4IDMwLjI5NDFMMjkuMzYxOCAxOC4zNTI5VjE2LjUyOTRDMjkuMzYxOCAxNi41Mjk0IDI5LjQ4MzkgMTYuNDExNyAyOS43ODkxIDE2LjI5NDFDMzAuNDYwNiAxNS45NDExIDMxLjgwMzYgMTUuNDExNyAzMy4yNjg2IDE0LjIzNTNMMzMuMzI5NiAxNC4xNzY1QzM1LjAzODggMTIuNzA1OSAzNi4wNzY2IDEwLjUyOTQgMzYuMDc2NiA4LjE3NjQ1QzM2LjAxNTUgMy42NDcwNCAzMi4xNjk4IDAgMjcuNDY5NSAwWiIgZmlsbD0iIzg1RDFCRiIvPjwvc3ZnPg==",
 			},
 		};
-		
+
+
 		// LOCAL STORAGE:
 		
 		/**
@@ -121,12 +123,13 @@
 			return session;
 		};
 		
+
 		/**
 		 * Посылает запрос для получения данных о следующей странице (вопрос|одежда)
 		 *
-		 * @returns {Promise<any>}
+		 * @returns {Promise<{pageData: any, pageName: (string)}>}
 		 */
-		const getFeedData = () => {
+		const getFeedData = async () => {
 			const uri = new URL(settings.uriForRequest.feed);
 			
 			const {product_id, category_id} = settings;
@@ -138,8 +141,12 @@
 			if (category_id) {
 				uri.searchParams.append("category_id", category_id);
 			}
-			
-			return getResponseInJson(uri);
+
+			const pageData = await getResponseInJson(uri);
+			const isQuestion = pageData.type === "1";
+			const pageName = isQuestion ? "question" : "choiceOfClothes";
+
+			return {pageName, pageData};
 		};
 		
 		/**
@@ -166,35 +173,69 @@
 		// RENDERING:
 		
 		/**
-		 * Проверяет есть ли измененения в state
-		 *
-		 * @param newState
-		 * @returns {boolean}
+		 * Инициализация state и обработчиков
 		 */
-		const componentNeedUpdate = newState => {
-			return JSON.stringify(state) !== JSON.stringify(newState);
+		const initState = () => {
+			let state = {
+				'current': {isOpen: false}
+			};
+			
+			const handler = {
+				set(target, prop, value) {
+					const pagesWithNextState = ["question", "choiceOfClothes"];
+					const stateChanged = prop === "current";
+					const {pageName, isOpen} = value;
+					const isPageWithNextState = pagesWithNextState.includes(pageName);
+					const isOpenedWidget = isOpen;
+
+					target[prop] = value;
+
+					if (stateChanged) {
+						const {pageName} = value;
+						const {html, handlers} = getPageData(pageName);
+						setTimeout(() => render(html, handlers), 0);
+					}
+
+					if (isPageWithNextState && isOpenedWidget) {
+						setTimeout(async () => {
+							target.next = await getFeedData();
+							console.log(`%cNEXT: PAGE NAME: "${state.next.pageName}" PAGE DATA:`, 'color: blueviolet; font-size: small', state.next.pageData);
+						}, 0);
+					}
+					
+					return true;
+				}
+			};
+			
+			return new Proxy(state, handler);
 		};
 		
 		/**
-		 * Обновление State (в случае изменений делает перендеринг)
+		 * Обновление State
 		 *
 		 * @param newState
 		 */
-		const setState = async newState => {
-			const newMergingState = {...state, ...newState};
-			
-			if (!componentNeedUpdate(newMergingState)) {
+		const setState = newState => {
+			const {current: currentState} = state;
+			const newMergingState = {...currentState, ...newState};
+
+			if (!componentNeedUpdate(currentState, newMergingState)) {
 				return;
 			}
 			
-			state = newMergingState;
-			
-			console.log("NEW STATE", state);
-			
-			const {pageName} = state;
-			const {html, handlers} = await getPageData(pageName);
-			
-			setTimeout(() => render(html, handlers), 0);
+			state.current = newMergingState;
+			console.log(`%cCURRENT: PAGE NAME: "${state.current.pageName}" PAGE DATA: %o`, 'color: green; font-size: small', state.current.pageData);
+		};
+		
+		/**
+		 * Проверяет есть ли измененения в state
+		 *
+		 * @param oldState
+		 * @param newState
+		 * @returns {boolean}
+		 */
+		const componentNeedUpdate = (oldState, newState) => {
+			return JSON.stringify(oldState) !== JSON.stringify(newState);
 		};
 		
 		/**
@@ -204,7 +245,7 @@
 		 * @param handlers
 		 */
 		const render = (html, handlers) => {
-			const {isOpen} = state;
+			const {isOpen} = state.current;
 			const statusWidget = isOpen ? "open" : "closed";
 			
 			// устанавливаем классы:
@@ -246,7 +287,7 @@
 				clearTimeout(delayTimerID);
 			}
 			
-			setState({isOpen: !state.isOpen});
+			setState({isOpen: !state.current.isOpen});
 		};
 		
 		/**
@@ -256,10 +297,8 @@
 		 */
 		const switchToFeed = async () => {
 			const pageData = await getFeedData();
-			const isQuestion = pageData.type === "1";
-			const pageName = isQuestion ? "question" : "choiceOfClothes";
-			
-			await setState({pageName, pageData});
+
+			setState(pageData);
 		};
 		
 		/**
@@ -616,7 +655,7 @@
 		 * @param pageName
 		 * @returns {*}
 		 */
-		const getPageData = async pageName => {
+		const getPageData = pageName => {
 			const wrapStart = `
 				<div class="ai-wgt__body fl-center mb-30">
 					<div class="ai-wgt__content">
@@ -634,7 +673,7 @@
 				question: getQuestionData,
 				myClothes: getMyClothesData
 			};
-
+			
 			const {html, handlers} = pageContentFnMap[pageName]();
 			const htmlWithWrapper = `${wrapStart}${html}${wrapEnd}`;
 			
@@ -982,7 +1021,7 @@
 		 * @returns {*}
 		 */
 		const getQuestionData = () => {
-			const {text, type, id} = state.pageData;
+			const {text, type, id} = state.current.pageData;
 			const html = `
 						<div class="fl-column-center ai-wgt__text">
 					<div class="ai-wgt__header text--big text--center">Пожалуйста,</div>
@@ -1071,17 +1110,16 @@
 				</style>
 			`;
 			
-			const answerBtnHandler = async e => {
-				const currAnswer = e.currentTarget;
-				const {action} = currAnswer.dataset;
+			const answerBtnHandler = ({currentTarget}) => {
+				const {action} = currentTarget.dataset;
 				const postData = {id, type, action};
 				
 				sendUserData(postData);
-				await switchToFeed();
+				setState(state.next);
 			};
 			
 			const nextPageBtnHandler = async () => {
-				await switchToFeed();
+				setState(state.next);
 			};
 			
 			return {
@@ -1100,7 +1138,7 @@
 		 * @returns {*}
 		 */
 		const getChoiceOfClothesData = () => {
-			const {type, id, img_src, price} = state.pageData;
+			const {type, id, img_src, price} = state.current.pageData;
 			const formattedPrice = price.split(".").join(" ");
 			
 			const html = `
@@ -1200,7 +1238,7 @@
 			const userActionHandler = action => {
 				const postData = {type, id, action};
 				sendUserData(postData);
-				switchToFeed();
+				setState(state.next);
 			};
 			
 			return {
@@ -1224,7 +1262,7 @@
 		 * HTML и обработчики для страницы "Аккаунт"
 		 */
 		const getAccountData = () => {
-			const {userName, userProgress, userThingsCount, accountPhoto} = state.pageData;
+			const {userName, userProgress, userThingsCount, accountPhoto} = state.current.pageData;
 			
 			const html = `
 					<div class="ai-wgt__account-photo horizontal-center"></div>
@@ -1332,26 +1370,7 @@
 			return;
 		}
 		
-		// Инициализируем первоначальный state:
-		// let state = {
-		// 	isOpen: false,
-		// };
-		
-		let state = new Proxy({
-			isOpen: false,
-		}, {
-			
-			set(target, prop, value) {
-				if (prop in target) {
-					target[prop] = value;
-					
-				}
-				console.log('Target', target);
-				console.log('Prop', prop);
-			},
-		});
-		
-		
+		let state = initState();
 		const tutorialIsDone = checkOnTutorialIsDone();
 		
 		generateWidgetCarcass();
