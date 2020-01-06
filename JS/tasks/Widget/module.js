@@ -10,7 +10,7 @@
 	
 	window._garderoboAssistantWidget = {};
 	
-	_garderoboAssistantWidget.init = async (widgetSettings) => {
+	_garderoboAssistantWidget.init = async widgetSettings => {
 		let container;
 		let delayTimerID;
 		let settings = {
@@ -98,6 +98,7 @@
 			}
 			
 			const response = await fetch(uri, fetchSettings);
+			
 			return await response.json();
 		};
 		
@@ -123,26 +124,38 @@
 			return session;
 		};
 		
-
+		/**
+		 * Вставляет в URI search params product_id и category_id
+		 *
+		 * @param uri
+		 * @returns {URL}
+		 */
+		const getURIWithSearchParams = uri => {
+			const url = new URL(uri);
+			
+			const {product_id, category_id} = settings;
+			
+			if (product_id) {
+				url.searchParams.append("product_id", product_id);
+			}
+			
+			if (category_id) {
+				url.searchParams.append("category_id", category_id);
+			}
+			
+			return url;
+		};
+		
 		/**
 		 * Посылает запрос для получения данных о следующей странице (вопрос|одежда)
 		 *
 		 * @returns {Promise<{pageData: any, pageName: (string)}>}
 		 */
 		const getFeedData = async () => {
-			const uri = new URL(settings.uriForRequest.feed);
-			
-			const {product_id, category_id} = settings;
-			
-			if (product_id) {
-				uri.searchParams.append("product_id", product_id);
-			}
-			
-			if (category_id) {
-				uri.searchParams.append("category_id", category_id);
-			}
+			const uri = settings.uriForRequest.feed;
+			const uriWithSearchParams = getURIWithSearchParams(uri);
 
-			const pageData = await getResponseInJson(uri);
+			const pageData = await getResponseInJson(uriWithSearchParams);
 			const isQuestion = pageData.type === "1";
 			const pageName = isQuestion ? "question" : "choiceOfClothes";
 
@@ -153,19 +166,10 @@
 		 * Посылает запрос для определения нужно ли показывать виджет
 		 */
 		const checkToShowWidget = async () => {
-			const uri = new URL(settings.uriForRequest.checkState);
+			const uri = settings.uriForRequest.checkState;
+			const uriWithSearchParams = getURIWithSearchParams(uri);
 			
-			const {product_id, category_id} = settings;
-			
-			if (product_id) {
-				uri.searchParams.append("product_id", product_id);
-			}
-			
-			if (category_id) {
-				uri.searchParams.append("category_id", category_id);
-			}
-			
-			const {show} = await getResponseInJson(uri);
+			const {show} = await getResponseInJson(uriWithSearchParams);
 			
 			return show === 1;
 		};
@@ -193,6 +197,7 @@
 					if (stateChanged) {
 						const {pageName} = value;
 						const {html, handlers} = getPageData(pageName);
+						
 						setTimeout(() => render(html, handlers), 0);
 					}
 
@@ -228,7 +233,7 @@
 		};
 		
 		/**
-		 * Проверяет есть ли измененения в state
+		 * Проверяет есть ли измененения в State
 		 *
 		 * @param oldState
 		 * @param newState
@@ -246,11 +251,12 @@
 		 */
 		const render = (html, handlers) => {
 			const {isOpen} = state.current;
+			const containerClassList = container.classList;
 			const statusWidget = isOpen ? "open" : "closed";
 			
 			// устанавливаем классы:
-			container.classList.remove(...["open", "closed"]);
-			container.classList.add(statusWidget);
+			containerClassList.remove(...["open", "closed"]);
+			containerClassList.add(statusWidget);
 			
 			// устанавливаем контент:
 			container.innerHTML = "";
