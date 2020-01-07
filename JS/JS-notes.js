@@ -2720,4 +2720,24 @@ input.value; // 'new', input.value изменилось
 // Получается, что атрибут input.getAttribute('value') хранит оригинальное (исходное) значение даже после того, как пользователь заполнил поле и свойство изменилось.
 
 
+// @ ДЕЛАЕМ ФАЙЛ ИСПОЛНЯЕМЫМ:
+// $ ./date
 
+/**
+ * Добавить права на исполнение: chmod +x date.
+ * Добавить шебанг в начало файла:
+ #!/usr/bin/env node
+ */
+
+
+
+// @ ОПЦИОНАЛЬНЫЕ ПОСЛЕДОВАТЕЛЬНОСТИ (OPTIONAL CHAINING)
+
+const someObj = {
+    property: 'prop',
+    otherProperty: {
+        name: 'prop2'
+    }
+};
+const property = someObj.NotOtherProperty?.name;
+console.log(property); // undefined

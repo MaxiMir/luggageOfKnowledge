@@ -281,7 +281,7 @@
 			}
 		};
 		
-		// PAGES:
+		// STATES:
 		
 		/**
 		 * Открывает/закрывает модальное окно
@@ -365,12 +365,12 @@
 				`
 					<div class="ai-block">
 					   <div class="ai-block__container">
-					       <div class="ai-wgt fl-column-center closed">
+					       <div class="ai-wgt fl-column-center closed" id="aiWidget">
 					           <div class="ai-wgt__body fl-center mb-30">
 					               <div class="ai-wgt__content"></div>
 					           </div>
 					       </div>
-					       <div class="ai-wgt__toggle-visible-btn ai-wgt__circle">
+					       <div class="ai-wgt__toggle-visible-btn ai-wgt__circle" id="aiWidgetToggleBtn">
 					            <div class="ai-wgt__toggle-visible-title"></div>
 					       </div>
 					   </div>
@@ -649,10 +649,9 @@
              `
 			);
 			
-			container = document.querySelector(".ai-wgt");
-			const toggleVisibleBtn = document.querySelector(".ai-wgt__toggle-visible-btn");
+			container = document.getElementById("aiWidget");
+			const toggleVisibleBtn = document.getElementById("aiWidgetToggleBtn");
 			
-			// Обработчики:
 			toggleVisibleBtn.addEventListener('click', toggleWidgetVisibility);
 		};
 		
