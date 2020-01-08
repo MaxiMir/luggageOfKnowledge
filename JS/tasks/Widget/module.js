@@ -3,7 +3,6 @@
 	
 	/** TODO:
 	 * программная обработка result: result': 'error'
-	 * open|closed CSS
 	 * название при наведении
 	 * IPHONE 5
 	 */

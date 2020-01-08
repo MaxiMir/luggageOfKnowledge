@@ -5,7 +5,7 @@
 
 /**
 	$ npm init
-	description: PodCast App
+	// ...
 	entry point: (index.js) app.js
 	
 	$ npm install -D webpack webpack-cli webpack-dev-server
@@ -15,10 +15,11 @@
  */
 
 
+
 // + FILE: /app/webpack.config.js:
 const path = require('path');
 const HTMLPlugin = require('html-webpack-plugin');
-const {CleanWebpackPlugin} = require('clean-webpack-plugin'); // для очистки старых сбилженных файлов (например, bundle.js)
+const {CleanWebpackPlugin} = require('clean-webpack-plugin');
 
 module.exports = {
 	entry: './src/app.js', // входной файл приложения
@@ -33,7 +34,7 @@ module.exports = {
 		new HTMLPlugin({ // инстанс плагина html-webpack-plugin
 			template: './src/index.html' // путь до шаблона (из которого будет генерироваться итоговый шаблон)
 		}),
-		new CleanWebpackPlugin()
+		new CleanWebpackPlugin() // для очистки старых сбилженных файлов (например, bundle.js)
 	],
 	module: {
 		rules: [
@@ -46,8 +47,8 @@ module.exports = {
 };
 
 
+
 // FILE: /app/package.json:
-/**
 {
 	// ...
 	"scripts": {
@@ -56,7 +57,8 @@ module.exports = {
 	}
 	// ...
 }
-*/
+
+
 
 // + FILE: /app/src/index.html:
 /**
@@ -118,6 +120,7 @@ module.exports = {
  */
 
 
+
 // + FILE: /app/src/styles.css:
 /**
 	html,
@@ -162,6 +165,10 @@ module.exports = {
 		padding: 1rem;
 	}
  
+   .red {
+      color: red;
+   }
+ 
 	@media (min-width: 768px) {
 		#sidebar {
 			position: fixed;
@@ -178,7 +185,8 @@ module.exports = {
 			margin-left: 180px;
 		}
 	}
-*/
+ */
+
 
 
 // + FILE: /app/src/app.js:
@@ -226,13 +234,15 @@ function authFormHandler(event) {
 	const form = event.target;
 	const email = form.querySelector('#email');
 	const password = form.querySelector('#password');
+	const btn = form.querySelector('button');
 	
 	event.preventDefault();
 	
+	btn.disabled = true;
 	authWithEmailAndPassword(email, password)
-		.then(token => {
-		
-		});
+		.then(Question.fetch)
+		.then(renderModalAfterAuth)
+		.then(() => btn.disabled = false);
 }
 
 function openModal() {
@@ -241,6 +251,16 @@ function openModal() {
 	
 	authForm.addEventListener('submit', authFormHandler, {once: true}); // флаг событие добавляется 1 раз
 }
+
+function renderModalAfterAuth(content) {
+	if (typeof content === 'string') {
+		createModal('Ошибка', content);
+		return;
+	}
+	
+	createModal('Список вопросов', Question.listToHTML(content));
+}
+
 
 
 // + FILE: /app/src/utils.js:
@@ -259,11 +279,21 @@ export function createModal(title, content) {
 }
 
 /**
-	URI: console.firebase.google.com - регистрация
-   Database -> Realtime Database - создать базу данных (вначале запускаем в тестовом режиме)
-   Authentication -> Настроиться способ входа - необходимо включить нужные варианты для авторизации
+	URI: console.firebase.google.com
+   Database -> Realtime Database - создать базу данных
+   Authentication -> Настроить способ входа - необходимо включить нужные варианты для авторизации
    Project Overview -> Веб приложение -> название приложения - зарегистрировать приложение -> копируем apiKey
+ 
+   Database -> Правила
+   {
+      "rules": {
+         ".read": "auth != null", // читать могут только авторизованные
+         ".write": true, // могут писать все пользователи
+      }
+   }
  */
+
+
 
 // + FILE: /app/src/question.js:
 export class Question {
@@ -271,7 +301,7 @@ export class Question {
 		// URI - ссылка до БД, берется из Realtime Database
 		// questions - название коллекции (таблицы) в БД
 		return fetch(
-			'https://app-15663.firebaseio.com/questions.json',
+			'https://podcast-app-15663.firebaseio.com/questions.json',
 			{
 				method: 'POST',
 				body: JSON.stringify(question),
@@ -301,6 +331,33 @@ export class Question {
 		
 		list.innerHTML = html;
 	}
+	
+	static listToHTML(questions) {
+		return !questions.length
+			? `<p>Вопросов пока нет</p>`
+			: `<ol>${questions.map(q => `<li>${q.text}</li>`).join('\n')}</ol>`
+	}
+	
+	static fetch(token) {
+		if (!token) {
+			return Promise.resolve('<p class="error">У вас нет токена</p>');
+		}
+		
+		return fetch(`https://podcast-app-15663.firebaseio.com/questions.json?auth=${token}`)
+			.then(response => response.json())
+			.then(response => {
+				if (response && response.error) {
+					return `<p class="error">${response.error}</p>`;
+				}
+				
+				return !response
+					? []
+					: Object.keys(response).map(key => ({
+						...response[key],
+						id: key
+					}));
+			});
+	}
 }
 
 function addToLocalStorage(question) {
@@ -326,6 +383,7 @@ function toCard(question) {
 		</div>
 	`;
 }
+
 
 
 // + FILE: /app/src/auth.js:
@@ -365,6 +423,12 @@ export function authWithEmailAndPassword(email, password) {
 			}
 		}
 	)
-	.then(response => response.json())
-	.then(data => data.idToken);
+		.then(response => response.json())
+		.then(data => data.idToken);
 }
+
+/**
+   $ npm run build
+ 
+	Hosting -> начать -> следовать инструкции
+*/
