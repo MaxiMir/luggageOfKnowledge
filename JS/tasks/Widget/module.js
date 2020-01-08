@@ -5,6 +5,8 @@
 	 * программная обработка result: result': 'error'
 	 * название при наведении
 	 * IPHONE 5
+	 *
+	 *
 	 */
 	
 	window._garderoboAssistantWidget = {};
@@ -38,8 +40,44 @@
 				hanger: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTUiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA1NSA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMjcuNDY5NSAwQzIyLjc2OTEgMCAxOC45MjM0IDMuNjQ3MDUgMTguOTIzNCA4LjExNzY0QzE4LjkyMzQgOS4xMTc2NCAxOS43MTcgOS44ODIzNSAyMC43NTQ3IDkuODgyMzVDMjEuNzkyNSA5Ljg4MjM1IDIyLjU4NiA5LjExNzY0IDIyLjU4NiA4LjExNzY0VjguMDU4NzlDMjIuNTg2IDUuNDcwNTYgMjQuNzIyNSAzLjQ3MDU3IDI3LjQ2OTUgMy40NzA1N0MzMC4yMTY0IDMuNDcwNTcgMzIuMzUyOSA1LjUyOTM4IDMyLjM1MjkgOC4wNTg3OUMzMi4zNTI5IDkuNDExNzQgMzEuNzQyNSAxMC41ODgyIDMwLjgyNjkgMTEuNDcwNkMyOS44NTAyIDEyLjIzNTMgMjguOTM0NSAxMi41ODgyIDI3Ljk1NzggMTMuMTE3NkMyNy40Njk1IDEzLjM1MjkgMjYuOTIwMSAxMy43MDU5IDI2LjQzMTcgMTQuMjM1M0MyNS45NDM0IDE0LjgyMzUgMjUuNjM4MiAxNS42NDcgMjUuNjM4MiAxNi40MTE3VjE4LjI5NDFMMy4wNTIxNiAzMC4yMzUzQzEuMjgxOTEgMzEuMTc2NSAwLjA2MTA0MzMgMzIuODgyMyAwIDM0Ljc2NDdDMCAzNy42NDcgMi41MDI3NyAzOS45NDEyIDUuNDkzOSAzOS45NDEySDI0LjQxNzNDMjUuNDU1IDM5Ljk0MTIgMjYuMjQ4NiAzOS4xNzY0IDI2LjI0ODYgMzguMTc2NEMyNi4yNDg2IDM3LjE3NjQgMjUuNDU1IDM2LjQxMTcgMjQuNDE3MyAzNi40MTE3SDI0LjM1NjNINS40OTM5QzQuNDU2MTYgMzYuNDExNyAzLjY2MjYgMzUuNjQ3IDMuNjYyNiAzNC43NjQ3QzMuNjYyNiAzNC4yMzUzIDMuOTY3ODEgMzMuNzA1OSA0Ljc2MTM4IDMzLjI5NDFMMjcuNDY5NSAyMS40MTE3TDUwLjE3NzYgMzMuMzUyOUM1MC45NzExIDMzLjc2NDcgNTEuMjc2NCAzNC4yOTQxIDUxLjI3NjQgMzQuODIzNUM1MS4yNzY0IDM1LjcwNTkgNTAuNTQzOCAzNi40NzA2IDQ5LjQ0NTEgMzYuNDcwNkgzMC41MjE2QzI5LjQ4MzkgMzYuNDcwNiAyOC42OTAzIDM3LjIzNTMgMjguNjkwMyAzOC4yMzUzQzI4LjY5MDMgMzkuMjM1MyAyOS40ODM5IDQwIDMwLjUyMTYgNDBIMzAuNTgyN0g0OS41MDYxQzUyLjQ5NzIgNDAgNTUgMzcuNzA1OSA1NSAzNC44MjM1QzU0LjkzOSAzMi45NDEyIDUzLjc3OTEgMzEuMjM1MyA1MS45NDc4IDMwLjI5NDFMMjkuMzYxOCAxOC4zNTI5VjE2LjUyOTRDMjkuMzYxOCAxNi41Mjk0IDI5LjQ4MzkgMTYuNDExNyAyOS43ODkxIDE2LjI5NDFDMzAuNDYwNiAxNS45NDExIDMxLjgwMzYgMTUuNDExNyAzMy4yNjg2IDE0LjIzNTNMMzMuMzI5NiAxNC4xNzY1QzM1LjAzODggMTIuNzA1OSAzNi4wNzY2IDEwLjUyOTQgMzYuMDc2NiA4LjE3NjQ1QzM2LjAxNTUgMy42NDcwNCAzMi4xNjk4IDAgMjcuNDY5NSAwWiIgZmlsbD0iIzg1RDFCRiIvPjwvc3ZnPg==",
 			},
 		};
-
-
+		
+		// SETTINGS:
+		
+		/**
+		 * Проверка на корректность переданных настроек
+		 *
+		 * @param keyMagazine
+		 * @param checkedFunctions
+		 * @returns {[]}
+		 */
+		const checkSettings = (keyMagazine, checkedFunctions) => {
+			const errors = [];
+			
+			if (!keyMagazine) {
+				errors.push("Не передан ключ магазина;");
+			}
+			
+			Object.keys(checkedFunctions).forEach(fnName => {
+				if (typeof checkedFunctions[fnName] !== 'function') {
+					errors.push(`В ${fnName} передана не функция;`);
+				}
+			});
+			
+			return errors;
+		};
+		
+		/**
+		 * Выводит ошибки в консоль
+		 *
+		 * @param settingsErrors
+		 */
+		const showSettingsError = settingsErrors => {
+			console.error('В виджет переданы некорректные настройки:');
+			settingsErrors.forEach((error, index) => {
+				console.error(`${index + 1}: ${error}`);
+			});
+		};
+		
 		// LOCAL STORAGE:
 		
 		/**
@@ -1131,7 +1169,10 @@
 				handlers: {
 					".ai-wgt__next-page": nextPageBtnHandler,
 					".ai-wgt__answer": answerBtnHandler,
-					".ai-wgt__account": switchToAccount
+					".ai-wgt__account": () => {
+						myClothesFn();
+						switchToAccount();
+					}
 				}
 			};
 		};
@@ -1249,15 +1290,21 @@
 				html,
 				handlers: {
 					".ai-wgt__like": () => {
+						likeFn(id);
 						userActionHandler(1);
 					},
 					".ai-wgt__dislike": () => {
+						dislikeFn(id);
 						userActionHandler(2);
 					},
 					".ai-wgt__purchases-count": () => {
+						addToBasketFn(id);
 						userActionHandler(3);
 					},
-					".ai-wgt__account": switchToAccount
+					".ai-wgt__account": () => {
+						myClothesFn();
+						switchToAccount();
+					}
 				}
 			}
 		};
@@ -1349,11 +1396,15 @@
 		
 		};
 		
-		// Переданные данные для виджета:
-		const {key: keyMagazine, category_id = null, product_id = null, delay = null} = widgetSettings;
+		// Переданные настройки для виджета:
+		const { key: keyMagazine, category_id, product_id, delay, addToBasketFn, likeFn, dislikeFn, myClothesFn } = widgetSettings;
+		const checkedFunctions = {addToBasketFn, likeFn, dislikeFn, myClothesFn};
 		
-		if (!keyMagazine) {
-			console.error("Не передан ключ магазина!");
+		// Проверка настроек для виджета:
+		const settingsErrors = checkSettings(keyMagazine, checkedFunctions);
+		
+		if (settingsErrors.length) {
+			showSettingsError(settingsErrors);
 			return;
 		}
 		
