@@ -163,7 +163,7 @@ router.post(
 			
 			const token = jwt.sign(
 				{ userId: user.id }, // данные для шифрования
-				config.get('jwtSecret'), // секреный ключ
+				config.get('jwtSecret'), // секретный ключ
 				{ expiresIn: '1h' } // время существования токена
 			);
 			

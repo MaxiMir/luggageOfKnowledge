@@ -15,7 +15,7 @@
 		let container;
 		let delayTimerID;
 		let settings = {
-			keyMagazine: null,
+			key: null,
 			sessionKey: null,
 			uriForRequest: {
 				authorization: "https://slim.xppx.ru/ai.php?page=authorization", // "https://api.garderobo.ai/api/v3/widget/start_session/"
@@ -46,19 +46,19 @@
 		/**
 		 * Проверка на корректность переданных настроек
 		 *
-		 * @param keyMagazine
+		 * @param key
 		 * @param checkedFunctions
 		 * @returns {[]}
 		 */
-		const checkSettings = (keyMagazine, checkedFunctions) => {
+		const checkSettings = (key, checkedFunctions) => {
 			const errors = [];
 			
-			if (!keyMagazine) {
+			if (!key) {
 				errors.push("Не передан ключ магазина;");
 			}
 			
 			Object.keys(checkedFunctions).forEach(fnName => {
-				if (typeof checkedFunctions[fnName] !== 'function') {
+				if (checkedFunctions[fnName] && typeof checkedFunctions[fnName] !== 'function') {
 					errors.push(`В ${fnName} передана не функция;`);
 				}
 			});
@@ -121,7 +121,7 @@
 				method: isGetRequest ? "GET" : "POST",
 				headers: {
 					'Accept': 'application/json',
-					//'HTTP_X_API_KEY': settings.keyMagazine,
+					//'HTTP_X_API_KEY': settings.key,
 					//'HTTP_AUTHORIZATION': `Bearer ${settings.sessionKey}`
 				}
 			};
@@ -311,11 +311,12 @@
 				return;
 			}
 			
-			for (let [selector, cb] of Object.entries(elemHandlers)) {
+			Object.keys(elemHandlers).forEach(selector => {
+				const cb = elemHandlers[selector];
 				const elements = container.querySelectorAll(selector);
 				
 				elements.forEach(element => element.addEventListener('click', cb));
-			}
+			});
 		};
 		
 		// STATES:
@@ -1170,7 +1171,10 @@
 					".ai-wgt__next-page": nextPageBtnHandler,
 					".ai-wgt__answer": answerBtnHandler,
 					".ai-wgt__account": () => {
-						myClothesFn();
+						if (myClothesFn) {
+							myClothesFn();
+						}
+						
 						switchToAccount();
 					}
 				}
@@ -1290,19 +1294,31 @@
 				html,
 				handlers: {
 					".ai-wgt__like": () => {
-						likeFn(id);
+						if (likeFn) {
+							likeFn(id);
+						}
+						
 						userActionHandler(1);
 					},
 					".ai-wgt__dislike": () => {
-						dislikeFn(id);
+						if (dislikeFn) {
+							dislikeFn(id);
+						}
+						
 						userActionHandler(2);
 					},
 					".ai-wgt__purchases-count": () => {
-						addToBasketFn(id);
+						if (addToBasketFn) {
+							addToBasketFn(id);
+						}
+						
 						userActionHandler(3);
 					},
 					".ai-wgt__account": () => {
-						myClothesFn();
+						if (myClothesFn) {
+							myClothesFn();
+						}
+						
 						switchToAccount();
 					}
 				}
@@ -1397,11 +1413,11 @@
 		};
 		
 		// Переданные настройки для виджета:
-		const { key: keyMagazine, category_id, product_id, delay, addToBasketFn, likeFn, dislikeFn, myClothesFn } = widgetSettings;
+		const { key, category_id, product_id, delay, addToBasketFn, likeFn, dislikeFn, myClothesFn } = widgetSettings;
 		const checkedFunctions = {addToBasketFn, likeFn, dislikeFn, myClothesFn};
 		
 		// Проверка настроек для виджета:
-		const settingsErrors = checkSettings(keyMagazine, checkedFunctions);
+		const settingsErrors = checkSettings(key, checkedFunctions);
 		
 		if (settingsErrors.length) {
 			showSettingsError(settingsErrors);
@@ -1416,7 +1432,7 @@
 			saveSessionKey(settings.sessionKey);
 		}
 		
-		settings = {...settings, keyMagazine, category_id, product_id, delay};
+		settings = {...settings, key, category_id, product_id, delay};
 		
 		// Определяем нужно ли показывать виджет на странице:
 		const isShowWidget = await checkToShowWidget();

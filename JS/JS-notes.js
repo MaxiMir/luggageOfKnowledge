@@ -2768,5 +2768,40 @@ console.log(property); // undefined
  # Lazy load
  Если ваш код находится в одном файле, то разделите его на chunks (чанки, маленькие части) и грузите их по мере надобности. Так же используйте lazy-loading для изображений.
 <img src="example.jpg" loading="lazy" alt="" />
-
 */
+
+
+
+// @ Object.fromEntries (ES7-ES9)
+const arr = [['one', 1], ['two', 2], ['three', 3]];
+Object.fromEntries(arr); // { one: 1, two: 2, three: 3}
+
+// @ Object.get (ES7-ES9)
+Object.getOwnPropertyDescriptors(object); // вывод данных по свойствам объекта
+Object.defineProperties({}, Object.getOwnPropertyDescriptors(object)); // клонирование объекта (сохраяет геттеры и сеттеры)
+
+// @ for-await-of (ES7-ES9)
+// Async function for iteration with 'for-await-of':
+const showNames = async = () => {
+  for await(name of names) {
+    console.log(name);
+  }
+};
+
+// @ Async generator function (ES7-ES9)
+async function* readLines(path) {
+    const file = await fileOpen(path);
+    
+    try {
+        while(!file.EOF) {
+            yield await file.readLine();
+        }
+    } finally {
+        await file.close();
+    }
+}
+
+// Async iteration of async generator function results:
+for await (const line of readLines(filePath)) {
+    console.log(line);
+}
