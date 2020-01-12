@@ -1,7 +1,6 @@
 ((window) => {
 	/** TODO:
 	 * программная обработка result: result': 'error'
-	 * название при наведении
 	 * IPHONE 5
 	 */
 
@@ -9,6 +8,7 @@
 	window.garderoboAssistantWidget.init = async (widgetSettings) => {
 		let state;
 		let container;
+		let toggleVisibleBtn;
 		let delayTimerID;
 		let settings = {
 			key: null,
@@ -37,8 +37,8 @@
 			},
 		};
 		const {
-			key, categoryID, productID, delay,
-			addToBasketFn, likeFn, dislikeFn, myClothesFn,
+			key, category_id: categoryID, product_id: productID,
+			addToBasketFn, likeFn, dislikeFn, myClothesFn, delay,
 		} = widgetSettings;
 
 
@@ -300,10 +300,16 @@
 		 * Если была установлена задержка перед показом виджета - убирает ее
 		 */
 		const toggleWidgetVisibility = () => {
+			const toggleBtnClassList = toggleVisibleBtn.classList;
+			
 			if (delayTimerID) {
 				clearTimeout(delayTimerID);
 			}
-
+			
+			if (toggleBtnClassList.contains("with-hint")) {
+				toggleBtnClassList.remove("with-hint");
+			}
+			
 			setState({ isOpen: !state.current.isOpen });
 		};
 
@@ -381,8 +387,8 @@
 					               <div class="ai-wgt__content"></div>
 					           </div>
 					       </div>
-					       <div class="ai-wgt__toggle-visible-btn ai-wgt__circle" id="aiWidgetToggleBtn">
-					            <div class="ai-wgt__toggle-visible-title"></div>
+					       <div class="ai-wgt__toggle-visible-btn ai-wgt__circle ai-wgt__circle--with-plus with-hint" id="aiWidgetToggleBtn">
+					            <div class="ai-wgt__toggle-visible-title">Название виджета</div>
 					       </div>
 					   </div>
 					</div>
@@ -458,31 +464,39 @@
 						    bottom: 20px;
 						    left: 20px;
 						    background: #FFFFFF;
-						
 						    transition: all 0.3s ease-in-out;
 						    animation-delay: 0.3s;
 						}
-						.ai-wgt__toggle-visible-btn:after,
-						.ai-wgt__toggle-visible-btn:before {
+						.ai-wgt__circle--with-plus:after,
+						.ai-wgt__circle--with-plus:before {
 						    width: 2px;
 						    height: 29px;
 						    position: absolute;
 						    margin-left: auto;
 						    margin-right: auto;
-						    left: 0;
-						    right: 0;
+						    right: 31px;
 						    content: '';
 						    background-color: #C4C4C4;
 						    bottom: 18px;
-						
 						    transition: all 0.3s ease-in-out;
 						    animation-delay: 0.3s;
 						}
-						.ai-wgt__toggle-visible-btn:before {
+						.ai-wgt__circle--with-plus:before {
 						    transform: rotate(45deg);
 						}
-						.ai-wgt__toggle-visible-btn:after {
+						.ai-wgt__circle--with-plus:after {
 						    transform: rotate(-45deg);
+						}
+						.ai-wgt__circle--with-plus:hover .ai-wgt__circle--with-plus:after,
+						.ai-wgt__circle--with-plus:hover .ai-wgt__circle--with-plus:before {
+							margin-left: initial;
+							margin-right: initial;
+							right: 45px;
+						}
+						.ai-wgt__toggle-visible-title {
+							display: none;
+							transform: inherit;
+							transition-delay: 1ms;
 						}
 						
 						/* STATE => STATUS: OPEN */
@@ -499,28 +513,27 @@
 						.ai-wgt.closed .ai-wgt__account {
 						    display: none;
 						}
-						.ai-wgt.closed + .ai-wgt__toggle-visible-btn {
+						.ai-wgt.closed + .ai-wgt__circle--with-plus {
 						    transform: scaleX(-1);
 						    animation: pulse infinite 1.5s;
 						}
-						.ai-wgt.closed + .ai-wgt__toggle-visible-btn:before {
+						.ai-wgt.closed + .ai-wgt__circle--with-plus:before {
 						    transform: rotate(90deg);
 						}
-						.ai-wgt.closed + .ai-wgt__toggle-visible-btn:after {
+						.ai-wgt.closed + .ai-wgt__circle--with-plus:after {
 						    transform: rotate(0deg);
 						}
-						
-						/*.ai-wgt.closed + .ai-wgt__toggle-visible-btn:hover {
+						.ai-wgt.closed + .ai-wgt__circle--with-plus.with-hint:hover {
 							animation: none;
 							width: 282px;
-                     border-radius: 40px;
-						}*/
-						
-						.ai-wgt__toggle-visible-btn:hover .ai-wgt__toggle-visible-btn:after,
-						.ai-wgt__toggle-visible-btn:hover .ai-wgt__toggle-visible-btn:before {
-							margin-left: initial;
-							margin-right: initial;
-							right: 45px;
+							border-radius: 40px;
+						}
+						.ai-wgt.closed + .ai-wgt__circle--with-plus.with-hint:hover .ai-wgt__toggle-visible-title {
+							height: 100%;
+							display: flex;
+							justify-content: center;
+							align-items: center;
+							animation:focus-in-expand 0.6s cubic-bezier(.25,.46,.45,.94) both;
 						}
 						
 						/* CSS HELPERS */
@@ -608,6 +621,19 @@
 						        box-shadow: 0 0 0 0 rgba(90, 153, 212, 0);
 						    }
 						}
+						@keyframes focus-in-expand{
+							0%{
+								letter-spacing: -0.5em;
+								-webkit-filter: blur(12px);
+								filter: blur(12px);
+								opacity: 0;
+							}
+							100%{
+								-webkit-filter: blur(0);
+								filter: blur(0);
+								opacity: 1;
+							}
+						}
 						
 						/* MEDIA */
 						@media (max-width: 575px) and (orientation: portrait) {
@@ -661,7 +687,7 @@
 			);
 
 			container = document.getElementById('aiWidget');
-			const toggleVisibleBtn = document.getElementById('aiWidgetToggleBtn');
+			toggleVisibleBtn = document.getElementById('aiWidgetToggleBtn');
 
 			toggleVisibleBtn.addEventListener('click', toggleWidgetVisibility);
 		};
@@ -1431,9 +1457,7 @@
 		};
 
 
-		const checkedFunctions = {
-			addToBasketFn, likeFn, dislikeFn, myClothesFn,
-		};
+		const checkedFunctions = { addToBasketFn, likeFn, dislikeFn, myClothesFn };
 
 		// Проверка настроек для виджета:
 		const settingsErrors = checkSettings(key, checkedFunctions);

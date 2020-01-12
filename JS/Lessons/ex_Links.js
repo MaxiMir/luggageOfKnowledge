@@ -1,5 +1,7 @@
 // MERN <-> MONGO DB + EXPRESS + REACT + NODE JS
 
+// LINK: https://github.com/vladilenm/mern-full-course
+
 //
 /**
    WebStorm -> create project -> mern-course
@@ -33,6 +35,7 @@
 // + FOLDER: /mern-course/config
 // + FOLDER: /mern-course/routes
 // + FOLDER: /mern-course/models
+
 
 
 // + FILE: /mern-course/config/default.json:
@@ -188,29 +191,36 @@ const schema = new Schema({
 
 module.exports = model('User', schema);
 
+// DELETE yarn.lock
+// DELETE App.css
+// DELETE App.text.js
+// DELETE logo.svg
 
 // $ npx create-react-app client // с указанием папки client
 // $ cd client/
 // $ rm -rf node_modules/
 // $ rm -rf .git
-// DELETE yarn.lock
-// DELETE App.css
-// DELETE App.text.js
-// DELETE logo.svg
 // $ npm i
-// $ npm install materialize-css@next
-
+// $ npm i materialize-css@next
+// $ npm i react-router-dom
 
 
 // FILE: /mern-course/client/src/App.js:
 
 import React from 'react';
+import {BrowserRouter as Router} from 'react-router-dom';
+import {useRoutes} from './routes';
 import 'materialize-css';
 
+
 function App() {
-	return (
-		<div>
-			<h1>Hello</h1>
+  const routes = useRoutes(false);
+
+  return (
+		<div className="container">
+      <Router>
+        {routes}  
+      </Router>
 		</div>
 	)
 }
@@ -222,5 +232,107 @@ export default App;
 // FILE: /mern-course/client/src/index.css:
 /**
 	@import "~materialize-css/dist/css/materialize.min.css";
-
  */
+
+
+// + FOLDER: /mern-course/client/pages/
+
+// + FILE: /mern-course/client/pages/AuthPage.js:
+import React from 'react';
+
+export const AuthPage = () => {
+	return (
+		<div className="row">
+      <div className="col s6 offset-s3">
+        <h1>Сократи ссылку</h1>
+        <div className="card blue darken-1">
+          <div className="card-content white-text">
+            <span className="card-title">Авторизация</span>
+            <div>
+
+              <div className="input-field">
+                <input 
+                  placeholder="Введите email" 
+                  id="email"
+                  type="text"
+                  className="validate"
+                />
+                <label htmlFor="email">Email</label>  
+              </div>
+
+
+            </div>
+          </div>
+          <div className="card-action">
+            <button className="btn yellow darken-4">Войти</button>
+            <button className="btn grey lighten-1 black-text">Регистрация</button>
+          </div>
+        </div>
+      </div>
+		</div>
+	);
+};
+
+
+
+// + FILE: /mern-course/client/pages/CreatePage.js:
+import React from 'react';
+
+export const CreatePage = () => {
+	return (
+		<div>
+			<h1>Create Page</h1>
+		</div>
+	);
+};
+
+
+
+// + FILE: /mern-course/client/pages/DetailPage.js:
+import React from 'react';
+
+export const DetailPage = () => {
+	return (
+		<div>
+			<h1>Detail Page</h1>
+		</div>
+	);
+};
+
+
+
+// + FILE: /mern-course/client/src/routes.js:
+import React from 'react';
+import {Switch, Route, Redirect} from 'react-router-dom';
+import {LinksPage} from './pages/LinksPage';
+import {CreatePage} from './pages/CreatePage';
+import {DetailPage} from './pages/DetailPage';
+import {AuthPage} from './pages/AuthPage';
+
+export const useRoutes = isAuthenticated => {
+	if (isAuthenticated) {
+		return (
+				<Switch>
+					<Route path="/links" exact>
+						<LinksPage />
+					</Route>
+		      <Route path="/create" exact>
+		        <CreatePage />
+		      </Route>
+		      <Route path="/detail/:id">
+		        <DetailPage />
+		      </Route> 
+          <Redirect to="/create" />
+				</Switch>
+		);
+	}
+	
+	return (
+		<Switch>
+      <Route path="/" exact>
+        <AuthPage />
+      </Route>
+      <Redirect to="/" />
+		</Switch>
+	);
+};
