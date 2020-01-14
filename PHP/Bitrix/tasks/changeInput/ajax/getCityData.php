@@ -31,6 +31,7 @@
     echo json_encode($response);
     
     
+    
     /**
      * @param $cityName
      * @return bool || данные по городу

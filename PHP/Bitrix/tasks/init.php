@@ -11,7 +11,7 @@
     ###### @ HELPERS @ ######
     
     /**
-     * Распечатываем любое количество аргументов
+     * Распечатка для дебага
      *
      * @param mixed ...$args
      */
@@ -28,7 +28,6 @@
         
         echo '</pre>';
     }
-    
     
     /**
      * Обрезаем строку на заданную длину с добавлением маркера
@@ -57,7 +56,7 @@
     {
         $result = false;
         $obCache = new CPHPCache();
-        $cachePath = '/' . SITE_ID . '/' . $cacheId;
+        $cachePath = '/'.SITE_ID.'/'.$cacheId;
         
         if ($obCache->InitCache($timeSeconds, $cacheId, $cachePath)) {
             $vars = $obCache->GetVars();
@@ -68,40 +67,6 @@
         }
         
         return $result;
-    }
-    
-    
-    /**
-     * Массив данных из СSV файла
-     *
-     * @param $fileName
-     * @return array
-     */
-    function getCSVData($fileName)
-    {
-        $csvData = [];
-        
-        if (!file_exists($fileName)) {
-            die('Файл не найден');
-        }
-        
-        $csvFile = new SplFileObject($fileName);
-        
-        while (!$csvFile->eof()) {
-            try {
-                $data = $csvFile->fgetcsv(';');
-                
-                if (empty($data[0])) {
-                    continue;
-                }
-                
-                $csvData[] = $data;
-            } catch (Exception $e) {
-                die($e->getMessage());
-            }
-        }
-        
-        return $csvData;
     }
     
     
@@ -214,7 +179,7 @@
             "ID",
             "NAME",
             "SECTION_PAGE_URL",
-            "IBLOCK_SECTION_ID"
+            "IBLOCK_SECTION_ID",
         ];
         $arFilter = [
             "IBLOCK_ID" => CATALOG_I_BLOCK_ID,
@@ -271,7 +236,7 @@
         $arFilter = [
             "IBLOCK_ID" => $iBlockID,
             "ACTIVE" => "Y",
-            "ID" => $elementID
+            "ID" => $elementID,
         ];
         
         $prodDBData = CIBlockElement::GetList([], $arFilter, false, false, $arSelect);
@@ -376,7 +341,7 @@
             "IBLOCK_ID" => CATALOG_I_BLOCK_ID,
             "!UF_SHOW_IN_SECT_MENU" => false,
             "GLOBAL_ACTIVE" => "Y",
-            "ACTIVE" => "Y"
+            "ACTIVE" => "Y",
         ];
         
         $sectionsDBData = CIBlockSection::GetList($arSort, $arFilter, false, $arSelect);
@@ -434,7 +399,7 @@
             "IBLOCK_ID" => CATALOG_I_BLOCK_ID,
             "SECTION_ID" => $sectionID,
             "GLOBAL_ACTIVE" => "Y",
-            "ACTIVE" => "Y"
+            "ACTIVE" => "Y",
         ];
         
         $sectionsDBData = CIBlockSection::GetList($arSort, $arFilter, false, $arSelect);
@@ -640,7 +605,7 @@
         $arFilter = [
             "IBLOCK_ID" => CATALOG_I_BLOCK_ID,
             'ACTIVE' => 'Y',
-            "SECTION_CODE" => $sectionCode
+            "SECTION_CODE" => $sectionCode,
         ];
         $arSelect = [
             'ID',

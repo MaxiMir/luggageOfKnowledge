@@ -1,4 +1,3 @@
-
 $(document).on('DOMSubtreeModified', e => {
 	const currElem = $(e.target);
 	const isCityInput = currElem.hasClass('bx-ui-sls-fake');
@@ -33,8 +32,7 @@ $(document).on('DOMSubtreeModified', e => {
 		},
 		success: data => {
 			if (!data) {
-				delay(2000)
-					.then(hideLoader);
+				delay(2000).then(hideLoader);
 				return;
 			}
 			
