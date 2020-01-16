@@ -1,32 +1,121 @@
 document.addEventListener('DOMContentLoaded', () => {
 	const filterInputs = document.getElementsByClassName('input-filter');
+	const checkboxContainers = document.getElementsByClassName('input-wrap');
+	
+	
+	
 	
 	/**
 	 * Обработчик ввода текста в input
 	 *
 	 * @param currentTarget
 	 */
-	const filterInputHandler = ({ currentTarget }) => {
-		const { filterId } = currentTarget.dataset;
+	const keyupInputHandler = ({ currentTarget }) => {
 		const value = currentTarget.value;
 		const preparedValue = value.trim().toLowerCase();
-		const checkboxesContainer = currentTarget.nextElementSibling;
-		const labels = checkboxesContainer.getElementsByClassName('bx_filter_param_label');
-		const noResultBlock = document.getElementById(`noResult${filterId}`);
+		
+		const container = currentTarget.closest('.bx_filter_parameters_box');
+		const labels = container.getElementsByClassName('bx_filter_param_label');
+		const noResultBlock = container.querySelector('.no-result');
 		
 		if (!preparedValue) {
-			toggleElementsVisibility(labels);
+			toggleVisibility(labels);
 			return;
 		}
 		
 		const { elementsToShow, elementsToHide } = splitCheckboxesByHidden(labels, preparedValue);
 		
-		toggleElementsVisibility(elementsToShow);
-		toggleElementsVisibility(elementsToHide, false);
+		toggleVisibility(elementsToShow);
+		toggleVisibility(elementsToHide, false);
 		
-		if (noResultBlock) {
-			noResultBlock.hidden = elementsToShow.length > 0;
+		noResultBlock.hidden = elementsToShow.length > 0;
+	};
+	
+	/**
+	 * Обработчик фокуса на input
+	 *
+	 * @param currentTarget
+	 */
+	const focusInputHandler = ({ currentTarget }) => {
+		const container = currentTarget.closest('.bx_filter_parameters_box');
+		
+		initContainer(container);
+	};
+	
+	/**
+	 *
+	 * @param container
+	 */
+	const initContainer = container => {
+		const isNotInitContainer = !container.dataset.init;
+		
+		if (!isNotInitContainer) {
+			return;
 		}
+		
+		const hiddenCheckboxContainer = container.querySelector(".hidden_values");
+		const expandBlock = container.querySelector(".inner_expand_text");
+		
+		if (hiddenCheckboxContainer) {
+			showHiddenCheckboxes(hiddenCheckboxContainer);
+		}
+		
+		if (expandBlock) {
+			expandBlock.remove();
+		}
+		
+		container.dataset.init = "true";
+	};
+	
+	const checkboxContainerHandler = ({currentTarget}) => {
+		for (let checkboxContainer of checkboxContainers) {
+			const isCurrentContainer = Object.is(checkboxContainer, currentTarget);
+			
+			if (isCurrentContainer) {
+				continue;
+			}
+			
+			const labels = checkboxContainer.querySelectorAll('.bx_filter_param_label.disabled');
+			
+			if (!labels.length) {
+				continue;
+			}
+			
+			const container = checkboxContainer.closest('.bx_filter_parameters_box');
+			
+			initContainer(container);
+			sortLabelsByActive(checkboxContainer, labels);
+		}
+	};
+	
+	const sortLabelsByActive = (checkboxContainer, collection) => {
+		collection.forEach(label => {
+			const prevElement = label.previousElementSibling;
+			const isInput = prevElement && prevElement.tagName.toLowerCase() === 'input';
+			
+			if (isInput) {
+				//checkboxContainer.append(prevElement);
+			}
+			
+			//checkboxContainer(label);
+			
+		});
+	};
+	
+	/**
+	 * Показывает скрытые чекбоксы
+	 *
+	 * @param hiddenCheckboxContainer
+	 */
+	const showHiddenCheckboxes = hiddenCheckboxContainer => {
+		const containerClassList = hiddenCheckboxContainer.classList;
+		
+		if (!hiddenCheckboxContainer || containerClassList.contains("active")) {
+			return;
+		}
+		
+		containerClassList.add("active");
+		toggleVisibility(hiddenCheckboxContainer, false);
 	};
 	
 	/**
@@ -43,7 +132,10 @@ document.addEventListener('DOMContentLoaded', () => {
 		[...labels].forEach(label => {
 			const span = label.querySelector('.bx_filter_param_text');
 			const spanPrepareText = span.innerText.toLowerCase();
-			const data = ~spanPrepareText.indexOf(value) ? elementsToShow : elementsToHide;
+			const data = ~spanPrepareText.indexOf(value)
+					? elementsToShow
+					: elementsToHide;
+			
 			data.push(label);
 		});
 		
@@ -53,23 +145,31 @@ document.addEventListener('DOMContentLoaded', () => {
 	/**
 	 * Переключает видимость элементов
 	 *
-	 * @param collection
+	 * @param elements
 	 * @param isShow
 	 */
-	const toggleElementsVisibility = (collection, isShow = true) => {
+	const toggleVisibility = (elements, isShow = true) => {
 		const display = isShow ? 'block' : 'none';
 		
-		if (!collection.length) {
+		if (!elements.length) {
 			return;
 		}
 		
-		[...collection].forEach(elem => elem.style.display = display);
+		if (elements instanceof HTMLElement) {
+			elements.style.display = display;
+		}
+		
+		[...elements].forEach(elem => elem.style.display = display);
 	};
-	
 	
 	if (filterInputs) {
 		for (let filterInput of filterInputs) {
-			filterInput.addEventListener('keyup', filterInputHandler);
+			filterInput.addEventListener('focus', focusInputHandler);
+			filterInput.addEventListener('keyup', keyupInputHandler);
+		}
+		
+		for (let checkboxContainer of checkboxContainers) {
+			checkboxContainer.addEventListener('click', checkboxContainerHandler);
 		}
 	}
 });

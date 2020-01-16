@@ -113,6 +113,15 @@
         '_garderoboAssistantTutorialDone', '1',
     );
     
+    // HELPERS:
+    /**
+     * Возвращает отформатированную цену
+     *
+     * @param price
+     * @returns {string}
+     */
+    const formatPrice = price => Number((+ price).toFixed(1)).toLocaleString();
+    
     // RESPONSES:
     
     /**
@@ -142,12 +151,18 @@
         fetchSettings.headers['Authorization'] = `Bearer ${sessionKey}`;
       }
       console.log(
-          `%cGET RESPONSE: URL: "${uri}" PAGE DATA: %o`,
+          `%cGET RESPONSE URL: "${uri}" PAGE DATA: %o`,
           'color: orange; font-size: small', fetchSettings,
       );
       const response = await fetch(uri, fetchSettings);
+      const json = response.json();
       
-      return response.json();
+      console.log(
+          `%cRESPONSE: %o`,
+          'color: blue; font-size: small', json
+      );
+      
+      return json;
     };
     
     /**
@@ -943,7 +958,7 @@
 				<div class="fl-column-center ai-wgt__text">
 					<div class="bg bg--hanger mb-20"></div>
 					<div class="text--center mb-25">Вы всегда можете просмотреть список понравившихся вещей, для этого нажмите кнопку</div>
-					<div class="ai-wgt__link--example fl-center mb-30">Мои вещи</div>
+					<div class="ai-wgt__link--example fl-center mb-30" style="display: none">Мои вещи</div>
 					<div class="ai-wgt__call text--big">Ну что, начнем?</div>
 					<div class="ai-wgt__progress">
 						<div class="ai-wgt__progress-line"></div>
@@ -1049,7 +1064,7 @@
 					</div>
 				</div>
 				<div class="ai-wgt__footer">
-					<div class="ai-wgt__link ai-wgt__account">Мои вещи</div>
+					<div class="ai-wgt__link ai-wgt__account" style="display: none">Мои вещи</div>
 				</div>
 				<style>
 					.ai-wgt__content {
@@ -1091,7 +1106,6 @@
 					}
 					.ai-wgt__footer {
 						 width: 100%;
-						 height: 110px;
 						 display: flex;
 						 justify-content: center;
 					}
@@ -1115,7 +1129,6 @@
 							margin-top: initial;
 						}
 						.ai-wgt__footer {
-							height: 100px;
 							align-items: center;
 						}
 					}
@@ -1153,28 +1166,29 @@
      */
     const getChoiceOfClothesData = () => {
       const {
-        type, id, img_src: imgSrc, price,
+        type, id, img_src: imgSrc, price, url
       } = state.current.pageData;
       
-      const formattedPrice = price.split('.').join(' ');
+      const formattedPrice = !price ? null : formatPrice(price);
       
       const html = `
-						<div class="ai-wgt__price text--big fl-center">${formattedPrice}₽</div>
-				      <div class="ai-wgt__dislike ai-wgt__circle"></div>
-				      <div class="ai-wgt__like ai-wgt__circle"></div>
-				      <div class="stage">
-						  <div class="heart is-active"></div>
-						</div>
-				      <div class="ai-wgt__purchases-count ai-wgt__circle horizontal-center"></div>
-					</div>
-				</div>
-				<div class="ai-wgt__footer">
-					<div class="ai-wgt__link ai-wgt__account">Мои вещи</div>
-				</div>
-            <style>
+              ${!formattedPrice ? '' : '<div class="ai-wgt__price text--big fl-center">${formattedPrice}₽</div>'}
+              <div class="ai-wgt__dislike ai-wgt__circle"></div>
+              <div class="ai-wgt__like ai-wgt__circle"></div>
+              <div class="stage">
+              <div class="heart is-active"></div>
+              </div>
+                <div class="ai-wgt__purchases-count ai-wgt__circle horizontal-center" style="display: none;"></div>
+            </div>
+          </div>
+          <div class="ai-wgt__footer">
+            <div class="ai-wgt__link ai-wgt__account" style="display: none">Мои вещи</div>
+          </div>
+          <style>
 					.ai-wgt__content {
 					    background-image:url(${imgSrc});
-					    background-size: contain;
+					    background-size: cover;
+					    cursor: pointer;
 					}
 					.ai-wgt__price {
 					    position: absolute;
@@ -1212,7 +1226,6 @@
 					}
 					.ai-wgt__footer {
 						 width: 100%;
-						 height: 110px;
 						 display: flex;
 						 justify-content: center;
 					}
@@ -1259,9 +1272,16 @@
         setState(state.next);
       };
       
+      const bodyLinkHandler = () => {
+        if (url) {
+          window.open(url, '_blank');
+        }
+      };
+      
       return {
         html,
         handlers: {
+          '.ai-wgt__content': bodyLinkHandler,
           '.ai-wgt__like': () => {
             if (likeFn) {
               likeFn(id);
@@ -1317,7 +1337,7 @@
 					       <span class="all-progress">10</span>
 					   </span>
 					</div>
-					<div class="ai-wgt__link ai-wgt__link--big mb-20 bg bg--things">
+					<div class="ai-wgt__link ai-wgt__link--big mb-20 bg bg--things" style="display: none">
 					   Мои вещи
 					   <span class="user-things-count">${userThingsCount}</span>
 					</div>
@@ -1482,7 +1502,7 @@
     // Определяем нужно ли показывать виджет на странице:
     const isShowWidget = await checkToShowWidget();
     
-    if (isShowWidget) {
+    if (!isShowWidget) {
       return;
     }
     
