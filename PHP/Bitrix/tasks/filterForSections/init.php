@@ -16,12 +16,14 @@
             "IBLOCK_ID" => IBLOCK_ID_CATALOG,
         ];
         
-        ["select" => $selectProduct, "filter" => $filterProduct, "sort" => $sortProduct] = $params;
+        ["select" => $selectProduct, "filter" => $filterProduct, "sort" => $sortProduct, "limit" => $limit] = $params;
         
         $select = $selectProduct ?: ["*"];
         $filter = !$filterProduct ? $filterDefault : array_replace($filterDefault, $filterProduct);
         $sort = $sortProduct ?? [];
-        $productDBData = CIBlockElement::Getlist($sort, $filter, false, false, $select);
+        $limitElements = !$limit ? false : ["nPageSize" => $limit];
+        
+        $productDBData = CIBlockElement::Getlist($sort, $filter, false, $limitElements, $select);
         
         while ($element = $productDBData->GetNext()) {
             $isSingleColumnQuery = sizeof($select) === 1 && $select !== ["*"];

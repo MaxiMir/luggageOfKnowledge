@@ -129,6 +129,7 @@
         method: isGetRequest ? 'GET' : 'POST',
         headers: {
           Accept: 'application/json',
+          'Content-Type': 'application/json',
           'X-Api-Key': key,
         },
       };
@@ -138,7 +139,7 @@
       }
       
       if (uri !== settings.uriForRequest.authorization) {
-        fetchSettings.headers['Authorization'] = sessionKey;
+        fetchSettings.headers['Authorization'] = `Bearer ${sessionKey}`;
       }
       console.log(
           `%cGET RESPONSE: URL: "${uri}" PAGE DATA: %o`,
@@ -415,9 +416,7 @@
 						    font-weight: normal;
 						}
 						.ai-wgt__body {
-						    display: flex;
-						    justify-content: center;
-						    align-items: center;
+						    width: 100%;
 						}
 						.ai-wgt__content {
 						    width: 280px;
@@ -500,7 +499,9 @@
 							transform: inherit;
 							transition-delay: 1ms;
 						}
-						
+						.ai-wgt__footer {
+						    max-height: 110px;
+						}
 						/* STATE => STATUS: OPEN */
 						.ai-wgt.open {
 						    background: rgba(255, 255, 255, 0.6);
@@ -1041,10 +1042,10 @@
 					<div class="ai-wgt__answers fl-column-center">
 						<div class="ai-wgt__answer ai-wgt__link mb-15" data-action="4">Соглашусь</div>
 						<div class="ai-wgt__answer ai-wgt__link mb-15" data-action="1">Не про меня</div>
-						<div class="ai-wgt__answer ai-wgt__link mb-15" data-action="0">Не знаю</div>
+						<div class="ai-wgt__answer ai-wgt__link mb-15" data-action="2">Не знаю</div>
 					</div>
 				</div>
-						<div class="ai-wgt__next-page ai-wgt__circle ai-wgt__circle--mini"></div>
+						<div class="ai-wgt__next-page ai-wgt__circle ai-wgt__circle--mini" data-action="0"></div>
 					</div>
 				</div>
 				<div class="ai-wgt__footer">
@@ -1129,14 +1130,10 @@
         setState(state.next);
       };
       
-      const nextPageBtnHandler = async () => {
-        setState(state.next);
-      };
-      
       return {
         html,
         handlers: {
-          '.ai-wgt__next-page': nextPageBtnHandler,
+          '.ai-wgt__next-page': answerBtnHandler,
           '.ai-wgt__answer': answerBtnHandler,
           '.ai-wgt__account': () => {
             if (myClothesFn) {
@@ -1158,6 +1155,7 @@
       const {
         type, id, img_src: imgSrc, price,
       } = state.current.pageData;
+      
       const formattedPrice = price.split('.').join(' ');
       
       const html = `
@@ -1176,6 +1174,7 @@
             <style>
 					.ai-wgt__content {
 					    background-image:url(${imgSrc});
+					    background-size: contain;
 					}
 					.ai-wgt__price {
 					    position: absolute;
@@ -1483,7 +1482,7 @@
     // Определяем нужно ли показывать виджет на странице:
     const isShowWidget = await checkToShowWidget();
     
-    if (!isShowWidget) {
+    if (isShowWidget) {
       return;
     }
     
