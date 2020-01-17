@@ -78,15 +78,16 @@ window.analytics = createAnalytics();
 // + FOLDER /dist/
 // + FOLDER /webpack-course-2020/src/:
 // MOVE TO -> /webpack-course-2020/src/:
-// analitics.js
-// index.js
-// Post.js
-// MOVE TO -> /webpack-course-2020/dist/:
-// index.html
+  // analitics.js
+  // index.js
+  // Post.js
+  // index.html
 
 
 // $ npm init
 // $ npm install -D webpack webpack-cli // -D - зависимость для разрабоки
+// $ npm install -D html-webpack-plugin // плагин для взаимодействия с html
+// $ npm install -D clean-webpack-plugin // плагин для очистки
 
 
 
@@ -118,6 +119,7 @@ console.log("title", post.toString());
 
 // + FILE /webpack-course-2020/src/webpack.config.js:
 const path = require('path');
+const HTMLWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
   mode: 'development', // mode по умолчанию (не минифированная версия у bundle.js)
@@ -129,26 +131,31 @@ module.exports = {
   output: { // куда складывать результаты выполнения webpack-ом
     filename: '[name].bundle.js', // навзвание результирующего файла. Паттерн - название файла.[contenthash] - хэш исходя из содержимого файла
     path: path.resolve(__dirname, 'dist') // конечная директория для результирующих файлов
-  }
-}
+  },
+  plugin: [ // массив с плагинами
+    new HTMLWebpackPlugin({
+      template: "./src/index.html" // путь до шаблона
+    })
+  ]
+};
 
 
-// FILE: /webpack-course-2020/dist/index.html:
+// FILE: /webpack-course-2020/src/index.html:
 /**
  <!DOCTYPE html>
  <html lang="en">
  <head>
- <meta charset="UTF-8">
- <meta name="viewport" content="width=device-width, initial-scale=1.0">
- <meta http-equiv="X-UA-Compatible" content="ie=edge">
- <title>Webpack</title>
- <script src="analitics.bundle.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Webpack</title>
  </head>
  <body>
- <div class="container">
- <h1>Webpack Container</h1>
- <script src="main.bundle.js"></script>
- </div>
+
+  <div class="container">
+    <h1>Webpack Container</h1>
+  </div>
+
  </body>
  </html>
  */

@@ -27,18 +27,14 @@
         $propID = false;
         $data = [];
         
-        $prodID = getLastAddProductID();
+        $resDB = CIBlockPropertyEnum::GetList([], ["IBLOCK_ID" => $iBlockID, "CODE" => $propCode]);
         
-        if ($prodID) {
-            $resDB = CIBlockPropertyEnum::GetList([], ["IBLOCK_ID" => $iBlockID, "CODE" => $propCode]);
-            
-            while (['ID' => $id, 'PROPERTY_ID' => $propertyID, 'VALUE' => $value] = $resDB->Fetch()) {
-                if (!$propID) {
-                    $propID = $propertyID;
-                }
-                
-                $data[$value] = $id;
+        while (['ID' => $id, 'PROPERTY_ID' => $propertyID, 'VALUE' => $value] = $resDB->Fetch()) {
+            if (!$propID) {
+                $propID = $propertyID;
             }
+            
+            $data[$value] = $id;
         }
         
         return compact("propID", "data");
@@ -52,7 +48,7 @@
      * @return int
      * @throws Exception
      */
-    function createPropertiesValues(string $propName, array $newPropValues): int
+    function createListPropertiesValues(string $propName, array $newPropValues): int
     {
         $countNewProps = 0;
         ["propID" => $propID, "data" => $currentPropData] = getListPropData($propName);

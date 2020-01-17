@@ -1,7 +1,7 @@
 ((window) => {
   /** TODO:
    * программная обработка result: result': 'error'
-   * IPHONE 5
+   * Поправить адаптивность
    */
   
   window.garderoboAssistantWidget = {};
@@ -159,7 +159,7 @@
       
       console.log(
           `%cRESPONSE: %o`,
-          'color: blue; font-size: small', json
+          'color: crimson; font-size: small', await json
       );
       
       return json;
@@ -698,7 +698,6 @@
 							    position: absolute;
 							    bottom: 0;
 							}
-					
 						}
 					</style>
              `,
@@ -1043,7 +1042,7 @@
     };
     
     /**
-		 * Возвращает HTML и обработчики для страницы "Вопрос"
+     * Возвращает HTML и обработчики для страницы "Вопрос"
      *
      * @returns {*}
      */
@@ -1172,7 +1171,7 @@
       const formattedPrice = !price ? null : formatPrice(price);
       
       const html = `
-              ${!formattedPrice ? '' : '<div class="ai-wgt__price text--big fl-center">${formattedPrice}₽</div>'}
+              ${!formattedPrice ? '' : `<div class="ai-wgt__price text--big fl-center">${formattedPrice}₽</div>`}
               <div class="ai-wgt__dislike ai-wgt__circle"></div>
               <div class="ai-wgt__like ai-wgt__circle"></div>
               <div class="stage">
@@ -1189,6 +1188,10 @@
 					    background-image:url(${imgSrc});
 					    background-size: cover;
 					    cursor: pointer;
+					    animation: fade-in 1s ease-out both;
+					}
+					.ai-wgt__content--changed {
+					    animation: fade-out 1s ease-out both;
 					}
 					.ai-wgt__price {
 					    position: absolute;
@@ -1263,17 +1266,42 @@
 							margin-top: 10px;
 						}
 					}
+					@keyframes fade-in {
+            0% {
+              opacity: 0;
+            }
+            100% {
+              opacity: 1;
+            }
+          }
+					@keyframes fade-out {
+            0% {
+              opacity: 1;
+            }
+            100% {
+              opacity: 0;
+            }
+          }
             </style>
          `;
       
       const userActionHandler = (action) => {
         const postData = {type, id, action};
+        const contentBlock = container.querySelector('.ai-wgt__content');
+        contentBlock.classList.add('ai-wgt__content--changed');
         sendUserData(postData);
         setState(state.next);
       };
       
-      const bodyLinkHandler = () => {
-        if (url) {
+      const bodyLinkHandler = ({currentTarget, target}) => {
+        const isBodyClick = Object.is(currentTarget, target);
+        const isPriceClick = target.classList.contains("ai-wgt__price");
+        
+        if (!url) {
+          return;
+        }
+        
+        if (isPriceClick || isBodyClick) {
           window.open(url, '_blank');
         }
       };
@@ -1502,7 +1530,7 @@
     // Определяем нужно ли показывать виджет на странице:
     const isShowWidget = await checkToShowWidget();
     
-    if (!isShowWidget) {
+    if (isShowWidget) {
       return;
     }
     
