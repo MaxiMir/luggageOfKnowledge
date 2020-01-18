@@ -1288,7 +1288,9 @@
       const userActionHandler = (action) => {
         const postData = {type, id, action};
         const contentBlock = container.querySelector('.ai-wgt__content');
+        
         contentBlock.classList.add('ai-wgt__content--changed');
+        
         sendUserData(postData);
         setState(state.next);
       };
