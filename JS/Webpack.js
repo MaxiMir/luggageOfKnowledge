@@ -1,6 +1,6 @@
-// URL: https://github.com/vladilenm/webpack-2020
+// LINK: https://github.com/vladilenm/webpack-2020
 
-// WITHOUNT Webpack:
+// @ WITHOUNT Webpack:
 
 // + FILE /webpack/index.html:
 /**
@@ -76,17 +76,18 @@ function createAnalytics() {
 window.analytics = createAnalytics();
 
 
-// WITH Webpack:
+
+// @ WITH Webpack:
 
 // Дефолтные расширения - js и json.
 
 
 // + FOLDER /webpack/dist/
+// + FOLDER /webpack/src/
 // + FOLDER /webpack/src/styles/
 // + FOLDER /webpack/src/assets/
 // + FOLDER /webpack/src/assets/fonts
-// + FOLDER /webpack/src/:
-// MOVE TO -> /webpack/src/:
+// MOVE FILES TO -> /webpack/src/:
 // analitics.js
 // index.js
 // Post.js
@@ -95,21 +96,23 @@ window.analytics = createAnalytics();
 
 // $ npm init
 
-// $ npm install -D webpack webpack-cli // -D - зависимость для разрабоки
+// $ npm install -D webpack webpack-cli // -D - зависимость для разрабоки (<-> --save-dev)
 
 // $ npm install -D html-webpack-plugin // плагин для взаимодействия с html
-// $ npm install -D clean-webpack-plugin // плагин для очистки
+// $ npm install -D clean-webpack-plugin // плагин для очистки старых сбилженных файлов
 
 // $ npm install -D style-loader css-loader // плагины для работы с css файлами
 // $ npm i -D less less-loader // плагин препроцессора less и плагин для работы с less файлами
 // $ npm i -D node-sass sass-loader // плагин препроцессора sass и плагин для работы с sass файлами
-// $ npm install -D file-loader // плагин для работы с файлами
 // $ npm install normalize.css // нормализация css
+// $ npm install --save-dev mini-css-extract-plugin // плагин для выноса css в файлы (вместо <style> в <head>)
+
+// $ npm install -D file-loader // плагин для работы с файлами
 // $ npm install -D xml-loader // плагин для работы с xml
 // $ npm install -D csv-loader // плагин для работы с csv
 // $ npm install -D papaparse // зависимость для csv плагина
+
 //  $ npm install -D copy-webpack-plugin // плагин для копирования файлов
-// $ npm install --save-dev mini-css-extract-plugin // --save-dev <-> -D плагин для выноса css в файлы (вместо <style> в <head>)
 
 // $ npm i -S jquery // -S (по умолч. зависимость для приложения)
 
@@ -139,16 +142,16 @@ window.analytics = createAnalytics();
 
 // + FILE: /webpack/.eslintrc:
 {
-  'parsers': 'babel-eslint', // указываем, что работаем с парсером babel-eslint
-    'rules': {
-  'no-unused-vars': 'warn'
+  "parser": "babel-eslint",
+    "rules": {
+  "no-unused-vars": "warn"
 },
-  'env': {
-  'es6': true,
-      'browser': true, // указываем, что работаем в браузере
+  "env": {
+  "es6": true,
+      "browser": true // указываем, что работаем в браузере
 },
-  'extends': [
-  'eslint:recommended'
+  "extends": [
+  "eslint:recommended"
 ]
 }
 
@@ -175,7 +178,7 @@ window.analytics = createAnalytics();
 
 
 // + FILE: /webpack/src/assets/data.csv:
-
+// 1/2/09 6:17	Product1	1200	Mastercard	carolina	Basildon	England	United Kingdom	1/2/09 6:00	1/2/09 6:08	51.5	-1.1166667
 
 
 
@@ -203,7 +206,6 @@ window.analytics = createAnalytics();
  <title>Webpack</title>
  </head>
  <body>
- 
  <div class="container">
  <h1>Webpack Container</h1>
  
@@ -232,17 +234,17 @@ window.analytics = createAnalytics();
  
  body {
   font-family: 'Roboto', sans-serif;
-}
+ }
  
  .container {
   padding-top: 2rem;
   max-width: 1000px;
   margin: 0 auto;
-}
+ }
  
  h1 {
   text-align: center;
-}
+ }
  
  .logo {
   background-image: url('../assets/logo.png');
@@ -250,8 +252,10 @@ window.analytics = createAnalytics();
   width: 200px;
   height: 200px;
   margin: 0 auto;
-}
+ }
  */
+
+
 
 // + FILE /webpack/src/styles/less.less:
 /**
@@ -270,12 +274,14 @@ window.analytics = createAnalytics();
 }
  */
 
+
+
 // + FILE: /webpack/src/assets/fonts/roboto.css:
 /**
  @font-fase {
   font-family: 'Roboto';
   src: url('../assets/fonts/Roboto-Regular.ttf) format('truetype);
-}
+ }
  */
 
 
@@ -293,14 +299,12 @@ export default class Post {
       title: this.title,
       date: this.date.toJSON(),
       img: this.img
-    }, null, 2);
+    }, null, 2); // переносы для отображения на странице
   }
 }
 
 // RENAME FILE /webpack/src/analitics.js -> /webpack/src/analitics.ts
 // FILE /webpack/src/analitics.js:
-import * as from 'jquery';
-
 function createAnalytics():object {
   let counter = 0;
   let isDestroyed: boolean = false;
@@ -325,6 +329,10 @@ function createAnalytics():object {
 }
 
 window['analytics'] = createAnalytics();
+
+
+
+// + FILE /webpack/src/features.js:
 async function start() {
   return await Promise.resolve('async is working')
 }
@@ -346,15 +354,13 @@ import('lodash').then(_ => { // динамический import в webpack (lazy
 
 
 
-// + FILE /webpack/src/features.js:
-
 // FILE: /webpack/src/index.js:
 import * as $ from 'jquery'; // импорт jquery
 import Post from './Post';
 import json from './assets/json' // импорт json файла (для .json расширение можно не указывать)
 import logo from './assets/logo.png'; // импорт картинки
-import xml from '@/assets/data.xml' // импорт xml файла c использованием алиаса
-import csv from '@/assets/data.csv' // импорт csv файла
+import xml from '@/assets/data.xml' // импорт xml файла c использованием алиаса в пути
+import csv from '@/assets/data.csv' // импорт csv файла c использованием алиаса в пути
 import './features';
 import './styles/styles.css';
 import './styles/less.less';
@@ -390,7 +396,7 @@ const getOptimizationSettings = () => {
     }
   };
   
-  if (isProd) {
+  if (isProd) { // минификация
     config.minimizer = [
       new OptimizeCssAssetWebpackPlugin(),
       new TerserWebpackPlugin()
@@ -405,9 +411,9 @@ const getFilename = ext => isDev ? `[name].${ext}` : `[name].[hash].${ext}`;
 const getCssLoaders = extra => {
   const loaders = [
     {
-      loader: MiniCssExtractPlugin.loader,
+      loader: MiniCssExtractPlugin.loader, // MiniCssExtractPlugin - добавляет стили в <head> в отдельный файл
       options: {
-        hmr: isDev, // hot module replacement - изменение сущностей перез перезагрузки страницы (если это возможно)
+        hmr: isDev, // hot module replacement - изменение сущностей без перезагрузки страницы (если это возможно)
         reloadAll: true
       }
     },
@@ -419,8 +425,6 @@ const getCssLoaders = extra => {
   }
   
   return loaders;
-  
-  // MiniCssExtractPlugin - добавляет стили в <head> в отдельный файл
 };
 
 const getBabelOptions = preset => {
@@ -482,7 +486,7 @@ const getPlugins = () => {
 
 module.exports = {
   context: path(__dirname, 'src'), // папка с исходниками (src можно не указывать в путях в других настройках)
-  mode: 'development', // mode по умолчанию (не минифированная версия у bundle.js)
+  mode: 'development', // mode по умолчанию (не минифированная версия у JS файлов)
   entry: './index.js', // путь до входного файла приложения
   entry: { // или 2 точки входа:
     main: ['@babel/polyfill', './index.js'], // при сборке использовать полифиллы
@@ -493,7 +497,7 @@ module.exports = {
     path: path.resolve(__dirname, 'dist') // конечная директория для результирующих файлов
   },
   resolve: {
-    extensions: ['.js', '.json', '.png'], // какие расширения считать по умолчанию    
+    extensions: ['.js', '.json'], // какие расширения считать по умолчанию    
     alias: { // создание алиасов для импортов
       '@models': path.resolve(__dir, 'src/models'),
       '@': path.resolve(__dirname, 'src')
@@ -596,7 +600,6 @@ module.exports = {
 import * as $ from 'jquery'; // импорт jquery
 import React from 'react';
 import {render} from 'react-dom';
-import './babel';
 import './styles/styles.css';
 import './styles/less.less';
 
@@ -616,6 +619,7 @@ const App = () => (
 render(<App />, document.getElementById('app'));
 
 
+
 // FILE: /webpack/src/index.html:
 /**
  <!DOCTYPE html>
@@ -628,7 +632,6 @@ render(<App />, document.getElementById('app'));
  <title>Webpack</title>
  </head>
  <body>
- 
  <div id="app"></div>
  </body>
  </html>
