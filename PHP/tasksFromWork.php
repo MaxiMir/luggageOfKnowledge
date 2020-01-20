@@ -114,3 +114,55 @@
 		
 		return ksort($array);
 	}
+    
+    
+    /**
+     * Class UserGeo
+     *
+     * Данные пользователя по IP
+     */
+    class UserGeo
+    {
+        private $ip;
+        private $apiURI = 'http://www.geoplugin.net/json.gp';
+        
+        public function __construct()
+        {
+            $this->ip = $this->defineIP();
+        }
+        
+        public function getIPData()
+        {
+            $content = file_get_contents("{$this->apiURI}?ip={$this->ip}&lang=ru");
+            
+            return json_decode($content);
+        }
+        
+        public function getTown()
+        {
+            $ipData = $this->getIPData();
+            
+            file_put_contents("./test.txt", $this->ip . " : " .  $ipData->geoplugin_city . "\n", FILE_APPEND);
+            
+            return !is_object($ipData) ? false : $ipData->geoplugin_city;
+        }
+        
+        private function defineIP()
+        {
+            [
+                'HTTP_CLIENT_IP' => $clientIP,
+                'HTTP_X_FORWARDED_FOR' => $forwardedFor,
+                'REMOTE_ADDR' => $remoteAddr
+            ] = $_SERVER;
+            
+            if (filter_var($clientIP, FILTER_VALIDATE_IP)) {
+                return $clientIP;
+            }
+            
+            if (filter_var($forwardedFor, FILTER_VALIDATE_IP)) {
+                return $forwardedFor;
+            }
+            
+            return $remoteAddr;
+        }
+    }

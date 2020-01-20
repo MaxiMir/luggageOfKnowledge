@@ -1214,7 +1214,7 @@
     const getChoiceOfClothesData = () => {
       const { type, id, img_src: imgSrc, price, url } = state.current.pageData;
       const formattedPrice = !price ? null : formatPrice(price);
-  
+      
       const html = `
                 ${!formattedPrice ? '' : `<div class="ai-wgt__price text--big fl-center">${formattedPrice}₽</div>`}
                 <div class="ai-wgt__dislike ai-wgt__circle"></div>
@@ -1583,9 +1583,8 @@
         set(target, prop, value) {
           const pagesWithNextState = ['question', 'choiceOfClothes'];
           const stateChanged = prop === 'current';
-          const {pageName, isOpen} = value;
+          const {pageName} = value;
           const isPageWithNextState = pagesWithNextState.includes(pageName);
-          const isOpenedWidget = isOpen;
           
           target[prop] = value;
           
@@ -1595,13 +1594,15 @@
             setTimeout(() => render(html, handlers), 0);
           }
           
-          if (isPageWithNextState && isOpenedWidget) {
+          if (isPageWithNextState) {
             setTimeout(async () => {
               target.next = await getFeedData();
-              console.log(
-                  `%cNEXT: PAGE NAME: "${state.next.pageName}" PAGE DATA:`,
-                  'color: blueviolet; font-size: small', state.next.pageData,
-              );
+              
+              const isProduct = target.next.pageData.type === 2;
+              
+              if (isProduct) {
+                preloadImage();
+              }
             }, 0);
           }
           
@@ -1611,6 +1612,17 @@
       
       return new Proxy(initialState, handler);
     };
+  
+    /**
+     * Вставляет в DOM скрытую картинку
+     */
+    const preloadImage = () => {
+      const imgSrc = state.next.pageData['img_src'];
+      const image = `<img src="${imgSrc}" alt='' style='opacity: 0; height: 0;'>`;
+  
+      container.insertAdjacentHTML('beforeend', image);
+    };
+    
     
     const checkedFunctions = {addToBasketFn, likeFn, dislikeFn, myClothesFn};
     
