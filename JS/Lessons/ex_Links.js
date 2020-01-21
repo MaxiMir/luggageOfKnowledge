@@ -218,9 +218,9 @@ function App() {
 
   return (
 		<div className="container">
-      <Router>
-        {routes}  
-      </Router>
+      		<Router>
+        		{routes}  
+      		</Router>
 		</div>
 	)
 }
@@ -232,6 +232,24 @@ export default App;
 // FILE: /mern-course/client/src/index.css:
 /**
 	@import "~materialize-css/dist/css/materialize.min.css";
+
+	input.yellow-input {
+		border-bottom: 1px solid #fff!important;
+		box-shadow: 0 1px 0 0 #fff!important;
+	}
+
+	input.yellow-input + label {
+		color: #ffffff!important;
+	}
+
+	input.yellow-input:focus + label {
+		color: #ffeb3b!important;
+	}
+
+	input.yellow-input:focus {
+		border-bottom: 1px solid #ffeb3b!important;
+		box-shadow: 0 1px 0 0 #ffeb3b!important;
+	}	
  */
 
 
@@ -241,34 +259,57 @@ export default App;
 import React from 'react';
 
 export const AuthPage = () => {
+	const [form, setForm] = useState({
+		email: '', password: ''
+	});
+
+	const changeHandler = event => {
+		setForm( {...form, [event.target.name]: event.target.value} );
+	}
+
 	return (
 		<div className="row">
-      <div className="col s6 offset-s3">
-        <h1>Сократи ссылку</h1>
-        <div className="card blue darken-1">
-          <div className="card-content white-text">
-            <span className="card-title">Авторизация</span>
-            <div>
+			<div className="col s6 offset-s3">
+				<h1>Сократи ссылку</h1>
+				<div className="card blue darken-1">
+					<div className="card-content white-text">
+						<span className="card-title">Авторизация</span>
+						<div>
 
-              <div className="input-field">
-                <input 
-                  placeholder="Введите email" 
-                  id="email"
-                  type="text"
-                  className="validate"
-                />
-                <label htmlFor="email">Email</label>  
-              </div>
+							<div className="input-field">
+								<input 
+									placeholder="Введите email" 
+									id="email"
+									type="text"
+									className="validate"
+									name="email"
+									className="yellow-input"
+									onChange={changeHandler}
+								/>
+								<label htmlFor="email">Email</label> 
+							</div>
 
+							<div className="input-field">
+								<input 
+									placeholder="Введите пароль" 
+									id="password"
+									type="password"
+									className="password"
+									name="password"
+									className="yellow-input"
+									onChange={changeHandler}
+								/>
+								<label htmlFor="password">Пароль</label> 
+							</div>
 
-            </div>
-          </div>
-          <div className="card-action">
-            <button className="btn yellow darken-4">Войти</button>
-            <button className="btn grey lighten-1 black-text">Регистрация</button>
-          </div>
-        </div>
-      </div>
+						</div>
+					</div>
+					<div className="card-action">
+						<button className="btn yellow darken-4">Войти</button>
+						<button className="btn grey lighten-1 black-text">Регистрация</button>
+					</div>
+				</div>
+			</div>
 		</div>
 	);
 };
@@ -312,27 +353,53 @@ import {AuthPage} from './pages/AuthPage';
 export const useRoutes = isAuthenticated => {
 	if (isAuthenticated) {
 		return (
-				<Switch>
-					<Route path="/links" exact>
-						<LinksPage />
-					</Route>
-		      <Route path="/create" exact>
-		        <CreatePage />
-		      </Route>
-		      <Route path="/detail/:id">
-		        <DetailPage />
-		      </Route> 
-          <Redirect to="/create" />
-				</Switch>
+			<Switch>
+				<Route path="/links" exact>
+					<LinksPage />
+				</Route>
+		      	<Route path="/create" exact>
+		        	<CreatePage />
+		      	</Route>
+		      	<Route path="/detail/:id">
+		        	<DetailPage />
+		      	</Route> 
+          		<Redirect to="/create" />
+			</Switch>
 		);
 	}
 	
 	return (
 		<Switch>
-      <Route path="/" exact>
-        <AuthPage />
-      </Route>
-      <Redirect to="/" />
+      		<Route path="/" exact>
+        		<AuthPage />
+      		</Route>
+      		<Redirect to="/" />
 		</Switch>
 	);
+};
+
+
+
+// + FOLDER: /mern-course/client/src/hooks/:
+// + FILE: /mern-course/client/src/hooks/http.hook.js:
+import {useState} from 'react';
+
+export const useHttp = () => {
+	const [loading, setLoading] = useState(false);
+	const [error, setError] = useState(null);
+	const request = useCallback(async(url, method = 'GET', body = null, headers = {}) => {
+		try {
+			const response = await fetch(url, { method, body, headers });	
+			const data = await response.json();
+
+			if (!response.ok) {
+				throw new Error(data.message || 'Что-то пошло не так');		
+			}
+
+		} catch (e) {
+
+		}	
+	}, []); // useCallback - чтобы не уходить в рекурсию
+
+	return { loading, request };
 };

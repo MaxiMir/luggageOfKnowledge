@@ -118,6 +118,12 @@
      * @returns {string}
      */
     const formatPrice = price => Number((+ price).toFixed(1)).toLocaleString();
+  
+    /**
+     * @param ms
+     * Задержка в ms
+     */
+    const pause = ms => new Promise(r => setTimeout(() => r(), ms));
     
     // RESPONSES:
     
@@ -1232,10 +1238,10 @@
                 background-image:url(${imgSrc});
                 background-size: cover;
                 cursor: pointer;
-                animation: fade-in 1s ease-out both;
+                animation: fade-in 0.3s ease-out both;
             }
             .ai-wgt__content--changed {
-                animation: fade-out 1s ease-out both;
+                animation: fade-out 0.3s ease-out both;
             }
             .ai-wgt__price {
                 position: absolute;
@@ -1343,7 +1349,7 @@
         const contentBlock = container.querySelector('.ai-wgt__content');
     
         contentBlock.classList.add('ai-wgt__content--changed');
-    
+        
         sendUserData(postData);
         setState(state.next);
       };
@@ -1649,7 +1655,7 @@
     // Определяем нужно ли показывать виджет на странице:
     const isShowWidget = await checkToShowWidget();
     
-    if (!isShowWidget) {
+    if (isShowWidget) {
       return;
     }
     
