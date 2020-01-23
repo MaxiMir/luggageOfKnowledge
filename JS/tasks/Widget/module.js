@@ -1,4 +1,12 @@
+/** TODO:
+ * ЗНАК РУБЛЯ
+ * АНИМАЦИЯ ПЕРЕХОДА
+ * АНИМАЦИЯ КНОПКИ ПЕРЕКЛЮЧАТЕЛЯ
+ * ОБРАБОТКА ОШИБОК
+ */
+
 ((window) => {
+  'use strict';
   
   window['garderoboAssistantWidget'] = {};
   window['garderoboAssistantWidget']['init'] = async (widgetSettings) => {
@@ -14,7 +22,7 @@
         checkState: 'https://testapi.garderobo.ai/api/v3/widget/assistant/check_state/', // https://api.garderobo.ai/api/v3/widget/assistant/check_state/
         feed: 'https://testapi.garderobo.ai/api/v3/widget/assistant/feed/', // https://api.garderobo.ai/api/v3/widget/assistant/feed/
         account: 'https://testapi.garderobo.ai/ai.php?page=account',
-        myClothes: '',
+        myClothes: 'https://testapi.garderobo.ai/api/v3/widget/assistant/feed_history/',
       },
       bgImages: {
         like: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzMiIGhlaWdodD0iMzAiIHZpZXdCb3g9IjAgMCAzMyAzMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMzMgOC43NzU0OVYxMS41MjYzQzMyLjk2NyAxMS41OTUxIDMyLjk2NyAxMS42NjM5IDMyLjkzNCAxMS42OTgzQzMyLjgwMTkgMTIuNzk4NiAzMi41MDQ4IDEzLjg2NDYgMzIuMDQyNyAxNC44NjE3QzMxLjAxOTQgMTcuMDI4IDI5LjY2NTkgMTkuMDIyNCAyOC4wNDg0IDIwLjcwNzNDMjQuNzE0MyAyNC4zODY2IDIwLjg1MjEgMjcuMzA5MyAxNi43NTg4IDI5LjkyMjZDMTYuNjI2NyAzMC4wMjU4IDE2LjM5NTYgMzAuMDI1OCAxNi4yNjM2IDI5LjkyMjZDMTIuOTYyNSAyNy44NTk1IDkuODU5NTQgMjUuNDg2OSA3LjAyMDYyIDIyLjgzOTJDNC45NzM5NiAyMC45NDggMy4xOTEzOSAxOC43ODE3IDEuNzM4OTIgMTYuMzc0N0MwLjEyMTM5NyAxMy43MjcgLTAuNDA2NzczIDEwLjQ2MDQgMC4zMTk0NjEgNy40MDAwN0MxLjgwNDk0IDAuNDg4NTY1IDEwLjA5MDYgLTIuMzY1NDQgMTUuMjczMyAyLjI3NjYyQzE1LjcwMjQgMi42NTQ4NiAxNi4wOTg2IDMuMTM2MjYgMTYuNTYwNyAzLjU4MzI3QzE2LjU5MzcgMy41NDg4OCAxNi42MjY3IDMuNDgwMTEgMTYuNjU5NyAzLjQ0NTczQzE4Ljk3MDUgMC43NjM2NSAyMS44NDI0IC0wLjQzOTg0NSAyNS4yNDI1IDAuMTQ0NzFDMjguOTcyNyAwLjgzMjQyMSAzMS40MTU1IDMuMTM2MjYgMzIuNjAzOSA2Ljg4NDI5QzMyLjc2ODkgNy41Mzc2MSAzMi45MDEgOC4xNTY1NSAzMyA4Ljc3NTQ5WiIgZmlsbD0id2hpdGUiLz48L3N2Zz4=',
@@ -407,18 +415,6 @@
       document.body.insertAdjacentHTML(
           'beforeend',
           `
-					<div class="ai-block">
-					   <div class="ai-block__container">
-					       <div class="ai-wgt fl-column-center closed" id="aiWidget">
-					           <div class="ai-wgt__body fl-center mb-30">
-					               <div class="ai-wgt__content"></div>
-					           </div>
-					       </div>
-					       <div class="ai-wgt__toggle-visible-btn ai-wgt__circle ai-wgt__circle--with-plus with-hint" id="aiWidgetToggleBtn">
-					            <div class="ai-wgt__toggle-visible-title">Название виджета</div>
-					       </div>
-					   </div>
-					</div>
 					<style>
 						.ai-block {
 						    width: 440px;
@@ -427,6 +423,7 @@
 						    left: 0;
 						    bottom: 0;
 						    z-index: 7777;
+						    --white: #FFFFFF;
 						}
 						.ai-block__container {
 						    height: 100%;
@@ -448,9 +445,10 @@
 						    border-radius: 10px;
 						    position: relative;
 						    box-sizing: border-box;
+						    background-color: var(--white);
+                box-shadow: 0px 14px 32px rgba(0, 0, 0, 0.24);
 						}
 						.ai-wgt__title {
-						    margin-top: 75px;
 						    font-size: 18px;
 						    line-height: 25px;
 						    font-weight: bold;
@@ -458,7 +456,7 @@
 						.ai-wgt__link {
 						    width: 150px;
 						    height: 40px;
-						    background-color: #FFFFFF;
+						    background-color: var(--white);
 						    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.08);
 						    border-radius: 90px;
 						    display: flex;
@@ -488,16 +486,17 @@
 						    position: absolute;
 						    top: 324px;
 						    right: -25px;
-						    background-color: #FFFFFF;
+						    background-color: var(--white);
 						    background-image: url(${settings.bgImages.nextPage});
 						}
 						.ai-wgt__toggle-visible-btn {
 						    position: absolute;
 						    bottom: 20px;
 						    left: 20px;
-						    background: #FFFFFF;
+						    background: var(--white);
 						    transition: all 0.3s ease-in-out;
 						    animation-delay: 0.3s;
+						    border: 1px solid #F8F8F8;
 						}
 						.ai-wgt__circle--with-plus:after,
 						.ai-wgt__circle--with-plus:before {
@@ -541,13 +540,13 @@
 						    background: rgba(255, 255, 255, 0.6);
 						    backdrop-filter: blur(10px);
 						    border-radius: 0 15px 0 0;
-						    animation: open-modal 0.3s cubic-bezier(1, 0.4, 0.27, 1.55);
+						    animation: open-modal 0.6s;
 						    transform-origin: bottom;
 						}
 						
 						/* STATE => STATUS: CLOSED */
 						.ai-wgt.closed .ai-wgt__body,
-						.ai-wgt.closed .ai-wgt__account {
+						.ai-wgt.closed .ai-wgt__my-clothes {
 						    display: none;
 						}
 						.ai-wgt.closed + .ai-wgt__circle--with-plus {
@@ -618,6 +617,7 @@
 						    align-items: center;
 						}
 						.fl-column-center {
+						    width: 100%;
 						    display: flex;
 						    flex-wrap: wrap;
 						    flex-direction: column;
@@ -635,13 +635,42 @@
 						
 						/* ANIMATIONS */
 						@keyframes open-modal {
-						    from {
-						        transform: scale(0);
-						    }
-						    to {
-						        transform: scale(1);
-						    }
-						}
+              from,
+              60%,
+              75%,
+              90%,
+              to {
+                -webkit-animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+                animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+              }
+            
+              0% {
+                opacity: 0;
+                -webkit-transform: translate3d(-3000px, 0, 0);
+                transform: translate3d(-3000px, 0, 0);
+              }
+            
+              60% {
+                opacity: 1;
+                -webkit-transform: translate3d(25px, 0, 0);
+                transform: translate3d(25px, 0, 0);
+              }
+            
+              75% {
+                -webkit-transform: translate3d(-10px, 0, 0);
+                transform: translate3d(-10px, 0, 0);
+              }
+              
+              90% {
+                -webkit-transform: translate3d(5px, 0, 0);
+                transform: translate3d(5px, 0, 0);
+              }
+            
+              to {
+                -webkit-transform: translate3d(0, 0, 0);
+                transform: translate3d(0, 0, 0);
+              }
+            }
 						@keyframes pulse {
 						    0% {
 						        -moz-transform: scale(0.9);
@@ -776,6 +805,18 @@
 							}
 						}
 					</style>
+					<div class="ai-block">
+					   <div class="ai-block__container">
+					       <div class="ai-wgt fl-column-center closed" id="aiWidget">
+					           <div class="ai-wgt__body fl-center mb-30">
+					               <div class="ai-wgt__content"></div>
+					           </div>
+					       </div>
+					       <div class="ai-wgt__toggle-visible-btn ai-wgt__circle ai-wgt__circle--with-plus with-hint" id="aiWidgetToggleBtn">
+					            <div class="ai-wgt__toggle-visible-title">Название виджета</div>
+					       </div>
+					   </div>
+					</div>
           `,
       );
       
@@ -809,8 +850,6 @@
 				<div class="ai-wgt__next-page ai-wgt__circle"></div>
 				<style>
 					.ai-wgt__content {
-						background-color: #FFFFFF;
-						box-shadow: 0px 14px 32px rgba(0, 0, 0, 0.24);
 						padding: 20px 25px;
 					}
 					.bg {
@@ -844,9 +883,6 @@
 					  .ai-wgt .ai-wgt__content {
 							max-width: 420px;
 					  }
-						.ai-wgt__next-page {
-							top: 260px;
-						}
 					}
 				</style>
 			`;
@@ -891,8 +927,6 @@
 				<div class="ai-wgt__next-page ai-wgt__circle"></div>
 				<style>
 					.ai-wgt .ai-wgt__content {
-						background-color: #FFFFFF;
-						box-shadow: 0px 14px 32px rgba(0, 0, 0, 0.24);
 						padding: 20px 25px;
 					}
 					.bg {
@@ -965,7 +999,7 @@
 						left: 0;
 						right: 0;
 						bottom: -10px;
-						background-color: #FFFFFF;
+						background-color: var(--white);
 						background-image: url(${settings.bgImages.purchases});
 						background-size: 23px 33px;
 					}
@@ -998,9 +1032,6 @@
 					  .ai-wgt .ai-wgt__content {
 							max-width: 420px;
 					  }
-						.ai-wgt__next-page {
-							top: 260px;
-						}
 						.bg--example {
 							width: 130px;
                      height: 151px;
@@ -1036,8 +1067,6 @@
 				<div class="ai-wgt__next-page ai-wgt__circle"></div>
 				<style>
 					.ai-wgt .ai-wgt__content {
-						background-color: #FFFFFF;
-						box-shadow: 0px 14px 32px rgba(0, 0, 0, 0.24);
 						padding: 20px 25px;
 					}
 					.bg {
@@ -1067,7 +1096,7 @@
 					.ai-wgt__link--example {
 						width: 150px;
 						height: 40px;
-						background-color: #FFFFFF;
+						background-color: var(--white);
 						box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.08);
 						border-radius: 90px;
 					}
@@ -1083,9 +1112,6 @@
             .ai-wgt .ai-wgt__content {
 							max-width: 420px;
 					  }
-						.ai-wgt__next-page {
-							top: 260px;
-						}
 						.ai-wgt__call {
 							margin-top: initial;
 						}
@@ -1113,79 +1139,74 @@
     const getQuestionData = () => {
       const {text, type, id} = state.current.pageData;
       const html = `
-						<div class="fl-column-center ai-wgt__text">
-					<div class="ai-wgt__header text--big text--center">Пожалуйста,</div>
-					<div class="ai-wgt__header text--big text--center mb-15">ответьте на вопрос</div>
-					<div class="text--big text--center mb-25">${text}</div>
-					<div class="ai-wgt__answers fl-column-center">
-						<div class="ai-wgt__answer ai-wgt__link mb-15" data-action="4">Соглашусь</div>
-						<div class="ai-wgt__answer ai-wgt__link mb-15" data-action="1">Не про меня</div>
-						<div class="ai-wgt__answer ai-wgt__link mb-15" data-action="2">Не знаю</div>
-					</div>
-				</div>
-						<div class="ai-wgt__next-page ai-wgt__circle ai-wgt__circle--mini" data-action="0"></div>
-					</div>
-				</div>
-				<div class="ai-wgt__footer">
-					<div class="ai-wgt__link ai-wgt__account">Мои вещи</div>
-				</div>
-				<style>
-					.ai-wgt__header {
-						font-weight: bold;
-						color: #000000;
-					}
-					.ai-wgt .ai-wgt__content {
-						background-color: #FFFFFF;
-						box-shadow: 0px 14px 32px rgba(0, 0, 0, 0.24);
-						padding: 20px 25px;
-					}
-					.bg {
-						height: 45px;
-					}
-					.bg--hanger {
-						width: 55px;
-						background-image: url(${settings.bgImages.hanger});
-					}
-					.ai-wgt__answer:hover {
-						background: #74A858;
-						color: #fff;
-					}
-					.ai-wgt .ai-wgt__link:hover {
-					    transform: unset;
-					}
-					.ai-wgt .ai-wgt__next-page {
-						position: absolute;
-						bottom: 42px;
-						right: -22px;
-						background-color: #FFFFFF;
-						background-image: url(${settings.bgImages.nextPageDisabled});
-					}
-					.ai-wgt .ai-wgt__circle--mini {
-						width: 44px;
-						height: 44px;
-					}
-					.ai-wgt__answers {
-					  width: 100%;
-					}
-					@media (max-height: 450px) and (max-width: 996px) {
-						.ai-wgt__next-page {
-							top: 260px;
-						}
-						.ai-wgt .ai-wgt__answers {
-							flex-direction: row;
-							justify-content: space-evenly;
-						}
-						.ai-wgt__answers .ai-wgt__answer {
-							width: 100px;
-						}
-						.ai-wgt__call {
-							margin-top: initial;
-						}
-						.ai-wgt__footer {
-							align-items: center;
-						}
-					}
-				</style>
+            <div class="fl-column-center ai-wgt__text">
+              <div class="ai-wgt__header text--big text--center">Пожалуйста,</div>
+              <div class="ai-wgt__header text--big text--center mb-15">ответьте на вопрос</div>
+              <div class="text--big text--center mb-25">${text}</div>
+              <div class="ai-wgt__answers fl-column-center">
+                <div class="ai-wgt__answer ai-wgt__link mb-15" data-action="4">Соглашусь</div>
+                <div class="ai-wgt__answer ai-wgt__link mb-15" data-action="1">Не про меня</div>
+                <div class="ai-wgt__answer ai-wgt__link mb-15" data-action="2">Не знаю</div>
+              </div>
+            </div>
+            <div class="ai-wgt__next-page ai-wgt__circle ai-wgt__circle--mini" data-action="0"></div>
+          </div>
+        </div>
+        <div class="ai-wgt__footer">
+          <div class="ai-wgt__link ai-wgt__my-clothes">Мои вещи</div>
+        </div>
+        <style>
+          .ai-wgt__header {
+            font-weight: bold;
+            color: #000000;
+          }
+          .ai-wgt .ai-wgt__content {
+            padding: 20px 25px;
+          }
+          .bg {
+            height: 45px;
+          }
+          .bg--hanger {
+            width: 55px;
+            background-image: url(${settings.bgImages.hanger});
+          }
+          .ai-wgt__answer:hover {
+            background: #74A858;
+            color: var(--white);
+          }
+          .ai-wgt .ai-wgt__link:hover {
+              transform: unset;
+          }
+          .ai-wgt .ai-wgt__next-page {
+            position: absolute;
+            bottom: 42px;
+            right: -22px;
+            background-color: var(--white);
+            background-image: url(${settings.bgImages.nextPageDisabled});
+          }
+          .ai-wgt .ai-wgt__circle--mini {
+            width: 44px;
+            height: 44px;
+          }
+          .ai-wgt__answers {
+            width: 100%;
+          }
+          @media (max-height: 450px) and (max-width: 996px) {
+            .ai-wgt .ai-wgt__answers {
+              flex-direction: row;
+              justify-content: space-evenly;
+            }
+            .ai-wgt__answers .ai-wgt__answer {
+              width: 100px;
+            }
+            .ai-wgt__call {
+              margin-top: initial;
+            }
+            .ai-wgt__footer {
+              align-items: center;
+            }
+          }
+        </style>
 			`;
       
       const answerBtnHandler = ({currentTarget}) => {
@@ -1196,18 +1217,20 @@
         setState(state.next);
       };
       
+      const myClothesBtnHandler = async () => {
+        if (myClothesFn) {
+          myClothesFn();
+        }
+  
+        await switchToMyClothes();
+      };
+      
       return {
         html,
         handlers: {
           '.ai-wgt__next-page': answerBtnHandler,
           '.ai-wgt__answer': answerBtnHandler,
-          '.ai-wgt__account': () => {
-            if (myClothesFn) {
-              myClothesFn();
-            }
-            
-            switchToAccount();
-          },
+          '.ai-wgt__my-clothes': myClothesBtnHandler,
         },
       };
     };
@@ -1231,12 +1254,13 @@
             </div>
           </div>
           <div class="ai-wgt__footer">
-            <div class="ai-wgt__link ai-wgt__account">Мои вещи</div>
+            <div class="ai-wgt__link ai-wgt__my-clothes">Мои вещи</div>
           </div>
           <style>
             .ai-wgt__content {
                 background-image:url(${imgSrc});
                 background-size: cover;
+                background-repeat: no-repeat;
                 cursor: pointer;
                 animation: fade-in 0.3s ease-out both;
             }
@@ -1250,7 +1274,7 @@
                 width: 96px;
                 height: 40px;
                 color: #3D4F63;
-                background: #FFFFFF;
+                background: var(--white);
                 box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.08);
                 border-radius: 90px;
             }
@@ -1273,7 +1297,7 @@
             .ai-wgt__purchases-count {
                 position: absolute;
                 bottom: -5px;
-                background-color: #FFFFFF;
+                background-color: var(--white);
                 background-image:url(${settings.bgImages.purchases});
                 background-size: 33px 41px;
             }
@@ -1311,7 +1335,7 @@
                  width: 200px;
                  height: 250px;
                  min-height: 250px;
-                 background-size: contain;
+                 background-size: cover;
                  background-repeat: no-repeat;
                  background-position: center;
               }
@@ -1367,37 +1391,45 @@
         }
       };
   
+      const myClothesBtnHandler = async () => {
+        if (myClothesFn) {
+          myClothesFn();
+        }
+  
+        await switchToMyClothes();
+      };
+      
+      const likeBtnHandler = () => {
+        if (likeFn) {
+          likeFn(id);
+        }
+  
+        userActionHandler(1);
+      };
+      
+      const dislikeBtnHandler = () => {
+        if (dislikeFn) {
+          dislikeFn(id);
+        }
+  
+        userActionHandler(2);
+      };
+      
+      const purchasesBtnHandler = () => {
+        if (addToBasketFn) {
+          addToBasketFn(id);
+        }
+  
+        userActionHandler(3);
+      };
+      
       const handlers = {
         '.ai-wgt__content': bodyLinkHandler,
-        '.ai-wgt__like': () => {
-          if (likeFn) {
-            likeFn(id);
-          }
-      
-          userActionHandler(1);
-        },
-        '.ai-wgt__dislike': () => {
-          if (dislikeFn) {
-            dislikeFn(id);
-          }
-      
-          userActionHandler(2);
-        },
-        '.ai-wgt__purchases-count': () => {
-          if (addToBasketFn) {
-            addToBasketFn(id);
-          }
-      
-          userActionHandler(3);
-        },
-        '.ai-wgt__account': () => {
-          if (myClothesFn) {
-            myClothesFn();
-          }
-      
-          switchToAccount();
-        },
-      }
+        '.ai-wgt__like': likeBtnHandler,
+        '.ai-wgt__dislike': dislikeBtnHandler,
+        '.ai-wgt__purchases-count': purchasesBtnHandler,
+        '.ai-wgt__my-clothes': myClothesBtnHandler,
+      };
       
       return { html, handlers };
     };
@@ -1409,17 +1441,18 @@
      */
     const getGoodOutOfStock = () => {
       const html = `
-                <div class="fl-column-center ai-wgt__text">
-                    <div class="bg bg--no-prod mb-15"></div>
-                    <div class="text--center mb-15">В этой категории закончились товары, которые могли бы быть вам интересны.</div>
-                    <div class="text--bold text--big mb-15">Не беда!</div>
-                    <div class="text--center mb-50">Перейдите в другую категорию сайта или посмотрите еще раз на “Мои вещи” – там есть все товары, которые вам понравились.</div>
-                    <div class="text--bold text--center">А еще вы можете оформить заказ на сайте прямо сейчас!</div>
-                </div>
+                  <div class="fl-column-center ai-wgt__text">
+                      <div class="bg bg--no-prod mb-15"></div>
+                      <div class="text--center mb-15">В этой категории закончились товары, которые могли бы быть вам интересны.</div>
+                      <div class="text--bold text--big mb-15">Не беда!</div>
+                      <div class="text--center mb-50">Перейдите в другую категорию сайта или посмотрите еще раз на “Мои вещи” – там есть все товары, которые вам понравились.</div>
+                      <div class="text--bold text--center">А еще вы можете оформить заказ на сайте прямо сейчас!</div>
+                  </div>
+              </div>
             </div>
-          </div>
-          <div class="ai-wgt__footer">
-            <div class="ai-wgt__link ai-wgt__account">Мои вещи</div>
+            <div class="ai-wgt__footer">
+              <div class="ai-wgt__link ai-wgt__my-clothes">Мои вещи</div>
+            </div>
           </div>
           <style>
             .bg {
@@ -1429,26 +1462,28 @@
               width: 44px;
               background-image: url(${settings.bgImages.noProd});
             }
-            .ai-wgt__content {
+            .ai-wgt .ai-wgt__content {
               padding: 40px 25px 48px 25px;
-              background: #FFF857;
+              background-color: #FFF857;
             }
             @media (max-height: 450px) and (max-width: 996px) {
-              .ai-wgt__content {
+              .ai-wgt .ai-wgt__content {
                 padding: 15px;
               }
             }
           </style>
-        </div>
         `;
-      const handlers = {
-        '.ai-wgt__account': () => {
-          if (myClothesFn) {
-            myClothesFn();
-          }
       
-          switchToMyClothes();
-        },
+      const myClothesBtnHandler = () => {
+        if (myClothesFn) {
+          myClothesFn();
+        }
+  
+        switchToMyClothes();
+      };
+      
+      const handlers = {
+        '.ai-wgt__my-clothes': myClothesBtnHandler,
       };
   
       return { html, handlers };
@@ -1458,9 +1493,7 @@
      * HTML и обработчики для страницы "Аккаунт"
      */
     const getAccountData = () => {
-      const {
-        userName, userProgress, userThingsCount, accountPhoto,
-      } = state.current.pageData;
+      const { userName, userProgress, userThingsCount, accountPhoto } = state.current.pageData;
       
       const html = `
 					<div class="ai-wgt__account-photo horizontal-center"></div>
@@ -1485,62 +1518,148 @@
 					   Луки звезд
 					</div>
 				</div>
-            <style>
-					.ai-wgt__content {
-					    background-color: #EEEEEE;
-					}
-					.ai-wgt__account-photo {
-					    position: absolute;
-					    top: -52px;
-					    width: 94px;
-					    height: 94px;
-					    border-radius: 50%;
-					    background-color: bisque;
-					    border: 10px solid #ffff;
-					    background-size: contain;
-					    background-image: url(${accountPhoto});
-					}
-					.bg {
-					    background-size: 12px 12px;
-					    background-position: 15px center;
-					}
-					.bg--search {
-					    background-image: url(${settings.bgImages.search});
-					}
-					.bg--progress {
-					    background-image: url(${settings.bgImages.progress});
-					}
-					.bg--things {
-					    background-image: url(${settings.bgImages.things});
-					}
-					.bg--bows {
-					    background-image: url(${settings.bgImages.bows});
-					}
-					@media (max-height: 450px) and (max-width: 996px) {
-						.ai-wgt .ai-wgt__title {
-							 margin-top: 55px;
-							 margin-bottom: 15px;
-						}
-						.ai-wgt__account-photo {
-							top: -30px;
-                     width: 60px;
-                     height: 60px;
-						}
-						.ai-wgt .ai-wgt__link {
-							margin-bottom: 10px;
-						}
-					}
-            </style>
+          <style>
+            .ai-wgt__title {
+              margin-top: 75px;
+            }
+            .ai-wgt__content {
+                background-color: #EEEEEE;
+            }
+            .ai-wgt__account-photo {
+                position: absolute;
+                top: -52px;
+                width: 94px;
+                height: 94px;
+                border-radius: 50%;
+                background-color: bisque;
+                border: 10px solid var(--white);
+                background-size: contain;
+                background-image: url(${accountPhoto});
+            }
+            .bg {
+                background-size: 12px 12px;
+                background-position: 15px center;
+            }
+            .bg--search {
+                background-image: url(${settings.bgImages.search});
+            }
+            .bg--progress {
+                background-image: url(${settings.bgImages.progress});
+            }
+            .bg--things {
+                background-image: url(${settings.bgImages.things});
+            }
+            .bg--bows {
+                background-image: url(${settings.bgImages.bows});
+            }
+            @media (max-height: 450px) and (max-width: 996px) {
+              .ai-wgt .ai-wgt__title {
+                 margin-top: 55px;
+                 margin-bottom: 15px;
+              }
+              .ai-wgt__account-photo {
+                top: -30px;
+                       width: 60px;
+                       height: 60px;
+              }
+              .ai-wgt .ai-wgt__link {
+                margin-bottom: 10px;
+              }
+            }
+          </style>
         `;
       
-      return {html};
+      return { html };
     };
     
     /**
      * HTML и обработчики для страницы "Мои вещи"
      */
     const getMyClothesData = () => {
-    
+      const {products} = state.current.pageData;
+      
+      console.log(products);
+      
+      const productsHTML = products.map(product => {
+        const { name = 'Куртка утепленная Bershka', img_src: imgSrc, price, old_price: oldPrice = 777, url } = product;
+        return `
+            <div class="product">
+                <a href='${url}' target='_blank' class="product__image" style="background-image: url('${imgSrc}')"></a>
+                <div class="product__description">
+                    <a href='${url}' target='_blank' class="ai-wgt__text">${name}</a>
+                    ${!oldPrice ? '' : `<div class='product__old-price'>${oldPrice} руб.</div>`}
+                    <div class="ai-wgt__text product__price">${price} руб.</div>
+                </div>
+            </div>
+        `;
+      });
+      
+      const html = `
+          <p class="ai-wgt__title text--center">Мои вещи</p>
+          <div class="products">
+              ${productsHTML.join('\n')}
+          </div>
+        </div>
+        </div>
+        <div class="ai-wgt__footer">
+          <div class="ai-wgt__link ai-wgt__my-clothes">Искать еще</div>
+        </div>
+        <style>
+          .ai-wgt ::-webkit-scrollbar {
+            width: 2px;
+          }
+          .ai-wgt {
+            scrollbar-width: thin;
+            scrollbar-color: #90A4AE #CFD8DC;
+          }
+          .ai-wgt ::-webkit-scrollbar-track {
+            background: var(--white);
+          }
+          .ai-wgt ::-webkit-scrollbar-thumb {
+            background-color: rgba(0, 0, 0, 0.2);
+          }
+          .products {
+            width: 240px;
+            height: 338px;
+            overflow-y: scroll;
+            margin: 0 auto;
+          }
+          .product {
+            display: flex;
+            width: 100%;
+            margin-bottom: 6px;
+          }
+          .product__image {
+            width: 80px;
+            height: 80px;
+            background-size: cover;
+            background-repeat: no-repeat;
+          }
+          .product__description {
+            width: 140px;
+            padding-left: 20px;
+          }
+          .product__old-price {
+            font-size: 10px;
+            line-height: 14px;
+            text-decoration-line: line-through;
+          }
+          @media (max-height: 450px) and (max-width: 996px) {
+            .products {
+              height: calc(100% - 90px);
+            }
+            .ai-wgt__footer {
+              align-items: center;
+            }
+          }
+        </style>
+      `;
+     
+      const handlers = {
+        '.ai-wgt__my-clothes': switchToFeed
+      };
+      
+      return { html, handlers };
     };
     
     /**

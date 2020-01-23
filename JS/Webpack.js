@@ -479,10 +479,9 @@ const getPlugins = () => {
   ];
   
   return base;
-}
+};
 
 // $ export NODE_ENV=development // ubuntu, macos - установить переменную окружения NODE_ENV в true на текущем сеансе операционной системы)
-
 
 module.exports = {
   context: path(__dirname, 'src'), // папка с исходниками (src можно не указывать в путях в других настройках)
@@ -557,7 +556,7 @@ module.exports = {
           loader: 'babel-loader',
           options: getBabelOptions('@babel/preset-typescript')
         }
-      }
+      },
       {
         test: /\.jsx/, // файлы react
         exclude: /node_modules/, // исключаем папку node_modules
@@ -578,14 +577,14 @@ module.exports = {
   
   // main: "index.js", // если мы не публикуем данный пакет как npm пакет - эту строчку удаляем и указываем: 
   "private": true, // пакет не нужно публиковать
-    "scripts": {
-  "dev": "cross-env NODE_ENV=development webpack --mode development", // сборка в режиме разработки
-      "build": "cross-env NODE_ENV=production webpack --mode production",
-      "watch": "cross-env NODE_ENV=development webpack --mode development --watch", // процесс запускает сборку в случае изменения файлов (необходима перезагрузка страницы в браузере)
-      "start": "cross-env NODE_ENV=development webpack-dev-server --mode development --open", // процесс запускает сборку в случае изменения файлов + открывает страницу в браузере (автоматическое обвновление) + складывает в оперативную память - для появления файлов в папке dist - Ctrl+C и например $ npm run dev
-      "stats": "webpack --json > stats.json && webpack-bundle-analyzer stats.json"
-},
-  "browserslist": "> 0.25%, not dead", // настройка для babel
+  "scripts": {
+    "dev": "cross-env NODE_ENV=development webpack --mode development", // сборка в режиме разработки
+    "build": "cross-env NODE_ENV=production webpack --mode production",
+    "watch": "cross-env NODE_ENV=development webpack --mode development --watch", // процесс запускает сборку в случае изменения файлов (необходима перезагрузка страницы в браузере)
+    "start": "cross-env NODE_ENV=development webpack-dev-server --mode development --open", // процесс запускает сборку в случае изменения файлов + открывает страницу в браузере (автоматическое обвновление) + складывает в оперативную память - для появления файлов в папке dist - Ctrl+C и например $ npm run dev
+    "stats": "webpack --json > stats.json && webpack-bundle-analyzer stats.json"
+  },
+  "browserslist": "> 0.25%, not dead" // настройка для babel
 }
 
 // $ npm run dev (без минификации)
@@ -605,14 +604,14 @@ import './styles/less.less';
 
 const App = () => (
     <div id="container">
-    <h1>Webpack Container</h1>
-<hr />
-<div class="logo" />
-    <pre />
-    <hr />
-    <div class="box">
-    <h2>Less</h2>
-    </div>
+      <h1>Webpack Container</h1>
+      <hr />
+      <div class="logo" />
+      <pre />
+      <hr />
+      <div class="box">
+        <h2>Less</h2>
+      </div>
     </div>
 );
 
