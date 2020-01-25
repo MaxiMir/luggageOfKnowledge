@@ -22,19 +22,23 @@
      * @param int $iBlockID
      * @return array
      */
-    function getListPropData(string $propCode, int $iBlockID = IBLOCK_ID_CATALOG): array
+    function getListProp(string $propCode, int $iBlockID = IBLOCK_ID_CATALOG): array
     {
         $propID = false;
         $data = [];
         
-        $resDB = CIBlockPropertyEnum::GetList([], ["IBLOCK_ID" => $iBlockID, "CODE" => $propCode]);
+        $prodID = getLastAddProductID();
         
-        while (['ID' => $id, 'PROPERTY_ID' => $propertyID, 'VALUE' => $value] = $resDB->Fetch()) {
-            if (!$propID) {
-                $propID = $propertyID;
-            }
+        if ($prodID) {
+            $resDB = CIBlockPropertyEnum::GetList([], ["IBLOCK_ID" => $iBlockID, "CODE" => $propCode]);
             
-            $data[$value] = $id;
+            while (['ID' => $id, 'PROPERTY_ID' => $propertyID, 'VALUE' => $value] = $resDB->Fetch()) {
+                if (!$propID) {
+                    $propID = $propertyID;
+                }
+                
+                $data[$value] = $id;
+            }
         }
         
         return compact("propID", "data");
@@ -48,10 +52,10 @@
      * @return int
      * @throws Exception
      */
-    function createListPropertiesValues(string $propName, array $newPropValues): int
+    function createPropertyValues(string $propName, array $newPropValues): int
     {
         $countNewProps = 0;
-        ["propID" => $propID, "data" => $currentPropData] = getListPropData($propName);
+        ["propID" => $propID, "data" => $currentPropData] = getListProp($propName);
         
         if (!$propID) {
             throw new Exception("Свойство {$propName} не найдено");
@@ -95,11 +99,45 @@
     {
         $countNewProduct = 0;
         
-        $propNameData = getListPropData("_NAME");
-        $propAppData = getListPropData("APPLICABILITY");
+        $propNameData = getListProp("_NAME");
+        $propAppData = getListProp("APPLICABILITY");
         
         foreach ($elementsData as $elementData) {
-            ['error' => $error] = createProduct($elementData, $propNameData, $propAppData);
+            $prodCount = 1;
+            $imgPathData = [__DIR__, 'img'];
+            
+            ["data" => $propNames] = $propNameData;
+            ["data" => $propApps] = $propAppData;
+            [$imgName, $PRODUCT_CODE, $name, $propName, $applicabilityList, $BRAND, $price, $sectionList] = $elementData;
+            
+            // Картинка
+            $imgPathData[] = $imgName;
+            $imgPath = implode(DIRECTORY_SEPARATOR, $imgPathData);
+            $imgData = CFILE::MakeFileArray($imgPath);
+            
+            // Символьный код:
+            $code = transliterate($name);
+            
+            // Разделы
+            $sectionIDs = explode("|", $sectionList);
+            
+            // Свойства:
+            $_NAME = $propNames[$propName];
+            $APPLICABILITY = _getPropIDs($applicabilityList, $propApps);
+            $props = compact("PRODUCT_CODE", "BRAND", "_NAME", "APPLICABILITY");
+            
+            $mainData = [
+                "ACTIVE" => "Y",
+                "IBLOCK_ID" => IBLOCK_ID_CATALOG,
+                "IBLOCK_SECTION" => $sectionIDs,
+                "NAME" => $name,
+                "CODE" => $code,
+                "PROPERTY_VALUES" => $props,
+                "DETAIL_PICTURE" => $imgData,
+                "PREVIEW_PICTURE" => $imgData,
+            ];
+            
+            ['error' => $error] = createProduct($mainData, $prodCount, $price);
             
             if ($error) {
                 throw new Exception($error);
@@ -112,77 +150,82 @@
     }
     
     /**
-     * Создает товара
+     * Создает товар
      *
-     * @param $elementData
-     * @param $propNameData
-     * @param $propAppData
+     * @param $mainData
+     * @param int $prodCount
+     * @param null $price
      * @return array
      */
-    function createProduct($elementData, $propNameData, $propAppData)
+    function createProduct($mainData, $prodCount = 1, $price = null)
     {
-        $BRAND = 267;
-        $sectionID = 544;
-        
-        ["data" => $propNames] = $propNameData;
-        ["data" => $propApps] = $propAppData;
-        [$PRODUCT_CODE, $name, $propName, $applicabilityList, $unused, $price] = $elementData;
-        
-        
-        $code = transliterate($name);
-        $_NAME = $propNames[$propName];
-        $APPLICABILITY = _getApplicabilityIDs($applicabilityList, $propApps);
-        
-        $props = compact("PRODUCT_CODE", "BRAND", "_NAME", "APPLICABILITY");
-        
-        $productData = [
-            "IBLOCK_ID" => IBLOCK_ID_CATALOG,
-            "IBLOCK_SECTION" => $sectionID,
-            "NAME" => $name,
-            "CODE" => $code,
-            "PROPERTY_VALUES" => $props,
-            "ACTIVE" => "Y",
-        ];
+        $errors = [];
+        ["NAME" => $name] = $mainData;
         
         $element = new CIBlockElement;
         
-        if (!$prodID = $element->Add($productData)) {
-            return ['isSuccess' => false, 'error' => "Error with {$name}:" . $element->LAST_ERROR];
+        if (!$prodID = $element->Add($mainData)) {
+            return ['isSuccess' => false, 'error' => "Ошибка с {$name}:" . $element->LAST_ERROR];
         }
         
-        $isPriceSet = setProductPrice($prodID, $price, "EUR");
-        
-        if (!$isPriceSet) {
-            return ['isSuccess' => false, 'error' => "Error with {$name}: цена не была установлена"];
+        if ($price && !setProductPrice($prodID, $price, "EUR")) {
+            $errors[] = "Ошибка с {$name}: цена не была установлена";
         }
         
-        $isSetProductCount = setProductCount($prodID, 1);
-        
-        if (!$isSetProductCount) {
-            return ['isSuccess' => false, 'error' => "Error with {$name}: количество товара не установлено"];
+        if ($prodCount && !setProductCount($prodID, 1)) {
+            $errors[] = "Ошибка с {$name}: количество товара не установлено";
         }
         
-        return ['isSuccess' => true, 'error' => null];
+        return ['isSuccess' => empty($errors), 'error' => implode('<br>', $errors)];
     }
     
     /**
-     * Устанавливает цену товара
+     * Возвращает код ценового предложения
+     * @param $prodID
+     * @param $priceTypeID
+     * @return mixed
+     */
+    function getPriceOfferCode($prodID, $priceTypeID)
+    {
+        $priceDB = CPrice::GetList(
+            [],
+            ["PRODUCT_ID" => $prodID, "CATALOG_GROUP_ID" => $priceTypeID]
+        );
+        
+        ['ID' => $id] = $priceDB->Fetch();
+        
+        return $id;
+    }
+    
+    /**
+     * Устанавливает|Обновляет цену товара
      *
      * @param $prodID
      * @param $price
      * @param string $currency
+     * @param bool $isAdd
      * @return mixed
      */
-    function setProductPrice($prodID, $price, $currency = "RUB")
+    function setProductPrice($prodID, $price, $currency = "RUB", $isAdd = true)
     {
+        $catalogGroupID = 1;
+        
+        $formattedPrice = str_replace(',', '.', $price);
+        
         $arFieldsPrice = [
             "PRODUCT_ID" => $prodID,
-            "CATALOG_GROUP_ID" => 1,
-            "PRICE" => $price,
+            "CATALOG_GROUP_ID" => $catalogGroupID,
+            "PRICE" => $formattedPrice,
             "CURRENCY" => $currency,
         ];
         
-        return CPrice::Add($arFieldsPrice);
+        if ($isAdd) {
+            return CPrice::Add($arFieldsPrice);
+        }
+        
+        $priceOfferCode = getPriceOfferCode($prodID, $catalogGroupID);
+        
+        return CPrice::Update($priceOfferCode, $arFieldsPrice);
     }
     
     /**
@@ -211,9 +254,9 @@
     function transliterate($value)
     {
         $params = [
-            "max_len" => "100",
+            "max_len" => "110",
             "change_case" => "L",
-            "replace_space" => "_",
+            "replace_space" => "-",
             "replace_other" => "_",
             "delete_repeat_replace" => "true",
             "use_google" => "false",
@@ -224,11 +267,23 @@
     
     
     //  @ HELPERS:
-    function _getApplicabilityIDs($applicabilityList, $propApps)
+    function _accumulateValues($elementsData, $propNum, $delimiter = '|')
     {
-        $applicabilityData = explode("; ", $applicabilityList);
+        $props = array_reduce($elementsData, function ($acc, $elementData) use ($propNum, $delimiter) {
+            $propList = explode($delimiter, $elementData[$propNum]);
+            array_push($acc, ...$propList);
+            
+            return $acc;
+        }, []);
         
-        return array_reduce($applicabilityData, function($acc, $name) use ($propApps) {
+        return array_unique($props);
+    }
+    
+    function _getPropIDs($propList, $propApps, $delimiter = '|')
+    {
+        $propValues = explode($delimiter, $propList);
+        
+        return array_reduce($propValues, function ($acc, $name) use ($propApps) {
             $id = $propApps[$name];
             
             if (!in_array($id, $acc)) {
@@ -238,4 +293,5 @@
             return $acc;
         }, []);
     }
+    
     

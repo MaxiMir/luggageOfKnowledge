@@ -1,0 +1,2 @@
+# найти от корня все php файлы в содержимом которых есть basket:
+find / -name '*.php' -exec grep -l 'basket' {} \;
