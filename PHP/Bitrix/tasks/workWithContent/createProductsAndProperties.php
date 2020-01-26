@@ -90,12 +90,16 @@
         return $ciBlockProp->Add(['PROPERTY_ID' => $propID, 'VALUE' => $propValue]);
     }
     
+    
     /**
-     * @param $elementsData
+     * Создает товары.
+     * Возвращает количество созданных товаров
+     *
+     * @param array $elementsData
      * @return int
      * @throws Exception
      */
-    function createProducts($elementsData)
+    function createProducts(array $elementsData): int
     {
         $countNewProduct = 0;
         
@@ -135,6 +139,10 @@
                 "PROPERTY_VALUES" => $props,
                 "DETAIL_PICTURE" => $imgData,
                 "PREVIEW_PICTURE" => $imgData,
+                #"IPROPERTY_TEMPLATES" => [
+                    #"ELEMENT_META_TITLE" => $TITLE,
+                    #"ELEMENT_META_DESCRIPTION" => $DESCRIPTION,
+                #],
             ];
             
             ['error' => $error] = createProduct($mainData, $prodCount, $price);
@@ -157,7 +165,7 @@
      * @param null $price
      * @return array
      */
-    function createProduct($mainData, $prodCount = 1, $price = null)
+    function createProduct($mainData, $prodCount = 1, $price = null) :array
     {
         $errors = [];
         ["NAME" => $name] = $mainData;
@@ -181,6 +189,7 @@
     
     /**
      * Возвращает код ценового предложения
+     *
      * @param $prodID
      * @param $priceTypeID
      * @return mixed
@@ -248,10 +257,10 @@
     /**
      * Возвращает транслит значения
      *
-     * @param $value
-     * @return mixed
+     * @param string $value
+     * @return string
      */
-    function transliterate($value)
+    function transliterate(string $value) :string
     {
         $params = [
             "max_len" => "110",

@@ -18,7 +18,7 @@
         
         ["select" => $selectProduct, "filter" => $filterProduct, "sort" => $sortProduct, "limit" => $limit] = $params;
         
-        $select = $selectProduct ?: ["*"];
+        $select = $selectProduct ?? ["*"];
         $filter = !$filterProduct ? $filterDefault : array_replace($filterDefault, $filterProduct);
         $sort = $sortProduct ?? [];
         $limitElements = !$limit ? false : ["nPageSize" => $limit];
