@@ -396,6 +396,10 @@ export default async (widgetSettings) => {
 						    bottom: 0;
 						    z-index: 7777;
 						    --white: #FFFFFF;
+                -webkit-user-select: none;
+                -moz-user-select: none;
+                -ms-user-select: none;
+                user-select: none;
 						}
 						.ai-block__container {
 						    height: 100%;
@@ -1553,7 +1557,7 @@ export default async (widgetSettings) => {
     console.log(products);
     
     const productsHTML = products.map(product => {
-      const { name = 'Куртка утепленная Bershka', img_src: imgSrc, price, old_price: oldPrice = 777, url } = product;
+      const { name, img_src: imgSrc, price, old_price: oldPrice, url } = product;
       return `
             <div class="product">
                 <a href='${url}' target='_blank' class="product__image" style="background-image: url('${imgSrc}')"></a>
@@ -1773,7 +1777,7 @@ export default async (widgetSettings) => {
   // Определяем нужно ли показывать виджет на странице:
   const isShowWidget = await checkToShowWidget();
   
-  if (isShowWidget) {
+  if (!isShowWidget) {
     return;
   }
   

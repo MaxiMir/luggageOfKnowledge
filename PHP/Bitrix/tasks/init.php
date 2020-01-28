@@ -1,6 +1,5 @@
 <?php
     
-    
     use Bitrix\Main\{Loader, Context};
     use Bitrix\Sale\{Basket, Fuser};
     
