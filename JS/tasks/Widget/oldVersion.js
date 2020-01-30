@@ -1,8 +1,8 @@
 ((window) => {
   'use strict';
   
-  window['garderoboAssistantWidget'] = {};
-  window['garderoboAssistantWidget']['init'] = async (widgetSettings) => {
+  const widget = window.garderoboAssistantWidget = {};
+  widget.init = async (widgetSettings) => {
     let state;
     let container;
     let toggleVisibleBtn;

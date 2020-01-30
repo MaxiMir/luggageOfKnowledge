@@ -1,13 +1,16 @@
 document.addEventListener('DOMContentLoaded', () => {
-	const filterInputs = document.getElementsByClassName('input-filter');
-	const checkboxContainers = document.getElementsByClassName('input-wrap');
+	const filterBlock = document.getElementById('filterContainer');
+	const filterInputs = filterBlock.getElementsByClassName('input-filter');
+	const checkboxContainers = filterBlock.getElementsByClassName('input-wrap');
+	const isInitContainers = filterBlock.querySelector('input:checked');
 	
 	/**
 	 * Раскрывает контейнер с чекбоксами и удаляет блок "Показать еще"
 	 *
-	 * @param container
+	 * @param containerChild
 	 */
-	const initContainer = container => {
+	const initContainer = containerChild => {
+		const container = containerChild.closest('.bx_filter_parameters_box');
 		const isContainerInit = container.dataset.init;
 		
 		if (isContainerInit) {
@@ -26,25 +29,6 @@ document.addEventListener('DOMContentLoaded', () => {
 		}
 		
 		container.dataset.init = "true";
-	};
-	
-	/**
-	 * Перемещает чекбоксы в конец контейнера
-	 *
-	 * @param checkboxContainer
-	 * @param inputs
-	 */
-	const dropDownCheckboxes = (checkboxContainer, inputs) => {
-		[...inputs].forEach(input => {
-			const nextElement = input.nextElementSibling;
-			const isLabel = nextElement && nextElement.tagName.toLowerCase() === 'label';
-			
-			checkboxContainer.append(input);
-			
-			if (isLabel) {
-				checkboxContainer.append(nextElement);
-			}
-		});
 	};
 	
 	/**
@@ -107,6 +91,25 @@ document.addEventListener('DOMContentLoaded', () => {
 	};
 	
 	/**
+	 * Перемещает чекбоксы в конец контейнера
+	 *
+	 * @param checkboxContainer
+	 * @param inputs
+	 */
+	const dropDownCheckboxes = (checkboxContainer, inputs) => {
+		[...inputs].forEach(input => {
+			const nextElement = input.nextElementSibling;
+			const isLabel = nextElement && nextElement.tagName.toLowerCase() === 'label';
+			
+			checkboxContainer.append(input);
+			
+			if (isLabel) {
+				checkboxContainer.append(nextElement);
+			}
+		});
+	};
+	
+	/**
 	 * Обработчик ввода текста в input
 	 *
 	 * @param currentTarget
@@ -138,9 +141,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	 * @param currentTarget
 	 */
 	const focusInputHandler = ({ currentTarget }) => {
-		const container = currentTarget.closest('.bx_filter_parameters_box');
-		
-		initContainer(container);
+		initContainer(currentTarget);
 	};
 	
 	/**
@@ -164,20 +165,26 @@ document.addEventListener('DOMContentLoaded', () => {
 		});
 		
 		for (let checkboxContainer of restCheckboxContainers) {
-			const container = checkboxContainer.closest('.bx_filter_parameters_box');
-			
-			initContainer(container);
+			initContainer(checkboxContainer);
 		}
 	};
 	
-	if (filterInputs) {
-		for (let filterInput of filterInputs) {
-			filterInput.addEventListener('focus', focusInputHandler);
-			filterInput.addEventListener('keyup', keyupInputHandler);
-		}
+	
+	for (let filterInput of filterInputs) {
+		filterInput.addEventListener('focus', focusInputHandler);
+		filterInput.addEventListener('keyup', keyupInputHandler);
+	}
+	
+	for (let checkboxContainer of checkboxContainers) {
+		checkboxContainer.addEventListener('click', checkboxContainerHandler);
 		
-		for (let checkboxContainer of checkboxContainers) {
-			checkboxContainer.addEventListener('click', checkboxContainerHandler);
+		if (isInitContainers) {
+			const inputs = checkboxContainer.querySelectorAll("input.disabled");
+			
+			if (inputs.length) {
+				initContainer(checkboxContainer);
+				dropDownCheckboxes(checkboxContainer, inputs);
+			}
 		}
 	}
 });

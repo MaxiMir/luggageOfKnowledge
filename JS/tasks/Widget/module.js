@@ -7,9 +7,8 @@ export default async (widgetSettings) => {
   const {
     key, category_id: categoryID, product_id: productID,
     addToBasketFn, likeFn, dislikeFn, myClothesFn, delay,
-    apiServerName = 'testapi.garderobo.ai', parentSelector = 'body'
+    apiBaseUri = 'https://testapi.garderobo.ai/api/v3/widget/', parentSelector = 'body'
   } = widgetSettings;
-  
   
   
   // SETTINGS:
@@ -93,12 +92,6 @@ export default async (widgetSettings) => {
    */
   const formatPrice = price => Number((+ price).toFixed(1)).toLocaleString();
   
-  /**
-   * @param ms
-   * Задержка в ms
-   */
-  const pause = ms => new Promise(r => setTimeout(() => r(), ms));
-  
   // RESPONSES:
   
   /**
@@ -127,19 +120,9 @@ export default async (widgetSettings) => {
     if (uri !== settings.uriForRequest.authorization) {
       fetchSettings.headers['Authorization'] = `Bearer ${sessionKey}`;
     }
-    console.log(
-        `%cGET RESPONSE URL: "${uri}" PAGE DATA: %o`,
-        'color: orange; font-size: small', fetchSettings,
-    );
+    
     const response = await fetch(uri, fetchSettings);
-    const json = response.json();
-    
-    console.log(
-        `%cRESPONSE: %o`,
-        'color: crimson; font-size: small', await json
-    );
-    
-    return json;
+    return response.json();
   };
   
   /**
@@ -320,7 +303,12 @@ export default async (widgetSettings) => {
    * @returns {Promise<void>}
    */
   const switchToFeed = async () => {
-    const pageData = await getFeedData();
+    let pageData = state.next;
+    state.next = null;
+    
+    if (!pageData) {
+      pageData = await getFeedData();
+    }
     
     setState(pageData);
   };
@@ -428,6 +416,7 @@ export default async (widgetSettings) => {
 						    font-size: 18px;
 						    line-height: 25px;
 						    font-weight: bold;
+						    padding: 15px 0;
 						}
 						.ai-wgt__link {
 						    width: 150px;
@@ -1190,7 +1179,7 @@ export default async (widgetSettings) => {
       const postData = {id, type, action};
       
       sendUserData(postData);
-      setState(state.next);
+      switchToFeed();
     };
     
     const myClothesBtnHandler = async () => {
@@ -1240,9 +1229,7 @@ export default async (widgetSettings) => {
                 cursor: pointer;
                 animation: fade-in 0.3s ease-out both;
             }
-            .ai-wgt__content--changed {
-                animation: fade-out 0.3s ease-out both;
-            }
+            
             .ai-wgt__price {
                 position: absolute;
                 top: -20px;
@@ -1347,11 +1334,14 @@ export default async (widgetSettings) => {
     const userActionHandler = (action) => {
       const postData = {type, id, action};
       const contentBlock = container.querySelector('.ai-wgt__content');
+      const blockClassList = contentBlock.classList;
       
-      contentBlock.classList.add('ai-wgt__content--changed');
+      if (!blockClassList.contains('ai-wgt__content--changed')) {
+        blockClassList.add('ai-wgt__content--changed');
+      }
       
       sendUserData(postData);
-      setState(state.next);
+      switchToFeed();
     };
     
     const bodyLinkHandler = ({currentTarget, target}) => {
@@ -1376,18 +1366,32 @@ export default async (widgetSettings) => {
     };
     
     const likeBtnHandler = () => {
+      const userSelected = likeBtnHandler.clicked || likeBtnHandler.clicked;
+      
+      if (userSelected) {
+        return false;
+      }
+      
       if (likeFn) {
         likeFn(id);
       }
-      
+  
+      likeBtnHandler.clicked = true;
       userActionHandler(1);
     };
     
     const dislikeBtnHandler = () => {
+      const userSelected = likeBtnHandler.clicked || likeBtnHandler.clicked;
+  
+      if (userSelected) {
+        return false;
+      }
+      
       if (dislikeFn) {
         dislikeFn(id);
       }
-      
+  
+      dislikeBtnHandler.clicked = true;
       userActionHandler(2);
     };
     
@@ -1552,13 +1556,14 @@ export default async (widgetSettings) => {
    * HTML и обработчики для страницы "Мои вещи"
    */
   const getMyClothesData = () => {
+    let productsHTML = "<p class='text--center'>Вы еще ничего не выбрали</p>";
+    
     const {products} = state.current.pageData;
     
-    console.log(products);
-    
-    const productsHTML = products.map(product => {
-      const { name, img_src: imgSrc, price, old_price: oldPrice, url } = product;
-      return `
+    if (products) {
+      const productsHTMLData = products.map(product => {
+        const { name, img_src: imgSrc, price, old_price: oldPrice, url } = product;
+        return `
             <div class="product">
                 <a href='${url}' target='_blank' class="product__image" style="background-image: url('${imgSrc}')"></a>
                 <div class="product__description">
@@ -1568,12 +1573,14 @@ export default async (widgetSettings) => {
                 </div>
             </div>
         `;
-    });
+      });
+      productsHTML = productsHTMLData.join('\n');
+    }
     
     const html = `
           <p class="ai-wgt__title text--center">Мои вещи</p>
           <div class="products">
-              ${productsHTML.join('\n')}
+              ${productsHTML}
           </div>
         </div>
         </div>
@@ -1684,20 +1691,28 @@ export default async (widgetSettings) => {
       set(target, prop, value) {
         const pagesWithNextState = ['question', 'choiceOfClothes'];
         const stateChanged = prop === 'current';
-        const {pageName} = value;
-        const isPageWithNextState = pagesWithNextState.includes(pageName);
         
         target[prop] = value;
-        
-        if (stateChanged) {
-          const {html, handlers} = getPageData(pageName);
-          
-          setTimeout(() => render(html, handlers), 0);
+  
+        if (!stateChanged) {
+          return true;
         }
         
-        if (isPageWithNextState) {
+        const {pageName} = value;
+        const isPageWithNextState = pagesWithNextState.includes(pageName);
+        const isMissingNextState = !target.next;
+        const {html, handlers} = getPageData(pageName);
+        
+        setTimeout(() => render(html, handlers), 0);
+        
+        if (isPageWithNextState && isMissingNextState) {
           setTimeout(async () => {
             target.next = await getFeedData();
+            
+            console.log(
+                `%cNEXT STATE: %o`,
+                'color: orange; font-size: small', target.next,
+            );
             
             const isProduct = target.next.pageData.type === 2;
             
@@ -1742,11 +1757,10 @@ export default async (widgetSettings) => {
     productID,
     delay,
     uriForRequest: {
-      authorization: `https://${apiServerName}/api/v3/widget/start_session/`,
-      checkState: `https://${apiServerName}/api/v3/widget/assistant/check_state/`,
-      feed: `https://${apiServerName}/api/v3/widget/assistant/feed/`,
-      account: `https://${apiServerName}/ai.php?page=account`,
-      myClothes: `https://${apiServerName}/api/v3/widget/assistant/feed_history/`,
+      authorization: `${apiBaseUri}start_session/`,
+      checkState: `${apiBaseUri}assistant/check_state/`,
+      feed: `${apiBaseUri}assistant/feed/`,
+      myClothes: `${apiBaseUri}assistant/feed_history/`,
     },
     bgImages: {
       like: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzMiIGhlaWdodD0iMzAiIHZpZXdCb3g9IjAgMCAzMyAzMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMzMgOC43NzU0OVYxMS41MjYzQzMyLjk2NyAxMS41OTUxIDMyLjk2NyAxMS42NjM5IDMyLjkzNCAxMS42OTgzQzMyLjgwMTkgMTIuNzk4NiAzMi41MDQ4IDEzLjg2NDYgMzIuMDQyNyAxNC44NjE3QzMxLjAxOTQgMTcuMDI4IDI5LjY2NTkgMTkuMDIyNCAyOC4wNDg0IDIwLjcwNzNDMjQuNzE0MyAyNC4zODY2IDIwLjg1MjEgMjcuMzA5MyAxNi43NTg4IDI5LjkyMjZDMTYuNjI2NyAzMC4wMjU4IDE2LjM5NTYgMzAuMDI1OCAxNi4yNjM2IDI5LjkyMjZDMTIuOTYyNSAyNy44NTk1IDkuODU5NTQgMjUuNDg2OSA3LjAyMDYyIDIyLjgzOTJDNC45NzM5NiAyMC45NDggMy4xOTEzOSAxOC43ODE3IDEuNzM4OTIgMTYuMzc0N0MwLjEyMTM5NyAxMy43MjcgLTAuNDA2NzczIDEwLjQ2MDQgMC4zMTk0NjEgNy40MDAwN0MxLjgwNDk0IDAuNDg4NTY1IDEwLjA5MDYgLTIuMzY1NDQgMTUuMjczMyAyLjI3NjYyQzE1LjcwMjQgMi42NTQ4NiAxNi4wOTg2IDMuMTM2MjYgMTYuNTYwNyAzLjU4MzI3QzE2LjU5MzcgMy41NDg4OCAxNi42MjY3IDMuNDgwMTEgMTYuNjU5NyAzLjQ0NTczQzE4Ljk3MDUgMC43NjM2NSAyMS44NDI0IC0wLjQzOTg0NSAyNS4yNDI1IDAuMTQ0NzFDMjguOTcyNyAwLjgzMjQyMSAzMS40MTU1IDMuMTM2MjYgMzIuNjAzOSA2Ljg4NDI5QzMyLjc2ODkgNy41Mzc2MSAzMi45MDEgOC4xNTY1NSAzMyA4Ljc3NTQ5WiIgZmlsbD0id2hpdGUiLz48L3N2Zz4=',
@@ -1777,7 +1791,7 @@ export default async (widgetSettings) => {
   // Определяем нужно ли показывать виджет на странице:
   const isShowWidget = await checkToShowWidget();
   
-  if (!isShowWidget) {
+  if (isShowWidget) {
     return;
   }
   

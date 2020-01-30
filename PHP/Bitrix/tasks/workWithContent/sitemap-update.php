@@ -1,35 +1,56 @@
-<?php
-    
+<?
     declare(strict_types=1);
     
     define('ROOT', $_SERVER['DOCUMENT_ROOT']);
-    define('DOMAIN', 'https://www.air-vint.ru');
+    define('MAIN_DOMAIN', 'https://some-domain.ru');
+    define('XML_REGIONS_FOLDER', ROOT . '/regions/sitemaps/');
     
     $siteMapFile = ROOT . DIRECTORY_SEPARATOR . 'sitemap.xml';
     
-    
+    // Обновление файлов:
     try {
         if (isNeedUpdateLastMode($siteMapFile)) {
             $siteMapsFiles = getSiteMapXMLFiles($siteMapFile);
-            echo updateLastModeInFiles($siteMapsFiles);
+            $siteMapRegionFiles = glob(XML_REGIONS_FOLDER . "*");
+            $allXMLFiles = array_merge($siteMapsFiles, $siteMapRegionFiles);
+            
+            changeServerNameInFiles($siteMapRegionFiles);
+            changeLastModeInFiles($allXMLFiles);
         }
-    } catch (Exception $e) {
-    
-    }
-    
+    } catch (Exception $e) {}
     
     /**
-     * Меняет lastMode в файлах на текущее время
+     * Изменяет loc в файлах
      *
      * @param array $siteMapsFiles
      * @return bool
      */
-    function updateLastModeInFiles(array $siteMapsFiles): bool
+    function changeServerNameInFiles(array $siteMapsFiles): bool
+    {
+        foreach ($siteMapsFiles as $siteMapFile) {
+            $fileNameData = explode('_', basename($siteMapFile, ".xml"));
+            $newServerName = end($fileNameData);
+            
+            if (!changeServerName($siteMapFile, $newServerName)) {
+                return false;
+            }
+        }
+        
+        return true;
+    }
+    
+    /**
+     * Изменяет lastMode в файлах на текущее время
+     *
+     * @param array $siteMapsFiles
+     * @return bool
+     */
+    function changeLastModeInFiles(array $siteMapsFiles): bool
     {
         $currentDate = date('c');
         
         foreach ($siteMapsFiles as $siteMapsFile) {
-            if (!updateTagsValue($siteMapsFile, 'lastmod', $currentDate)) {
+            if (!changeTagsValue($siteMapsFile, 'lastmod', $currentDate)) {
                 return false;
             }
         }
@@ -50,7 +71,7 @@
         
         foreach ($xmlObj->sitemap as $sitemap) {
             $locFile = (string) $sitemap->loc;
-            $file = str_replace(DOMAIN, ROOT, $locFile);
+            $file = str_replace(MAIN_DOMAIN, ROOT, $locFile);
             
             if (file_exists($file)) {
                 $files[] = $file;
@@ -59,7 +80,6 @@
         
         return $files;
     }
-    
     
     /**
      * Проверяет на то что прошла неделя с последних изменений в файле
@@ -77,7 +97,6 @@
         return $dateDiff >= 7;
     }
     
-    
     /**
      * Меняет значение в тегах в файле
      *
@@ -86,10 +105,25 @@
      * @param string $value
      * @return bool
      */
-    function updateTagsValue(string $file, string $tag, string $value): bool
+    function changeTagsValue(string $file, string $tag, string $value): bool
     {
         $content = file_get_contents($file);
         $newContent = preg_replace("|<{$tag}>(.*)</{$tag}>|isU", "<{$tag}>{$value}</{$tag}>", $content);
+        
+        return file_put_contents($file, $newContent, LOCK_EX) !== false;
+    }
+    
+    /**
+     * Меняет значение в loc в файле
+     *
+     * @param string $file
+     * @param string $value
+     * @return bool
+     */
+    function changeServerName(string $file, string $value) :bool
+    {
+        $content = file_get_contents($file);
+        $newContent = str_replace(MAIN_DOMAIN, $value, $content);
         
         return file_put_contents($file, $newContent, LOCK_EX) !== false;
     }
