@@ -112,7 +112,7 @@
             
             ["data" => $propNames] = $propNameData;
             ["data" => $propApps] = $propAppData;
-            [$imgName, $PRODUCT_CODE, $name, $propName, $applicabilityList, $BRAND, $price, $sectionList] = $elementData;
+            [$imgName, $PRODUCT_CODE, $name, $propName, $applicabilityList, $BRAND, $price, $currency, $sectionList] = $elementData;
             
             // Картинка
             $imgPathData[] = $imgName;
@@ -140,12 +140,12 @@
                 "DETAIL_PICTURE" => $imgData,
                 "PREVIEW_PICTURE" => $imgData,
                 #"IPROPERTY_TEMPLATES" => [
-                    #"ELEMENT_META_TITLE" => $TITLE,
-                    #"ELEMENT_META_DESCRIPTION" => $DESCRIPTION,
+                #"ELEMENT_META_TITLE" => $TITLE,
+                #"ELEMENT_META_DESCRIPTION" => $DESCRIPTION,
                 #],
             ];
             
-            ['error' => $error] = createProduct($mainData, $prodCount, $price);
+            ['error' => $error] = createProduct($mainData, $prodCount, $price, $currency);
             
             if ($error) {
                 throw new Exception($error);
@@ -163,9 +163,10 @@
      * @param $mainData
      * @param int $prodCount
      * @param null $price
+     * @param null $currency
      * @return array
      */
-    function createProduct($mainData, $prodCount = 1, $price = null) :array
+    function createProduct($mainData, $prodCount = 1, $price = null, $currency = null) :array
     {
         $errors = [];
         ["NAME" => $name] = $mainData;
@@ -176,7 +177,7 @@
             return ['isSuccess' => false, 'error' => "Ошибка с {$name}:" . $element->LAST_ERROR];
         }
         
-        if ($price && !setProductPrice($prodID, $price, "EUR")) {
+        if ($price && !setProductPrice($prodID, $price, $currency)) {
             $errors[] = "Ошибка с {$name}: цена не была установлена";
         }
         
@@ -302,5 +303,3 @@
             return $acc;
         }, []);
     }
-    
-    

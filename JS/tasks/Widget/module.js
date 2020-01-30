@@ -1556,11 +1556,23 @@ export default async (widgetSettings) => {
    * HTML и обработчики для страницы "Мои вещи"
    */
   const getMyClothesData = () => {
-    let productsHTML = "<p class='text--center'>Вы еще ничего не выбрали</p>";
+    let productsHTML = `
+        <div class="mb-20">
+            <div class="bg bg--hanger"></div>
+        </div>
+        <p class='ai-wgt__text text--center mb-20'>
+        Вещи, которые вы отметите «сердечком», появятся тут.
+        </p>
+        <p class='ai-wgt__text text--center mb-20'>
+        Для этого нажмите кнопку “Искать еще” и наш ассистент подберет одежду или аксессуары <b>специально для вас</b>.
+        </p>
+        <p class='ai-wgt__text text--center'>
+        Вы обязательно найдете что-нибудь себе по душе!
+        </p>
+    `;
+    const { products } = state.current.pageData;
     
-    const {products} = state.current.pageData;
-    
-    if (products) {
+    if (products.length) {
       const productsHTMLData = products.map(product => {
         const { name, img_src: imgSrc, price, old_price: oldPrice, url } = product;
         return `
@@ -1578,7 +1590,7 @@ export default async (widgetSettings) => {
     }
     
     const html = `
-          <p class="ai-wgt__title text--center">Мои вещи</p>
+          <p class="ai-wgt__title text--center mb-10">Мои вещи</p>
           <div class="products">
               ${productsHTML}
           </div>
@@ -1588,6 +1600,17 @@ export default async (widgetSettings) => {
           <div class="ai-wgt__link ai-wgt__my-clothes">Искать еще</div>
         </div>
         <style>
+          .bg {
+            height: 45px;
+            margin: 0 auto;
+          }
+          .bg--hanger {
+            width: 55px;
+            background-image: url(${settings.bgImages.hanger});
+          }
+          .ai-wgt__content {
+            padding: 10px 25px;
+          }
           .ai-wgt ::-webkit-scrollbar {
             width: 2px;
           }
@@ -1602,7 +1625,6 @@ export default async (widgetSettings) => {
             background-color: rgba(0, 0, 0, 0.2);
           }
           .products {
-            width: 240px;
             height: 338px;
             overflow-y: scroll;
             margin: 0 auto;
@@ -1791,7 +1813,7 @@ export default async (widgetSettings) => {
   // Определяем нужно ли показывать виджет на странице:
   const isShowWidget = await checkToShowWidget();
   
-  if (isShowWidget) {
+  if (!isShowWidget) {
     return;
   }
   
