@@ -3467,10 +3467,10 @@ where($pdo, []);           // select id from users order by id
 where($pdo, ['id' => []]); // select id from users order by id
 
 // select id from users where first_name in ('john', 'adel') order by id
-where($pdo, ['first_name' => ['john', 'adel']])
+where($pdo, ['first_name' => ['john', 'adel']]);
 
 // select id from users where first_name = 'ada' or source in ('bing', 'gmail') order by id
-where($pdo, ['first_name' => 'ada', 'source' => ['bing', 'gmail']])
+where($pdo, ['first_name' => 'ada', 'source' => ['bing', 'gmail']]);
 
 
 function where($pdo, $params)
