@@ -12,8 +12,6 @@
      */
     class CAdvertCatalogSection extends \CBitrixComponent
     {
-        private $iBlockID = 28;
-        
         function __constructor()
         {
             parent::__constructor();
@@ -87,9 +85,9 @@
                 return;
             }
             
-            ['IBLOCK_ID' => $iBlockID, 'SKU_PROPERTY_ID' => $skuPropID] = $productInfo;
+            ['IBLOCK_ID' => CATALOG_IBLOCK_ID, 'SKU_PROPERTY_ID' => $skuPropID] = $productInfo;
             
-            $arrFilter = ['IBLOCK_ID' => $iBlockID, "PROPERTY_{$skuPropID}" => $elemID];
+            $arrFilter = ['IBLOCK_ID' => CATALOG_IBLOCK_ID, "PROPERTY_{$skuPropID}" => $elemID];
             $offersDBData = CIBlockElement::GetList([], $arrFilter);
             
             while ($offerData = $offersDBData->GetNext()) {

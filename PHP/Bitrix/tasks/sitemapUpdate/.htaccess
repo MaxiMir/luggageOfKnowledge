@@ -1,0 +1,7 @@
+<IfModule mod_rewrite.c>
+  Options +FollowSymLinks
+    RewriteEngine On
+    RewriteCond %{REQUEST_FILENAME} sitemap.xml
+	RewriteCond %{DOCUMENT_ROOT}/sitemap.php -f
+	RewriteRule ^(.*)$ /sitemap.php [L]
+</IfModule>

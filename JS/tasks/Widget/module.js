@@ -5,9 +5,16 @@ export default async (widgetSettings) => {
   let delayTimerID;
   
   const {
-    key, category_id: categoryID, product_id: productID,
-    addToBasketFn, likeFn, dislikeFn, myClothesFn, delay,
-    apiBaseUri = 'https://testapi.garderobo.ai/api/v3/widget/', parentSelector = 'body'
+    key,
+    category_id: categoryID,
+    product_id: productID,
+    addToBasketFn,
+    likeFn,
+    dislikeFn,
+    myClothesFn,
+    delay,
+    apiBaseUri = 'https://testapi.garderobo.ai/api/v3/widget/',
+    parentSelector = 'body'
   } = widgetSettings;
   
   
@@ -1210,7 +1217,7 @@ export default async (widgetSettings) => {
     const formattedPrice = !price ? null : formatPrice(price);
     
     const html = `
-                ${!formattedPrice ? '' : `<div class="ai-wgt__price text--big fl-center">${formattedPrice}₽</div>`}
+                ${!formattedPrice ? '' : `<div class="ai-wgt__price text--big fl-center">${formattedPrice}&#8381;</div>`}
                 <div class="ai-wgt__dislike ai-wgt__circle"></div>
                 <div class="ai-wgt__like ai-wgt__circle"></div>
                 <div class="stage">
@@ -1813,7 +1820,7 @@ export default async (widgetSettings) => {
   // Определяем нужно ли показывать виджет на странице:
   const isShowWidget = await checkToShowWidget();
   
-  if (!isShowWidget) {
+  if (isShowWidget) {
     return;
   }
   
