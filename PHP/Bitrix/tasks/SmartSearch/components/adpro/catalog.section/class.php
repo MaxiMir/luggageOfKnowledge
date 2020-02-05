@@ -6,10 +6,6 @@
     
     use \Bitrix\Main\Loader;
     
-    /**
-     * @global CUser $USER
-     * @global CMain $APPLICATION
-     */
     class CAdvertCatalogSection extends \CBitrixComponent
     {
         function __constructor()
@@ -40,9 +36,7 @@
             
             $dbResElement = $obElement->GetList(
                 [],
-                [
-                    "ID" => $arIdProduct
-                ],
+                ["ID" => $arIdProduct],
                 false,
                 $navParams,
                 [
@@ -56,10 +50,7 @@
             );
             
             while ($arElement = $dbResElement->GetNext()) {
-                [
-                    "ID" => $elemID,
-                    "NAME" => $name
-                ] = $arElement;
+                ["ID" => $elemID, "NAME" => $name] = $arElement;
                 
                 $arElement["IMG_SRC"] = $this->getProductImage($arElement);
                 $arElement["TITLE"] = $this->generateProductTitle($name);
@@ -79,7 +70,7 @@
         {
             $offersData = [];
             
-            $productInfo = CCatalogSKU::GetInfoByProductIBlock($this->iBlockID);
+            $productInfo = CCatalogSKU::GetInfoByProductIBlock(CATALOG_IBLOCK_ID);
             
             if (!is_array($productInfo)) {
                 return;
@@ -118,6 +109,7 @@
         public function getMiniImageSrc($idImage)
         {
             $imgData = CFile::ResizeImageGet($idImage, ['width' => 70, 'height' => 70], BX_RESIZE_IMAGE_EXACT, true);
+            
             return $imgData["src"];
         }
         
@@ -133,7 +125,7 @@
                 "ID" => $elemID,
                 "PREVIEW_PICTURE" => $previewPicture,
                 "DETAIL_PICTURE" => $detailPicture,
-                "PROPERTY_MORE_PHOTO_VALUE" => $morePhotoData
+                "PROPERTY_MORE_PHOTO_VALUE" => $morePhotoData,
             ] = $arElement;
             
             if ($previewPicture) {
@@ -175,7 +167,7 @@
             [
                 "DISCOUNT" => $discount,
                 "BASE_PRICE" => $basePrice,
-                "DISCOUNT_PRICE" => $discountPrice
+                "DISCOUNT_PRICE" => $discountPrice,
             ] = $resultPrice;
             
             
@@ -189,7 +181,7 @@
         }
         
         /**
-         * выполняет логику работы компонента
+         * Выполняет логику работы компонента
          */
         public function executeComponent()
         {
