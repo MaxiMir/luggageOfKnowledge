@@ -18,7 +18,6 @@
     }
 </style>
 
-
 <script type="module">
   import initWidget from './module.js';
 

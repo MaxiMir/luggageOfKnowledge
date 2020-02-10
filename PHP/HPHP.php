@@ -12234,7 +12234,7 @@ EOD;
 		 ['id' => 8, 'age' => 3]
 	 ];
 	 
-	 json_encode($expected) == $actual
+	 json_encode($expected) == $actual;
 	 
 	 // FILE: /app/src/Application.php:
 	 namespace App;
