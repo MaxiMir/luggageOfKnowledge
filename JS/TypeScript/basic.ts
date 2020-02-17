@@ -1,3 +1,6 @@
+// ### TYPESCRIPT: BASIC ###
+
+
 // @ INSTALL:
 // $ npm install -g typescript
 

@@ -17,17 +17,17 @@
             "es2016" // (по умолч.)
         ],
         "allowJs": true, // разрешить JS файлам быть скомпилированными
-        "checkJs": true, // влючает проверку JS файлов
-        "jsx": "preverse", // или react или react-native - настройки для React
+        "checkJs": true, // включает проверку JS файлов
         "sourceMap": true, // включить генерацию sourceMap
         "outDir": "./dist", // директория для скомпилированных файлов
         "rootDir": "./src", // корневая директория
         "removeComments": true, // удаление комменториев в скомпилированных файлах
-        "noEmitOnError": false, // не запускать компиляцию если есть ошибки (по умолч. false)
+        "noEmitOnError": true, // не запускать компиляцию если есть ошибки (по умолч. false)
         "noUnusedLocals": true,
         "noUnusedParameters": true,
         "noImplicitReturns": true,
 
+        "jsx": "preverse", // или react или react-native - настройки для React
         "experimentalDecorators": true // экспериментальная фича - декораторы
     },
     "exclude": [ // файлы или пути, которые исключаем из компиляции
@@ -46,17 +46,17 @@
 /**
  <!DOCTYPE html>
  <html lang="en">
- <head>
- <meta charset="UTF-8">
- <meta name="viewport" content="width=device-width, initial-scale=1.0">
- <title>Typescript</title>
- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
- <script src="dist/app.js" defer></script>
- <script src="dist/generic.js" defer></script>
- </head>
- <body>
- <div class="container"></div>
- </body>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Typescript</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+        <script src="dist/app.js" defer></script>
+        <script src="dist/generic.js" defer></script>
+    </head>
+    <body>
+        <div class="container"></div>
+    </body>
  </html>
  */
 
@@ -208,7 +208,7 @@ numbers.items; // [1, 2, 2]
 // #7:
 interface Car {
     model: string,
-    year: Number
+    year: number
 }
 
 function createAndValidateCar(model: string, year: number): Car {
@@ -268,3 +268,92 @@ class Component {
         return this.name;
     }
 }
+
+
+// #2:
+interface ComponentDecorator {
+    selector: string,
+    template: string
+}
+
+function Component(config: ComponentDecorator) {
+    return function
+        <T extends { new(...args:any[]): object }>
+        (Constructor: T) {
+        return class extends Constructor {
+            constructor(...args: any[]) {
+                super(...args);   
+                
+                const el = document.querySelector(config.selector)!;
+                el.innerHTML = config.template;
+            }
+        }        
+    }
+}
+
+function Bind(_:any, _2: any, descriptor: PropertyDescriptor): PropertyDescriptor {
+    const original = descriptor.value;
+    
+    return {
+        configurable: true,
+        enumerable: false,
+        get() { // this указывает на инстанс класса
+            return original.bind(this)
+        }
+    };
+}
+
+@Component({
+    selector: '#card',
+    template: `
+        <div class="card">
+            <div class="card-content">
+                <span class="card-title">Card Component</span>
+            </div>
+        </div>
+    `
+})
+class CarComponent {
+    constructor(public name: string) {
+    }
+
+    @Bind
+    logName(): void {
+        console.log(`Component Name: ${this.name}`);
+    }
+}
+
+const card = new CarComponent('My Card Component'); 
+const btn = document.querySelector('#btn')!;
+btn.addEventListener('click', card.logName); // благодаря декоратору @Bind, вместо card.logName.bind(card)
+
+
+// #3:
+type ValidatorType = 'required' | 'email';
+
+interface ValidatorConfig {
+    [prop: string]: {
+        [validateProp: string]: ValidatorType
+    }
+}
+
+const validators: ValidatorConfig = {}
+
+function Required(target: any, propName: string) {
+    validators[target.constructor.name] = { // target.constructor.name - название класса
+        ...validators[target.constructor.name],
+        [propName]: 'required',
+    }
+}
+
+class Form {
+    @Required
+    public email: string|void;
+
+    constructor(email?: string) {
+        this.email = email;
+    }
+}
+
+const form = new Form();
+console.log(form);

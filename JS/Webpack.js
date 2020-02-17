@@ -404,7 +404,7 @@ const getOptimizationSettings = () => {
   }
   
   return config;
-}
+};
 
 const getFilename = ext => isDev ? `[name].${ext}` : `[name].[hash].${ext}`;
 
