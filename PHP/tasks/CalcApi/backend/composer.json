@@ -1,0 +1,18 @@
+{
+    "name": "maksimmincenko/calc-api",
+    "type": "project",
+    "authors": [
+        {
+            "name": "Maxim",
+            "email": "mmirrev@gmail.com"
+        }
+    ],
+    "require": {
+        "slim/slim": "3.*"
+    },
+    "autoload": {
+        "psr-4": {
+            "app\\": "src/"
+        }
+    }
+}
