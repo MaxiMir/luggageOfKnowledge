@@ -42,31 +42,7 @@
 }
 
 
-// + FILE: index.js:
-/**
- <!DOCTYPE html>
- <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Typescript</title>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-        <script src="dist/app.js" defer></script>
-        <script src="dist/generic.js" defer></script>
-    </head>
-    <body>
-        <div class="container"></div>
-    </body>
- </html>
- */
-
-
-// + FILE: src/app.ts:
-const message: string = 'Hello world';
-
-
-
-// + FILE: src/generic.ts:
+// @ generic:
 // #1:
 function mergeObjects<T extends object, R extends object>(a: T, b: R): T & R {
     return Object.assign({}, a, b);
@@ -346,6 +322,25 @@ function Required(target: any, propName: string) {
     }
 }
 
+function validate(obj: any): boolean {
+    let isValid = true;
+    const objConfig = validators[obj.constructor.name];
+
+    if (!objConfig) {
+        return isValid;
+    }
+
+    
+
+    Object.keys(objConfig).forEach(key => {
+        if (objConfig[key] === 'required') {
+            isValid = isValid && !!obj[key];
+        }
+    });
+
+    return isValid;
+}
+
 class Form {
     @Required
     public email: string|void;
@@ -357,3 +352,50 @@ class Form {
 
 const form = new Form();
 console.log(form);
+
+if (validate(form)) {
+    console.log('Valid: ', form);
+} else {
+    console.log('Validation Error');
+}
+
+
+// @ namespaces:
+
+// + FILE: form-namespace.ts:
+namespace Form {
+    export type FormType = 'inline' | 'block'; // экспортиртируем из namespace
+    export type FormState = 'active' | 'disabled';
+    
+    export interface FormInfo {
+        type: FormType,
+        state: FormState
+    }
+}
+
+// + FILE: my-form.ts:
+/// <reference path="form-namespace.ts" /> 
+// импорт namespace
+
+namespace Form {
+    class MyForm {
+        private type: FormType = 'inline';
+        private state: FormState = 'active';
+    
+        constructor(public email: string) {
+    
+        }
+    
+        getInfo(): FormInfo {
+            return {
+                type: this.state,
+                state: this.state
+            }
+        }
+    }
+    
+    const myForm = new MyForm('m@m.ru');
+}
+
+
+
