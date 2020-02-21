@@ -1,53 +1,11 @@
-interface IApiCalc {
-  init: (settings: ICalcSettings) => void,
-}
-
-interface ICalcSettings {
-  Services?: string|null,
-  CalcSettings?: string|null,
-  PriceName?: string|null,
-  PriceCost?: string|null,
-  PriceParam2?: string|null,
-  PriceParam1?: string|null,
-  MatTypes?: string|null,
-  Materials?: string|null,
-  MatFormats?: string|null
-}
-
-interface IElement extends HTMLElement {
-  dataset: {
-    id: string
-  }
-}
-
-interface IElementData {
-  id: number,
-  title: string;
-}
-
-interface IContainerElement extends HTMLElement {
-  dataset: {
-    table: string,
-        checkedId: string
-  }
-}
-
-interface IContainerData {
-  id ?: number,
-  title?: string,
-  sort: number,
-  header: string,
-  table: keyof ICalcSettings,
-  checkedID: number|null,
-  type: 'section' | 'price',
-  elements: IElementData[]
-}
-
-interface IResponseData {
-  isSuccess: boolean,
-  data: IContainerData[],
-  msg: string
-}
+import ICalcSettings from "./ICalcSettings";
+import IApiCalc from "./IApiCalc";
+import IElement from "./IElement";
+import IElementData from "./IElementData";
+import IContainerElement from "./IContainerElement";
+import IContainerData from "./IContainerData";
+import IResponseData from "./IResponseData";
+import RenderData from "./RenderData";
 
 type state = 'loader' | 'error' | 'show-calc-containers';
 
@@ -224,16 +182,15 @@ type state = 'loader' | 'error' | 'show-calc-containers';
      * @returns {Promise}
      */
     const updateContainers = async (calcSettings: ICalcSettings): Promise<void> => {
-      const {isSuccess, data, msg} = await getResponse(uri, true, calcSettings);
+      const {isSuccess, data, msg: error} = await getResponse(uri, true, calcSettings);
       
       if (!isSuccess) {
-        render('error', msg);
+        render('error', {error});
         return;
       }
       
       const containersData = sortContainers(data);
-      
-      render('show-calc-containers', containersData);
+      render('show-calc-containers', {containersData});
     };
     
     
@@ -924,36 +881,33 @@ type state = 'loader' | 'error' | 'show-calc-containers';
      * Рендеринг виджета
      *
      * @param {string} state
-     * @param {string|object|null} data
+     * @param {object} renderData
      */
-    const render = (state: state, data: string|object|null = null): void => {
+    const render = (state: state, renderData: RenderData = {}): void => {
       const cb = () => {
         if (!calcContainer) {
           return;
         }
 
-        const htmlMapFn = {
-          'loader': getLoaderHTML,
-          'error': getErrorHTML,
-          'show-calc-containers': getContainersHTML,
-        };
+        const {error, containersData} = renderData;
 
-        const handlersMapFn = {
-          'show-calc-containers': bindElementsHandlers,
-        };
+        if (state === 'loader') {
+          calcContainer.innerHTML = getLoaderHTML();
+        }
 
-        calcContainer.innerHTML = !data ? htmlMapFn[state]() : htmlMapFn[state](data);
+        if (state === 'error') {
+          calcContainer.innerHTML = getErrorHTML(error || 'Что-то пошло не так');
+        }
 
-        if (handlersMapFn[state]) {
-          handlersMapFn[state]();
+        if (state === 'show-calc-containers' && containersData) {
+          calcContainer.innerHTML = getContainersHTML(containersData);
+          bindElementsHandlers();
         }
       };
 
       setTimeout(cb, 0);
     };
   
-    
-    
     generateCalcCarcase();
     render('loader');
     

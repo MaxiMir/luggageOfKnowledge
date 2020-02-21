@@ -8,6 +8,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+System.register("ICalcSettings", [], function (exports_1, context_1) {
+    "use strict";
+    var __moduleName = context_1 && context_1.id;
+    return {
+        setters: [],
+        execute: function () {
+        }
+    };
+});
 ((window) => {
     'use strict';
     const calcWidget = window.calcWidget = {};
@@ -83,13 +92,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
             }, {});
         };
         const updateContainers = (calcSettings) => __awaiter(void 0, void 0, void 0, function* () {
-            const { isSuccess, data, msg } = yield getResponse(uri, true, calcSettings);
+            const { isSuccess, data, msg: error } = yield getResponse(uri, true, calcSettings);
             if (!isSuccess) {
-                render('error', msg);
+                render('error', { error });
                 return;
             }
             const containersData = sortContainers(data);
-            render('show-calc-containers', containersData);
+            render('show-calc-containers', { containersData });
         });
         const generateCalcCarcase = () => {
             const calcSection = document.createElement('div');
@@ -670,22 +679,21 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                 });
             }
         };
-        const render = (state, data = null) => {
+        const render = (state, renderData = {}) => {
             const cb = () => {
                 if (!calcContainer) {
                     return;
                 }
-                const htmlMapFn = {
-                    'loader': getLoaderHTML,
-                    'error': getErrorHTML,
-                    'show-calc-containers': getContainersHTML,
-                };
-                const handlersMapFn = {
-                    'show-calc-containers': bindElementsHandlers,
-                };
-                calcContainer.innerHTML = !data ? htmlMapFn[state]() : htmlMapFn[state](data);
-                if (handlersMapFn[state]) {
-                    handlersMapFn[state]();
+                const { error, containersData } = renderData;
+                if (state === 'loader') {
+                    calcContainer.innerHTML = getLoaderHTML();
+                }
+                if (state === 'error') {
+                    calcContainer.innerHTML = getErrorHTML(error || 'Что-то пошло не так');
+                }
+                if (state === 'show-calc-containers' && containersData) {
+                    calcContainer.innerHTML = getContainersHTML(containersData);
+                    bindElementsHandlers();
                 }
             };
             setTimeout(cb, 0);

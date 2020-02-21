@@ -23,9 +23,7 @@
             $this->connection = sqlsrv_connect($serverName, $connectionInfo);
             
             if (!$this->connection) {
-                $errorsList = implode('<br>', sqlsrv_errors());
-                
-                die("Connection could not be established.<br />{$errorsList}");
+                die("Connection could not be established.<br />");
             }
         }
         
