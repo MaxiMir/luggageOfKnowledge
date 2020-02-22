@@ -363,7 +363,7 @@ if (validate(form)) {
 // @ namespaces:
 
 // + FILE: form-namespace.ts:
-namespace Form {
+namespace Form { // namespace должны совпадать
     export type FormType = 'inline' | 'block'; // экспортиртируем из namespace
     export type FormState = 'active' | 'disabled';
     

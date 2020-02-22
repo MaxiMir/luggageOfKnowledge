@@ -24,15 +24,15 @@ $ code . // открыть текущую директорию в MVC
 */
 
 // FILE gulpfile.js:
-const {src, dest, series, watch} = require('KNOWLEDGE/JS/GULP') // series - позволяет вызывать последовательно несколько задач
-const sass = require('gulp-sass')
-const csso = require('gulp-csso')
-const include = require('gulp-file-include') // пакет отвечает за соединение данных файлов
-const htmlmin = require('gulp-htmlmin')
-const del = require('del')
-const concat = require('gulp-concat') // cоединяет множество файлов в один
-const autoprefixer = require('gulp-autoprefixer')  
-const sync = require('browser-sync').create()
+const {src, dest, series, watch} = require('gulp'); // series - позволяет вызывать последовательно несколько задач
+const sass = require('gulp-sass');
+const csso = require('gulp-csso');
+const include = require('gulp-file-include'); // пакет отвечает за соединение данных файлов
+const htmlmin = require('gulp-htmlmin');
+const del = require('del');
+const concat = require('gulp-concat'); // cоединяет множество файлов в один
+const autoprefixer = require('gulp-autoprefixer');
+const sync = require('browser-sync').create();
 
 function html() {
     return src('src/**.html') // указываем какие файлы обрабатываем (все .html файлы в папке /src)

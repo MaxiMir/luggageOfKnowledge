@@ -1,211 +1,212 @@
-import ICalcSettings from "./ICalcSettings";
-import IApiCalc from "./IApiCalc";
-import IElement from "./IElement";
-import IElementData from "./IElementData";
-import IContainerElement from "./IContainerElement";
-import IContainerData from "./IContainerData";
-import IResponseData from "./IResponseData";
-import RenderData from "./RenderData";
+/// <reference path="../interfaces/IApiCalc.ts" />
+/// <reference path="../interfaces/ICalcSettings.ts" />
+/// <reference path="../interfaces/IContainerData.ts" />
+/// <reference path="../interfaces/IContainerElement.ts" />
+/// <reference path="../interfaces/IElement.ts" />
+/// <reference path="../interfaces/IElementData.ts" />
+/// <reference path="../interfaces/IResponseData.ts" />
+/// <reference path="../interfaces/RenderData.ts" />
+/// <reference path="../types/state.ts" />
 
-type state = 'loader' | 'error' | 'show-calc-containers';
+namespace calcApi {
+    ((window) => {
+        'use strict';
 
-((window) => {
-  'use strict';
+        const calcWidget = (<any>window).calcWidget = {} as IApiCalc;
 
-  const calcWidget = (<any>window).calcWidget = {} as IApiCalc;
-  
-  /**
-   * Инициализация калькулятора
-   *
-   * @param calcSettings
-   * @return {Promise<void>}
-   */
-  calcWidget.init = async (calcSettings: ICalcSettings): Promise<void> => {
+        /**
+         * Инициализация калькулятора
+         *
+         * @param calcSettings
+         * @return {Promise<void>}
+         */
+        calcWidget.init = async (calcSettings: ICalcSettings): Promise<void> => {
 
-    let calcContainer: HTMLElement|null;
-    const uri: string = 'https://slim.xppx.ru/work/src/';
-    const calcElements: HTMLCollectionOf<Element>|null = document.getElementsByClassName('calc-elem');
-    const closeIcons: HTMLCollectionOf<Element>|null = document.getElementsByClassName('calc-elem__close');
-    const listElements: HTMLCollectionOf<Element>|null = document.getElementsByClassName('calc-elem__list');
+            let calcContainer: HTMLElement | null;
+            const uri: string = 'https://slim.xppx.ru/work/src/';
+            const calcElements: HTMLCollectionOf<Element> | null = document.getElementsByClassName('calc-elem');
+            const closeIcons: HTMLCollectionOf<Element> | null = document.getElementsByClassName('calc-elem__close');
+            const listElements: HTMLCollectionOf<Element> | null = document.getElementsByClassName('calc-elem__list');
 
-    // @ HELPERS:
+            // @ HELPERS:
 
-    /**
-     * Возвращает отсортированный по ключу sort массив
-     *
-     * @param {array} containersData
-     * @returns {array}
-     */
-    const sortContainers = (containersData: IContainerData[]): IContainerData[] => {
-      if (containersData.length > 1) {
-        containersData.sort((a, b) => {
-          return a.sort - b.sort;
-        });
-      }
+            /**
+             * Возвращает отсортированный по ключу sort массив
+             *
+             * @param {array} containersData
+             * @returns {array}
+             */
+            const sortContainers = (containersData: IContainerData[]): IContainerData[] => {
+                if (containersData.length > 1) {
+                    containersData.sort((a, b) => {
+                        return a.sort - b.sort;
+                    });
+                }
 
-      return containersData;
-    };
+                return containersData;
+            };
 
-    /**
-     * Возвращает название для контейнера
-     *
-     * @param {array} elements
-     * @param {string} header
-     * @param {int|null} checkedID
-     * @returns {string}
-     */
-    const getTitle = (elements: IElementData[], header: string, checkedID: number|null): string => {
-      if (!checkedID) {
-        return header;
-      }
+            /**
+             * Возвращает название для контейнера
+             *
+             * @param {array} elements
+             * @param {string} header
+             * @param {int|null} checkedID
+             * @returns {string}
+             */
+            const getTitle = (elements: IElementData[], header: string, checkedID: number | null): string => {
+                if (!checkedID) {
+                    return header;
+                }
 
-      const checkedElement = elements.filter(item => item.id === checkedID)[0];
+                const checkedElement = elements.filter(item => item.id === checkedID)[0];
 
-      return checkedElement.title;
-    };
+                return checkedElement.title;
+            };
 
-    /**
-     * Обновляет data-id у контейнера
-     *
-     * @param container
-     * @param target
-     * @returns {void}
-     */
-    const updateContainerID = (container: IContainerElement, target: IElement) => {
-      const {id} = target.dataset;
+            /**
+             * Обновляет data-id у контейнера
+             *
+             * @param container
+             * @param target
+             * @returns {void}
+             */
+            const updateContainerID = (container: IContainerElement, target: IElement) => {
+                const {id} = target.dataset;
 
-      container.dataset.checkedId = id;
-    };
+                container.dataset.checkedId = id;
+            };
 
-    /**
-     *
-     * @param element
-     * @param {string} className
-     */
-    const toggleElementClass = (element: HTMLElement|null, className: string): void => {
-      if (!element) {
-        return;
-      }
+            /**
+             * Переключает класс у элемента
+             *
+             * @param element
+             * @param {string} className
+             */
+            const toggleElementClass = (element: HTMLElement | null, className: string): void => {
+                if (!element) {
+                    return;
+                }
 
-      element.classList.toggle(className);
-    };
+                element.classList.toggle(className);
+            };
 
-    /**
-     * Переключает класс у элементов
-     *
-     * @param elements
-     * @param {string} className
-     */
-    const toggleElementsClass = (elements: HTMLElement[] | HTMLCollection, className: string): void => {
-      const elementsList = elements instanceof Array ? elements : [...elements] as HTMLElement[];
+            /**
+             * Переключает класс у элементов
+             *
+             * @param elements
+             * @param {string} className
+             */
+            const toggleElementsClass = (elements: HTMLElement[] | HTMLCollection, className: string): void => {
+                const elementsList = elements instanceof Array ? elements : [...elements] as HTMLElement[];
 
-      elementsList.forEach(element => {
-        toggleElementClass(element, className);
-      });
-    };
-    
-    /**
-     * Обновляет заголовок у блока
-     *
-     * @param titleElement
-     * @param target
-     * @returns {void}
-     */
-    const updateContainerTitle = (titleElement: HTMLElement|null, target: HTMLElement): void => {
-      if (!titleElement) {
-        return;
-      }
-      
-      titleElement.innerHTML = target.innerText;
-      
-      toggleElementClass(titleElement, 'fade');
-      
-      setTimeout(() => {
-        toggleElementClass(titleElement, 'fade');
-      }, 800);
-    };
-    
-    
-    // @ RESPONSE DATA:
-    
-    /**
-     * Отправляет запрос на сервер
-     *
-     * @param {string} uri
-     * @param {boolean} isPost
-     * @param {object} data
-     * @returns {Promise}
-     */
-    const getResponse = async (uri: string, isPost: boolean = false, data: ICalcSettings): Promise<IResponseData> => {
-      const settings = {
-        method: isPost ? 'POST' : 'GET',
-        headers: {
-          'Content-Type': 'application/json;charset=utf-8',
-        },
-        body: JSON.stringify(data),
-      };
-      
-      const fetchResponse = await fetch(uri, settings);
-      
-      return await fetchResponse.json();
-    };
-    
-    /**
-     * Возвращает данные для отправки на сервер
-     *
-     * @param container
-     * @returns {object}
-     */
-    const getDataForResponse = (container: IContainerElement): ICalcSettings => {
-      if (!calcElements) {
-        return {};
-      }
-      
-      const calcElementsData = [...calcElements];
-      const slicedIndex = calcElementsData.indexOf(container) + 1;
-      const containers = calcElementsData.slice(0, slicedIndex) as IContainerElement[];
-      
-      return containers.reduce((acc, container) => {
-        const {table, checkedId} = container.dataset;
+                elementsList.forEach(element => {
+                    toggleElementClass(element, className);
+                });
+            };
 
-        // @ts-ignore
-        acc[table] = checkedId;
+            /**
+             * Обновляет заголовок у блока
+             *
+             * @param titleElement
+             * @param target
+             * @returns {void}
+             */
+            const updateContainerTitle = (titleElement: HTMLElement | null, target: HTMLElement): void => {
+                if (!titleElement) {
+                    return;
+                }
 
-        return acc;
-      }, {});
-    };
-  
-    /**
-     * Посылает данные для обновления контейнеров с элементами
-     *
-     * @param {object} calcSettings
-     * @returns {Promise}
-     */
-    const updateContainers = async (calcSettings: ICalcSettings): Promise<void> => {
-      const {isSuccess, data, msg: error} = await getResponse(uri, true, calcSettings);
-      
-      if (!isSuccess) {
-        render('error', {error});
-        return;
-      }
-      
-      const containersData = sortContainers(data);
-      render('show-calc-containers', {containersData});
-    };
-    
-    
-    // @ HTML:
-  
-    /**
-     * Возвращает первоначальный HTML
-     *
-     * @returns {string}
-     */
-    const generateCalcCarcase = (): void => {
-      const calcSection = document.createElement('div');
-      
-      calcSection.classList.add('calc-section');
-      calcSection.insertAdjacentHTML('afterbegin', `
+                titleElement.innerHTML = target.innerText;
+
+                toggleElementClass(titleElement, 'fade');
+
+                setTimeout(() => {
+                    toggleElementClass(titleElement, 'fade');
+                }, 800);
+            };
+
+
+            // @ RESPONSE DATA:
+
+            /**
+             * Отправляет запрос на сервер
+             *
+             * @param {string} uri
+             * @param {boolean} isPost
+             * @param {object} data
+             * @returns {Promise}
+             */
+            const getResponse = async (uri: string, isPost: boolean = false, data: ICalcSettings): Promise<IResponseData> => {
+                const settings = {
+                    method: isPost ? 'POST' : 'GET',
+                    headers: {
+                        'Content-Type': 'application/json;charset=utf-8',
+                    },
+                    body: JSON.stringify(data),
+                };
+
+                const fetchResponse = await fetch(uri, settings);
+
+                return await fetchResponse.json();
+            };
+
+            /**
+             * Возвращает данные для отправки на сервер
+             *
+             * @param container
+             * @returns {object}
+             */
+            const getDataForResponse = (container: IContainerElement): ICalcSettings => {
+                if (!calcElements) {
+                    return {};
+                }
+
+                const calcElementsData = [...calcElements];
+                const slicedIndex = calcElementsData.indexOf(container) + 1;
+                const containers = calcElementsData.slice(0, slicedIndex) as IContainerElement[];
+
+                return containers.reduce((acc, container) => {
+                    const {table, checkedId} = container.dataset;
+
+                    // @ts-ignore
+                    acc[table] = checkedId;
+
+                    return acc;
+                }, {});
+            };
+
+            /**
+             * Посылает данные для обновления контейнеров с элементами
+             *
+             * @param {object} calcSettings
+             * @returns {Promise}
+             */
+            const updateContainers = async (calcSettings: ICalcSettings): Promise<void> => {
+                const {isSuccess, data, msg: error} = await getResponse(uri, true, calcSettings);
+
+                if (!isSuccess) {
+                    render('error', {error});
+                    return;
+                }
+
+                const containersData = sortContainers(data);
+                render('show-calc-containers', {containersData});
+            };
+
+
+            // @ HTML:
+
+            /**
+             * Возвращает первоначальный HTML
+             *
+             * @returns {string}
+             */
+            const generateCalcCarcase = (): void => {
+                const calcSection = document.createElement('div');
+
+                calcSection.classList.add('calc-section');
+                calcSection.insertAdjacentHTML('afterbegin', `
             <style>
                 .calc-section {
                     width: 100%;
@@ -403,19 +404,19 @@ type state = 'loader' | 'error' | 'show-calc-containers';
             <h2>Калькулятор</h2>
             <div id="calcContainer" class="calc-main-container"></div>
         `);
-      
-      document.body.appendChild(calcSection);
-      
-      calcContainer = document.getElementById('calcContainer');
-    };
-  
-    /**
-     * Возвращает HTML для лоадера
-     *
-     * @returns {string}
-     */
-    const getLoaderHTML = () => {
-      return `
+
+                document.body.appendChild(calcSection);
+
+                calcContainer = document.getElementById('calcContainer');
+            };
+
+            /**
+             * Возвращает HTML для лоадера
+             *
+             * @returns {string}
+             */
+            const getLoaderHTML = () => {
+                return `
             <style>
                 .calc-loader {
                     display: none;
@@ -641,15 +642,15 @@ type state = 'loader' | 'error' | 'show-calc-containers';
                 </div>
             </div>
         `;
-    };
-  
-    /**
-     * Возвращает HTML для ошибки
-     *
-     * @returns {string}
-     */
-    const getErrorHTML = (msg: string): string => {
-      return `
+            };
+
+            /**
+             * Возвращает HTML для ошибки
+             *
+             * @returns {string}
+             */
+            const getErrorHTML = (msg: string): string => {
+                return `
           <style>
               .calc-error {
                   color: red;
@@ -657,46 +658,46 @@ type state = 'loader' | 'error' | 'show-calc-containers';
           </style>
           <p class="calc-error">${msg}</p>
       `;
-    };
+            };
 
-    /**
-     * Возвращает HTML для списка элементов контейнера
-     *
-     * @param elementsData
-     * @param {int|null} checkedID
-     * @returns {string}
-     */
-    const getElementsListHTML = (elementsData: IElementData[], checkedID: number|null): string => {
-      const preparedID = !checkedID ? null : +checkedID;
-      
-      const elementListHTML = elementsData.map(({id, title}) => {
-        const isChecked = preparedID && id === preparedID;
-        const elemClass = !isChecked ? 'calc-elem__link' : 'calc-elem__link active';
-        
-        return `
+            /**
+             * Возвращает HTML для списка элементов контейнера
+             *
+             * @param elementsData
+             * @param {int|null} checkedID
+             * @returns {string}
+             */
+            const getElementsListHTML = (elementsData: IElementData[], checkedID: number | null): string => {
+                const preparedID = !checkedID ? null : +checkedID;
+
+                const elementListHTML = elementsData.map(({id, title}) => {
+                    const isChecked = preparedID && id === preparedID;
+                    const elemClass = !isChecked ? 'calc-elem__link' : 'calc-elem__link active';
+
+                    return `
               <li class="${elemClass}" data-id="${id}">${title}</li>
             `;
-      });
-      
-      return elementListHTML.join('\n');
-    };
-  
-    /**
-     * Возвращает HTML для контейнера с ценой
-     * @param containerData
-     * @returns {string}
-     */
-    const getPriceContainer = (containerData: IContainerData): string => {
-      const {elements} = containerData;
-      const isShowPrice = elements.length === 1;
-      
-      if (!isShowPrice) {
-        return '';
-      }
-      
-      const {title} = elements[0];
-      
-      return `
+                });
+
+                return elementListHTML.join('\n');
+            };
+
+            /**
+             * Возвращает HTML для контейнера с ценой
+             * @param containerData
+             * @returns {string}
+             */
+            const getPriceContainer = (containerData: IContainerData): string => {
+                const {elements} = containerData;
+                const isShowPrice = elements.length === 1;
+
+                if (!isShowPrice) {
+                    return '';
+                }
+
+                const {title} = elements[0];
+
+                return `
         <div class="calc-container">
           <div class="calc-price calc-price">
             <p class="calc-elem__title">Цена:</p>
@@ -704,18 +705,18 @@ type state = 'loader' | 'error' | 'show-calc-containers';
           </div>
         </div>
       `;
-    };
-  
-    /**
-     * Возвращает HTML для контейнера с элементами
-     * @param containerData
-     * @returns {string}
-     */
-    const getContainerHTML = (containerData: IContainerData): string => {
-      const {table, title, id, checkedID, elements} = containerData;
-      const elementsHTML = getElementsListHTML(elements, checkedID);
-      
-      return `
+            };
+
+            /**
+             * Возвращает HTML для контейнера с элементами
+             * @param containerData
+             * @returns {string}
+             */
+            const getContainerHTML = (containerData: IContainerData): string => {
+                const {table, title, id, checkedID, elements} = containerData;
+                const elementsHTML = getElementsListHTML(elements, checkedID);
+
+                return `
           <div class="calc-container">
             <div class="calc-elem" id="${id}" data-table="${table}" data-checked-id="${checkedID}">
               <svg
@@ -747,170 +748,172 @@ type state = 'loader' | 'error' | 'show-calc-containers';
             </div>
           </div>
         `;
-    };
-  
-    /**
-     * Возвращает HTML для всех контейнеров
-     *
-     * @returns {string}
-     */
-    const getContainersHTML = (containersData: IContainerData[]): string => {
-      const containersHtmlData: string[] = [];
-      
-      Object.values(containersData).forEach((containerData: IContainerData) => {
-        const {header, type, elements, checkedID} = containerData;
-        
-        containerData.checkedID = !checkedID ? null : +checkedID;
-        containerData.title  = getTitle(elements, header, containerData.checkedID);
-        
-        const typeMapFn = {
-          'section': getContainerHTML,
-          'price': getPriceContainer
+            };
+
+            /**
+             * Возвращает HTML для всех контейнеров
+             *
+             * @returns {string}
+             */
+            const getContainersHTML = (containersData: IContainerData[]): string => {
+                const containersHtmlData: string[] = [];
+
+                Object.values(containersData).forEach((containerData: IContainerData) => {
+                    const {header, type, elements, checkedID} = containerData;
+
+                    containerData.checkedID = !checkedID ? null : +checkedID;
+                    containerData.title = getTitle(elements, header, containerData.checkedID);
+
+                    const typeMapFn = {
+                        'section': getContainerHTML,
+                        'price': getPriceContainer
+                    };
+
+                    const containerHTML = typeMapFn[type](containerData);
+                    containersHtmlData.push(containerHTML)
+                });
+
+                return containersHtmlData.join('\n');
+            };
+
+
+            // @ HANDLERS:
+
+            /**
+             * Обработчик клика по закрытию выпадающего списка
+             *
+             * @param e
+             * @returns {void}
+             */
+            const closeIconClickHandler = (e: Event): void => {
+                const currentTarget = e.currentTarget as HTMLElement | null;
+
+                if (!currentTarget) {
+                    return;
+                }
+
+                const container = currentTarget.closest('.calc-elem') as HTMLElement | null;
+
+                if (!container) {
+                    toggleElementClass(currentTarget, 'active');
+                    return;
+                }
+
+                toggleElementsClass([container, currentTarget], 'active');
+            };
+
+            /**
+             *  Обработчик наведения на иконку закрытия выпадающего списка
+             *
+             * @param e
+             * @returns {void}
+             */
+            const closeIconHoverHandler = (e: Event): void => {
+                const currentTarget = e.currentTarget as HTMLElement | null;
+
+                if (!currentTarget) {
+                    return;
+                }
+
+                const container = currentTarget.closest('.calc-elem') as HTMLElement | null;
+                toggleElementClass(container, 'hover');
+            };
+
+            /**
+             * Обработчик клика по списку
+             * @param e
+             */
+            const listElementsClickHandler = async (e: Event) => {
+                const target = e.target as IElement | null;
+                const currentTarget = e.currentTarget as HTMLElement | null;
+                const isListElement = target !== currentTarget;
+
+                if (!target || !isListElement) {
+                    return;
+                }
+
+                const container = target.closest('.calc-elem') as IContainerElement | null;
+
+                if (!container) {
+                    return;
+                }
+
+                const activeElement = container.querySelector('.calc-elem__link.active') as HTMLElement | null;
+                const titleElement = container.querySelector('.calc-elem__title') as HTMLElement | null;
+
+                if (activeElement) {
+                    toggleElementClass(activeElement, 'active');
+                }
+
+                if (titleElement) {
+                    updateContainerTitle(titleElement, target);
+                }
+
+                updateContainerID(container, target);
+                toggleElementClass(target, 'active');
+                toggleElementClass(container, 'active');
+
+                const dataForResponse = getDataForResponse(container);
+                await updateContainers(dataForResponse);
+            };
+
+            /**
+             * Добавляет обработчики для элементов контейнеров
+             *
+             * @returns {void}
+             */
+            const bindElementsHandlers = () => {
+                if (closeIcons.length) {
+                    [...closeIcons].forEach(closeIcon => {
+                        closeIcon.addEventListener('click', closeIconClickHandler);
+                        closeIcon.addEventListener('mouseenter', closeIconHoverHandler);
+                        closeIcon.addEventListener('mouseover', closeIconHoverHandler);
+                    });
+                }
+
+                if (listElements.length) {
+                    [...listElements].forEach(listElements => {
+                        listElements.addEventListener('click', listElementsClickHandler);
+                    });
+                }
+            };
+
+            /**
+             * Рендеринг виджета
+             *
+             * @param {string} state
+             * @param {object} renderData
+             */
+            const render = (state: state, renderData: RenderData = {}): void => {
+                const cb = () => {
+                    if (!calcContainer) {
+                        return;
+                    }
+
+                    const {error, containersData} = renderData;
+
+                    if (state === 'loader') {
+                        calcContainer.innerHTML = getLoaderHTML();
+                    }
+
+                    if (state === 'error') {
+                        calcContainer.innerHTML = getErrorHTML(error || 'Что-то пошло не так');
+                    }
+
+                    if (state === 'show-calc-containers' && containersData) {
+                        calcContainer.innerHTML = getContainersHTML(containersData);
+                        bindElementsHandlers();
+                    }
+                };
+
+                setTimeout(cb, 0);
+            };
+
+            generateCalcCarcase();
+            render('loader');
+
+            await updateContainers(calcSettings);
         };
-        
-        const containerHTML = typeMapFn[type](containerData);
-        containersHtmlData.push(containerHTML)
-      });
-      
-      return containersHtmlData.join('\n');
-    };
-    
-    
-    // @ HANDLERS:
+    })(window);
+}
 
-    /**
-     * Обработчик клика по закрытию выпадающего списка
-     *
-     * @param e
-     * @returns {void}
-     */
-    const closeIconClickHandler = (e: Event): void => {
-      const currentTarget = e.currentTarget as HTMLElement|null;
-      
-      if (!currentTarget) {
-        return;
-      }
-      
-      const container = currentTarget.closest('.calc-elem') as HTMLElement|null;
-      
-      if (!container) {
-        toggleElementClass(currentTarget, 'active');
-        return;
-      }
-      
-      toggleElementsClass([container, currentTarget], 'active');
-    };
-    
-    /**
-     *  Обработчик наведения на иконку закрытия выпадающего списка
-     *
-     * @param e
-     * @returns {void}
-     */
-    const closeIconHoverHandler = (e: Event): void => {
-      const currentTarget = e.currentTarget as HTMLElement|null;
-      
-      if (!currentTarget) {
-        return;
-      }
-      
-      const container = currentTarget.closest('.calc-elem') as HTMLElement|null;
-      toggleElementClass(container, 'hover');
-    };
-
-    /**
-     * Обработчик клика по списку
-     * @param e
-     */
-    const listElementsClickHandler = async (e: Event) => {
-      const target = e.target as IElement|null;
-      const currentTarget = e.currentTarget as HTMLElement|null;
-      const isListElement = target !== currentTarget;
-
-      if (!target || !isListElement) {
-        return;
-      }
-
-      const container = target.closest('.calc-elem')as IContainerElement|null;
-
-      if (!container) {
-        return;
-      }
-
-      const activeElement = container.querySelector('.calc-elem__link.active') as HTMLElement|null;
-      const titleElement = container.querySelector('.calc-elem__title') as HTMLElement|null;
-
-      if (activeElement) {
-        toggleElementClass(activeElement, 'active');
-      }
-
-      if (titleElement) {
-        updateContainerTitle(titleElement, target);
-      }
-
-      updateContainerID(container, target);
-      toggleElementClass(target, 'active');
-      toggleElementClass(container, 'active');
-
-      const dataForResponse = getDataForResponse(container);
-      await updateContainers(dataForResponse);
-    };
-    
-    /**
-     * Добавляет обработчики для элементов контейнеров
-     *
-     * @returns {void}
-     */
-    const bindElementsHandlers = () => {
-      if (closeIcons.length) {
-        [...closeIcons].forEach(closeIcon => {
-          closeIcon.addEventListener('click', closeIconClickHandler);
-          closeIcon.addEventListener('mouseenter', closeIconHoverHandler);
-          closeIcon.addEventListener('mouseover', closeIconHoverHandler);
-        });
-      }
-      
-      if (listElements.length) {
-        [...listElements].forEach(listElements => {
-          listElements.addEventListener('click', listElementsClickHandler);
-        });
-      }
-    };
-
-    /**
-     * Рендеринг виджета
-     *
-     * @param {string} state
-     * @param {object} renderData
-     */
-    const render = (state: state, renderData: RenderData = {}): void => {
-      const cb = () => {
-        if (!calcContainer) {
-          return;
-        }
-
-        const {error, containersData} = renderData;
-
-        if (state === 'loader') {
-          calcContainer.innerHTML = getLoaderHTML();
-        }
-
-        if (state === 'error') {
-          calcContainer.innerHTML = getErrorHTML(error || 'Что-то пошло не так');
-        }
-
-        if (state === 'show-calc-containers' && containersData) {
-          calcContainer.innerHTML = getContainersHTML(containersData);
-          bindElementsHandlers();
-        }
-      };
-
-      setTimeout(cb, 0);
-    };
-  
-    generateCalcCarcase();
-    render('loader');
-    
-    await updateContainers(calcSettings);
-  };
-})(window);

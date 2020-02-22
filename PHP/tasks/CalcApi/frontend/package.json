@@ -2,14 +2,18 @@
   "name": "frontend-calc-api",
   "version": "1.0.0",
   "description": "",
-  "main": "example.html",
+  "main": "",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "gulp build",
+    "dev": "tsc -w"
   },
   "keywords": [],
   "author": "MaxiMir@mmirrev@gmail.com",
   "license": "ISC",
   "devDependencies": {
-    "typescript": "^3.7.5"
+    "gulp": "^4.0.0",
+    "gulp-minify": "^3.1.0",
+    "gulp-typescript": "^6.0.0-alpha.1",
+    "typescript": "^3.8.2"
   }
 }
