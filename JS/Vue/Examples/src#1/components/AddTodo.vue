@@ -22,10 +22,10 @@
                     id: Date.now(),
                     title: this.title, // введенное в input значение, тк это модель
                     completed: false
-                }
+                };
 
-                this.$emit('add-todo', newTodo) // передаем событие с данными родительскому компоненту
-                this.title= '' // очищаем поле input
+                this.$emit('add-todo', newTodo); // передаем событие с данными родительскому компоненту
+                this.title= ''; // очищаем поле input
             }
         }
     }

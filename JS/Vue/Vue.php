@@ -3,15 +3,13 @@
 /* ######## Vue ######### */
 
 # http://book.loftschool.com/vuejs
-# SERVER SITE RENDERING - фреймворк NUXT JS + node
-
 
 /** 
   @ ЗАЧЕМ?
   * Обеспечивать сложный front-end
   * SPA, PWA
   * Отдельные виджеты  
-  * Реактивность - данные сообщают об их изменений, и представление отображает текущее состояние модели
+  * Реактивность - данные сообщают об их изменении, а представление отображает текущее состояние модели
 
   @ ЧТО?
   * Виртуальный DOM
@@ -43,33 +41,32 @@
 </head>
 <body>
     <div id="app" v-cloak> <!-- атрибут v-cloak будет у элемента, до тех пор, пока Vue его не обработает -->
-		<h1>{{ title }}</h1> <!-- ИЛИ: <h1 v-text="title"></h1> если кроме title ничего нет -->
+		<h1>{{ title }}</h1><!-- ИЛИ: <h1 v-text="title"></h1> если кроме title ничего нет -->
 		
+  
 		<!-- v-pre: -->
 		<p v-pre>{{ title }}</p> <!-- {{ title }} не будет обработан Vue -->
 
+  
 		<!-- v-once: -->
 		<p v-text="text" v-once></p> <!-- перерисован будет только 1 раз --> 
 		<p v-text="text"></p>
 		
+   
 		 <!-- v-on: -->
-		<input 
-			type="text" 
-			v-on:input="handleChange"
-		> <!-- v-on - обработка событий, input - имя события, handleChange - имя метода для обработки 
-
-		! Сокращенная рекомендуемая запись: v-on:input="handleChange" -> @input="handleChange"
+		<input type="text" v-on:input="handleChange" >
+        <!--
+		v-on - обработка событий, input - имя события, handleChange - имя метода для обработки
+		! Сокращенная рекомендуемая запись вместо v-on:input="handleChange" -> @input="handleChange"
 		-->
 
 		<!-- Несколько обработчиков: -->
-		<input 
-			type="text" 
-			v-on:"{input="handleChange", focus:handleFocus}"
-		> 
+		<input type="text" v-on:"{input="handleChange", focus:handleFocus}" >
 
 		<!-- Вывод динамических свойств в атрибутах элемента:-->
-		<a v-bind:href="href">ссылка</a> <!-- v-bind +  без {{ }}. В v-bind можно реализовывать JS код
-
+		<a v-bind:href="href">ссылка</a>
+        <!--
+		v-bind +  без {{ }}. В v-bind можно реализовывать JS код
 		! Сокращенная рекомендуемая запись: v-bind:href="href" -> :href="href"
 		-->
 
@@ -81,13 +78,12 @@
 		<div>{{textOfBtn.textOfBtn}}, был клик в x = {{textOfBtn.coordX}}</div>
 		<button @click="handleClick('ONE', $event)">Изменить</button> <!-- $event - данные о событии -->
 		<button @click="handleClick('TWO', $event)">Изменить</button>
-
-
+  
 		<!--
-			v-model — позволяет связать элемент ввода в шаблоне и заставляет его изменять свойство данных Vue, когда пользователь меняет содержимое поля в шаблоне;
-			v-show — элемент не будет исчеpпать из разметки, а будет добавляться display: none;
-			v-if, v-else и v-else-if — директивы условий;
-			v-for — позволяет создать список элементов.
+        v-model — позволяет связать элемент ввода в шаблоне и заставляет его изменять свойство данных Vue, когда пользователь меняет содержимое поля в шаблоне;
+        v-show — элемент не будет показан в разметке, а будет добавляться display: none;
+        v-if, v-else и v-else-if — директивы условий;
+        v-for — позволяет создать список элементов.
 		-->
 	</div>
 	 
@@ -96,15 +92,14 @@
 
 
 
-<script src="main.js"></script><script>
+<script src="main.js"></script><script> // Содержимое main.js:
 
-// FILE: main.js:
 new Vue({
 	el: '#app', 
 	data: { // данные которые хотим отрисовать в компоненте
 		title: 'Hello world',
 		text: 'some text',
-		href: '//gogle.com',
+		href: '//google.com',
 		link: "<a href='google.com'>google.com</a>",
 		textOfBtn: { // объединяем данные одной сущности в объект
 			'title': 'Ждем клика',   
@@ -128,30 +123,32 @@ new Vue({
 
 <!-- # Модификаторы событий -->
 <div id="app">
-	<div class="outer" @click.capture="handleOuter"> <!-- события срабатывают в момент погружения
+	<div class="outer" @click.capture="handleOuter"><!-- можно отслеживать события в режиме capture, т.е. событие, нацеленное
+        на внутренний элемент, обрабатывается здесь до обработки этим элементом -->
+        
+    <!-- события срабатывают в момент погружения
 		@click.stop <-> e.stopPropagation()
 		@click.self - обработчик сработает только на том элементе, на котором произошло событие
 		@click.once - обработчик сработает только 1 раз
-		@click.passive - соответствует опции passive в addEventListener. Улучшить взаимодейтсвие пользователя со скроллом: при нажатии элемента в пассивный элемент, скролл не будет думать нужно ли ему скроллится или нет, а сразу будет производить необходимые операции.
+		@click.passive - соответствует опции passive в addEventListener. Улучшить взаимодействие пользователя со скроллом: при нажатии элемента в пассивный элемент, скролл не будет думать нужно ли ему скроллится или нет, а сразу будет производить необходимые операции.
 		@click.left - нажатие левой кнопки мыши
 		@click.right - нажатие правой кнопки мыши
 		@click.middle - нажатие средней кнопки мыши
-		@keydown.alt.enter - нажатие alt + enter (tab|delete|space|esc|up|down|left|right|down|alt|meta). Можжно и с кодом кнопки @keydown.alt.67
-		-->
+		@keydown.alt.enter - нажатие alt + enter (tab|delete|space|esc|up|down|left|right|down|alt|meta). Можно и с кодом кнопки @keydown.alt.67
+    -->
 		внешний
 		<div class="inner" @click="handleInner"></div>
 
-		<a @click.prevent href="#">ссылка</a> <!-- отменяем действия по умолчанию @click.prevent.once() - отменить действия по умолчанию 1 раз --> 	
+		<a @click.prevent href="#">ссылка</a> <!-- отменяем действия по умолчанию @click.prevent.once() - отменить действия по умолчанию 1 раз -->
 	</div>
 </div>		
 
-<script src="main.js"></script><script>
 
-// FILE: main.js:
+<script src="main.js"></script><script> // Содержимое main.js:
 new Vue({
 	el: '#app', 
 	data: { 
-		expample: {
+		example: {
 			'title': 'Ждем клика',   
 			coordX: 0  
 		}  
@@ -181,6 +178,7 @@ C @click.capture:
 -->
 
 
+
 <!-- # Вычисляемые свойства -->
 <div id="app">
 	<h1>{{ reversedTitle }}</h1>
@@ -190,9 +188,9 @@ C @click.capture:
 	<button @click="setupSecondTitle">Вывести #2</button>
 </div>
 
-<script src="main.js"></script><script>
 
-// FILE: main.js:
+<script src="main.js"></script><script> // Содержимое main.js:
+
 new Vue({
 	el: '#app', 
 	data: { 
@@ -200,7 +198,7 @@ new Vue({
 	},
 	computed: { // вычисляемые свойства (выполняются 1 раз, затем кэшируются)
 		reversedTitle() {
-			return this.title.split('').revese().join();
+			return this.title.split('').reverse().join();
 		},
 		newTitle() {
 			return 'new Title'; // #1
@@ -231,13 +229,11 @@ new Vue({
 <!-- # Вотчеры  -->
 <div id="app">
 	<h1>{{ title }}</h1>
-
-	<p>{{ title }}</pack>
+	<button @click="setupTitle">change title</button>
 </div>
 
-<script src="main.js"></script><script>
 
-// FILE: main.js:
+<script src="main.js"></script><script> // Содержимое main.js:
 new Vue({
 	el: '#app', 
 	data: { 
@@ -261,7 +257,9 @@ new Vue({
 
 <!-- # Управление классами -->
 <div id="app">
-	<h1 class="static-class" :class="{active: changed}"></h1> <!-- className: propName (propName - true ? добавляем класс className : не добавляем ) 
+	<h1 class="static-class" :class="{active: changed}"></h1>
+    <!--
+    className: propName (propName - true ? добавляем класс className : не добавляем )
 
 	// еще пример: класс active и colored - по условию, класс error - всегда:
 	:class="[{ active: changed, active: colored }, errorClass]" 
@@ -272,9 +270,9 @@ new Vue({
 	</button>	
 </div>
 
-<script src="main.js"></script><script>
 
-// FILE: main.js:
+<script src="main.js"></script><script> // Содержимое main.js:
+
 new Vue({
 	el: '#app', 
 	data: { 
@@ -301,9 +299,9 @@ new Vue({
 	</p>
 </div>
 
-<script src="main.js"></script><script>
 
-// FILE: main.js:
+<script src="main.js"></script><script> // Содержимое main.js:
+
 new Vue({
 	el: '#app', 
 	data: { 
@@ -332,9 +330,9 @@ new Vue({
 	</button>
 </div>
 
-<script src="main.js"></script><script>
 
-// FILE: main.js:
+<script src="main.js"></script><script> // Содержимое main.js:
+
 new Vue({
 	el: '#app', 
 	data: { 
@@ -351,6 +349,7 @@ new Vue({
 </script>
 
 
+
 <!-- # Рендеринг списков: -->
 <div id="app">
 	<ul> <!-- массивы -->
@@ -364,11 +363,8 @@ new Vue({
 		</li>	
 	</ul>
 	<ul>
-		<li 
-			v-for="member in arrObj"
-			@click="handleClick" 
-			v-if="member.salary < 1500"
-		><!-- В цикле вышаем обработчики на клик и вывод по условию -->
+		<!-- В цикле вышаем обработчики на клик и вывод по условию -->
+		<li v-for="member in arrObj" @click="handleClick"  v-if="member.salary < 1500" >
 			<p>name: {{member.name}}</p>
 			<p>salary: {{member.salary}}</p>
 		</li>
@@ -381,9 +377,7 @@ new Vue({
 
 </div>
 
-<script src="main.js"></script><script>
-
-// FILE: main.js:
+<script src="main.js"></script><script> // Содержимое main.js:
 new Vue({
 	el: '#app', 
 	data: { 
@@ -402,14 +396,15 @@ new Vue({
 </script>
 
 
+
 <!-- # Объект Vue -->
 <div id="app">
 	<h1>{{title}}</h1>
 </div>
 
-<script src="main.js"></script><script>
 
-// FILE: main.js:
+<script src="main.js"></script><script> // Содержимое main.js:
+
 const vueModel = new Vue({
 	data: { // здесь объявляется реактивные поля
 		title: 'hello world!'
@@ -428,9 +423,9 @@ setTimeout(() => {
 }, 2000);
 
 /*
-На стадии "mount" содержимое DOM узла, указанного в свойстве "el" полностью заменяется 
-на результат выполнения рендер-функции Vue
+На стадии "mount" содержимое DOM узла, указанного в свойстве "el" полностью заменяется  на результат выполнения рендер-функции Vue
 */
+
 </script>
 
 
@@ -442,9 +437,9 @@ setTimeout(() => {
 	<hello></hello><!-- каждый компонент независимая сущность -->
 </div>
 
-<script src="main.js"></script><script>
 
-// FILE: main.js:
+<script src="main.js"></script><script> // Содержимое main.js:
+
 Vue.component('hello', { // экземляр компонета. hello - название компонента, в {} - настройки
 	template: '<h1 @click="handleClick">{{title}}</h1>',
 	data() { // ! в экземляре компонента data должна возвращать объект
@@ -483,7 +478,7 @@ vueModel.$mount('#app');
 	</div>
 </script>
 
-<script src="main.js"></script><script>
+<script src="main.js"></script><script> // Содержимое main.js:
 
 // FILE: main.js:
 Vue.component('outerComponent', {
@@ -521,20 +516,15 @@ vueModel.$mount('#app');
 
 <!-- # Свойства компонента -->
 <div id="app"> 
-	<hello 
-		:key="name"
-		v-for="name in names"
-		:name="name" 
-	></hello><!--для внутренней оптимизации Vue, добавляем уникальный key-->
+	<hello :key="name" v-for="name in names" :name="name" ></hello> <!--для внутренней оптимизации Vue, добавляем уникальный key-->
 <div>
 	
 <script type="text/x-template" id="helloTemplate">
 	<h1>Hello {{name}}!</h1>
 </script>
 
-<script src="main.js"></script><script>
+<script src="main.js"></script><script> // Содержимое main.js:
 
-// FILE: main.js:
 Vue.component('hello', { 
 	props: ['name'], // регистрируем с какими свойствами будем работать в компоненте
 	template: "#helloTemplate",
@@ -554,11 +544,7 @@ vueModel.$mount('#app');
 
 <!-- # Пользовательские события -->
 <div id="app"> 
-	<hello 
-		:key="name"
-		v-for="name in names"
-		:name="name" 
-	></hello><!--для внутренней оптимизации Vue, добавляем уникальный key-->
+	<hello :key="name" v-for="name in names" :name="name" ></hello><!--для внутренней оптимизации Vue, добавляем уникальный key-->
 <div>
 	
 <script type="text/x-template" id="helloTemplate">
@@ -572,7 +558,7 @@ vueModel.$mount('#app');
 	</button>
 </script>
 
-<script src="main.js"></script><script>
+<script src="main.js"></script><script> // Содержимое main.js:
 
 
 // FILE: main.js:
@@ -621,10 +607,7 @@ vueModel.$mount('#app');
 <!-- # Vuex 
 https://vuex.vuejs.org
 Vuex - библиотека для работы с данными во Vue
-
-$ vue create .
 -->
-
 
 
 
@@ -645,5 +628,4 @@ module.exports = {
 vue init webpack-simple vue-components
 cd vue-components
 npm install // устанавливаем все зависимости
-
 -->
