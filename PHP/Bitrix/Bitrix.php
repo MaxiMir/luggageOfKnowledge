@@ -735,27 +735,3 @@ while ($arPathData = $rsPath->GetNext()) {
 
     $APPLICATION->AddChainItem($name, $sectionPageURL);
 }
-
-
-
-#@@@ Добавление значения свойств из HB: @@@#
-// ...
-if ($arrProperty["PROPERTY_TYPE"] === "S" && $arrProperty["USER_TYPE_SETTINGS"]) {
-    $tableName = $arrProperty["USER_TYPE_SETTINGS"]["TABLE_NAME"];
-
-    $hlData = array_pop(HighloadBlockTable::getList([
-        'filter' => ['TABLE_NAME' => $arrProperty["USER_TYPE_SETTINGS"]["TABLE_NAME"]]
-    ])->fetchAll());
-
-    $entityClass = HighloadBlockTable::compileEntity($hlData)->getDataClass();
-
-    $res = $entityClass::getList([
-        'select' => ['UF_NAME'],
-        'order' => ['ID' => 'ASC'],
-        'filter' => ['UF_XML_ID' => $arrProperty["VALUE"]]
-    ])->fetchAll();
-
-    if ($res) {
-        $arr_prop[$arrProperties["CODE"]]["VALUE"] = $res[0]["UF_NAME"];
-    }
-}

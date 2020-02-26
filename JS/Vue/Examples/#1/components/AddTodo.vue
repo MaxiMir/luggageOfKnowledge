@@ -1,6 +1,8 @@
 <template>
     <form @submit.prevent="onSubmit"> <!-- prevent - отменяет действия события по умолчанию -->
+
         <input type="text" v-model="title"> <!-- свойство title из data() - превращаем в модель https://ru.vuejs.org/v2/guide/forms.html -->
+
         <button type="submit">Create</button>
     </form>
 </template>
@@ -25,7 +27,7 @@
                 };
 
                 this.$emit('add-todo', newTodo); // передаем событие с данными родительскому компоненту
-                this.title= ''; // очищаем поле input
+                this.title = ''; // очищаем поле input
             }
         }
     }

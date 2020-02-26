@@ -1,27 +1,27 @@
 <template>
     <li>
-        <span :class="{done: todo.completed}"><!-- после : условие добавления -->
+        <span :class="{done: todo.completed}">
             <input type="checkbox" @change="todo.completed = !todo.completed"><!-- обработчик события change-->
             <strong>{{ index + 1 }}</strong>
-            {{ todo.title | uppercase }} <!-- применяем фильтр uppercase -->
+            {{ todo.title | uppercase }}
         </span>
+
         <button class="rm"
                 @click="$emit('remove-todo', todo.id)"
-        >&times;</button><!-- сообщаем родительскому элементу, что у нас что-то случилось -->
-
+        >&times;</button>
     </li>
 </template>
 
 <script>
     export default {
-        props: { // валидируем принимаемые данные
+        props: {
             todo: {
-                type: Object, // задаем тип
-                required: true // делаем обязательным
+                type: Object,
+                required: true
             },
-            index: Number // просто задаем тип
+            index: Number
         },
-        filters: { // фильтры по принимаемым данным
+        filters: {
             uppercase(value) {
                 return value.toUpperCase();
             }

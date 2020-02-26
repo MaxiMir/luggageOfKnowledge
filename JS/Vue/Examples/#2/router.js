@@ -1,8 +1,8 @@
-import Vue from 'vue'
-import Router from 'vue-router'
-import Home from '@/views/Home' // подключаем компонент для роутинга
+import Vue from 'vue';
+import Router from 'vue-router';
+import Home from '@/views/Home'; // подключаем компонент для роутинга
 
-Vue.use(Router) // регистрируем плагин
+Vue.use(Router); // регистрируем роутер как плагин
 
 export default new Router({
     mode: 'history', // для слешей в путях

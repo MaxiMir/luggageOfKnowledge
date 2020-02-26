@@ -50,6 +50,7 @@ $ npm run dev # запуск генерации проекта
 // FOLDER: store - реализовывается Vuex
 
 
+
 // FILE: nuxt.config.js - конфигурация Nuxt приложения
 module.exports = {
     mode: 'universal', // SSR (Service Site Rendering)
@@ -67,7 +68,7 @@ module.exports = {
     /**
      * Customize the progress-bar color    
      */
-    loading: { color: 'blue' } // loader
+    loading: { color: 'blue' } // loader при подгрузке данных
 
     /**
      * Global CSS
@@ -93,6 +94,7 @@ module.exports = {
 </script>
 
 
+
 // + FILE: /components/Navbar.vue:
 <template>
     <header>
@@ -112,6 +114,10 @@ module.exports = {
                     <li class="nav-item">
                         <nuxt-link active-class="active" class="nav-link" to="/login">Login</nuxt-link>
                     </li>
+
+                    <li class="nav-item" v-if="isAuth"> 
+                        <a class="nav-link"href="#" @click.prevent="logout">Logout</a>
+                    </li>
                     <!--
                     nuxt-link - ссылка с динамическим режимом (без перезагрузки)
                     active-class="active" - класс для активной ссылки (по умолчанию добавляет класс nuxt-link-active). При этом, добаляет класс и родительскому элементу li
@@ -125,6 +131,22 @@ module.exports = {
         </nav>
     </header>
 </template>
+
+<script>
+export default {
+    computed: {
+        isAuth() {
+            return this.$store.getters.isAuth;
+        }
+    },
+    methods: {
+        logout() {
+            this.$store.dispatch('logout');
+        }
+    }
+}
+
+</script>
 
 
 
@@ -151,6 +173,7 @@ module.exports = {
 </script>
 
 
+
 // 1 вариант создания страниц - создание файлов в /pages:
 // FILE: /pages/index.vue (главная страница) он же `роут`:
 <template>
@@ -159,13 +182,11 @@ module.exports = {
     </section>
 </template> 
 
-
 <script>
     export default {
             
     }
 </script>
-
 
 
 
@@ -178,7 +199,7 @@ module.exports = {
         <ul>
             <li v-for="user of users" :key="user">
                 <a href="#" @click.prevent="goTo(user)">
-                    User {{user}}
+                    User: {{user}}
                 </a>
             </li>
         </ul>
@@ -201,19 +222,18 @@ module.exports = {
             return $axios.$get('https://jsonplaceholder.typicode.com/users')
                 .then(users => { users })
                 .catch(err => {
-                    error(err)
+                    error(err);
                 })
         }, 
         data() { // данные доступны на клиентской стороне
             return {
                 pageTitle: 'Users pages',
-                users: [ // в примере с asyncData users удаляется
+                users: [ // ! в примере с asyncData users удаляется
                     1, 2, 3, 4 , 5
                 ]
             }
         },
         methods: {
-            
             goTo(user) { // переход на страницу юзера
 
                 //  До asyncData:
@@ -240,7 +260,7 @@ module.exports = {
 
 <script>
     export default {
-        validate({params}) { // валидация nuxt. params - поля из контекста
+        validate({params}) { // валидация nuxt; params - поля из контекста
             console.log(params); // => { id: 32 }
 
             return /^\d+$/.test(params.id);
@@ -259,13 +279,15 @@ module.exports = {
 
 
 
-
 // 2 вариант создания страниц - создание папок:
 // + FOLDER: /about
 // + FILE: /about/index.vue:
 <template>
     <section>
         <h1>About page</h1>
+
+        <p>some text...</p>
+        <p>some text...</p>
     </section>
 </template>
 
@@ -296,8 +318,7 @@ module.exports = {
 // + FILE: /layouts/empty.vue:
 <template>
     <div class="container">
-        <nuxt />
-        <!-- <nuxt /> - место куда страница будет рендирениться -->
+        <nuxt /> <!-- место куда страница будет рендирениться -->
     </div>   
 </template>
 
@@ -311,9 +332,10 @@ module.exports = {
 </style>
 
 
+
 // + FILE: /pages/login.vue:
 <template>
-    <form>
+    <form @submit.prevent="onSubmit">
         <h1>Login</h1>
         <div class="form-group">
             <input type="text" class="from-control">
@@ -324,13 +346,19 @@ module.exports = {
         <p>
             <nuxt-link to="/">Home</nuxt-link>
         </p>
-        <button class="btn btn-primary">Enter</button>
+        <button class="btn btn-primary" type="submit">Enter</button>
     </form>
 </template>
 
 <script>
     export default {
-        layout: 'empty' // layout; устанавливаем layout empty.vue (по умолчанию стоит default)
+        layout: 'empty', // устанавливаем layout empty.vue (по умолчанию стоит default.vue)
+        methods: {
+            onSubmit() {
+                this.$store.dispatch('login');
+                this.$router.push('/'); // редирект на главную
+            }
+        }
     }
 </script>
 
@@ -341,14 +369,16 @@ module.exports = {
 </style>
 
 
+
 <script>
+
 
 
 // @ Модули:
 /**
     google: nuxt community awesome nuxt - описание официальных модулей
 
-    Пример находим модуль axios -> setup:
+    Пример: находим модуль axios -> setup:
 
     $ npm install @nuxtjs/axios
 
@@ -369,8 +399,7 @@ export const actions = {
         } catch (e) {
             throw e;    
         }
-        
-    },
+    }
 }
 
 
@@ -414,3 +443,207 @@ export const actions = {
         }        
     }
 </script>
+
+
+
+<script>
+
+
+
+// @ Fetch:
+
+// CHANGE FILE: /store/users.js:
+export const state = () => {
+    users: []
+});
+
+export const mutations = {
+    setUsers(state, users) {
+        state.users = users;
+    }
+}
+
+export const actions = {
+    async fetchUsers({commit}) {
+        try {
+            // ! this
+            const users = await this.$axios.$get('https://jsonplaceholder.typicode.com/users/');
+
+            commit('setUsers', users);
+        } catch (e) {
+            throw e;    
+        }
+    },
+    async fetchUserById({}, userId) {
+        try {
+            return await this.$axios.$get(`https://jsonplaceholder.typicode.com/users/${userId}`);
+        } catch (e) {
+            throw e;    
+        }
+    }
+}
+
+export const getters = {
+    users: state => state.users
+}
+
+
+
+</script>
+
+
+
+// CHANGE FILE: /pages/users/index.vue:
+<template>
+    <section>
+        <h1>{{pageTitle}}</h1>
+
+        <ul>
+            <li v-for="user of users" :key="user.id">
+                <a href="#" @click.prevent="goTo(user)">
+                    {{ user.name }} ({{ user.email}}>)
+                </a>
+            </li>
+        </ul>
+    </section>
+</template>
+
+<script>
+    export default {
+        // async asyncData({store, error}) { 
+        //     try {
+        //         const users = await store.dispatch('users/fetchUsers'); // /store/users.js / fetchUsers
+        //         return {}; // -> пустой объект
+        //     } catch (e) {
+        //         error(e);    
+        //     }
+        // },
+        async fetch({store, error}) { // <-> asyncData только не надо ничего возвращать
+            try {
+                if (store.getters['users/users'].length === 0) {
+                    await store.dispatch('users/fetchUsers'); // заполняем state
+                }
+            } catch (e) {
+                error(e);
+            }
+        }, 
+        data() { // данные доступны на клиентской стороне
+            return {
+                pageTitle: 'Users pages',
+            }
+        },
+        computed: {
+            users() {
+                return this.$store.getters['users/users'];
+            }
+        },
+        methods: {
+            goTo(user) { 
+                this.$router.push(`/users/${user.id}`);
+            }
+        }        
+    }
+</script>
+
+
+
+// CHANGE FILE: /pages/users/_id.vue:
+<template>
+    <h1>UserName: {{ user.name }}</h1> 
+    <hr />
+    <b>{{ user.email }}</b>
+</template>
+
+<script>
+    export default {
+        validate({params}) {
+            return /^\d+$/.test(params.id);
+        },
+        async asyncData({params, err, store}) {
+            try {
+                const user = await store.dispatch('users/fetchUserById', params.id);
+
+                return {user};
+            } catch(e) {
+                error(e);
+            }               
+        }
+    }
+</script>
+
+
+
+<script>
+
+
+
+// @ Middleware:
+
+// + FILE: /store/index.js:
+export const actions = {
+    login({commit}) {
+        commit('setToken', 'true');
+    },
+    logout({commit}) {
+        commit('clearToken');
+    }
+}
+
+export const state = () => ({
+    token: null
+});
+
+export const mutations = {
+    setToken(state, token) {
+        state.token = token;
+    },
+    clearToken(state) {
+        state.token = null;
+    }
+};
+
+export const getters = {
+    isAuth: state => !!state.token
+}
+
+
+// + FILE: /middleware/auth.js/:
+export default function ({store, redirect}) {
+    if (!store.getters.isAuth) {
+        redirect('/login');
+    }
+}
+
+
+// CHANGE FILE: /about/index.vue:
+<template>
+    <section>
+        <h1>About page</h1>
+
+        <p>some text...</p>
+        <p>some text...</p>
+    </section>
+</template>
+
+<script>
+    export defalt {
+        middleware: ['auth'] // применяем middleware (вход на страницу только для авторизованных пользователей). Можно применять несколько middleware
+    }
+</script>
+
+
+
+
+// @ NuxtServerInit:
+// Реализуем загрузку пользователей на какой странице бы не находились
+
+
+// CHANGE FILE: /store/index.js:
+export const actions = {
+    // ...
+    async nuxtServerInit({dispatch}) {
+        await dispatch('users/fetchUsers')
+    }
+}
+
+// ...

@@ -3,18 +3,27 @@
         <h1>Todo application</h1>
         <AddTodo
             @add-todo="addTodo"
-        />
+        /><!--
+        addTodo - обработчик для дочернего события в AddTodo
+        -->
+
         <hr>
+
         <TodoList
             :todos="todos"
             @remove-todo="removeTodo"
-        /><!-- паредаем в компонент TodoList данные из data() - todos -->
+        /><!--
+        :todos="todos" <- передаем в компонент TodoList данные из data() - todos
+        removeTodo - обработчик для дочернего события в TodoItem
+        -->
     </div>
 </template>
 
+
 <script>
-    import TodoList from '@/components/TodoList' // импортируем компонент; @ - указывает на попку src
-    import AddTodo from '@/components/AddTodo'
+    import TodoList from '@/components/TodoList';
+    import AddTodo from '@/components/AddTodo';
+    // импортируем компоненты; @ - указывает на попку src
 
     export default { // экспортируем по дефолту функционал главного компонента
         name: 'app',
@@ -25,29 +34,33 @@
                     {id: 2, title: 'Купить масло', completed: false},
                     {id: 3, title: 'Купить пиво', completed: false},
                 ]
-            }
+            };
         },
         mounted() { // событие - Vue подготовил HTML шаблон и разместил его в DOM дерево
-            // fetch('https://jsonplaceholder.typicode.com/todos?_limit=5')
-            //     .then(response => response.json())
-            //     .then(json => this.todos = json)
+            // асинхронное получение todos:
+            fetch('https://jsonplaceholder.typicode.com/todos?_limit=5')
+                .then(response => response.json())
+                .then(json => {
+                  this.todos = json
+                });
         },
         components: {
             TodoList, // регистрируем компонент
-            AddTodo // ключ значение совпадают, если нет - OtherComponentName: ComponentName
+            AddTodo // регистрируем компонент
+            // ключ значение совпадают, если нет - OtherComponentName: ComponentName
         },
         methods: {
             removeTodo(id) {
-                this.todos = this.todos.filter(t => t.id !== id)
+                this.todos = this.todos.filter(t => t.id !== id); // todos - из данных приложения
             },
             addTodo(todo) {
-                this.todos.push(todo)
+                this.todos.push(todo);
             }
         }
     }
 </script>
 
-<style>/* стили для главного компонента */
+<style> /* стили для главного компонента */
     #app {
         font-family: 'Avenir', Helvetica, Arial, sans-serif;
         -webkit-font-smoothing: antialiased;
@@ -57,15 +70,3 @@
         margin-top: 60px;
     }
 </style>
-
-<!--
-# INIT:
-$ npm install -g @vue/cli
-$ vue create my-vue-project
-> Features: Babel
-> Where do you prefer placing config: In dedicated config files
-> Save this as preset for future projects > n
-
-
-$ npm run serve
--->

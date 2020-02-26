@@ -17,17 +17,3 @@
         margin-top: 60px;
     }
 </style>
-
-<!--
-# INIT:
-$ npm install -g @vue/cli
-$ vue create my-vue-project
-> Features: Babel
-> Where do you prefer placing config: In dedicated config files
-> Save this as preset for future projects > n
-
-
-$ npm run serve
-
-$ npm i vue-router
--->

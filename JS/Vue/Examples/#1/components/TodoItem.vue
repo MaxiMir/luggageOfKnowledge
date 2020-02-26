@@ -1,12 +1,18 @@
 <template>
     <li>
-        <span :class="{done: todo.completed}"><!-- после : условие добавления класса -->
+        <span :class="{done: todo.completed}"><!-- после ":" условие добавления класса -->
+
+            <!-- @change - обработчик события change-->
             <input type="checkbox"
                 @change="todo.completed = !todo.completed"
-            ><!-- обработчик события change-->
+            >
+
             <strong>{{ index + 1 }}</strong>
-            {{ todo.title | uppercase }} <!-- применяем фильтр uppercase -->
+
+            {{ todo.title | uppercase }} <!-- #upc применяем фильтр uppercase -->
+
         </span>
+
         <button class="rm"
             @click="$emit('remove-todo', todo.id)"
         >&times;</button><!-- $emit - сообщаем родительскому элементу, что у нас что-то случилось (название события, данные) -->
@@ -22,7 +28,7 @@
             },
             index: Number // просто задаем тип
         },
-        filters: { // фильтры по принимаемым данным
+        filters: { // фильтры по принимаемым данным #upc
             uppercase(value) {
                 return value.toUpperCase();
             }
