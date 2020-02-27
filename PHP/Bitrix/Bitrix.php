@@ -735,3 +735,8 @@ while ($arPathData = $rsPath->GetNext()) {
 
     $APPLICATION->AddChainItem($name, $sectionPageURL);
 }
+
+
+
+# redirect on 404:
+Bitrix\Iblock\Component\Tools::process404('Не найден', true, true, true, false);
