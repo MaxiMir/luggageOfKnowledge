@@ -27,8 +27,14 @@
         
         while ($element = $productDBData->GetNext()) {
             $isSingleColumnQuery = sizeof($select) === 1 && $select !== ["*"];
-            
-            $elements[] = !$isSingleColumnQuery ? $element : $element[$select[0]];
+            $elementData = !$isSingleColumnQuery ? $element : $element[$select[0]];
+    
+            if (isset($element['ID'])) {
+                $elements[$element['ID']] = $elementData;
+                continue;
+            }
+    
+            $elements[] = $elementData;
         }
         
         return $elements;

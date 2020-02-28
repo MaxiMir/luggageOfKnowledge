@@ -43,7 +43,7 @@
      * @param array $params
      * @return array
      */
-    function getProducts($params)
+    function getProducts(array $params): array
     {
         $products = [];
         $arFilterDefault = [

@@ -57,7 +57,7 @@
 		<input type="text" v-on:input="handleChange" >
         <!--
 		v-on - обработка событий, input - имя события, handleChange - имя метода для обработки
-		! Сокращенная рекомендуемая запись вместо v-on:input="handleChange" -> @input="handleChange"
+		! Сокращенная рекомендуемая запись @input="handleChange"
 		-->
 
 		<!-- Несколько обработчиков: -->
@@ -92,7 +92,8 @@
 
 
 
-<script src="main.js"></script><script> // Содержимое main.js:
+<script src="main.js"></script><script> 
+// Содержимое main.js:
 
 new Vue({
 	el: '#app', 
@@ -116,7 +117,6 @@ new Vue({
 		} 
 	}
 });
-
 </script>
 
 
@@ -237,7 +237,7 @@ new Vue({
 new Vue({
 	el: '#app', 
 	data: { 
-		title: 'Hello world!',
+		title: 'Hello world!', // #watch
 		status: ""
 	},
 	methods: {
@@ -245,8 +245,8 @@ new Vue({
 			this.title = "new title";
 		}
 	},
-	watch: { // указываем свойства, за которыми будем следить
-		title(value) { // в value на что было изменено
+	watch: { // указываем свойства, за которыми будем следить 
+		title(value) { // в value на что было изменено #watch
 			this.status = `title изменился на ${value}`;
 		}
 	}
@@ -294,7 +294,7 @@ new Vue({
 <!-- # Работа со стилями: -->
 <div id="app">
 	<h1 :style="styles">{{title}}</h1> 
-	<p :style="{color: fontNewColor, backgroundColor: backgroundColor }">
+	<p :style="{ color: fontNewColor, backgroundColor: backgroundColor }">
 		Some text
 	</p>
 </div>

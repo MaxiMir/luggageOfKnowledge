@@ -13,9 +13,9 @@
 
         </span>
 
-        <button class="rm"
-            @click="$emit('remove-todo', todo.id)"
-        >&times;</button><!-- $emit - сообщаем родительскому элементу, что у нас что-то случилось (название события, данные) -->
+        <button class="rm" @click="$emit('remove-todo', todo.id)">
+            &times;
+        </button><!-- $emit - сообщаем родительскому элементу, что у нас что-то случилось (название события, данные) -->
     </li>
 </template>
 

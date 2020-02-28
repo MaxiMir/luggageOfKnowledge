@@ -11,6 +11,7 @@
     ? Save preset: no
 
     $ npm run serve 
+
     $ npm i vuex
  */
 
@@ -23,7 +24,8 @@
 
 <template>
     <div id="app">
-        <PostForm />>
+        <PostForm />
+
         <h1>{{postsCount}}</h1>
         <div class="post" v-for="post in allPosts" :key="post.id">
             <h2>{{post.title}}</h2>
@@ -74,8 +76,7 @@ export default {
         this.$store.dispach('fetchPosts'); // вызов action
 
         // c #action:
-        this.fetchPosts(); 
-
+        this.fetchPosts(); // вызов action
     }
 }
 
@@ -92,8 +93,7 @@ import post from './modules/post'; // импортируем отдельный 
 Vue.use(Vuex); // регистрируем плагин
 
 export default new Vuex.Store({
-    actions: {
-    },
+    actions: {},
     mutations: {}, // функции для изменения store
     state: {}, // изначальные данные
     getters: {}, // получение данных из store
@@ -168,12 +168,14 @@ new Vue({
 
 
 <template>
-    <form @submit.prevent="submit">
-        <input type="text" placeholder="title" v-model="title">
-        <input type="text" placeholder="body" v-model="body">
-        <button type="submit">Create Post</button>
-    </form>
-    <hr />>
+    <div>
+        <form @submit.prevent="submit">
+            <input type="text" placeholder="title" v-model="title">
+            <input type="text" placeholder="body" v-model="body">
+            <button type="submit">Create Post</button>
+        </form>
+        <hr>
+    </div>
 </template>
 
 <script>
@@ -206,7 +208,7 @@ new Vue({
         width: 100%;
         border: 1px solid #ccc;
         border-radius: 2px;
-        padding: 10px
+        padding: 10px;
         margin-bottom: 10px;
     }
 </style>

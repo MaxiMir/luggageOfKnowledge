@@ -41,10 +41,10 @@ $ npm run dev # запуск генерации проекта
 // FOLDER: nuxt - системная папка
 // FOLDER: assets - нескомпилированные файлы (LESS, SASS, JS)
 // FOLDER: components - компоненты
-// FOLDER: layouts - 
-// FOLDER: middleware -
+// FOLDER: layouts
+// FOLDER: middleware
 // FOLDER: node_modules - зависимости
-// FOLDER: pages - 
+// FOLDER: pages
 // FOLDER: plugins - плагины
 // FOLDER: static - статические элементы приложения (доступны через /)
 // FOLDER: store - реализовывается Vuex
@@ -68,7 +68,7 @@ module.exports = {
     /**
      * Customize the progress-bar color    
      */
-    loading: { color: 'blue' } // loader при подгрузке данных
+    loading: { color: 'blue' }, // loader при подгрузке данных
 
     /**
      * Global CSS

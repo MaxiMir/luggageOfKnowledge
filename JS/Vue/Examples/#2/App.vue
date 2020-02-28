@@ -1,6 +1,7 @@
 <template> <!-- шаблон компонента -->
     <div id="app">
         <h2>Todo application</h2>
+        
         <hr>
 
         <router-view /> <!-- куда рендерить страницы -->
