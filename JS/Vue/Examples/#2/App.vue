@@ -1,14 +1,14 @@
-<template> <!-- шаблон компонента -->
+<template> <!-- шаблон главного компонента -->
     <div id="app">
         <h2>Todo application</h2>
         
         <hr>
 
-        <router-view /> <!-- куда рендерить страницы -->
+        <router-view /> <!-- место куда Vue по умолчанию рендерит страницы, которые загружаются по роуту -->
     </div>
 </template>
 
-<style>/* стили для компонента */
+<style>/* стили для главного компонента */
     #app {
         font-family: 'Avenir', Helvetica, Arial, sans-serif;
         -webkit-font-smoothing: antialiased;

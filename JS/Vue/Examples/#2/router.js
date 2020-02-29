@@ -13,7 +13,7 @@ export default new Router({
         },
         {
             path: '/todos',
-            component: () => import('./views/Todos.vue') // применяем LazyLoading для страницы
+            component: () => import('./views/Todos.vue') // применяем LazyLoading для страницы (загрузка по требованию) - оптимизация уменьшающая размер приложения и более быстрой ее загрузки
         }
     ]
 })

@@ -3,11 +3,12 @@
     URI: vuejs.org
     URI: cli.vuejs.org
 
-    $ npm install -g @vue/cli
+    $ npm install -g @vue/cli # для генерации новых проектов
 
     $ cd Documents/projects/
 
-    $ vue create vue-crash-course # генерация проекта
+    $ vue create vue-crash-course # создание проекта
+
     ? Please pick a preset: Manually select features
     ? Check the features needed for your project: Babel
     ? Where do you prefer placing config for Babel, PostCSS, ...: In dedicated config files

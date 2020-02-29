@@ -7,7 +7,8 @@
 
     $ cd Documents/projects/
 
-    $ vue create vue-crash-course # генерация проекта
+    $ vue create vue-crash-course # создание проекта
+
     ? Please pick a preset: Manually select features
     ? Check the features needed for your project: Babel
     ? Where do you prefer placing config for Babel, PostCSS, ...: In dedicated config files
@@ -17,5 +18,5 @@
     $ npm run server # запуск проекта в режиме разработки
     $ npm run build # запуск проекта в режиме продакшена
  
-    $ npm i vue-router
+    $ npm i vue-router # для роутинга
 */
