@@ -5,7 +5,7 @@
     </div>
 
     <div class="history-chart">
-      <canvas ref="canvas"></canvas>
+      <canvas ref="canvas"></canvas><!-- для диаграммы -->
     </div>
 
     <Loader v-if="loading"/>
@@ -16,7 +16,8 @@
     </p>
 
     <section v-else>
-      <HistoryTable :records="items"/>
+
+      <HistoryTable :records="items"/> <!-- items берутся из миксина pagination -->
 
       <Paginate
         v-model="page"
@@ -26,15 +27,22 @@
         :next-text="'Forward' | localize"
         :container-class="'pagination'"
         :page-class="'waves-effect'"
-      />
+      /><!--
+      пагинация
+      pageCount - берутся из миксина pagination
+      pageChangeHandler - метод из миксина pagination
+      container-class - класс для ul
+      page-class - класс для li
+      -->
+
     </section>
   </div>
 </template>
 
 <script>
-  import paginationMixin from '@/mixins/pagination.mixin';
+  import paginationMixin from '@/mixins/pagination.mixin'; // подключаем миксин pagination
   import HistoryTable from '@/components/HistoryTable';
-  import {Pie} from 'vue-chartjs';
+  import {Pie} from 'vue-chartjs'; // плагин vue-chartjs
   import localizeFilter from '@/filters/localize.filter';
 
   export default {
@@ -44,27 +52,27 @@
         title: this.$title('Menu_History'),
       };
     },
-    extends: Pie,
-    mixins: [paginationMixin],
+    extends: Pie, // наследуемся от Pie vue-chartjs
+    mixins: [paginationMixin], // поля для применения миксина (Vue мержит поля компонента и миксина)
     data: () => ({
       loading: true,
       records: [],
     }),
     async mounted() {
       this.records = await this.$store.dispatch('fetchRecords');
-      const categoires = await this.$store.dispatch('fetchCategories');
+      const categories = await this.$store.dispatch('fetchCategories');
 
-      this.setup(categoires);
+      this.setup(categories);
 
       this.loading = false;
     },
     methods: {
-      setup(categoires) {
+      setup(categories) {
         this.setupPagination(
           this.records.map(record => {
             return {
               ...record,
-              categoryName: categoires.find(c => c.id === record.categoryId).title,
+              categoryName: categories.find(c => c.id === record.categoryId).title,
               typeClass: record.type === 'income' ? 'green' : 'red',
               typeText:
                 record.type === 'income'
@@ -74,12 +82,12 @@
           }),
         );
 
-        this.renderChart({
-          labels: categoires.map(c => c.title),
+        this.renderChart({ // рендеринг диаграммы
+          labels: categories.map(c => c.title),
           datasets: [
             {
               label: localizeFilter('CostsForCategories'),
-              data: categoires.map(c => {
+              data: categories.map(c => {
                 return this.records.reduce((total, r) => {
                   if (r.categoryId === c.id && r.type === 'outcome') {
                     total += +r.amount;

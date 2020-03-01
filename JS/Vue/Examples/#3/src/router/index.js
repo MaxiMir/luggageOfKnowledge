@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
+import firebase from 'firebase/app';
 
 Vue.use(VueRouter);
 
@@ -56,6 +57,13 @@ const routes = [
     path: '/record',
     name: 'record',
     meta: {layout: 'main', auth: true}, // свойства роута
+    beforeEnter: (to, from, next) => { // хук для конкретного маршрута
+      // if (!isAuthenticated) {
+      //   next('/login');
+      // } else {
+      //   next();
+      // }
+    },
     component: () => import('../views/Record.vue'),
   },
 ];
@@ -64,6 +72,22 @@ const router = new VueRouter({
   mode: 'history', // убирает # в пути + / в пути
   base: process.env.BASE_URL, // по умолчанию базовый URL
   routes,
+});
+
+router.beforeEach((to, from, next) => { // вызывается перед каждой сменой роута
+                                        // to - роут куда идем
+                                        // from - откуда
+                                        // next - функция, вызов которой разрешает хук
+  
+  const currentUser = firebase.auth.currentUser;
+  const requireAuth = to.matched.some(record => record.meta.auth);
+  
+  if (requireAuth && !currentUser) {
+    next('/login?message=login'); // редирект на страницу входа
+  } else {
+    next();
+  }
+  
 });
 
 export default router;

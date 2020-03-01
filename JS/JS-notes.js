@@ -147,8 +147,8 @@ obj[symbol]; // => meta
 
 
 // #3:
-const array = [1, 2, 3];
-const iter = array[Symbol.iterator](); // аналогично и для строк
+const integers = [1, 2, 3];
+const iter = integers[Symbol.iterator](); // аналогично и для строк
 iter.next(); // => {value: 1, done: false}
 iter.next(); // => {value: 2, done: false}
 iter.next(); // => {value: 3, done: false}
@@ -163,7 +163,7 @@ const countries = {
 
         return {
             next: () => {
-                const values = this.values[i];
+                const value = this.values[i];
                 i++;
                 return {
                     done: i > this.values.length,
@@ -180,13 +180,15 @@ for (let item of countries) {
 
 
 
-// @ УНАРНЫЕ ПОБИТОВЫЙ ОПЕРАТОР:
+// @ УНАРНЫЙ ПОБИТОВЫЙ ОПЕРАТОР:
 // проверка на −1: 
 const str = "Проверка";
 
 if (~str.indexOf("верка")) { // если найдено , т.к. ~n = -(n+1)
   alert( 'найдено!' );
 }
+
+// <-> str.includes("верка")
 
 
 
@@ -1702,6 +1704,7 @@ const movies = {
                const value = this.list[index++].title;
                return { value, done: false };
             }
+
             return { done: true };
          }
       };
@@ -2265,8 +2268,8 @@ const cacheUser = user => {
     return cache.get(user);
 };
 
-const lena = {name: 'Elena'};
-const alex = {name: 'Alex'};
+let lena = {name: 'Elena'};
+let alex = {name: 'Alex'};
 
 cacheUser(lena);
 cacheUser(alex);
@@ -2274,7 +2277,7 @@ cacheUser(alex);
 lena = null;
 
 // автоматически у WeakMap был удален объект + очищена память
-cache.has(lena); // true
+cache.has(lena); // false
 cache.has(alex); // true
 
 
@@ -2508,7 +2511,7 @@ document.readyState === 'complete' ?
 // <input id="input" type="text" value="markup">
 
 // При изменении свойства input.value атрибут input.getAttribute('value') не меняется:
-input.value = 'new'; // поменяли свойство 
+input.value = 'new'; // поменяли свойство
 input.getAttribute('value'); // 'markup', не изменилось!
 
 // То есть, изменение DOM‐свойства value на атрибут не влияет, он остаётся таким же. А вот изменение атрибута обновляет свойство:

@@ -46,7 +46,7 @@
       loading: true,
     }),
     async mounted() {
-      const id = this.$route.params.id;
+      const id = this.$route.params.id; // получаем id из роута
       const record = await this.$store.dispatch('fetchRecordById', id);
       const category = await this.$store.dispatch(
         'fetchCategoryById',

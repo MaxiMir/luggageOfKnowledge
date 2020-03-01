@@ -24,8 +24,8 @@
         <button
           v-tooltip="'OpenRecord'"
           class="btn-small btn"
-          @click="$router.push('/detail/' + record.id)"
-        >
+          @click="$router.push(`/detail/${record.id}`)"
+        ><!-- редирект по клику -->
           <i class="material-icons">open_in_new</i>
         </button>
       </td>

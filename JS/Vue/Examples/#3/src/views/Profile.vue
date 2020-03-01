@@ -36,14 +36,15 @@
   </div>
 </template>
 
+
 <script>
   import {mapActions, mapGetters} from 'vuex';
   import {required} from 'vuelidate/lib/validators';
 
   export default {
-    metaInfo() {
+    metaInfo() { // установка мет с помощью планина
       return {
-        title: this.$title('ProfileTitle'),
+        title: this.$title('ProfileTitle'), // используем title.plugin.js
       };
     },
     data: () => ({
@@ -56,6 +57,7 @@
     mounted() {
       this.name = this.info.name;
       this.isRuLocale = this.info.locale === 'ru-RU';
+
       setTimeout(() => {
         M.updateTextFields();
       });

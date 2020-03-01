@@ -1,0 +1,46 @@
+// файл с глобальными стилями
+// подключаем в nuxt.config.js
+// $ npm run dev
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: Helvetica Neue,Helvetica,PingFang SC,Hiragino Sans GB,Microsoft YaHei,SimSun,sans-serif;
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.text-center {
+  text-align: center;
+}
+
+/*
+page-enter-active - анимация при заходе на страницу
+page-leave-active - анимация когда покидаем страницу
+*/
+.page-enter-active, .page-leave-active {
+  transition: opacity .4s;
+  /* 1 не добавляем, поскольку по умолч. у Всех элементов 1*/
+}
+
+/* изначальный state для анимации */
+.page-enter, .page-leave-active {
+  opacity: 0;
+}
+
+.mb {
+  margin-bottom: 1rem;
+}
+
+.mb2 {
+  margin-bottom: 2rem;
+}
+

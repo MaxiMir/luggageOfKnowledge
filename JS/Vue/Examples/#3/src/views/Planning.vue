@@ -18,7 +18,7 @@
           <strong>{{cat.title}}:</strong>
           {{cat.spend | currency}} {{'Of'|localize}} {{cat.limit | currency}}
         </p>
-        <div class="progress" v-tooltip.noloc="cat.tooltip">
+        <div class="progress" v-tooltip.noloc="cat.tooltip"><!-- применение директивы -->
           <div
             class="determinate"
             :class="[cat.progressColor]"
@@ -51,9 +51,9 @@
     },
     async mounted() {
       const records = await this.$store.dispatch('fetchRecords');
-      const categoires = await this.$store.dispatch('fetchCategories');
+      const categories = await this.$store.dispatch('fetchCategories');
 
-      this.categories = categoires.map(cat => {
+      this.categories = categories.map(cat => {
         const spend = records.filter(r => r.categoryId === cat.id).
           filter(r => r.type === 'outcome').
           reduce((total, record) => {
@@ -66,6 +66,7 @@
           percent < 60 ? 'green' : percent < 100 ? 'yellow' : 'red';
 
         const tooltipValue = cat.limit - spend;
+
         const tooltip = `${
           tooltipValue < 0 ? localizeFilter('MoreThan') : localizeFilter('Stayed')
         } ${currencyFilter(Math.abs(tooltipValue))}`;

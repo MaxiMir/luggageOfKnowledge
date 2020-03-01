@@ -9,14 +9,14 @@ npm (current version)
 ! В ядро Nuxt входит Vue и Vuex
 
 
-$ sudo npm i -g create-nuxt-app # для разворачивания приложений на nuxt
-$ npm install bootstrap # фрейморк UI
+$ sudo npm i -g create-nuxt-app     # для разворачивания приложений на nuxt
+$ npm install bootstrap             # фрейморк UI
 
 
 $ cd Documents/projects/
-$ create-nuxt-app nuxt-theory # инициализация проекта
+$ create-nuxt-app nuxt-theory       # инициализация проекта
 
-$ ? Use a custom server framework: none
+$ ? Use a custom server framework: none (Nuxt default server)
 $ ? Choose features to install: enter
 $ ? Use a custom UI framework: none
 $ ? Use a custom test framework: none
@@ -24,7 +24,7 @@ $ ? Choose rendering mode: Universal
 $ ? Choose a package manager: npm
 
 cd nuxt-theory/
-$ npm run dev # запуск генерации проекта
+$ npm run dev                       # запуск генерации проекта
 
 */
 
@@ -133,19 +133,18 @@ module.exports = {
 </template>
 
 <script>
-export default {
-    computed: {
-        isAuth() {
-            return this.$store.getters.isAuth;
-        }
-    },
-    methods: {
-        logout() {
-            this.$store.dispatch('logout');
+    export default {
+        computed: {
+            isAuth() {
+                return this.$store.getters.isAuth;
+            }
+        },
+        methods: {
+            logout() {
+                this.$store.dispatch('logout');
+            }
         }
     }
-}
-
 </script>
 
 
@@ -154,11 +153,13 @@ export default {
 <template>
     <div>
         <Navbar /> 
+
         <main>
             <div class="container">
                 <nuxt />
             </div>
         </main>
+
     </div>
 </template>
 
@@ -218,7 +219,7 @@ export default {
 <script>
     export default {
         // nuxt затем совмещает asyncData и data
-        asyncData({$axios, error}) { // данные доступны на сервере (nuxt). Из контекста берем модуль $axios и error
+        async asyncData({$axios, error}) { // данные доступны на сервере (nuxt). Из контекста берем модуль $axios и error
             return $axios.$get('https://jsonplaceholder.typicode.com/users')
                 .then(users => { users })
                 .catch(err => {
@@ -228,14 +229,14 @@ export default {
         data() { // данные доступны на клиентской стороне
             return {
                 pageTitle: 'Users pages',
-                users: [ // ! в примере с asyncData users удаляется
+                // ! в примере с asyncData users удаляется:
+                users: [ 
                     1, 2, 3, 4 , 5
                 ]
             }
         },
         methods: {
             goTo(user) { // переход на страницу юзера
-
                 //  До asyncData:
                 this.$router.push(`/users/${user}`);
 
@@ -254,7 +255,9 @@ export default {
 
     <!-- C asyncData: -->
     <h1>UserName: {{ user.name }}</h1> 
+
     <hr />
+
     <b>{{ user.email }}</b>
 </template>
 
@@ -301,7 +304,7 @@ export default {
     </section>
 </template>
 
-<style scoped> /** область видимости только внутри компонента **/
+<style scoped> 
     h1 {
         color: red;
     }
@@ -455,7 +458,7 @@ export const actions = {
 // CHANGE FILE: /store/users.js:
 export const state = () => {
     users: []
-});
+};
 
 export const mutations = {
     setUsers(state, users) {
@@ -642,7 +645,7 @@ export default function ({store, redirect}) {
 export const actions = {
     // ...
     async nuxtServerInit({dispatch}) {
-        await dispatch('users/fetchUsers')
+        await dispatch('users/fetchUsers');
     }
 }
 

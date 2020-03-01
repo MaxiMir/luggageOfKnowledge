@@ -35,5 +35,4 @@ export default {
       commit('clearInfo'); // дергаем мутацию
     },
   },
-  
 };

@@ -28,4 +28,8 @@
   $ npm install materialize-css@next # устанавливаем Materialize CSS  
   $ npm install vuelidate --save # устанавливаем пакет для валидации
   $ npm i firebase # устанавливаем Firebase
+  $ npm install vuejs-paginate --save # устанавливаем пагинацию
+  $ npm i lodash
+  $ npm install vue-chartjs chart.js # устанавливаем зависимости для графиков
+  % npm install vue-meta --save # устанавливаем зависимость для мет
 */
