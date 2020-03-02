@@ -27,12 +27,11 @@
           native-type="submit"
           round
           :loading="loading"
-        ><!-- loading - дизейблит кнопки и добавляет анимацию загрузки-->
+        ><!-- loading - дизейблит кнопку и добавляет анимацию загрузки-->
           Войти
         </el-button>
       </el-form-item>
     </el-form>
-
   </el-card>
 </template>
 
@@ -42,11 +41,11 @@
    data() {
       return {
         loading: false,
-        controls: {
+        controls: { // контроллы модели формы
           login: '',
           password: ''
         },
-        rules: {
+        rules: { // правила валидации формы
           loading: [
             { required: true, message: 'Введите логин', trigger: 'blur'},
           ],
@@ -58,7 +57,7 @@
       }
    },
    mounted() {
-    const {message} = this.$route.query;
+    const {message} = this.$route.query
 
     switch(message) {
       case 'login':

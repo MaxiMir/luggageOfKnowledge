@@ -48,11 +48,67 @@
     $productWithOffers = $splitProducts['withOffers'];
     
     if ($productWithOffers) {
-        $el = new CIblockElement();
-        updateProductsWithOffersPrice($productWithOffers, $el);
+        updateProductsWithOffersPrice($productWithOffers);
     }
     
     
+    
+    
+    /**
+     * Распечатка для дебага
+     *
+     * @param mixed ...$args
+     */
+    function dbg(...$args)
+    {
+        echo '<pre>';
+        
+        foreach ($args as $arg) {
+            $type = gettype($arg);
+            
+            echo "TYPE: {$type}<br>";
+            print_r($arg);
+        }
+        
+        echo '</pre>';
+    }
+    
+    
+    /**
+     * Абстракция для выборки элементов ИБ
+     *
+     * @param array $params
+     * @return array
+     */
+    function getElements(array $params): array
+    {
+        $elements = [];
+        $filterDefault = [
+            "ACTIVE" => "Y",
+            "IBLOCK_ID" => CATALOG_I_BLOCK_ID,
+        ];
+        
+        $select = $params["select"] ?? ["*"];
+        $filter = !$params["filter"] ? $filterDefault : array_replace($filterDefault, $params["filter"]);
+        $sort = $params["sort"] ?? [];
+        $limit = !$params["limit"] ? false : ["nPageSize" => $params["limit"]];
+        
+        $productDBData = CIBlockElement::Getlist($sort, $filter, false, $limit, $select);
+        
+        while ($element = $productDBData->Fetch()) {
+            $isSingleColumnQuery = sizeof($select) === 1 && $select !== ["*"];
+            $elementData = !$isSingleColumnQuery ? $element : $element[$select[0]];
+            
+            if (isset($element['ID'])) {
+                $elements[$element['ID']] = $elementData;
+                continue;
+            }
+            
+            $elements[] = $elementData;
+        }
+        
+        return $elements;
+    }
     
     
     /**
@@ -110,7 +166,7 @@
                 "CURRENCY" => $currency
             ];
             
-            $res = CPrice::GetList([], ["PRODUCT_ID" => $id, "CATALOG_GROUP_ID" => 1]);
+            $res = CPrice::GetList([], [ "PRODUCT_ID" => $id, "CATALOG_GROUP_ID" => 1 ]);
             
             if ($arr = $res->Fetch()) {
                 CPrice::Update($arr["ID"], $arFields);
@@ -125,28 +181,17 @@
      * Обновляет цены торговых предложений
      *
      * @param $products
-     * @param $el
-     * @param $iBlockID
      */
-    function updateProductsWithOffersPrice($products, $el)
+    function updateProductsWithOffersPrice($products)
     {
         $updatedOffers = [];
         
-        $res = $el->GetList(
-            [],
-            [
-                "IBLOCK_ID" => OFFERS_I_BLOCK_ID,
-                "PROPERTY_CML2_LINK" => array_keys($products)
-            ],
-            false,
-            false,
-            [
-                "ID",
-                "CATALOG_GROUP_1"
-            ]
-        );
+        $filter = ["IBLOCK_ID" => OFFERS_I_BLOCK_ID, "PROPERTY_CML2_LINK" => array_keys($products)];
+        $select = ['ID', "CATALOG_GROUP_1"];
+        $settings = compact('filter', 'select');
+        $offers = getElements($settings);
         
-        while ($offer = $res->Fetch()) {
+        foreach ($offers as $offer) {
             $price = $offer["CATALOG_PRICE_1"];
             
             if (!$price || in_array($offer["ID"], $updatedOffers)) {
@@ -179,4 +224,3 @@
             }
         }
     }
-    

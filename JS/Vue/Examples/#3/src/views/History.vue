@@ -16,7 +16,6 @@
     </p>
 
     <section v-else>
-
       <HistoryTable :records="items"/> <!-- items берутся из миксина pagination -->
 
       <Paginate
@@ -34,7 +33,6 @@
       container-class - класс для ul
       page-class - класс для li
       -->
-
     </section>
   </div>
 </template>

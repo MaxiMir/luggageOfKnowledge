@@ -12,6 +12,7 @@ import tooltipDirective from '@/directives/tooltip.directive'; // импорти
 import messagePlugin from '@/utils/message.plugin'; // импортируем утилиту для сообщений
 import titlePlugin from '@/utils/title.plugin'; // импортируем утилиту для title
 import Loader from '@/components/app/Loader'; // импортируем loader
+
 import './registerServiceWorker';
 import 'materialize-css/dist/js/materialize.min'; // импортируем JS скрипты Material CSS
 
@@ -25,10 +26,13 @@ Vue.use(messagePlugin); // регистрация плагина для сооб
 Vue.use(Vuelidate); // регистрация плагина для валидации
 Vue.use(VueMeta); // регистрация плагина для мет
 Vue.use(titlePlugin); // регистрация плагина для title
+
 Vue.filter('date', dateFilter); // регистрация фильтра с названием date
 Vue.filter('currency', currencyFilter); // регистрация фильтра с названием currency
 Vue.filter('localize', localizeFilter); // регистрация фильтра с названием localize
+
 Vue.directive('tooltip', tooltipDirective); // регистрация директивы с названием tooltip
+
 Vue.component('Loader', Loader); // регистрация Loader
 Vue.component('Paginate', Paginate); // регистрация Paginate
 

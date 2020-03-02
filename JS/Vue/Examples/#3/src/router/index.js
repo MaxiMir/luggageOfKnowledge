@@ -74,10 +74,11 @@ const router = new VueRouter({
   routes,
 });
 
-router.beforeEach((to, from, next) => { // вызывается перед каждой сменой роута
-                                        // to - роут куда идем
-                                        // from - откуда
-                                        // next - функция, вызов которой разрешает хук
+router.beforeEach((to, from, next) => { 
+  // вызывается перед каждой сменой роута
+  // to - роут куда идем
+  // from - откуда
+  // next - функция, вызов которой разрешает хук
   
   const currentUser = firebase.auth.currentUser;
   const requireAuth = to.matched.some(record => record.meta.auth);

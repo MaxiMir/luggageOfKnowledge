@@ -8,3 +8,6 @@ export default {
     };
   },
 };
+
+
+// импортируем в main.js

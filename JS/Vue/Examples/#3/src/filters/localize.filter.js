@@ -11,3 +11,6 @@ export default function localizeFilter(key) {
   const locale = store.getters.info.locale || 'ru-RU';
   return locales[locale][key] || `[Localize error]: key ${key} not found`;
 }
+
+
+// импортиритруем функцию в main.js

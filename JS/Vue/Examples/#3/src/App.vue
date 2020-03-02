@@ -31,5 +31,4 @@
   @import '~materialize-css/dist/css/materialize.min.css';
   // импортируем стили Materialize CSS
   @import 'assets/index.css'; // импорт локальных стилей
-
 </style>

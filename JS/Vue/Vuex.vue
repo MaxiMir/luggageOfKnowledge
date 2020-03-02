@@ -196,6 +196,7 @@ new Vue({
                    body: thjis.body,
                    id: Date.now()
                });
+
                this.title = this.body = ''; 
             }
         }
@@ -212,4 +213,3 @@ new Vue({
         margin-bottom: 10px;
     }
 </style>
-
