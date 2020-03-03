@@ -1,6 +1,7 @@
 const {Strategy, ExtractJwt} = require('passport-jwt')
-const {model} = require('mongoose') // вычленяет модели если они зарегистрированы
+// const {model} = require('mongoose') // вычленяет модели если они зарегистрированы
 const keys = require('../keys')
+const User = require('../models/user.model')
 
 const User = model('users')
 

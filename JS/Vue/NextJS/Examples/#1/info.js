@@ -21,12 +21,17 @@
 
 
     BACKEND:
+    
+    Service for mongo DB: mlab
+
     $ npm install body-parser           # пакет для удобного парсинга входящих параметров        
     $ npm i mongoose                    # пакет для работы с mongoDB
     $ npm install bcrypt-nodejs         # пакет для шифрования паролей
     $ npm install jsonwebtoken          # пакет для создания токенов для сессий
     $ npm install passport passport-jwt # защита роутов и поддержка авторизации
+    $ npp install multer                # пакет для загрузки файлов
+    $ npm install moment                # пакет для работы с файлами    
 
-    Service for mongo DB: mlab
+    
  */
 
