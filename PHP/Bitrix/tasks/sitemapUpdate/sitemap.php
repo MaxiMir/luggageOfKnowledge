@@ -5,7 +5,7 @@
     require_once "sitemap-functions.php";
     
     ['DOCUMENT_ROOT' => $root, 'HTTP_HOST' => $currentHost, 'REQUEST_URI' => $requestUri] = $_SERVER;
-    $mainHost = 'spb-elektromontazh.ru';
+    $mainHost = 'donballon.ru';
     $mainHostWithProto = "https://{$mainHost}";
     $siteMapFile = $root . DIRECTORY_SEPARATOR . 'sitemap.xml';
     $isSubDomain = $currentHost != $mainHost;
@@ -20,6 +20,4 @@
         
         # Вывод запрашиваемого sitemap файла для текущего домена:
         echo generateSiteMapContent($mainHost, $currentHost, $requestedSiteMap);
-    } catch (Exception $e) {
-        #echo $e->getMessage();
-    }
+    } catch (Exception $e) {}

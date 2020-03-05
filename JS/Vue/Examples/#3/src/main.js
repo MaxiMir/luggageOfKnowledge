@@ -33,9 +33,8 @@ Vue.filter('localize', localizeFilter); // регистрация фильтра
 
 Vue.directive('tooltip', tooltipDirective); // регистрация директивы с названием tooltip
 
-Vue.component('Loader', Loader); // регистрация Loader
-Vue.component('Paginate', Paginate); // регистрация Paginate
-
+Vue.component('Loader', Loader); // регистрация глобального компонента Loader
+Vue.component('Paginate', Paginate); // регистрация глобального компонента Paginate
 
 // Firabase инициализация:
 firebase.initializeApp({

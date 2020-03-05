@@ -30,5 +30,3 @@ app.use('/api/comments', commentRoutes) // регистрация роута
 
 
 module.exports = app
-
-
