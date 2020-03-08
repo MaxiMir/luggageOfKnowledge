@@ -4,8 +4,8 @@
 
 <script>
   export default {
-   layout: 'admin', // nuxt - указываем layout
-   middleware: ['admin-auth']
+    layout: 'admin', // nuxt - указываем layout
+    middleware: ['admin-auth']
   }
 </script>
 

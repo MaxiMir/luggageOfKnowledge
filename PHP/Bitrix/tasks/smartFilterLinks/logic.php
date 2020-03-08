@@ -37,11 +37,14 @@
     }
     
     
+    
     # FILE: /local/components/bitrix/catalog.smart.filter/component.php:
     if ($arParams["SEF_MODE"] == "Y") {
         #@ Генерация URNs для фильтра:
         $arResult["SMART_FILTER_URN"] = $this->getSmartURNs($url);
     }
+    
+    
     
     # FILE: /local/templates/aspro_next/components/bitrix/catalog.smart.filter/main/template.php:
     // ...

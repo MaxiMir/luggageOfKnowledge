@@ -40,7 +40,7 @@
 <script>
   import paginationMixin from '@/mixins/pagination.mixin'; // подключаем миксин pagination
   import HistoryTable from '@/components/HistoryTable';
-  import {Pie} from 'vue-chartjs'; // плагин vue-chartjs
+  import { Pie } from 'vue-chartjs'; // плагин vue-chartjs
   import localizeFilter from '@/filters/localize.filter';
 
   export default {

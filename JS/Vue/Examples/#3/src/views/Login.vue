@@ -64,7 +64,7 @@
 </template>
 
 <script>
-  import {email, minLength, required} from 'vuelidate/lib/validators'; // импорт определенных валидаторов
+  import { email, minLength, required } from 'vuelidate/lib/validators'; // импорт определенных валидаторов
   import messages from '@/utils/messages'; // коды сообщений
   import localizeFilter from '@/filters/localize.filter';
 
@@ -80,8 +80,8 @@
       password: '',
     }),
     validations: { // использование плагина Vuelidate
-      email: {email, required}, // задаем валидацию для email
-      password: {required, minLength: minLength(6)},
+      email: { email, required }, // задаем валидацию для email
+      password: { required, minLength: minLength(6) },
     },
     mounted() {
       // показываем всплывашку с сообщением:

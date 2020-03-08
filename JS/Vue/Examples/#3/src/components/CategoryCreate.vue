@@ -51,7 +51,7 @@
 </template>
 
 <script>
-  import {minValue, required} from 'vuelidate/lib/validators';
+  import { minValue, required } from 'vuelidate/lib/validators';
   import localizeFilter from '@/filters/localize.filter';
 
   export default {
@@ -60,8 +60,8 @@
       limit: 100,
     }),
     validations: {
-      title: {required},
-      limit: {minValue: minValue(100)}, // валидатор минимальное значение
+      title: { required },
+      limit: { minValue: minValue(100) }, // валидатор минимальное значение
     },
     mounted() {
       M.updateTextFields(); // решает баг с наездом label на введенное значение

@@ -3,7 +3,7 @@ import _ from 'lodash';
 export default {
   data() {
     return {
-      page: + this.$route.query.page || 1,   // v-model="page"
+      page: +this.$route.query.page || 1,   // v-model="page"
       pageSize: 5,
       pageCount: 0,
       allItems: [],
@@ -12,7 +12,7 @@ export default {
   },
   methods: {
     pageChangeHandler(page) { // обработчик клика
-      this.$router.push(`${this.$route.path}?page=${page}`); // this.$route.path - текущий путь
+      this.$router.push(`${ this.$route.path }?page=${ page }`); // this.$route.path - текущий путь
       this.items = this.allItems[page - 1] || this.allItems[0];
     },
     setupPagination(allItems) {

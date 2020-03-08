@@ -1,11 +1,11 @@
 <template>
   <el-container>
     <el-header>
-      <app-navigation />
+      <app-navigation/>
     </el-header>
 
     <el-main>
-      <nuxt />
+      <nuxt/>
     </el-main>
 
     <el-footer/>

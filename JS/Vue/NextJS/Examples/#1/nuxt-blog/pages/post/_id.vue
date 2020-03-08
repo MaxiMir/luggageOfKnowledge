@@ -55,7 +55,7 @@
   import AppComment from '@/components/main/Comment'
 
   export default {
-    validate({params}) { // nuxt method
+    validate({ params }) { // nuxt method
       return Boolean(params.id)
     },
     data() {

@@ -7,7 +7,7 @@
       <Loader v-if="loading"/>
 
       <div class="row" v-else>
-        <CategoryCreate @created="addNewCategory" />
+        <CategoryCreate @created="addNewCategory"/>
 
         <CategoryEdit
           v-if="categories.length"

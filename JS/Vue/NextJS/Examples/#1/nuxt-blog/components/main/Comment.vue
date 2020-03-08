@@ -1,4 +1,5 @@
-s<template>
+s
+<template>
   <el-card class="comment">
     <div class="comment-header">
       <span>Person name</span>
@@ -17,7 +18,7 @@ s<template>
 
 <script>
   export default {
-      props: ['comment']
+    props: ['comment']
   }
 </script>
 

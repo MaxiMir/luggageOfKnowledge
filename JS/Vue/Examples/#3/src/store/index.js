@@ -14,7 +14,7 @@ export default new Vuex.Store({
     async fetchCurrency() {
       const key = proccess.env.VUE_APP_FIXER; // получаем значение из файла .env
       const res = await fetch(
-        `http://data.fixer.io/api/latest?access_key=${key}&symbols=USD,EUR,RUB`);
+        `http://data.fixer.io/api/latest?access_key=${ key }&symbols=USD,EUR,RUB`);
       return await res.json();
     },
   },

@@ -73,7 +73,7 @@
 </template>
 
 <script>
-  import {email, minLength, required} from 'vuelidate/lib/validators';
+  import { email, minLength, required } from 'vuelidate/lib/validators';
 
   export default {
     name: 'register',
@@ -89,10 +89,10 @@
       agree: false,
     }),
     validations: {
-      email: {email, required},
-      password: {required, minLength: minLength(6)},
-      name: {required},
-      agree: {checked: v => v}, // собственный валидатор
+      email: { email, required },
+      password: { required, minLength: minLength(6) },
+      name: { required },
+      agree: { checked: v => v }, // собственный валидатор
     },
     methods: {
       async submitHandler() {

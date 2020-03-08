@@ -98,7 +98,6 @@ module.exports = {
 }
 
 // @ @@ ~ ~~  # корень приложения
-
 </script>
 
 
@@ -256,6 +255,8 @@ module.exports = {
 </script>
 
 
+
+
 // + FILE: /pages/users/_id.vue (динамическая страница пользователя) nuxt будет передавать во Vue роутер параметр id:
 <template>
     <!-- До asyncData: -->
@@ -277,7 +278,7 @@ module.exports = {
             return /^\d+$/.test(params.id);
             // если возвращается false -> this page could not be found
         },
-        async asyncData({params, err, $axios}) { // asyncData поддерживает async
+        async asyncData({params, error, $axios}) { // asyncData поддерживает async
             try {
                 const user = $axios.$get(`https://jsonplaceholder.typicode.com/users/${params.id}`);
                 return {user};
@@ -414,7 +415,9 @@ export const actions = {
 }
 
 
+
 </script>
+
 
 
 // CHANGE FILE: /pages/users/index.vue (страница пользователей) он же `роут`:
@@ -626,6 +629,11 @@ export default function ({store, redirect}) {
 }
 
 
+
+</script>
+
+
+
 // CHANGE FILE: /about/index.vue:
 <template>
     <section>
@@ -644,6 +652,10 @@ export default function ({store, redirect}) {
 
 
 
+<script>
+
+
+
 
 // @ NuxtServerInit:
 // Реализуем загрузку пользователей на какой странице бы не находились
@@ -657,4 +669,7 @@ export const actions = {
     }
 }
 
-// ...
+
+
+
+

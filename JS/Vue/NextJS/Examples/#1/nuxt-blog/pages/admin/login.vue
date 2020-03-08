@@ -45,8 +45,8 @@
           login: '',
           password: ''
         },
-        rules: { // правила валидации формы
-          loading: [
+        rules: { // правила валидации формы (Element UI)
+          login: [
             { required: true, message: 'Введите логин', trigger: 'blur'},
           ],
           password: [

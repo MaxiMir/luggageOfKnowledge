@@ -31,7 +31,7 @@
 </template>
 
 <script>
-  import {mapGetters} from 'vuex';
+  import { mapGetters } from 'vuex';
   import currencyFilter from '@/filters/currency.filter';
   import localizeFilter from '@/filters/localize.filter';
 
@@ -54,11 +54,9 @@
       const categories = await this.$store.dispatch('fetchCategories');
 
       this.categories = categories.map(cat => {
-        const spend = records.filter(r => r.categoryId === cat.id).
-          filter(r => r.type === 'outcome').
-          reduce((total, record) => {
-            return (total += +record.amount);
-          }, 0);
+        const spend = records.filter(r => r.categoryId === cat.id).filter(r => r.type === 'outcome').reduce((total, record) => {
+          return (total += +record.amount);
+        }, 0);
 
         const percent = (100 * spend) / cat.limit;
         const progressPercent = percent > 100 ? 100 : percent;
@@ -69,7 +67,7 @@
 
         const tooltip = `${
           tooltipValue < 0 ? localizeFilter('MoreThan') : localizeFilter('Stayed')
-        } ${currencyFilter(Math.abs(tooltipValue))}`;
+        } ${ currencyFilter(Math.abs(tooltipValue)) }`;
 
         return {
           ...cat,

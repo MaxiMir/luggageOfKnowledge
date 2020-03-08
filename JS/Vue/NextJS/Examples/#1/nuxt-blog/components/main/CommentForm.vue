@@ -8,7 +8,7 @@
     <h2>Добавить комментарий</h2>
 
     <el-form-item label="Ваше имя" prop="name">
-      <el-input v-model.trim="controls.name" />
+      <el-input v-model.trim="controls.name"/>
     </el-form-item>
 
     <el-form-item label="Текст комментария" prop="text">

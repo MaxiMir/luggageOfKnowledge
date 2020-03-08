@@ -7,7 +7,7 @@
         />
       </el-aside>
       <el-main>
-        <nuxt />
+        <nuxt/>
       </el-main>
     </el-container>
   </div>

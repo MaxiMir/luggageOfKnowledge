@@ -17,9 +17,9 @@
   import localizeFilter from '@/filters/localize.filter';
 
   export default {
-    props: [
+    props: [ // регистрируем принимаемый параметр (v-model="isOpen" в MainLayout.vue)
       'value',
-    ], // регистрируем принимаемый параметр (v-model="isOpen" в MainLayout.vue)
+    ],
     data: () => ({
       links: [
         {title: localizeFilter('Menu_Bill'), url: '/', exact: true},

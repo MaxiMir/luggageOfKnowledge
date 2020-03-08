@@ -3,15 +3,15 @@
     URI: vuex.vuejs.org
     Vue.js devtools - расширение для браузера
 
-    vue create . # генерация проекта в текущей папке
+    $ vue create . # генерация проекта в текущей папке
+
     ? Generate project in current directory: yes
     ? Please pick a preset: Manually select features
     ? Check the features needed for your project: Babel
     ? Where do you prefer placing config for Babel, ... : In dedicated config files
     ? Save preset: no
 
-    $ npm run serve 
-
+    $ npm run serve
     $ npm i vuex
  */
 
@@ -189,7 +189,7 @@ new Vue({
             }
         },
         methods: {
-            ...mapMutations(['createPost'])
+            ...mapMutations(['createPost']),
             submit() {
                this.createPost({
                    title: this.title,

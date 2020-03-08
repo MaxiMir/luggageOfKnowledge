@@ -70,8 +70,8 @@
 </template>
 
 <script>
-  import {minValue, required} from 'vuelidate/lib/validators';
-  import {mapGetters} from 'vuex';
+  import { minValue, required } from 'vuelidate/lib/validators';
+  import { mapGetters } from 'vuex';
   import localizeFilter from '@/filters/localize.filter';
 
   export default {
@@ -91,8 +91,8 @@
       description: '',
     }),
     validations: {
-      amount: {minValue: minValue(1)},
-      description: {required},
+      amount: { minValue: minValue(1) },
+      description: { required },
     },
     async mounted() {
       this.categories = await this.$store.dispatch('fetchCategories');
@@ -142,7 +142,7 @@
                 ? this.info.bill + this.amount
                 : this.info.bill - this.amount;
 
-            await this.$store.dispatch('updateInfo', {bill});
+            await this.$store.dispatch('updateInfo', { bill });
             this.$message(localizeFilter('RecordHasBeenCreated'));
             this.$v.$reset();
             this.amount = 1;
@@ -152,8 +152,8 @@
           }
         } else {
           this.$message(
-            `${localizeFilter('NotEnoughMoney')} (${this.amount -
-            this.info.bill})`,
+            `${ localizeFilter('NotEnoughMoney') } (${ this.amount -
+            this.info.bill })`,
           );
         }
       },

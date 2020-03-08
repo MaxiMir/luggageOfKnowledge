@@ -4,7 +4,7 @@
     :body-style="{padding: 0}"
     class="post"
   >
-   <header slot="header" class="post-header">
+    <header slot="header" class="post-header">
       <h3>Post title</h3>
 
       <small>
@@ -38,7 +38,7 @@
   export default {
     methods: {
       openPost() {
-        this.$router.push(`/post${this.post.id}`)
+        this.$router.push(`/post${ this.post.id }`)
       }
     }
   }
@@ -51,7 +51,7 @@
     &-header {
       display: flex;
       justify-content: space-between;
-      align-items:center;
+      align-items: center;
     }
 
     &-img {

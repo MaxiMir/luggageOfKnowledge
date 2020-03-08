@@ -38,8 +38,8 @@
 
 
 <script>
-  import {mapActions, mapGetters} from 'vuex';
-  import {required} from 'vuelidate/lib/validators';
+  import { mapActions, mapGetters } from 'vuex';
+  import { required } from 'vuelidate/lib/validators';
 
   export default {
     metaInfo() { // установка мет с помощью планина
@@ -52,7 +52,7 @@
       isRuLocale: true,
     }),
     validations: {
-      name: {required},
+      name: { required },
     },
     mounted() {
       this.name = this.info.name;

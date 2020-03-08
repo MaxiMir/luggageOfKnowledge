@@ -12,20 +12,20 @@ export const mutations = {
 }
 
 export const actions = {
-  async login({commit, dispatch}, formData) {
+  async login({ commit, dispatch }, formData) {
     try {
-      const {token} = this.$axios.$post('/api/auth/admin/login', formData)
+      const { token } = this.$axios.$post('/api/auth/admin/login', formData)
 
       dispatch('setToken', token)
     } catch (e) {
-      commit('setError', e, {root: true}) // root: true смотреть в корневом элементе
-      throw e // чтобы в login попасть в catch
+      commit('setError', e, { root: true }) // root: true смотреть в корневом элементе
+      throw e // чтобы, например, в login попасть в catch
     }
   },
-  setToken({commit}, token) {
+  setToken({ commit }, token) {
     commit('setToken', token)
   },
-  logout({commit}) {
+  logout({ commit }) {
     commit('clearToken')
   }
 }
