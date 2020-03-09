@@ -1,4 +1,4 @@
-const {Schema, model} = require('mongoose')
+const { Schema, model } = require('mongoose')
 
 const commentSchema = new Schema({
   name: {
@@ -15,7 +15,7 @@ const commentSchema = new Schema({
   },
   postId: {
     type: Schema.Types.ObjectId,
-    ref: 'posts',
+    ref: 'posts'
   }
 })
 

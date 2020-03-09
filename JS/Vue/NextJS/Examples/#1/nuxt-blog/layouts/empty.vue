@@ -13,11 +13,13 @@
     },
     watch: {
       error(value) {
-        this.$message.error(value)
+        const axiosError = value.response.data.message
+        this.$message.error(axiosError)
       }
     }
   }
 </script>
+
 
 <style lang="scss" scoped>
   .empty-layout {

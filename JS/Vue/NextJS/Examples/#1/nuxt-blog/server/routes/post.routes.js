@@ -1,7 +1,7 @@
+const { Router } = require('express')
 const passport = require('passport')
-const {Router} = require('express')
-const upload = require('../middleware/upload')
-const ctr = require('../contollers/post.controller')
+const upload = require('../middleware/upload') // middleware upload
+const ctr = require('../controllers/post.controller') // контроллер post
 const router = Router()
 
 
@@ -9,45 +9,41 @@ const router = Router()
 // /api/post/admin
 router.post(
   '/admin/',
-  passport.authenticate('jwt', {session: false}), // проверяем наличие токена
-  upload.single('image'), // middleware upload; image - поле, в котором картинка
+  passport.authenticate('jwt', { session: false }), // middleware passport с проверкой токена
+  upload.single('image'), // использовуем middleware upload; single - так как одна картинка; image - название в formData
   ctr.create
 )
 
 router.get(
   '/admin/',
-  passport.authenticate('jwt', {session: false}), // проверяем наличие токена
+  passport.authenticate('jwt', { session: false }), // middleware passport с проверкой токена
   ctr.getAll
 )
 
 router.get(
-  '/admin/:id', // получение детальной страницы
-  passport.authenticate('jwt', {session: false}), // проверяем наличие токена
+  '/admin/:id',
+  passport.authenticate('jwt', { session: false }), // middleware passport с проверкой токена
   ctr.getById
 )
 
-
 router.put(
-  '/admin/:id', // модификация детальной страницы
-  passport.authenticate('jwt', {session: false}), // проверяем наличие токена
+  '/admin/:id',
+  passport.authenticate('jwt', { session: false }), // middleware passport с проверкой токена
   ctr.update
 )
 
 router.delete(
-  '/admin/:id', // модификация детальной страницы
-  passport.authenticate('jwt', {session: false}), // проверяем наличие токена
+  '/admin/:id',
+  passport.authenticate('jwt', { session: false }), // middleware passport с проверкой токена
   ctr.remove
 )
 
 
-
 // Base - публичные без jwt токена
 // /api/post
-router.get('/', ctr.getAll) // получение всех постов
-router.get('/:id', ctr.getById) // получение детальной страницы
-router.put('/:id', ctr.addView) // увеличение просмотров страницы
-
+router.get('/', ctr.getAll)
+router.get('/:id', ctr.getById)
+router.put('/:id', ctr.addView)
 
 
 module.exports = router
-

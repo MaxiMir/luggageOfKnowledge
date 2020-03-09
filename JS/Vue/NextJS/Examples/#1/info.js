@@ -18,7 +18,9 @@
 
     URI: nuxtjs.org -> search -> preprocessors
     $ npm install --save-dev node-sass sass-loader  # устанавливаем препроцессор SCSS
-
+    $ npm install vue-markdown # плагин для Markdown
+    $ npm install cookie js-cookie # библиотеки для работы с куками (чтение кук|запись+удаление из кук)
+    $ npm install jwt-decode # библиотека для декодирования токена
 
     BACKEND:
     
@@ -30,7 +32,8 @@
     $ npm install jsonwebtoken          # пакет для создания токенов для сессий
     $ npm install passport passport-jwt # защита роутов и поддержка авторизации
     $ npp install multer                # пакет для загрузки файлов
-    $ npm install moment                # пакет для работы с файлами    
+    $ npm install moment                # пакет для работы с датами
+
 
     
  */

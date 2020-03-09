@@ -1,18 +1,18 @@
 const path = require('path')
-const multer = require('multer')
-const moment = require('moment')
+const multer = require('multer') // пакет для загрузки файлов
+const moment = require('moment') // пакет для работы с датами
 
 
 const storage = multer.diskStorage({
   destination(req, file, cb) {
-    cb(null, path.resolve(__dirname, '../../', 'static')) // место куда складываем файл
+    cb(null, path.resolve(__dirname, '../../', 'static')) // место куда складываем файл, когда он загрузится
   },
   filename(req, file, cb) {
-    cb(null, `${file.originalname}-${moment().format('DDMMYYYY-HHmmss_SSS')}`) // название файла; moment() - текущий момент
+    cb(null, `${ file.originalname }-${ moment().format('DDMMYYYY-HHmmss_SSS') }`) // название файла; moment() - текущий момент
   }
 })
 
-const fileFilter = (req, file, cb) => {
+const fileFilter = (req, file, cb) => { // валидация файлов
   if (file.mimetype === 'image/png' || file.mimetype === 'image/jpeg') {
     cb(null, true)
   } else {
@@ -20,10 +20,10 @@ const fileFilter = (req, file, cb) => {
   }
 }
 
-module.export = multer({
+module.export = multer({ // конфигурация для multer
   storage,
   fileFilter,
-  limits: {fileSize: 1024 * 1024 * 5}
+  limits: { fileSize: 1024 * 1024 * 5 } // ограничение по размеру файла
 })
 
 

@@ -1,10 +1,10 @@
 const {model, Schema} = require('mongoose')
 
-const userSchema = new Schema({ // описание модели юзера
+const userSchema = new Schema({ // Schema - создает новую сущнось
   login: {
-    type: String,
-    unique: true,
-    required: true
+    type: String, // тип данных JS
+    unique: true, // уникальное
+    required: true // обязательное
   },
   password: {
     type: String,
@@ -13,4 +13,4 @@ const userSchema = new Schema({ // описание модели юзера
   }
 })
 
-module.exports = model('users', userSchema) // регистрируем модель users
+module.exports = model('users', userSchema) // model - регистрирует модель users

@@ -12,13 +12,13 @@
       <h2>Войти в панель администратора</h2>
 
       <el-form-item label="Логин" prop="login">
-        <el-input v-model.trim="controls.login" />
+        <el-input v-model.trim="controls.login"/>
       </el-form-item>
 
       <div class="mb">
         <el-form-item label="Пароль" prop="password">
-        <el-input type="password" v-model.trim="controls.password" />
-      </el-form-item>
+          <el-input type="password" v-model.trim="controls.password"/>
+        </el-form-item>
       </div>
 
       <el-form-item>
@@ -37,8 +37,8 @@
 
 <script>
   export default {
-   layout: 'empty', // nuxt - указываем layout
-   data() {
+    layout: 'empty', // nuxt - указываем layout
+    data() {
       return {
         loading: false,
         controls: { // контроллы модели формы
@@ -47,47 +47,50 @@
         },
         rules: { // правила валидации формы (Element UI)
           login: [
-            { required: true, message: 'Введите логин', trigger: 'blur'},
+            { required: true, message: 'Введите логин', trigger: 'blur' },
           ],
           password: [
-            { required: true, message: 'Введите пароль', trigger: 'blur'},
-            { min: 6, message: 'Пароль должен быть не менее 6 символов', trigger: 'blur'}
+            { required: true, message: 'Введите пароль', trigger: 'blur' },
+            { min: 6, message: 'Пароль должен быть не менее 6 символов', trigger: 'blur' }
           ],
         }
       }
-   },
-   mounted() {
-    const {message} = this.$route.query
+    },
+    mounted() {
+      const { message } = this.$route.query
 
-    switch(message) {
-      case 'login':
-        this.$message.info('Для начала войдите в систему')
-        break
-      case 'logout':
-        this.$message.success('Вы успешно вышли из системы')
-    }
-   },
-   methods: {
-     async onSubmit() {
-      this.$refs.form.validate(valid => {
-        if (valid) {
-          this.loading = true
+      switch (message) {
+        case 'login':
+          this.$message.info('Для начала войдите в систему')
+          break
+        case 'logout':
+          this.$message.success('Вы успешно вышли из системы')
+          break
+        case 'session':
+          this.$message.warning('Время сессии истекло, пожалуйста войдите.')
+      }
+    },
+    methods: {
+      async onSubmit() {
+        this.$refs.form.validate(async valid => {
+          if (valid) {
+            this.loading = true
 
-          try {
-            const formData = {
-              login: this.controls.login,
-              password: this.controls.password
+            try {
+              const formData = {
+                login: this.controls.login,
+                password: this.controls.password
+              }
+
+              await this.$store.dispatch('auth/login', formData) // название модуля/action
+              this.$router.push('/admin')
+            } catch (e) {
+              this.loading = false
             }
-
-            await this.$store.dispatch('auth/login', formData) // название модуля/action
-            this.$router.push('/admin')
-          } catch (e) {
-            this.loading = false
           }
-        }
-      })
-     }
-   }
+        })
+      }
+    }
   }
 </script>
 

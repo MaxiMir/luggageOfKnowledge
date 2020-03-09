@@ -54,7 +54,7 @@
     },
     methods: {
       onSubmit() {
-        this.$refs.form.validate(valid => {
+        this.$refs.form.validate(async valid => {
           if (valid) {
             this.loading = true
             const formData = {

@@ -1,4 +1,4 @@
-const {Schema, model} = require('mongoose')
+const { Schema, model } = require('mongoose')
 
 const postSchema = new Schema({
   title: {
@@ -20,10 +20,11 @@ const postSchema = new Schema({
   imageUrl: String,
   comments: [
     {
-      type: Schema.Types.ObjectId, // связка с комментариями
-      ref: 'comments'
+      type: Schema.Types.ObjectId,
+      ref: 'comments' // связка с коллекцией комментариев
     }
   ]
 })
 
 module.exports = model('posts', postSchema)
+

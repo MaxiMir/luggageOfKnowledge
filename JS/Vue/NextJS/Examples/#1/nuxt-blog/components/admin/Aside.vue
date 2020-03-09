@@ -1,7 +1,7 @@
 <template>
   <el-menu
-    :style="{height: '100%'}"
     router
+    :style="{height: '100%'}"
     :default-active="$route.path"
   ><!-- router - делает ссылками; $route.path - текущий путь -->
     <el-menu-item index="/admin">
@@ -9,19 +9,19 @@
       <span>Аналитика</span>
     </el-menu-item>
     <el-menu-item index="/admin/create">
-      <i class="el-icon-menu"></i>
+      <i class="el-icon-edit-outline"></i>
       <span>Создать</span>
     </el-menu-item>
     <el-menu-item index="/admin/list">
-      <i class="el-icon-menu"></i>
+      <i class="el-icon-tickets"></i>
       <span>Посты</span>
     </el-menu-item>
     <el-menu-item index="/admin/user">
-      <i class="el-icon-menu"></i>
+      <i class="el-icon-service"></i>
       <span>Пользователи</span>
     </el-menu-item>
     <el-menu-item index="/admin/logout">
-      <i class="el-icon-menu"></i>
+      <i class="el-icon-setting"></i>
       <span>Выйти</span>
     </el-menu-item>
   </el-menu>
