@@ -24,7 +24,7 @@
         <small class="mr">
           <i class="el-icon-time"></i>
           <span>
-            {{ new Date(post.date).toLocaleString() }}
+            {{ post.date | date }}
           </span>
         </small>
 
@@ -60,10 +60,6 @@
     validate({params}) {
       return Boolean(params.id)
     },
-    async asyncData({store, params}) { // в params есть id страницы (_id.vue)
-      const post = await store.dispatch('post/fetchAdminById', params.id)
-      return {post}
-    },
     data() {
       return {
         loading: false,
@@ -76,6 +72,13 @@
           ]
         }
       }
+    },
+    async asyncData({store, params}) { // в params есть id страницы (_id.vue)
+      const post = await store.dispatch('post/fetchAdminById', params.id)
+      return {post}
+    },
+    mounted() {
+      this.controls.text = this.post.text
     },
     methods: {
       onSubmit() {

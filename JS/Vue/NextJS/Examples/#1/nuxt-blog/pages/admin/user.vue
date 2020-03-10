@@ -33,6 +33,9 @@
 <script>
   export default {
     layout: 'admin', // nuxt - указываем layout
+    head: {
+      title: `Создать пользователя | ${proccess.env.appName}`
+    },
     data() {
       return {
         loading: false,

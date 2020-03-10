@@ -21,6 +21,10 @@
     $ npm install vue-markdown # плагин для Markdown
     $ npm install cookie js-cookie # библиотеки для работы с куками (чтение кук|запись+удаление из кук)
     $ npm install jwt-decode # библиотека для декодирования токена
+    $ npm install vue-chartjs chart.js --save # библиотека для графиков
+
+    $ npm install @nuxtjs/pwa  # модуль для PWA URI: pwa.nuxtjs.org
+
 
     BACKEND:
     

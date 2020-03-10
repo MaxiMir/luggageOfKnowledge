@@ -10,7 +10,7 @@ const keys = require('./keys') // ключи для разработки/про�
 const app = express()
 
 // рекомендуется подлючаться к БД после инициализации express
-mongoose.connect(keys.MONGO_URI)// берем из файлов в /keys
+mongoose.connect(keys.MONGO_URI, { useNewUrlParser: true }) // берем из файлов в /keys
   .then(() => console.log('MongoDB connected...'))
   .catch(error => console.error(error))
 

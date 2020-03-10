@@ -2,7 +2,7 @@
   <article class="post">
     <header class="post-header">
       <div class="post-title">
-        <h1>Post title</h1>
+        <h1>{{ post.title }}</h1>
 
         <nuxt-link to="/">
           <i class="el-icon-back"></i>
@@ -11,37 +11,38 @@
       <div class="post-info">
         <small>
           <i class="el-icon-time">
-            {{ new Date().toLocaleString() }}
+            {{ post.date || date }}
           </i>
         </small>
         <small>
           <i class="el-icon-view">
-            42
+            {{ post.views }}
           </i>
         </small>
       </div>
       <div class="post-img">
         <img
-          src="https://cdn.tr.com/files/1.jpg"
+          :src="post.imageUrl"
           alt="post-img"
         >
       </div>
     </header>
 
     <main class="post-content">
-      <p></p>
+      <vue-markdown>{{ post.text }}</vue-markdown>
     </main>
 
     <footer>
       <app-comment-form
         v-if="canAddComment"
         @created="createdCommentHandler"
+        :postId="post._id"
       />
 
-      <div class="comments" v-if="comments.length">
+      <div class="comments" v-if="post.comments.length">
         <app-comment
-          v-for="comment in comments"
-          :key="comment.id"
+          v-for="comment in post.comments"
+          :key="comment._id"
           :comment="comment"
         />
       </div>
@@ -63,8 +64,20 @@
         canAddComment: true
       }
     },
+    head() {
+      return {
+        title: `${this.post.title} | ${proccess.env.appName}`
+      }
+    },
+    async asyncData({ store, params }) {
+      const post = await store.dispatch('post/fetchById', params.id)
+      await store.dispatch('post/addView', post)
+
+      return { ...post, views: ++post.views }
+    },
     methods: {
-      createdCommentHandler() {
+      createdCommentHandler(comment) {
+        this.post.comments.unshift(comment)
         this.canAddComment = false
       }
     },

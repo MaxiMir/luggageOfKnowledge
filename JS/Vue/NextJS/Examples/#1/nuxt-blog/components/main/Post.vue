@@ -5,18 +5,18 @@
     class="post"
   >
     <header slot="header" class="post-header">
-      <h3>Post title</h3>
+      <h3>{{ post. title }}</h3>
 
       <small>
         <i class="el-icon-time">
-          {{ new Date().toLocaleString() }}
+          {{ post.date | date }}
         </i>
       </small>
     </header>
     <div class="post-body">
       <img
-        src="https://cdn.tr.com/files/1.jpg"
-        alt="post-img"
+        :src="post.imageUrl"
+        alt="post image"
         class="post-img"
       >
     </div>
@@ -27,7 +27,7 @@
 
       <span>
         <i class="el-icon-message">
-          12
+          {{ post.comments.length }}
         </i>
       </span>
     </footer>
@@ -36,9 +36,16 @@
 
 <script>
   export default {
+    props: {
+      post: {
+        type: Object,
+        required: true
+      }
+    },
     methods: {
       openPost() {
-        this.$router.push(`/post${ this.post.id }`)
+        const id = this.post._id
+        this.$router.push(`/post/${ id }`)
       }
     }
   }

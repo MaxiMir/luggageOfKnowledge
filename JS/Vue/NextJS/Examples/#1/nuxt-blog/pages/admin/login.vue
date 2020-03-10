@@ -38,6 +38,9 @@
 <script>
   export default {
     layout: 'empty', // nuxt - указываем layout
+    head: {
+      title: `Вход в панель администратора | ${proccess.env.appName}`
+    },
     data() {
       return {
         loading: false,

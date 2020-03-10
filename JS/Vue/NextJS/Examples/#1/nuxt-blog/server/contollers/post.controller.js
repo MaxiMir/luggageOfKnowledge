@@ -63,7 +63,7 @@ module.exports.remove = async (req, res) => {
 
 module.exports.addView = async (req, res) => {
   const $set = {
-    view: ++req.body.views
+    views: ++req.body.views
   }
 
   try {
@@ -72,6 +72,29 @@ module.exports.addView = async (req, res) => {
       { $set }
     )
     res.status(204).json() // контента нет, но все успешно
+  } catch (e) {
+    res.status(500).json(e)
+  }
+}
+
+module.exports.getAnalytics = async (req, res) => {
+  try {
+    const posts = await Post.find()
+
+    const labels = posts.map(post => post.title)
+
+    const json = {
+      comments: {
+        labels,
+        data: posts.data(post => post.comments.length)
+      },
+      views: {
+        labels,
+        data: posts.data(post => post.views)
+      }
+    }
+
+    res.json(json)
   } catch (e) {
     res.status(500).json(e)
   }
