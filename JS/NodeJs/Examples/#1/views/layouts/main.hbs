@@ -1,0 +1,8 @@
+{{> head }}<!-- подключение partials/head.hbs -->
+    <body>
+        {{> navbar }}<!-- подключение partials/navbar.hbs -->
+        <div class="container">
+            {{{ body }}}<!-- место для рендеринга текущей страницы -->
+        </div>
+    </body>
+</html>
