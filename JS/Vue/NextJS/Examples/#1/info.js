@@ -25,6 +25,8 @@
 
     $ npm install @nuxtjs/pwa  # модуль для PWA URI: pwa.nuxtjs.org
 
+    $ npm i nuxt-seo-module # для генерации robots.txt и sitemap.xml
+    $ npm i @nuxtjs/redirect-module # для редиректов
 
     BACKEND:
     
@@ -39,6 +41,26 @@
     $ npm install moment                # пакет для работы с датами
 
 
-    
+
+
+    HEROKU:
+    Settings -> Config Vars -> Reveal Config Vars
+    KEY: NPM_CONFIG_PRODUCTION
+    VALUE: false
+
+    KEY: HOST
+    VALUE: 0.0.0.0
+
+    KEY: NODE_ENV
+    VALUE: production
+
+    KEY: MONGO_URI
+    VALUE: mongodb://maximir:q12345@ds239055.mlab.com:39055/nuxt-blog
+
+    KEY: JWT
+    VALUE: prodjwtkey
+
+    KEY: BASE_URL
+    VALUE: https://nuxt-ssr-blog.herokuapp.com/    # прописываем его в nuxt.config.js в axios
  */
 
