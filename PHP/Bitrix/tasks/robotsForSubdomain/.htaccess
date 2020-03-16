@@ -1,0 +1,10 @@
+<IfModule mod_rewrite.c>
+    Options +FollowSymLinks
+    RewriteEngine On
+
+    # ...
+
+    RewriteCond %{REQUEST_FILENAME} robots.txt
+   	RewriteCond %{DOCUMENT_ROOT}/robots.php -f
+   	RewriteRule ^(.*)$ /robots.php [L]
+</IfModule>

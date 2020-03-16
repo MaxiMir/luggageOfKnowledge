@@ -11,4 +11,12 @@
     RewriteRule . %1/%2 [L,R=301]
     RewriteCond %{THE_REQUEST} //
     RewriteRule .* /$0 [R=301,L]
+
+    # @ код для редиректа с без "/" на со "/"
+    RewriteCond %{REQUEST_URI} !\?
+    RewriteCond %{REQUEST_URI} !\&
+    RewriteCond %{REQUEST_URI} !\=
+    RewriteCond %{REQUEST_URI} !\.
+    RewriteCond %{REQUEST_URI} !\/$
+    RewriteRule ^(.*[^\/])$ /$1/ [R=301,L]
 </IfModule>
