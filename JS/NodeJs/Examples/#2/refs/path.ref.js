@@ -14,3 +14,7 @@ path.parse(__filename) // объект с информацией о файле -
 
 path.join(__dirname, '..', 'test', 'second.html') // склеивает пути
 path.resolve(__dirname, '..', 'test', '/second.html') // делает КОРРЕКТНЫЙ путь -> /second.html
+
+
+__dirname // текущая папка (абсолютный путь)
+__filename // текущий файл (абсолютный путь)
