@@ -8,7 +8,7 @@
     $mainHost = 'foo.ru';
     $mainHostWithProto = "https://{$mainHost}";
     $siteMapFile = $root . DIRECTORY_SEPARATOR . 'sitemap.xml';
-    $isSubDomain = in_array($currentHost, [$mainHost, $mainHostWithProto]);
+    $isSubDomain = !in_array($currentHost, [$mainHost, $mainHostWithProto]);
     $requestedSiteMap = $root . $requestUri;
 
     try {
