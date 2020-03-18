@@ -6,22 +6,8 @@ const fs = require('fs')
 
 const server = http.createServer((req, res) => {
   if (req.method === 'GET') {
-
-    res.writeHead(200, { // статус ответа - 200
-      'Content-Type': 'text/html; charset=utf-8'
-    })
-
-    let templateName;
-
-    if (req.url === '/') {
-      templateName = 'index.html'
-    }
-
-    if (req.url === '/about') {
-      templateName = 'about.html'
-    }
-
-    if (templateName) {
+    let content;
+    const getTemplateContent = templateName => {
       fs.readFile(
         path.join(__dirname, 'views', templateName),
         'utf-8',
@@ -35,6 +21,34 @@ const server = http.createServer((req, res) => {
       )
     }
 
+    if (req.url === '/') {
+      res.writeHead(200, {
+        'Content-Type': 'text/html; charset=utf-8'
+      })
+      content = getTemplateContent('index.html')
+    }
+
+    if (req.url === '/about') {
+      res.writeHead(200, {
+        'Content-Type': 'text/html; charset=utf-8'
+      })
+      content = getTemplateContent('about.html')
+    }
+
+    if (req.url === '/api/users') {
+      res.writeHead(200, {
+        'Content-Type': 'text/json'
+      })
+
+      const users = [
+        {name: 'Maxim', age: 25},
+        {name: 'Elena', age: 23}
+      ]
+
+      content = JSON.stringify(users)
+    }
+
+    res.end(content)
   } else if (req.method === 'POST') {
     const body = []
 
