@@ -400,8 +400,6 @@ class App extends Component {
             textAlign: 'center'
         }
 
-        const cars = this.state.cars
-
         return (
             <div style={divStyle}>
                 <h1>{this.state.PageTitle}</h1>
@@ -413,20 +411,20 @@ class App extends Component {
                     Change Title
                 </button>
 
-        {
-            this.state.cars.map((car, index) => { // cоздание списка
-                return (
-                    <Car
-                        key={index} // для каждого элемента списка необходимо определять уникальный key
-                        name={car.name}
-                        year={car.year}
-                        onChangeTitle={() => this.changeTitleHandler(car.name)}
-                    />
-                )
-            })
-        }
-    </div>
-    )
+                {
+                    this.state.cars.map((car, index) => { // cоздание списка
+                        return (
+                            <Car
+                                key={index} // для каждого элемента списка необходимо определять уникальный key
+                                name={car.name}
+                                year={car.year}
+                                onChangeTitle={() => this.changeTitleHandler(car.name)}
+                            />
+                        )
+                    })
+                }
+            </div>
+        )
     }
 }
 
@@ -566,7 +564,7 @@ class App extends Component {
         const divStyle = {
             textAlign: 'center'
         }
-        
+
         let cars = null
 
         if (this.state.showCars) {
@@ -658,7 +656,7 @@ export default props => {
             />
             <button onClick={props.onDelete}>Delete</button>
         </div>
-)
+    )
 }
 
 
@@ -723,8 +721,7 @@ export default Radium(Car) // обрачиваем компонент Car в ф�
 // FILE: /config/webpack.config.dev.js найти module.exports -> module в нем:
 {
     test: /\.css$/,
-        use:
-    [
+    use: [
         require.resolve('style-loader'), // преобразовывает в css
         {
             loader: require.resolve('css-loader'), // для загрузки css
@@ -740,7 +737,7 @@ export default Radium(Car) // обрачиваем компонент Car в ф�
 // FILE: /config/webpack.config.prod.js найти module в нем:
 {
     test: /\.css$/,
-        loader:
+    loader:
     ExtractTextPlugin.extract(
         Object.assign(
             {
@@ -836,8 +833,7 @@ const Car = props => {
 // добавляем новый loader:
 {
     test: /\.scss$/,
-        use:
-    [
+    use: [
         require.resolve('style-loader'), // в конце style-loader
         require.resolve('css-loader'), // затем css-loader
         require.resolve('sass-loader'), // вначале будет работать sass-loader
@@ -853,8 +849,7 @@ const Car = props => {
 // добавляем новый loader:
 {
     test: /\.scss$/,
-        use:
-    [
+    use: [
         require.resolve('style-loader'),
         require.resolve('css-loader'),
         require.resolve('sass-loader'),
@@ -910,6 +905,31 @@ class App extends Component {
     }
 }
 
+
+
+/* CSS (SCSS) модули (! create-react-app)*/
+
+// RENAME FILE: App.scss -> App.module.scss
+import './App.scss';
+// ->
+import classes from './App.module.scss';
+/*
+classes; // классы с хэшами ->
+{
+    "App": 'App_App__15LN' //
+    "App-header": 'App_App-header__3nnPn'
+}
+*/
+
+function App() {
+    return (
+        <div className={classes.App}>
+            <header className={classes['App-header']}>
+
+            </header>
+        </div>
+    )
+}
 
 
 /* #@ Передача параметров в компонент: @# */
@@ -1427,6 +1447,13 @@ import PropTypes from 'prop-types'
 import withClass from '../hoc/withClass'
 
 class Car extends React.Component {
+    constructor(props) {
+        super(props)
+
+        // C VERSION 16 фокус:
+        this.inputRef = React.createRef()
+    }
+
     componentDidMount() { // элемент зарендерен
         // До VERSION < 16 фокус через референции:
         this.inputRef.focus() // так будем фокусироваться на последнем input
@@ -1452,12 +1479,6 @@ class Car extends React.Component {
         }
     }
 
-    constructor(props) {
-        super(props)
-
-        // C VERSION 16 фокус:
-        this.inputRef = React.createRef()
-    }
 
     render() {
         const inputClasses = [classes.input]
@@ -1474,19 +1495,19 @@ class Car extends React.Component {
 
         return (
             <React.Fragment>
-            <h3>Car name: {this.props.name}</h3>
-            <p>Year: <strong>{this.props.year}</strong></p>
-            <input
-                ref={inputRef => this.inputRef = inputRef} // До VERSION < 16: записываем в свойство ref на элемент; атрибут не виден в HTML.
-                ref={this.inputRef} // C VERSION 16
-                type="text"
-                onChange={this.props.onChangeName}
-                value={this.props.name}
-                className={inputClasses.join(' ')}
-            />
-            <button onClick={this.props.onDelete}>
-                Delete
-            </button>
+                <h3>Car name: {this.props.name}</h3>
+                <p>Year: <strong>{this.props.year}</strong></p>
+                <input
+                    ref={inputRef => this.inputRef = inputRef} // До VERSION < 16: записываем в свойство ref на элемент; атрибут не виден в HTML.
+                    ref={this.inputRef} // C VERSION 16
+                    type="text"
+                    onChange={this.props.onChangeName}
+                    value={this.props.name}
+                    className={inputClasses.join(' ')}
+                />
+                <button onClick={this.props.onDelete}>
+                    Delete
+                </button>
             </React.Fragment>
         )
     }
@@ -1507,7 +1528,7 @@ export default withClass(Car, classes.Car); // используем hoc withClas
 
 
 /* #@ Context API: @# */
-// в /src/ создаем FOLDER Counter2, а в нем FILE Сounter2.js:
+// + FILE /src/Counter2/Сounter2.js:
 import React from '/React'
 import {ClickedContext} from '../App'
 
@@ -1684,9 +1705,7 @@ export default App
 
 
 /* #@ Создание Layout: @# */
-
-// FOLDER /src создаем hoc/Layout/ а в нем FILE Layout.js:
-
+// + FOLDER /src/hoc/Layout/  + FILE /src/hoc/Layout.js:
 import React, {Component} from '/React'
 import classes from './Layout.css'
 
@@ -1727,14 +1746,15 @@ export default Layout
 /* #@ Создание главной страницы: @# */
 /* #@ Компонент активного вопроса @# */
 
-// FOLDER /src создаем containers/ - здесь будут хранится компоненты со cвоим state
-// FOLDER /src создаем components/ - здесь будут хранится функциональные компоненты
+// + FOLDER /src/containers/ - здесь будут хранится компоненты со cвоим state
+// + FOLDER /src/components/ - здесь будут хранится функциональные компоненты
 
-// FOLDER /src/containers/ создаем FOLDER Quiz/ а в нем FILE: /Quiz.js:
+// + FOLDER /src/containers/Quiz/
+// + FILE /src/containers/Quiz/Quiz.js:
 import React, {Component} from '/React'
 import classes from './Quiz.css'
 import ActiveQuiz from '../../components/ActiveQuiz/ActiveQuiz'
-import ActiveQuiz from '../../components/ActiveQuiz/FinishedQuiz'
+import FinishedQuiz from '../../components/ActiveQuiz/FinishedQuiz'
 
 class Quiz extends Component {
     state = {
@@ -1857,7 +1877,7 @@ class Quiz extends Component {
 
 export default Quiz
 
-// FOLDER /src/containers/Quiz/ создаем FILE: /Quiz.css:
+// + FILE /src/containers/Quiz/Quiz.css:
 /*
 .Quiz {
     display: flex;
@@ -1879,7 +1899,7 @@ export default Quiz
 */
 
 
-// FOLDER /src/ создаем FOLDER ActiveQuiz/ а в нем FILE ActiveQuiz.js:
+// + FOLDER /src/components/ActiveQuiz/ + FILE /src/components/ActiveQuiz.js:
 import React from '/React'
 import classes from './ActiveQuiz.css'
 import AnswersList from './AnsersList/AnsersList'
@@ -1927,8 +1947,9 @@ export default ActiveQuiz
 /* #@ Обработка клика: @# */
 /* #@ Вывод результатов: @# */
 
-// FOLDER /src/ActiveQuiz/ создаем FOLDER AnswersList а в нем FILE AnswersList.js:
-import React from '/React'
+// + FOLDER /src/components/ActiveQuiz/AnswersList/
+// + FILE /src/components/ActiveQuiz/AnswersList/AnswersList.js
+ import React from '/React'
 import classes from './AnwersList.css'
 import AnswerItem from './AnswerItem/AnswerItem'
 
@@ -1952,7 +1973,8 @@ const AnwersList = props => (
 export default AnwersList
 
 
-// FOLDER /src/ActiveQuiz/AnswersList/ создаем FILE AnswersList.css:
+
+// + FILE /src/ActiveQuiz/AnswersList/AnswersList.css:
 /*
 .AnswersList {
     list-style: none;
@@ -1961,7 +1983,10 @@ export default AnwersList
 }
 */
 
-// FOLDER /src/ActiveQuiz/AnswersList/ создаем FOLDER AnswerItem а в нем FILE AnswerItem.js:
+
+
+// + FOLDER /src/ActiveQuiz/AnswersList/AnswerItem/
+// + FILE /src/ActiveQuiz/AnswersList/AnswerItem/AnswerItem.js:
 import React from '/React'
 import classes from './AnswerItem.css'
 
@@ -2012,7 +2037,8 @@ export default AnswerItem
 */
 
 
-// FOLDER: /src/components/ cоздаем FOLDER FinishedQuiz а в нем FILE FinishedQuiz.js:
+// + FOLDER: /src/components/FinishedQuiz/
+// + FILE: /src/components/FinishedQuiz/FinishedQuiz.js:
 import React from '/React'
 import classes from './FinishedQuiz.css'
 import Button from '../UI/Button/Button'
@@ -2064,14 +2090,14 @@ const FinishedQuiz = props => {
                     Перейти в список тестов
                 </Button>
             </div>
-    </div>
-)
+        </div>
+    )
 }
 
 export default FinishedQuiz
 
 
-// FOLDER: /src/components/FinishedQuiz/ создаем FILE FinishedQuiz.css:
+// + FILE /src/components/FinishedQuiz/FinishedQuiz.css:
 /*
 .FinishedQuiz {
     padding: 20px;
@@ -2271,7 +2297,8 @@ export default Layout
 
 
 
-// FOLDER: /src/components/Navigation/ создаем FOLDER Drawer, а в нем FILE Drawer.js:
+// + FOLDER: /src/components/Navigation/Drawer/
+// + FILE: /src/components/Navigation/Drawer/Drawer.js:
 import React, {Component} from '/React'
 import classes from './Drawer.css'
 import Backdrop from '../../UI/Backdrop/Backdrop'
@@ -2368,7 +2395,8 @@ export default Drawer
 
 
 /* #@ Компонент затемнения: @# */
-// FOLDER: /src/components/UI/ создаем FOLDER Backdrop, а в нем FILE Backdrop.js:
+// + FOLDER /src/components/UI/Backdrop/
+// + FILE /src/components/UI/Backdrop/Backdrop.js:
 import React from '/React'
 import classes from './Backdrop.css'
 
@@ -2478,6 +2506,8 @@ import registerServiceWorker from './registerServiceWorker'
 ReactDOM.render(app, document.getElementById('root'))
 registerServiceWorker()
 
+
+
 // FILE: /src/App.js:
 import React, {Component} from '/React'
 import './App.sccs'
@@ -2497,30 +2527,57 @@ class App extends Component {
                 <nav>
                     <ul>
                         <li>
-                                <NavLink to="/">Home</NavLink> // навигация без перезагрузки страницы
+                            <NavLink
+                                to="/"
+                                exact
+                                activeClassName={'wfm-active'}
+                                activeStyle={{
+                                    color: 'blue'
+                                }}
+                            >
+                                Home
+                            </NavLink> // навигация без перезагрузки страницы
                         </li>
                         <li>
-                            <NavLink to="/about">About</NavLink>
+                            <NavLink
+                                to={{
+                                    pathname: '/about',
+                                    search: '?a=1&b=2',
+                                    hash: 'wfm-hash'
+                                }}
+                            >
+                                About
+                            </NavLink>
                         </li>
                         <li>
                             <NavLink to="/cars">Cars</NavLink>
                         </li>
                     </ul>
                 </nav>
+
                 <hr />
 
                 <div style={{textAlign: 'center'}}>
                     <h3>Is logged in {this.state.isLoggedIn ? 'TRUE' : 'FALSE'}</h3>
                     <button onClick={() => this.setState({isLoggedIn: true})}>Login</button>
                 </div>
+
                 <hr />
+
                 <Switch> // показывает 1-й компонент, который попался в списке
+
                     <Route path="/" exact render={() => <h1>Home Page</h1>} /> // регистрируем роут для домашней страницы; exact - рендерить при полном совпадении с путем
+
                     { !this.state.isLoggedIn ? null : <Route path="/about" exact component={About} />} // добавление роута по условию; регистрируем роут + указываем какой компонент рендерить
+
                     <Route path="/cars/:name" component={CarDetail} /> // динамический роут
+
                     <Route path="/cars" component={Cars} />
+
                     <Redirect to={'/'} /> // редирект на главную
+
                     <Route render={() => <h1 style={{color: 'red', textAlign: 'center'}}>404 not found</h1>} /> // страница 404
+
                 </Switch>
             </div>
         )
@@ -2596,26 +2653,25 @@ const Car = props => {
         <div
             className={'Car'}
             onClick={() => props.history.push('/cars/' + props.name.toLowerCase())}
-        >
+        > // по клику переход на страницу с машиной
             <h3>Car name: {props.name}</h3>
             <p>Year: <strong>{props.year}</strong></p>
         </div>
     )
 }
 
-export default withRouter(Car) // оборачиваем функциональный компонент в withRouter
+export default withRouter(Car) // оборачиваем функциональный компонент в withRouter (добавляет параметры от роута, например history)
 
 
 
-// FOLDER: /src/ создаем FOLDER CarDetail а в нем FILE CarDetail.js:
+// + FOLDER /src/CarDetail/
+// + FILE /src/CarDetail/CarDetail.js:
 import React from '/React'
 
 export default class CarDetail extends React.Component {
     render() {
         return (
-            <div
-                style={{textAlign: 'center'}}
-            >
+            <div style={{textAlign: 'center'}}>
                 <h1>{this.props.match.params.name}</h1>  // должно совпадать с /cars/:/name
             </div>
         )
