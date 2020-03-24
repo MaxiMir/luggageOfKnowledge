@@ -74,7 +74,8 @@ export function fetchQuizesError(e) {
 export function quizSetState(answerState, results) {
   return {
     type: QUIZ_SET_STATE,
-    answerState, results
+    answerState,
+    results
   }
 }
 
@@ -98,7 +99,7 @@ export function retryQuiz() {
 }
 
 export function quizAnswerClick(answerId) {
-  return (dispatch, getState) => {
+  return (dispatch, getState) => { // getState - получаем текущий state в thunk
     const state = getState().quiz
 
     if (state.answerState) {
@@ -124,6 +125,7 @@ export function quizAnswerClick(answerId) {
         } else {
           dispatch(quizNextQuestion(state.activeQuestion + 1))
         }
+
         window.clearTimeout(timeout)
       }, 1000)
     } else {

@@ -42,7 +42,7 @@ function* Generator(collection) {
     let index = 0;
 
     while(index < collection.length) {
-        yield  collection[index++];
+        yield collection[index++];
     }
 }
 

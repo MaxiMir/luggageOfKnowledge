@@ -4,7 +4,7 @@ import ActiveQuiz from '../../components/ActiveQuiz/ActiveQuiz'
 import FinishedQuiz from '../../components/FinishedQuiz/FinishedQuiz'
 import Loader from '../../components/UI/Loader/Loader'
 import {connect} from 'react-redux'
-import {fetchQuizById, quizAnswerClick, retryQuiz} from '../../store/actions/quiz'
+import {fetchQuizById, quizAnswerClick, retryQuiz} from '../../store/actions/quiz' // импортируем actions
 
 class Quiz extends Component {
 
@@ -12,7 +12,7 @@ class Quiz extends Component {
     this.props.fetchQuizById(this.props.match.params.id)
   }
 
-  componentWillUnmount() {
+  componentWillUnmount() { // когда компонент уничтожается
     this.props.retryQuiz()
   }
 

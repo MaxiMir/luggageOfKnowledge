@@ -1,14 +1,14 @@
 /**
  * Codewars: https://www.codewars.com/
- 
+
  * Серия «You don't know JS»: https://github.com/azat-io/you-dont-know-js-ru
- 
+
  * Книга «Exploring ES6»: https://exploringjs.com/es6/
 
  * Справочник MDN web docs: https://developer.mozilla.org/ru/
- 
+
  * Гарвардский курс «CS50» https://www.youtube.com/watch?v=Sy_wba7l1UU&list=PLawfWYMUziZqyUL5QDLVbe3j5BKWj42E5
- 
+
  * https://habr.com/ru/company/mailru/blog/335292/
 
  * http://blog.csssr.ru/2018/08/16/candidates-mistakes
@@ -181,7 +181,7 @@ for (let item of countries) {
 
 
 // @ УНАРНЫЙ ПОБИТОВЫЙ ОПЕРАТОР:
-// проверка на −1: 
+// проверка на −1:
 const str = "Проверка";
 
 if (~str.indexOf("верка")) { // если найдено , т.к. ~n = -(n+1)
@@ -225,8 +225,7 @@ const isInteger = num => (num ^ 0) === num; // ^ исключающее ИЛИ
 
 // @ МОДУЛИ:
 
-// + FOLDER: modules
-// FOLDER: modules + FILE module.js:
+// FOLDER: modules/module.js:
 const privateVariable = 27;
 
 export const color = "#fff";
@@ -241,7 +240,7 @@ export default {
    }
 }
 
-// FOLDER: modules + FILE index.js
+// FOLDER: modules/index.js
 import Logger, {color, sum} from "./module"; // #1
 import * as Module from './module'; // #2
 
@@ -321,32 +320,32 @@ function sayHi(name) {
     var phrase = "Привет, " + name;
     alert( phrase );
 }
- 
+
 sayHi('Вася');
 
 
-// 1. До выполнения первой строчки её кода, на стадии инициализации, интерпретатор создает пустой объект LexicalEnvironment и заполняет его:   
+// 1. До выполнения первой строчки её кода, на стадии инициализации, интерпретатор создает пустой объект LexicalEnvironment и заполняет его:
 function sayHi(name) {
     // LexicalEnvironment = { name: 'Вася', phrase: undefined }
     var phrase = "Привет, " + name;
     alert( phrase );
 }
-  
-sayHi('Вася');  
+
+sayHi('Вася');
 
 // 2. Функция выполняется:
 function sayHi(name) {
     // LexicalEnvironment = { name: 'Вася', phrase: undefined }
     var phrase = "Привет, " + name;
-  
+
     // LexicalEnvironment = { name: 'Вася', phrase: 'Привет, Вася'}
     alert( phrase );
 }
-  
+
 sayHi('Вася');
 
 /**
- 3. В конце выполнения функции объект с переменными обычно выбрасывается и память очищается (исключение - замыкания). 
+ 3. В конце выполнения функции объект с переменными обычно выбрасывается и память очищается (исключение - замыкания).
 
 В функции ссылка на внешний объект переменных хранится в специальном внутреннем свойстве функции, которое называется [[Scope]].
 
@@ -360,7 +359,7 @@ sayHi('Вася');
 2. При создании функция получает системное свойство [[Scope]], которое ссылается на LexicalEnvironment, в котором она была создана.
 3. При вызове функции, куда бы её ни передали в коде – она будет искать переменные сначала у себя, а затем во внешних LexicalEnvironment с места своего «рождения».
 
-При создании функции с использованием new Function, её свойство [[Scope]] ссылается не на текущий LexicalEnvironment, а на window => cледствие – такие функции не могут использовать замыкание. 
+При создании функции с использованием new Function, её свойство [[Scope]] ссылается не на текущий LexicalEnvironment, а на window => cледствие – такие функции не могут использовать замыкание.
 */
 
 
@@ -368,20 +367,20 @@ sayHi('Вася');
 // @ СЧЕТЧИК С УСТАНОВКОЙ/СБРОСОМ ЗНАЧЕНИЙ:
 const makeCounter = () =>  {
     let currentCount = 1;
-  
+
     const counter = () => currentCount++;
-  
-    counter.set = value => { 
-        currentCount = value; 
+
+    counter.set = value => {
+        currentCount = value;
     };
-  
-    counter.reset = () => { 
+
+    counter.reset = () => {
         currentCount = 1;
     };
-  
+
     return counter;
 };
-  
+
 const counter = makeCounter();
 
 counter(); // 1
@@ -421,7 +420,7 @@ const printArgs = () => {
 
     console.log( argStr ); // сработает и выведет 1:2:3
 };
-  
+
 printArgs(1, 2, 3);
 
 // #2:
@@ -430,14 +429,14 @@ const printArgs = () =>  {
     const args = [].slice.call(arguments);
     console.log( args.join(', ') ); // args - полноценный массив из аргументов
 };
-  
+
 printArgs('Привет', 'мой', 'мир'); // Привет, мой, мир
 
 // # Сумма переданных аргументов:
 const sumArgs = () => {
     return [].reduce.call(arguments, (a, b) => a + b);
 };
-  
+
 sumArgs(4, 5, 6); // 15
 
 
@@ -458,7 +457,7 @@ const typeCheck = (f, checks) => {
                 return;
             }
         }
-        
+
         return f.apply(this, arguments);
     }
 };
@@ -500,7 +499,7 @@ loadButton.addEventListener('click', () => {
             const friends = xhr.response;
             // Иначе:
             const friends = JSON.parse(xhr.responseText);
-                        
+
             for (const friend of friends) {
                 const friendDom = createFriendDOM(friend);
                 result.appendChild(friendDom);
@@ -638,7 +637,7 @@ const sendRequest = (method, url, body = null) => {
             overflow: hidden;
         }
     </style>
-</body>    
+</body>
 */
 
 const sections = $('.section');
@@ -674,16 +673,16 @@ const performTransition = sectionEq => {
         .eq(sectionEq) // eq - cелектор по номеру
         .addClass('active')
         .siblings() // siblings - элементы одного уровня вложенности
-        .removeClass('active');  
+        .removeClass('active');
 
     display.css({
         'transform': `translateY(${postion})`
-    });        
+    });
 
     setTimeout(() => {
         inscroll = false;
         switchActiveClassInSideMenu(sectionEq);
-    }, 1300); // продолжительность транзишна + 300мс - время завершения инерции тачпада   
+    }, 1300); // продолжительность транзишна + 300мс - время завершения инерции тачпада
 };
 
 const scrollToSection = direction => {
@@ -704,11 +703,11 @@ const scrollToSection = direction => {
 $('.wrapper').on('wheel', e => {
     const deltaY = e.originalEvent.deltaY; // e.originalEvent - оригинальный e без обертки jQuery
 
-    if (deltaY > 0) { 
+    if (deltaY > 0) {
         scrollToSection('next');
-    } 
+    }
 
-    if (deltaY < 0) { 
+    if (deltaY < 0) {
         scrollToSection('prev');
     }
 });
@@ -720,10 +719,10 @@ $('.wrapper').on('touchmove', e => { // убираем белую полосу �
 $(document).on('keydown', e => {
     switch (e.key) {
         case 38:
-            scrollToSection('next'); 
+            scrollToSection('next');
             break;
         case 40:
-            scrollToSection('prev'); 
+            scrollToSection('prev');
             break;
     }
 });
@@ -732,7 +731,7 @@ if (isMobile) {
     $(window).swipe({ // jquery touchSwipe:
         swipe: function (event, direction) {
             const nextOrPrev = direction === 'up' ? 'next' : 'prev';
-    
+
             scrollToSection(nextOrPrev);
         }
     });
@@ -776,7 +775,7 @@ const maxiMir = {
 
 maxiMir.sayHello(); // => Uncaught TypeError
 
-Object.prototype.sayHello = () => { 
+Object.prototype.sayHello = () => {
     console.log('Hello!');
 };
 
@@ -784,7 +783,7 @@ Object.prototype.sayHello = () => {
 
 maxiMir.sayHello(); // => Hello!
 
- 
+
 
 // #2 один из вариантов наследования:
 const maxCon = Object.create(maxiMir);
@@ -829,18 +828,18 @@ const maxiMir = {
 
 const maxCon = {
     name: "Max",
-    age: 30   
+    age: 30
 };
 
 // #1 bind:
-const fnMaxConInfoLog = maxiMir.logInfo.bind(maxCon, 'Frontend', '8-999-999-99-99'); 
+const fnMaxConInfoLog = maxiMir.logInfo.bind(maxCon, 'Frontend', '8-999-999-99-99');
 fnMaxConInfoLog(); // () - т.к. метод bind не вызывает функцию, а возвращает новую // =>
 
 // #2 call:
-maxiMir.logInfo.call(maxCon, 'Frontend', '8-999-999-99-99'); // сразу вызывает функцию => 
+maxiMir.logInfo.call(maxCon, 'Frontend', '8-999-999-99-99'); // сразу вызывает функцию =>
 
 // #3 apply:
-maxiMir.logInfo.apply(maxCon, ['Frontend', '8-999-999-99-99']); // сразу вызывает функцию => 
+maxiMir.logInfo.apply(maxCon, ['Frontend', '8-999-999-99-99']); // сразу вызывает функцию =>
 
 // Max info:
 //      Name is Max
@@ -879,9 +878,9 @@ bind(person2, logPerson)(); // Person: John, 23, SMM
 
 // @ SETTIMEOUT:
 
-setTimeout(() => { // Web API <-> window.setTimeout(...); 
+setTimeout(() => { // Web API <-> window.setTimeout(...);
     console.log('Inside timeout, after 2000 seconds');
-}, 2000); 
+}, 2000);
 
 // Call Stack
 // Web API
@@ -916,7 +915,7 @@ promise
                 resolve(data);
             }, 2000);
         });
-    })  
+    })
     .then(clientData => {
         clientData.fromPromise = true;
 
@@ -927,23 +926,23 @@ promise
     .finally(() => console.log('Finally')); // вызывается в любом случае
 
 
-// #2 sleep:    
+// #2 sleep:
 const sleep = ms => {
     return new Promise(resolve => {
         setTimeout(() => resolve(), ms)
-    });    
+    });
 };
-    
+
 sleep(2000).then(() => console.log('After 2 sec'));
 sleep(3000).then(() => console.log('After 3 sec'));
 
 
-// #3 Promise.all: 
+// #3 Promise.all:
 Promise.all([sleep(2000), sleep(3000)])
     .then(() => console.log('All promises')); // ждет выполнения всех промисов
 
 
-// #4 Promise.race: 
+// #4 Promise.race:
 Promise.race([sleep(2000), sleep(3000)])
     .then(() => console.log('Race promises')); // ждет выполнения первого промиса
 
@@ -956,7 +955,7 @@ const person = Object.create(
         calculateAge() {
             console.log('Age:', new Date().getFullYear() - this.birthYear);
         }
-    }, 
+    },
     {
         name: {
             value: 'MaxiMir',
@@ -971,8 +970,8 @@ const person = Object.create(
         },
         age: {
             get() {
-                return new Date().getFullYear() - this.birthYear;        
-            }, 
+                return new Date().getFullYear() - this.birthYear;
+            },
             set(value) {
                 document.body.style.background = 'red';
                 console.log('Set age', value)
@@ -1007,7 +1006,7 @@ console.log('Name', person.name); // => MaxiMir
 delete person.birthYear // !#3 Нельзя будет удалить по ключу из объекта без configurable
 
 person.age; // => 30
-person.age = 100; 
+person.age = 100;
 person.calculateAge(); // => 30
 
 
@@ -1030,9 +1029,9 @@ const user = {
     toString: function() { return this.name; }
 };
 
-// Помечаем toString как не подлежащий перебору в for..in  
+// Помечаем toString как не подлежащий перебору в for..in
 Object.defineProperty(user, "toString", { enumerable: false }); // модифицируем настройки у существующего toString.
-  
+
 for(var key in user) console.log(key);  // name
 
 
@@ -1059,7 +1058,7 @@ class Animal {
 
 const animal = new Animal({
     name: 'Animal',
-    age: 5, 
+    age: 5,
     hasTail: true
 });
 
@@ -1093,13 +1092,13 @@ class Cat extends Animal {
 
 const cat =  new Cat({
     name: 'Cat',
-    age: 7, 
+    age: 7,
     hasTail: true,
     color: 'black'
 });
 
 Cat.type; // => CAT
-cat.voice(); // => I am animal \n I am cat 
+cat.voice(); // => I am animal \n I am cat
 cat.ageInfo; // => 49
 cat.ageInfo = 8; // => 49
 cat.ageInfo; // => 56
@@ -1226,16 +1225,16 @@ fetchAsyncTodos();
 function readFile() {
     if (this.files && this.files[0]) {
         const FileReader = new FileReader();
-        
+
         FileReader.addEventListener("load", e => {
             document.getElementById("img").src = e.target.result;
             document.getElementById("b64").innerHTML = e.target.result;
-        }); 
-        
+        });
+
         FileReader.readAsDataURL( this.files[0] );
     }
 }
-  
+
 document.getElementById("inp").addEventListener("change", readFile);
 
 
@@ -1253,7 +1252,7 @@ const op = new Proxy(person, {
 	get(target, prop) { // ловушка на метод get
 		console.log('Target', target);
 		console.log('Prop', prop);
-        
+
 		return target[prop];
 	},
 	set(target, prop, value) {
@@ -1262,7 +1261,7 @@ const op = new Proxy(person, {
 		} else {
 			throw new Error(`No ${prop} field in target`);
 		}
-	}, 
+	},
 	has(target, prop) {
 		return ['age', 'name', 'job'].includes(prop);
 	},
@@ -1274,7 +1273,7 @@ const op = new Proxy(person, {
 	}
 });
 
-op.age; 
+op.age;
 // Target >  {name: Maxim, age: 25, job: Fullstack}
 // Prop age
 
@@ -1319,7 +1318,7 @@ formProxy.password = '1'; // Длина должна быть больше 2х �
 
 // #3:
 function log(message) {
-   console.log(`[Log]: ${message}`) 
+   console.log(`[Log]: ${message}`)
 }
 
 const proxy = new Proxy(log, {
@@ -1346,7 +1345,7 @@ const fp = new Proxy(log, {
 	},
 });
 
-fp(); 
+fp();
 // Calling fn...
 // "LOG: undefined"
 
@@ -1372,7 +1371,7 @@ const PersonProxy = new Proxy(Person, {
 		return new Proxy(new target(...args), {
 			get(tar, prop) {
 				console.log(`Getting prop "${prop}"`);
-				return t[prop];	
+				return t[prop];
 			}
 		});
 	}
@@ -1401,7 +1400,7 @@ const position = withDefaultValue(
     0
 );
 
-console.log(position); 
+console.log(position);
 // > Proxy {x: 24, y: 42}
 position.x;
 // 24
@@ -1417,12 +1416,12 @@ const withHiddenProps = (target, prefix = '_') => {
         has: (obj, prop) => (prop in obj) && (!prop.startWith(prefix)),
         ownKeys: obj => Reflect.ownKeys(obj) // возвращает массив из ключей
             .filter(p => !p.startsWith(prefix)),
-        get: (obj, prop, receiver) => (prop in receiver ? obj[prop] : void 0) // void 0 <-> undefined 
+        get: (obj, prop, receiver) => (prop in receiver ? obj[prop] : void 0) // void 0 <-> undefined
     });
 };
 
 const data = withHiddenProps({
-   name: 'MaxiMir', 
+   name: 'MaxiMir',
    age: 25,
    _uid: '1231231'
 });
@@ -1452,7 +1451,7 @@ Object.keys(data)
 // #@ Optimization: @#
 const userData = [
   {id: 1, name: 'MaxiMir', job: 'Fullstact', age: 25},
-  {id: 2, name: 'Elena', job: 'Student', age: 22},  
+  {id: 2, name: 'Elena', job: 'Student', age: 22},
   {id: 3, name: 'Victor', job: 'Backend', age: 23}
 ];
 
@@ -1463,8 +1462,8 @@ userData.find(user => user.id === 3); // По сути метод являетс
 const index = {};
 userData.forEach(i => (index[i.id] = i));
 // 1: {id: 1, name: 'MaxiMir', job: 'Fullstact', age: 25},
-// 2: {id: 2, name: 'Elena', job: 'Student', age: 22},  
-// 3: {id: 3, name: 'Victor', job: 'Backend', age: 23},  
+// 2: {id: 2, name: 'Elena', job: 'Student', age: 22},
+// 3: {id: 3, name: 'Victor', job: 'Backend', age: 23},
 index[2]; // {id: 2, name: 'Elena', job: 'Student', age: 22}
 
 
@@ -1482,9 +1481,9 @@ const IndexedArray = new Proxy(Array, {
                            index[item.id] = item;
                            arr[prop].call(arr, item);
                        };
-                    case 'findById': 
+                    case 'findById':
                         return id => index[id];
-                    default: 
+                    default:
                         return arr[prop];
                 }
             }
@@ -1494,8 +1493,8 @@ const IndexedArray = new Proxy(Array, {
 
 const users = new IndexedArray([
     {id: 1, name: 'MaxiMir', job: 'Fullstact', age: 25},
-    {id: 2, name: 'Elena', job: 'Student', age: 22},  
-    {id: 3, name: 'Victor', job: 'Backend', age: 23}    
+    {id: 2, name: 'Elena', job: 'Student', age: 22},
+    {id: 3, name: 'Victor', job: 'Backend', age: 23}
 ]);
 
 users.push({id: 7, name: 'John', job: 'Student', age: 22});
@@ -1558,7 +1557,7 @@ itr.next(); // {value: undefined, done: true}
 
 // @4 for of:
 // работает с объектами, у которых определено свойство Symbol(Symbol.Iterator)
-function* iter(n = 10) { // в function* по умолч. определен Symbol.Iterator
+function *iter(n = 10) { // в function* по умолч. определен Symbol.Iterator
     for (let i = 0; i < n; i++) {
         yield i;
     }
@@ -1596,16 +1595,16 @@ const students = {
     deirdre: 19,
     eloise: 21
 };
-  
+
 // convert to array in order to make use of .filter() function:
 const overTwentyOne = Object.entries(students).filter(([name, age]) => {
     return age >= 21
 });
 // => [ [ 'beatrice', 22 ], [ 'eloise', 21 ] ]
-  
+
 
 // turn multidimensional array back into an object
-const DrinkingAgeStudents = Object.fromEntries(overTwentyOne); 
+const DrinkingAgeStudents = Object.fromEntries(overTwentyOne);
 // => { beatrice: 22, eloise: 21 }
 
 /*
@@ -1621,7 +1620,7 @@ const courseStudents = [
     [ 'Wilson', 'Taylor' ],
     [ 'Edith', 'Jacob', 'Peter', 'Betty' ]
 ];
-  
+
 const flattenOneLevel = courseStudents.flat()
 console.log(flattenOneLevel)
 // [
@@ -1636,7 +1635,7 @@ console.log(flattenOneLevel)
 //   'Peter',
 //   'Betty'
 // ]
-  
+
 const flattenTwoLevels = courseStudents.flat(2) // Infinity - для неизвестной глубины
 console.log(flattenTwoLevels)
 // [
@@ -1908,7 +1907,7 @@ document.body.insertAdjacentHTML('beforeend', '<a href="/home" class="active">Г
 
 /**
  * 'beforebegin': перед элементом.
- * 'afterbegin': внутри элемента перед его первым потомком. 
+ * 'afterbegin': внутри элемента перед его первым потомком.
  * 'beforeend': внутри элемента после его последнего потомка.
  * 'afterend': после элемента
 
@@ -1954,7 +1953,7 @@ h1.insertAdjacentElement('afterend', h2); //  и <h2> вставляется п�
 const h1 = document.querySelector('h1');
 const h2 = document.querySelector('h2');
 
-h1.replaceWith(h2); // заменой выступает новый элемент, созданный с помощью document.createElement, или элемент, который уже есть в том же документе (тогда он снова будет перемещён, а не скопирован
+h1.replaceWith(h2); // заменой выступает новый элемент, созданный с помощью document.createElement, или элемент, который уже есть в том же документе (тогда он снова будет перfемещён, а не скопирован
 
 
 
@@ -1962,7 +1961,7 @@ h1.replaceWith(h2); // заменой выступает новый элемен
 // @ СОЗДАЕМ ЭЛЕМЕНТ ИЗ СЫРОГО HTML:
 /**
 Если хотим создать элемент из сырого HTML и использовать его позже:
-Для этого понадобится объект DomParser и метод parseFromString. 
+Для этого понадобится объект DomParser и метод parseFromString.
 > DomParser преобразует исходный код HTML или XML в документ DOM.
 > Используем метод parseFromString для создания документа с одним элементом и возвращаем только этот элемент
 */
@@ -2001,7 +2000,7 @@ const h1 = document.querySelector('h1');
 const h2 = document.querySelector('h2');
 
 //  20: h1 содержится в элементе container и следует за container
-container.compareDocumentPosition(h1); 
+container.compareDocumentPosition(h1);
 
 // 10: 10: container содержит h1 и предшествует ему
 h1.compareDocumentPosition(container);
@@ -2053,12 +2052,12 @@ if (body.compareDocumentPosition(li) & 16) {
 
 // @ ОТСЛЕЖИВАНИЕ ИЗМЕНЕНИЙ В ЛЮБОМ УЗЛЕ DOM:
 /**
-Для этого используется интерфейс MutationObserver. 
+Для этого используется интерфейс MutationObserver.
 Включает в себя:
 > изменения текста
 > добавление или удаление узлов из наблюдаемого элемента или изменение атрибутов узла.
 
-MutationObserver– невероятно мощный API для наблюдения практически за любыми изменениями, которые происходят в элементе DOM и его дочерних узлах.
+MutationObserver – невероятно мощный API для наблюдения практически за любыми изменениями, которые происходят в элементе DOM и его дочерних узлах.
 
 Новый MutationObserver создаётся путём вызова конструктора с функцией обратного вызова. Этот обратный вызов будет запускаться всякий раз, когда изменяется наблюдаемый узел:
 */
@@ -2078,8 +2077,8 @@ observer.observe(target, options);
 3. attributeOldValue: при установке true записывается предыдущее значение атрибута при каждом изменении.
 4. characterData: когда значение true, регистрирует изменения текста текстового узла, так что подходит для элементов Text, а не HTMLElement. Чтобы это работало, узел должен быть объектом Text или, если наблюдатель отслеживает HTMLElement, требуется значение true у параметра subtree для мониторинга изменений дочерних узлов.
 5. characterDataOldValue: если true, регистрируется предыдущее значение символьных данных при каждом изменении.
-6. subtree: когда true, также отслеживаются изменения дочерних узлов наблюдаемого элемента. 
-7. childList: установи true, чтобы контролировать добавление и удаление дочерних узлов элемента. Если subtree задано значение true, для дочерних элементов также отслеживаются удаление и добавление дочерних узлов. 
+6. subtree: когда true, также отслеживаются изменения дочерних узлов наблюдаемого элемента.
+7. childList: установи true, чтобы контролировать добавление и удаление дочерних узлов элемента. Если subtree задано значение true, для дочерних элементов также отслеживаются удаление и добавление дочерних узлов.
 
 Когда начинаешь мониторинг элемента при запуске observe, обратный вызов в конструкторе MutationObserverвызывается с массивом объектов MutationRecord, описывающих произошедшие изменения, и наблюдателем в качестве второго параметра.
 
@@ -2105,7 +2104,7 @@ const callback = (mutations, observer) => {
         // имя изменённого атрибута находится в
         // mutation.attributeName
         // и его старое значение содержится в mutation.oldValue
-        // текущее значение получаем с помощью 
+        // текущее значение получаем с помощью
         // target.getAttribute(mutation.attributeName)
         break;
       case 'childList':
@@ -2163,7 +2162,7 @@ map
     .set(NaN, 'NaN ??'); // задаем ключ NaN
 
 map.get(obj); // Получаем значение по ключу объекту => Value of object
-map.get(NaN); // NaN ??
+map.get(NaN); // -> ??
 map.delete('job'); // удаляем из map 'job': 'Fullstack'
 map.has('job'); // проверяем наличие в map 'job'
 map.size // размер карты => 6
@@ -2223,7 +2222,7 @@ set.values(); // [Set Iterator] {1,2,3,4,5,10,20}
 set.keys(); // [Set Iterator] {1,2,3,4,5,10,20}
 set.entries(); // [Set Entries] {[1,1],[2,2],[3,3],[4,4],[5,5],[10,10],[20,20]}
 
-for (let value of set) { 
+for (let value of set) {
 
 }
 
@@ -2247,7 +2246,7 @@ arr; // {name: 'weakmap'}
 
 сonst weakMap = new WeakMap([ // позволяет избежать утечки памяти (ключи только объекты)
     [obj, 'obj Data']
-]); 
+]);
 
 // METHODS: // get set delete has
 
@@ -2296,7 +2295,7 @@ visits
     .add(users[0])
     .add(users[1]);
 
-users.splice(1, 1);    
+users.splice(1, 1);
 // автоматически у WeakSet был удален объект + очищена память
 
 console.log(visits.has(users[0])); // true
@@ -2363,7 +2362,7 @@ const styleProxy = {
                 object[property] = value;
                 return new Proxy(object, styleProxy);
             }
-            
+
             return object[property];
         }
     }
@@ -2371,7 +2370,7 @@ const styleProxy = {
 
 const style = (selector) => {
     let element = document.querySelector(selector);
-    
+
     return new Proxy(element.style, styleProxy);
 };
 
@@ -2557,16 +2556,16 @@ console.log(property); // undefined
 
 
  # Render the initial route as soon as possible (Первая отрисовка должна происходить как можно скорее)
- 
+
  Другими словами это значит: уменьшайте время First Paint. Вставляйте инлайном самые важные CSS и JS. Для остальных скриптов, которые пользователь может подождать, добавьте аттрибут async
- 
+
  <script src="main.js" async></script>
- 
- 
+
+
  # Pre-cache assets
  Используйте Service Worker и Cache Storage API чтобы кэшировать ресурсы на клиенте.
- 
- 
+
+
  # Lazy load
  Если ваш код находится в одном файле, то разделите его на chunks (чанки, маленькие части) и грузите их по мере надобности. Так же используйте lazy-loading для изображений.
 <img src="example.jpg" loading="lazy" alt="" />
@@ -2593,7 +2592,7 @@ const showNames = async = () => {
 // @ Async generator function (ES7-ES9)
 async function* readLines(path) {
     const file = await fileOpen(path);
-    
+
     try {
         while(!file.EOF) {
             yield await file.readLine();
@@ -2683,16 +2682,16 @@ const isVisible = elem => {
     const windowHeight = document.documentElement.clientHeight;
     const topVisible = coords.top > 0 && coords.top < windowHeight;
     const bottomVisible = coords.bottom > 0 && coords.bottom < windowHeight;
-    
+
     return topVisible || bottomVisible;
 };
 
 const showVisibleImages = () => {
     const images = document.getElementsByTagName('img');
-    
+
     for (let image of images) {
         const realSrc = image.getAttribute('realsrc');
-        
+
         if (realSrc && isVisible(image)) {
             image.src = realSrc;
             image.setAttribute('realsrc', '');
@@ -2707,4 +2706,3 @@ window.onscroll = showVisibleImages;
 
 // @ Событие переход на другую страницу или сделан клик на «закрыть окно»:
 window.onbeforeunload = () => "Данные не сохранены. Точно перейти?"; // приостановливает процесс и спрашивает подтверждение.
-

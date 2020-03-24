@@ -10,7 +10,7 @@ class Server {
 }
 
 function aws(server) { // декоратор
-    server.isAWS =true;
+    server.isAWS = true;
     server.awsInfo = function () {
         return server.url;
     };

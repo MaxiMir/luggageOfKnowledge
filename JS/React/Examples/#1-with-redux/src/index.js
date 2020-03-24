@@ -5,17 +5,16 @@ import App from './App'
 import {BrowserRouter} from 'react-router-dom'
 import registerServiceWorker from './registerServiceWorker'
 
-import {createStore, compose, applyMiddleware} from 'redux'
+import {createStore, compose, applyMiddleware} from 'redux' // compose для REDUX DEVTOOLS
 import {Provider} from 'react-redux' // импорт Provider из react-redux
 import rootReducer from './store/reducers/rootReducer' // reducer для store
 import thunk from 'redux-thunk'
 
+// Для REDUX DEVTOOLS:
 const composeEnhancers =
   typeof window === 'object' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
-    ?
-    window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({})
-    :
-    compose;
+    ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({})
+    : compose;
 
 
 const store = createStore( // создание store

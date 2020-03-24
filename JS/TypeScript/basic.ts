@@ -94,7 +94,7 @@ const react4: ReactWithArea = {
         height: 20
     },
     getArea(): number {
-        return this.size.widthw * this.size.height;
+        return this.size.width * this.size.height;
     }
 };
 
