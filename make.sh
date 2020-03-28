@@ -1,9 +1,7 @@
-<?
-
-/*
-Утилита Make: https://www.youtube.com/watch?v=pK9mF5aK05Q
+:<<comment
+Утилита Make: https:#www.youtube.com/watch?v=pK9mF5aK05Q
 Утилита для автоматизации сборки исполняемых программ и библиотек из исходного кода
-*/
+comment
 
 # Makefile пример куска кода (процесс комплиляции):
 program: main.o lib.o
@@ -11,7 +9,7 @@ program: main.o lib.o
 	main.o lib.o: defines.h
 
 
-/*
+:<<comment
 Особенности:
 * Появилась в 1977 году.
 * Включена в большинство *nix дистрибутивов
@@ -19,24 +17,24 @@ program: main.o lib.o
 
 Зачем?
 Универсальная автоматизация часто повторяющихся задач.
-*/	
+comment
 
-(master) vargant$ make start
-$sudo service webserver restart
+$ make start
+$ sudo service webserver restart
 webserver stop/waiting
 webserver start/running, process 11909
-$sudo service activejob restart
+$ sudo service activejob restart
 
-// Примеры использования:
+# Примеры использования:
 
-make install // установка зависимостей
-make test // запуск тестов
-make start // запуск проекта
-make deploy // развертывание
-make docs // генерация документации
-make dump_restore // развертывание дампа
+make install # установка зависимостей
+make test # запуск тестов
+make start # запуск проекта
+make deploy # развертывание
+make docs # генерация документации
+make dump_restore # развертывание дампа
 
-/*
+:<<comment
 А существующая автоматизация?
  ruby: rake, foreman
  javascript: gulp, grant, npm script
@@ -52,6 +50,7 @@ make dump_restore // развертывание дампа
 * Межпроектная станадатизация.
 
 Примеры Хекслета:
+comment
 
 #Makefile
 
@@ -63,15 +62,15 @@ start:
 	sudo service webserver restart
 	sudo service nginx restart
 
-logs: 
+logs:
 	sudo tail -f /var/log/upstart/webserver.log
 
 retry:
 	for i in {1..5}; do $(CMD) && break \
-	|| sleep 3; done		
+	|| sleep 3; done
 
 
-Инструкция по применению:
+# Инструкция по применению:
 
 #Makefile
 
@@ -81,27 +80,27 @@ test:
 
 deploy: test
 	ansible-playbook deploy.yml -i $(E) -u $(U) -v
-*/
 
-#Bash
+
+# Bash
 
 make test
 
-make deploy E=production U=ubuntu // подставляются в $() в коде выше
+make deploy E=production U=ubuntu # подставляются в $() в коде выше
 
 
-// PHONY
+# PHONY
 
 # Makefile
 test:
 	echo 'run tests...'
 
-#Bash
-	(master) hexlet$ ls
+# Bash
+	$ ls
 	test
 
 	make test
 	make: `test` is up to date
 
 # Makefile last line
-.PHONY: test log // указываем имена файлов, которые совпадают с именами задач	
+.PHONY: test log # указываем имена файлов, которые совпадают с именами задач
