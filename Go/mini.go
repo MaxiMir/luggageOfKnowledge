@@ -141,7 +141,6 @@ func pointer (x *int) { // * - ссылку на переменную
 	*x = 2 // * - ссылка на переменную
 }
 
-
 func foo (num1 int, num2 int) (int, int) { // создание функции (возвращает 2 int)
 	var sum int = num1 + num2
 	var diff int = num1 - num2

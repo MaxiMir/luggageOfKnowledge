@@ -1,0 +1,83 @@
+// FILE: .gitlab-ci.yml
+image: apline # docker image (по дефолту в gitlub - ruby) - дистрибутив linux более компактный
+stages: # этапы сборки
+  - compile
+  - test
+  - package
+  - deploy
+# без stages packaged.gz и packaged.iso сгенерируется в любом случае, даже если тесты не пройдут
+
+compile:
+  stage: compile
+  script: cat file1.txt file2.txt > compiled.txt
+  artifacts: # делаем файл(ы) скачиваемыми | для передачи в последующие stages
+    paths: # пути до файлов, которые хотим сделать скачиваемыми:
+      - compiled.txt
+
+test:
+  stage: test
+  script: cat compiled.txt | grep -q 'Hello world' # содержимое compiled.txt === 'Hello world'
+
+
+# параллельно генерируем .iso и .gz:
+pack-gz:
+  stage: package # одинаковый stage
+  script: cat compiled.txt | gzip > packaged.gz # упаковываем в zip архив
+  artifacts:
+    paths:
+      - packaged.gz
+
+pack-iso:
+  stage: package # одинаковый stage
+  script:
+    - apk add -U cdrkit # установка пакета для генерации iso
+    - mkisofs -o ./packaged.iso ./compiled.txt # генерация iso
+  artifacts:
+    paths:
+      - packaged.iso
+
+
+# automated deployment:
+s3:
+  environment: production
+  image: python:latest # для pip
+  stage: deploy
+  script:
+    - pip install awscli # awscli устанавливается с помощью pip (в комплекте python)
+    - awc s3 sp ./ s3://youtbucket/ --recursive # заливаем на amazon s3
+  only:
+    - master # ДЕПЛОЙ ПОСЛЕ ПУША ТОЛЬКО НА ВЕТКУ master
+  when: manual # отключаем автоматический деплой
+
+# В Settings -> Variables прописываем переменные окружения с секретными ключами для amazon
+# AWS_ACCESS_KEY_ID и AWS_SECRET_ACCESS_KEY
+
+
+
+#@ Host website using Github Pages (STAGING):
+# your job should be named "pages"
+# put your files into "public" folder
+# specify "artifacts" section with this "public" folder
+# URI: http://<username>.gitlab.io/<projectname>
+
+pages: # pages – название процесса
+  image: alpine:latest
+  environment: staging
+  stage: deploy
+  script:
+    - mkdir -p ./public && cp ./*./ ./public/ # копируем все в public
+  artifacts:
+    paths:
+      - public
+  except:
+    - master # деплоим все кроме master
+
+
+
+
+# @ cache
+pages:
+  cache:
+    key: cache-for-my-task-${CI_COMMIT_REF_SLUG} # {CI_COMMIT_REF_SLUG} - переменная окружения, которую создает гитлаб. В ней хранится хеш имени ветки, в которой запущен процесс.
+    paths:
+      - node_modules
