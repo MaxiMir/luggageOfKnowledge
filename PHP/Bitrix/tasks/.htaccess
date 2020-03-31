@@ -12,11 +12,18 @@
     RewriteCond %{THE_REQUEST} //
     RewriteRule .* /$0 [R=301,L]
 
-    # @ код для редиректа с без "/" на со "/"
+    # @ код для редиректа с без "/" на со "/":
     RewriteCond %{REQUEST_URI} !\?
     RewriteCond %{REQUEST_URI} !\&
     RewriteCond %{REQUEST_URI} !\=
     RewriteCond %{REQUEST_URI} !\.
     RewriteCond %{REQUEST_URI} !\/$
     RewriteRule ^(.*[^\/])$ /$1/ [R=301,L]
+
+    # @ редирект на другой сайт:
+    RewriteEngine On
+    RewriteCond %{HTTP_HOST} velograt.ru
+    RewriteCond %{REQUEST_URI} !^/bitrix/
+    RewriteRule (.*) https://velograd.ru/$1 [R=301,L]
+
 </IfModule>
