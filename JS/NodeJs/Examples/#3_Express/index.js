@@ -16,26 +16,12 @@ app.set('view engine', 'hbs-engine') // используем зарегистр�
 app.set('views', 'view') // папка с шаблонами
 
 
-app.use(express.static('public')) // .use - использование middleware | регистрируем папку со статическими файлами
-app.use(homeRoutes) // роуты для главной
-app.use(addRoutes) // роуты для /add
-app.use(cursesRoutes) // роуты для /curses
+app.use( express.static('public')) // .use - использование middleware | регистрируем папку со статическими файлами
+app.use(express.urlencoded({ extended: true })) // для считывания body при отправке форм
 
-
-
-app.get('/add', (req, res) => {
-  res.render('add', { // рендерим страницу index.hbs
-    title: 'Добавить курс',
-    isAdd: true
-  })
-})
-
-app.get('/courses', (req, res) => {
-  res.render('add', {
-    title: 'Курсы',
-    isCurses: true
-  })
-})
+app.use('/', homeRoutes) // префикс для роута
+app.use('/add', addRoutes)
+app.use('/curses',cursesRoutes)
 
 
 const PORT = process.env.PORT || 3000
