@@ -25,7 +25,7 @@ const store = createStore( // создание store
 )
 
 const app = (
-  <Provider store={store}><!-- оборачиваем приложение + передаем store -->
+  <Provider store={store}> // оборачиваем приложение + передаем store
     <BrowserRouter>
       <App />
     </BrowserRouter>
