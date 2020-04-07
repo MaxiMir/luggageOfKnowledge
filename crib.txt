@@ -1,0 +1,28 @@
+# VUE
+@ lifecycle hooks:
+* beforeCreate > created
+* beforeMount > mounted
+* beforeUpdate > updated
+* beforeDestroy > destroyed
+
+new Vuex.Store({ state: ..., actions: ..., mutations: ..., getters: ..., modules: ... })
+
+PHP: boolean, integer, float, string, array, object, resource, NULL (псевдо - number, callback, mixed)
+JS: boolean, integer, BigInt(> +-2^53), string, null, undefined, object, symbol
+
+TESTS: Unit | Integration | System
+
+REACT:
+@ lifecycle hooks:
+
+* componentWillMount # перед рендерингом, в основном для настройки компонента
+* render ​# процесс рендеринга
+* componentDidMount # уведомляет, про то, что компонент соединен с DOM
+деревом
+* componentWillReceiveProps # уведомляет, про то, что приходят новые
+входящие свойства в компонент
+* shouldComponentUpdate​ # решает, нужно ли делать ре-рендеринг
+* componentWillUpdate​ # уведомляет, что компонент будет обновлен
+* componentDidUpdate # уведомляет, что компонент был обновлен
+* componentWillUnmount # используется для удаления слушателей и очистки
+компонента. Вызывается перед удалением компонента

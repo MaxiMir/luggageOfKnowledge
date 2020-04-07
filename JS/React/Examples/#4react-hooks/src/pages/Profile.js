@@ -7,11 +7,11 @@ export const Profile = ({match}) => {
   const {getUser, getRepos, loading, user, repos} = useContext(GithubContext)
   const urlName = match.params.name
 
-  useEffect(() => {
+  useEffect(() => { // в cb эффекты которые выполнятся
     getUser(urlName)
     getRepos(urlName)
     // eslint-disable-next-line
-  }, [])
+  }, []) // в [] переменные за которыми следим (здесь вызовется 1)
 
   if (loading) {
     return <p className="text-center">Загрузка...</p>

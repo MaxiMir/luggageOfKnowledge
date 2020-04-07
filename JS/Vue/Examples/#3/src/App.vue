@@ -16,7 +16,7 @@
 
   export default {
     computed: {
-      layout() {
+      layout() { // использование в :is="layout"
         return (this.$route.meta.layout || 'empty') + '-layout'; // получаем из router/index.js
         // совпадает с name в export default компонента
       },
