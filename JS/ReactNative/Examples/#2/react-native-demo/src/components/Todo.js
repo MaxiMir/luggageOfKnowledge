@@ -3,12 +3,12 @@ import { Text, View, StyleSheet, TouchableOpacity } from 'react-native'
 
 // TouchableOpacity - при нажатии меняется прозрачность элементов в дочерних компонентах
 
-export const Todo = ({ todo, onRemove }) => {
+export const Todo = ({ todo, onRemove, onOpen }) => {
 
  return (
    <TouchableOpacity
     activeOpacity={0.5}
-    onPress={() => {}}
+    onPress={() => onOpen(todo.id)}
     onLongPress={() => onRemove(todo.id)}
   >
     <View style={styles.todo}>

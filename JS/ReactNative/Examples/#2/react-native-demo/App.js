@@ -1,8 +1,9 @@
 import React, { useState } from 'react' // useState - для локального state
-import { StyleSheet, View, ScrollView, FlatList } from 'react-native'
-import { Navbar } from './src/NavBar'
-import { AddTodo } from './src/AddTodo'
-import { Todo } from './src/Todo'
+import { StyleSheet, View } from 'react-native'
+import { Navbar } from './src/components/NavBar'
+import { MainScreen } from './src/screens/MainScreen'
+import { TodoScreen } from './src/screens/TodoScreen'
+
 
 /**
   * StyleSheet - класс для создания стилей для блоков. Производит оптимизации (объёдинение|удаление лишних стилей) + делает валидацию свойств
@@ -15,6 +16,7 @@ import { Todo } from './src/Todo'
  */
 
 export default function App() {
+  const [todoId, setTodoId] = useState(null) // разовдная | детальная
   const [todos, setTodos] = useState([]) // [] - дефолтный state
 
   const addTodo = (title) => {
@@ -31,31 +33,26 @@ export default function App() {
   }
 
 
+  let content = (
+    <MainScreen
+      todos={todos}
+      addTodo={addTodo}
+      removeTodo={removeTodo}
+      openTodo={setTodoId}
+    />
+  )
+
+  if (todoId) {
+    const selectedTodo = todos.find(todo => todo.id === todoId)
+    content = (
+      <TodoScreen goBack={() => setTodoId(null)} todo={selectedTodo} />
+    )
+  }
+
   return (
     <View>
       <Navbar title="Todo App" />
-      <View style={styles.container}>
-        <AddTodo onSubmit={addTodo} />
-
-        // #1:
-        <ScrollView>
-          {todos.map(todo => (
-            <Todo todo={todo} key={todo.id} />
-          ))}
-        </ScrollView>
-
-        // #2
-        <FlatList
-          data={todos}
-          keyExtractor={item => item.id.toString()}
-          renderItem={({item}) => (
-            <Todo todo={item}
-              onRemove={removeTodo}
-            />
-          )}
-        />
-
-      </View>
+      <View style={styles.container}>{ content }</View>
     </View>
   );
 
