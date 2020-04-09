@@ -1,3 +1,4 @@
+# reactnative.dev/docs/getting-started
 # expo.io библиотека для разрабоки приложений (абстракция над react native)
 # docs.expo.io - дока (Managed Workflow)
 # draw.io # создание схем
