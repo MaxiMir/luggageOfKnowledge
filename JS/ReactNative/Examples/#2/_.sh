@@ -18,6 +18,7 @@ $ cd react-native-demo
 $ code . # запуск текущей директории в VSC
 $ npm start
 
+$ npm i expo-font # пакет для загрузки шрифтов
 
 
 # ПОСЛЕ УСТАНОВКИ ANDROID STUDIO:
