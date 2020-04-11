@@ -1,6 +1,7 @@
 # reactnative.dev/docs/getting-started
 # expo.io библиотека для разрабоки приложений (абстракция над react native)
 # docs.expo.io - дока (Managed Workflow)
+# expo.github.io/vector-icons/ - иконки
 # draw.io # создание схем
 
 # IOS -> Swift | Android -> Java
@@ -18,7 +19,10 @@ $ cd react-native-demo
 $ code . # запуск текущей директории в VSC
 $ npm start
 
+
 $ npm i expo-font # пакет для загрузки шрифтов
+$ npm i @expo/vector-icons # пакет с иконками
+
 
 
 # ПОСЛЕ УСТАНОВКИ ANDROID STUDIO:

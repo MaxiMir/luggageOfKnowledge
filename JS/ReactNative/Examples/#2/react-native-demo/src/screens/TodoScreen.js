@@ -1,8 +1,12 @@
 import React, { useState } from 'react'
-import { StyleSheet, View, Text, Button } from 'react-native'
+import { StyleSheet, View, Dimensions } from 'react-native'
+import { FontAwesome, AntDesign } from '@expo/vector-icons'
+
 import { THEME } from '../theme'
 import { AppCard } from '../components/ui/AppCard'
 import { EditModal } from '../components/EditModal'
+import { AppTextBold } from '../components/ui/AppTextBold'
+import { AppButton } from '../components/ui/AppButton'
 
 
 export const TodoScreen = ({ todo, goBack, onSave, onRemove }) => {
@@ -25,29 +29,35 @@ export const TodoScreen = ({ todo, goBack, onSave, onRemove }) => {
       />
 
       <AppCard style={styles.card}>
-        <Text style={styles.title}>{todo.title}</Text>
-        <Button title="Ред." onPress={() => setModal(true)} />
+        <AppTextBold style={styles.title}>{todo.title}</AppTextBold>
+        <AppButton onPress={() => setModal(true)}>
+          <FontAwesome name="edit" size={20} />
+        </AppButton>
       </AppCard>
 
       <View style={styles.buttons}>
         <View style={styles.button}>
-          <Button
-            title="Назад"
+          <AppButton
             color={THEME.GREY_COLOR}
             onPress={goBack}
-          />
+          >
+            <AntDesign name='back' size={20} color='#fff' />
+          </AppButton>
         </View>
         <View style={styles.button}>
-          <Button
-            title="Удалить"
+          <AppButton
             color={THEME.DANGER_COLOR}
             onPress={() => onRemove(todo.id)}
-          />
+          >
+            <FontAwesome name='remove' size={20} color='#fff' />
+          </AppButton>
         </View>
       </View>
     </View>
   )
 }
+
+
 
 const styles = new StyleSheet.create({
   buttons: {
@@ -59,9 +69,12 @@ const styles = new StyleSheet.create({
     padding: 15
   },
   button: {
-    width: '40%'
+    width: Dimensions.get('window').width / 3
   },
   title: {
     fontSize: 20
   }
 })
+
+// Dimensions - класс для определения размерностей текущего девайса
+// Dimensions.get('window').width - полная ширина экрана девайса

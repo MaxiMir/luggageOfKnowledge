@@ -1,9 +1,25 @@
-import React from 'react'
-import { StyleSheet, View, FlatList, Image } from 'react-native'
+import React, { useState, useEffect } from 'react'
+import { StyleSheet, View, FlatList, Image, Dimensions } from 'react-native'
 import { AddTodo } from '../components/AddTodo'
 import { Todo } from '../components/Todo'
+import { THEME } from '../theme'
 
 export const MainScreen = ({ addTodo, todos, removeTodo, openTodo }) => {
+  const [deviceWidth, setDeviceWidth] = useState(Dimensions.get('window').width - THEME.PADDING_HORIZONTAL * 2)
+
+  useEffect(() => { // без 2 параметра вызовется 1 раз при инициализации этого компонента
+    const update = () => {
+      const width = Dimensions.get('window').width - THEME.PADDING_HORIZONTAL * 2
+      setDeviceWidth(width)
+    }
+
+    Dimensions.addEventListener('change', update)
+
+    return () => { // при переходе на другой экран очищаем обработчик update. Вызовется при desctroy данного компонента
+      Dimensions.removeEventListener('change', update)
+    }
+  })
+
   const content = !todos.length
     ?
     <View>
@@ -13,16 +29,18 @@ export const MainScreen = ({ addTodo, todos, removeTodo, openTodo }) => {
       />
     </View>
     :
-    <FlatList
-      data={todos}
-      keyExtractor={item => item.id.toString()}
-      renderItem={({item}) => (
-        <Todo todo={item}
-          onRemove={removeTodo}
-          onOpen={openTodo}
-        />
-      )}
-    />
+    <View style={{width: deviceWidth}}>
+      <FlatList
+        data={todos}
+        keyExtractor={item => item.id.toString()}
+        renderItem={({item}) => (
+          <Todo todo={item}
+            onRemove={removeTodo}
+            onOpen={openTodo}
+          />
+        )}
+      />
+    </View>
 
   // require - добавление модулей или сущностей (NodeJS)
   // для внешних картинок source={{ uri: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/React-icon.svg/1200px-React-icon.svg.png' }}

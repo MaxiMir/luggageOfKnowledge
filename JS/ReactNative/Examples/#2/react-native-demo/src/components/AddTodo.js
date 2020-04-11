@@ -1,5 +1,7 @@
 import React, { useState } from 'react'
-import { View, StyleSheet, TextInput, Button, Alert } from 'react-native'
+import { View, StyleSheet, TextInput, Alert, Keyboard } from 'react-native'
+import { AntDesign } from '@expo/vector-icons'
+
 import { THEME } from '../theme'
 
 export const AddTodo = ({ onSubmit }) => {
@@ -13,6 +15,7 @@ export const AddTodo = ({ onSubmit }) => {
 
     onSubmit(value)
     setValue('') // очищаем input
+    Keyboard.dismiss() // скрывает клавиатуру
   }
 
   return (
@@ -25,9 +28,15 @@ export const AddTodo = ({ onSubmit }) => {
         autoCorrect={false}
         autoCapitalize='none'
       />
-      <Button title="Добавить" onPress={pressHandler} />
+
+      <AntDesign.Button onPress={pressHandler} name="pluscircleo">
+        Добавить
+      </AntDesign.Button>
+
     </View>
   )
+
+  // Keyboard - класс для управления клавиатурой
 
   // onChangeText={setValue} <->/ onChangeText={text => setValue(text)}
   // onChangeText - изменение текста в инпуте (здесь еще меняем локальный state)
@@ -35,6 +44,8 @@ export const AddTodo = ({ onSubmit }) => {
   // autoCorrect - настройка автозамены в словах
   // autoCapitalize - настройка вверхнего регистра (characteres - все символы | words - каждая буква в каждом слове | sentences - первая буква в предложении (по умолч.) | none - все в маленьком регистре)
   // keyboardType - тип клавиатуры
+
+  // AntDesign.Button - кнопка с иконкой | pluscircleo - название иконки
 }
 
 const styles = StyleSheet.create({
@@ -45,7 +56,8 @@ const styles = StyleSheet.create({
     marginBottom: 15
   },
   input: {
-    width: '70%',
+    width: '60%',
+    marginRight: 10,
     padding: 10,
     borderStyle: 'solid',
     borderBottomWidth: 2,
