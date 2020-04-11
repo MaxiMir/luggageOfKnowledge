@@ -15,7 +15,7 @@ export const MainScreen = ({ addTodo, todos, removeTodo, openTodo }) => {
 
     Dimensions.addEventListener('change', update)
 
-    return () => { // при переходе на другой экран очищаем обработчик update. Вызовется при desctroy данного компонента
+    return () => { // при переходе на другой экран очищаем обработчик update. Вызовется при destroy данного компонента
       Dimensions.removeEventListener('change', update)
     }
   })
@@ -42,6 +42,7 @@ export const MainScreen = ({ addTodo, todos, removeTodo, openTodo }) => {
       />
     </View>
 
+  // keyExtractor - для key компонентов
   // require - добавление модулей или сущностей (NodeJS)
   // для внешних картинок source={{ uri: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/React-icon.svg/1200px-React-icon.svg.png' }}
 
@@ -64,6 +65,6 @@ const styles = new StyleSheet.create({
   image: {
     width: '100%',
     height: '100%',
-    //resizeMode: 'contain' // режим для расположения картинки
+    resizeMode: 'contain' // режим для расположения картинки
   }
 })

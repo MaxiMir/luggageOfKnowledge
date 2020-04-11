@@ -68,7 +68,7 @@ export default function App() {
           style: 'destructive', // iOS
           onPress: () => {
             setTodoId(null)
-            setTodos(prev => prev.filter((todo => todo.id !== id)))
+            setTodos(prev => prev.filter(todo => todo.id !== id))
           }
         },
       ],
