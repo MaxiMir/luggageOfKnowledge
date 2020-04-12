@@ -1519,6 +1519,8 @@ Car.propTypes = { // указываем типы данных для свойс�
     index: PropTypes.number,
     onChangeName: PropTypes.func,
     OnDelete: PropTypes.func
+
+  // todos: PropTypes.arrayOf(PropTypes.object) // массив c объектами
 }
 
 export default withClass(Car, classes.Car); // используем hoc withClass
