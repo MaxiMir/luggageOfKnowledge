@@ -1,15 +1,36 @@
-import React from 'react'
+import React, { useEffect, useCallback } from 'react'
 import { View, Text, StyleSheet, Image, Button, ScrollView, Alert } from 'react-native'
 import { Item, HeaderButtons } from 'react-navigation-header-buttons'
+import  { useDispatch, useSelector } from 'react-redux'
 
 import { AppHeaderIcon } from '../components/AppHeaderIcon'
-import { DATA } from '../data'
+import { removePost, toggleBooked } from '../store/actions/post';
 import { THEME } from '../theme'
 
 export const PostScreen = ({ navigation }) => {
+  const dispatch = useDispatch()
   const postId = navigation.getParam('postId') // получение значения из переданных параметров
 
-  const post = DATA.find(p => p.id === postId)
+  const post = useSelector(state =>
+    state.post.allPosts.find(p => p.id === postId)
+  )
+
+  const booked = useSelector(state =>
+    state.post.bookedPosts.some(post => post.id === postId)
+  )
+
+  useEffect(() => {
+    navigation.setParams({ booked })
+  }, [booked]) // если меняется меняем navigation params
+
+  const toggleHandler = useCallback(() => { // useCallback - чтобы cb вызывался 1 раз
+    dispatch(toggleBooked(postId)) // изменяем state
+  }, [dispatch, postId])
+
+  useEffect(() => { // передаем обработчик
+    navigation.setParams( { toggleHandler } )
+  }, [toggleHandler])
+
 
   const removeHandler = () => {
     Alert.alert(
@@ -20,7 +41,14 @@ export const PostScreen = ({ navigation }) => {
           text: 'Отменить',
           style: 'cancel'
         },
-        { text: 'Удалить', style: 'destructive', onPress: () => {} } // destructive - для iOS (кнопка красного цвета)
+        {
+          text: 'Удалить',
+          style: 'destructive',
+          onPress() { // destructive - для iOS (кнопка красного цвета)
+            navigation.navigate('Main')
+            dispatch(removePost(postId))
+          }
+        }
       ],
       { cancelable: false }
     )
@@ -47,6 +75,7 @@ export const PostScreen = ({ navigation }) => {
 PostScreen.navigationOptions = ({ navigation }) => {
   const date = navigation.getParam('date')
   const booked = navigation.getParam('booked')
+  const toggleHandler = navigation.getParam('toggleHandler')
   const iconName = booked ? 'ios-star' : 'ios-star-outline'
 
   return {
@@ -56,7 +85,7 @@ PostScreen.navigationOptions = ({ navigation }) => {
         <Item
           title='Take photo'
           iconName={iconName}
-          onPress={() => console.log('Press photo')}
+          onPress={toggleHandler}
         />
       </HeaderButtons>
     )

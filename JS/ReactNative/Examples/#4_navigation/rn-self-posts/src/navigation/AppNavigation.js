@@ -1,12 +1,11 @@
 import React from 'react'
-import { Platform } from 'react-native'
-import { createAppContainer } from 'react-navigation' // для создания контейнера для всего нашего приложения
+import { createAppContainer, ThemeColors } from 'react-navigation' // для создания контейнера для всего нашего приложения
 import { createStackNavigator } from 'react-navigation-stack' // для создания набора роутов
 import { createBottomTabNavigator } from 'react-navigation-tabs'
 import { createMaterialBottomTabNavigator } from 'react-navigation-material-bottom-tabs'
 import { createDrawerNavigator } from 'react-navigation-drawer' // боковое меню с навигацией
+import { Platform } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
-
 import { MainScreen } from '../screens/MainScreen'
 import { PostScreen } from '../screens/PostScreen'
 import { AboutScreen } from '../screens/AboutScreen'
@@ -34,7 +33,7 @@ const navigatorOptions = {
 }
 
 const PostNavigator = createStackNavigator(
-  {
+  { // регистрация роута
     Main: MainScreen,
     Post: PostScreen
   },
@@ -50,8 +49,8 @@ const BookedNavigator = createStackNavigator(
 )
 
 
-// конфиг для навигации внизу:
-const bottomTabsConfig = {
+
+const bottomTabsConfig = { // конфиг для навигации внизу:
   Post: {
     screen: PostNavigator, // передаем навигатор
     navigationOptions: { // настройка навигатора
@@ -64,7 +63,7 @@ const bottomTabsConfig = {
   Booked: {
     screen: BookedNavigator,
     navigationOptions: {
-      tabBarLabel: 'Избранное', // текст под иконкой
+      tabBarLabel: 'Избранное',
       tabBarIcon: info => (
         <Ionicons name='ios-star' size={25} color={info.tintColor} />
       )
@@ -72,23 +71,20 @@ const bottomTabsConfig = {
   }
 }
 
-// Навигация внизу:
-const BottomNavigator = Platform.OS === 'android'
-    ?
-    createMaterialBottomTabNavigator(bottomTabsConfig, {
+const BottomNavigator =
+  isAndroidOS
+    ? createMaterialBottomTabNavigator(bottomTabsConfig, {
       activeTintColor: '#fff', // цвет активной иконки
       shifting: true, // эффект появление текста у активной иконки
       barStyle: {
         backgroundColor: THEME.MAIN_COLOR
       }
     })
-    :
-    createBottomTabNavigator(bottomTabsConfig, {
+    : createBottomTabNavigator(bottomTabsConfig, {
       tabBarOptions: {
         activeTintColor: THEME.MAIN_COLOR // цвет активной иконки
       }
     })
-
 
 const AboutNavigator = createStackNavigator(
   {
@@ -109,28 +105,28 @@ const MainNavigator = createDrawerNavigator( // боковое меню с на�
     PostTabs: {
       screen: BottomNavigator,
       navigationOptions: {
-        drawerLabel: 'Главная'
-        // drawerIcon: <Ionicons name='ios-star' />
+        drawerLabel: 'Главная' // название для боковой навигации
+        // drawerIcon: <Ionicons name='ios-star' /> // иконка для боковой навигации
       }
     },
     About: {
       screen: AboutNavigator,
       navigationOptions: {
-        drawerLabel: 'О приложении'
+        drawerLabel: 'О приложении' // название для боковой навигации
       }
     },
     Create: {
       screen: CreateNavigator,
       navigationOptions: {
-        drawerLabel: 'Новый пост'
+        drawerLabel: 'Новый пост' // название для боковой навигации
       }
     }
   },
   {
-    contentOptions: {
-      activeTintColor: THEME.MAIN_COLOR,
+    contentOptions: { // опции для боковой навигации
+      activeTintColor: THEME.MAIN_COLOR, // цвет шрифта
       labelStyle: {
-        fontFamily: 'open-bold'
+        fontFamily: 'open-bold' // шрифт
       }
     }
   }
