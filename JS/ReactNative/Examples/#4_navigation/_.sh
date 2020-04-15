@@ -17,7 +17,14 @@ $ npm i react-navigation-header-buttons # для установки иконок
 $ npm i @expo/vector-icons # набор иконок
 
 $ npm i redux react-redux # redux
+$ npm i redux-thunk # для диспатча асинхронных actions
 
 $ expo install expo-image-picker # пакет для фото
 $ expo install expo-permissions # библиотека для доступов
+
 $ expo install expo-sqlite # БД
+
+$ expo install expo-file-system # библиотека для работы с файловой системой
+
+
+$ expo publish # публикация приложения

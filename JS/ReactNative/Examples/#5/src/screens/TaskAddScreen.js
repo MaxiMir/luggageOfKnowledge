@@ -1,11 +1,11 @@
 import React from 'react'
 import { View, StyleSheet } from 'react-native'
 
-import { AppContainer } from '../components/ui/AppContainer'
-import { AppHeader } from '../components/ui/AppHeader'
-import { ProductList } from '../components/ProductList'
-import { TaskInfo } from '../components/TaskInfo'
-import { AppButton } from '../components/ui/AppButton';
+import { AppContainer } from '../components/UI/AppContainer'
+import { AppHeader } from '../components/UI/AppHeader'
+import { AppButton } from '../components/UI/AppButton'
+import { TaskProducts } from '../components/Task/TaskProducts/TaskProducts'
+import { TaskInfo } from '../components/Task/TaskInfo/TaskInfo'
 
 
 export const TaskAddScreen = ({ navigation }) => {
@@ -40,7 +40,7 @@ export const TaskAddScreen = ({ navigation }) => {
         task={task}
       />
 
-      <ProductList
+      <TaskProducts
         products={task.products}
         totalQuantity={task.totalQuantity}
         totalAmount={task.totalAmount}

@@ -1,10 +1,12 @@
 import React, { useEffect } from 'react'
+import { View, StyleSheet, ActivityIndicator } from 'react-native'
 import { HeaderButtons, Item } from 'react-navigation-header-buttons'
 import { useDispatch, useSelector } from 'react-redux' // позволяет в функциональном компоненте изменять state c помощью actions | useSelector - предоставляет доступ до state
 
 import { AppHeaderIcon } from '../components/AppHeaderIcon'
 import { PostList } from '../components/PostList'
-import { loadPosts } from '../store/actions/post';
+import { loadPosts } from '../store/actions/post'
+import { THEME } from '../theme'
 
 export const MainScreen = ({ navigation }) => {
 
@@ -24,6 +26,17 @@ export const MainScreen = ({ navigation }) => {
   }, [dispatch]) // dispatch - не будет меняться, поэтому вызовется 1 раз
 
   const appPosts = useSelector(state => state.post.allPosts) // забераем по ключу post из rootReducer, а затем по ключу allPosts
+  const loading = useSelector(state => state.post.loading)
+
+  if (loading) {
+    return (
+      <View style={styles.center}>
+        <ActivityIndicator color={THEME.MAIN_COLOR}/>
+      </View>
+    )
+  }
+
+  // ActivityIndicator - loader
 
   return <PostList data={appPosts} onOpen={openPostHandler} />
 }
@@ -52,4 +65,13 @@ MainScreen.navigationOptions = ({ navigation }) => ({
   )
 
   // navigation.toggleDrawer - переключает боковое меню с навигацией
+})
+
+
+const styles = StyleSheet.create({
+  center: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
+  }
 })

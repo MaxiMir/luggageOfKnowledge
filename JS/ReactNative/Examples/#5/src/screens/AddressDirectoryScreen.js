@@ -1,7 +1,7 @@
 import React from 'react'
 
-import { AppContainer } from '../components/ui/AppContainer'
-import { AppText } from '../components/ui/AppText';
+import { AppContainer } from '../components/UI/AppContainer'
+import { AppText } from '../components/UI/AppText';
 
 
 export const AddressDirectoryScreen = ({ navigation }) => {

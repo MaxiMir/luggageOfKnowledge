@@ -1,13 +1,11 @@
 import React, { useState, useRef } from 'react'
-import { View, Text, TextInput, Button, StyleSheet, ScrollView, TouchableWithoutFeedback, Keyboard } from 'react-native'
-import { useDispatch } from 'react-redux';
+import { View, Text, StyleSheet, TextInput, Button, ScrollView, TouchableWithoutFeedback, Keyboard } from 'react-native'
+import { useDispatch } from 'react-redux'
 import { HeaderButtons, Item } from 'react-navigation-header-buttons'
-
 import { AppHeaderIcon } from '../components/AppHeaderIcon'
-import { PhotoPicker } from '../components/PhotoPicker';
-import { addPost } from '../store/actions/post';
 import { THEME } from '../theme'
-
+import { addPost } from '../store/actions/post'
+import { PhotoPicker } from '../components/PhotoPicker'
 
 export const CreateScreen = ({ navigation }) => {
   const dispatch = useDispatch()
@@ -17,11 +15,10 @@ export const CreateScreen = ({ navigation }) => {
   const saveHandler = () => {
     const post = {
       date: new Date().toJSON(),
-      text,
+      text: text,
       img: imgRef.current,
       booked: false
     }
-
     dispatch(addPost(post))
     navigation.navigate('Main')
   }
@@ -35,9 +32,9 @@ export const CreateScreen = ({ navigation }) => {
 
   return (
     <ScrollView>
-      <TouchableWithoutFeedback onPress={() => Keyboard.dismiss() }>
+      <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
         <View style={styles.wrapper}>
-          <Text styles={styles.title}>Создай новый пост</Text>
+          <Text style={styles.title}>Создай новый пост</Text>
           <TextInput
             style={styles.textarea}
             placeholder='Введите текст заметки'
@@ -45,9 +42,7 @@ export const CreateScreen = ({ navigation }) => {
             onChangeText={setText}
             multiline
           />
-
-          <PhotoPicker onPick={photoPickHandler}/>
-
+          <PhotoPicker onPick={photoPickHandler} />
           <Button
             title='Создать пост'
             color={THEME.MAIN_COLOR}
@@ -80,7 +75,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 20,
     textAlign: 'center',
-    fontFamily: 'open-sans',
+    fontFamily: 'open-regular',
     marginVertical: 10
   },
   textarea: {

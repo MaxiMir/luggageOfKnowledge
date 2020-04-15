@@ -1,30 +1,32 @@
 {
   "expo": {
-    "name": "React native Self Posts App",
-    "slug": "rn-self-posts",
-    "privacy": "public",
+    "name": "Self Blog", // название приложения
+    "slug": "rn-self-posts", // id приложения в expo
+    "privacy": "public", // могут ли другие скачивать
     "sdkVersion": "35.0.0",
-    "platforms": [
+    "platforms": [ // на какие платформы
       "ios",
-      "android",
-      "web"
+      "android"
     ],
-    "version": "1.0.0",
-    "orientation": "portrait",
-    "icon": "./assets/icon.png",
-    "splash": {
-      "image": "./assets/splash.png",
+    "version": "1.0.0", // вручную прописываем версию (мажорная | минорная | патч )
+    "orientation": "default", // для вращения приложения
+    "icon": "./assets/icon.png", // иконка приложения 1024*1024px
+    "splash": { // загрузка приложения
+      "image": "./assets/splash.png", // из документации 1242*2436px
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#242832"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": [
+    "assetBundlePatterns": [ // все статические файлы идут с приложением
       "**/*"
     ],
-    "ios": {
+    "ios": { // параметры для iOS
       "supportsTablet": true
+    },
+    "android": { // параметры для Android
+
     }
   }
 }

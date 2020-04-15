@@ -5,7 +5,7 @@ import { Post } from './Post'
 export const PostList = ({ data, onOpen }) => {
   if (!data.length) {
     return (
-      <View style={style.wrapper}>
+      <View style={styles.wrapper}>
         <Text style={styles.noItems}>
           Постов пока нет
         </Text>

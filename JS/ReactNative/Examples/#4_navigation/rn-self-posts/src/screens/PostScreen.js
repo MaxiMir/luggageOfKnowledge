@@ -24,8 +24,8 @@ export const PostScreen = ({ navigation }) => {
   }, [booked]) // если меняется меняем navigation params
 
   const toggleHandler = useCallback(() => { // useCallback - чтобы cb вызывался 1 раз
-    dispatch(toggleBooked(postId)) // изменяем state
-  }, [dispatch, postId])
+    dispatch(toggleBooked(post)) // изменяем state
+  }, [dispatch, post])
 
   useEffect(() => { // передаем обработчик
     navigation.setParams( { toggleHandler } )

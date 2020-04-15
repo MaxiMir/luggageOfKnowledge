@@ -78,7 +78,7 @@ const bottomTabsConfig = {
   Photo: {
     screen: PhotoNavigator,
     navigationOptions: {
-      tabBarLabel: 'Сканировать',
+      tabBarLabel: 'Скан',
       tabBarIcon: info => <MaterialIcons name='add-a-photo' size={ 25 } color={ info.tintColor }/>
     }
   },

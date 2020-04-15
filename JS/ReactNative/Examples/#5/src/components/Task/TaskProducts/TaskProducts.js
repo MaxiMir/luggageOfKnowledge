@@ -2,10 +2,10 @@ import React from 'react'
 import { View, StyleSheet, ScrollView  } from 'react-native'
 import { Table, Row, Rows } from 'react-native-table-component'
 
-import { THEME } from '../theme';
-import { AppTextBold } from './ui/AppTextBold';
+import { THEME } from '../../../theme';
+import { AppTextBold } from '../../UI/AppTextBold'
 
-export const ProductList = ({ products, totalQuantity, totalAmount }) => {
+export const TaskProducts = ({ products, totalQuantity, totalAmount }) => {
   const tableHead = ['Название товара', 'Уп.', 'Сумма']
   const tableData = products.map(({name, quantity, price }) => [name, quantity, price])
   const tableFooter = ['Итого:', totalQuantity, totalAmount]

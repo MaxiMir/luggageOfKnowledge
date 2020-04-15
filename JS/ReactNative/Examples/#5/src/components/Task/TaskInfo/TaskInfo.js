@@ -1,8 +1,8 @@
 import React from 'react'
 import { View, StyleSheet } from 'react-native'
 
-import { AppText } from './ui/AppText';
-import { AppTextBold } from './ui/AppTextBold';
+import { AppText } from '../../UI/AppText'
+import { AppTextBold } from '../../UI/AppTextBold';
 
 
 export const TaskInfo = ({ task }) => (

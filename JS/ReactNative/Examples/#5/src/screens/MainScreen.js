@@ -1,8 +1,8 @@
 import React from 'react'
 import { View, Image, StyleSheet } from 'react-native'
 
-import { AppContainer } from '../components/ui/AppContainer'
-import { AppButton } from '../components/ui/AppButton'
+import { AppContainer } from '../components/UI/AppContainer'
+import { AppButton } from '../components/UI/AppButton'
 
 
 export const MainScreen = ({ navigation }) => {
