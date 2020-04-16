@@ -17,16 +17,23 @@
       "backgroundColor": "#242832"
     },
     "updates": {
-      "fallbackToCacheTimeout": 0
+      "fallbackToCacheTimeout": 0 // 0 - проверка обновлений в фоне
     },
     "assetBundlePatterns": [ // все статические файлы идут с приложением
       "**/*"
     ],
     "ios": { // параметры для iOS
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.maximirdev.self-blog-rn-app", // должно быть уникальным для AppStore
+      "buildNumber": "1.0.0"
     },
     "android": { // параметры для Android
-
+      "package": "com.maximirdev.self_blog_rn_app", // должно быть уникальным для Play Market
+      "versionCode": 1, // по умолч., потом меняем +1
+      "permissions": [ // какие доступы необходимы
+        "CAMERA",
+        "WRITE_EXTERNAL_STORAGE"
+      ]
     }
   }
 }

@@ -1,54 +1,43 @@
 import React from 'react'
-import { View, StyleSheet, ScrollView  } from 'react-native'
+import { StyleSheet, ScrollView } from 'react-native'
 import { Table, Row, Rows } from 'react-native-table-component'
 
 import { THEME } from '../../../theme';
-import { AppTextBold } from '../../UI/AppTextBold'
 
 export const TaskProducts = ({ products, totalQuantity, totalAmount }) => {
   const tableHead = ['Название товара', 'Уп.', 'Сумма']
-  const tableData = products.map(({name, quantity, price }) => [name, quantity, price])
+  const tableBody = products.map(({name, quantity, price }) => [name, quantity, price])
   const tableFooter = ['Итого:', totalQuantity, totalAmount]
-  const flexArr = [3, 1, 1]
+  const flexArr = [4, 1, 2]
 
   return (
-    <View style={styles.productsList}>
-      <View style={styles.productListHeader}>
-        <AppTextBold>Товары:</AppTextBold>
-      </View>
-
-      <ScrollView vertical={true}>
-        <Table borderStyle={{borderWidth: 2, borderColor: '#c8e1ff'}}>
-          <Row
-            data={tableHead}
-            style={styles.head}
-            textStyle={styles.textInHead}
-            flexArr={flexArr}
-          />
-          <Rows
-            data={tableData}
-            textStyle={styles.textInBody}
-            flexArr={flexArr}
-          />
-          <Row
-            data={tableFooter}
-            style={styles.footer}
-            textStyle={styles.textInFooter}
-            flexArr={flexArr}
-          />
-        </Table>
-      </ScrollView>
-    </View>
+    <ScrollView style={styles.scrollView}>
+      <Table borderStyle={{borderWidth: 2, borderColor: '#c8e1ff'}}>
+        <Row
+          data={tableHead}
+          style={styles.head}
+          textStyle={styles.textInHead}
+          flexArr={flexArr}
+        />
+        <Rows
+          data={tableBody}
+          textStyle={styles.textInBody}
+          flexArr={flexArr}
+        />
+        <Row
+          data={tableFooter}
+          style={styles.footer}
+          textStyle={styles.textInFooter}
+          flexArr={flexArr}
+        />
+      </Table>
+    </ScrollView>
   )
 }
 
 const styles = StyleSheet.create({
-  productsList: {
-    width: '100%',
-    marginBottom: 20
-  },
-  productListHeader: {
-    marginBottom: 10
+  scrollView: {
+    width: '100%'
   },
   head: {
     height: 40,

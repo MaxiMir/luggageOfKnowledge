@@ -4,60 +4,70 @@ import * as Permissions from 'expo-permissions'
 import { BarCodeScanner } from 'expo-barcode-scanner'
 
 import { AppContainer } from '../components/UI/AppContainer'
-import { AppButton } from '../components/UI/AppButton'
+import { AppLoader } from '../components/UI/AppLoader'
+import { AppText } from '../components/UI/AppText'
+import { AppButton } from '../components/UI/AppButton';
 
 
 export const PhotoScreen = ({ navigation }) => {
+  const [askCameraPermission, setAskCameraPermission] = useState(false)
   const [hasCameraPermission, setHasCameraPermission] = useState(null)
-  const [scanned, setScanned] = useState(null)
 
   const getPermissionsAsync = async () => {
     const { status } = await Permissions.askAsync(Permissions.CAMERA);
-    setHasCameraPermission(status === 'granted')
+    const hasCameraPermission = status === 'granted'
+
+    setHasCameraPermission(hasCameraPermission)
   };
 
   const handleBarCodeScanned = ({ type, data }) => {
-    setScanned(true)
-    alert(`Bar code with type ${type} and data ${data} has been scanned!`);
-  };
+    navigation.navigate('TaskAdd', { type, data })
+  }
 
-  const loadTodos = useCallback(async () => getPermissionsAsync(), [])
-
+  const cbGetPermissionsAsync = useCallback(async () => {
+    await getPermissionsAsync()
+    setAskCameraPermission(true)
+  }, [getPermissionsAsync])
 
   useEffect(() => {
-    loadTodos()
+    cbGetPermissionsAsync()
   }, [])
 
 
-  if (hasCameraPermission === null) {
-    return <AppButton>Requesting for camera permission</AppButton>;
+  if (!askCameraPermission) {
+    return <AppLoader />
   }
-  if (hasCameraPermission === false) {
-    return <AppButton>No access to camera</AppButton>;
-  }
+
+  const content = hasCameraPermission ?
+    <BarCodeScanner
+      onBarCodeScanned={handleBarCodeScanned}
+      style={styles.scanner}
+    />
+    :
+    <View>
+      <AppText>Для работы приложения необходим доступ к камере</AppText>
+      <AppButton onPress={() => navigation.push('PhotoScreen')}>
+        Попробовать снова
+      </AppButton>
+    </View>
 
   return (
     <AppContainer>
-      <AppButton onPress={() => navigation.navigate('TaskAdd')}>
-        Создать задание
-      </AppButton>
-
-        <View style={{border: 10, borderColor: 'rgba(0,0,0,0.5)'}}>
-          <BarCodeScanner
-            onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
-            style={StyleSheet.absoluteFillObject}
-          />
-        </View>
-
-
-        {scanned && (
-          <AppButton title={'Tap to Scan Again'} onPress={() => setScanned(false)} />
-        )}
-
+      {content}
     </AppContainer>
   )
 }
 
 PhotoScreen.navigationOptions = ({ navigation }) => ({
   headerTitle: 'Сканирование штрихкода'
+})
+
+const styles = StyleSheet.create({
+  scanner: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+  }
 })

@@ -28,3 +28,9 @@ $ expo install expo-file-system # библиотека для работы с ф
 
 
 $ expo publish # публикация приложения
+$ expo build:android -t app-bundle # билд для android
+$ expo fetch:android:keystore # после сближенного приложения -> возвращает Keystore password | Key alias | Key password
+$ expo upload:android # заливка приложения в Play Market
+
+$ expo build:ios
+$ expo upload:ios # заливка приложения в AppStore

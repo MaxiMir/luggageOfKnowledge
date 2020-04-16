@@ -2,6 +2,7 @@ import React from 'react'
 
 import { AppContainer } from '../components/UI/AppContainer'
 import { AppText } from '../components/UI/AppText';
+import { AppButton } from '../components/UI/AppButton';
 
 
 export const HistoryScreen = ({ navigation }) => {
@@ -10,6 +11,9 @@ export const HistoryScreen = ({ navigation }) => {
       <AppText>
         HistoryScreen
       </AppText>
+      <AppButton onPress={() => navigation.navigate('TaskAdd')}>
+        На заказ
+      </AppButton>
     </AppContainer>
   )
 }

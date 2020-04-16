@@ -1,59 +1,68 @@
-import React from 'react'
-import { View, StyleSheet } from 'react-native'
+import React, { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { View, ScrollView, StyleSheet } from 'react-native'
 
 import { AppContainer } from '../components/UI/AppContainer'
+import { AppLoader } from '../components/UI/AppLoader'
 import { AppHeader } from '../components/UI/AppHeader'
 import { AppButton } from '../components/UI/AppButton'
-import { TaskProducts } from '../components/Task/TaskProducts/TaskProducts'
 import { TaskInfo } from '../components/Task/TaskInfo/TaskInfo'
-
+import { TaskProducts } from '../components/Task/TaskProducts/TaskProducts'
+import { getTask } from '../store/actions/task'
 
 export const TaskAddScreen = ({ navigation }) => {
-  // const task = navigation.getParam('taskID')
+  const dispatch = useDispatch()
+  const documentID = navigation.getParam('data')
 
-  const task = {
-    documentNumber: 'ЭС-00032075',
-    documentDate: '04.03.2020',
-    pharmacySender: 'АУ1032 Спб Абрамова 8',
-    pharmacyRecipient: 'АУ1003 Спб Гражданский 66',
-    products: [
-      {id: '187', name: 'Лозартан таб. п.п.o 100м№90', quantity: 1, price: '376.26'},
-      {id: '187', name: 'Лозартан таб. п.п.o 100м№90', quantity: 1, price: '376.26'},
-      {id: '187', name: 'Лозартан таб. п.п.o 100м№90', quantity: 1, price: '376.26'},
-      {id: '187', name: 'Лозартан таб. п.п.o 100м№90', quantity: 1, price: '376.26'},
-      {id: '187', name: 'Лозартан таб. п.п.o 100м№90', quantity: 1, price: '376.26'},
-      {id: '187', name: 'Лозартан таб. п.п.o 100м№90', quantity: 1, price: '376.26'},
-      {id: '187', name: 'Лозартан таб. п.п.o 100м№90', quantity: 1, price: '376.26'},
-      {id: '187', name: 'Лозартан таб. п.п.o 100м№90', quantity: 1, price: '376.26'},
-    ],
-    totalQuantity: 8,
-    totalAmount: '3010.08'
+  const btnHandler = operationType => {
+
+  }
+
+  useEffect(() => {
+    dispatch(getTask(documentID))
+  }, [dispatch])
+
+  const { info, loading } = useSelector(state => state.task)
+
+  if (loading) {
+    return (
+      <AppContainer>
+        <AppLoader
+          text={`Получаю данные по заказу №\n${documentID}`}
+        />
+      </AppContainer>
+    )
   }
 
   return (
     <AppContainer>
-      <AppHeader>
-        Задание на перемещение товара
+       <AppHeader>
+         Задание на перемещение товара
+       </AppHeader>
+
+       <TaskInfo
+         task={info}
+       />
+
+      <AppHeader style={styles.productListHeader}>
+        Товары:
       </AppHeader>
 
-      <TaskInfo
-        task={task}
-      />
-
       <TaskProducts
-        products={task.products}
-        totalQuantity={task.totalQuantity}
-        totalAmount={task.totalAmount}
+       products={info.products}
+       totalQuantity={info.totalQuantity}
+       totalAmount={info.totalAmount}
       />
 
       <View style={styles.buttonsContainer}>
-        <AppButton color='#037bff' onPress={console.log}>
-          Принял
-        </AppButton>
-        <AppButton color='#28a745' onPress={console.log}>
-          Отгрузил
-        </AppButton>
+       <AppButton color='#037bff' onPress={console.log}>
+         Принял
+       </AppButton>
+       <AppButton color='#28a745' onPress={console.log}>
+         Отгрузил
+       </AppButton>
       </View>
+
     </AppContainer>
   )
 }
@@ -63,9 +72,14 @@ TaskAddScreen.navigationOptions = ({ navigation }) => ({
 })
 
 const styles = StyleSheet.create({
+  productListHeader: {
+    fontSize: 16,
+    marginBottom: 10
+  },
   buttonsContainer: {
+    width: '100%',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    width: '100%'
+    paddingVertical: 20
   }
 })
