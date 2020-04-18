@@ -24,21 +24,22 @@ export const MainScreen = ({ addTodo, todos, removeTodo, openTodo }) => {
     ?
     <View>
       <Image
-        source={require('../../assets/no-items.png')}
-        style={styles.image}
+        source={ require('../../assets/no-items.png') }
+        style={ styles.image }
       />
     </View>
     :
-    <View style={{width: deviceWidth}}>
+    <View style={ { width: deviceWidth } }>
       <FlatList
-        data={todos}
-        keyExtractor={item => item.id.toString()}
-        renderItem={({item}) => (
-          <Todo todo={item}
-            onRemove={removeTodo}
-            onOpen={openTodo}
+        data={ todos }
+        keyExtractor={ item => item.id.toString() }
+        renderItem={ ({ item }) => (
+          <Todo
+            todo={ item }
+            onRemove={ removeTodo }
+            onOpen={ openTodo }
           />
-        )}
+        ) }
       />
     </View>
 
@@ -47,10 +48,10 @@ export const MainScreen = ({ addTodo, todos, removeTodo, openTodo }) => {
   // для внешних картинок source={{ uri: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/React-icon.svg/1200px-React-icon.svg.png' }}
 
   return (
-    <View style={styles.imageWrap}>
-      <AddTodo onSubmit={addTodo} />
+    <View style={ styles.imageWrap }>
+      <AddTodo onSubmit={ addTodo }/>
 
-      {content}
+      { content }
     </View>
   )
 }

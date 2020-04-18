@@ -18565,7 +18565,7 @@ h2= petName
  К заданию подключен http://getbootstrap.com/ Вы можете его использовать.
  */
 
-// FILE: /app/entities/Post.js:
+// FILE: /app/entities/Posts.js:
 export default class Post {
     static id = 1;
 
@@ -19177,7 +19177,7 @@ solution().listen(port, () => {
 });
 
 
-// FILE: /app/entities/Post.js
+// FILE: /app/entities/Posts.js
 export default class Post {
     static id = 1;
 

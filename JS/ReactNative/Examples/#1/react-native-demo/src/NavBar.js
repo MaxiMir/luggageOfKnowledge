@@ -1,10 +1,10 @@
 import React from 'react'
 import { View, Text, StyleSheet } from 'react-native'
 
-export const NavBar = ({title}) => { // из props сразу достать
+export const NavBar = ({ title }) => { // из props сразу достать
   return (
-    <View style={styles.navbar}>
-      <Text style={styles.text}>{title}</Text>
+    <View style={ styles.navbar }>
+      <Text style={ styles.text }>{ title }</Text>
     </View>
   )
 }

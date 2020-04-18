@@ -17,46 +17,43 @@ export const TodoScreen = ({ todo, goBack, onSave, onRemove }) => {
     setModal(false)
   }
 
-
   return (
     <View>
-
       <EditModal
-        visible={modal}
-        value={todo.title}
-        onCancel={() => setModal(false)}
-        onSave={saveHandler}
+        visible={ modal }
+        value={ todo.title }
+        onCancel={ () => setModal(false) }
+        onSave={ saveHandler }
       />
 
-      <AppCard style={styles.card}>
-        <AppTextBold style={styles.title}>{todo.title}</AppTextBold>
-        <AppButton onPress={() => setModal(true)}>
-          <FontAwesome name="edit" size={20} />
+      <AppCard style={ styles.card }>
+        <AppTextBold style={ styles.title }>{ todo.title }</AppTextBold>
+        <AppButton onPress={ () => setModal(true) }>
+          <FontAwesome name="edit" size={ 20 }/>
         </AppButton>
       </AppCard>
 
-      <View style={styles.buttons}>
-        <View style={styles.button}>
+      <View style={ styles.buttons }>
+        <View style={ styles.button }>
           <AppButton
-            color={THEME.GREY_COLOR}
-            onPress={goBack}
+            color={ THEME.GREY_COLOR }
+            onPress={ goBack }
           >
-            <AntDesign name='back' size={20} color='#fff' />
+            <AntDesign name='back' size={ 20 } color='#fff'/>
           </AppButton>
         </View>
-        <View style={styles.button}>
+        <View style={ styles.button }>
           <AppButton
-            color={THEME.DANGER_COLOR}
-            onPress={() => onRemove(todo.id)}
+            color={ THEME.DANGER_COLOR }
+            onPress={ () => onRemove(todo.id) }
           >
-            <FontAwesome name='remove' size={20} color='#fff' />
+            <FontAwesome name='remove' size={ 20 } color='#fff'/>
           </AppButton>
         </View>
       </View>
     </View>
   )
 }
-
 
 
 const styles = new StyleSheet.create({

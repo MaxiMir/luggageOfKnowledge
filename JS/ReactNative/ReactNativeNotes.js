@@ -2,3 +2,5 @@
 import { Linking } from 'react-native'
 
 Linking.openURL(`tel:${phoneNumber}`)
+
+

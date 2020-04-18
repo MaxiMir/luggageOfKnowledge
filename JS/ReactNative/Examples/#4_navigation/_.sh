@@ -34,3 +34,17 @@ $ expo upload:android # заливка приложения в Play Market
 
 $ expo build:ios
 $ expo upload:ios # заливка приложения в AppStore
+
+
+$ npm install eslint eslint-config-airbnb babel-preset-airbnb eslint-plugin-import eslint-plugin-jsx-a11y eslint-plugin-react eslint-watch babel-core babel-eslint babel-preset-react-native pre-commit prettier prettier-eslint eslint-plugin-prettier eslint-config-prettier eslint-plugin-react eslint-plugin-react-native eslint-plugin-flowtype eslint-plugin-react-hooks --dev
+# + FILE .eslintrc.js .
+# + FILE .prettierrc.js
+# + ADD in package.json:
+:<<comment
+"scripts": {
+  "lint": "esw src/**",
+  "lint-watch": "esw -w --changed src/**",
+  "postinstall":"cd ./ios && pod install && cd .."
+ },
+"precommit": "lint",
+comment

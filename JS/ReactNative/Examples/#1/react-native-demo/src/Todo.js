@@ -5,17 +5,17 @@ import { Text, View, StyleSheet, TouchableOpacity } from 'react-native'
 
 export const Todo = ({ todo, onRemove }) => {
 
- return (
-   <TouchableOpacity
-    activeOpacity={0.5}
-    onPress={() => {}}
-    onLongPress={() => onRemove(todo.id)}
-  >
-    <View style={styles.todo}>
-      <Text>{todo.title}</Text>
-    </View>
-  </TouchableOpacity>
- )
+  return (
+    <TouchableOpacity
+      activeOpacity={ 0.5 }
+      onPress={ () => {} }
+      onLongPress={ () => onRemove(todo.id) }
+    >
+      <View style={ styles.todo }>
+        <Text>{ todo.title }</Text>
+      </View>
+    </TouchableOpacity>
+  )
 }
 
 // onLongPress - долгое нажатие на элемент

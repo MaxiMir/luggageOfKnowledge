@@ -5,13 +5,13 @@ import { AddTodo } from './src/AddTodo'
 import { Todo } from './src/Todo'
 
 /**
-  * StyleSheet - класс для создания стилей для блоков. Производит оптимизации (объёдинение|удаление лишних стилей) + делает валидацию свойств
+ * StyleSheet - класс для создания стилей для блоков. Производит оптимизации (объёдинение|удаление лишних стилей) + делает валидацию свойств
 
-  * View - аналог <div>
+ * View - аналог <div>
 
-  * ScrollView - аналог View только со скроллом
+ * ScrollView - аналог View только со скроллом
 
-  * FlatList - отображает скролящийся лист данных, которые могут изменятся
+ * FlatList - отображает скролящийся лист данных, которые могут изменятся
  */
 
 export default function App() {
@@ -23,36 +23,35 @@ export default function App() {
       title
     }
 
-    setTodos(prev => [ ...prev, newTodo ])
+    setTodos(prev => [...prev, newTodo])
   }
 
   const removeTodo = id => {
     setTodos(prev => prev.filter((todo => todo.id !== id)))
   }
 
-
   return (
     <View>
-      <Navbar title="Todo App" />
-      <View style={styles.container}>
-        <AddTodo onSubmit={addTodo} />
+      <Navbar title="Todo App"/>
+      <View style={ styles.container }>
+        <AddTodo onSubmit={ addTodo }/>
 
-        // #1:
+        { /* #1: */ }
         <ScrollView>
-          {todos.map(todo => (
-            <Todo todo={todo} key={todo.id} />
-          ))}
+          { todos.map(todo => (
+            <Todo todo={ todo } key={ todo.id }/>
+          )) }
         </ScrollView>
 
-        // #2
+        { /* #2: */ }
         <FlatList
-          data={todos}
-          keyExtractor={item => item.id.toString()}
-          renderItem={({item}) => (
-            <Todo todo={item}
-              onRemove={removeTodo}
+          data={ todos }
+          keyExtractor={ item => item.id.toString() }
+          renderItem={ ({ item }) => (
+            <Todo todo={ item }
+                  onRemove={ removeTodo }
             />
-          )}
+          ) }
         />
 
       </View>

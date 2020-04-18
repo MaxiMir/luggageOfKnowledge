@@ -15,16 +15,16 @@ export const AddTodo = ({ onSubmit }) => {
   }
 
   return (
-    <View style={styles.block}>
+    <View style={ styles.block }>
       <TextInput
-        style={styles.input}
-        onChangeText={setValue}
-        value={value}
+        style={ styles.input }
+        onChangeText={ setValue }
+        value={ value }
         placeholder="Введите название дела..."
-        autoCorrect={false}
+        autoCorrect={ false }
         autoCapitalize='none'
       />
-      <Button title="Добавить" onPress={pressHandler} />
+      <Button title="Добавить" onPress={ pressHandler }/>
     </View>
   )
 

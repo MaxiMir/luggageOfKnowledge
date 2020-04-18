@@ -9,14 +9,14 @@ import { TodoScreen } from './src/screens/TodoScreen'
 import { THEME } from './src/theme'
 
 /**
-  * StyleSheet - класс для создания стилей для блоков. Производит оптимизации (объёдинение|удаление лишних стилей) + делает валидацию свойств
+ * StyleSheet - класс для создания стилей для блоков. Производит оптимизации (объёдинение|удаление лишних стилей) + делает валидацию свойств
 
-  * View - аналог <div>
+ * View - аналог <div>
 
-  * ScrollView - аналог View только со скроллом
+ * ScrollView - аналог View только со скроллом
 
-  * FlatList - отображает скролящийся лист данных, которые могут изменятся
-*/
+ * FlatList - отображает скролящийся лист данных, которые могут изменятся
+ */
 
 async function loadApplication() {
   await Font.loadAsync({ // загрузка шрифтов
@@ -34,10 +34,10 @@ export default function App() {
   if (!isReady) { // приложение не будет отрисовываться, пока приложение не будет готово
     return (
       <AppLoading
-        startAsync={loadApplication}
-        onError={err => console.log(err)}
-        onFinish={() => setIsReady(true)}
-    />
+        startAsync={ loadApplication }
+        onError={ err => console.log(err) }
+        onFinish={ () => setIsReady(true) }
+      />
     )
 
     // startAsync - старт асинхронной функции в фоне
@@ -49,7 +49,7 @@ export default function App() {
       title
     }
 
-    setTodos(prev => [ ...prev, newTodo ])
+    setTodos(prev => [...prev, newTodo])
   }
 
   const removeTodo = id => {
@@ -57,7 +57,7 @@ export default function App() {
 
     Alert.alert(
       'Удаление элемента',
-      `Вы уверены, что хотите удалить "${todo.title}"?`,
+      `Вы уверены, что хотите удалить "${ todo.title }"?`,
       [
         {
           text: 'Отмена',
@@ -89,10 +89,10 @@ export default function App() {
 
   let content = (
     <MainScreen
-      todos={todos}
-      addTodo={addTodo}
-      removeTodo={removeTodo}
-      openTodo={setTodoId}
+      todos={ todos }
+      addTodo={ addTodo }
+      removeTodo={ removeTodo }
+      openTodo={ setTodoId }
     />
   )
 
@@ -100,10 +100,10 @@ export default function App() {
     const selectedTodo = todos.find(todo => todo.id === todoId)
     content = (
       <TodoScreen
-        goBack={() => setTodoId(null)}
-        todo={selectedTodo}
-        onSave={updateTodo}
-        onRemove={removeTodo}
+        goBack={ () => setTodoId(null) }
+        todo={ selectedTodo }
+        onSave={ updateTodo }
+        onRemove={ removeTodo }
       />
     )
   }
@@ -111,8 +111,8 @@ export default function App() {
 
   return (
     <View>
-      <Navbar title="Todo App" />
-      <View style={styles.container}>{ content }</View>
+      <Navbar title="Todo App"/>
+      <View style={ styles.container }>{ content }</View>
     </View>
   );
 
