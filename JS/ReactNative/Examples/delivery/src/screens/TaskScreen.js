@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { View, StyleSheet } from 'react-native'
 
@@ -8,19 +8,20 @@ import { AppHeader } from '../components/UI/AppHeader'
 import { AppButton } from '../components/UI/AppButton'
 import { TaskInfo } from '../components/Task/TaskInfo/TaskInfo'
 import { TaskProducts } from '../components/Task/TaskProducts/TaskProducts'
-import { getTask, setTaskStatus } from '../store/actions/task'
+import { bindTaskToUser, getTask, setTaskStatus } from '../store/actions/task'
 import { TASK_STATUS } from '../consts'
 
 
 export const TaskScreen = ({ navigation }) => {
   const dispatch = useDispatch()
-  const { current: task, loading } = useSelector(state => state.task)
+  const task = useSelector(state => state.task.current)
   const documentID = navigation.getParam('documentID')
 
   const btnHandler = newTaskStatus => {
     const nextScreen = newTaskStatus === TASK_STATUS.ACCEPTED ? 'Tasks' : 'TaskClosure';
 
-    dispatch(setTaskStatus(newTaskStatus))
+    dispatch(bindTaskToUser(1, task))
+    dispatch(setTaskStatus(documentID, newTaskStatus))
 
     navigation.navigate(nextScreen, {
       documentID
@@ -31,8 +32,7 @@ export const TaskScreen = ({ navigation }) => {
     dispatch(getTask(documentID))
   }, [dispatch])
 
-
-  if (loading) {
+  if (!task) {
     return (
       <AppContainer>
         <AppLoader
@@ -70,7 +70,6 @@ export const TaskScreen = ({ navigation }) => {
          Отгрузил
        </AppButton>
       </View>
-
     </AppContainer>
   )
 }

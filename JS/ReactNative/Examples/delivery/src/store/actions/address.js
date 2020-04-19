@@ -1,4 +1,5 @@
 import { GET_SHIPPING_ADDRESSES } from '../types';
+import { hideLoaderWithMessage, showLoaderWithMessage } from './app';
 
 export const getShippingAddresses = () => async dispatch => {
   const shippingAddresses = [
@@ -13,12 +14,12 @@ export const getShippingAddresses = () => async dispatch => {
     'АУ 1011 СПб Гражданский 56',
   ]
 
-  await (new Promise(r => setTimeout(() => {
-    r()
-  }, 3000)))
+  dispatch(showLoaderWithMessage('Получаю список адресов...'))
 
   dispatch({
     type: GET_SHIPPING_ADDRESSES,
     payload: shippingAddresses
   })
+
+  dispatch(hideLoaderWithMessage())
 }

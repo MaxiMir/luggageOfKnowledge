@@ -1,9 +1,7 @@
 import { GET_SHIPPING_ADDRESSES } from '../types';
 
 const initialState = {
-  shippingAddresses: null,
-  loading: true,
-  error: null
+  shippingAddresses: null
 }
 
 const handlers = {
@@ -20,4 +18,6 @@ export const addressReducer = (state = initialState, action) => {
 
   return handler(state, action)
 }
+
+
 

@@ -21,7 +21,10 @@ export const PhotoScreen = ({ navigation }) => {
   };
 
   const handleBarCodeScanned = ({ type, data }) => {
-    navigation.navigate('Task', { type, documentID: data })
+    navigation.navigate('Task', {
+      type,
+      documentID: data
+    })
   }
 
   const cbGetPermissionsAsync = useCallback(async () => {
