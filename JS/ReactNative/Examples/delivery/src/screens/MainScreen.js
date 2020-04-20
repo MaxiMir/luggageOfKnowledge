@@ -3,6 +3,7 @@ import { View, Image, StyleSheet } from 'react-native'
 
 import { AppContainer } from '../components/UI/AppContainer'
 import { AppButton } from '../components/UI/AppButton'
+import { THEME } from '../theme'
 
 
 export const MainScreen = ({ navigation }) => {
@@ -39,7 +40,7 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 200,
     resizeMode: 'contain',
-    marginBottom: 20
+    marginBottom: THEME.MARGIN_BOTTOM
   },
   buttonsContainer: {
     height: 90,

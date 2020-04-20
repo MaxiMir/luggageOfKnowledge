@@ -5,4 +5,5 @@ export const initAppHandler = async () => {
     'open-regular': require('../assets/fonts/OpenSans-Regular.ttf'),
     'open-bold': require('../assets/fonts/OpenSans-Bold.ttf')
   })
+
 }

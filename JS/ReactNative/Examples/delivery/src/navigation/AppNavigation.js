@@ -10,11 +10,12 @@ import { MainScreen } from '../screens/MainScreen'
 import { TasksScreen } from '../screens/TasksScreen'
 import { TaskScreen } from '../screens/TaskScreen'
 import { TaskClosureScreen } from '../screens/TaskClosureScreen'
-import { PhotoScreen } from '../screens/PhotoScreen'
+import { ScanScreen } from '../screens/ScanScreen'
 import { HistoryScreen } from '../screens/HistoryScreen'
 import { ProfileScreen } from '../screens/ProfileScreen'
 import { HowToUseScreen } from '../screens/HowToUseScreen'
 import { AddressDirectoryScreen } from '../screens/AddressDirectoryScreen'
+import { TaskIcon } from '../components/Task/TaskIcon/TaskIcon'
 import { THEME } from '../theme'
 
 const isAndroidOS = Platform.OS === 'android'
@@ -47,7 +48,7 @@ const TasksNavigator = createStackNavigator(
 )
 const PhotoNavigator = createStackNavigator(
   {
-    Photo: PhotoScreen,
+    Scan: ScanScreen,
   },
   navigatorOptions
 )
@@ -65,14 +66,14 @@ const bottomTabsConfig = {
     screen: MainNavigator,
     navigationOptions: {
       tabBarLabel: 'Главная',
-      tabBarIcon: info => <AntDesign name='home' size={25} color={info.tintColor} />
+      tabBarIcon: info => <AntDesign name='home' size={ 25 } color={ info.tintColor }/>
     }
   },
   Tasks: {
     screen: TasksNavigator,
     navigationOptions: {
       tabBarLabel: 'Задания',
-      tabBarIcon: info => <FontAwesome5 name='tasks' size={25} color={info.tintColor} />
+      tabBarIcon: info => <TaskIcon color={info.tintColor} size={ 25 }/>
     }
   },
   Photo: {
@@ -86,31 +87,37 @@ const bottomTabsConfig = {
     screen: HistoryNavigator,
     navigationOptions: {
       tabBarLabel: 'История',
-      tabBarIcon: info => <MaterialIcons name='history' size={25} color={info.tintColor} />
+      tabBarIcon: info => <MaterialIcons name='history' size={ 25 } color={ info.tintColor }/>
     }
   },
   Profile: {
     screen: ProfileNavigator,
     navigationOptions: {
       tabBarLabel: 'Профиль',
-      tabBarIcon: info => <AntDesign name='user' size={25} color={info.tintColor} />
+      tabBarIcon: info => <AntDesign name='user' size={ 25 } color={ info.tintColor }/>
     }
   }
 }
 
 const BottomNavigator = isAndroidOS ?
   createMaterialBottomTabNavigator(bottomTabsConfig, {
-      activeTintColor: THEME.WHITE_COLOR,
-      shifting: true,
-      barStyle: {
-        backgroundColor: THEME.MAIN_COLOR
+    activeTintColor: THEME.WHITE_COLOR,
+    shifting: true,
+    barStyle: {
+      backgroundColor: THEME.MAIN_COLOR,
+      height: 75,
+      justifyContent: 'center'
+    }
+  })
+  :
+  createBottomTabNavigator(bottomTabsConfig, {
+    tabBarOptions: {
+      activeTintColor: THEME.MAIN_COLOR,
+      style: {
+        paddingTop: 15,
+        height: 70
       }
-    })
-    :
-    createBottomTabNavigator(bottomTabsConfig, {
-      tabBarOptions: {
-        activeTintColor: THEME.MAIN_COLOR
-      }
-    })
+    }
+  })
 
 export const AppNavigation = createAppContainer(BottomNavigator)

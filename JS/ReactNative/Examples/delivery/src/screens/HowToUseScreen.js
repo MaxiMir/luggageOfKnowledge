@@ -24,6 +24,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: THEME.BACKGROUND_COLOR,
-    padding: 20
+    padding: THEME.PADDING
   }
 })

@@ -1,6 +1,7 @@
 import React from 'react'
 import { View, StyleSheet } from 'react-native'
-import { THEME } from '../../theme';
+import { THEME } from '../../theme'
+
 
 export const AppContainer = ({ children, style }) => (
   <View style={{...styles.default, ...style}}>
@@ -13,7 +14,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'flex-start',
     alignItems: 'center',
-    padding: 20,
+    padding: THEME.PADDING,
     backgroundColor: THEME.BACKGROUND_COLOR
   }
 })

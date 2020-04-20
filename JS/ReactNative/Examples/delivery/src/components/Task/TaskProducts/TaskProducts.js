@@ -2,13 +2,14 @@ import React from 'react'
 import { StyleSheet, ScrollView } from 'react-native'
 import { Table, Row, Rows } from 'react-native-table-component'
 
-import { THEME } from '../../../theme';
+import currencyFilter from '../../../filters/currency.filter'
+import { THEME } from '../../../theme'
 
 export const TaskProducts = ({ products, totalQuantity, totalAmount }) => {
   const tableHead = ['Название товара', 'Уп.', 'Сумма']
-  const tableBody = products.map(({name, quantity, price }) => [name, quantity, price])
-  const tableFooter = ['Итого:', totalQuantity, totalAmount]
-  const flexArr = [4, 1, 2]
+  const tableBody = products.map(({name, quantity, price }) => [name, quantity, currencyFilter(price)])
+  const tableFooter = ['Итого:', totalQuantity, currencyFilter(totalAmount)]
+  const flexArr = [5, 1, 2]
 
   return (
     <ScrollView style={styles.scrollView}>
@@ -37,7 +38,8 @@ export const TaskProducts = ({ products, totalQuantity, totalAmount }) => {
 
 const styles = StyleSheet.create({
   scrollView: {
-    width: '100%'
+    width: '100%',
+    marginBottom: THEME.MARGIN_BOTTOM
   },
   head: {
     height: 40,

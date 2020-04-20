@@ -1,6 +1,8 @@
 import React from 'react'
 import { View, Image, StyleSheet } from 'react-native'
 
+import { THEME } from '../../../theme'
+
 
 export const UserPhoto = ({ image }) => (
   <View style={styles.imageContainer}>
@@ -16,7 +18,7 @@ const styles = StyleSheet.create({
     width: '100%',
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 20
+    marginBottom: THEME.MARGIN_BOTTOM
   },
   image: {
     width: 200,

@@ -21,6 +21,6 @@ const styles = StyleSheet.create({
   },
   text: {
     textAlign: 'center',
-    marginBottom: 20
+    marginBottom: THEME.MARGIN_BOTTOM
   }
 })

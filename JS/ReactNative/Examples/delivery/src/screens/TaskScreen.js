@@ -8,24 +8,23 @@ import { AppHeader } from '../components/UI/AppHeader'
 import { AppButton } from '../components/UI/AppButton'
 import { TaskInfo } from '../components/Task/TaskInfo/TaskInfo'
 import { TaskProducts } from '../components/Task/TaskProducts/TaskProducts'
-import { bindTaskToUser, getTask, setTaskStatus } from '../store/actions/task'
+import { getTask, setTaskStatus } from '../store/actions/task'
 import { TASK_STATUS } from '../consts'
+import { THEME } from '../theme'
 
 
 export const TaskScreen = ({ navigation }) => {
   const dispatch = useDispatch()
   const task = useSelector(state => state.task.current)
   const documentID = navigation.getParam('documentID')
+  const isNewTask = navigation.getParam('isNewTask')
 
   const btnHandler = newTaskStatus => {
     const nextScreen = newTaskStatus === TASK_STATUS.ACCEPTED ? 'Tasks' : 'TaskClosure';
 
-    dispatch(bindTaskToUser(1, task))
-    dispatch(setTaskStatus(documentID, newTaskStatus))
+    navigation.navigate(nextScreen)
 
-    navigation.navigate(nextScreen, {
-      documentID
-    })
+    dispatch(setTaskStatus(newTaskStatus))
   }
 
   useEffect(() => {
@@ -63,10 +62,17 @@ export const TaskScreen = ({ navigation }) => {
       />
 
       <View style={styles.buttonsContainer}>
-       <AppButton color='#037bff' onPress={() => btnHandler(TASK_STATUS.ACCEPTED)}>
+       <AppButton
+         color='#037bff'
+         onPress={() => btnHandler(TASK_STATUS.ACCEPTED)}
+         disabled={!isNewTask}
+       >
          Принял
        </AppButton>
-       <AppButton color='#28a745' onPress={() => btnHandler(TASK_STATUS.SHIPPED)}>
+       <AppButton
+         color='#28a745'
+         onPress={() => btnHandler(TASK_STATUS.SHIPPED)}
+       >
          Отгрузил
        </AppButton>
       </View>
@@ -81,12 +87,11 @@ TaskScreen.navigationOptions = ({ navigation }) => ({
 const styles = StyleSheet.create({
   productListHeader: {
     fontSize: 16,
-    marginBottom: 10
+    marginBottom: THEME.MARGIN_BOTTOM
   },
   buttonsContainer: {
     width: '100%',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingVertical: 20
   }
 })

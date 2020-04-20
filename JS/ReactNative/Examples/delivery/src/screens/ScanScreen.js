@@ -9,7 +9,7 @@ import { AppText } from '../components/UI/AppText'
 import { AppButton } from '../components/UI/AppButton';
 
 
-export const PhotoScreen = ({ navigation }) => {
+export const ScanScreen = ({ navigation }) => {
   const [askCameraPermission, setAskCameraPermission] = useState(false)
   const [hasCameraPermission, setHasCameraPermission] = useState(null)
 
@@ -20,10 +20,10 @@ export const PhotoScreen = ({ navigation }) => {
     setHasCameraPermission(hasCameraPermission)
   };
 
-  const handleBarCodeScanned = ({ type, data }) => {
+  const handleBarCodeScanned = ({ data }) => {
     navigation.navigate('Task', {
-      type,
-      documentID: data
+      documentID: data,
+      isNewTask: true
     })
   }
 
@@ -61,7 +61,7 @@ export const PhotoScreen = ({ navigation }) => {
   )
 }
 
-PhotoScreen.navigationOptions = ({ navigation }) => ({
+ScanScreen.navigationOptions = ({ navigation }) => ({
   headerTitle: 'Сканирование штрихкода'
 })
 

@@ -1,8 +1,10 @@
-import { BIND_TASK, GET_ALL_TASKS, GET_TASK, SET_TASK_STATUS } from '../types'
+import { GET_ALL_TASKS, GET_TASK, SET_TASK_STATUS } from '../types'
+import { TASK_STATUS } from '../../consts';
 
 const initialState = {
   current: null,
-  all: [],
+  all: null,
+  completed: [],
 }
 
 const handlers = {
@@ -12,22 +14,20 @@ const handlers = {
   }),
   [GET_ALL_TASKS]: (state, { payload }) => ({
     ...state,
-    all: [...state.all, ...payload]
+    all: payload
   }),
   [SET_TASK_STATUS]: (state, { payload }) => {
-    const { current } = state
-
-    current.status = payload
-
-    return {
-      ...state,
-      current: current,
+    switch (payload) {
+      case TASK_STATUS.ACCEPTED:
+        return {
+          ...state,
+          current: null,
+          all: !state.all ? null : [...state.all, state.current]
+        }
+      default:
+        return { ...state }
     }
   },
-  [BIND_TASK]: (state, { payload }) => ({
-    ...state,
-    all: [...state.all, payload]
-  }),
   DEFAULT: state => state
 }
 

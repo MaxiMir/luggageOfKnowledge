@@ -13,6 +13,7 @@
     "expo-barcode-scanner": "~7.0.0",
     "expo-font": "^7.0.0",
     "expo-permissions": "~7.0.0",
+    "intl": "^1.2.5",
     "react": "16.8.3",
     "react-dom": "16.8.3",
     "react-native": "https://github.com/expo/react-native/archive/sdk-35.0.0.tar.gz",

@@ -13,18 +13,16 @@ import { getShippingAddresses } from '../store/actions/address'
 export const TaskClosureScreen = ({ navigation }) => {
   const dispatch = useDispatch()
   const { shippingAddresses } = useSelector(state => state.address)
-  const { loading, message } = useSelector(state => state.app)
-  const documentID = navigation.getParam('documentID')
 
   useEffect(() => {
     dispatch(getShippingAddresses())
   }, [dispatch])
 
-  if (!shippingAddresses || loading) {
+  if (!shippingAddresses) {
     return (
       <AppContainer>
         <AppLoader
-          text={message}
+          text='Получаю список адресов...'
         />
       </AppContainer>
     )

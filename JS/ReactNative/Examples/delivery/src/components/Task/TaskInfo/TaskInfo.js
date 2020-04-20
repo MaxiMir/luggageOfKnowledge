@@ -2,17 +2,18 @@ import React from 'react'
 import { View, StyleSheet } from 'react-native'
 
 import { AppText } from '../../UI/AppText'
-import { AppTextBold } from '../../UI/AppTextBold';
+import { AppTextBold } from '../../UI/AppTextBold'
+import { THEME } from '../../../theme'
 
 
 export const TaskInfo = ({ task }) => (
   <View style={styles.taskInfo}>
     <AppText>
-      <AppTextBold>Перемещение №</AppTextBold> {task.documentNumber}
+      <AppTextBold>Перемещение №</AppTextBold> {task.documentID}
     </AppText>
 
     <AppText>
-      от {task.documentDate}
+      <AppTextBold>от:</AppTextBold> {task.documentDate}
     </AppText>
 
     <AppText>
@@ -28,7 +29,7 @@ export const TaskInfo = ({ task }) => (
 const styles = StyleSheet.create({
   taskInfo: {
     width: '100%',
-    marginBottom: 20,
+    marginBottom: THEME.MARGIN_BOTTOM
   }
 })
 
