@@ -12,7 +12,7 @@ export const AppPhone = ({ phone, color = THEME.MAIN_COLOR }) => {
   return (
     <AppTouchableBlock onPress={ pressHandler }>
       <View>
-        <AppTextBold style={ color }>
+        <AppTextBold style={{ color }}>
           { phone }
         </AppTextBold>
       </View>

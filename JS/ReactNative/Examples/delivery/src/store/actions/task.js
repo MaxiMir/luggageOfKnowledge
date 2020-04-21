@@ -1,4 +1,4 @@
-import { GET_TASK, GET_ALL_TASKS, SET_TASK_STATUS } from '../types'
+import { GET_TASK, GET_ALL_TASKS, SET_TASK_ACCEPTED, SET_TASK_COMPLETED, GET_TASK_HISTORY } from '../types'
 
 const MOCK_TASK = {
   documentID: '148583',
@@ -20,30 +20,57 @@ export const getTask = documentID => async dispatch => {
   const task = { ...MOCK_TASK, documentID }
 
   setTimeout(() => {
+
     dispatch({
       type: GET_TASK,
       payload: task
     })
+
   }, 500)
 }
 
 export const getAllTasks = () => async dispatch => {
   setTimeout(() => {
-    const task1 = { ...MOCK_TASK, documentID: Date.now().toString() }
-    const task2 = { ...MOCK_TASK, documentID: Date.now().toString() + 1 }
-
+    const task = { ...MOCK_TASK, documentID: Date.now().toString() }
     dispatch({
       type: GET_ALL_TASKS,
-      payload: [task1, task2]
+      payload: [task]
     })
+
   }, 500)
 }
 
-export const setTaskStatus = status => async dispatch => {
+export const setTaskAccepted = () => async dispatch => {
   setTimeout(() => {
+
     dispatch({
-      type: SET_TASK_STATUS,
-      payload: status
+      type: SET_TASK_ACCEPTED
     })
+
   }, 500)
 }
+
+export const setTaskCompleted = () => async dispatch => {
+  setTimeout(() => {
+
+    dispatch({
+      type: SET_TASK_COMPLETED
+    })
+
+  }, 500)
+}
+
+export const getTaskHistory = () => async dispatch => {
+  setTimeout(() => {
+
+    dispatch({
+      type: GET_TASK_HISTORY,
+      payload: []
+    })
+
+  }, 500)
+}
+
+
+
+

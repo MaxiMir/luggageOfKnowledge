@@ -1,9 +1,3 @@
-export const TASK_STATUS = {
-  ACCEPTED: 'ACCEPTED',
-  SHIPPED: 'SHIPPED',
-  CONFIRMED: 'CONFIRMED'
-}
-
 export const SCREEN = {
   TASK: 'Task',
   TASK_CLOSURE: 'TaskClosure',

@@ -23,6 +23,16 @@ export const MainScreen = ({ navigation }) => {
           Справочник адресов
         </AppButton>
       </View>
+
+      <AppButton
+        color={THEME.DANGER_COLOR}
+        onPress={ () => navigation.navigate(SCREEN.TASK, {
+        documentID: Date.now().toString(),
+        isNewTask: true
+        }) }
+      >
+        DEBUG
+      </AppButton>
     </AppContainer>
   )
 }
@@ -43,6 +53,7 @@ const styles = StyleSheet.create({
   },
   buttonsContainer: {
     height: 90,
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
+    marginBottom: THEME.MARGIN_BOTTOM
   }
 })

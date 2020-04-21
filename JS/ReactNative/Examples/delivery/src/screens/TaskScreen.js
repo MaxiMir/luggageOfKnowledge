@@ -8,8 +8,8 @@ import { AppHeader } from '../components/UI/AppHeader'
 import { AppButton } from '../components/UI/AppButton'
 import { TaskInfo } from '../components/Task/TaskInfo/TaskInfo'
 import { TaskProducts } from '../components/Task/TaskProducts/TaskProducts'
-import { getTask, setTaskStatus } from '../store/actions/task'
-import { TASK_STATUS, SCREEN } from '../consts'
+import { getTask, setTaskAccepted } from '../store/actions/task'
+import { SCREEN } from '../consts'
 import { THEME } from '../theme'
 
 
@@ -22,7 +22,7 @@ export const TaskScreen = ({ navigation }) => {
 
 
   const acceptedBtnHandler = () => {
-    dispatch(setTaskStatus(TASK_STATUS.ACCEPTED))
+    dispatch(setTaskAccepted())
     navigation.navigate(SCREEN.TASKS)
   }
 

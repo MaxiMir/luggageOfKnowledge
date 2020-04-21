@@ -5,17 +5,19 @@ import { AppHeader } from '../../UI/AppHeader'
 import { TaskListItem } from './TaskListItem/TaskListItem'
 
 
-export const TaskList = ({ tasks, taskPressHandler }) => {
+export const TaskList = ({ tasks, taskPressHandler, isCompleted = false }) => {
   return (
     <View>
       <AppHeader>
-        Текущие задания
+        { isCompleted ? 'Выполненные' : 'Текущие' } задания
       </AppHeader>
 
       <FlatList
         data={ tasks }
         keyExtractor={ task => task.documentID }
-        renderItem={ ({ item }) => <TaskListItem task={ item } onPress={ () => taskPressHandler(item.documentID) }/> }
+        renderItem={ ({ item }) => (
+          <TaskListItem task={ item } isCompleted={ isCompleted } onPress={ () => taskPressHandler(item.documentID) }/>
+        ) }
       />
     </View>
   )

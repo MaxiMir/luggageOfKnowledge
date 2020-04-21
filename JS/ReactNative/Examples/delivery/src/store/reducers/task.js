@@ -1,5 +1,4 @@
-import { GET_ALL_TASKS, GET_TASK, SET_TASK_STATUS } from '../types'
-import { TASK_STATUS } from '../../consts';
+import { GET_ALL_TASKS, GET_TASK, SET_TASK_ACCEPTED, SET_TASK_COMPLETED, GET_TASK_HISTORY } from '../types'
 
 const initialState = {
   current: null,
@@ -16,18 +15,21 @@ const handlers = {
     ...state,
     all: payload
   }),
-  [SET_TASK_STATUS]: (state, { payload }) => {
-    switch (payload) {
-      case TASK_STATUS.ACCEPTED:
-        return {
-          ...state,
-          current: null,
-          all: !state.all ? null : [...state.all, state.current]
-        }
-      default:
-        return { ...state }
-    }
-  },
+  [SET_TASK_ACCEPTED]: state => ({
+    ...state,
+    current: null,
+    all: !state.all ? null : [...state.all, state.current]
+  }),
+  [SET_TASK_COMPLETED]: state => ({
+    ...state,
+    current: null,
+    all: !state.all ? null : state.all.filter(task => task.documentID !== state.current.documentID),
+    completed: !state.completed ? null : [...state.completed, state.current]
+  }),
+  [GET_TASK_HISTORY]: (state, { payload }) => ({
+    ...state,
+    completed: payload
+  }),
   DEFAULT: state => state
 }
 
