@@ -5,6 +5,7 @@ import { Table, Row, Rows } from 'react-native-table-component'
 import currencyFilter from '../../../filters/currency.filter'
 import { THEME } from '../../../theme'
 
+
 export const TaskProducts = ({ products, totalQuantity, totalAmount }) => {
   const tableHead = ['Название товара', 'Уп.', 'Сумма']
   const tableBody = products.map(({ name, quantity, price }) => [name, quantity, currencyFilter(price)])

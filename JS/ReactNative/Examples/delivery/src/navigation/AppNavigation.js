@@ -19,6 +19,7 @@ import { TaskIcon } from '../components/Task/TaskIcon/TaskIcon'
 import { SCREEN } from '../consts'
 import { THEME } from '../theme'
 
+
 const isAndroidOS = Platform.OS === 'android'
 
 const navigatorOptions = {

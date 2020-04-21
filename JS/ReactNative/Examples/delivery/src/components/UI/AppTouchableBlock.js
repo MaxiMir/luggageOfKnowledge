@@ -1,5 +1,6 @@
 import React from 'react'
-import { Platform, TouchableNativeFeedback, TouchableOpacity, StyleSheet } from 'react-native'
+import { Platform, TouchableNativeFeedback, TouchableOpacity } from 'react-native'
+
 
 export const AppTouchableBlock = ({ children, onPress, disabled }) => {
   const Wrapper = Platform.OS === 'android' ?

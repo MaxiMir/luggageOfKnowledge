@@ -1,9 +1,8 @@
 import React from 'react'
-import { View, StyleSheet, Picker } from 'react-native'
+import { View, StyleSheet } from 'react-native'
 
 
 import { AppContainer } from '../components/UI/AppContainer'
-import { AppLoader } from '../components/UI/AppLoader'
 import { AppHeader } from '../components/UI/AppHeader'
 import { AppButton } from '../components/UI/AppButton'
 import { AppTextBold } from '../components/UI/AppTextBold'

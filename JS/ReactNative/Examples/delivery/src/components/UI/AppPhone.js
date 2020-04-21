@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Linking, Platform, TouchableNativeFeedback, TouchableOpacity, StyleSheet } from 'react-native'
+import { View, Linking } from 'react-native'
 
 import { AppTouchableBlock } from './AppTouchableBlock'
 import { AppTextBold } from './AppTextBold'
@@ -12,7 +12,7 @@ export const AppPhone = ({ phone, color = THEME.MAIN_COLOR }) => {
   return (
     <AppTouchableBlock onPress={ pressHandler }>
       <View>
-        <AppTextBold style={ { ...styles.phone, color } }>
+        <AppTextBold style={ color }>
           { phone }
         </AppTextBold>
       </View>
