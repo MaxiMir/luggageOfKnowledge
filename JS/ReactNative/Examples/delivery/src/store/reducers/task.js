@@ -4,11 +4,11 @@ import { TASK_STATUS } from '../../consts';
 const initialState = {
   current: null,
   all: null,
-  completed: [],
+  completed: null,
 }
 
 const handlers = {
-  [GET_TASK]: (state , { payload }) => ({
+  [GET_TASK]: (state, { payload }) => ({
     ...state,
     current: payload
   }),
@@ -36,3 +36,7 @@ export const taskReducer = (state = initialState, action) => {
 
   return handler(state, action)
 }
+
+/**
+ Сканирование одинаковых кодов -> ошибка
+ */

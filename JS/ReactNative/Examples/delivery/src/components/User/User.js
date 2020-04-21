@@ -8,27 +8,27 @@ import { UserPhoto } from './UserPhoto/UserPhoto'
 
 
 export const User = ({ user }) => (
-  <View styles={styles.info}>
+  <View styles={ styles.info }>
     <View>
       <UserPhoto
-        image={user.image}
+        image={ user.image }
       />
     </View>
 
-    <View style={styles.infoRow}>
+    <View style={ styles.infoRow }>
       <AppTextBold>ФИО: </AppTextBold>
       <AppText>{ user.fullName }</AppText>
     </View>
 
-    <View style={styles.infoRow}>
+    <View style={ styles.infoRow }>
       <AppTextBold>Должность: </AppTextBold>
       <AppText>{ user.post }</AppText>
     </View>
 
-    <View style={styles.infoRow}>
+    <View style={ styles.infoRow }>
       <AppTextBold>Телефон: </AppTextBold>
       <AppPhone
-        phone={user.phone}
+        phone={ user.phone }
       />
     </View>
   </View>

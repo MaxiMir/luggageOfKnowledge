@@ -9,7 +9,7 @@ import { AppButton } from '../components/UI/AppButton'
 import { TaskInfo } from '../components/Task/TaskInfo/TaskInfo'
 import { TaskProducts } from '../components/Task/TaskProducts/TaskProducts'
 import { getTask, setTaskStatus } from '../store/actions/task'
-import { TASK_STATUS } from '../consts'
+import { TASK_STATUS, SCREEN } from '../consts'
 import { THEME } from '../theme'
 
 
@@ -18,14 +18,20 @@ export const TaskScreen = ({ navigation }) => {
   const task = useSelector(state => state.task.current)
   const documentID = navigation.getParam('documentID')
   const isNewTask = navigation.getParam('isNewTask')
+  const isCompletedTask = navigation.getParam('isCompletedTask')
 
-  const btnHandler = newTaskStatus => {
-    const nextScreen = newTaskStatus === TASK_STATUS.ACCEPTED ? 'Tasks' : 'TaskClosure';
 
-    navigation.navigate(nextScreen)
-
-    dispatch(setTaskStatus(newTaskStatus))
+  const acceptedBtnHandler = () => {
+    dispatch(setTaskStatus(TASK_STATUS.ACCEPTED))
+    navigation.navigate(SCREEN.TASKS)
   }
+
+  const shippedBtnHandler = () => {
+    navigation.navigate(SCREEN.TASK_CLOSURE, {
+      task
+    })
+  }
+
 
   useEffect(() => {
     dispatch(getTask(documentID))
@@ -35,7 +41,7 @@ export const TaskScreen = ({ navigation }) => {
     return (
       <AppContainer>
         <AppLoader
-          text={`Получаю данные по заказу №\n${documentID}`}
+          text={ `Получаю данные по заказу №\n${ documentID }` }
         />
       </AppContainer>
     )
@@ -43,38 +49,39 @@ export const TaskScreen = ({ navigation }) => {
 
   return (
     <AppContainer>
-       <AppHeader>
-         Задание на перемещение товара
-       </AppHeader>
+      <AppHeader>
+        Задание на перемещение товара
+      </AppHeader>
 
-       <TaskInfo
-         task={task}
-       />
+      <TaskInfo
+        task={ task }
+      />
 
-      <AppHeader style={styles.productListHeader}>
+      <AppHeader style={ styles.productListHeader }>
         Товары:
       </AppHeader>
 
       <TaskProducts
-       products={task.products}
-       totalQuantity={task.totalQuantity}
-       totalAmount={task.totalAmount}
+        products={ task.products }
+        totalQuantity={ task.totalQuantity }
+        totalAmount={ task.totalAmount }
       />
 
-      <View style={styles.buttonsContainer}>
-       <AppButton
-         color='#037bff'
-         onPress={() => btnHandler(TASK_STATUS.ACCEPTED)}
-         disabled={!isNewTask}
-       >
-         Принял
-       </AppButton>
-       <AppButton
-         color='#28a745'
-         onPress={() => btnHandler(TASK_STATUS.SHIPPED)}
-       >
-         Отгрузил
-       </AppButton>
+      <View style={ styles.buttonsContainer }>
+        <AppButton
+          color={ THEME.PRIMARY_COLOR }
+          onPress={ acceptedBtnHandler }
+          disabled={ !isNewTask }
+        >
+          Принял
+        </AppButton>
+        <AppButton
+          color={ THEME.SUCCESS_COLOR }
+          onPress={ shippedBtnHandler }
+          disabled={ isCompletedTask }
+        >
+          Отгрузил
+        </AppButton>
       </View>
     </AppContainer>
   )

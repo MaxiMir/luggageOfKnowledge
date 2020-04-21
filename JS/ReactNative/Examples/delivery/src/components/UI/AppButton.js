@@ -15,7 +15,7 @@ export const AppButton = ({ onPress, children, color = THEME.MAIN_COLOR, disable
 
   return (
     <AppTouchableBlock onPress={ onPress } disabled={ disabled }>
-      <View style={btnContainerStyle}>
+      <View style={ btnContainerStyle }>
         <AppTextBold style={ styles.text }>
           { children }
         </AppTextBold>

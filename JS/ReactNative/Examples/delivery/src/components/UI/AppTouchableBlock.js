@@ -11,7 +11,7 @@ export const AppTouchableBlock = ({ children, onPress, disabled }) => {
     <Wrapper
       onPress={ onPress }
       activeOpacity={ 0.7 }
-      disabled={disabled}
+      disabled={ disabled }
     >
       { children }
     </Wrapper>

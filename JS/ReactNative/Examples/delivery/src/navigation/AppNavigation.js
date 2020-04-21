@@ -16,6 +16,7 @@ import { ProfileScreen } from '../screens/ProfileScreen'
 import { HowToUseScreen } from '../screens/HowToUseScreen'
 import { AddressDirectoryScreen } from '../screens/AddressDirectoryScreen'
 import { TaskIcon } from '../components/Task/TaskIcon/TaskIcon'
+import { SCREEN } from '../consts'
 import { THEME } from '../theme'
 
 const isAndroidOS = Platform.OS === 'android'
@@ -31,33 +32,37 @@ const navigatorOptions = {
 
 const MainNavigator = createStackNavigator(
   {
-    Main: MainScreen,
-    HowToUse: HowToUseScreen,
-    AddressDirectory: AddressDirectoryScreen,
+    [SCREEN.MAIN]: MainScreen,
+    [SCREEN.HOW_TO_USE]: HowToUseScreen,
+    [SCREEN.ADDRESS_DIRECTORY]: AddressDirectoryScreen,
   },
   navigatorOptions
 )
 
 const TasksNavigator = createStackNavigator(
   {
-    Tasks: TasksScreen,
-    Task: TaskScreen,
-    TaskClosure: TaskClosureScreen
+    [SCREEN.TASKS]: TasksScreen,
+    [SCREEN.TASK]: TaskScreen,
+    [SCREEN.TASK_CLOSURE]: TaskClosureScreen
   },
   navigatorOptions
 )
-const PhotoNavigator = createStackNavigator(
+const ScanNavigator = createStackNavigator(
   {
-    Scan: ScanScreen,
+    [SCREEN.SCAN]: ScanScreen
   },
   navigatorOptions
 )
 const HistoryNavigator = createStackNavigator(
-  { History: HistoryScreen },
+  {
+    [SCREEN.HISTORY]: HistoryScreen
+  },
   navigatorOptions
 )
 const ProfileNavigator = createStackNavigator(
-  { Profile: ProfileScreen },
+  {
+    [SCREEN.PROFILE]: ProfileScreen
+  },
   navigatorOptions
 )
 
@@ -73,11 +78,11 @@ const bottomTabsConfig = {
     screen: TasksNavigator,
     navigationOptions: {
       tabBarLabel: 'Задания',
-      tabBarIcon: info => <TaskIcon color={info.tintColor} size={ 25 }/>
+      tabBarIcon: info => <TaskIcon color={ info.tintColor } size={ 25 }/>
     }
   },
   Photo: {
-    screen: PhotoNavigator,
+    screen: ScanNavigator,
     navigationOptions: {
       tabBarLabel: 'Скан',
       tabBarIcon: info => <MaterialIcons name='add-a-photo' size={ 25 } color={ info.tintColor }/>

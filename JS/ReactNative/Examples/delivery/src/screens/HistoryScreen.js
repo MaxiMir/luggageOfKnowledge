@@ -11,10 +11,10 @@ export const HistoryScreen = ({ navigation }) => {
       <AppText>
         HistoryScreen
       </AppText>
-      <AppButton onPress={() => navigation.navigate('Task', {
+      <AppButton onPress={ () => navigation.navigate('Task', {
         documentID: Date.now().toString(),
         isNewTask: true
-      })}>
+      }) }>
         На заказ
       </AppButton>
     </AppContainer>

@@ -3,8 +3,8 @@ import { Text, StyleSheet } from 'react-native'
 
 
 export const AppTextBold = ({ style, children }) => (
-  <Text style={{...styles.default, ...style}}>
-    {children}
+  <Text style={ { ...styles.default, ...style } }>
+    { children }
   </Text>
 )
 

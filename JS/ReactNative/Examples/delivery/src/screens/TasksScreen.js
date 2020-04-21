@@ -3,12 +3,13 @@ import { View, StyleSheet } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { AppContainer } from '../components/UI/AppContainer'
-import { AppLoader } from '../components/UI/AppLoader';
-import { getAllTasks } from '../store/actions/task';
-import { TaskList } from '../components/Task/TaskList/TaskList';
-import { AppTextBold } from '../components/UI/AppTextBold';
-import { AppButton } from '../components/UI/AppButton';
-import { THEME } from '../theme';
+import { AppLoader } from '../components/UI/AppLoader'
+import { AppTextBold } from '../components/UI/AppTextBold'
+import { AppButton } from '../components/UI/AppButton'
+import { TaskList } from '../components/Task/TaskList/TaskList'
+import { getAllTasks } from '../store/actions/task'
+import { SCREEN } from '../consts'
+import { THEME } from '../theme'
 
 
 export const TasksScreen = ({ navigation }) => {
@@ -20,13 +21,14 @@ export const TasksScreen = ({ navigation }) => {
   }, [dispatch])
 
   const taskPressHandler = documentID => {
-    navigation.navigate('Task', {
+    navigation.navigate(SCREEN.TASK, {
       documentID,
-      isNewTask: false
+      isNewTask: false,
+      isCompletedTask: false
     })
   }
 
-  const scanBtnHandler = () => navigation.navigate('Photo')
+  const scanBtnHandler = () => navigation.navigate(SCREEN.SCAN)
 
   if (!tasks) {
     return (
@@ -40,15 +42,15 @@ export const TasksScreen = ({ navigation }) => {
 
   const content = tasks.length ?
     <TaskList
-      tasks={tasks}
-      taskPressHandler={taskPressHandler}
+      tasks={ tasks }
+      taskPressHandler={ taskPressHandler }
     />
     :
-    <View style={styles.noTaskContainer}>
-      <AppTextBold style={styles.noTaskText}>
+    <View style={ styles.noTaskContainer }>
+      <AppTextBold style={ styles.noTaskText }>
         Список задач пуст
       </AppTextBold>
-      <AppButton onPress={scanBtnHandler}>
+      <AppButton onPress={ scanBtnHandler }>
         Сканировать шрихкод
       </AppButton>
     </View>

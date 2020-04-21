@@ -6,15 +6,18 @@ const MOCK_TASK = {
   pharmacySender: 'АУ1032 Спб Абрамова 8',
   pharmacyRecipient: 'АУ1003 Спб Гражданский 66',
   products: [
-    {id: '187', name: 'Лозартан таб. п.п.o 100м№90', quantity: 1, price: '376.26'},
-    {id: '187', name: 'Лозартан таб. п.п.o 100м№90', quantity: 1, price: '376.26'},
+    { id: '187', name: 'Лозартан таб. п.п.o 100м№90', quantity: 1, price: '376.26' },
+    { id: '188', name: 'Лозартан таб. п.п.o 100м№90', quantity: 2, price: '1376.26' },
+    { id: '189', name: 'Лозартан таб. п.п.o 100м№90', quantity: 3, price: '5376.26' },
+    { id: '184', name: 'Лозартан таб. п.п.o 100м№90', quantity: 4, price: '4376.26' },
+    { id: '181', name: 'Лозартан таб. п.п.o 100м№90', quantity: 5, price: '5376.26' },
   ],
   totalQuantity: 8,
   totalAmount: '3010.08'
 }
 
 export const getTask = documentID => async dispatch => {
-  const task = {...MOCK_TASK, documentID}
+  const task = { ...MOCK_TASK, documentID }
 
   setTimeout(() => {
     dispatch({
@@ -26,18 +29,21 @@ export const getTask = documentID => async dispatch => {
 
 export const getAllTasks = () => async dispatch => {
   setTimeout(() => {
-    const task = {...MOCK_TASK }
+    const task1 = { ...MOCK_TASK, documentID: Date.now().toString() }
+    const task2 = { ...MOCK_TASK, documentID: Date.now().toString() + 1 }
 
     dispatch({
       type: GET_ALL_TASKS,
-      payload: [ task ]
+      payload: [task1, task2]
     })
   }, 500)
 }
 
 export const setTaskStatus = status => async dispatch => {
-  dispatch({
-    type: SET_TASK_STATUS,
-    payload: status
-  })
+  setTimeout(() => {
+    dispatch({
+      type: SET_TASK_STATUS,
+      payload: status
+    })
+  }, 500)
 }

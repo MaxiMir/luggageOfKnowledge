@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 import { Provider } from 'react-redux'
 import { AppLoading } from 'expo'
 
@@ -12,16 +12,16 @@ export default function App() {
   if (!isReady) {
     return (
       <AppLoading
-        startAsync={initAppHandler}
-        onFinish={() => setIsReady(true)}
-        onError={console.log}
+        startAsync={ initAppHandler }
+        onFinish={ () => setIsReady(true) }
+        onError={ console.log }
       />
     )
   }
 
   return (
-    <Provider store={store}>
-      <AppNavigation />
+    <Provider store={ store }>
+      <AppNavigation/>
     </Provider>
   );
 }

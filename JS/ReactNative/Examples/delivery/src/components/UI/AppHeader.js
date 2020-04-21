@@ -6,8 +6,8 @@ import { THEME } from '../../theme'
 
 
 export const AppHeader = ({ children, style }) => (
-  <AppTextBold style={{...styles.default, ...style}}>
-    {children}
+  <AppTextBold style={ { ...styles.default, ...style } }>
+    { children }
   </AppTextBold>
 )
 

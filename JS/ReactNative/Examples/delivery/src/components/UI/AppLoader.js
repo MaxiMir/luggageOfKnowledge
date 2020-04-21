@@ -5,10 +5,10 @@ import { AppTextBold } from './AppTextBold'
 import { THEME } from '../../theme'
 
 export const AppLoader = ({ color = THEME.MAIN_COLOR, text = null }) => (
-  <View style={styles.loaderContainer}>
-    { text && <AppTextBold style={styles.text}>{text}</AppTextBold> }
+  <View style={ styles.loaderContainer }>
+    { text && <AppTextBold style={ styles.text }>{ text }</AppTextBold> }
     <ActivityIndicator
-      color={color}
+      color={ color }
     />
   </View>
 )

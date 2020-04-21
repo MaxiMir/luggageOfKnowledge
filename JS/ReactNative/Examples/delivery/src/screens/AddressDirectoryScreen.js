@@ -1,14 +1,18 @@
 import React from 'react'
 
 import { AppContainer } from '../components/UI/AppContainer'
-import { AppText } from '../components/UI/AppText';
+import { AppHeader } from '../components/UI/AppHeader'
+import { AppText } from '../components/UI/AppText'
 
 
 export const AddressDirectoryScreen = ({ navigation }) => {
   return (
     <AppContainer>
+      <AppHeader>
+        Справочник адресов
+      </AppHeader>
       <AppText>
-        AddressDirectory
+        Логика тут
       </AppText>
     </AppContainer>
   )

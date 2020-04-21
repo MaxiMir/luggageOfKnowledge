@@ -2,10 +2,10 @@ import React from 'react'
 import { StyleSheet, View } from 'react-native'
 
 import { AppTextBold } from './AppTextBold'
-import { THEME } from '../../theme';
+import { THEME } from '../../theme'
 
 
-export const AppIconContainer = ({ children, number}) => (
+export const AppIconContainer = ({ children, number }) => (
   <View style={ styles.iconContainer }>
     {
       number > 0 &&
@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: -15,
     right: -15,
-    backgroundColor: 'red',
+    backgroundColor: THEME.DANGER_COLOR,
     borderRadius: 12,
     zIndex: 1000,
   },

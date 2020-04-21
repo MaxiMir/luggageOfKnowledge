@@ -10,18 +10,14 @@ export const hideLoader = () => ({
 })
 
 export const showLoaderWithMessage = message => async dispatch => {
- setTimeout(() => {
-   dispatch({
-     type: SHOW_LOADER_WITH_MESSAGE,
-     payload: message
-   })
- }, 2500)
+  dispatch({
+    type: SHOW_LOADER_WITH_MESSAGE,
+    payload: message
+  })
 }
 
 export const hideLoaderWithMessage = () => async dispatch => {
-  setTimeout(() => {
-    dispatch({
-      type: HIDE_LOADER_WITH_MESSAGE,
-    })
-  }, 1500)
+  dispatch({
+    type: HIDE_LOADER_WITH_MESSAGE,
+  })
 }

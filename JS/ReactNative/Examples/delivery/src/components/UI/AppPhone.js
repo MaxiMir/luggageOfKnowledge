@@ -7,21 +7,15 @@ import { THEME } from '../../theme'
 
 
 export const AppPhone = ({ phone, color = THEME.MAIN_COLOR }) => {
-  const pressHandler = () => Linking.openURL(`tel:${phone}`)
+  const pressHandler = () => Linking.openURL(`tel:${ phone }`)
 
   return (
-    <AppTouchableBlock onPress={pressHandler}>
+    <AppTouchableBlock onPress={ pressHandler }>
       <View>
-        <AppTextBold style={{...styles.phone, color }}>
+        <AppTextBold style={ { ...styles.phone, color } }>
           { phone }
         </AppTextBold>
       </View>
     </AppTouchableBlock>
   )
 }
-
-const styles = StyleSheet.create({
-  phone: {
-
-  }
-})

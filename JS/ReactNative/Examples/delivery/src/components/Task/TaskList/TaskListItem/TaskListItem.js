@@ -8,9 +8,9 @@ import currencyFilter from '../../../../filters/currency.filter'
 import { THEME } from '../../../../theme';
 
 export const TaskListItem = ({ task, onPress }) => (
-    <AppTouchableBlock onPress={onPress} >
-      <View style={ styles.taskContainer }>
-      <View style={{ ...styles.block, ...styles.blockWithBottomLine }}>
+  <AppTouchableBlock onPress={ onPress }>
+    <View style={ styles.taskContainer }>
+      <View style={ { ...styles.block, ...styles.blockWithBottomLine } }>
         <AppText>
           <AppTextBold>№: </AppTextBold>
           { task.documentID }
@@ -22,7 +22,7 @@ export const TaskListItem = ({ task, onPress }) => (
         </AppText>
       </View>
 
-      <View style={{...styles.blockWithBottomLine, ...styles.body}}>
+      <View style={ { ...styles.blockWithBottomLine, ...styles.body } }>
         <AppText>
           <AppTextBold>Отправитель: </AppTextBold>
           { task.pharmacySender }
@@ -34,7 +34,7 @@ export const TaskListItem = ({ task, onPress }) => (
         </AppText>
       </View>
 
-      <View style={styles.block}>
+      <View style={ styles.block }>
         <AppText>
           <AppTextBold>Упаковок: </AppTextBold>
           { task.totalQuantity }

@@ -3,27 +3,26 @@ import { View, Image, StyleSheet } from 'react-native'
 
 import { AppContainer } from '../components/UI/AppContainer'
 import { AppButton } from '../components/UI/AppButton'
+import { SCREEN } from '../consts'
 import { THEME } from '../theme'
 
 
 export const MainScreen = ({ navigation }) => {
   return (
-    <AppContainer style={styles.container}>
-        <Image
-          source={require('../../assets/logo-min.png')}
-          style={styles.image}
-        />
+    <AppContainer style={ styles.container }>
+      <Image
+        source={ require('../../assets/logo-min.png') }
+        style={ styles.image }
+      />
+      <View style={ styles.buttonsContainer }>
+        <AppButton onPress={ () => navigation.navigate(SCREEN.HOW_TO_USE) }>
+          Как использовать приложение
+        </AppButton>
 
-        <View style={styles.buttonsContainer}>
-          <AppButton onPress={() => navigation.navigate('HowToUse')}>
-            Как использовать приложение
-          </AppButton>
-
-          <AppButton onPress={() => navigation.navigate('AddressDirectory')}>
-            Справочник адресов
-          </AppButton>
-
-        </View>
+        <AppButton onPress={ () => navigation.navigate(SCREEN.ADDRESS_DIRECTORY) }>
+          Справочник адресов
+        </AppButton>
+      </View>
     </AppContainer>
   )
 }

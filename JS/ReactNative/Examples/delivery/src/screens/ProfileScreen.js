@@ -14,7 +14,7 @@ export const ProfileScreen = ({ navigation }) => {
   return (
     <AppContainer>
       <User
-        user={user}
+        user={ user }
       />
     </AppContainer>
   )

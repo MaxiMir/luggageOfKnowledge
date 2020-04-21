@@ -1,5 +1,5 @@
-import Intl from "intl"
-import "intl/locale-data/jsonp/ru-RU.js"
+import Intl from 'intl'
+import 'intl/locale-data/jsonp/ru-RU.js'
 
 
 export default (value, currency = 'RUB') => {

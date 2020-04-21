@@ -13,9 +13,9 @@ export const TaskList = ({ tasks, taskPressHandler }) => {
       </AppHeader>
 
       <FlatList
-        data={tasks}
-        keyExtractor={task => task.documentID}
-        renderItem={({item}) => <TaskListItem task={item} onPress={() => taskPressHandler(item.documentID)} />}
+        data={ tasks }
+        keyExtractor={ task => task.documentID }
+        renderItem={ ({ item }) => <TaskListItem task={ item } onPress={ () => taskPressHandler(item.documentID) }/> }
       />
     </View>
   )

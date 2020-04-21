@@ -5,10 +5,10 @@ import { THEME } from '../../../theme'
 
 
 export const UserPhoto = ({ image }) => (
-  <View style={styles.imageContainer}>
+  <View style={ styles.imageContainer }>
     <Image
-      source={require('../../../../assets/mock/mockAvatar.png')}
-      style={styles.image}
+      source={ require('../../../../assets/mock/mockAvatar.png') }
+      style={ styles.image }
     />
   </View>
 )

@@ -6,7 +6,8 @@ import { BarCodeScanner } from 'expo-barcode-scanner'
 import { AppContainer } from '../components/UI/AppContainer'
 import { AppLoader } from '../components/UI/AppLoader'
 import { AppText } from '../components/UI/AppText'
-import { AppButton } from '../components/UI/AppButton';
+import { AppButton } from '../components/UI/AppButton'
+import { SCREEN } from '../consts'
 
 
 export const ScanScreen = ({ navigation }) => {
@@ -21,7 +22,7 @@ export const ScanScreen = ({ navigation }) => {
   };
 
   const handleBarCodeScanned = ({ data }) => {
-    navigation.navigate('Task', {
+    navigation.navigate(SCREEN.TASK, {
       documentID: data,
       isNewTask: true
     })
@@ -38,25 +39,25 @@ export const ScanScreen = ({ navigation }) => {
 
 
   if (!askCameraPermission) {
-    return <AppLoader />
+    return <AppLoader/>
   }
 
   const content = hasCameraPermission ?
     <BarCodeScanner
-      onBarCodeScanned={handleBarCodeScanned}
-      style={styles.scanner}
+      onBarCodeScanned={ handleBarCodeScanned }
+      style={ styles.scanner }
     />
     :
     <View>
       <AppText>Для работы приложения необходим доступ к камере</AppText>
-      <AppButton onPress={() => navigation.push('PhotoScreen')}>
+      <AppButton onPress={ () => navigation.push(SCREEN.SCAN) }>
         Попробовать снова
       </AppButton>
     </View>
 
   return (
     <AppContainer>
-      {content}
+      { content }
     </AppContainer>
   )
 }

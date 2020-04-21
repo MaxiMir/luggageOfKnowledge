@@ -7,29 +7,29 @@ import { THEME } from '../../../theme'
 
 export const TaskProducts = ({ products, totalQuantity, totalAmount }) => {
   const tableHead = ['Название товара', 'Уп.', 'Сумма']
-  const tableBody = products.map(({name, quantity, price }) => [name, quantity, currencyFilter(price)])
+  const tableBody = products.map(({ name, quantity, price }) => [name, quantity, currencyFilter(price)])
   const tableFooter = ['Итого:', totalQuantity, currencyFilter(totalAmount)]
   const flexArr = [5, 1, 2]
 
   return (
-    <ScrollView style={styles.scrollView}>
-      <Table borderStyle={{borderWidth: 2, borderColor: '#c8e1ff'}}>
+    <ScrollView style={ styles.scrollView }>
+      <Table borderStyle={ { borderWidth: 2, borderColor: '#c8e1ff' } }>
         <Row
-          data={tableHead}
-          style={styles.head}
-          textStyle={styles.textInHead}
-          flexArr={flexArr}
+          data={ tableHead }
+          style={ styles.head }
+          textStyle={ styles.textInHead }
+          flexArr={ flexArr }
         />
         <Rows
-          data={tableBody}
-          textStyle={styles.textInBody}
-          flexArr={flexArr}
+          data={ tableBody }
+          textStyle={ styles.textInBody }
+          flexArr={ flexArr }
         />
         <Row
-          data={tableFooter}
-          style={styles.footer}
-          textStyle={styles.textInFooter}
-          flexArr={flexArr}
+          data={ tableFooter }
+          style={ styles.footer }
+          textStyle={ styles.textInFooter }
+          flexArr={ flexArr }
         />
       </Table>
     </ScrollView>
