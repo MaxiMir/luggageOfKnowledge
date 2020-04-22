@@ -38,7 +38,3 @@ export const taskReducer = (state = initialState, action) => {
 
   return handler(state, action)
 }
-
-/**
- Сканирование одинаковых кодов -> ошибка
- */

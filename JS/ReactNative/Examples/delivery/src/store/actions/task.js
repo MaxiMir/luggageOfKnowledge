@@ -32,6 +32,7 @@ export const getTask = documentID => async dispatch => {
 export const getAllTasks = () => async dispatch => {
   setTimeout(() => {
     const task = { ...MOCK_TASK, documentID: Date.now().toString() }
+
     dispatch({
       type: GET_ALL_TASKS,
       payload: [task]

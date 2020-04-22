@@ -112,7 +112,7 @@ const BottomNavigator = isAndroidOS ?
     barStyle: {
       backgroundColor: THEME.MAIN_COLOR,
       height: 75,
-      justifyContent: 'center'
+      justifyContent: 'center',
     }
   })
   :

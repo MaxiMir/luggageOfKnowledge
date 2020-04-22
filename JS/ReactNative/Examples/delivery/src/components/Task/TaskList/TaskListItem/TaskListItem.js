@@ -10,7 +10,6 @@ import { THEME } from '../../../../theme'
 
 export const TaskListItem = ({ task, onPress, isCompleted }) => {
   const borderColor = isCompleted ? THEME.SECONDARY_COLOR : THEME.MAIN_COLOR
-
   const taskItemStyle = { ...styles.taskContainer, borderColor }
   const headerStyle = { ...styles.block, ...styles.blockWithBottomLine }
   const bodyStyle = { ...styles.blockWithBottomLine, ...styles.body, borderColor }
@@ -61,6 +60,7 @@ export const TaskListItem = ({ task, onPress, isCompleted }) => {
 
 const styles = StyleSheet.create({
   taskContainer: {
+    position: 'relative',
     borderWidth: 2,
     borderRadius: 10,
     padding: THEME.PADDING,

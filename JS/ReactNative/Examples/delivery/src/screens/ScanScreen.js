@@ -8,6 +8,7 @@ import { AppLoader } from '../components/UI/AppLoader'
 import { AppText } from '../components/UI/AppText'
 import { AppButton } from '../components/UI/AppButton'
 import { SCREEN } from '../consts'
+import { THEME } from '../theme';
 
 
 export const ScanScreen = ({ navigation }) => {
@@ -48,8 +49,8 @@ export const ScanScreen = ({ navigation }) => {
       style={ styles.scanner }
     />
     :
-    <View>
-      <AppText>Для работы приложения необходим доступ к камере</AppText>
+    <View style={styles.noAccessContainer}>
+      <AppText style={styles.noAccessText}>Для работы приложения необходим доступ к камере</AppText>
       <AppButton onPress={ () => navigation.push(SCREEN.SCAN) }>
         Попробовать снова
       </AppButton>
@@ -73,5 +74,13 @@ const styles = StyleSheet.create({
     right: 0,
     top: 0,
     bottom: 0,
+  },
+  noAccessContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  noAccessText: {
+    marginBottom: THEME.MARGIN_BOTTOM
   }
 })
