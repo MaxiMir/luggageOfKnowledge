@@ -3,13 +3,13 @@ import thunk from 'redux-thunk'
 
 import { appReducer } from './reducers/app'
 import { taskReducer } from './reducers/task'
-import { addressReducer } from './reducers/address'
+import { pharmacyReducer } from './reducers/pharmacy'
 
 
 const rootReducer = combineReducers({
   app: appReducer,
   task: taskReducer,
-  address: addressReducer
+  pharmacy: pharmacyReducer
 })
 
 export default createStore(

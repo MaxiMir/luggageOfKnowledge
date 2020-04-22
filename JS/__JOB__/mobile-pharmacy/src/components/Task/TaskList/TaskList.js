@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, FlatList } from 'react-native'
+import { View, FlatList, StyleSheet } from 'react-native'
 
 import { AppHeader } from '../../UI/AppHeader'
 import { TaskListItem } from './TaskListItem/TaskListItem'
@@ -7,7 +7,7 @@ import { TaskListItem } from './TaskListItem/TaskListItem'
 
 export const TaskList = ({ tasks, taskPressHandler, isCompleted = false }) => {
   return (
-    <View>
+    <View style={styles.taskListContainer}>
       <AppHeader>
         { isCompleted ? 'Выполненные' : 'Текущие' } задания
       </AppHeader>
@@ -22,3 +22,11 @@ export const TaskList = ({ tasks, taskPressHandler, isCompleted = false }) => {
     </View>
   )
 }
+
+const styles = StyleSheet.create({
+  taskListContainer: {
+    width: '100%'
+  }
+})
+
+

@@ -32,7 +32,7 @@ export const AddTodo = ({ onSubmit }) => {
   // onChangeText - изменение текста в инпуте (здесь еще меняем локальный state)
   // onPress <-> onClick - в вебе
   // autoCorrect - настройка автозамены в словах
-  // autoCapitalize - настройка вверхнего регистра (characteres - все символы | words - каждая буква в каждом слове | sentences - первая буква в предложении (по умолч.) | none - все в маленьком регистре)
+  // autoCapitalize - настройка вверхнего регистра (characters - все символы | words - каждая буква в каждом слове | sentences - первая буква в предложении (по умолч.) | none - все в маленьком регистре)
   // keyboardType - тип клавиатуры
 }
 

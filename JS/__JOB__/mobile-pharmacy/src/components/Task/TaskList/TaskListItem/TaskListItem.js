@@ -60,13 +60,12 @@ export const TaskListItem = ({ task, onPress, isCompleted }) => {
 
 const styles = StyleSheet.create({
   taskContainer: {
-    position: 'relative',
     borderWidth: 2,
     borderRadius: 10,
     padding: THEME.PADDING,
     marginBottom: THEME.MARGIN_BOTTOM,
-    backgroundColor: '#ffffff',
-    shadowColor: "#000",
+    backgroundColor: THEME.WHITE_COLOR,
+    shadowColor: THEME.BLACK_COLOR,
     shadowOffset: {
       width: 0,
       height: 1,

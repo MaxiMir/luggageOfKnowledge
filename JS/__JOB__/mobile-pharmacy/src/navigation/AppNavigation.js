@@ -6,6 +6,7 @@ import { createBottomTabNavigator } from 'react-navigation-tabs'
 import { createMaterialBottomTabNavigator } from 'react-navigation-material-bottom-tabs'
 import { AntDesign, MaterialIcons, FontAwesome5 } from '@expo/vector-icons'
 
+import { AuthScreen } from '../screens/AuthScreen'
 import { MainScreen } from '../screens/MainScreen'
 import { TasksScreen } from '../screens/TasksScreen'
 import { TaskScreen } from '../screens/TaskScreen'
@@ -18,7 +19,6 @@ import { AddressDirectoryScreen } from '../screens/AddressDirectoryScreen'
 import { TaskIcon } from '../components/Task/TaskIcon/TaskIcon'
 import { SCREEN } from '../consts'
 import { THEME } from '../theme'
-
 
 const isAndroidOS = Platform.OS === 'android'
 
@@ -33,6 +33,7 @@ const navigatorOptions = {
 
 const MainNavigator = createStackNavigator(
   {
+    [SCREEN.AUTH]: AuthScreen,
     [SCREEN.MAIN]: MainScreen,
     [SCREEN.HOW_TO_USE]: HowToUseScreen,
     [SCREEN.ADDRESS_DIRECTORY]: AddressDirectoryScreen,

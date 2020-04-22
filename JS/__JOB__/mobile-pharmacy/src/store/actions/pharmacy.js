@@ -1,6 +1,6 @@
-import { GET_ALL_ADDRESSES } from '../types';
+import { GET_ALL_PHARMACIES } from '../types';
 
-const MOCK_ADDRESSES = [
+const MOCK_PHARMACIES = [
   {
     code: 'АУ1032',
     address: 'Спб Абрамова 8',
@@ -36,15 +36,14 @@ const MOCK_ADDRESSES = [
     operationMode: '10-18 ежедневно',
     phone: '8800-888-88-66'
   },
-
 ]
 
-export const getAllAddresses = () => async dispatch => {
+export const getAllPharmacies = () => async dispatch => {
   setTimeout(() => {
 
     dispatch({
-      type: GET_ALL_ADDRESSES,
-      payload: MOCK_ADDRESSES
+      type: GET_ALL_PHARMACIES,
+      payload: MOCK_PHARMACIES
     })
 
   }, 500)

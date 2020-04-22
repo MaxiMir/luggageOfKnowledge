@@ -1,4 +1,5 @@
 export const SCREEN = {
+  AUTH: 'Auth',
   TASK: 'Task',
   TASK_CLOSURE: 'TaskClosure',
   TASKS: 'TasksScreen',

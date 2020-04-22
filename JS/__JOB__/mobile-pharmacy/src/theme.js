@@ -2,6 +2,7 @@ export const THEME = {
   MAIN_COLOR: '#303f9f',
   BACKGROUND_COLOR: '#f8f8f8',
   WHITE_COLOR: '#fff',
+  BLACK_COLOR: '#000000',
   SUCCESS_COLOR: '#28a745',
   PRIMARY_COLOR: '#037bff',
   DANGER_COLOR: '#dc3545',
