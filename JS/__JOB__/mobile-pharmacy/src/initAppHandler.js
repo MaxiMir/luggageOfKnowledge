@@ -6,4 +6,6 @@ export const initAppHandler = async () => {
     'open-bold': require('../assets/fonts/OpenSans-Bold.ttf')
   })
 
+
+
 }

@@ -5,6 +5,7 @@ import { AppText } from '../UI/AppText'
 import { AppTextBold } from '../UI/AppTextBold'
 import { AppPhone } from '../UI/AppPhone'
 import { UserPhoto } from './UserPhoto/UserPhoto'
+import { THEME } from '../../theme';
 
 
 export const User = ({ user }) => (
@@ -37,11 +38,12 @@ export const User = ({ user }) => (
 const styles = StyleSheet.create({
   info: {
     flex: 1,
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   infoRow: {
     width: '100%',
-    flexDirection: 'row'
+    flexDirection: 'row',
+    marginBottom: THEME.MARGIN_BOTTOM / 2
   }
 })
 

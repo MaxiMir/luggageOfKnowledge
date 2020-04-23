@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
-import { AppContainer } from '../components/UI/AppContainer'
+import { AppContainer } from '../hoc/AppContainer'
 import { AppLoader } from '../components/UI/AppLoader'
 import { PharmacyList } from '../components/Pharmacy/PharmacyList/PharmacyList'
 import { getAllPharmacies } from '../store/actions/pharmacy'

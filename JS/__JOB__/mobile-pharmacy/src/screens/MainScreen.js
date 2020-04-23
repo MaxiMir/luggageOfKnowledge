@@ -1,7 +1,7 @@
 import React from 'react'
 import { View, Image, StyleSheet } from 'react-native'
 
-import { AppContainer } from '../components/UI/AppContainer'
+import { AppContainer } from '../hoc/AppContainer'
 import { AppButton } from '../components/UI/AppButton'
 import { SCREEN } from '../consts'
 import { THEME } from '../theme'

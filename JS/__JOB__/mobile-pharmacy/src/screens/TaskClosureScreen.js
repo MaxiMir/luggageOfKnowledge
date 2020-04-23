@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { View, TextInput, TouchableWithoutFeedback, Keyboard, StyleSheet } from 'react-native'
 
-import { AppContainer } from '../components/UI/AppContainer'
+import { AppContainer } from '../hoc/AppContainer'
 import { AppHeader } from '../components/UI/AppHeader'
 import { AppButton } from '../components/UI/AppButton'
 import { AppTextBold } from '../components/UI/AppTextBold'

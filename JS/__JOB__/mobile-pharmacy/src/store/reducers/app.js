@@ -1,30 +1,25 @@
-import { SHOW_LOADER, HIDE_LOADER, SHOW_LOADER_WITH_MESSAGE, HIDE_LOADER_WITH_MESSAGE } from '../types';
+import {  SHOW_SUCCESS_MESSAGE, SHOW_ERROR_MESSAGE, CLEAR_MESSAGE } from '../types'
 
 
 const initialState = {
-  loading: true,
-  error: null,
-  message: null
+  message: null,
+  isSuccess: false
 }
 
 const handlers = {
-  [SHOW_LOADER]: state => ({
+  [SHOW_SUCCESS_MESSAGE]: (state, { payload }) => ({
     ...state,
-    loading: true
+    message: payload,
+    isSuccess: true
   }),
-  [HIDE_LOADER]: state => ({
+  [SHOW_ERROR_MESSAGE]: (state, { payload }) => ({
     ...state,
-    loading: false
+    message: payload,
+    isSuccess: false
   }),
-  [SHOW_LOADER_WITH_MESSAGE]: (state, action) => ({
+  [CLEAR_MESSAGE]: state => ({
     ...state,
-    message: action.payload,
-    loading: true
-  }),
-  [HIDE_LOADER_WITH_MESSAGE]: state => ({
-    ...state,
-    message: null,
-    loading: false
+    message: null
   }),
   DEFAULT: state => state
 }

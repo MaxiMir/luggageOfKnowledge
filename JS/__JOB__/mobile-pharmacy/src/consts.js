@@ -8,5 +8,11 @@ export const SCREEN = {
   ADDRESS_DIRECTORY: 'AddressDirectory',
   SCAN: 'Scan',
   HISTORY: 'History',
-  PROFILE: 'Profile'
+  PROFILE: 'Profile',
+  LOGOUT: 'Logout'
+}
+
+export const SETTINGS = {
+  PHONE_LENGTH: 11,
+  PASSWORD_MIN_LENGTH: 1
 }

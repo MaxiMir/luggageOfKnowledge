@@ -4,9 +4,8 @@ import { createAppContainer } from 'react-navigation'
 import { createStackNavigator } from 'react-navigation-stack'
 import { createBottomTabNavigator } from 'react-navigation-tabs'
 import { createMaterialBottomTabNavigator } from 'react-navigation-material-bottom-tabs'
-import { AntDesign, MaterialIcons, FontAwesome5 } from '@expo/vector-icons'
+import { AntDesign, MaterialIcons } from '@expo/vector-icons'
 
-import { AuthScreen } from '../screens/AuthScreen'
 import { MainScreen } from '../screens/MainScreen'
 import { TasksScreen } from '../screens/TasksScreen'
 import { TaskScreen } from '../screens/TaskScreen'
@@ -16,6 +15,7 @@ import { HistoryScreen } from '../screens/HistoryScreen'
 import { ProfileScreen } from '../screens/ProfileScreen'
 import { HowToUseScreen } from '../screens/HowToUseScreen'
 import { AddressDirectoryScreen } from '../screens/AddressDirectoryScreen'
+import { LogoutScreen } from '../screens/LogoutScreen'
 import { TaskIcon } from '../components/Task/TaskIcon/TaskIcon'
 import { SCREEN } from '../consts'
 import { THEME } from '../theme'
@@ -33,7 +33,6 @@ const navigatorOptions = {
 
 const MainNavigator = createStackNavigator(
   {
-    [SCREEN.AUTH]: AuthScreen,
     [SCREEN.MAIN]: MainScreen,
     [SCREEN.HOW_TO_USE]: HowToUseScreen,
     [SCREEN.ADDRESS_DIRECTORY]: AddressDirectoryScreen,
@@ -63,7 +62,8 @@ const HistoryNavigator = createStackNavigator(
 )
 const ProfileNavigator = createStackNavigator(
   {
-    [SCREEN.PROFILE]: ProfileScreen
+    [SCREEN.PROFILE]: ProfileScreen,
+    [SCREEN.LOGOUT]: LogoutScreen
   },
   navigatorOptions
 )

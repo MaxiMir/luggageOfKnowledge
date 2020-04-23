@@ -1,23 +1,25 @@
-import { HIDE_LOADER, HIDE_LOADER_WITH_MESSAGE, SHOW_LOADER, SHOW_LOADER_WITH_MESSAGE } from '../types';
+import { SHOW_SUCCESS_MESSAGE, SHOW_ERROR_MESSAGE, CLEAR_MESSAGE } from '../types';
 
 
-export const showLoader = () => ({
-  type: SHOW_LOADER
-})
+export const showAndHideMessage = (message, isSuccess = true, showTimeMs = 3000) => async dispatch => {
+  dispatch(showMessage(message, isSuccess))
 
-export const hideLoader = () => ({
-  type: HIDE_LOADER
-})
-
-export const showLoaderWithMessage = message => async dispatch => {
-  dispatch({
-    type: SHOW_LOADER_WITH_MESSAGE,
-    payload: message
-  })
+  setTimeout(() => {
+    dispatch(clearMessage())
+  }, showTimeMs)
 }
 
-export const hideLoaderWithMessage = () => async dispatch => {
-  dispatch({
-    type: HIDE_LOADER_WITH_MESSAGE,
-  })
+export const showMessage = (message, isSuccess) => {
+  const type = isSuccess ? SHOW_SUCCESS_MESSAGE : SHOW_ERROR_MESSAGE
+
+  return {
+    type,
+    payload: message
+  }
+}
+
+export const clearMessage = () => {
+  return {
+    type: CLEAR_MESSAGE
+  }
 }

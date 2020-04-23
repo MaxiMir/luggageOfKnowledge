@@ -3,8 +3,9 @@ import { Provider } from 'react-redux'
 import { AppLoading } from 'expo'
 
 import { initAppHandler } from './src/initAppHandler'
-import { AppNavigation } from './src/navigation/AppNavigation'
+import { NavigationManager } from './src/navigation/NavigationManager'
 import store from './src/store'
+
 
 export default function App() {
   const [isReady, setIsReady] = useState(false)
@@ -21,7 +22,7 @@ export default function App() {
 
   return (
     <Provider store={ store }>
-      <AppNavigation/>
+      <NavigationManager />
     </Provider>
   );
 }

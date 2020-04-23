@@ -3,7 +3,7 @@ import { View, StyleSheet } from 'react-native'
 import * as Permissions from 'expo-permissions'
 import { BarCodeScanner } from 'expo-barcode-scanner'
 
-import { AppContainer } from '../components/UI/AppContainer'
+import { AppContainer } from '../hoc/AppContainer'
 import { AppLoader } from '../components/UI/AppLoader'
 import { AppText } from '../components/UI/AppText'
 import { AppButton } from '../components/UI/AppButton'

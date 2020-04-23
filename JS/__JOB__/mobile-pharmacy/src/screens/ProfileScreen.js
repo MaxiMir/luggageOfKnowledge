@@ -1,7 +1,10 @@
 import React from 'react'
 
-import { AppContainer } from '../components/UI/AppContainer'
+import { AppContainer } from '../hoc/AppContainer'
 import { User } from '../components/User/User'
+import { AppButton } from '../components/UI/AppButton'
+import { SCREEN } from '../consts'
+import { THEME } from '../theme'
 
 
 export const ProfileScreen = ({ navigation }) => {
@@ -17,6 +20,13 @@ export const ProfileScreen = ({ navigation }) => {
       <User
         user={ user }
       />
+      <AppButton
+        color={THEME.DANGER_COLOR}
+        onPress={() => navigation.navigate(SCREEN.LOGOUT)}
+        style={{marginTop: 20}}
+      >
+        Выйти
+      </AppButton>
     </AppContainer>
   )
 }

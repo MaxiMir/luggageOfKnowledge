@@ -17,26 +17,24 @@ export const PharmacyList = ({ pharmacies }) => {
   }
 
   return (
-    <TouchableWithoutFeedback onPress={ () => Keyboard.dismiss() }>
-      <View style={ styles.pharmacyListContainer }>
-        <View style={ styles.searchInputContainer }>
-          <TextInput
-            style={ styles.searchInput }
-            value={ searchValue }
-            placeholder='Поиск по коду АУ или адресу'
-            onChangeText={ setSearchValue }
-          />
-        </View>
-
-        <FlatList
-          data={ pharmacies }
-          keyExtractor={ pharmacy => pharmacy.code }
-          renderItem={ ({ item }) => (
-            <PharmacyListItem pharmacy={ item }/>
-          ) }
+    <View style={ styles.pharmacyListContainer }>
+      <View style={ styles.searchInputContainer }>
+        <TextInput
+          style={ styles.searchInput }
+          value={ searchValue }
+          placeholder='Поиск по коду АУ или адресу'
+          onChangeText={ setSearchValue }
         />
       </View>
-    </TouchableWithoutFeedback>
+
+      <FlatList
+        data={ pharmacies }
+        keyExtractor={ pharmacy => pharmacy.code }
+        renderItem={ ({ item }) => (
+          <PharmacyListItem pharmacy={ item }/>
+        ) }
+      />
+    </View>
   )
 }
 

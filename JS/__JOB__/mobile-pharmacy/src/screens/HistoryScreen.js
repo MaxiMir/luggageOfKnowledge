@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import { View, StyleSheet } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 
-import { AppContainer } from '../components/UI/AppContainer'
+import { AppContainer } from '../hoc/AppContainer'
 import { AppLoader } from '../components/UI/AppLoader'
 import { AppTextBold } from '../components/UI/AppTextBold'
 import { AppButton } from '../components/UI/AppButton'
