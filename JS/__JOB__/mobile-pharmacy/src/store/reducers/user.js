@@ -2,7 +2,7 @@ import { CLEAR_USER, SET_USER } from '../types'
 import { AsyncStorage } from 'react-native'
 
 const initialState = {
-  user: null,
+  data: null,
   isAuthenticated: false
 }
 
@@ -10,13 +10,13 @@ const handlers = {
   [SET_USER]: (state, { payload }) => {
     return {
       ...state,
-      user: payload,
+      data: payload,
       isAuthenticated: true
     }
   },
   [CLEAR_USER]: state => ({
     ...state,
-    user: null,
+    data: null,
     isAuthenticated: false
   }),
   DEFAULT: state => state

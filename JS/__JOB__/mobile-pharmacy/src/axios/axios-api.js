@@ -1,5 +1,6 @@
 import axios from 'axios'
 
+
 let instance = axios.create({
   baseURL: 'https://vacancy-dev.erkapharm.com/api/mobile/',
   headers: {
@@ -7,18 +8,21 @@ let instance = axios.create({
   }
 })
 
-instance.interceptors.response.use(
-  response => {
-    console.log(response.data['http_code'])
-    return response
-  },
-    error => {
-    if (error.response.status !== 401) {
+const onFulfilledCb = response => {
+  const { data: { success, message } } = response
 
-    }
+  //
 
-    return Promise.reject(error)
-  }
-)
+  return response
+}
+
+const onReject = error => {
+
+  //
+
+  return Promise.reject(error)
+}
+
+instance.interceptors.response.use(onFulfilledCb, onReject)
 
 export default instance

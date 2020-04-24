@@ -3,25 +3,26 @@ import { View, StyleSheet } from 'react-native'
 
 import { AppText } from '../../UI/AppText'
 import { AppTextBold } from '../../UI/AppTextBold'
+import dateFilter from '../../../filters/date.filter'
 import { THEME } from '../../../theme'
 
 
 export const TaskInfo = ({ task }) => (
   <View style={ styles.taskInfo }>
     <AppText>
-      <AppTextBold>Перемещение №</AppTextBold> { task.documentID }
+      <AppTextBold>Перемещение №</AppTextBold> { task['relocation_id'] }
     </AppText>
 
     <AppText>
-      <AppTextBold>от:</AppTextBold> { task.documentDate }
+      <AppTextBold>от:</AppTextBold> { dateFilter(task['created_at']) }
     </AppText>
 
     <AppText>
-      <AppTextBold>Аптека отправитель:</AppTextBold> { task.pharmacySender }
+      <AppTextBold>Аптека отправитель:</AppTextBold> { task['store'] }
     </AppText>
 
     <AppText>
-      <AppTextBold>Аптека получатель:</AppTextBold> { task.pharmacyRecipient }
+      <AppTextBold>Аптека получатель:</AppTextBold> { task['destination_store'] }
     </AppText>
   </View>
 )

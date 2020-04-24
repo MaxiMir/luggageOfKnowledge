@@ -16,7 +16,7 @@ import { THEME } from '../theme'
 export const TaskScreen = ({ navigation }) => {
   const dispatch = useDispatch()
   const task = useSelector(state => state.task.current)
-  const documentID = navigation.getParam('documentID')
+  const id = navigation.getParam('id')
   const isNewTask = navigation.getParam('isNewTask')
   const isCompletedTask = navigation.getParam('isCompletedTask')
 
@@ -34,14 +34,14 @@ export const TaskScreen = ({ navigation }) => {
 
 
   useEffect(() => {
-    dispatch(getTask(documentID))
+    dispatch(getTask(id))
   }, [dispatch])
 
   if (!task) {
     return (
       <AppContainer>
         <AppLoader
-          text={ `Получаю данные по заказу №\n${ documentID }` }
+          text={ `Получаю данные по заказу №\n${ id }` }
         />
       </AppContainer>
     )
@@ -62,9 +62,9 @@ export const TaskScreen = ({ navigation }) => {
       </AppHeader>
 
       <TaskProducts
-        products={ task.products }
-        totalQuantity={ task.totalQuantity }
-        totalAmount={ task.totalAmount }
+        products={ task['basket'] }
+        totalQuantity={ task['goods_count'] }
+        totalAmount={ task['basket_cost'] }
       />
 
       <View style={ styles.buttonsContainer }>

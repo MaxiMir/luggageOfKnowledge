@@ -14,5 +14,5 @@ export const SCREEN = {
 
 export const SETTINGS = {
   PHONE_LENGTH: 11,
-  PASSWORD_MIN_LENGTH: 1
+  PASSWORD_MIN_LENGTH: 3
 }

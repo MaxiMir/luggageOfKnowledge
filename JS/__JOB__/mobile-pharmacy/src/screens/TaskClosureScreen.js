@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { View, TextInput, TouchableWithoutFeedback, Keyboard, StyleSheet } from 'react-native'
 
 import { AppContainer } from '../hoc/AppContainer'
@@ -15,14 +15,15 @@ import { THEME } from '../theme'
 export const TaskClosureScreen = ({ navigation }) => {
   const dispatch = useDispatch()
   const [comment, setComment] = useState('')
-  const { documentID, pharmacyRecipient } = navigation.getParam('task')
+  const {id: userID, name} = useSelector(state => state.user.data)
+  const { id, destination_store } = navigation.getParam('task')
 
   const cancelBtnHandler = () => {
     navigation.navigate(SCREEN.TASKS)
   }
 
   const acceptBtnHandler = () => {
-    dispatch(setTaskCompleted())
+    dispatch(setTaskCompleted(id, userID))
     navigation.navigate(SCREEN.TASKS)
   }
 
@@ -39,7 +40,7 @@ export const TaskClosureScreen = ({ navigation }) => {
               Адрес отгрузки:
             </AppTextBold>
             <AppText>
-              { pharmacyRecipient }
+              { destination_store }
             </AppText>
           </View>
 
@@ -48,7 +49,7 @@ export const TaskClosureScreen = ({ navigation }) => {
               Ф.И.О:
             </AppTextBold>
             <AppText>
-
+              { name }
             </AppText>
           </View>
 

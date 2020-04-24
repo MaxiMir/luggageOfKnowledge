@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { View, TextInput, StyleSheet, TouchableWithoutFeedback, Keyboard } from 'react-native'
 
 import { AppContainer } from '../hoc/AppContainer'
@@ -10,27 +10,13 @@ import { auth } from '../store/actions/user'
 import { SETTINGS } from '../consts'
 import { THEME } from '../theme'
 
+
 export const AuthScreen = ({ navigation }) => {
   const dispatch = useDispatch()
-  const [phone, setPhone] = useState('79991234567')
-  const [password, setPassword] = useState('123456')
+  const userPhone = useSelector(state => !state.user.data ? '+7' : state.user.data.phone)
+  const [phone, setPhone] = useState(userPhone)
+  const [password, setPassword] = useState('')
   const [isSendingData, setIsSendingData] = useState(false)
-
-  const isInvalidPhone = () => {
-    return phone.length !== SETTINGS.PHONE_LENGTH
-  }
-
-  const isInvalidPassword = () => {
-    return password.length < SETTINGS.PASSWORD_MIN_LENGTH
-  }
-
-  const enterBtnHandler = () => {
-    setIsSendingData(true)
-    dispatch(auth(phone, password))
-    setIsSendingData(false)
-  }
-
-  const isDisableEnterBtn = isInvalidPhone() || isInvalidPassword()
 
   if (isSendingData) {
     return (
@@ -42,6 +28,30 @@ export const AuthScreen = ({ navigation }) => {
     )
   }
 
+  const checkOnValidPhone = () => {
+    const phoneWithoutPlus = String(+phone)
+    return phoneWithoutPlus.length === SETTINGS.PHONE_LENGTH
+  }
+
+  const checkOnValidPassword = () => {
+    return password.length >= SETTINGS.PASSWORD_MIN_LENGTH
+  }
+
+  const enterBtnHandler = () => {
+    const phoneWithoutPlus = String(+phone)
+
+    setIsSendingData(true)
+
+    dispatch(auth(phoneWithoutPlus, password))
+
+    setIsSendingData(false)
+  }
+
+  const isValidPhone = checkOnValidPhone()
+  const isValidPassword = checkOnValidPassword()
+  const phoneContainerColor = isValidPhone ? THEME.SUCCESS_COLOR : THEME.MAIN_COLOR
+  const passwordContainerColor = isValidPassword ? THEME.SUCCESS_COLOR : THEME.MAIN_COLOR
+  const isDisableEnterBtn = !isValidPhone || !isValidPassword
 
   return (
     <AppContainer>
@@ -51,20 +61,20 @@ export const AuthScreen = ({ navigation }) => {
             Авторизация
           </AppHeader>
           <View style={ styles.inputsContainer }>
-            <View style={ styles.inputContainer }>
+            <View style={ { ...styles.inputContainer, borderColor: phoneContainerColor } }>
               <TextInput
-                placeholder="Номер телефона"
+                placeholder="НОМЕР ТЕЛЕФОНА"
                 value={ phone }
                 onChangeText={ setPhone }
                 autoCorrect={ false }
                 onSubmitEditing={ Keyboard.dismiss }
                 keyboardType="numeric"
-                maxLength={11}
+                maxLength={ !phone.startsWith('+') ? 11 : 12 }
               />
             </View>
-            <View style={ styles.inputContainer }>
+            <View style={ { ...styles.inputContainer, borderColor: passwordContainerColor } }>
               <TextInput
-                placeholder="Пароль"
+                placeholder="ПАРОЛЬ"
                 value={ password }
                 onChangeText={ setPassword }
                 autoCorrect={ false }
@@ -93,15 +103,16 @@ const styles = StyleSheet.create({
   container: {
     width: '100%',
     height: '100%',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    backgroundColor: THEME.BACKGROUND_COLOR
   },
   inputsContainer: {
     paddingHorizontal: 60
   },
   inputContainer: {
-    padding: THEME.PADDING / 2,
+    padding: THEME.PADDING,
+    backgroundColor: THEME.WHITE_COLOR,
     borderWidth: 2,
-    borderColor: THEME.MAIN_COLOR,
     borderRadius: 5,
     marginBottom: THEME.MARGIN_BOTTOM
   }

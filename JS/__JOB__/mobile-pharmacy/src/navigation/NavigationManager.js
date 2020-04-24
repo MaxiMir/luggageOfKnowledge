@@ -8,12 +8,11 @@ import { autoLogin } from '../store/actions/user';
 
 export const NavigationManager = () => {
   const dispatch = useDispatch()
+  const isAuthenticated = useSelector(state => state.user.isAuthenticated)
 
   useEffect(() => {
     dispatch(autoLogin())
   }, [dispatch])
-
-  const isAuthenticated = useSelector(state => state.user.isAuthenticated)
 
   return !isAuthenticated ? <AuthScreen /> : <AppNavigation />
 }

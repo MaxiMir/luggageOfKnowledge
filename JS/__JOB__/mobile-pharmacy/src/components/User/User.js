@@ -12,18 +12,18 @@ export const User = ({ user }) => (
   <View styles={ styles.info }>
     <View>
       <UserPhoto
-        image={ user.image }
+        image={ user.image || '../../../../assets/mock/mockAvatar.png' }
       />
     </View>
 
     <View style={ styles.infoRow }>
       <AppTextBold>ФИО: </AppTextBold>
-      <AppText>{ user.fullName }</AppText>
+      <AppText>{ user.name }</AppText>
     </View>
 
     <View style={ styles.infoRow }>
       <AppTextBold>Должность: </AppTextBold>
-      <AppText>{ user.post }</AppText>
+      <AppText>{ user.post || 'Не заполнена' }</AppText>
     </View>
 
     <View style={ styles.infoRow }>

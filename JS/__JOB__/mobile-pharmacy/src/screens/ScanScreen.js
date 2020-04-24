@@ -24,7 +24,7 @@ export const ScanScreen = ({ navigation }) => {
 
   const handleBarCodeScanned = ({ data }) => {
     navigation.navigate(SCREEN.TASK, {
-      documentID: data,
+      id: data,
       isNewTask: true
     })
   }

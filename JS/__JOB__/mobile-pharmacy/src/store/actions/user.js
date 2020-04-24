@@ -38,7 +38,7 @@ export const autoLogin = () => async dispatch => {
         payload: user
       })
 
-      setToken(user.token)
+      setToken(user['api_token'])
     }
   } catch (e) {
     console.log('autoLogin ERROR: ', e.message)

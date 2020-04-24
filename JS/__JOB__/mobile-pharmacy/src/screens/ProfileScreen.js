@@ -1,19 +1,15 @@
 import React from 'react'
+import { useSelector } from 'react-redux'
 
 import { AppContainer } from '../hoc/AppContainer'
-import { User } from '../components/User/User'
 import { AppButton } from '../components/UI/AppButton'
+import { User } from '../components/User/User'
 import { SCREEN } from '../consts'
 import { THEME } from '../theme'
 
 
 export const ProfileScreen = ({ navigation }) => {
-  const user = {
-    fullName: 'Прохоров Семен Семеныч',
-    post: 'Провизор',
-    phone: '+7 (920) 777-77-77',
-    image: '../../../../assets/mock/mockAvatar.png'
-  }
+  const user = useSelector(state => state.user.data)
 
   return (
     <AppContainer>

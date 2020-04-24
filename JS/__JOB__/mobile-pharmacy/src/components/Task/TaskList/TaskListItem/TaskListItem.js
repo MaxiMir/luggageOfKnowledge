@@ -5,6 +5,7 @@ import { AppTouchableBlock } from '../../../UI/AppTouchableBlock'
 import { AppText } from '../../../UI/AppText'
 import { AppTextBold } from '../../../UI/AppTextBold'
 import currencyFilter from '../../../../filters/currency.filter'
+import dateFilter from '../../../../filters/date.filter'
 import { THEME } from '../../../../theme'
 
 
@@ -21,36 +22,36 @@ export const TaskListItem = ({ task, onPress, isCompleted }) => {
         <View style={ headerStyle }>
           <AppText>
             <AppTextBold>№: </AppTextBold>
-            { task.documentID }
+            { task['relocation_id'] }
           </AppText>
 
           <AppText>
             <AppTextBold>Дата: </AppTextBold>
-            { task.documentDate }
+            { dateFilter(task['created_at']) }
           </AppText>
         </View>
 
         <View style={ bodyStyle }>
           <AppText>
             <AppTextBold>Отправитель: </AppTextBold>
-            { task.pharmacySender }
+            { task['store'] }
           </AppText>
 
           <AppText>
             <AppTextBold>Получатель: </AppTextBold>
-            { task.pharmacyRecipient }
+            { task['destination_store'] }
           </AppText>
         </View>
 
         <View style={ footerStyle }>
           <AppText>
             <AppTextBold>Упаковок: </AppTextBold>
-            { task.totalQuantity }
+            { task['goods_count'] }
           </AppText>
 
           <AppText>
             <AppTextBold>Сумма: </AppTextBold>
-            { currencyFilter(task.totalAmount) }
+            { currencyFilter(task['basket_cost']) }
           </AppText>
         </View>
       </View>

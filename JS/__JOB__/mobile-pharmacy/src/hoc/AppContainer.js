@@ -39,14 +39,14 @@ const styles = StyleSheet.create({
     backgroundColor: THEME.BACKGROUND_COLOR
   },
   messageBlock: {
-    opacity: 0.7,
+    opacity: 0.6,
     width: '100%',
     position: 'absolute',
-    top: 65,
+    top: '10%',
     padding: THEME.PADDING,
     backgroundColor: THEME.SUCCESS_COLOR,
     borderRadius: 10,
-    zIndex: 1500
+    zIndex: 1500,
   },
   messageText: {
     textAlign: 'center',

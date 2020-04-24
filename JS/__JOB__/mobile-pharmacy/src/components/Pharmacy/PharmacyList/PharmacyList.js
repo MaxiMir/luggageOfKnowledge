@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
-import { View, TextInput, FlatList, TouchableWithoutFeedback, StyleSheet, Keyboard } from 'react-native'
+import { View, TextInput, FlatList, StyleSheet } from 'react-native'
 
 import { PharmacyListItem } from './PharmacyListItem/PharmacyListItem'
-import { THEME } from '../../../theme';
+import { THEME } from '../../../theme'
 
 
 export const PharmacyList = ({ pharmacies }) => {

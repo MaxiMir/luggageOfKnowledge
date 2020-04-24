@@ -27,8 +27,8 @@ export const MainScreen = ({ navigation }) => {
       <AppButton
         color={THEME.DANGER_COLOR}
         onPress={ () => navigation.navigate(SCREEN.TASK, {
-        documentID: Date.now().toString(),
-        isNewTask: true
+        id: 1,
+        isNewTask: false
         }) }
       >
         DEBUG

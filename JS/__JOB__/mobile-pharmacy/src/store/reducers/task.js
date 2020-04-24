@@ -23,7 +23,7 @@ const handlers = {
   [SET_TASK_COMPLETED]: state => ({
     ...state,
     current: null,
-    all: !state.all ? null : state.all.filter(task => task.documentID !== state.current.documentID),
+    all: !state.all ? null : state.all.filter(task => task.id !== state.current.id),
     completed: !state.completed ? null : [...state.completed, state.current]
   }),
   [GET_TASK_HISTORY]: (state, { payload }) => ({

@@ -1,7 +1,7 @@
 import { SHOW_SUCCESS_MESSAGE, SHOW_ERROR_MESSAGE, CLEAR_MESSAGE } from '../types';
 
 
-export const showAndHideMessage = (message, isSuccess = true, showTimeMs = 3000) => async dispatch => {
+export const showAndHideMessage = (message, isSuccess = true, showTimeMs = 2000) => async dispatch => {
   dispatch(showMessage(message, isSuccess))
 
   setTimeout(() => {

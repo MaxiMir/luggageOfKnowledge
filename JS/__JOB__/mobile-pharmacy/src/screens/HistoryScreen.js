@@ -20,9 +20,9 @@ export const HistoryScreen = ({ navigation }) => {
     dispatch(getTaskHistory())
   }, [dispatch])
 
-  const taskPressHandler = documentID => {
+  const taskPressHandler = id => {
     navigation.navigate(SCREEN.TASK, {
-      documentID,
+      id,
       isNewTask: false,
       isCompletedTask: true
     })
