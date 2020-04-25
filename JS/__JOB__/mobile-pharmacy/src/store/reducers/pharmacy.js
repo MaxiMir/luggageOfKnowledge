@@ -5,7 +5,7 @@ const initialState = {
 }
 
 const handlers = {
-  [GET_ALL_PHARMACIES]: (state, {payload}) => ({
+  [GET_ALL_PHARMACIES]: (state, { payload }) => ({
     ...state,
     all: payload
   }),

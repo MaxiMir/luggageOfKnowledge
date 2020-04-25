@@ -20,19 +20,13 @@ export const ScanScreen = ({ navigation }) => {
     const hasCameraPermission = status === 'granted'
 
     setHasCameraPermission(hasCameraPermission)
-  };
-
-  const handleBarCodeScanned = ({ data }) => {
-    navigation.navigate(SCREEN.TASK, {
-      id: data,
-      isNewTask: true
-    })
   }
 
   const cbGetPermissionsAsync = useCallback(async () => {
     await getPermissionsAsync()
     setAskCameraPermission(true)
   }, [getPermissionsAsync])
+
 
   useEffect(() => {
     cbGetPermissionsAsync()
@@ -43,14 +37,22 @@ export const ScanScreen = ({ navigation }) => {
     return <AppLoader/>
   }
 
+  const handleBarCodeScanned = ({ data }) => {
+    navigation.navigate(SCREEN.TASK, {
+      id: data,
+      isCheckOnStatus: true
+    })
+  }
+
+
   const content = hasCameraPermission ?
     <BarCodeScanner
       onBarCodeScanned={ handleBarCodeScanned }
       style={ styles.scanner }
     />
     :
-    <View style={styles.noAccessContainer}>
-      <AppText style={styles.noAccessText}>Для работы приложения необходим доступ к камере</AppText>
+    <View style={ styles.noAccessContainer }>
+      <AppText style={ styles.noAccessText }>Для работы приложения необходим доступ к камере</AppText>
       <AppButton onPress={ () => navigation.push(SCREEN.SCAN) }>
         Попробовать снова
       </AppButton>

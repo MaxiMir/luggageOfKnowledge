@@ -7,7 +7,7 @@ import { SET_USER, CLEAR_USER } from '../types'
 
 export const auth = (phone, password) => async dispatch => {
   try {
-    const { data: { success, message, user } } = await axios.post('auth', { phone, password })
+    const { data: { success, message, user } } = await axios.post('/auth', { phone, password })
 
     if (!success) {
       dispatch(showAndHideMessage(message, false))
@@ -19,11 +19,11 @@ export const auth = (phone, password) => async dispatch => {
         payload: user
       })
 
-      setToken(user.token)
+      setToken(user['api_token'])
       dispatch(showAndHideMessage(message))
     }
   } catch (e) {
-    console.error('auth:', e.message())
+    console.error('auth ERROR:', e.message)
   }
 }
 
@@ -69,7 +69,7 @@ export const logout = () => async dispatch => {
 }
 
 export const setToken = token => {
-  axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
+  axios.defaults.headers.common['Authorization'] = `Bearer ${ token }`
 }
 
 export const clearToken = () => {

@@ -14,8 +14,8 @@ export const AppContainer = ({ children, style }) => {
     const backgroundColor = isSuccess ? THEME.SUCCESS_COLOR : THEME.DANGER_COLOR
 
     messageBlock = (
-      <View style={{...styles.messageBlock, backgroundColor }}>
-        <AppTextBold style={styles.messageText}>
+      <View style={ { ...styles.messageBlock, backgroundColor } }>
+        <AppTextBold style={ styles.messageText }>
           { message }
         </AppTextBold>
       </View>

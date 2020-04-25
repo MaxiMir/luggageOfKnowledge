@@ -8,7 +8,7 @@ import { getAllTasks } from '../../../store/actions/task'
 
 export const TaskIcon = ({ size, color }) => {
   const dispatch = useDispatch()
-  const taskCount = useSelector(state => !state.task.all ? 0 : state.task.all.length)
+  const taskCount = useSelector(state => !state.task.accepted ? 0 : state.task.accepted.length)
 
   useEffect(() => {
     dispatch(getAllTasks())

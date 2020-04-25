@@ -2,7 +2,7 @@ import { GET_ALL_TASKS, GET_TASK, SET_TASK_ACCEPTED, SET_TASK_COMPLETED, GET_TAS
 
 const initialState = {
   current: null,
-  all: null,
+  accepted: null,
   completed: null,
 }
 
@@ -13,17 +13,17 @@ const handlers = {
   }),
   [GET_ALL_TASKS]: (state, { payload }) => ({
     ...state,
-    all: payload
+    accepted: payload
   }),
   [SET_TASK_ACCEPTED]: state => ({
     ...state,
     current: null,
-    all: !state.all ? null : [...state.all, state.current]
+    accepted: !state.accepted ? null : [...state.accepted, state.current]
   }),
   [SET_TASK_COMPLETED]: state => ({
     ...state,
     current: null,
-    all: !state.all ? null : state.all.filter(task => task.id !== state.current.id),
+    accepted: !state.accepted ? null : state.accepted.filter(task => task.id !== state.current.id),
     completed: !state.completed ? null : [...state.completed, state.current]
   }),
   [GET_TASK_HISTORY]: (state, { payload }) => ({

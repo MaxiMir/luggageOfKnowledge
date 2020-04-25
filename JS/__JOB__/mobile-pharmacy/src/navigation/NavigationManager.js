@@ -14,5 +14,5 @@ export const NavigationManager = () => {
     dispatch(autoLogin())
   }, [dispatch])
 
-  return !isAuthenticated ? <AuthScreen /> : <AppNavigation />
+  return !isAuthenticated ? <AuthScreen/> : <AppNavigation/>
 }

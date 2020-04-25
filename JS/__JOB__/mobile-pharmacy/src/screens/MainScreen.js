@@ -25,10 +25,10 @@ export const MainScreen = ({ navigation }) => {
       </View>
 
       <AppButton
-        color={THEME.DANGER_COLOR}
+        color={ THEME.DANGER_COLOR }
         onPress={ () => navigation.navigate(SCREEN.TASK, {
-        id: 1,
-        isNewTask: false
+          id: 1,
+          isNewTask: false
         }) }
       >
         DEBUG

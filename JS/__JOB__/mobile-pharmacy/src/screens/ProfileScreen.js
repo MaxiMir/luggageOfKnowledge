@@ -17,9 +17,9 @@ export const ProfileScreen = ({ navigation }) => {
         user={ user }
       />
       <AppButton
-        color={THEME.DANGER_COLOR}
-        onPress={() => navigation.navigate(SCREEN.LOGOUT)}
-        style={{marginTop: 20}}
+        color={ THEME.DANGER_COLOR }
+        onPress={ () => navigation.navigate(SCREEN.LOGOUT) }
+        style={ { marginTop: 20 } }
       >
         Выйти
       </AppButton>

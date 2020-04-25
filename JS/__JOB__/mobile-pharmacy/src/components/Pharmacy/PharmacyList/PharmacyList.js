@@ -29,7 +29,7 @@ export const PharmacyList = ({ pharmacies }) => {
 
       <FlatList
         data={ pharmacies }
-        keyExtractor={ pharmacy => pharmacy.code }
+        keyExtractor={ pharmacy => pharmacy.id.toString() }
         renderItem={ ({ item }) => (
           <PharmacyListItem pharmacy={ item }/>
         ) }

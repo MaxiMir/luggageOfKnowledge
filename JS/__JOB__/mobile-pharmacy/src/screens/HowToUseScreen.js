@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text, ScrollView, StyleSheet } from 'react-native'
+import { View, ScrollView, StyleSheet } from 'react-native'
 
 import { AppHeader } from '../components/UI/AppHeader'
 import { AppText } from '../components/UI/AppText'

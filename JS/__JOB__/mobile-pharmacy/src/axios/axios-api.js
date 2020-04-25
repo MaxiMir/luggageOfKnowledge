@@ -8,8 +8,23 @@ let instance = axios.create({
   }
 })
 
+
+instance.interceptors.request.use(request => {
+    //console.log('REQUEST url', request.url)
+    //console.log('REQUEST headers Authorization', request.headers.common.Authorization)
+    return request
+})
+
+
+
 const onFulfilledCb = response => {
   const { data: { success, message } } = response
+
+  //console.log('RESPONSE DATA', response.data)
+
+  if(response.status === 401) {
+
+  }
 
   //
 
@@ -17,6 +32,7 @@ const onFulfilledCb = response => {
 }
 
 const onReject = error => {
+  console.log("ERROR onReject:", error)
 
   //
 

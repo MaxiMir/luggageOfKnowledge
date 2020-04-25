@@ -6,7 +6,7 @@ import { TaskListItem } from './TaskListItem/TaskListItem'
 
 
 export const TaskList = ({ tasks, taskPressHandler, isCompleted = false }) => (
-  <View style={styles.taskListContainer}>
+  <View style={ styles.taskListContainer }>
     <AppHeader>
       { isCompleted ? 'Выполненные' : 'Текущие' } задания
     </AppHeader>

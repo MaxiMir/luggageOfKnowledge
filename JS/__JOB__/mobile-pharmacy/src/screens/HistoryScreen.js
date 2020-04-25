@@ -20,16 +20,6 @@ export const HistoryScreen = ({ navigation }) => {
     dispatch(getTaskHistory())
   }, [dispatch])
 
-  const taskPressHandler = id => {
-    navigation.navigate(SCREEN.TASK, {
-      id,
-      isNewTask: false,
-      isCompletedTask: true
-    })
-  }
-
-  const scanBtnHandler = () => navigation.navigate(SCREEN.SCAN)
-
   if (!completedTasks) {
     return (
       <AppContainer>
@@ -40,11 +30,21 @@ export const HistoryScreen = ({ navigation }) => {
     )
   }
 
+  const taskPressHandler = id => {
+    navigation.navigate(SCREEN.TASK, {
+      id,
+      isNewTask: false,
+      isCompletedTask: true
+    })
+  }
+
+  const scanBtnHandler = () => navigation.navigate(SCREEN.SCAN)
+
   const content = completedTasks.length ?
     <TaskList
       tasks={ completedTasks }
       taskPressHandler={ taskPressHandler }
-      isCompleted={true}
+      isCompleted={ true }
     />
     :
     <View style={ styles.noTaskContainer }>

@@ -7,23 +7,23 @@ import { AppHeader } from '../components/UI/AppHeader'
 import { AppButton } from '../components/UI/AppButton'
 import { AppTextBold } from '../components/UI/AppTextBold'
 import { AppText } from '../components/UI/AppText'
-import { setTaskCompleted } from '../store/actions/task'
-import { SCREEN } from '../consts'
+import { setTaskStatus } from '../store/actions/task'
+import { SCREEN, TASK_STATUS } from '../consts'
 import { THEME } from '../theme'
 
 
 export const TaskClosureScreen = ({ navigation }) => {
   const dispatch = useDispatch()
   const [comment, setComment] = useState('')
-  const {id: userID, name} = useSelector(state => state.user.data)
+  const { name } = useSelector(state => state.user.data)
   const { id, destination_store } = navigation.getParam('task')
 
   const cancelBtnHandler = () => {
     navigation.navigate(SCREEN.TASKS)
   }
 
-  const acceptBtnHandler = () => {
-    dispatch(setTaskCompleted(id, userID))
+  const acceptBtnHandler = (id, comment) => {
+    dispatch(setTaskStatus(id, TASK_STATUS.COMPLETED, comment))
     navigation.navigate(SCREEN.TASKS)
   }
 
@@ -71,7 +71,7 @@ export const TaskClosureScreen = ({ navigation }) => {
               Отменить
             </AppButton>
             <AppButton
-              onPress={ () => acceptBtnHandler(comment) }
+              onPress={ () => acceptBtnHandler(id, comment) }
               color={ THEME.SUCCESS_COLOR }
             >
               Подтвердить

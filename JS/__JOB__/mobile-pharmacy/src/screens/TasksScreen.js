@@ -1,34 +1,18 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { View, StyleSheet } from 'react-native'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 
 import { AppContainer } from '../hoc/AppContainer'
 import { AppLoader } from '../components/UI/AppLoader'
 import { AppTextBold } from '../components/UI/AppTextBold'
 import { AppButton } from '../components/UI/AppButton'
 import { TaskList } from '../components/Task/TaskList/TaskList'
-import { getAllTasks } from '../store/actions/task'
 import { SCREEN } from '../consts'
 import { THEME } from '../theme'
 
 
 export const TasksScreen = ({ navigation }) => {
-  const dispatch = useDispatch()
-  const tasks = useSelector(state => state.task.all)
-
-  useEffect(() => {
-    dispatch(getAllTasks())
-  }, [dispatch])
-
-  const taskPressHandler = id => {
-    navigation.navigate(SCREEN.TASK, {
-      id,
-      isNewTask: false,
-      isCompletedTask: false
-    })
-  }
-
-  const scanBtnHandler = () => navigation.navigate(SCREEN.SCAN)
+  const tasks = useSelector(state => state.task.accepted)
 
   if (!tasks) {
     return (
@@ -39,6 +23,16 @@ export const TasksScreen = ({ navigation }) => {
       </AppContainer>
     )
   }
+
+  const taskPressHandler = id => {
+    navigation.navigate(SCREEN.TASK, {
+      id,
+      isNewTask: false,
+      isCompletedTask: false
+    })
+  }
+
+  const scanBtnHandler = () => navigation.navigate(SCREEN.SCAN)
 
   const content = tasks.length ?
     <TaskList

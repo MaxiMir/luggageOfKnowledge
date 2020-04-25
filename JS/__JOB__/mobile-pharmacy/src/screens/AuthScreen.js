@@ -13,9 +13,9 @@ import { THEME } from '../theme'
 
 export const AuthScreen = ({ navigation }) => {
   const dispatch = useDispatch()
-  const userPhone = useSelector(state => !state.user.data ? '+7' : state.user.data.phone)
+  const userPhone = useSelector(state => !state.user.data ? '+79991234567' : state.user.data.phone)
   const [phone, setPhone] = useState(userPhone)
-  const [password, setPassword] = useState('')
+  const [password, setPassword] = useState('123456')
   const [isSendingData, setIsSendingData] = useState(false)
 
   if (isSendingData) {

@@ -1,63 +1,77 @@
 import axios from '../../axios/axios-api'
 import { GET_TASK, GET_ALL_TASKS, SET_TASK_ACCEPTED, SET_TASK_COMPLETED, GET_TASK_HISTORY } from '../types'
 import { showAndHideMessage } from './app'
+import { TASK_STATUS } from '../../consts';
 
 
 export const getTask = id => async dispatch => {
   try {
-    const { data: { success, message, order } } = await axios.get(`/${id}`)
+    const { data: { success, message, relocation } } = await axios.get(`/relocations/${ id }`)
 
     if (!success) {
       dispatch(showAndHideMessage(message, false))
     } else {
       dispatch({
         type: GET_TASK,
-        payload: order
+        payload: relocation
       })
     }
 
   } catch (e) {
-
+    dispatch(showAndHideMessage('Что-то пошло не так...', false))
   }
 }
 
 export const getAllTasks = () => async dispatch => {
   try {
-    const { data: { success, message, orders } } = await axios.get('/')
+    const { data: { success, message, relocations } } = await axios.get('/relocations')
 
     if (!success) {
       dispatch(showAndHideMessage(message, false))
     } else {
       dispatch({
         type: GET_ALL_TASKS,
-        payload: orders
+        payload: relocations
       })
     }
   } catch (e) {
-
+    dispatch(showAndHideMessage('Что-то пошло не так...', false))
   }
 }
 
-export const setTaskAccepted = () => async dispatch => {
+export const setTaskStatus = (id, status, comment = null) => async dispatch => {
+  try {
+    const statusMap = {
+      [TASK_STATUS.ACCEPTED]: "accept",
+      [TASK_STATUS.COMPLETED]: "deliver",
+    }
 
-  dispatch({
-    type: SET_TASK_ACCEPTED
-  })
-}
+    const action = statusMap[status]
+    const postData = !comment ? { id, action } : { id, action, comment }
 
-export const setTaskCompleted = (id, userID) => async dispatch => {
+    const { data: { success, message } } = await axios.post('/relocations', postData)
 
-  dispatch({
-    type: SET_TASK_COMPLETED
-  })
+    if (!success) {
+      dispatch(showAndHideMessage(message, false))
+    } else {
+      dispatch({
+        type: status
+      })
+    }
+  } catch (e) {
+    dispatch(showAndHideMessage('Что-то пошло не так...', false))
+  }
 }
 
 export const getTaskHistory = () => async dispatch => {
-
-  dispatch({
-    type: GET_TASK_HISTORY,
-    payload: []
-  })
+  try {
+    dispatch({
+      type: GET_TASK_HISTORY,
+      payload: []
+    })
+  } catch (e) {
+    dispatch(showAndHideMessage('Что-то пошло не так...', false))
+  }
 }
 
 

@@ -8,7 +8,7 @@ import { THEME } from '../../../theme'
 
 export const TaskProducts = ({ products, totalQuantity, totalAmount }) => {
   const tableHead = ['Название товара', 'Уп.', 'Сумма']
-  const tableBody = products.map(({ name, quantity, price }) => [name, quantity, currencyFilter(price)])
+  const tableBody = products.map(({ name, amount, price }) => [name, amount, currencyFilter(price)])
   const tableFooter = ['Итого:', totalQuantity, currencyFilter(totalAmount)]
   const flexArr = [5, 1, 2]
 

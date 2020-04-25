@@ -8,8 +8,8 @@ import { AppHeader } from '../components/UI/AppHeader'
 import { AppButton } from '../components/UI/AppButton'
 import { TaskInfo } from '../components/Task/TaskInfo/TaskInfo'
 import { TaskProducts } from '../components/Task/TaskProducts/TaskProducts'
-import { getTask, setTaskAccepted } from '../store/actions/task'
-import { SCREEN } from '../consts'
+import { getTask, setTaskStatus } from '../store/actions/task'
+import { SCREEN, TASK_STATUS } from '../consts'
 import { THEME } from '../theme'
 
 
@@ -17,21 +17,9 @@ export const TaskScreen = ({ navigation }) => {
   const dispatch = useDispatch()
   const task = useSelector(state => state.task.current)
   const id = navigation.getParam('id')
-  const isNewTask = navigation.getParam('isNewTask')
-  const isCompletedTask = navigation.getParam('isCompletedTask')
-
-
-  const acceptedBtnHandler = () => {
-    dispatch(setTaskAccepted())
-    navigation.navigate(SCREEN.TASKS)
-  }
-
-  const shippedBtnHandler = () => {
-    navigation.navigate(SCREEN.TASK_CLOSURE, {
-      task
-    })
-  }
-
+  const isNewTaskFromNavigation = navigation.getParam('isNewTask')
+  const isCompletedTaskFromNavigation = navigation.getParam('isCompletedTask')
+  const isCheckOnStatus = navigation.getParam('isCheckOnStatus', false)
 
   useEffect(() => {
     dispatch(getTask(id))
@@ -45,6 +33,35 @@ export const TaskScreen = ({ navigation }) => {
         />
       </AppContainer>
     )
+  }
+
+  const { status_id: taskStatus } = task
+
+  const checkOnCanAcceptTask = () => {
+    if (isCheckOnStatus) {
+      return taskStatus === TASK_STATUS.NEW
+    }
+
+    return isNewTaskFromNavigation
+  }
+
+  const checkOnCanShippedTask = () => {
+    if (isCheckOnStatus) {
+      return taskStatus < TASK_STATUS.SHIPPED
+    }
+
+    return !isCompletedTaskFromNavigation
+  }
+
+  const acceptedBtnHandler = id => {
+    dispatch(setTaskStatus(id, TASK_STATUS.ACCEPTED))
+    navigation.navigate(SCREEN.TASKS)
+  }
+
+  const shippedBtnHandler = () => {
+    navigation.navigate(SCREEN.TASK_CLOSURE, {
+      task
+    })
   }
 
   return (
@@ -70,15 +87,15 @@ export const TaskScreen = ({ navigation }) => {
       <View style={ styles.buttonsContainer }>
         <AppButton
           color={ THEME.PRIMARY_COLOR }
-          onPress={ acceptedBtnHandler }
-          disabled={ !isNewTask }
+          onPress={ () => acceptedBtnHandler(id) }
+          disabled={ !checkOnCanAcceptTask() }
         >
           Принял
         </AppButton>
         <AppButton
           color={ THEME.SUCCESS_COLOR }
           onPress={ shippedBtnHandler }
-          disabled={ isCompletedTask }
+          disabled={ !checkOnCanShippedTask() }
         >
           Отгрузил
         </AppButton>

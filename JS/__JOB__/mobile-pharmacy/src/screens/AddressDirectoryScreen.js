@@ -28,7 +28,7 @@ export const AddressDirectoryScreen = ({ navigation }) => {
   return (
     <AppContainer>
       <PharmacyList
-        pharmacies={pharmacies}
+        pharmacies={ pharmacies }
       />
     </AppContainer>
   )
