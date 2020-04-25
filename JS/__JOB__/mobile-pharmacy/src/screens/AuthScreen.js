@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { View, TextInput, StyleSheet, TouchableWithoutFeedback, Keyboard } from 'react-native'
 
 import { AppContainer } from '../hoc/AppContainer'
@@ -13,9 +13,8 @@ import { THEME } from '../theme'
 
 export const AuthScreen = ({ navigation }) => {
   const dispatch = useDispatch()
-  const userPhone = useSelector(state => !state.user.data ? '+79991234567' : state.user.data.phone)
-  const [phone, setPhone] = useState(userPhone)
-  const [password, setPassword] = useState('123456')
+  const [phone, setPhone] = useState('+7')
+  const [password, setPassword] = useState('')
   const [isSendingData, setIsSendingData] = useState(false)
 
   if (isSendingData) {

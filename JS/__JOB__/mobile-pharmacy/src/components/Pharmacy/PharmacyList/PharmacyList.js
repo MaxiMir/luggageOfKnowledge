@@ -3,6 +3,7 @@ import { View, TextInput, FlatList, StyleSheet } from 'react-native'
 
 import { PharmacyListItem } from './PharmacyListItem/PharmacyListItem'
 import { THEME } from '../../../theme'
+import { AppTextBold } from '../../UI/AppTextBold';
 
 
 export const PharmacyList = ({ pharmacies }) => {
@@ -30,14 +31,19 @@ export const PharmacyList = ({ pharmacies }) => {
           onChangeText={ setSearchValue }
         />
       </View>
+      {
+        !pharmacies.length ?
+        <AppTextBold style={styles.noFoundText}>Ничего не найдено</AppTextBold>
+        :
+        <FlatList
+          data={ pharmacies }
+          keyExtractor={ pharmacy => pharmacy.id.toString() }
+          renderItem={ ({ item }) => (
+            <PharmacyListItem pharmacy={ item }/>
+          ) }
+        />
+      }
 
-      <FlatList
-        data={ pharmacies }
-        keyExtractor={ pharmacy => pharmacy.id.toString() }
-        renderItem={ ({ item }) => (
-          <PharmacyListItem pharmacy={ item }/>
-        ) }
-      />
     </View>
   )
 }
@@ -55,6 +61,9 @@ const styles = StyleSheet.create({
   },
   searchInput: {
     width: '100%'
+  },
+  noFoundText: {
+    textAlign: 'center'
   }
 })
 
