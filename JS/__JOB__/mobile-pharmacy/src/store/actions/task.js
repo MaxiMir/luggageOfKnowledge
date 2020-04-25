@@ -42,11 +42,11 @@ export const getAllTasks = () => async dispatch => {
 export const setTaskStatus = (id, status, comment = null) => async dispatch => {
   try {
     const statusMap = {
-      [TASK_STATUS.ACCEPTED]: "accept",
-      [TASK_STATUS.COMPLETED]: "deliver",
+      [TASK_STATUS.ACCEPTED]: { action: "accept", type: SET_TASK_ACCEPTED },
+      [TASK_STATUS.COMPLETED]: { action: "deliver", type: SET_TASK_COMPLETED },
     }
 
-    const action = statusMap[status]
+    const { action, type } = statusMap[status]
     const postData = !comment ? { id, action } : { id, action, comment }
 
     const { data: { success, message } } = await axios.post('/relocations', postData)
@@ -54,9 +54,7 @@ export const setTaskStatus = (id, status, comment = null) => async dispatch => {
     if (!success) {
       dispatch(showAndHideMessage(message, false))
     } else {
-      dispatch({
-        type: status
-      })
+      dispatch({ type })
     }
   } catch (e) {
     dispatch(showAndHideMessage('Что-то пошло не так...', false))

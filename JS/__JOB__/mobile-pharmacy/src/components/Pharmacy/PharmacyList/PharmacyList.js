@@ -11,8 +11,12 @@ export const PharmacyList = ({ pharmacies }) => {
   if (searchValue.trim()) {
     const prepareSearchValue = searchValue.trim().toLowerCase()
 
-    pharmacies = pharmacies.filter(({ code, address }) => {
-      return code.toLowerCase().includes(prepareSearchValue) || address.toLowerCase().includes(prepareSearchValue)
+    pharmacies = pharmacies.filter(({ au_code, address }) => {
+      if (!address) {
+        return au_code.toLowerCase().includes(prepareSearchValue)
+      }
+
+      return au_code.toLowerCase().includes(prepareSearchValue) || address.toLowerCase().includes(prepareSearchValue)
     })
   }
 
