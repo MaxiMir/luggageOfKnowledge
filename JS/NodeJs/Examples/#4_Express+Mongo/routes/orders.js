@@ -1,10 +1,10 @@
-const {Router} = require('express')
+const { Router } = require('express')
 const Order = require('../models/order')
 const router = Router()
 
 router.get('/', async (req, res) => {
   try {
-    const orders = await Order.find({'user.userId': req.user._id})
+    const orders = await Order.find({ 'user.userId': req.user._id })
       .populate('user.userId')
 
     res.render('orders', {
@@ -33,7 +33,7 @@ router.post('/', async (req, res) => {
 
     const courses = user.cart.items.map(i => ({
       count: i.count,
-      course: {...i.courseId._doc}
+      course: { ...i.courseId._doc }
     }))
 
     const order = new Order({

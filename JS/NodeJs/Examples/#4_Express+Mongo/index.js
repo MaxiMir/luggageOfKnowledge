@@ -46,21 +46,23 @@ const PORT = process.env.PORT || 3000
 
 async function start() {
   try {
-    const url = `mongodb+srv://maximir:0I5GEL9uLUcR38GC@cluster0-3rrau.mongodb.net/shop` // 0I5GEL9uLUcR38GC - пароль
+    const url = `mongodb+srv://maximir:0I5GEL9uLUcR38GC@cluster0-3rrau.mongodb.net/shop` // 0I5GEL9uLUcR38GC - пароль | shop - название БД
     await mongoose.connect(url, {
       useNewUrlParser: true, // лечение warning
       useFindAndModify: false
     })
 
     const candidate = await User.findOne()
+
     if (!candidate) {
       const user = new User({
-        email: 'vladilen@mail.ru',
-        name: 'Vladilen',
+        email: 'maxim@mail.ru',
+        name: 'Maxim',
         cart: {items: []}
       })
       await user.save()
     }
+
     app.listen(PORT, () => {
       console.log(`Server is running on port ${PORT}`)
     })

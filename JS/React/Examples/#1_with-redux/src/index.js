@@ -5,7 +5,7 @@ import App from './App'
 import {BrowserRouter} from 'react-router-dom'
 import registerServiceWorker from './registerServiceWorker'
 
-import {createStore, compose, applyMiddleware} from 'redux' // compose для REDUX DEVTOOLS
+import {createStore, compose, applyMiddleware} from 'redux' // compose функциональная композиция (ФП)
 import {Provider} from 'react-redux' // импорт Provider из react-redux
 import rootReducer from './store/reducers/rootReducer' // reducer для store
 import thunk from 'redux-thunk' // для асинхронных диспатчей стейта

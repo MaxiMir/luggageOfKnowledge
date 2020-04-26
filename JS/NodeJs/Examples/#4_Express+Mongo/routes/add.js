@@ -1,4 +1,4 @@
-const {Router} = require('express')
+const { Router } = require('express')
 const Course = require('../models/course')
 const router = Router()
 
@@ -18,7 +18,7 @@ router.post('/', async (req, res) => {
   })
 
   try {
-    await course.save()
+    await course.save() // сохранение модели в коллекцию
     res.redirect('/courses')
   } catch (e) {
     console.log(e)

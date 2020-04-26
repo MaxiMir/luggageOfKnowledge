@@ -1,4 +1,4 @@
-const {Schema, model} = require('mongoose')
+const { Schema, model } = require('mongoose')
 
 const courseSchema = new Schema({
   title: {
@@ -14,9 +14,9 @@ const courseSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'User'
   }
-})
+}) // поле id идет по умолчанию
 
-courseSchema.method('toClient', function() {
+courseSchema.method('toClient', function () {
   const course = this.toObject()
 
   course.id = course._id
