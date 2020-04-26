@@ -25,7 +25,7 @@ if ('actions' in Notification.prototype) {
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
         navigator.serviceWorker.register('/sw-workbox.js')
-            .then(...);
+            .then(/*...*/);
     });
 }
 

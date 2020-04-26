@@ -180,7 +180,7 @@ class HigherOrderComponent extends Component {
 
 
 class HeaderComponent extends ComponentWithTemplate {
-    onInit() {}
+  onInit() {}
 }
 
 
