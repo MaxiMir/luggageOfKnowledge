@@ -1,6 +1,6 @@
 import { AsyncStorage } from 'react-native'
 
-import axios from '../../axios/axios-api'
+import axios from '../../axios/axiosApi'
 import { showAndHideMessage } from './app'
 import { SET_USER, CLEAR_USER } from '../types'
 

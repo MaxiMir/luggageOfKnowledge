@@ -6,7 +6,7 @@ import { THEME } from '../../../theme'
 import { AppTextBold } from '../../UI/AppTextBold';
 
 
-export const PharmacyList = ({ pharmacies }) => {
+export const PharmacyList = ({ pharmacies, onSelect }) => {
   const [searchValue, setSearchValue] = useState('')
 
   if (searchValue.trim()) {
@@ -39,7 +39,7 @@ export const PharmacyList = ({ pharmacies }) => {
           data={ pharmacies }
           keyExtractor={ pharmacy => pharmacy.id.toString() }
           renderItem={ ({ item }) => (
-            <PharmacyListItem pharmacy={ item }/>
+            <PharmacyListItem pharmacy={ item } onSelect={onSelect} />
           ) }
         />
       }

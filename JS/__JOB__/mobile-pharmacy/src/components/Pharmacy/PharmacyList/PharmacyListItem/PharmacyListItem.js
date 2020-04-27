@@ -6,9 +6,10 @@ import { AppText } from '../../../UI/AppText'
 import { AppTextBold } from '../../../UI/AppTextBold'
 import { AppPhone } from '../../../UI/AppPhone'
 import { THEME } from '../../../../theme'
+import { AppButton } from '../../../UI/AppButton';
 
 
-export const PharmacyListItem = ({ pharmacy }) => {
+export const PharmacyListItem = ({ pharmacy, onSelect }) => {
   const textListData = [
     { name: 'au_code', IconComponent: Entypo, iconName: 'list', label: 'код АУ' },
     { name: 'address', IconComponent: Entypo, iconName: 'address', label: 'адрес аптеки' },
@@ -28,6 +29,12 @@ export const PharmacyListItem = ({ pharmacy }) => {
     </View>
   ))
 
+  const button = !onSelect ?
+    null :
+    <AppButton color={ THEME.SUCCESS_COLOR } onPress={ () => onSelect(pharmacy['destination_store_id'], pharmacy['address']) }>
+      Выбрать
+    </AppButton>
+
   return (
     <View style={ styles.pharmacyContainer }>
       { textListContent }
@@ -41,6 +48,8 @@ export const PharmacyListItem = ({ pharmacy }) => {
           phone={ pharmacy.phone }
         />
       </View>
+
+      { button }
     </View>
   )
 }

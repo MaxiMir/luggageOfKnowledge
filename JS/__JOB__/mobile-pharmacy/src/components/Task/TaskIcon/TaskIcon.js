@@ -12,7 +12,7 @@ export const TaskIcon = ({ size, color }) => {
 
   useEffect(() => {
     dispatch(getAllTasks())
-  }, [dispatch])
+  }, [])
 
   return (
     <AppIconContainer number={ taskCount }>

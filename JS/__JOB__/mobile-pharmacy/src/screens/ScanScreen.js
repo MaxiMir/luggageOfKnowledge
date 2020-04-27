@@ -17,15 +17,21 @@ export const ScanScreen = ({ navigation }) => {
 
   const getPermissionsAsync = async () => {
     const { status } = await Permissions.askAsync(Permissions.CAMERA);
-    const hasCameraPermission = status === 'granted'
 
-    setHasCameraPermission(hasCameraPermission)
+    setHasCameraPermission(status === 'granted')
   }
 
   const cbGetPermissionsAsync = useCallback(async () => {
     await getPermissionsAsync()
     setAskCameraPermission(true)
   }, [getPermissionsAsync])
+
+  const handleBarCodeScanned = ({ data }) => {
+    navigation.navigate(SCREEN.TASK, {
+      id: data,
+      isCheckOnStatus: true
+    })
+  }
 
 
   useEffect(() => {
@@ -36,14 +42,6 @@ export const ScanScreen = ({ navigation }) => {
   if (!askCameraPermission) {
     return <AppLoader/>
   }
-
-  const handleBarCodeScanned = ({ data }) => {
-    navigation.navigate(SCREEN.TASK, {
-      id: data,
-      isCheckOnStatus: true
-    })
-  }
-
 
   const content = hasCameraPermission ?
     <BarCodeScanner

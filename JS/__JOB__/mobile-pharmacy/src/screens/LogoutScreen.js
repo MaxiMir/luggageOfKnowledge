@@ -8,7 +8,7 @@ export const LogoutScreen = ({ navigation }) => {
 
   useEffect(() => {
     dispatch(logout())
-  }, [dispatch])
+  }, [])
 
   return null
 }

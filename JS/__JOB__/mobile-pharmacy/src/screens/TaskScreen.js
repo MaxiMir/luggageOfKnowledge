@@ -8,8 +8,8 @@ import { AppHeader } from '../components/UI/AppHeader'
 import { AppButton } from '../components/UI/AppButton'
 import { TaskInfo } from '../components/Task/TaskInfo/TaskInfo'
 import { TaskProducts } from '../components/Task/TaskProducts/TaskProducts'
-import { getTask, setTaskStatus } from '../store/actions/task'
-import { SCREEN, TASK_STATUS } from '../consts'
+import { getTask, setTaskAccepted } from '../store/actions/task'
+import { SCREEN } from '../consts'
 import { THEME } from '../theme'
 
 
@@ -23,23 +23,21 @@ export const TaskScreen = ({ navigation }) => {
 
   useEffect(() => {
     dispatch(getTask(id))
-  }, [dispatch])
+  }, [])
 
   if (!task) {
     return (
       <AppContainer>
-        <AppLoader
-          text={ `Получаю данные по заказу №\n${ id }` }
-        />
+        <AppLoader text={ `Получаю данные по заказу №\n${ id }` } />
       </AppContainer>
     )
   }
 
-  const { status_id: taskStatus } = task
+  const { allow_accept_action, allow_deliver_action } = task
 
   const checkOnCanAcceptTask = () => {
     if (isCheckOnStatus) {
-      return taskStatus === TASK_STATUS.NEW
+      return allow_accept_action
     }
 
     return isNewTaskFromNavigation
@@ -47,14 +45,14 @@ export const TaskScreen = ({ navigation }) => {
 
   const checkOnCanShippedTask = () => {
     if (isCheckOnStatus) {
-      return taskStatus < TASK_STATUS.SHIPPED
+      return allow_deliver_action
     }
 
     return !isCompletedTaskFromNavigation
   }
 
   const acceptedBtnHandler = id => {
-    dispatch(setTaskStatus(id, TASK_STATUS.ACCEPTED))
+    dispatch(setTaskAccepted(id))
     navigation.navigate(SCREEN.TASKS)
   }
 

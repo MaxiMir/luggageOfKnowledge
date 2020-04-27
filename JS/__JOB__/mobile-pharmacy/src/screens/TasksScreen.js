@@ -17,9 +17,7 @@ export const TasksScreen = ({ navigation }) => {
   if (!tasks) {
     return (
       <AppContainer>
-        <AppLoader
-          text='Получаю список Ваших задач...'
-        />
+        <AppLoader text='Получаю список Ваших задач...' />
       </AppContainer>
     )
   }

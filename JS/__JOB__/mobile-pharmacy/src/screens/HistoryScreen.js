@@ -18,14 +18,12 @@ export const HistoryScreen = ({ navigation }) => {
 
   useEffect(() => {
     dispatch(getTaskHistory())
-  }, [dispatch])
+  }, [])
 
   if (!completedTasks) {
     return (
       <AppContainer>
-        <AppLoader
-          text='Получаю историю Ваших задач...'
-        />
+        <AppLoader text='Получаю историю Ваших задач' />
       </AppContainer>
     )
   }

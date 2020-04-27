@@ -13,14 +13,12 @@ export const AddressDirectoryScreen = ({ navigation }) => {
 
   useEffect(() => {
     dispatch(getAllPharmacies())
-  }, [dispatch])
+  }, [])
 
   if (!pharmacies) {
     return (
       <AppContainer>
-        <AppLoader
-          text='Получаю список адресов аптек...'
-        />
+        <AppLoader text='Получаю список адресов аптек...' />
       </AppContainer>
     )
   }

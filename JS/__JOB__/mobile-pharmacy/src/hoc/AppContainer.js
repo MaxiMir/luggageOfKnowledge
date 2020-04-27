@@ -39,7 +39,6 @@ const styles = StyleSheet.create({
     backgroundColor: THEME.BACKGROUND_COLOR
   },
   messageBlock: {
-    opacity: 0.6,
     width: '100%',
     position: 'absolute',
     top: '10%',

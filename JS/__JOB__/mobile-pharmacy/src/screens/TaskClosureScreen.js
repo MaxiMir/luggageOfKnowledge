@@ -7,23 +7,34 @@ import { AppHeader } from '../components/UI/AppHeader'
 import { AppButton } from '../components/UI/AppButton'
 import { AppTextBold } from '../components/UI/AppTextBold'
 import { AppText } from '../components/UI/AppText'
-import { setTaskStatus } from '../store/actions/task'
-import { SCREEN, TASK_STATUS } from '../consts'
+import { SelectPharmacyModal } from '../components/Pharmacy/SelectPharmacyModal/SelectPharmacyModal'
+import { setTaskCompleted } from '../store/actions/task'
+import { SCREEN } from '../consts'
 import { THEME } from '../theme'
 
 
 export const TaskClosureScreen = ({ navigation }) => {
   const dispatch = useDispatch()
+  const { id, destination_store_id, destination_store } = navigation.getParam('task')
   const [comment, setComment] = useState('')
+  const [modalVisible, setModalVisible] = useState(false)
+  const [address, setAddress] = useState(destination_store)
+  const [destinationStoreId, setDestinationStoreId] = useState(destination_store_id)
   const { name } = useSelector(state => state.user.data)
-  const { id, destination_store } = navigation.getParam('task')
+
 
   const cancelBtnHandler = () => {
     navigation.navigate(SCREEN.TASKS)
   }
 
-  const acceptBtnHandler = (id, comment) => {
-    dispatch(setTaskStatus(id, TASK_STATUS.COMPLETED, comment))
+  const onSelectPharmacy = () => {
+    setAddress(address)
+    setDestinationStoreId(destinationStoreId)
+    setModalVisible(false)
+  }
+
+  const acceptBtnHandler = () => {
+    dispatch(setTaskCompleted(id, destinationStoreId, comment))
     navigation.navigate(SCREEN.TASKS)
   }
 
@@ -31,26 +42,25 @@ export const TaskClosureScreen = ({ navigation }) => {
     <AppContainer>
       <TouchableWithoutFeedback onPress={ () => Keyboard.dismiss() }>
         <View style={ styles.container }>
-          <AppHeader>
-            Завершение задачи на перемещение
-          </AppHeader>
+          <AppHeader>Завершение задачи на перемещение</AppHeader>
+
+          <SelectPharmacyModal
+            visible={modalVisible}
+            onClose={() => setModalVisible(false)}
+            onSelect={onSelectPharmacy}
+          />
 
           <View style={ styles.textBlock }>
-            <AppTextBold>
-              Адрес отгрузки:
-            </AppTextBold>
-            <AppText>
-              { destination_store }
-            </AppText>
+            <AppTextBold>Адрес отгрузки: </AppTextBold>
+            <AppText style={styles.destinationText}>{ address }</AppText>
+            <AppButton onPress={() => setModalVisible(true)}>
+              <AppTextBold>Изменить</AppTextBold>
+            </AppButton>
           </View>
 
           <View style={ styles.textBlock }>
-            <AppTextBold>
-              Ф.И.О:
-            </AppTextBold>
-            <AppText>
-              { name }
-            </AppText>
+            <AppTextBold>Ф.И.О: </AppTextBold>
+            <AppText>{ name }</AppText>
           </View>
 
           <View style={ styles.textBlock }>
@@ -71,7 +81,7 @@ export const TaskClosureScreen = ({ navigation }) => {
               Отменить
             </AppButton>
             <AppButton
-              onPress={ () => acceptBtnHandler(id, comment) }
+              onPress={acceptBtnHandler}
               color={ THEME.SUCCESS_COLOR }
             >
               Подтвердить
@@ -98,6 +108,9 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: THEME.MAIN_COLOR,
     borderRadius: 5,
+    marginBottom: THEME.MARGIN_BOTTOM
+  },
+  destinationText: {
     marginBottom: THEME.MARGIN_BOTTOM
   },
   buttonsContainer: {

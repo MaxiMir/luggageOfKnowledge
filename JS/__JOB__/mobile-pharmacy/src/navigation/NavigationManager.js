@@ -12,7 +12,7 @@ export const NavigationManager = () => {
 
   useEffect(() => {
     dispatch(autoLogin())
-  }, [dispatch])
+  }, [])
 
   return !isAuthenticated ? <AuthScreen/> : <AppNavigation/>
 }
