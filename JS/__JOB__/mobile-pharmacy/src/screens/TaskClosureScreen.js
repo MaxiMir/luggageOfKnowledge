@@ -32,7 +32,7 @@ export const TaskClosureScreen = ({ navigation }) => {
     setModalVisible(true)
   }
 
-  const onSelectPharmacy = () => {
+  const onSelectPharmacy = (destinationStoreId, address) => {
     setAddress(address)
     setDestinationStoreId(destinationStoreId)
     setModalVisible(false)
