@@ -51,9 +51,6 @@ export const ScanScreen = ({ navigation }) => {
     :
     <View style={ styles.noAccessContainer }>
       <AppText style={ styles.noAccessText }>Для работы приложения необходим доступ к камере</AppText>
-      <AppButton onPress={ () => navigation.push(SCREEN.SCAN) }>
-        Попробовать снова
-      </AppButton>
     </View>
 
   return (

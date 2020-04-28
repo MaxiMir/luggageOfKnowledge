@@ -14,25 +14,20 @@ export const MainScreen = ({ navigation }) => {
         source={ require('../../assets/logo-min.png') }
         style={ styles.image }
       />
+
       <View style={ styles.buttonsContainer }>
-        <AppButton onPress={ () => navigation.navigate(SCREEN.HOW_TO_USE) }>
+        <AppButton
+          onPress={ () => navigation.navigate(SCREEN.HOW_TO_USE) }
+        >
           Как использовать приложение
         </AppButton>
 
-        <AppButton onPress={ () => navigation.navigate(SCREEN.ADDRESS_DIRECTORY) }>
+        <AppButton
+          onPress={ () => navigation.navigate(SCREEN.ADDRESS_DIRECTORY) }
+        >
           Справочник адресов
         </AppButton>
       </View>
-
-      <AppButton
-        color={ THEME.DANGER_COLOR }
-        onPress={ () => navigation.navigate(SCREEN.TASK, {
-          id: 1,
-          isNewTask: false
-        }) }
-      >
-        DEBUG
-      </AppButton>
     </AppContainer>
   )
 }

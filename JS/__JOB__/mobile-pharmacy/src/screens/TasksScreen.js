@@ -42,6 +42,7 @@ export const TasksScreen = ({ navigation }) => {
       <AppTextBold style={ styles.noTaskText }>
         Список задач пуст
       </AppTextBold>
+
       <AppButton onPress={ scanBtnHandler }>
         Сканировать шрихкод
       </AppButton>

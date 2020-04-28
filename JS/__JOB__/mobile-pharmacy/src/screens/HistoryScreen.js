@@ -23,7 +23,7 @@ export const HistoryScreen = ({ navigation }) => {
   if (!completedTasks) {
     return (
       <AppContainer>
-        <AppLoader text='Получаю историю Ваших задач' />
+        <AppLoader text='Получаю историю Ваших задач'/>
       </AppContainer>
     )
   }
@@ -46,14 +46,10 @@ export const HistoryScreen = ({ navigation }) => {
     />
     :
     <View style={ styles.noTaskContainer }>
-      <AppTextBold style={ styles.noHistoryText }>
-        Список выполненных задач пуст
-      </AppTextBold>
-      <AppButton onPress={ scanBtnHandler }>
-        Сканировать шрихкод
-      </AppButton>
-    </View>
+      <AppTextBold style={ styles.noHistoryText }>Список выполненных задач пуст</AppTextBold>
 
+      <AppButton onPress={ scanBtnHandler }>Сканировать шрихкод</AppButton>
+    </View>
 
   return (
     <AppContainer>
@@ -65,7 +61,6 @@ export const HistoryScreen = ({ navigation }) => {
 HistoryScreen.navigationOptions = ({ navigation }) => ({
   headerTitle: 'История'
 })
-
 
 const styles = StyleSheet.create({
   noTaskContainer: {

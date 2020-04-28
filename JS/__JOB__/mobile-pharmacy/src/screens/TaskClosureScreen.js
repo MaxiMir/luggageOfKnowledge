@@ -7,24 +7,29 @@ import { AppHeader } from '../components/UI/AppHeader'
 import { AppButton } from '../components/UI/AppButton'
 import { AppTextBold } from '../components/UI/AppTextBold'
 import { AppText } from '../components/UI/AppText'
-import { SelectPharmacyModal } from '../components/Pharmacy/SelectPharmacyModal/SelectPharmacyModal'
+import { PharmacySelectModal } from '../components/Pharmacy/PharmacySelectModal/PharmacySelectModal'
 import { setTaskCompleted } from '../store/actions/task'
 import { SCREEN } from '../consts'
 import { THEME } from '../theme'
+
 
 
 export const TaskClosureScreen = ({ navigation }) => {
   const dispatch = useDispatch()
   const { id, destination_store_id, destination_store } = navigation.getParam('task')
   const [comment, setComment] = useState('')
-  const [modalVisible, setModalVisible] = useState(false)
   const [address, setAddress] = useState(destination_store)
   const [destinationStoreId, setDestinationStoreId] = useState(destination_store_id)
+  const [modalVisible, setModalVisible] = useState(false)
+  const [modalIsInitialized, setModalIsInitialized] = useState(false)
   const { name } = useSelector(state => state.user.data)
 
+  const changePharmacy = () => {
+    if (!modalIsInitialized) {
+      setModalIsInitialized(true)
+    }
 
-  const cancelBtnHandler = () => {
-    navigation.navigate(SCREEN.TASKS)
+    setModalVisible(true)
   }
 
   const onSelectPharmacy = () => {
@@ -38,22 +43,34 @@ export const TaskClosureScreen = ({ navigation }) => {
     navigation.navigate(SCREEN.TASKS)
   }
 
+  const cancelBtnHandler = () => {
+    navigation.navigate(SCREEN.TASKS)
+  }
+
+  const modalContent = !modalIsInitialized ?
+    null
+    :
+    <PharmacySelectModal
+      visible={ modalVisible }
+      onClose={ () => setModalVisible(false) }
+      onSelect={ onSelectPharmacy }
+    />
+
+
   return (
     <AppContainer>
       <TouchableWithoutFeedback onPress={ () => Keyboard.dismiss() }>
         <View style={ styles.container }>
           <AppHeader>Завершение задачи на перемещение</AppHeader>
 
-          <SelectPharmacyModal
-            visible={modalVisible}
-            onClose={() => setModalVisible(false)}
-            onSelect={onSelectPharmacy}
-          />
+          { modalContent }
 
           <View style={ styles.textBlock }>
             <AppTextBold>Адрес отгрузки: </AppTextBold>
-            <AppText style={styles.destinationText}>{ address }</AppText>
-            <AppButton onPress={() => setModalVisible(true)}>
+
+            <AppText style={ styles.destinationText }>{ address }</AppText>
+
+            <AppButton onPress={ changePharmacy }>
               <AppTextBold>Изменить</AppTextBold>
             </AppButton>
           </View>
@@ -80,8 +97,9 @@ export const TaskClosureScreen = ({ navigation }) => {
             >
               Отменить
             </AppButton>
+
             <AppButton
-              onPress={acceptBtnHandler}
+              onPress={ acceptBtnHandler }
               color={ THEME.SUCCESS_COLOR }
             >
               Подтвердить

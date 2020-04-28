@@ -13,16 +13,14 @@ import { THEME } from '../theme'
 
 export const AuthScreen = ({ navigation }) => {
   const dispatch = useDispatch()
-  const [phone, setPhone] = useState('+79991234567')
-  const [password, setPassword] = useState('123456')
+  const [phone, setPhone] = useState('+7')
+  const [password, setPassword] = useState('')
   const [isSendingData, setIsSendingData] = useState(false)
 
   if (isSendingData) {
     return (
       <AppContainer>
-        <AppLoader
-          text='Отправляю данные...'
-        />
+        <AppLoader text='Отправляю данные...'/>
       </AppContainer>
     )
   }
@@ -56,9 +54,8 @@ export const AuthScreen = ({ navigation }) => {
     <AppContainer>
       <TouchableWithoutFeedback onPress={ () => Keyboard.dismiss() }>
         <View style={ styles.container }>
-          <AppHeader>
-            Авторизация
-          </AppHeader>
+          <AppHeader>Авторизация</AppHeader>
+
           <View style={ styles.inputsContainer }>
             <View style={ { ...styles.inputContainer, borderColor: phoneContainerColor } }>
               <TextInput
@@ -71,6 +68,7 @@ export const AuthScreen = ({ navigation }) => {
                 maxLength={ !phone.startsWith('+') ? 11 : 12 }
               />
             </View>
+
             <View style={ { ...styles.inputContainer, borderColor: passwordContainerColor } }>
               <TextInput
                 placeholder="ПАРОЛЬ"
@@ -82,6 +80,7 @@ export const AuthScreen = ({ navigation }) => {
                 onSubmitEditing={ Keyboard.dismiss }
               />
             </View>
+
             <View style={ styles.buttonContainer }>
               <AppButton
                 onPress={ enterBtnHandler }
@@ -96,7 +95,6 @@ export const AuthScreen = ({ navigation }) => {
     </AppContainer>
   )
 }
-
 
 const styles = StyleSheet.create({
   container: {

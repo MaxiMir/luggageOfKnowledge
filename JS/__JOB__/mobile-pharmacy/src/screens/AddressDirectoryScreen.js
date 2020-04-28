@@ -15,19 +15,14 @@ export const AddressDirectoryScreen = ({ navigation }) => {
     dispatch(getAllPharmacies())
   }, [])
 
-  if (!pharmacies) {
-    return (
-      <AppContainer>
-        <AppLoader text='Получаю список адресов аптек...' />
-      </AppContainer>
-    )
-  }
+  const content = !pharmacies ?
+    <AppLoader text='Получаю список адресов аптек...'/>
+    :
+    <PharmacyList pharmacies={ pharmacies }/>
 
   return (
     <AppContainer>
-      <PharmacyList
-        pharmacies={ pharmacies }
-      />
+      { content }
     </AppContainer>
   )
 }

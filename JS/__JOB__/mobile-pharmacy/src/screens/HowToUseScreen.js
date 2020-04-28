@@ -12,12 +12,10 @@ export const HowToUseScreen = ({ navigation }) => {
   return (
     <View style={ styles.container }>
       <ScrollView>
-        <AppHeader>
-          Инструкция
-        </AppHeader>
-        <AppText style={ styles.text }>
-          Как пользоваться приложением
-        </AppText>
+        <AppHeader>Инструкция</AppHeader>
+
+        <AppText style={ styles.text }>Как пользоваться приложением</AppText>
+
         <AppButton
           onPress={ () => navigation.navigate(SCREEN.MAIN) }
         >

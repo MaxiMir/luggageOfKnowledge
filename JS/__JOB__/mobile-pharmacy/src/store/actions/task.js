@@ -1,11 +1,12 @@
 import axios from '../../axios/axiosApi'
-import { GET_TASK, GET_ALL_TASKS, SET_TASK_ACCEPTED, SET_TASK_COMPLETED, GET_TASK_HISTORY } from '../types'
 import { showAndHideMessage } from './app'
+import { responseUserErrorHandler}  from './user'
+import { GET_TASK, GET_ALL_TASKS, SET_TASK_ACCEPTED, SET_TASK_COMPLETED, GET_TASK_HISTORY } from '../types'
 
 
 export const getTask = id => async dispatch => {
   try {
-    const { data: { success, message, relocation } } = await axios.get(`/relocations/${ id }`)
+    const { success, message, relocation } = await axios.get(`/relocations/${ id }`)
 
     if (!success) {
       dispatch(showAndHideMessage(message, false))
@@ -15,16 +16,14 @@ export const getTask = id => async dispatch => {
         payload: relocation
       })
     }
-
   } catch (e) {
-    dispatch(showAndHideMessage('Что-то пошло не так...', false))
+    dispatch(responseUserErrorHandler(e))
   }
 }
 
 export const getAllTasks = () => async dispatch => {
   try {
-    const response = await axios.get('https://vacancy-dev.erkapharm.com/api/mobile/relocations')
-    const { data: { success, message, relocations } } = response
+    const { success, message, relocations } = await axios.get('/relocations')
 
     if (!success) {
       dispatch(showAndHideMessage(message, false))
@@ -35,14 +34,14 @@ export const getAllTasks = () => async dispatch => {
       })
     }
   } catch (e) {
-    dispatch(showAndHideMessage('Что-то пошло не так...', false))
+    dispatch(responseUserErrorHandler(e))
   }
 }
 
 export const setTaskAccepted = id => async dispatch => {
   try {
     const postData = { id, action: "accept" }
-    const { data: { success, message } } = await axios.post('/relocations', { postData })
+    const { success, message } = await axios.post('/relocations', { postData })
 
     if (!success) {
       dispatch(showAndHideMessage(message, false))
@@ -52,14 +51,14 @@ export const setTaskAccepted = id => async dispatch => {
       })
     }
   } catch (e) {
-    dispatch(showAndHideMessage('Что-то пошло не так...', false))
+    dispatch(responseUserErrorHandler(e))
   }
 }
 
 export const setTaskCompleted = (id, storeId, comment) => async dispatch => {
   try {
     const postData = { id, comment, action: "deliver", store_id: storeId }
-    const { data: { success, message } } = await axios.post('/relocations', postData)
+    const { success, message } = await axios.post('/relocations', postData)
 
     if (!success) {
       dispatch(showAndHideMessage(message, false))
@@ -69,7 +68,7 @@ export const setTaskCompleted = (id, storeId, comment) => async dispatch => {
       })
     }
   } catch (e) {
-    dispatch(showAndHideMessage('Что-то пошло не так...', false))
+    dispatch(responseUserErrorHandler(e))
   }
 }
 
@@ -80,10 +79,6 @@ export const getTaskHistory = () => async dispatch => {
       payload: []
     })
   } catch (e) {
-    dispatch(showAndHideMessage('Что-то пошло не так...', false))
+    dispatch(responseUserErrorHandler(e))
   }
 }
-
-
-
-

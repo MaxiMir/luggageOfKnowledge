@@ -1,4 +1,5 @@
 import React from 'react'
+import { StyleSheet } from 'react-native'
 import { useSelector } from 'react-redux'
 
 import { AppContainer } from '../hoc/AppContainer'
@@ -13,13 +14,12 @@ export const ProfileScreen = ({ navigation }) => {
 
   return (
     <AppContainer>
-      <User
-        user={ user }
-      />
+      <User user={ user }/>
+
       <AppButton
         color={ THEME.DANGER_COLOR }
         onPress={ () => navigation.navigate(SCREEN.LOGOUT) }
-        style={ { marginTop: 20 } }
+        style={ styles.logoutBtn }
       >
         Выйти
       </AppButton>
@@ -29,4 +29,10 @@ export const ProfileScreen = ({ navigation }) => {
 
 ProfileScreen.navigationOptions = ({ navigation }) => ({
   headerTitle: 'Профиль'
+})
+
+const styles = StyleSheet.create({
+  logoutBtn: {
+    marginTop: 20
+  }
 })

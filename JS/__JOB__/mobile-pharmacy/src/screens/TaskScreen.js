@@ -90,6 +90,7 @@ export const TaskScreen = ({ navigation }) => {
         >
           Принял
         </AppButton>
+
         <AppButton
           color={ THEME.SUCCESS_COLOR }
           onPress={ shippedBtnHandler }

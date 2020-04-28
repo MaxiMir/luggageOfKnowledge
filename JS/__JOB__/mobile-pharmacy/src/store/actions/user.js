@@ -7,7 +7,7 @@ import { SET_USER, CLEAR_USER } from '../types'
 
 export const auth = (phone, password) => async dispatch => {
   try {
-    const { data: { success, message, user } } = await axios.post('/auth', { phone, password })
+    const { success, message, user } = await axios.post('/auth', { phone, password })
 
     if (!success) {
       dispatch(showAndHideMessage(message, false))
@@ -23,7 +23,7 @@ export const auth = (phone, password) => async dispatch => {
       dispatch(showAndHideMessage(message))
     }
   } catch (e) {
-    console.error('auth ERROR:', e.message)
+    dispatch(responseUserErrorHandler(e))
   }
 }
 
@@ -74,4 +74,12 @@ export const setToken = token => {
 
 export const clearToken = () => {
   axios.defaults.headers.common['Authorization'] = false
+}
+
+export const responseUserErrorHandler = e => async dispatch => {
+  if (e.response.status === 401) {
+    dispatch(logout())
+  } else {
+    dispatch(showAndHideMessage('Что-то пошло не так...', false))
+  }
 }
