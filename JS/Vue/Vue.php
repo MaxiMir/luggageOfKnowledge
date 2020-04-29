@@ -4,11 +4,11 @@
 
 # http://book.loftschool.com/vuejs
 
-/** 
+/**
   @ ЗАЧЕМ?
   * Обеспечивать сложный front-end
   * SPA, PWA
-  * Отдельные виджеты  
+  * Отдельные виджеты
   * Реактивность - данные сообщают об их изменении, а представление отображает текущее состояние модели
 
   @ ЧТО?
@@ -42,17 +42,17 @@
 <body>
     <div id="app" v-cloak> <!-- атрибут v-cloak будет у элемента, до тех пор, пока Vue его не обработает -->
 		<h1>{{ title }}</h1><!-- ИЛИ: <h1 v-text="title"></h1> если кроме title ничего нет -->
-		
-  
+
+
 		<!-- v-pre: -->
 		<p v-pre>{{ title }}</p> <!-- {{ title }} не будет обработан Vue -->
 
-  
+
 		<!-- v-once: -->
-		<p v-text="text" v-once></p> <!-- перерисован будет только 1 раз --> 
+		<p v-text="text" v-once></p> <!-- перерисован будет только 1 раз -->
 		<p v-text="text"></p>
-		
-   
+
+
 		 <!-- v-on: -->
 		<input type="text" v-on:input="handleChange" >
         <!--
@@ -78,7 +78,7 @@
 		<div>{{textOfBtn.textOfBtn}}, был клик в x = {{textOfBtn.coordX}}</div>
 		<button @click="handleClick('ONE', $event)">Изменить</button> <!-- $event - данные о событии -->
 		<button @click="handleClick('TWO', $event)">Изменить</button>
-  
+
 		<!--
         v-model — позволяет связать элемент ввода в шаблоне и заставляет его изменять свойство данных Vue, когда пользователь меняет содержимое поля в шаблоне;
         v-show — элемент не будет показан в разметке, а будет добавляться display: none;
@@ -86,26 +86,26 @@
         v-for — позволяет создать список элементов.
 		-->
 	</div>
-	 
-    <script src="main.js"></script>
+
+    <script src="MainLayout.js"></script>
 </body>
 
 
 
-<script src="main.js"></script><script> 
-// Содержимое main.js:
+<script src="MainLayout.js"></script><script>
+// Содержимое MainLayout.js:
 
 new Vue({
-	el: '#app', 
+	el: '#app',
 	data: { // данные которые хотим отрисовать в компоненте
 		title: 'Hello world',
 		text: 'some text',
 		href: '//google.com',
 		link: "<a href='google.com'>google.com</a>",
 		textOfBtn: { // объединяем данные одной сущности в объект
-			'title': 'Ждем клика',   
-			coordX: 0  
-		}  
+			'title': 'Ждем клика',
+			coordX: 0
+		}
 	},
 	methods: {
 		handleChange(e) {
@@ -114,7 +114,7 @@ new Vue({
 		handleClick(newTitle, e) {
 			this.textOfBtn.title = newTitle;
 			this.textOfBtn.coordX = e.clientX;
-		} 
+		}
 	}
 });
 </script>
@@ -125,7 +125,7 @@ new Vue({
 <div id="app">
 	<div class="outer" @click.capture="handleOuter"><!-- можно отслеживать события в режиме capture, т.е. событие, нацеленное
         на внутренний элемент, обрабатывается здесь до обработки этим элементом -->
-        
+
     <!-- события срабатывают в момент погружения
 		@click.stop <-> e.stopPropagation()
 		@click.self - обработчик сработает только на том элементе, на котором произошло событие
@@ -141,17 +141,17 @@ new Vue({
 
 		<a @click.prevent href="#">ссылка</a> <!-- отменяем действия по умолчанию @click.prevent.once() - отменить действия по умолчанию 1 раз -->
 	</div>
-</div>		
+</div>
 
 
-<script src="main.js"></script><script> // Содержимое main.js:
+<script src="MainLayout.js"></script><script> // Содержимое MainLayout.js:
 new Vue({
-	el: '#app', 
-	data: { 
+	el: '#app',
+	data: {
 		example: {
-			'title': 'Ждем клика',   
-			coordX: 0  
-		}  
+			'title': 'Ждем клика',
+			coordX: 0
+		}
 	},
 	methods: {
 		handleOuter(e) {
@@ -189,11 +189,11 @@ C @click.capture:
 </div>
 
 
-<script src="main.js"></script><script> // Содержимое main.js:
+<script src="MainLayout.js"></script><script> // Содержимое MainLayout.js:
 
 new Vue({
-	el: '#app', 
-	data: { 
+	el: '#app',
+	data: {
 		title: 'Hello world!'
 	},
 	computed: { // вычисляемые свойства (выполняются 1 раз, затем кэшируются)
@@ -205,7 +205,7 @@ new Vue({
 		},
 		newSecondTitle: { // #2 !через объект
 			get() {
-				return 'new second Title';		
+				return 'new second Title';
 			},
 			set(value) {
 				this.title = `new second Title ${value}`
@@ -233,10 +233,10 @@ new Vue({
 </div>
 
 
-<script src="main.js"></script><script> // Содержимое main.js:
+<script src="MainLayout.js"></script><script> // Содержимое MainLayout.js:
 new Vue({
-	el: '#app', 
-	data: { 
+	el: '#app',
+	data: {
 		title: 'Hello world!', // #watch
 		status: ""
 	},
@@ -245,12 +245,12 @@ new Vue({
 			this.title = "new title";
 		}
 	},
-	watch: { // указываем свойства, за которыми будем следить 
+	watch: { // указываем свойства, за которыми будем следить
 		title(value) { // в value на что было изменено #watch
 			this.status = `title изменился на ${value}`;
 		}
 	}
-});	
+});
 </script>
 
 
@@ -262,20 +262,20 @@ new Vue({
     className: propName (propName - true ? добавляем класс className : не добавляем )
 
 	// еще пример: класс active и colored - по условию, класс error - всегда:
-	:class="[{ active: changed, active: colored }, errorClass]" 
+	:class="[{ active: changed, active: colored }, errorClass]"
 	-->
 
 	<button @click="setupTitle">
 		Вывести
-	</button>	
+	</button>
 </div>
 
 
-<script src="main.js"></script><script> // Содержимое main.js:
+<script src="MainLayout.js"></script><script> // Содержимое MainLayout.js:
 
 new Vue({
-	el: '#app', 
-	data: { 
+	el: '#app',
+	data: {
 		title: 'Hello world!',
 		activeClass: 'active',
 		errorClass: 'error'
@@ -293,18 +293,18 @@ new Vue({
 
 <!-- # Работа со стилями: -->
 <div id="app">
-	<h1 :style="styles">{{title}}</h1> 
+	<h1 :style="styles">{{title}}</h1>
 	<p :style="{ color: fontNewColor, backgroundColor: backgroundColor }">
 		Some text
 	</p>
 </div>
 
 
-<script src="main.js"></script><script> // Содержимое main.js:
+<script src="MainLayout.js"></script><script> // Содержимое MainLayout.js:
 
 new Vue({
-	el: '#app', 
-	data: { 
+	el: '#app',
+	data: {
 		title: 'Hello world!',
 		styles: {
 			color: 'white',
@@ -331,11 +331,11 @@ new Vue({
 </div>
 
 
-<script src="main.js"></script><script> // Содержимое main.js:
+<script src="MainLayout.js"></script><script> // Содержимое MainLayout.js:
 
 new Vue({
-	el: '#app', 
-	data: { 
+	el: '#app',
+	data: {
 		show: true;
 		num: 0
 	},
@@ -360,7 +360,7 @@ new Vue({
 	<ul> <!-- объекты -->
 		<li v-for="(val, prop) in obj">  <!-- перебор объекта -->
 			{{prop}} : {{val}}
-		</li>	
+		</li>
 	</ul>
 	<ul>
 		<!-- В цикле вышаем обработчики на клик и вывод по условию -->
@@ -377,10 +377,10 @@ new Vue({
 
 </div>
 
-<script src="main.js"></script><script> // Содержимое main.js:
+<script src="MainLayout.js"></script><script> // Содержимое MainLayout.js:
 new Vue({
-	el: '#app', 
-	data: { 
+	el: '#app',
+	data: {
 		arr: ['one', 'two', 'three'],
 		obj: {
 			prop1: 'val1',
@@ -403,7 +403,7 @@ new Vue({
 </div>
 
 
-<script src="main.js"></script><script> // Содержимое main.js:
+<script src="MainLayout.js"></script><script> // Содержимое MainLayout.js:
 
 const vueModel = new Vue({
 	data: { // здесь объявляется реактивные поля
@@ -438,7 +438,7 @@ setTimeout(() => {
 </div>
 
 
-<script src="main.js"></script><script> // Содержимое main.js:
+<script src="MainLayout.js"></script><script> // Содержимое MainLayout.js:
 
 Vue.component('hello', { // экземляр компонета. hello - название компонента, в {} - настройки
 	template: '<h1 @click="handleClick">{{title}}</h1>',
@@ -478,17 +478,17 @@ vueModel.$mount('#app');
 	</div>
 </script>
 
-<script src="main.js"></script><script> // Содержимое main.js:
+<script src="MainLayout.js"></script><script> // Содержимое MainLayout.js:
 
-// FILE: main.js:
+// FILE: MainLayout.js:
 Vue.component('outerComponent', {
 	template: '<span> внутренний компонент</span>'
 });
 
 
-Vue.component('hello', { 
+Vue.component('hello', {
 	template: "#helloTemplate", // указываем селектор шаблона
-	data() { 
+	data() {
 		return {
 			'title': 'hello world'
 		}
@@ -508,24 +508,24 @@ Vue.component('hello', {
 	}
 });
 
-const vueModel = new Vue(); 
+const vueModel = new Vue();
 vueModel.$mount('#app');
 </script>
 
 
 
 <!-- # Свойства компонента -->
-<div id="app"> 
+<div id="app">
 	<hello :key="name" v-for="name in names" :name="name" ></hello> <!--для внутренней оптимизации Vue, добавляем уникальный key-->
 <div>
-	
+
 <script type="text/x-template" id="helloTemplate">
 	<h1>Hello {{name}}!</h1>
 </script>
 
-<script src="main.js"></script><script> // Содержимое main.js:
+<script src="MainLayout.js"></script><script> // Содержимое MainLayout.js:
 
-Vue.component('hello', { 
+Vue.component('hello', {
 	props: ['name'], // регистрируем с какими свойствами будем работать в компоненте
 	template: "#helloTemplate",
 });
@@ -543,25 +543,25 @@ vueModel.$mount('#app');
 
 
 <!-- # Пользовательские события -->
-<div id="app"> 
+<div id="app">
 	<hello :key="name" v-for="name in names" :name="name" ></hello><!--для внутренней оптимизации Vue, добавляем уникальный key-->
 <div>
-	
+
 <script type="text/x-template" id="helloTemplate">
 	<h1>Hello {{title}}!</h1>
 	<child @clickEmitted="changeTitle"></child> <!-- #2 -->
 </script>
-	
+
 <script type="text/x-template" id="childTemplate">
 	<button @click="handleClick">
 		Оповестить
 	</button>
 </script>
 
-<script src="main.js"></script><script> // Содержимое main.js:
+<script src="MainLayout.js"></script><script> // Содержимое MainLayout.js:
 
 
-// FILE: main.js:
+// FILE: MainLayout.js:
 Vue.component('child', {
 	template: "#childTemplate",
 	methods: {
@@ -570,14 +570,14 @@ Vue.component('child', {
 				string: "new title",
 				num: 123
 			}); // #1
-			// возможность обратится к родительскому компоненту. 
+			// возможность обратится к родительскому компоненту.
 			// clickEmitted - имя пользовательского события
 			// {} - передаваемые данные
 		}
 	}
 });
 
-Vue.component('hello', { 
+Vue.component('hello', {
 	props: ['name'], // регистрируем с какими свойствами будем работать в компоненте
 	template: "#helloTemplate",
 	data() {
@@ -604,7 +604,7 @@ vueModel.$mount('#app');
 </script>
 
 
-<!-- # Vuex 
+<!-- # Vuex
 https://vuex.vuejs.org
 Vuex - библиотека для работы с данными во Vue
 -->

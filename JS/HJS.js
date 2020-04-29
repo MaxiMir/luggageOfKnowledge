@@ -11346,9 +11346,9 @@ try {
 }
 
 // ReferenceError: undefinedFunc is not defined
-// at g (main.js:60:17)
-// at f (main.js:61:17)
-// at Object.<anonymous> (main.js:64:3)
+// at g (MainLayout.js:60:17)
+// at f (MainLayout.js:61:17)
+// at Object.<anonymous> (MainLayout.js:64:3)
 
 // # Возбуждение исключения:
 // const obj = new Error(message);
@@ -15790,8 +15790,8 @@ event.stopImmediatePropagation()
  <div class="container m-3">
  <div class="gem-puzzle"></div>
  </div>
- <script src="/vendors~main.js" ></script>
- <script src="/main.js" ></script>
+ <script src="/vendors~MainLayout.js" ></script>
+ <script src="/MainLayout.js" ></script>
  </body>
  </html>
  */
@@ -16067,8 +16067,8 @@ console.log(parsedUrl); // https://some.site/?id=123&key=value
  </div>
  </div>
  </div>
- <script src="/vendors~main.js" ></script>
- <script src="/main.js" ></script>
+ <script src="/vendors~MainLayout.js" ></script>
+ <script src="/MainLayout.js" ></script>
  </body>
  </html>
  */
@@ -16590,8 +16590,8 @@ export default () => {
  </div>
  </div>
  </div>
- <script src="/vendors~main.js" ></script>
- <script src="/main.js" ></script>
+ <script src="/vendors~MainLayout.js" ></script>
+ <script src="/MainLayout.js" ></script>
  </body>
  </html>
  */
@@ -16784,8 +16784,8 @@ app();
  </div>
  </div>
  </div>
- <script src="/vendors~main.js" ></script>
- <script src="/main.js" ></script>
+ <script src="/vendors~MainLayout.js" ></script>
+ <script src="/MainLayout.js" ></script>
  </body>
  </html>
  */
@@ -22304,8 +22304,8 @@ const render = (state) => {
       </div>
       </div>
     </div>
-    <script src="/vendors~main.js" ></script>
-    <script src="/main.js" ></script>
+    <script src="/vendors~MainLayout.js" ></script>
+    <script src="/MainLayout.js" ></script>
   </body>
 </html>
 */
@@ -22776,8 +22776,8 @@ watch(state, 'registrationProcess.state', () => {
         </div>
       </div>
     </div>
-    <script src="/vendors~main.js" ></script>
-    <script src="/main.js" ></script>
+    <script src="/vendors~MainLayout.js" ></script>
+    <script src="/MainLayout.js" ></script>
   </body>
 </html>
 */

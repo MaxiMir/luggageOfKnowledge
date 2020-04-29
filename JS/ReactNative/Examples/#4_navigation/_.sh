@@ -40,6 +40,7 @@ $ npm install eslint eslint-config-airbnb babel-preset-airbnb eslint-plugin-impo
 # + FILE .eslintrc.js .
 # + FILE .prettierrc.js
 # + ADD in package.json:
+
 :<<comment
 "scripts": {
   "lint": "esw src/**",

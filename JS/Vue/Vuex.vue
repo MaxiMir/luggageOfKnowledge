@@ -17,7 +17,7 @@
 
 
 
-// FILE: App.vue: 
+// FILE: App.vue:
 </script>
 
 
@@ -43,7 +43,7 @@ export default {
             allPosts: []
         }
     },
-    async mounted() { 
+    async mounted() {
         const res = await fetch('https://jsonplaceholder.typicode.com/posts?_limit=3')
         const posts = await res.json();
 
@@ -122,10 +122,10 @@ export default {
         createPost(state, newPost) {
             state.posts.unshift(newPost);
         }
-    }, 
+    },
     state: {
         post: []
-    }, 
+    },
     getters: {
         validPost(state) {
             return state.posts.filter(p => {
@@ -146,7 +146,7 @@ export default {
 
 
 
-// FILE: main.js:
+// FILE: MainLayout.js:
 import Vue from 'vue';
 import store from './store'; // импортируем store (без названия файла тк index.js)
 import App from './App.vue';
@@ -197,7 +197,7 @@ new Vue({
                    id: Date.now()
                });
 
-               this.title = this.body = ''; 
+               this.title = this.body = '';
             }
         }
     }
