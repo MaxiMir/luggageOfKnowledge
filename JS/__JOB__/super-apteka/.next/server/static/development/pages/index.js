@@ -88,7 +88,7 @@ module.exports =
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 4);
+/******/ 	return __webpack_require__(__webpack_require__.s = 3);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -191,9 +191,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _UI_Icons_AppPhoneIcon__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../UI/Icons/AppPhoneIcon */ "./components/UI/Icons/AppPhoneIcon.js");
 /* harmony import */ var _UI_Icons_AppLocationIcon__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../UI/Icons/AppLocationIcon */ "./components/UI/Icons/AppLocationIcon.js");
 /* harmony import */ var _UI_Icons_AppChevron__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../UI/Icons/AppChevron */ "./components/UI/Icons/AppChevron.js");
-/* harmony import */ var _theme__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../../theme */ "./theme.js");
+/* harmony import */ var _UI_AppLink__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../UI/AppLink */ "./components/UI/AppLink.js");
+/* harmony import */ var _theme__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../../theme */ "./theme.js");
 var _jsxFileName = "/Users/maksimmincenko/PhpstormProjects/slim.xppx/r/KNOWLEDGE/JS/__JOB__/super-apteka/components/Navigation/Header/HeaderTopBar/HeaderTopBar.js";
 var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
+
 
 
 
@@ -204,17 +206,21 @@ var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
 const HeaderTopBarStyles = styled_components__WEBPACK_IMPORTED_MODULE_1___default.a.div.withConfig({
   displayName: "HeaderTopBar__HeaderTopBarStyles",
   componentId: "sc-84qcod-0"
-})(["background-color:", ";padding-top:14px;padding-bottom:10px;"], _theme__WEBPACK_IMPORTED_MODULE_6__["THEME"].BACKGROUND_COLOR);
-const RegionLabelStyles = styled_components__WEBPACK_IMPORTED_MODULE_1___default.a.span.withConfig({
-  displayName: "HeaderTopBar__RegionLabelStyles",
+})(["background-color:", ";padding-top:14px;padding-bottom:10px;"], _theme__WEBPACK_IMPORTED_MODULE_7__["THEME"].BACKGROUND_COLOR);
+const LabelStyles = styled_components__WEBPACK_IMPORTED_MODULE_1___default.a.span.withConfig({
+  displayName: "HeaderTopBar__LabelStyles",
   componentId: "sc-84qcod-1"
-})(["color:", ";margin-right:5px;font-weight:bold;font-size:9px;line-height:13px;text-transform:uppercase;"], _theme__WEBPACK_IMPORTED_MODULE_6__["THEME"].LABEL_FONT_COLOR);
+})(["color:", ";margin-right:5px;font-weight:bold;font-size:9px;line-height:13px;text-transform:uppercase;"], _theme__WEBPACK_IMPORTED_MODULE_7__["THEME"].LABEL_FONT_COLOR);
+const SpanLinkStyles = styled_components__WEBPACK_IMPORTED_MODULE_1___default.a.span.withConfig({
+  displayName: "HeaderTopBar__SpanLinkStyles",
+  componentId: "sc-84qcod-2"
+})(["margin-right:5px"]);
 const HeaderTopBar = () => {
   return __jsx(HeaderTopBarStyles, {
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 29,
+      lineNumber: 34,
       columnNumber: 5
     }
   }, __jsx("div", {
@@ -222,7 +228,7 @@ const HeaderTopBar = () => {
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 30,
+      lineNumber: 35,
       columnNumber: 7
     }
   }, __jsx("div", {
@@ -230,7 +236,7 @@ const HeaderTopBar = () => {
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 31,
+      lineNumber: 36,
       columnNumber: 9
     }
   }, __jsx("div", {
@@ -238,21 +244,21 @@ const HeaderTopBar = () => {
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 32,
+      lineNumber: 37,
       columnNumber: 11
     }
   }, __jsx("div", {
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 33,
+      lineNumber: 38,
       columnNumber: 13
     }
   }, __jsx(_UI_Icons_AppPhoneIcon__WEBPACK_IMPORTED_MODULE_3__["AppPhoneIcon"], {
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 34,
+      lineNumber: 39,
       columnNumber: 15
     }
   }), __jsx(_UI_AppPhone__WEBPACK_IMPORTED_MODULE_2__["AppPhone"], {
@@ -260,7 +266,7 @@ const HeaderTopBar = () => {
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 35,
+      lineNumber: 40,
       columnNumber: 15
     }
   })), __jsx("div", {
@@ -268,71 +274,99 @@ const HeaderTopBar = () => {
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 38,
+      lineNumber: 43,
       columnNumber: 13
     }
-  }, __jsx(RegionLabelStyles, {
+  }, __jsx(LabelStyles, {
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 39,
+      lineNumber: 44,
       columnNumber: 15
     }
-  }, "\u0440\u0435\u0433\u0438\u043E\u043D"), "\u041C\u043E\u0441\u043A\u0432\u0430", __jsx(_UI_Icons_AppChevron__WEBPACK_IMPORTED_MODULE_5__["AppChevron"], {
-    __self: undefined,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 45,
-      columnNumber: 15
-    }
-  })), __jsx("div", {
+  }, "\u0440\u0435\u0433\u0438\u043E\u043D"), __jsx(_UI_AppLink__WEBPACK_IMPORTED_MODULE_6__["AppLink"], {
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
       lineNumber: 48,
-      columnNumber: 13
+      columnNumber: 15
     }
-  }, __jsx(RegionLabelStyles, {
+  }, __jsx(SpanLinkStyles, {
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
       lineNumber: 49,
-      columnNumber: 15
+      columnNumber: 17
     }
-  }, "\u0430\u043F\u0442\u0435\u043A\u0430"), __jsx(_UI_Icons_AppLocationIcon__WEBPACK_IMPORTED_MODULE_4__["AppLocationIcon"], {
+  }, "\u041C\u043E\u0441\u043A\u0432\u0430"), __jsx(_UI_Icons_AppChevron__WEBPACK_IMPORTED_MODULE_5__["AppChevron"], {
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 53,
-      columnNumber: 15
+      lineNumber: 52,
+      columnNumber: 17
     }
-  }), "\u0421\u0443\u043C\u0441\u043A\u0430\u044F \u0443\u043B\u0438\u0446\u0430, 2/12", __jsx(_UI_Icons_AppChevron__WEBPACK_IMPORTED_MODULE_5__["AppChevron"], {
+  }))), __jsx("div", {
+    __self: undefined,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 56,
+      columnNumber: 13
+    }
+  }, __jsx(LabelStyles, {
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
       lineNumber: 57,
       columnNumber: 15
     }
-  }))), __jsx("div", {
-    className: "col d-flex justify-content-end",
+  }, "\u0430\u043F\u0442\u0435\u043A\u0430"), __jsx(_UI_Icons_AppLocationIcon__WEBPACK_IMPORTED_MODULE_4__["AppLocationIcon"], {
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
       lineNumber: 61,
+      columnNumber: 15
+    }
+  }), __jsx(_UI_AppLink__WEBPACK_IMPORTED_MODULE_6__["AppLink"], {
+    __self: undefined,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 63,
+      columnNumber: 15
+    }
+  }, __jsx(SpanLinkStyles, {
+    __self: undefined,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 64,
+      columnNumber: 17
+    }
+  }, "\u0421\u0443\u043C\u0441\u043A\u0430\u044F \u0443\u043B\u0438\u0446\u0430, 2/12"), __jsx(_UI_Icons_AppChevron__WEBPACK_IMPORTED_MODULE_5__["AppChevron"], {
+    __self: undefined,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 67,
+      columnNumber: 17
+    }
+  })))), __jsx("div", {
+    className: "col d-flex justify-content-end",
+    __self: undefined,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 72,
       columnNumber: 11
     }
   }, __jsx("div", {
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 62,
+      lineNumber: 73,
       columnNumber: 13
     }
   }, "\u0417\u0430\u0440\u0435\u0433\u0438\u0441\u0442\u0440\u0438\u0440\u043E\u0432\u0430\u0442\u044C\u0441\u044F"), __jsx("div", {
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 66,
+      lineNumber: 77,
       columnNumber: 13
     }
   }, "\u0412\u043E\u0439\u0442\u0438")))));
@@ -370,7 +404,7 @@ function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) r
 const StyledLink = styled_components__WEBPACK_IMPORTED_MODULE_1___default.a.a.withConfig({
   displayName: "AppLink__StyledLink",
   componentId: "sc-1yt1140-0"
-})(["color:", ";:hover{color:", ";text-decoration:none;}"], _theme__WEBPACK_IMPORTED_MODULE_2__["THEME"].FONT_COLOR, _theme__WEBPACK_IMPORTED_MODULE_2__["THEME"].FONT_COLOR);
+})(["cursor:pointer;color:", ";:hover{color:", ";text-decoration:none;}"], _theme__WEBPACK_IMPORTED_MODULE_2__["THEME"].FONT_COLOR, _theme__WEBPACK_IMPORTED_MODULE_2__["THEME"].FONT_COLOR);
 const AppLink = (_ref) => {
   let {
     children
@@ -381,7 +415,7 @@ const AppLink = (_ref) => {
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 15,
+      lineNumber: 16,
       columnNumber: 3
     }
   }), children);
@@ -442,6 +476,7 @@ var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
 const AppChevron = ({
   color = _theme__WEBPACK_IMPORTED_MODULE_2__["THEME"].FONT_COLOR
 }) => __jsx(_AppIconContainer__WEBPACK_IMPORTED_MODULE_1__["AppIconContainer"], {
+  userHeight: "8",
   __self: undefined,
   __source: {
     fileName: _jsxFileName,
@@ -485,11 +520,13 @@ const AppIconContainerStyles = styled_components__WEBPACK_IMPORTED_MODULE_1___de
   componentId: "sc-16i2rmc-0"
 })(["margin-right:5px"]);
 const AppIconContainer = ({
-  children
+  children,
+  userWidth = 12,
+  userHeight = 15
 }) => __jsx(AppIconContainerStyles, {
   width: "12",
   height: "12",
-  viewBox: "0 0 12 15",
+  viewBox: `0 0 ${userWidth} ${userHeight}`,
   fill: "none",
   xmlns: "http://www.w3.org/2000/svg",
   preserveAspectRatio: "xMidYMid meet",
@@ -791,7 +828,7 @@ const THEME = {
 
 /***/ }),
 
-/***/ 4:
+/***/ 3:
 /*!******************************!*\
   !*** multi ./pages/index.js ***!
   \******************************/

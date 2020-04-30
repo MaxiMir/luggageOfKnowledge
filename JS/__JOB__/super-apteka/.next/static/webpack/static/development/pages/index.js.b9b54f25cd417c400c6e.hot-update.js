@@ -25,6 +25,7 @@ var AppChevron = function AppChevron(_ref) {
   var _ref$color = _ref.color,
       color = _ref$color === void 0 ? _theme__WEBPACK_IMPORTED_MODULE_2__["THEME"].FONT_COLOR : _ref$color;
   return __jsx(_AppIconContainer__WEBPACK_IMPORTED_MODULE_1__["AppIconContainer"], {
+    userHeight: "18",
     __self: _this,
     __source: {
       fileName: _jsxFileName,
@@ -47,4 +48,4 @@ var AppChevron = function AppChevron(_ref) {
 /***/ })
 
 })
-//# sourceMappingURL=index.js.7c789fdbfa6811e7fef7.hot-update.js.map
+//# sourceMappingURL=index.js.b9b54f25cd417c400c6e.hot-update.js.map

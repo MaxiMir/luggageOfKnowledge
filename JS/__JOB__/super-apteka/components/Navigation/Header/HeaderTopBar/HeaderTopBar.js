@@ -5,6 +5,7 @@ import { AppPhone } from '../../../UI/AppPhone'
 import { AppPhoneIcon } from '../../../UI/Icons/AppPhoneIcon'
 import { AppLocationIcon } from '../../../UI/Icons/AppLocationIcon'
 import { AppChevron } from '../../../UI/Icons/AppChevron'
+import { AppLink } from '../../../UI/AppLink'
 import { THEME } from '../../../../theme'
 
 
@@ -14,13 +15,17 @@ const HeaderTopBarStyles = styled.div`
   padding-bottom: 10px;
 `
 
-const RegionLabelStyles = styled.span`
+const LabelStyles = styled.span`
   color: ${ THEME.LABEL_FONT_COLOR};
   margin-right: 5px;
   font-weight: bold;
   font-size: 9px;
   line-height: 13px;
   text-transform: uppercase;
+`
+
+const SpanLinkStyles = styled.span`
+  margin-right: 5px
 `
 
 
@@ -36,25 +41,31 @@ export const HeaderTopBar = () => {
             </div>
 
             <div className='region'>
-              <RegionLabelStyles>
+              <LabelStyles>
                 регион
-              </RegionLabelStyles>
+              </LabelStyles>
 
-              Москва
-
-              <AppChevron />
+              <AppLink>
+                <SpanLinkStyles>
+                  Москва
+                </SpanLinkStyles>
+                <AppChevron />
+              </AppLink>
             </div>
 
             <div>
-              <RegionLabelStyles>
+              <LabelStyles>
                 аптека
-              </RegionLabelStyles>
+              </LabelStyles>
 
               <AppLocationIcon />
 
-              Сумская улица, 2/12
-
-              <AppChevron />
+              <AppLink>
+                <SpanLinkStyles>
+                  Сумская улица, 2/12
+                </SpanLinkStyles>
+                <AppChevron />
+              </AppLink>
             </div>
 
           </div>

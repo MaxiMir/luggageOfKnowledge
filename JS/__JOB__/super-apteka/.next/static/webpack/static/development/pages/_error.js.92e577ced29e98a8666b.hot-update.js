@@ -1350,7 +1350,7 @@ var errorPage = function errorPage() {
 
 /***/ }),
 
-/***/ 1:
+/***/ 2:
 /*!***********************************************************************************************************************************************************************************************************************!*\
   !*** multi next-client-pages-loader?page=%2F_error&absolutePagePath=%2FUsers%2Fmaksimmincenko%2FPhpstormProjects%2Fslim.xppx%2Fr%2FKNOWLEDGE%2FJS%2F__JOB__%2Fsuper-apteka%2Fpages%2F_error.js&hotRouterUpdates=true ***!
   \***********************************************************************************************************************************************************************************************************************/
@@ -1363,4 +1363,4 @@ module.exports = __webpack_require__(/*! next-client-pages-loader?page=%2F_error
 /***/ })
 
 })
-//# sourceMappingURL=_error.js.b483b24b3560a31cd89e.hot-update.js.map
+//# sourceMappingURL=_error.js.92e577ced29e98a8666b.hot-update.js.map
