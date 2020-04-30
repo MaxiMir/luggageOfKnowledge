@@ -190,11 +190,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _UI_AppPhone__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../UI/AppPhone */ "./components/UI/AppPhone.js");
 /* harmony import */ var _UI_Icons_AppPhoneIcon__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../UI/Icons/AppPhoneIcon */ "./components/UI/Icons/AppPhoneIcon.js");
 /* harmony import */ var _UI_Icons_AppLocationIcon__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../UI/Icons/AppLocationIcon */ "./components/UI/Icons/AppLocationIcon.js");
-/* harmony import */ var _UI_Icons_AppChevron__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../UI/Icons/AppChevron */ "./components/UI/Icons/AppChevron.js");
-/* harmony import */ var _UI_AppLink__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../UI/AppLink */ "./components/UI/AppLink.js");
-/* harmony import */ var _theme__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../../theme */ "./theme.js");
+/* harmony import */ var _UI_Icons_AppChevronIcon__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../UI/Icons/AppChevronIcon */ "./components/UI/Icons/AppChevronIcon.js");
+/* harmony import */ var _UI_Icons_AppCrossIcon__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../UI/Icons/AppCrossIcon */ "./components/UI/Icons/AppCrossIcon.js");
+/* harmony import */ var _UI_AppLink__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../UI/AppLink */ "./components/UI/AppLink.js");
+/* harmony import */ var _theme__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../../../theme */ "./theme.js");
 var _jsxFileName = "/Users/maksimmincenko/PhpstormProjects/slim.xppx/r/KNOWLEDGE/JS/__JOB__/super-apteka/components/Navigation/Header/HeaderTopBar/HeaderTopBar.js";
 var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
+
 
 
 
@@ -206,11 +208,11 @@ var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
 const HeaderTopBarStyles = styled_components__WEBPACK_IMPORTED_MODULE_1___default.a.div.withConfig({
   displayName: "HeaderTopBar__HeaderTopBarStyles",
   componentId: "sc-84qcod-0"
-})(["background-color:", ";padding-top:14px;padding-bottom:10px;"], _theme__WEBPACK_IMPORTED_MODULE_7__["THEME"].BACKGROUND_COLOR);
+})(["background-color:", ";padding-top:14px;padding-bottom:10px;"], _theme__WEBPACK_IMPORTED_MODULE_8__["THEME"].BACKGROUND_COLOR);
 const LabelStyles = styled_components__WEBPACK_IMPORTED_MODULE_1___default.a.span.withConfig({
   displayName: "HeaderTopBar__LabelStyles",
   componentId: "sc-84qcod-1"
-})(["color:", ";margin-right:5px;font-weight:bold;font-size:9px;line-height:13px;text-transform:uppercase;"], _theme__WEBPACK_IMPORTED_MODULE_7__["THEME"].LABEL_FONT_COLOR);
+})(["color:", ";margin-right:10px;font-weight:bold;font-size:9px;line-height:13px;text-transform:uppercase;"], _theme__WEBPACK_IMPORTED_MODULE_8__["THEME"].LABEL_FONT_COLOR);
 const SpanLinkStyles = styled_components__WEBPACK_IMPORTED_MODULE_1___default.a.span.withConfig({
   displayName: "HeaderTopBar__SpanLinkStyles",
   componentId: "sc-84qcod-2"
@@ -220,7 +222,7 @@ const HeaderTopBar = () => {
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 34,
+      lineNumber: 35,
       columnNumber: 5
     }
   }, __jsx("div", {
@@ -228,7 +230,7 @@ const HeaderTopBar = () => {
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 35,
+      lineNumber: 36,
       columnNumber: 7
     }
   }, __jsx("div", {
@@ -236,7 +238,7 @@ const HeaderTopBar = () => {
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 36,
+      lineNumber: 37,
       columnNumber: 9
     }
   }, __jsx("div", {
@@ -244,21 +246,22 @@ const HeaderTopBar = () => {
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 37,
+      lineNumber: 38,
       columnNumber: 11
     }
   }, __jsx("div", {
+    className: "d-flex align-items-center",
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 38,
+      lineNumber: 39,
       columnNumber: 13
     }
   }, __jsx(_UI_Icons_AppPhoneIcon__WEBPACK_IMPORTED_MODULE_3__["AppPhoneIcon"], {
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 39,
+      lineNumber: 40,
       columnNumber: 15
     }
   }), __jsx(_UI_AppPhone__WEBPACK_IMPORTED_MODULE_2__["AppPhone"], {
@@ -266,85 +269,93 @@ const HeaderTopBar = () => {
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 40,
+      lineNumber: 41,
       columnNumber: 15
     }
   })), __jsx("div", {
-    className: "region",
+    className: "d-flex align-items-center",
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 43,
+      lineNumber: 44,
       columnNumber: 13
     }
   }, __jsx(LabelStyles, {
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 44,
+      lineNumber: 45,
       columnNumber: 15
     }
-  }, "\u0440\u0435\u0433\u0438\u043E\u043D"), __jsx(_UI_AppLink__WEBPACK_IMPORTED_MODULE_6__["AppLink"], {
-    __self: undefined,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 48,
-      columnNumber: 15
-    }
-  }, __jsx(SpanLinkStyles, {
+  }, "\u0440\u0435\u0433\u0438\u043E\u043D"), __jsx(_UI_AppLink__WEBPACK_IMPORTED_MODULE_7__["AppLink"], {
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
       lineNumber: 49,
+      columnNumber: 15
+    }
+  }, __jsx(_UI_Icons_AppLocationIcon__WEBPACK_IMPORTED_MODULE_4__["AppLocationIcon"], {
+    __self: undefined,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 50,
       columnNumber: 17
     }
-  }, "\u041C\u043E\u0441\u043A\u0432\u0430"), __jsx(_UI_Icons_AppChevron__WEBPACK_IMPORTED_MODULE_5__["AppChevron"], {
+  }), __jsx(SpanLinkStyles, {
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
       lineNumber: 52,
       columnNumber: 17
     }
-  }))), __jsx("div", {
+  }, "\u041C\u043E\u0441\u043A\u0432\u0430"), __jsx(_UI_Icons_AppChevronIcon__WEBPACK_IMPORTED_MODULE_5__["AppChevronIcon"], {
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
       lineNumber: 56,
+      columnNumber: 17
+    }
+  }))), __jsx("div", {
+    className: "d-flex align-items-center",
+    __self: undefined,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 60,
       columnNumber: 13
     }
   }, __jsx(LabelStyles, {
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 57,
-      columnNumber: 15
-    }
-  }, "\u0430\u043F\u0442\u0435\u043A\u0430"), __jsx(_UI_Icons_AppLocationIcon__WEBPACK_IMPORTED_MODULE_4__["AppLocationIcon"], {
-    __self: undefined,
-    __source: {
-      fileName: _jsxFileName,
       lineNumber: 61,
       columnNumber: 15
     }
-  }), __jsx(_UI_AppLink__WEBPACK_IMPORTED_MODULE_6__["AppLink"], {
+  }, "\u0430\u043F\u0442\u0435\u043A\u0430"), __jsx(_UI_AppLink__WEBPACK_IMPORTED_MODULE_7__["AppLink"], {
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 63,
+      lineNumber: 65,
       columnNumber: 15
     }
-  }, __jsx(SpanLinkStyles, {
+  }, __jsx(_UI_Icons_AppCrossIcon__WEBPACK_IMPORTED_MODULE_6__["AppCrossIcon"], {
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 64,
+      lineNumber: 66,
       columnNumber: 17
     }
-  }, "\u0421\u0443\u043C\u0441\u043A\u0430\u044F \u0443\u043B\u0438\u0446\u0430, 2/12"), __jsx(_UI_Icons_AppChevron__WEBPACK_IMPORTED_MODULE_5__["AppChevron"], {
+  }), __jsx(SpanLinkStyles, {
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 67,
+      lineNumber: 68,
+      columnNumber: 17
+    }
+  }, "\u0421\u0443\u043C\u0441\u043A\u0430\u044F \u0443\u043B\u0438\u0446\u0430, 2/12"), __jsx(_UI_Icons_AppChevronIcon__WEBPACK_IMPORTED_MODULE_5__["AppChevronIcon"], {
+    __self: undefined,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 72,
       columnNumber: 17
     }
   })))), __jsx("div", {
@@ -352,21 +363,21 @@ const HeaderTopBar = () => {
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 72,
+      lineNumber: 77,
       columnNumber: 11
     }
   }, __jsx("div", {
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 73,
+      lineNumber: 78,
       columnNumber: 13
     }
   }, "\u0417\u0430\u0440\u0435\u0433\u0438\u0441\u0442\u0440\u0438\u0440\u043E\u0432\u0430\u0442\u044C\u0441\u044F"), __jsx("div", {
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 77,
+      lineNumber: 82,
       columnNumber: 13
     }
   }, "\u0412\u043E\u0439\u0442\u0438")))));
@@ -454,28 +465,30 @@ const AppPhone = ({
 
 /***/ }),
 
-/***/ "./components/UI/Icons/AppChevron.js":
-/*!*******************************************!*\
-  !*** ./components/UI/Icons/AppChevron.js ***!
-  \*******************************************/
-/*! exports provided: AppChevron */
+/***/ "./components/UI/Icons/AppChevronIcon.js":
+/*!***********************************************!*\
+  !*** ./components/UI/Icons/AppChevronIcon.js ***!
+  \***********************************************/
+/*! exports provided: AppChevronIcon */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AppChevron", function() { return AppChevron; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AppChevronIcon", function() { return AppChevronIcon; });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _AppIconContainer__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./AppIconContainer */ "./components/UI/Icons/AppIconContainer.js");
 /* harmony import */ var _theme__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../theme */ "./theme.js");
-var _jsxFileName = "/Users/maksimmincenko/PhpstormProjects/slim.xppx/r/KNOWLEDGE/JS/__JOB__/super-apteka/components/UI/Icons/AppChevron.js";
+var _jsxFileName = "/Users/maksimmincenko/PhpstormProjects/slim.xppx/r/KNOWLEDGE/JS/__JOB__/super-apteka/components/UI/Icons/AppChevronIcon.js";
 var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
 
 
 
-const AppChevron = ({
+const AppChevronIcon = ({
   color = _theme__WEBPACK_IMPORTED_MODULE_2__["THEME"].FONT_COLOR
 }) => __jsx(_AppIconContainer__WEBPACK_IMPORTED_MODULE_1__["AppIconContainer"], {
+  width: "8",
+  height: "5",
   userHeight: "8",
   __self: undefined,
   __source: {
@@ -492,6 +505,64 @@ const AppChevron = ({
     fileName: _jsxFileName,
     lineNumber: 9,
     columnNumber: 5
+  }
+}));
+
+/***/ }),
+
+/***/ "./components/UI/Icons/AppCrossIcon.js":
+/*!*********************************************!*\
+  !*** ./components/UI/Icons/AppCrossIcon.js ***!
+  \*********************************************/
+/*! exports provided: AppCrossIcon */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AppCrossIcon", function() { return AppCrossIcon; });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _AppIconContainer__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./AppIconContainer */ "./components/UI/Icons/AppIconContainer.js");
+/* harmony import */ var _theme__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../theme */ "./theme.js");
+var _jsxFileName = "/Users/maksimmincenko/PhpstormProjects/slim.xppx/r/KNOWLEDGE/JS/__JOB__/super-apteka/components/UI/Icons/AppCrossIcon.js";
+var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
+
+
+
+const AppCrossIcon = ({
+  color = _theme__WEBPACK_IMPORTED_MODULE_2__["THEME"].MAIN_COLOR
+}) => __jsx(_AppIconContainer__WEBPACK_IMPORTED_MODULE_1__["AppIconContainer"], {
+  __self: undefined,
+  __source: {
+    fileName: _jsxFileName,
+    lineNumber: 8,
+    columnNumber: 5
+  }
+}, __jsx("rect", {
+  y: "5",
+  width: "14",
+  height: "4",
+  rx: "1",
+  fill: color,
+  __self: undefined,
+  __source: {
+    fileName: _jsxFileName,
+    lineNumber: 9,
+    columnNumber: 7
+  }
+}), __jsx("rect", {
+  x: "5",
+  y: "14",
+  width: "14",
+  height: "4",
+  rx: "1",
+  transform: "rotate(-90 5 14)",
+  fill: color,
+  __self: undefined,
+  __source: {
+    fileName: _jsxFileName,
+    lineNumber: 16,
+    columnNumber: 7
   }
 }));
 
@@ -521,11 +592,13 @@ const AppIconContainerStyles = styled_components__WEBPACK_IMPORTED_MODULE_1___de
 })(["margin-right:5px"]);
 const AppIconContainer = ({
   children,
+  width = 14,
+  height = 14,
   userWidth = 12,
-  userHeight = 15
+  userHeight = 17
 }) => __jsx(AppIconContainerStyles, {
-  width: "12",
-  height: "12",
+  width: width,
+  height: height,
   viewBox: `0 0 ${userWidth} ${userHeight}`,
   fill: "none",
   xmlns: "http://www.w3.org/2000/svg",
