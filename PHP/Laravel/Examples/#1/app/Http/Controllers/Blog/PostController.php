@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Blog;
 
-use App\Models\Post;
+use App\Models\BlogPost;
 use Illuminate\Http\Request;
 
 class PostController extends BaseController
@@ -14,7 +14,8 @@ class PostController extends BaseController
      */
     public function index()
     {
-        $items = Post::all();
+        $items = BlogPost::all();
+
         return view('blog.posts.index', ['items' => $items]);
     }
 
