@@ -46,8 +46,12 @@ $ php artisan make:controller Blog/BaseController # Blog - подпапка
 $ php artisan make:controller Blog/PostController --resource # Blog - подпапка
 $ php artisan make:controller Blog/Admin/CategoryController --resource # контроллер для категорий
 
+#7
+$ php artisan make:request BlogCategoryUpdateRequest
+$ php artisan make:request BlogCategoryCreateRequest
 
-#7 Создание базовых файлов для авторизации/регистрации:
+
+#8 Создание базовых файлов для авторизации/регистрации:
 $ php artisan make:auth
 # > 6.0:
 $ composer require laravel/ui

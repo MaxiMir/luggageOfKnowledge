@@ -2,8 +2,16 @@
 
 @section('content')
   @php /** @var \App\Models\BlogCategory $item */@endphp
-  <form method="POST" action="{{ route('blog.admin.categories.update', $item->id) }}">
+
+  @if($item->exists)
+    <form method="POST" action="{{ route('blog.admin.categories.update', $item->id) }}">
     @method('PATCH')
+      {{-- обновление --}}
+  @else
+    <form method="POST" action="{{ route('blog.admin.categories.store') }}">
+      {{-- создание --}}
+  @endif
+
     @csrf
     <div class="container">
       @php
@@ -11,8 +19,7 @@
       @endphp
 
       @if($errors->any()) {{-- any() - не пуст --}}
-        <div class="container">
-          <div class="row justify-content-center">
+        <div class="row justify-content-center">
             <div class="col md-11">
               <div class="alert alert-danger" role="alert">
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -24,15 +31,23 @@
               </div>
             </div>
           </div>
+      @endif
+
+      @if(session('success')) {{-- session - сессия --}}
+        <div class="row justify-content-center">
+          <div class="col md-11">
+            <div class="alert alert-success" role="alert">
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">
+                  x
+                </span>
+              </button>
+              {{ session()->get('success') }}
+            </div>
+          </div>
         </div>
       @endif
-    </div>
 
-    @if(session('success'))
-
-    @endif
-
-    <div class="container">
       <div class="row justify-content-center">
         <div class="col md-8">
           @include('blog.admin.categories.includes.item_edit_main_col')

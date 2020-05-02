@@ -1,12 +1,14 @@
 <?php
 
-namespace App\Http\Controllers\Blog\Admin;
+  namespace App\Http\Controllers\Blog\Admin;
 
-use Illuminate\Http\Request;
-use App\Models\BlogCategory;
+  use App\Http\Requests\BlogCategoryCreateRequest;
+  use App\Http\Requests\BlogCategoryUpdateRequest;
+  use App\Models\BlogCategory;
+  use Illuminate\Support\Str;
 
-class CategoryController extends BaseController
-{
+  class CategoryController extends BaseController
+  {
     /**
      * Display a listing of the resource.
      *
@@ -14,9 +16,9 @@ class CategoryController extends BaseController
      */
     public function index()
     {
-        $paginator = BlogCategory::paginate(5);
+      $paginator = BlogCategory::paginate(5);
 
-        return view('blog.admin.categories.index', compact('paginator'));
+      return view('blog.admin.categories.index', compact('paginator'));
     }
 
     /**
@@ -26,77 +28,124 @@ class CategoryController extends BaseController
      */
     public function create()
     {
-        //
+      $item = new BlogCategory(); // объект класса BlogCategory
+      $categoryList = BlogCategory::all();
+
+      return view('blog.admin.categories.edit',
+        compact('item', 'categoryList')
+      );
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(BlogCategoryCreateRequest $request)
     {
-        //
+      $data = $request->input(); // данные с формы
+
+      if (empty($data['slug'])) {
+        $data['slug'] = Str::slug($data['title']);
+      }
+
+      // Создаст объект но не добавит в БД
+      $item = new BlogCategory($data);
+      dd($item);
+      $item->save();
+
+      if ($item) {
+        return redirect()->route('blog.admin.categories.edit', [$item->id])
+          ->with(['success' => 'Успешно сохранено']);
+      }
+
+      return back()->withErrors(['msg' => 'Ошибка сохранения'])
+        ->withInput();
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
     {
-        $item = BlogCategory::find($id);
-        $item = BlogCategory::findOfFail($id); // если не найдет -> 404
-        $item = BlogCategory::where('id', '=' ,$id)->first(); // если не найдет -> 404
-        $categoryList = BlogCategory::all();
+      $item = BlogCategory::find($id);
+      $item = BlogCategory::findOfFail($id); // если не найдет -> 404
+      $item = BlogCategory::where('id', '=', $id)->first(); // если не найдет -> 404
+      $categoryList = BlogCategory::all();
 
-        return view('blog.admin.categories.edit', compact('item', 'categoryList'));
+      return view('blog.admin.categories.edit', compact('item', 'categoryList'));
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(BlogCategoryUpdateRequest $request, $id)
     {
-        $item = BlogCategory::find($id);
+      // заменил Request на BlogCategoryUpdateRequest в нем прописана валидация
 
-        if (empty($item)) {
-          return back() // редирект назад
-            ->withErrors(['msg' => "Запись id=[{$id}] не найдена"])
-            ->withInput(); // вернуть с input с заполненными данными
-        }
+      /*
+      $rules = [
+        'title' => 'required|min:5|max:200',
+        'slug' => 'max:200',
+        'description' => 'string|min:3|max:500',
+        'parent_id' => 'required|integer|exists:blog_categories,id' // таблица blog_categories поле id
+      ];
 
-        $data = $request->all(); // ->input()
-        $result = $item
-          ->fill($data) // заполнение полей данными
-          ->save(); // сохранение в БД
+      ! ПЕРЕНЕСЕНО в /app/Http/Requests/BlogCategoryUpdateRequest.php
 
-        if ($result) {
-          return redirect()
-            ->route('blog.admin.categories.edit', $item->id)
-            ->with(['success' => 'Успешно сохранено']);
-        } else {
-          return back()
-            ->withErrors(['msg' => 'Ошибка сохранения'])
-            ->withInput();
-        }
+      $validatedData = $this->validate($request, $rules);
+      // <->
+      $validatedData = $request->validate($rules);
+      // <->
+      $validator = \Validator::make($request->all(), $rules);
+      $validatedData[] = $validator->passes(); // выполнит проверку и -> true || false
+      $validatedData[] = $validator->validate(); // выполнит проверку, если ошибка - сделает редирект
+      $validatedData[] = $validator->valid(); // валидные данные
+      $validatedData[] = $validator->failed(); // невалидные данные
+      $validatedData[] = $validator->error(); // ошибки
+      $validatedData[] = $validator->fails();
+      */
+
+      $item = BlogCategory::find($id);
+
+      if (empty($item)) {
+        return back() // редирект назад
+        ->withErrors(['msg' => "Запись id=[{$id}] не найдена"])
+          ->withInput(); // вернуть с input с заполненными данными
+      }
+
+      $data = $request->all(); // ->input()
+      $result = $item
+        ->fill($data) // заполнение полей данными
+        ->save(); // сохранение в БД
+
+      if ($result) {
+        return redirect()
+          ->route('blog.admin.categories.edit', $item->id)
+          ->with(['success' => 'Успешно сохранено']);
+      } else {
+        return back()
+          ->withErrors(['msg' => 'Ошибка сохранения'])
+          ->withInput();
+      }
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
-        //
+      //
     }
-}
+  }
