@@ -13,8 +13,7 @@ import { THEME } from '../theme'
 
 export const AuthScreen = ({ navigation }) => {
   const dispatch = useDispatch()
-  const [phone, setPhone] = useState('+7')
-  const [password, setPassword] = useState('')
+  const [form, setForm] = useState({ phone: '+7', password: '' })
   const [isSendingData, setIsSendingData] = useState(false)
 
   if (isSendingData) {
@@ -25,21 +24,25 @@ export const AuthScreen = ({ navigation }) => {
     )
   }
 
+  const changeInputHandler = (name, value) => {
+    setForm({ ...form, [name]: value })
+  }
+
   const checkOnValidPhone = () => {
-    const phoneWithoutPlus = String(+phone)
+    const phoneWithoutPlus = String( + form.phone)
     return phoneWithoutPlus.length === SETTINGS.PHONE_LENGTH
   }
 
   const checkOnValidPassword = () => {
-    return password.length >= SETTINGS.PASSWORD_MIN_LENGTH
+    return form.password.length >= SETTINGS.PASSWORD_MIN_LENGTH
   }
 
   const enterBtnHandler = () => {
-    const phoneWithoutPlus = String(+phone)
+    const phoneWithoutPlus = String( + form.phone)
 
     setIsSendingData(true)
 
-    dispatch(auth(phoneWithoutPlus, password))
+    dispatch(auth(phoneWithoutPlus, form.password))
 
     setIsSendingData(false)
   }
@@ -48,7 +51,7 @@ export const AuthScreen = ({ navigation }) => {
   const isValidPassword = checkOnValidPassword()
   const phoneContainerColor = isValidPhone ? THEME.SUCCESS_COLOR : THEME.MAIN_COLOR
   const passwordContainerColor = isValidPassword ? THEME.SUCCESS_COLOR : THEME.MAIN_COLOR
-  const isDisableEnterBtn = !isValidPhone || !isValidPassword
+  const isDisableEnterBtn = !isValidPhone || !isValidPassword || isSendingData
 
   return (
     <AppContainer>
@@ -60,20 +63,20 @@ export const AuthScreen = ({ navigation }) => {
             <View style={ { ...styles.inputContainer, borderColor: phoneContainerColor } }>
               <TextInput
                 placeholder="НОМЕР ТЕЛЕФОНА"
-                value={ phone }
-                onChangeText={ setPhone }
+                value={ form.phone }
+                onChangeText={ newValue => changeInputHandler('phone', newValue) }
                 autoCorrect={ false }
                 onSubmitEditing={ Keyboard.dismiss }
                 keyboardType="numeric"
-                maxLength={ !phone.startsWith('+') ? 11 : 12 }
+                maxLength={ !form.phone.startsWith('+') ? 11 : 12 }
               />
             </View>
 
             <View style={ { ...styles.inputContainer, borderColor: passwordContainerColor } }>
               <TextInput
                 placeholder="ПАРОЛЬ"
-                value={ password }
-                onChangeText={ setPassword }
+                value={ form.password }
+                onChangeText={ newValue => changeInputHandler('password', newValue) }
                 autoCorrect={ false }
                 autoCapitalize='none'
                 secureTextEntry={ true }

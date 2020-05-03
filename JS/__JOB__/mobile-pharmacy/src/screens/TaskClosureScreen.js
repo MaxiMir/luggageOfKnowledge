@@ -17,29 +17,36 @@ import { THEME } from '../theme'
 export const TaskClosureScreen = ({ navigation }) => {
   const dispatch = useDispatch()
   const { id, destination_store_id, destination_store } = navigation.getParam('task')
-  const [comment, setComment] = useState('')
-  const [address, setAddress] = useState(destination_store)
-  const [destinationStoreId, setDestinationStoreId] = useState(destination_store_id)
-  const [modalVisible, setModalVisible] = useState(false)
-  const [modalIsInitialized, setModalIsInitialized] = useState(false)
+  const [form, setForm] = useState({ comment: '', address: destination_store, destinationStoreId: destination_store_id })
+  const [modalState, setModalState] = useState({ isVisible: false, isInitialized: false })
   const { name } = useSelector(state => state.user.data)
 
+
+  const changeFormHandler = (name, value) => {
+    setForm({ ...form, [name]: value })
+  }
+
+  const changeModalHandler = (name, value) => {
+    setModalState({ ...modalState, [name]: value })
+  }
+
   const changePharmacy = () => {
-    if (!modalIsInitialized) {
-      setModalIsInitialized(true)
+    if (!modalState.isInitialized) {
+      changeModalHandler('isInitialized', true)
     }
 
-    setModalVisible(true)
+    changeModalHandler('isVisible', true)
   }
 
   const onSelectPharmacy = (destinationStoreId, address) => {
-    setAddress(address)
-    setDestinationStoreId(destinationStoreId)
-    setModalVisible(false)
+    changeFormHandler('address', address)
+    changeFormHandler('destinationStoreId', destinationStoreId)
+
+    changeModalHandler('isVisible', false)
   }
 
   const acceptBtnHandler = () => {
-    dispatch(setTaskCompleted(id, destinationStoreId, comment))
+    dispatch(setTaskCompleted(id, form.destinationStoreId, form.comment))
     navigation.navigate(SCREEN.TASKS)
   }
 
@@ -47,12 +54,12 @@ export const TaskClosureScreen = ({ navigation }) => {
     navigation.navigate(SCREEN.TASKS)
   }
 
-  const modalContent = !modalIsInitialized ?
+  const modalContent = !modalState.isInitialized ?
     null
     :
     <PharmacySelectModal
-      visible={ modalVisible }
-      onClose={ () => setModalVisible(false) }
+      visible={ modalState.isVisible }
+      onClose={ () => changeModalHandler('isVisible', false) }
       onSelect={ onSelectPharmacy }
     />
 
@@ -68,7 +75,7 @@ export const TaskClosureScreen = ({ navigation }) => {
           <View style={ styles.textBlock }>
             <AppTextBold>Адрес отгрузки: </AppTextBold>
 
-            <AppText style={ styles.destinationText }>{ address }</AppText>
+            <AppText style={ styles.destinationText }>{ form.address }</AppText>
 
             <AppButton onPress={ changePharmacy }>
               <AppTextBold>Изменить</AppTextBold>
@@ -84,8 +91,8 @@ export const TaskClosureScreen = ({ navigation }) => {
             <TextInput
               style={ styles.textarea }
               placeholder='Комментарий (необязательно)'
-              value={ comment }
-              onChangeText={ setComment }
+              value={ form.comment }
+              onChangeText={ newValue => changeFormHandler('comment', newValue) }
               multiline
             />
           </View>
