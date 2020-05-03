@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+  namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+  use Illuminate\Http\Request;
 
-class RestTestController extends Controller
-{
+  class RestTestController extends Controller
+  {
     /**
      * Display a listing of the resource.
      *
@@ -13,8 +13,8 @@ class RestTestController extends Controller
      */
     public function index()
     {
-        // страница списка сущностей
-        dd(1); // дампит переменную
+      // страница списка сущностей
+      dd(1); // дампит переменную
     }
 
     /**
@@ -24,62 +24,62 @@ class RestTestController extends Controller
      */
     public function create()
     {
-        // страница создания новой сущности
+      // страница создания новой сущности
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
-        // страница созданной сущности
+      // страница созданной сущности
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
-        // показ сущности по ID
+      // показ сущности по ID
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
     {
-        // Создание страницы для редактирования данной сущности
+      // Создание страницы для редактирования данной сущности
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
     {
-        // страница обновления сущности
+      // страница обновления сущности
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
-        // страница удаления сущности
+      // страница удаления сущности
     }
-}
+  }

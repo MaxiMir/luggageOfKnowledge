@@ -1,11 +1,10 @@
 <?php
 
-namespace App\Http\Controllers\Blog;
+  namespace App\Http\Controllers\Blog;
 
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
+  use App\Http\Controllers\Controller;
 
-class BaseController extends Controller
-{
+  class BaseController extends Controller
+  {
     //
-}
+  }
