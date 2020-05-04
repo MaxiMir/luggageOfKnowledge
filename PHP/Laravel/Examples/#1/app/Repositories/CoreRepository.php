@@ -14,7 +14,7 @@
    * Может выдавать выборку данных
    * Не может создавать/изменять сущности
    */
-  class CoreRepository
+  abstract class CoreRepository
   {
     /**
      * @var Model

@@ -65,9 +65,7 @@
         $data['slug'] = Str::slug($data['title']);
       }
 
-      // Создаст объект но не добавит в БД
       $item = new BlogCategory($data);
-      dd($item);
       $item->save();
 
       if ($item) {
@@ -140,7 +138,7 @@
       $validatedData[] = $validator->fails();
       */
 
-      $item = BlogCategory::find($id);
+      $item = $this->blogCategoryRepository->getEdit($id);
 
       if (empty($item)) {
         return back() // редирект назад
@@ -149,6 +147,11 @@
       }
 
       $data = $request->all(); // ->input()
+
+      if (empty($data['slug'])) {
+        $data['slug'] = Str::slug($data['title']);
+      }
+
 
       $result = $item
         ->fill($data) // заполнение полей данными

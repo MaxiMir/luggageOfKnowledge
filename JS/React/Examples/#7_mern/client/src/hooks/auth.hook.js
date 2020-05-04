@@ -4,8 +4,8 @@ const storageName = 'userData'
 
 export const useAuth = () => {
   const [token, setToken] = useState(null)
-  const [ready, setReady] = useState(false)
   const [userId, setUserId] = useState(null)
+  const [ready, setReady] = useState(false)
 
   const login = useCallback((jwtToken, id) => {
     setToken(jwtToken)
@@ -15,7 +15,6 @@ export const useAuth = () => {
       userId: id, token: jwtToken
     }))
   }, [])
-
 
   const logout = useCallback(() => {
     setToken(null)
@@ -29,9 +28,11 @@ export const useAuth = () => {
     if (data && data.token) {
       login(data.token, data.userId)
     }
+
     setReady(true)
   }, [login])
 
-
   return { login, logout, token, userId, ready }
 }
+
+// Используется в App.js

@@ -5,7 +5,7 @@ const mongoose = require('mongoose')
 
 const app = express()
 
-app.use(express.json({ extended: true }))
+app.use(express.json({ extended: true })) // middleware для правильного парсинга req.body
 
 // Регистрация роутов:
 app.use('/api/auth', require('./routes/auth.routes'))
@@ -14,9 +14,9 @@ app.use('/t', require('./routes/redirect.routes'))
 
 
 if (process.env.NODE_ENV === 'production') {
-  app.use('/', express.static(path.join(__dirname, 'client', 'build')))
+  app.use('/', express.static(path.join(__dirname, 'client', 'build'))) // отдаем статическую папку
 
-  app.get('*', (req, res) => {
+  app.get('*', (req, res) => { // отправляем файл index.html
     res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'))
   })
 }

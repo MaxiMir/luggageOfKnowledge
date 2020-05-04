@@ -3,59 +3,58 @@
 @section('content')
   @php /** @var \App\Models\BlogCategory $item */@endphp
 
-  @if($item->exists)
-    <form method="POST" action="{{ route('blog.admin.categories.update', $item->id) }}">
-      @method('PATCH')
-      {{-- обновление --}}
-      @else
-        <form method="POST" action="{{ route('blog.admin.categories.store') }}">
-          {{-- создание --}}
-          @endif
+  <div class="container">
+    @if($item->exists)
+      <form method="POST" action="{{ route('blog.admin.categories.update', $item->id) }}">
+        @method('PATCH')
+    @else
+      <form method="POST" action="{{ route('blog.admin.categories.store') }}">
+    @endif
 
-          @csrf
-          <div class="container">
-            @php
-              /** @var \Illuminate\Support\ViewErrorBag $errors */
-            @endphp
+        @csrf
 
-            @if($errors->any()) {{-- any() - не пуст --}}
-            <div class="row justify-content-center">
-              <div class="col md-11">
-                <div class="alert alert-danger" role="alert">
-                  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">
-                  x
-                </span>
-                    {{ $errors->first() }}
-                  </button>
-                </div>
-              </div>
-            </div>
-            @endif
+        @php
+          /** @var \Illuminate\Support\ViewErrorBag $errors */
+        @endphp
 
-            @if(session('success')) {{-- session - сессия --}}
-            <div class="row justify-content-center">
-              <div class="col md-11">
-                <div class="alert alert-success" role="alert">
-                  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">
-                  x
-                </span>
-                  </button>
-                  {{ session()->get('success') }}
-                </div>
-              </div>
-            </div>
-            @endif
-
-            <div class="row justify-content-center">
-              <div class="col md-8">
-                @include('blog.admin.categories.includes.item_edit_main_col')
-              </div>
-              <div class="col md-4">
-                @include('blog.admin.categories.includes.item_edit_add_col')
+        @if($errors->any()) {{-- any() - не пуст --}}
+          <div class="row justify-content-center">
+            <div class="col-md-11">
+              <div class="alert alert-danger" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">
+                x
+              </span>
+                  {{ $errors->first() }}
+                </button>
               </div>
             </div>
           </div>
-        </form>
+        @endif
+
+        @if(session('success')) {{-- session - сессия --}}
+          <div class="row justify-content-center">
+            <div class="col-md-11">
+              <div class="alert alert-success" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">
+                x
+              </span>
+                </button>
+                {{ session()->get('success') }}
+              </div>
+            </div>
+          </div>
+        @endif
+
+        <div class="row justify-content-center">
+          <div class="col-md-8">
+            @include('blog.admin.categories.includes.item_edit_main_col')
+          </div>
+          <div class="col-md-4">
+            @include('blog.admin.categories.includes.item_edit_add_col')
+          </div>
+        </div>
+      </form>
+  </div>
 @endsection

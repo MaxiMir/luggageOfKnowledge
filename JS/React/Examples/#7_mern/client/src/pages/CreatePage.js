@@ -10,7 +10,7 @@ export const CreatePage = () => {
   const [link, setLink] = useState('')
 
   useEffect(() => {
-    window.M.updateTextFields()
+    window.M.updateTextFields() // баг с полями HTML
   }, [])
 
   const pressHandler = async event => {
@@ -19,9 +19,9 @@ export const CreatePage = () => {
         const data = await request('/api/link/generate', 'POST', { from: link }, {
           Authorization: `Bearer ${ auth.token }`
         })
+
         history.push(`/detail/${ data.link._id }`)
-      } catch (e) {
-      }
+      } catch (e) {}
     }
   }
 

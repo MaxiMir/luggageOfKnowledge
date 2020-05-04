@@ -13,7 +13,8 @@ import { THEME } from '../theme'
 
 export const AuthScreen = ({ navigation }) => {
   const dispatch = useDispatch()
-  const [form, setForm] = useState({ phone: '+7', password: '' })
+  const formInitialState = { phone: '+7', password: '' }
+  const [form, setForm] = useState(formInitialState)
   const [isSendingData, setIsSendingData] = useState(false)
 
   if (isSendingData) {

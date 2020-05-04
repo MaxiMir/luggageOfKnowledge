@@ -45,6 +45,8 @@ $ php artisan make:controller Blog/BaseController # Blog - подпапка
 # Контроллер статей блога:
 $ php artisan make:controller Blog/PostController --resource # Blog - подпапка
 $ php artisan make:controller Blog/Admin/CategoryController --resource # контроллер для категорий
+$ php artisan make:controller Blog/Admin/PostController --resource
+
 
 #7
 $ php artisan make:request BlogCategoryUpdateRequest

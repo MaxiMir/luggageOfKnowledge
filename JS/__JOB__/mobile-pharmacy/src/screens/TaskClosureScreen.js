@@ -17,8 +17,10 @@ import { THEME } from '../theme'
 export const TaskClosureScreen = ({ navigation }) => {
   const dispatch = useDispatch()
   const { id, destination_store_id, destination_store } = navigation.getParam('task')
-  const [form, setForm] = useState({ comment: '', address: destination_store, destinationStoreId: destination_store_id })
-  const [modalState, setModalState] = useState({ isVisible: false, isInitialized: false })
+  const formInitialState = { comment: '', address: destination_store, destinationStoreId: destination_store_id }
+  const modalInitialState = { isVisible: false, isInitialized: false }
+  const [form, setForm] = useState(formInitialState)
+  const [modalState, setModalState] = useState(modalInitialState)
   const { name } = useSelector(state => state.user.data)
 
 
