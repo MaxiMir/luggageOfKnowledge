@@ -41,7 +41,7 @@
     }
 
     /**
-     * Пример аксессуара (Accessor)
+     * Пример аксесуара (Accessor)
      *
      * @url https://laravel.com/docs/5.8/eloquent-mutators
      *
@@ -63,5 +63,26 @@
     public function isRoot()
     {
       return $this->id === BlogCategory::ROOT;
+    }
+
+    /**
+     * Пример аксесуара
+     *
+     * @param string $valueFromObject
+     * @return bool|false|string|string[]|null
+     */
+    public function getTitleAttribute($valueFromObject)
+    {
+      return mb_strtoupper($valueFromObject);
+    }
+
+    /**
+     * Пример мутатора
+     *
+     * @param $incomingValue
+     */
+    public function setTitleAttribute($incomingValue)
+    {
+      $this->attributes['title'] = mb_strtoupper($incomingValue);
     }
   }

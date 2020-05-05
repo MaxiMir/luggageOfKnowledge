@@ -6,7 +6,6 @@
   use App\Http\Requests\BlogCategoryUpdateRequest;
   use App\Models\BlogCategory;
   use App\Repositories\BlogCategoryRepository;
-  use Illuminate\Support\Str;
 
   class CategoryController extends BaseController
   {
@@ -77,10 +76,10 @@
      * Show the form for editing the specified resource.
      *
      * @param int $id
-     * @param BlogCategoryRepository $categoryRepository
+     *
      * @return \Illuminate\Http\Response
      */
-    public function edit($id, BlogCategoryRepository $categoryRepository)
+    public function edit($id)
     {
       /*
       $item = BlogCategory::find($id);
@@ -89,13 +88,23 @@
       $categoryList = BlogCategory::all();
       */
 
-      $item = $categoryRepository->getEdit($id);
+      $item = $this->blogCategoryRepository->getEdit($id);
+
+      $title = $item->title; // отработает аксесуар getTitleAttribute()
+      $item->title = 'new value'; // отработает мутатор setTitleAttribute()
+      $title = $item->getAttribute('title'); // получаем артибут title
+      $attributes = $item->attributesToArray();
+      $title = $item->attributes['title'];
+      $title = $item->getAttributeValue('title');
+      $mutatedAttributes = $item->getMutatedAttributes(); // получить атрибуты, у которых есть мутаторы
+      $hasMutatorTitle = $item->hasGetMutator('title'); // есть ли мутатор для поля title
+      $itemData = $item->toArray(); // объект в массив
 
       if (empty($item)) {
         abort(404);
       }
 
-      $categoryList = $categoryRepository->getForComboBox();
+      $categoryList = $this->blogCategoryRepository->getForComboBox();
 
       return view('blog.admin.categories.edit', compact('item', 'categoryList'));
     }

@@ -2,12 +2,11 @@
 
   namespace App\Http\Controllers\Blog\Admin;
 
-  use App\Http\Requests\BlogPostUpdateRequest;
   use App\Http\Requests\BlogPostCreateRequest;
+  use App\Http\Requests\BlogPostUpdateRequest;
   use App\Models\BlogPost;
   use App\Repositories\BlogCategoryRepository;
   use App\Repositories\BlogPostRepository;
-  use Illuminate\Http\Request;
 
   /**
    * Управление статьями блога
@@ -62,7 +61,7 @@
       $categoryList = $this->blogCategoryRepository->getForComboBox();
 
       return view('blog.admin.posts.edit',
-      compact('item', $categoryList));
+        compact('item', $categoryList));
     }
 
     /**
@@ -152,10 +151,24 @@
      * Remove the specified resource from storage.
      *
      * @param int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
-      //
+      // софт-удаление, в БД остается:
+      $result = BlogPost::destroy($id);
+
+      // полное удаление из БД:
+      $result = BlogPost::find($id)->forceDelete();
+
+      if ($result) {
+        return redirect()
+          ->route('blog.admin.posts.index')
+          ->with(['success' => "Запись id=[$id] удалена"]);
+      }
+
+      return back()
+        ->withErrors(['msg' => 'Ошибка удаления']);
     }
   }

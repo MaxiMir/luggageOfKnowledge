@@ -30,6 +30,7 @@
         <br>
         <form method="POST" action="{{ route('blog.admin.posts.destroy', $item->id) }}">
           @method('DELETE')
+
           @csrf
           <div class="row justify-content-center">
             <div class="col-md-8">

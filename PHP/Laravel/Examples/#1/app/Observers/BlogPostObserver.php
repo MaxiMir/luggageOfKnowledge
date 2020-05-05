@@ -55,7 +55,7 @@
     }
 
     /**
-     * Handle the blog post "updated" event.
+     * ОБРАБОТКА ПОСЛЕ ОБНОВЛЕНИЯ ЗАПИСИ
      *
      * @param \App\Models\BlogPost $blogPost
      * @return void
@@ -66,7 +66,17 @@
     }
 
     /**
-     * Handle the blog post "deleted" event.
+     * ОБРАБОТКА ДО УДАЛЕНИЯ ЗАПИСИ
+     *
+     * @param BlogPost $blogPost
+     */
+    public function deleting(BlogPost $blogPost)
+    {
+      // return false; // удаление не произойдет
+    }
+
+    /**
+     * ОБРАБОТКА ПОСЛЕ УДАЛЕНИЯ ЗАПИСИ
      *
      * @param \App\Models\BlogPost $blogPost
      * @return void
