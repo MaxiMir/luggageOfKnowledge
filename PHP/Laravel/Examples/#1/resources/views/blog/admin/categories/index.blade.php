@@ -21,20 +21,38 @@
               </tr>
               </thead>
               <tbody>
-              @foreach($paginator as $item)
-                @php /** @var \App\Models\BlogCategory $item */ @endphp
-                <tr>
-                  <td>{{ $item->id }}</td>
-                  <td>
-                    <a href="{{ route('blog.admin.categories.edit', $item->id) }}">
-                      {{ $item->title }}
-                    </a>
-                  </td>
-                  <td @if(in_array($item->parent_id, [0, 1])) style="color: #ccc" @endif>
-                    {{ $item->parent_id }}{{-- $item->parentCategory->title --}}
-                  </td>
-                </tr>
-              @endforeach
+                @foreach($paginator as $item)
+                  @php /** @var \App\Models\BlogCategory $item */ @endphp
+                  <tr>
+                    <td>{{ $item->id }}</td>
+                    <td>
+                      <a href="{{ route('blog.admin.categories.edit', $item->id) }}">
+                        {{ $item->title }}
+                      </a>
+                    </td>
+                    <td @if(in_array($item->parent_id, [0, 1])) style="color: #ccc" @endif>
+                      {{-- #1 НЕЖЕЛЕТЕЛЬНО --}}
+                      {{ $item->parentCategory->title ?? '?' }}
+
+                      {{-- #2 --}}
+                      {{ optional($item->parentCategory->title) }}
+                      {{-- optional не если существует parentCategory->title ошибки не будет --}}
+
+                      {{-- #3 НЕЖЕЛЕТЕЛЬНО --}}
+                      {{
+                          $item->parentCategory->title
+                              ?? ($item->id === \App\Models\BlogCategory::ROOT
+                                  ? 'Корень'
+                                  : '???')
+                      }}
+
+                      {{-- #4 getParentTitleAttribute() Accessor --}}
+                      {{ $item->parentTitle }}
+                      {{-- ИЛИ НЕЖЕЛЕТЕЛЬНО --}}
+                      {{ $item->parent_title }}
+                    </td>
+                  </tr>
+                @endforeach
               </tbody>
             </table>
           </div>

@@ -1,11 +1,16 @@
 <?php
 
-namespace App\Providers;
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Support\ServiceProvider;
+  namespace App\Providers;
 
-class AppServiceProvider extends ServiceProvider
-{
+  use App\Models\BlogCategory;
+  use App\Models\BlogPost;
+  use App\Observers\BlogCategoryObserver;
+  use App\Observers\BlogPostObserver;
+  use Illuminate\Support\Facades\Schema;
+  use Illuminate\Support\ServiceProvider;
+
+  class AppServiceProvider extends ServiceProvider
+  {
     /**
      * Register any application services.
      *
@@ -13,7 +18,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+      //
     }
 
     /**
@@ -23,6 +28,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        Schema::defaultStringLength(191);
+      Schema::defaultStringLength(191);
+
+      BlogPost::observe(BlogPostObserver::class);
+      BlogCategory::observe(BlogCategoryObserver::class);
     }
-}
+  }

@@ -61,10 +61,6 @@
     {
       $data = $request->input(); // данные с формы
 
-      if (empty($data['slug'])) {
-        $data['slug'] = Str::slug($data['title']);
-      }
-
       $item = new BlogCategory($data);
       $item->save();
 
@@ -107,7 +103,7 @@
     /**
      * Update the specified resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param BlogCategoryUpdateRequest $request
      * @param int $id
      * @return \Illuminate\Http\Response
      */
@@ -148,16 +144,11 @@
 
       $data = $request->all(); // ->input()
 
-      if (empty($data['slug'])) {
-        $data['slug'] = Str::slug($data['title']);
-      }
-
-
       $result = $item
         ->fill($data) // заполнение полей данными
         ->save(); // сохранение в БД
       // <->
-      $request = $item->update($data);
+      $result = $item->update($data);
 
 
       if ($result) {

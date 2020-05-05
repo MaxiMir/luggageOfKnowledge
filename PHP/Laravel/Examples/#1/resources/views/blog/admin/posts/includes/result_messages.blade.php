@@ -6,8 +6,12 @@
             <span aria-hidden="true">
               x
             </span>
-        {{ $errors->first() }}
       </button>
+      <ul>
+        @foreach($errors->all() as $errorTxt)
+          <li>{{ $errorTxt }}</li>
+        @endforeach
+      </ul>
     </div>
   </div>
 </div>

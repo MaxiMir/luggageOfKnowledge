@@ -48,7 +48,7 @@ $ php artisan make:controller Blog/Admin/CategoryController --resource # кон�
 $ php artisan make:controller Blog/Admin/PostController --resource
 
 
-#7
+#7 REQUESTS:
 $ php artisan make:request BlogCategoryUpdateRequest
 $ php artisan make:request BlogCategoryCreateRequest
 
@@ -58,6 +58,11 @@ $ php artisan make:auth
 # > 6.0:
 $ composer require laravel/ui
 $ php artisan ui vue --auth
+
+#9 OBSERVERS:
+$ php artisan make:observer BlogPostObserver --model=Models/BlogPost
+$ php artisan make:observer BlogCategoryObserver --model=Models/BlogCategory
+# Прописать в AppServiceProvider
 
 # INFO:
 $ php artisan route:list # список всех маршрутов приложения
