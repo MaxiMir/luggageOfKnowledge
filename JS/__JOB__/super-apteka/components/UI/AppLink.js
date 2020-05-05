@@ -13,7 +13,7 @@ const StyledLink = styled.a`
 `
 
 export const AppLink = ({ children, ...rest }) => (
-  <StyledLink { ...rest }>
+  <StyledLink { ...rest } className="d-flex align-items-center">
     { children }
   </StyledLink>
 )

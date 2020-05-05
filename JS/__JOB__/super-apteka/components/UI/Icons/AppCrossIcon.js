@@ -5,7 +5,12 @@ import { THEME } from '../../../theme'
 
 
 export const AppCrossIcon = ({ color = THEME.MAIN_COLOR }) => (
-    <AppIconContainer>
+    <AppIconContainer
+      width="14"
+      height="14"
+      viewBoxWidth="14"
+      viewBoxHeight="14"
+    >
       <rect
         y="5"
         width="14"

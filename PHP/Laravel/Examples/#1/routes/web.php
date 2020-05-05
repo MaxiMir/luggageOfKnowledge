@@ -22,17 +22,16 @@
   });
 
   # Админка Блога:
-  $groupData = [
-    'namespace' => 'Blog\Admin',
-    'prefix' => 'admin\blog',
-  ];
+  $groupData = ['namespace' => 'Blog\Admin', 'prefix' => 'admin\blog'];
 
   Route::group($groupData, function () {
     # BlogCategory
     $methods = ['index', 'edit', 'update', 'create', 'store'];
+
     Route::resource('categories', 'CategoryController')
       ->only($methods) // для каких методов создать маршруты
       ->names('blog.admin.categories'); // имя маршрута
+
 
     # BlogPost
     Route::resource('posts', 'PostController')

@@ -5,7 +5,12 @@ import { THEME } from '../../../theme'
 
 
 export const AppLocationIcon = ({ color = THEME.MAIN_COLOR }) => (
-  <AppIconContainer>
+  <AppIconContainer
+    width="10"
+    height="14"
+    viewBoxWidth="10"
+    viewBoxHeight="14"
+  >
     <path
       fillRule="evenodd"
       clipRule="evenodd"
