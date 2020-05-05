@@ -6,9 +6,8 @@ import { BarCodeScanner } from 'expo-barcode-scanner'
 import { AppContainer } from '../hoc/AppContainer'
 import { AppLoader } from '../components/UI/AppLoader'
 import { AppText } from '../components/UI/AppText'
-import { AppButton } from '../components/UI/AppButton'
 import { SCREEN } from '../consts'
-import { THEME } from '../theme';
+import { THEME } from '../theme'
 
 
 export const ScanScreen = ({ navigation }) => {
@@ -27,17 +26,13 @@ export const ScanScreen = ({ navigation }) => {
   }, [getPermissionsAsync])
 
   const handleBarCodeScanned = ({ data }) => {
-    navigation.navigate(SCREEN.TASK, {
-      id: data,
-      isCheckOnStatus: true
-    })
+    navigation.navigate(SCREEN.TASK, { id: data, isCheckOnStatus: true })
   }
 
 
   useEffect(() => {
     cbGetPermissionsAsync()
   }, [])
-
 
   if (!askCameraPermission) {
     return <AppLoader/>
@@ -52,6 +47,7 @@ export const ScanScreen = ({ navigation }) => {
     <View style={ styles.noAccessContainer }>
       <AppText style={ styles.noAccessText }>Для работы приложения необходим доступ к камере</AppText>
     </View>
+
 
   return (
     <AppContainer>

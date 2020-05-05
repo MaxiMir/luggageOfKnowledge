@@ -14,6 +14,5 @@ const rootReducer = combineReducers({
   pharmacy: pharmacyReducer
 })
 
-
 export default createStore(rootReducer, applyMiddleware(thunk))
 

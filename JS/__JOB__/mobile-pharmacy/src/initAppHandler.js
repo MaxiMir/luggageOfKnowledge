@@ -1,5 +1,6 @@
 import * as Font from 'expo-font'
 
+
 export const initAppHandler = async () => {
   await Font.loadAsync({
     'open-regular': require('../assets/fonts/OpenSans-Regular.ttf'),

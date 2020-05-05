@@ -5,8 +5,8 @@ import { Entypo } from '@expo/vector-icons'
 import { AppText } from '../../../UI/AppText'
 import { AppTextBold } from '../../../UI/AppTextBold'
 import { AppPhone } from '../../../UI/AppPhone'
+import { AppButton } from '../../../UI/AppButton'
 import { THEME } from '../../../../theme'
-import { AppButton } from '../../../UI/AppButton';
 
 
 export const PharmacyListItem = ({ pharmacy, onSelect }) => {
@@ -20,18 +20,17 @@ export const PharmacyListItem = ({ pharmacy, onSelect }) => {
   const textListContent = textListData.map(({ name, IconComponent, iconName, label }) => (
     <View style={ styles.block } key={ name }>
       <IconComponent name={ iconName } size={ 20 } style={ styles.icon }/>
-      <AppTextBold style={ styles.text }>
-        { label }:
-      </AppTextBold>
-      <AppText>
-        { pharmacy[name] }
-      </AppText>
+      <AppTextBold style={ styles.text }>{ label }:</AppTextBold>
+      <AppText>{ pharmacy[name] }</AppText>
     </View>
   ))
 
   const button = !onSelect ?
     null :
-    <AppButton color={ THEME.SUCCESS_COLOR } onPress={ () => onSelect(pharmacy['destination_store_id'], pharmacy['address']) }>
+    <AppButton
+      color={ THEME.SUCCESS_COLOR }
+      onPress={ () => onSelect(pharmacy['destination_store_id'], pharmacy['address']) }
+    >
       Выбрать
     </AppButton>
 
@@ -41,12 +40,8 @@ export const PharmacyListItem = ({ pharmacy, onSelect }) => {
 
       <View style={ styles.block }>
         <Entypo name='old-phone' size={ 20 } style={ styles.icon }/>
-        <AppTextBold style={ styles.text }>
-          телефон:
-        </AppTextBold>
-        <AppPhone
-          phone={ pharmacy.phone }
-        />
+        <AppTextBold style={ styles.text }>телефон:</AppTextBold>
+        <AppPhone phone={ pharmacy.phone }/>
       </View>
 
       { button }

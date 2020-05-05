@@ -20,6 +20,7 @@ export const AddressDirectoryScreen = ({ navigation }) => {
     :
     <PharmacyList pharmacies={ pharmacies }/>
 
+
   return (
     <AppContainer>
       { content }

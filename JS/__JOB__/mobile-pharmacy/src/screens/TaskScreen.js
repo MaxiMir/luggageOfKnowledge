@@ -28,7 +28,7 @@ export const TaskScreen = ({ navigation }) => {
   if (!task) {
     return (
       <AppContainer>
-        <AppLoader text={ `Получаю данные по заказу №\n${ id }` } />
+        <AppLoader text={ `Получаю данные по заказу №\n${ id }` }/>
       </AppContainer>
     )
   }
@@ -57,24 +57,16 @@ export const TaskScreen = ({ navigation }) => {
   }
 
   const shippedBtnHandler = () => {
-    navigation.navigate(SCREEN.TASK_CLOSURE, {
-      task
-    })
+    navigation.navigate(SCREEN.TASK_CLOSURE, { task })
   }
 
   return (
     <AppContainer>
-      <AppHeader>
-        Задание на перемещение товара
-      </AppHeader>
+      <AppHeader>Задание на перемещение товара</AppHeader>
 
-      <TaskInfo
-        task={ task }
-      />
+      <TaskInfo task={ task }/>
 
-      <AppHeader style={ styles.productListHeader }>
-        Товары:
-      </AppHeader>
+      <AppHeader style={ styles.productListHeader }>Товары:</AppHeader>
 
       <TaskProducts
         products={ task['basket'] }

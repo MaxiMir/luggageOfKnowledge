@@ -25,12 +25,12 @@ export const AuthScreen = ({ navigation }) => {
     )
   }
 
-  const changeInputHandler = (name, value) => {
-    setForm({ ...form, [name]: value })
+  const changeInputHandler = formNewData => {
+    setForm({ ...form, ...formNewData })
   }
 
   const checkOnValidPhone = () => {
-    const phoneWithoutPlus = String( + form.phone)
+    const phoneWithoutPlus = String(+form.phone)
     return phoneWithoutPlus.length === SETTINGS.PHONE_LENGTH
   }
 
@@ -39,7 +39,7 @@ export const AuthScreen = ({ navigation }) => {
   }
 
   const enterBtnHandler = () => {
-    const phoneWithoutPlus = String( + form.phone)
+    const phoneWithoutPlus = String(+form.phone)
 
     setIsSendingData(true)
 
@@ -65,7 +65,7 @@ export const AuthScreen = ({ navigation }) => {
               <TextInput
                 placeholder="НОМЕР ТЕЛЕФОНА"
                 value={ form.phone }
-                onChangeText={ newValue => changeInputHandler('phone', newValue) }
+                onChangeText={ phone => changeInputHandler({ phone }) }
                 autoCorrect={ false }
                 onSubmitEditing={ Keyboard.dismiss }
                 keyboardType="numeric"
@@ -77,7 +77,7 @@ export const AuthScreen = ({ navigation }) => {
               <TextInput
                 placeholder="ПАРОЛЬ"
                 value={ form.password }
-                onChangeText={ newValue => changeInputHandler('password', newValue) }
+                onChangeText={ password => changeInputHandler({ password }) }
                 autoCorrect={ false }
                 autoCapitalize='none'
                 secureTextEntry={ true }

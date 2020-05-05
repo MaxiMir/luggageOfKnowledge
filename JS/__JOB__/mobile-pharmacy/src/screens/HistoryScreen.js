@@ -29,11 +29,7 @@ export const HistoryScreen = ({ navigation }) => {
   }
 
   const taskPressHandler = id => {
-    navigation.navigate(SCREEN.TASK, {
-      id,
-      isNewTask: false,
-      isCompletedTask: true
-    })
+    navigation.navigate(SCREEN.TASK, { id, isNewTask: false, isCompletedTask: true })
   }
 
   const scanBtnHandler = () => navigation.navigate(SCREEN.SCAN)
@@ -47,9 +43,9 @@ export const HistoryScreen = ({ navigation }) => {
     :
     <View style={ styles.noTaskContainer }>
       <AppTextBold style={ styles.noHistoryText }>Список выполненных задач пуст</AppTextBold>
-
       <AppButton onPress={ scanBtnHandler }>Сканировать шрихкод</AppButton>
     </View>
+
 
   return (
     <AppContainer>

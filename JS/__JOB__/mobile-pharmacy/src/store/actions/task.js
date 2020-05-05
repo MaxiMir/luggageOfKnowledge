@@ -1,6 +1,6 @@
 import axios from '../../axios/axiosApi'
 import { showAndHideMessage } from './app'
-import { responseUserErrorHandler}  from './user'
+import { responseUserErrorHandler } from './user'
 import { GET_TASK, GET_ALL_TASKS, SET_TASK_ACCEPTED, SET_TASK_COMPLETED, GET_TASK_HISTORY } from '../types'
 
 
@@ -40,7 +40,7 @@ export const getAllTasks = () => async dispatch => {
 
 export const setTaskAccepted = id => async dispatch => {
   try {
-    const postData = { id, action: "accept" }
+    const postData = { id, action: 'accept' }
     const { success, message } = await axios.post('/relocations', { postData })
 
     if (!success) {
@@ -57,7 +57,7 @@ export const setTaskAccepted = id => async dispatch => {
 
 export const setTaskCompleted = (id, storeId, comment) => async dispatch => {
   try {
-    const postData = { id, comment, action: "deliver", store_id: storeId }
+    const postData = { id, comment, action: 'deliver', store_id: storeId }
     const { success, message } = await axios.post('/relocations', postData)
 
     if (!success) {

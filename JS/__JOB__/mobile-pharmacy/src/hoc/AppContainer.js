@@ -2,8 +2,8 @@ import React from 'react'
 import { View, StyleSheet } from 'react-native'
 import { useSelector } from 'react-redux'
 
-import { THEME } from '../theme'
 import { AppTextBold } from '../components/UI/AppTextBold'
+import { THEME } from '../theme'
 
 
 export const AppContainer = ({ children, style }) => {

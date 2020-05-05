@@ -8,23 +8,19 @@ import { SCREEN } from '../consts'
 import { THEME } from '../theme'
 
 
-export const HowToUseScreen = ({ navigation }) => {
-  return (
-    <View style={ styles.container }>
-      <ScrollView>
-        <AppHeader>Инструкция</AppHeader>
+export const HowToUseScreen = ({ navigation }) => (
+  <View style={ styles.container }>
+    <ScrollView>
+      <AppHeader>Инструкция</AppHeader>
 
-        <AppText style={ styles.text }>Как пользоваться приложением</AppText>
+      <AppText style={ styles.text }>Как пользоваться приложением</AppText>
 
-        <AppButton
-          onPress={ () => navigation.navigate(SCREEN.MAIN) }
-        >
-          На главную
-        </AppButton>
-      </ScrollView>
-    </View>
-  )
-}
+      <AppButton onPress={ () => navigation.navigate(SCREEN.MAIN) }>
+        На главную
+      </AppButton>
+    </ScrollView>
+  </View>
+)
 
 HowToUseScreen.navigationOptions = ({ navigation }) => ({
   headerTitle: 'Как использовать приложение'

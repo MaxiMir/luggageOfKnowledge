@@ -7,30 +7,24 @@ import { SCREEN } from '../consts'
 import { THEME } from '../theme'
 
 
-export const MainScreen = ({ navigation }) => {
-  return (
-    <AppContainer style={ styles.container }>
-      <Image
-        source={ require('../../assets/logo-min.png') }
-        style={ styles.image }
-      />
+export const MainScreen = ({ navigation }) => (
+  <AppContainer style={ styles.container }>
+    <Image
+      source={ require('../../assets/logo-min.png') }
+      style={ styles.image }
+    />
 
-      <View style={ styles.buttonsContainer }>
-        <AppButton
-          onPress={ () => navigation.navigate(SCREEN.HOW_TO_USE) }
-        >
-          Как использовать приложение
-        </AppButton>
+    <View style={ styles.buttonsContainer }>
+      <AppButton onPress={ () => navigation.navigate(SCREEN.HOW_TO_USE) }>
+        Как использовать приложение
+      </AppButton>
 
-        <AppButton
-          onPress={ () => navigation.navigate(SCREEN.ADDRESS_DIRECTORY) }
-        >
-          Справочник адресов
-        </AppButton>
-      </View>
-    </AppContainer>
-  )
-}
+      <AppButton onPress={ () => navigation.navigate(SCREEN.ADDRESS_DIRECTORY) }>
+        Справочник адресов
+      </AppButton>
+    </View>
+  </AppContainer>
+)
 
 MainScreen.navigationOptions = ({ navigation }) => ({
   headerTitle: 'Главная'

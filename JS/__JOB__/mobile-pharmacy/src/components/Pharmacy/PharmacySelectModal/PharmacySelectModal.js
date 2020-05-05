@@ -25,7 +25,6 @@ export const PharmacySelectModal = ({ visible, onClose, onSelect }) => {
     findNearPharmaciesCb()
   }, [])
 
-
   const findNearPharmaciesAsync = async () => {
     const { status } = await Permissions.askAsync(Permissions.LOCATION);
     const hasPermission = status === 'granted'

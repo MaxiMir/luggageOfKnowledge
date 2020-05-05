@@ -3,17 +3,10 @@ import { Platform, TouchableNativeFeedback, TouchableOpacity } from 'react-nativ
 
 
 export const AppTouchableBlock = ({ children, onPress, disabled }) => {
-  const Wrapper = Platform.OS === 'android' ?
-    TouchableNativeFeedback
-    :
-    TouchableOpacity
+  const Wrapper = Platform.OS === 'android' ? TouchableNativeFeedback : TouchableOpacity
 
   return (
-    <Wrapper
-      onPress={ onPress }
-      activeOpacity={ 0.7 }
-      disabled={ disabled }
-    >
+    <Wrapper onPress={ onPress } activeOpacity={ 0.7 } disabled={ disabled }>
       { children }
     </Wrapper>
   )

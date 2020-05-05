@@ -13,7 +13,6 @@ import { SCREEN } from '../consts'
 import { THEME } from '../theme'
 
 
-
 export const TaskClosureScreen = ({ navigation }) => {
   const dispatch = useDispatch()
   const { id, destination_store_id, destination_store } = navigation.getParam('task')
@@ -23,28 +22,25 @@ export const TaskClosureScreen = ({ navigation }) => {
   const [modalState, setModalState] = useState(modalInitialState)
   const { name } = useSelector(state => state.user.data)
 
-
-  const changeFormHandler = (name, value) => {
-    setForm({ ...form, [name]: value })
+  const changeFormHandler = formNewValues => {
+    setForm({ ...form, ...formNewValues })
   }
 
-  const changeModalHandler = (name, value) => {
-    setModalState({ ...modalState, [name]: value })
+  const changeModalHandler = modalNewValues => {
+    setModalState({ ...modalState, ...modalNewValues })
   }
 
   const changePharmacy = () => {
     if (!modalState.isInitialized) {
-      changeModalHandler('isInitialized', true)
+      changeModalHandler({ isInitialized: true })
     }
 
-    changeModalHandler('isVisible', true)
+    changeModalHandler({ isVisible: true })
   }
 
   const onSelectPharmacy = (destinationStoreId, address) => {
-    changeFormHandler('address', address)
-    changeFormHandler('destinationStoreId', destinationStoreId)
-
-    changeModalHandler('isVisible', false)
+    changeFormHandler({ address, destinationStoreId })
+    changeModalHandler({ isVisible: false })
   }
 
   const acceptBtnHandler = () => {
@@ -61,7 +57,7 @@ export const TaskClosureScreen = ({ navigation }) => {
     :
     <PharmacySelectModal
       visible={ modalState.isVisible }
-      onClose={ () => changeModalHandler('isVisible', false) }
+      onClose={ () => changeModalHandler({ isVisible: false }) }
       onSelect={ onSelectPharmacy }
     />
 
@@ -76,9 +72,7 @@ export const TaskClosureScreen = ({ navigation }) => {
 
           <View style={ styles.textBlock }>
             <AppTextBold>Адрес отгрузки: </AppTextBold>
-
             <AppText style={ styles.destinationText }>{ form.address }</AppText>
-
             <AppButton onPress={ changePharmacy }>
               <AppTextBold>Изменить</AppTextBold>
             </AppButton>
@@ -94,23 +88,17 @@ export const TaskClosureScreen = ({ navigation }) => {
               style={ styles.textarea }
               placeholder='Комментарий (необязательно)'
               value={ form.comment }
-              onChangeText={ newValue => changeFormHandler('comment', newValue) }
+              onChangeText={ comment => changeFormHandler({ comment }) }
               multiline
             />
           </View>
 
           <View style={ styles.buttonsContainer }>
-            <AppButton
-              onPress={ cancelBtnHandler }
-              color={ THEME.DANGER_COLOR }
-            >
+            <AppButton onPress={ cancelBtnHandler } color={ THEME.DANGER_COLOR }>
               Отменить
             </AppButton>
 
-            <AppButton
-              onPress={ acceptBtnHandler }
-              color={ THEME.SUCCESS_COLOR }
-            >
+            <AppButton onPress={ acceptBtnHandler } color={ THEME.SUCCESS_COLOR }>
               Подтвердить
             </AppButton>
           </View>

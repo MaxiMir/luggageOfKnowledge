@@ -11,9 +11,7 @@ import { THEME } from '../../theme';
 export const User = ({ user }) => (
   <View styles={ styles.info }>
     <View>
-      <UserPhoto
-        image={ user.image || '../../../../assets/mock/mockAvatar.png' }
-      />
+      <UserPhoto image={ user.image || '../../../../assets/mock/mockAvatar.png' } />
     </View>
 
     <View style={ styles.infoRow }>
@@ -28,9 +26,7 @@ export const User = ({ user }) => (
 
     <View style={ styles.infoRow }>
       <AppTextBold>Телефон: </AppTextBold>
-      <AppPhone
-        phone={ user.phone }
-      />
+      <AppPhone phone={ user.phone } />
     </View>
   </View>
 )

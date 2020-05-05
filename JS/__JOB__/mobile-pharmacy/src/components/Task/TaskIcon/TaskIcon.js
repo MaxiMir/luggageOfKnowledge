@@ -10,6 +10,7 @@ export const TaskIcon = ({ size, color }) => {
   const dispatch = useDispatch()
   const taskCount = useSelector(state => !state.task.accepted ? 0 : state.task.accepted.length)
 
+
   useEffect(() => {
     dispatch(getAllTasks())
   }, [])

@@ -2,8 +2,8 @@ import React, { useState } from 'react'
 import { View, TextInput, FlatList, StyleSheet } from 'react-native'
 
 import { PharmacyListItem } from './PharmacyListItem/PharmacyListItem'
+import { AppTextBold } from '../../UI/AppTextBold'
 import { THEME } from '../../../theme'
-import { AppTextBold } from '../../UI/AppTextBold';
 
 
 export const PharmacyList = ({ pharmacies, onSelect }) => {
@@ -33,17 +33,16 @@ export const PharmacyList = ({ pharmacies, onSelect }) => {
       </View>
       {
         !pharmacies.length ?
-        <AppTextBold style={styles.noFoundText}>Ничего не найдено</AppTextBold>
-        :
-        <FlatList
-          data={ pharmacies }
-          keyExtractor={ pharmacy => pharmacy.id.toString() }
-          renderItem={ ({ item }) => (
-            <PharmacyListItem pharmacy={ item } onSelect={onSelect} />
-          ) }
-        />
+          <AppTextBold style={ styles.noFoundText }>Ничего не найдено</AppTextBold>
+          :
+          <FlatList
+            data={ pharmacies }
+            keyExtractor={ pharmacy => pharmacy.id.toString() }
+            renderItem={ ({ item }) => (
+              <PharmacyListItem pharmacy={ item } onSelect={ onSelect }/>
+            ) }
+          />
       }
-
     </View>
   )
 }

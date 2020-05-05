@@ -23,27 +23,18 @@ export const TasksScreen = ({ navigation }) => {
   }
 
   const taskPressHandler = id => {
-    navigation.navigate(SCREEN.TASK, {
-      id,
-      isNewTask: false,
-      isCompletedTask: false
-    })
+    navigation.navigate(SCREEN.TASK, { id, isNewTask: false, isCompletedTask: false })
   }
 
-  const scanBtnHandler = () => navigation.navigate(SCREEN.SCAN)
-
   const content = tasks.length ?
-    <TaskList
-      tasks={ tasks }
-      taskPressHandler={ taskPressHandler }
-    />
+    <TaskList tasks={ tasks } taskPressHandler={ taskPressHandler } />
     :
     <View style={ styles.noTaskContainer }>
       <AppTextBold style={ styles.noTaskText }>
         Список задач пуст
       </AppTextBold>
 
-      <AppButton onPress={ scanBtnHandler }>
+      <AppButton onPress={ () => navigation.navigate(SCREEN.SCAN) }>
         Сканировать шрихкод
       </AppButton>
     </View>

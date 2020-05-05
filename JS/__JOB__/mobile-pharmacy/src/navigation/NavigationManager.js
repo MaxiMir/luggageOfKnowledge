@@ -10,6 +10,7 @@ export const NavigationManager = () => {
   const dispatch = useDispatch()
   const isAuthenticated = useSelector(state => state.user.isAuthenticated)
 
+
   useEffect(() => {
     dispatch(autoLogin())
   }, [])

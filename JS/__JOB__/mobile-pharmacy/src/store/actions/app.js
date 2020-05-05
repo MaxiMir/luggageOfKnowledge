@@ -1,7 +1,8 @@
 import { SHOW_SUCCESS_MESSAGE, SHOW_ERROR_MESSAGE, CLEAR_MESSAGE } from '../types'
+import { SETTINGS } from '../../consts'
 
 
-export const showAndHideMessage = (message, isSuccess = true, showTimeMs = 1000) => async dispatch => {
+export const showAndHideMessage = (message, isSuccess = true, showTimeMs = SETTINGS.SHOW_MESSAGE_TIME_MS) => async dispatch => {
   dispatch(showMessage(message, isSuccess))
 
   setTimeout(() => {
