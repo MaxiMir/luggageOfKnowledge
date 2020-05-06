@@ -11526,7 +11526,7 @@ var THEME = {
 
 /***/ }),
 
-/***/ 2:
+/***/ 1:
 /*!****************************************************************************************************************************************************************************************************************!*\
   !*** multi next-client-pages-loader?page=%2F&absolutePagePath=%2FUsers%2Fmaksimmincenko%2FPhpstormProjects%2Fslim.xppx%2Fr%2FKNOWLEDGE%2FJS%2F__JOB__%2Fsuper-apteka%2Fpages%2Findex.js&hotRouterUpdates=true ***!
   \****************************************************************************************************************************************************************************************************************/
@@ -11549,5 +11549,5 @@ module.exports = dll_2adc2403d89adc16ead0;
 
 /***/ })
 
-},[[2,"static/runtime/webpack.js"]]]);
+},[[1,"static/runtime/webpack.js"]]]);
 //# sourceMappingURL=index.js.map

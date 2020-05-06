@@ -41,7 +41,8 @@
      */
     public function create()
     {
-      $item = new BlogCategory(); // объект класса BlogCategory
+      $item = new BlogCategory(); // пустой объект
+      $item = BlogCategory::make(); // >= 6.0
       // $categoryList = BlogCategory::all();
       $categoryList = $this->blogCategoryRepository->getForComboBox();
 
@@ -60,7 +61,8 @@
     {
       $data = $request->input(); // данные с формы
 
-      $item = new BlogCategory($data);
+      $item = new BlogCategory($data); // создаст объект и запишет в БД
+      $item = BlogCategory::create($data); // >= 6.0
       $item->save();
 
       if ($item) {

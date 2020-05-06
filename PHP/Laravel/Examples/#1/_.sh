@@ -55,7 +55,7 @@ $ php artisan make:request BlogCategoryCreateRequest
 
 #8 Создание базовых файлов для авторизации/регистрации:
 $ php artisan make:auth
-# > 6.0:
+# >= 6.0:
 $ composer require laravel/ui
 $ php artisan ui vue --auth
 
@@ -63,6 +63,33 @@ $ php artisan ui vue --auth
 $ php artisan make:observer BlogPostObserver --model=Models/BlogPost
 $ php artisan make:observer BlogCategoryObserver --model=Models/BlogCategory
 # Прописать в AppServiceProvider
+
+
+
+
+#10: ОЧЕРЕДИ
+<<comment
+Очередь (queue) - это некий пул Задач реализованный по принципу FIFO - "первым пришел - первым ушел".
+
+Задача (job) - это целостный элемент очереди (может быть пустой или состоять из одной или более задач).
+
+Воркер (worker) - это приложение, которые прослушивает Очередь и выполняет Задачи.
+
+Пример: отправка почты
+comment
+
+# Создаем файл миграции для таблицы jobs. jobs - это таблица Задач, которые можно группировать по Очередям (поле queue)
+$ php artisan queue:table
+
+# Создаем файл миграции для таблицы failed_jobs
+$ php artisan queue:failed_jobs
+
+# Создаем первые Job`s
+$ php artisan make:job BlogPostAfterCreateJob
+$ php artisan make:job BlogPostAfterDeleteJob
+$ php artisan make:job ProccessVideoJob
+
+# /config/queue.php
 
 # INFO:
 $ php artisan route:list # список всех маршрутов приложения
