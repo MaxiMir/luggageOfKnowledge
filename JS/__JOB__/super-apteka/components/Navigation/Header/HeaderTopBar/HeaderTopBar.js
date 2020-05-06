@@ -2,7 +2,6 @@ import React from 'react'
 import styled from 'styled-components'
 
 import { AppPhone } from '../../../UI/AppPhone'
-import { AppPhoneIcon } from '../../../UI/Icons/AppPhoneIcon'
 import { AppLocationIcon } from '../../../UI/Icons/AppLocationIcon'
 import { AppChevronIcon } from '../../../UI/Icons/AppChevronIcon'
 import { AppCrossIcon } from '../../../UI/Icons/AppCrossIcon'
@@ -15,10 +14,11 @@ const HeaderTopBarStyles = styled.div`
   background-color: ${ THEME.BACKGROUND_COLOR };
   padding-top: 14px;
   padding-bottom: 10px;
+  margin-bottom: 15px;
 `
 
 const LabelStyles = styled.span`
-  color: ${ THEME.LABEL_FONT_COLOR};
+  color: ${ THEME.LABEL_FONT_COLOR };
   margin-right: 10px;
   font-weight: bold;
   font-size: 9px;
@@ -37,16 +37,16 @@ export const HeaderTopBar = () => {
         <div className="row">
           <div className="col d-flex justify-content-between">
             <div className="d-flex align-items-center">
-              <AppPhone phone="+7 (495) 122-22-82" />
+              <AppPhone phone="+7 (495) 122-22-82"/>
             </div>
 
             <div className="d-flex align-items-center">
               <LabelStyles>регион</LabelStyles>
 
               <AppLink>
-                <AppLocationIcon />
+                <AppLocationIcon/>
                 <SpanLinkStyles>Москва</SpanLinkStyles>
-                <AppChevronIcon />
+                <AppChevronIcon/>
               </AppLink>
             </div>
 
@@ -54,9 +54,9 @@ export const HeaderTopBar = () => {
               <LabelStyles>аптека</LabelStyles>
 
               <AppLink>
-                <AppCrossIcon />
+                <AppCrossIcon/>
                 <SpanLinkStyles>Сумская улица, 2/12</SpanLinkStyles>
-                <AppChevronIcon />
+                <AppChevronIcon/>
               </AppLink>
             </div>
           </div>
@@ -68,7 +68,7 @@ export const HeaderTopBar = () => {
 
             <div className="d-flex align-items-center">
               <AppLink>
-                <AppEnterIcon />
+                <AppEnterIcon/>
                 Войти
               </AppLink>
             </div>

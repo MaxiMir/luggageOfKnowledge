@@ -31,11 +31,9 @@ export const TaskClosureScreen = ({ navigation }) => {
   }
 
   const changePharmacy = () => {
-    if (!modalState.isInitialized) {
-      changeModalHandler({ isInitialized: true })
-    }
+    const newState = modalState.isInitialized ? { isVisible: true } : { isInitialized: true,  isVisible: true}
 
-    changeModalHandler({ isVisible: true })
+    changeModalHandler(newState)
   }
 
   const onSelectPharmacy = (destinationStoreId, address) => {
