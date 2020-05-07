@@ -102,42 +102,101 @@ module.exports =
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return MyApp; });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _style_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../style.css */ "./style.css");
-/* harmony import */ var _style_css__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_style_css__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var styled_components__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! styled-components */ "styled-components");
+/* harmony import */ var styled_components__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(styled_components__WEBPACK_IMPORTED_MODULE_1__);
 var _jsxFileName = "/Users/maksimmincenko/PhpstormProjects/slim.xppx/r/KNOWLEDGE/JS/__JOB__/super-apteka/pages/_app.js";
-
 var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
 
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
 
-function MyApp({
+
+const GlobalStyle = styled_components__WEBPACK_IMPORTED_MODULE_1__["createGlobalStyle"]`
+  @font-face {
+    font-family: 'Circe';
+    src: url('/fonts/Circe-Light.eot');
+    src: url('/fonts/Circe-Light.eot?#iefix') format('embedded-opentype'),
+        url('/fonts/Circe-Light.woff2') format('woff2'),
+        url('/fonts/Circe-Light.woff') format('woff'),
+        url('/fonts/Circe-Light.ttf') format('truetype');
+    font-weight: 300;
+    font-style: normal;
+  }
+
+  @font-face {
+    font-family: 'Circe Extra';
+    src: url('/fonts/Circe-ExtraBold.eot');
+    src: url('/fonts/Circe-ExtraBold.eot?#iefix') format('embedded-opentype'),
+        url('/fonts/Circe-ExtraBold.woff2') format('woff2'),
+        url('/fonts/Circe-ExtraBold.woff') format('woff'),
+        url('/fonts/Circe-ExtraBold.ttf') format('truetype');
+    font-weight: 800;
+    font-style: normal;
+  }
+
+  @font-face {
+    font-family: 'Circe';
+    src: url('/fonts/Circe-Thin.eot');
+    src: url('/fonts/Circe-Thin.eot?#iefix') format('embedded-opentype'),
+        url('/fonts/Circe-Thin.woff2') format('woff2'),
+        url('/fonts/Circe-Thin.woff') format('woff'),
+        url('/fonts/Circe-Thin.ttf') format('truetype');
+    font-weight: 100;
+    font-style: normal;
+  }
+
+  @font-face {
+    font-family: 'Circe';
+    src: url('/fonts/Circe-Regular.eot');
+    src: url('/fonts/Circe-Regular.eot?#iefix') format('embedded-opentype'),
+        url('/fonts/Circe-Regular.woff2') format('woff2'),
+        url('/fonts/Circe-Regular.woff') format('woff'),
+        url('/fonts/Circe-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+  }
+
+  @font-face {
+    font-family: 'Circe';
+    src: url('/fonts/Circe-Bold.eot');
+    src: url('/fonts/Circe-Bold.eot?#iefix') format('embedded-opentype'),
+        url('/fonts/Circe-Bold.woff2') format('woff2'),
+        url('/fonts/Circe-Bold.woff') format('woff'),
+        url('/fonts/Circe-Bold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+  }
+
+  body {
+    font-family: Circe, serif;
+    font-size: 14px;
+  }
+`;
+
+const MyApp = ({
   Component,
   pageProps
-}) {
-  return __jsx(Component, _extends({}, pageProps, {
-    __self: this,
+}) => {
+  return __jsx(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, __jsx(GlobalStyle, {
+    __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 4,
-      columnNumber: 10
+      lineNumber: 70,
+      columnNumber: 7
     }
-  }));
-}
+  }), __jsx(Component, _extends({}, pageProps, {
+    __self: undefined,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 71,
+      columnNumber: 7
+    }
+  })));
+};
 
-/***/ }),
-
-/***/ "./style.css":
-/*!*******************!*\
-  !*** ./style.css ***!
-  \*******************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-
+/* harmony default export */ __webpack_exports__["default"] = (MyApp);
 
 /***/ }),
 
@@ -161,6 +220,17 @@ module.exports = __webpack_require__(/*! private-next-pages/_app.js */"./pages/_
 /***/ (function(module, exports) {
 
 module.exports = require("react");
+
+/***/ }),
+
+/***/ "styled-components":
+/*!************************************!*\
+  !*** external "styled-components" ***!
+  \************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("styled-components");
 
 /***/ })
 

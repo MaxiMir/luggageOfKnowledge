@@ -24,7 +24,8 @@ const indexPage = ({ albums }) => (
 
 export async function getStaticProps() {
   const res = await fetch('https://jsonplaceholder.typicode.com/albums/1/photos')
-  const albums = await res.json()
+  const albumsColl = await res.json()
+  const albums = [albumsColl[0]]
 
   return {
     props: {

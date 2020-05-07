@@ -1,11 +1,11 @@
 import React from 'react'
 
-import { AppIconContainer } from './AppIconContainer'
+import { AppSvgContainer } from './AppSvgContainer'
 import { THEME } from '../../../theme'
 
 
 export const AppEnterIcon = ({ color = THEME.MAIN_COLOR }) => (
-  <AppIconContainer
+  <AppSvgContainer
     width="10"
     height="10"
     viewBoxWidth="10"
@@ -29,5 +29,5 @@ export const AppEnterIcon = ({ color = THEME.MAIN_COLOR }) => (
       d="M0 5C0 4.72386 0.223858 4.5 0.5 4.5H6.5C6.77614 4.5 7 4.72386 7 5C7 5.27614 6.77614 5.5 6.5 5.5H0.5C0.223858 5.5 0 5.27614 0 5Z"
       fill={ color }
     />
-  </AppIconContainer>
+  </AppSvgContainer>
 )

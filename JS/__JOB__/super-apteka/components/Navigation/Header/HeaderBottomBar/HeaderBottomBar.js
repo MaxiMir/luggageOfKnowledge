@@ -2,10 +2,11 @@ import React, { useState } from 'react'
 import styled from 'styled-components'
 
 import { CatalogSearch } from '../../../Catalog/CatalogSearch/CatalogSearch'
+import { HeaderPopupMenu } from './HeaderPopupMenu/HeaderPopupMenu'
 import { AppBurgerIcon } from '../../../UI/Icons/AppBurgerIcon'
+import { AppCloseIcon } from '../../../UI/Icons/AppCloseIcon'
 import { AppLink } from '../../../UI/AppLink'
 import { THEME } from '../../../../theme'
-import { AppCloseIcon } from '../../../UI/Icons/AppCloseIcon';
 
 
 const HeaderBottomBarStyles = styled.div`
@@ -24,28 +25,34 @@ const AppLinkContainerStyles = styled.div`
 export const HeaderBottomBar = () => {
   const [isOpenedMenu, setIsOpenedMenu] = useState(false);
 
-  const menuBtnHandler = () => {
-    setIsOpenedMenu(!isOpenedMenu)
+  const menuPopupHandler = isOpenedMenu => {
+    setIsOpenedMenu(isOpenedMenu)
   }
 
-  const MenuIcon = isOpenedMenu ? AppCloseIcon : AppBurgerIcon
+  const CatalogBtnIcon = isOpenedMenu ? AppCloseIcon : AppBurgerIcon
 
   return (
-    <HeaderBottomBarStyles>
-      <div className="container">
-        <div className="row align-items-center">
-          <AppLinkContainerStyles className="d-flex justify-content-center align-items-center">
-            <AppLink data-toggle="modal" data-target=".header-modal-menu" onClick={ menuBtnHandler }>
-              <MenuIcon />
-              Каталог
-            </AppLink>
-          </AppLinkContainerStyles>
+    <>
+      <HeaderBottomBarStyles>
+        <div className="container">
+          <div className="row align-items-center">
+            <AppLinkContainerStyles className="d-flex justify-content-center align-items-center">
+              <AppLink data-toggle="modal" data-target=".header-modal-menu" onClick={ () => menuPopupHandler(!isOpenedMenu) }>
+                <CatalogBtnIcon/>
+                Каталог
+              </AppLink>
+            </AppLinkContainerStyles>
 
-          <div className="flex-grow-1">
-            <CatalogSearch/>
+            <div className="flex-grow-1">
+              <CatalogSearch/>
+            </div>
           </div>
         </div>
-      </div>
-    </HeaderBottomBarStyles>
+      </HeaderBottomBarStyles>
+
+      <HeaderPopupMenu
+        isOpened={ isOpenedMenu }
+      />
+    </>
   )
 }

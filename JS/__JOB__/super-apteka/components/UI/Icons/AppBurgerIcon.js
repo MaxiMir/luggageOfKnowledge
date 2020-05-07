@@ -1,11 +1,11 @@
 import React from 'react'
 
-import { AppIconContainer } from './AppIconContainer'
+import { AppSvgContainer } from './AppSvgContainer'
 import { THEME } from '../../../theme'
 
 
 export const AppBurgerIcon = ({ color = THEME.WHITE_COLOR }) => (
-  <AppIconContainer
+  <AppSvgContainer
     width="13"
     height="13"
     viewBoxWidth="13"
@@ -31,5 +31,5 @@ export const AppBurgerIcon = ({ color = THEME.WHITE_COLOR }) => (
       rx="1"
       fill={ color }
     />
-  </AppIconContainer>
+  </AppSvgContainer>
 )

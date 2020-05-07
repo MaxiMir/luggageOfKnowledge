@@ -2,11 +2,12 @@ import React from 'react'
 import styled from 'styled-components'
 
 import { AppPhone } from '../../../UI/AppPhone'
+import { AppLink } from '../../../UI/AppLink'
 import { AppLocationIcon } from '../../../UI/Icons/AppLocationIcon'
 import { AppChevronIcon } from '../../../UI/Icons/AppChevronIcon'
 import { AppCrossIcon } from '../../../UI/Icons/AppCrossIcon'
 import { AppEnterIcon } from '../../../UI/Icons/AppEnterIcon'
-import { AppLink } from '../../../UI/AppLink'
+import { AppPhoneIcon } from '../../../UI/Icons/AppPhoneIcon'
 import { THEME } from '../../../../theme'
 
 
@@ -37,6 +38,7 @@ export const HeaderTopBar = () => {
         <div className="row">
           <div className="col d-flex justify-content-between">
             <div className="d-flex align-items-center">
+              <AppPhoneIcon/>
               <AppPhone phone="+7 (495) 122-22-82"/>
             </div>
 

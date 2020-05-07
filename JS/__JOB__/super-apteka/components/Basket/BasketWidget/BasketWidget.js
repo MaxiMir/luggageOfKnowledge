@@ -5,6 +5,20 @@ import { AppBasketIcon } from '../../UI/Icons/AppBasketicon'
 import { THEME } from '../../../theme'
 
 
+const BasketCountContainerStyles = styled.div`
+  display: inline-block!important;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background-color: ${ THEME.MAIN_COLOR };
+  color: ${ THEME.WHITE_COLOR };
+  font-size: 18px;
+  font-weight: bold;
+  text-align: center;
+  vertical-align: middle;
+  line-height: 37px;
+`
+
 const BasketWidgetContainerStyles = styled.div`
   width: 200px;
   height: 56px;
@@ -15,16 +29,6 @@ const BasketWidgetContainerStyles = styled.div`
   cursor: pointer;
 `
 
-const BasketCountContainerStyles = styled.div`
-  width: 34px;
-  height: 34px;
-  border-radius: 50%;
-  background-color: ${THEME.MAIN_COLOR};
-  font-size: 18px;
-  font-weight: bold;
-  color: ${THEME.WHITE_COLOR};
-`
-
 export const BasketWidget = () => {
   const basketCount = 12;
 
@@ -32,9 +36,9 @@ export const BasketWidget = () => {
     <BasketWidgetContainerStyles className="d-flex justify-content-between align-items-center">
       <div>Корзина</div>
 
-      <AppBasketIcon />
+      <AppBasketIcon/>
 
-      <BasketCountContainerStyles className="d-flex justify-content-center align-items-center">
+      <BasketCountContainerStyles>
         { basketCount }
       </BasketCountContainerStyles>
     </BasketWidgetContainerStyles>

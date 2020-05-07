@@ -88,7 +88,7 @@ module.exports =
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 3);
+/******/ 	return __webpack_require__(__webpack_require__.s = 4);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -137,14 +137,14 @@ var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
 
 
 
-const BasketWidgetContainerStyles = styled_components__WEBPACK_IMPORTED_MODULE_1___default.a.div.withConfig({
-  displayName: "BasketWidget__BasketWidgetContainerStyles",
-  componentId: "xt2zlp-0"
-})(["width:200px;height:56px;padding:12px 33px 10px 34px;border:2px solid #DADFE6;box-sizing:border-box;border-radius:10px;cursor:pointer;"]);
 const BasketCountContainerStyles = styled_components__WEBPACK_IMPORTED_MODULE_1___default.a.div.withConfig({
   displayName: "BasketWidget__BasketCountContainerStyles",
+  componentId: "xt2zlp-0"
+})(["display:inline-block!important;width:34px;height:34px;border-radius:50%;background-color:", ";color:", ";font-size:18px;font-weight:bold;text-align:center;vertical-align:middle;line-height:37px;"], _theme__WEBPACK_IMPORTED_MODULE_3__["THEME"].MAIN_COLOR, _theme__WEBPACK_IMPORTED_MODULE_3__["THEME"].WHITE_COLOR);
+const BasketWidgetContainerStyles = styled_components__WEBPACK_IMPORTED_MODULE_1___default.a.div.withConfig({
+  displayName: "BasketWidget__BasketWidgetContainerStyles",
   componentId: "xt2zlp-1"
-})(["width:34px;height:34px;border-radius:50%;background-color:", ";font-size:18px;font-weight:bold;color:", ";"], _theme__WEBPACK_IMPORTED_MODULE_3__["THEME"].MAIN_COLOR, _theme__WEBPACK_IMPORTED_MODULE_3__["THEME"].WHITE_COLOR);
+})(["width:200px;height:56px;padding:12px 33px 10px 34px;border:2px solid #DADFE6;box-sizing:border-box;border-radius:10px;cursor:pointer;"]);
 const BasketWidget = () => {
   const basketCount = 12;
   return __jsx(BasketWidgetContainerStyles, {
@@ -152,29 +152,28 @@ const BasketWidget = () => {
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 32,
+      lineNumber: 36,
       columnNumber: 5
     }
   }, __jsx("div", {
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 33,
+      lineNumber: 37,
       columnNumber: 7
     }
   }, "\u041A\u043E\u0440\u0437\u0438\u043D\u0430"), __jsx(_UI_Icons_AppBasketicon__WEBPACK_IMPORTED_MODULE_2__["AppBasketIcon"], {
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 35,
+      lineNumber: 39,
       columnNumber: 7
     }
   }), __jsx(BasketCountContainerStyles, {
-    className: "d-flex justify-content-center align-items-center",
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 37,
+      lineNumber: 41,
       columnNumber: 7
     }
   }, basketCount));
@@ -305,15 +304,27 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Footer", function() { return Footer; });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var styled_components__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! styled-components */ "styled-components");
+/* harmony import */ var styled_components__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(styled_components__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _FooterContacts_FooterContacts__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./FooterContacts/FooterContacts */ "./components/Navigation/Footer/FooterContacts/FooterContacts.js");
+/* harmony import */ var _theme__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../theme */ "./theme.js");
 var _jsxFileName = "/Users/maksimmincenko/PhpstormProjects/slim.xppx/r/KNOWLEDGE/JS/__JOB__/super-apteka/components/Navigation/Footer/Footer.js";
 var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
 
+
+
+
+const FooterStyles = styled_components__WEBPACK_IMPORTED_MODULE_1___default.a.div.withConfig({
+  displayName: "Footer__FooterStyles",
+  componentId: "sc-14mlg6y-0"
+})(["padding:20px;background-color:", ";"], _theme__WEBPACK_IMPORTED_MODULE_3__["THEME"].BACKGROUND_COLOR);
 const Footer = () => {
-  return __jsx("footer", {
+  return __jsx(FooterStyles, {
+    className: "footer mt-auto",
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 5,
+      lineNumber: 16,
       columnNumber: 5
     }
   }, __jsx("div", {
@@ -321,11 +332,84 @@ const Footer = () => {
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 6,
+      lineNumber: 17,
       columnNumber: 7
     }
-  }));
+  }, __jsx(_FooterContacts_FooterContacts__WEBPACK_IMPORTED_MODULE_2__["FooterContacts"], {
+    __self: undefined,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 18,
+      columnNumber: 9
+    }
+  })));
 };
+
+/***/ }),
+
+/***/ "./components/Navigation/Footer/FooterContacts/FooterContacts.js":
+/*!***********************************************************************!*\
+  !*** ./components/Navigation/Footer/FooterContacts/FooterContacts.js ***!
+  \***********************************************************************/
+/*! exports provided: FooterContacts */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FooterContacts", function() { return FooterContacts; });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _UI_AppPhone__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../UI/AppPhone */ "./components/UI/AppPhone.js");
+/* harmony import */ var _UI_Icons_AppPhoneIcon__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../UI/Icons/AppPhoneIcon */ "./components/UI/Icons/AppPhoneIcon.js");
+/* harmony import */ var _theme__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../theme */ "./theme.js");
+var _jsxFileName = "/Users/maksimmincenko/PhpstormProjects/slim.xppx/r/KNOWLEDGE/JS/__JOB__/super-apteka/components/Navigation/Footer/FooterContacts/FooterContacts.js";
+var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
+
+
+
+
+const FooterContacts = () => __jsx(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, __jsx("div", {
+  className: "d-flex align-items-center",
+  __self: undefined,
+  __source: {
+    fileName: _jsxFileName,
+    lineNumber: 10,
+    columnNumber: 5
+  }
+}, __jsx(_UI_Icons_AppPhoneIcon__WEBPACK_IMPORTED_MODULE_2__["AppPhoneIcon"], {
+  color: _theme__WEBPACK_IMPORTED_MODULE_3__["THEME"].ICON_COLOR,
+  __self: undefined,
+  __source: {
+    fileName: _jsxFileName,
+    lineNumber: 11,
+    columnNumber: 7
+  }
+}), __jsx(_UI_AppPhone__WEBPACK_IMPORTED_MODULE_1__["AppPhone"], {
+  phone: "+7 (495) 122-22-82",
+  size: "24px",
+  color: _theme__WEBPACK_IMPORTED_MODULE_3__["THEME"].ICON_COLOR,
+  __self: undefined,
+  __source: {
+    fileName: _jsxFileName,
+    lineNumber: 15,
+    columnNumber: 7
+  }
+})), __jsx("div", {
+  __self: undefined,
+  __source: {
+    fileName: _jsxFileName,
+    lineNumber: 22,
+    columnNumber: 5
+  }
+}, "\u041D\u0430\u043F\u0438\u0441\u0430\u0442\u044C \u043D\u0430\u043C"), __jsx("div", {
+  className: "d-flex align-items-center",
+  __self: undefined,
+  __source: {
+    fileName: _jsxFileName,
+    lineNumber: 26,
+    columnNumber: 5
+  }
+}, "\xA9 2020 superapteka.ru \u0412\u0441\u0435 \u043F\u0440\u0430\u0432\u0430 \u0437\u0430\u0449\u0438\u0449\u0435\u043D\u044B"));
 
 /***/ }),
 
@@ -344,10 +428,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _HeaderTopBar_HeaderTopBar__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./HeaderTopBar/HeaderTopBar */ "./components/Navigation/Header/HeaderTopBar/HeaderTopBar.js");
 /* harmony import */ var _HeaderMiddleBar_HeaderMiddleBar__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./HeaderMiddleBar/HeaderMiddleBar */ "./components/Navigation/Header/HeaderMiddleBar/HeaderMiddleBar.js");
 /* harmony import */ var _HeaderBottomBar_HeaderBottomBar__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./HeaderBottomBar/HeaderBottomBar */ "./components/Navigation/Header/HeaderBottomBar/HeaderBottomBar.js");
-/* harmony import */ var _HeaderMainNav_HeaderMainNav__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./HeaderMainNav/HeaderMainNav */ "./components/Navigation/Header/HeaderMainNav/HeaderMainNav.js");
 var _jsxFileName = "/Users/maksimmincenko/PhpstormProjects/slim.xppx/r/KNOWLEDGE/JS/__JOB__/super-apteka/components/Navigation/Header/Header.js";
 var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
-
 
 
 
@@ -357,35 +439,28 @@ const Header = () => {
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 11,
+      lineNumber: 10,
       columnNumber: 5
     }
   }, __jsx(_HeaderTopBar_HeaderTopBar__WEBPACK_IMPORTED_MODULE_1__["HeaderTopBar"], {
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 12,
+      lineNumber: 11,
       columnNumber: 7
     }
   }), __jsx(_HeaderMiddleBar_HeaderMiddleBar__WEBPACK_IMPORTED_MODULE_2__["HeaderMiddleBar"], {
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 13,
+      lineNumber: 12,
       columnNumber: 7
     }
   }), __jsx(_HeaderBottomBar_HeaderBottomBar__WEBPACK_IMPORTED_MODULE_3__["HeaderBottomBar"], {
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 14,
-      columnNumber: 7
-    }
-  }), __jsx(_HeaderMainNav_HeaderMainNav__WEBPACK_IMPORTED_MODULE_4__["HeaderMainNav"], {
-    __self: undefined,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 15,
+      lineNumber: 13,
       columnNumber: 7
     }
   }));
@@ -408,12 +483,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var styled_components__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! styled-components */ "styled-components");
 /* harmony import */ var styled_components__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(styled_components__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _Catalog_CatalogSearch_CatalogSearch__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../Catalog/CatalogSearch/CatalogSearch */ "./components/Catalog/CatalogSearch/CatalogSearch.js");
-/* harmony import */ var _UI_Icons_AppBurgerIcon__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../UI/Icons/AppBurgerIcon */ "./components/UI/Icons/AppBurgerIcon.js");
-/* harmony import */ var _UI_AppLink__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../UI/AppLink */ "./components/UI/AppLink.js");
-/* harmony import */ var _theme__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../../theme */ "./theme.js");
-/* harmony import */ var _UI_Icons_AppCloseIcon__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../UI/Icons/AppCloseIcon */ "./components/UI/Icons/AppCloseIcon.js");
+/* harmony import */ var _HeaderPopupMenu_HeaderPopupMenu__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./HeaderPopupMenu/HeaderPopupMenu */ "./components/Navigation/Header/HeaderBottomBar/HeaderPopupMenu/HeaderPopupMenu.js");
+/* harmony import */ var _UI_Icons_AppBurgerIcon__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../UI/Icons/AppBurgerIcon */ "./components/UI/Icons/AppBurgerIcon.js");
+/* harmony import */ var _UI_Icons_AppCloseIcon__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../UI/Icons/AppCloseIcon */ "./components/UI/Icons/AppCloseIcon.js");
+/* harmony import */ var _UI_AppLink__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../UI/AppLink */ "./components/UI/AppLink.js");
+/* harmony import */ var _theme__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../../theme */ "./theme.js");
 var _jsxFileName = "/Users/maksimmincenko/PhpstormProjects/slim.xppx/r/KNOWLEDGE/JS/__JOB__/super-apteka/components/Navigation/Header/HeaderBottomBar/HeaderBottomBar.js";
 var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
+
 
 
 
@@ -428,111 +505,119 @@ const HeaderBottomBarStyles = styled_components__WEBPACK_IMPORTED_MODULE_1___def
 const AppLinkContainerStyles = styled_components__WEBPACK_IMPORTED_MODULE_1___default.a.div.withConfig({
   displayName: "HeaderBottomBar__AppLinkContainerStyles",
   componentId: "sc-19780bz-1"
-})(["width:129px;height:45px;margin-right:20px;background:linear-gradient(270deg,#37BBEB 5.81%,#37BBEB 97.67%);color:", ";border-radius:10px;"], _theme__WEBPACK_IMPORTED_MODULE_5__["THEME"].WHITE_COLOR);
+})(["width:129px;height:45px;margin-right:20px;background:linear-gradient(270deg,#37BBEB 5.81%,#37BBEB 97.67%);color:", ";border-radius:10px;"], _theme__WEBPACK_IMPORTED_MODULE_7__["THEME"].WHITE_COLOR);
 const HeaderBottomBar = () => {
   const {
     0: isOpenedMenu,
     1: setIsOpenedMenu
   } = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(false);
 
-  const menuBtnHandler = () => {
-    setIsOpenedMenu(!isOpenedMenu);
+  const menuPopupHandler = isOpenedMenu => {
+    setIsOpenedMenu(isOpenedMenu);
   };
 
-  const MenuIcon = isOpenedMenu ? _UI_Icons_AppCloseIcon__WEBPACK_IMPORTED_MODULE_6__["AppCloseIcon"] : _UI_Icons_AppBurgerIcon__WEBPACK_IMPORTED_MODULE_3__["AppBurgerIcon"];
-  return __jsx(HeaderBottomBarStyles, {
+  const CatalogBtnIcon = isOpenedMenu ? _UI_Icons_AppCloseIcon__WEBPACK_IMPORTED_MODULE_5__["AppCloseIcon"] : _UI_Icons_AppBurgerIcon__WEBPACK_IMPORTED_MODULE_4__["AppBurgerIcon"];
+  return __jsx(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, __jsx(HeaderBottomBarStyles, {
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 34,
-      columnNumber: 5
+      lineNumber: 36,
+      columnNumber: 7
     }
   }, __jsx("div", {
     className: "container",
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 35,
-      columnNumber: 7
+      lineNumber: 37,
+      columnNumber: 9
     }
   }, __jsx("div", {
     className: "row align-items-center",
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 36,
-      columnNumber: 9
+      lineNumber: 38,
+      columnNumber: 11
     }
   }, __jsx(AppLinkContainerStyles, {
     className: "d-flex justify-content-center align-items-center",
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 37,
-      columnNumber: 11
-    }
-  }, __jsx(_UI_AppLink__WEBPACK_IMPORTED_MODULE_4__["AppLink"], {
-    "data-toggle": "modal",
-    "data-target": ".header-modal-menu",
-    onClick: menuBtnHandler,
-    __self: undefined,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 38,
+      lineNumber: 39,
       columnNumber: 13
     }
-  }, __jsx(MenuIcon, {
+  }, __jsx(_UI_AppLink__WEBPACK_IMPORTED_MODULE_6__["AppLink"], {
+    "data-toggle": "modal",
+    "data-target": ".header-modal-menu",
+    onClick: () => menuPopupHandler(!isOpenedMenu),
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 39,
+      lineNumber: 40,
       columnNumber: 15
+    }
+  }, __jsx(CatalogBtnIcon, {
+    __self: undefined,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 41,
+      columnNumber: 17
     }
   }), "\u041A\u0430\u0442\u0430\u043B\u043E\u0433")), __jsx("div", {
     className: "flex-grow-1",
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 44,
-      columnNumber: 11
+      lineNumber: 46,
+      columnNumber: 13
     }
   }, __jsx(_Catalog_CatalogSearch_CatalogSearch__WEBPACK_IMPORTED_MODULE_2__["CatalogSearch"], {
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 45,
-      columnNumber: 13
+      lineNumber: 47,
+      columnNumber: 15
     }
-  })))));
+  }))))), __jsx(_HeaderPopupMenu_HeaderPopupMenu__WEBPACK_IMPORTED_MODULE_3__["HeaderPopupMenu"], {
+    isOpened: isOpenedMenu,
+    __self: undefined,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 53,
+      columnNumber: 7
+    }
+  }));
 };
 
 /***/ }),
 
-/***/ "./components/Navigation/Header/HeaderMainNav/HeaderMainNav.js":
-/*!*********************************************************************!*\
-  !*** ./components/Navigation/Header/HeaderMainNav/HeaderMainNav.js ***!
-  \*********************************************************************/
-/*! exports provided: HeaderMainNav */
+/***/ "./components/Navigation/Header/HeaderBottomBar/HeaderPopupMenu/HeaderPopupLeftMenu/HeaderPopupLeftMenu.js":
+/*!*****************************************************************************************************************!*\
+  !*** ./components/Navigation/Header/HeaderBottomBar/HeaderPopupMenu/HeaderPopupLeftMenu/HeaderPopupLeftMenu.js ***!
+  \*****************************************************************************************************************/
+/*! exports provided: HeaderPopupLeftMenu */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "HeaderMainNav", function() { return HeaderMainNav; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "HeaderPopupLeftMenu", function() { return HeaderPopupLeftMenu; });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var styled_components__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! styled-components */ "styled-components");
 /* harmony import */ var styled_components__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(styled_components__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _UI_AppRouterLink__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../UI/AppRouterLink */ "./components/UI/AppRouterLink.js");
-/* harmony import */ var _UI_Icons_Catalog_AppMedicinesIcon__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../UI/Icons/Catalog/AppMedicinesIcon */ "./components/UI/Icons/Catalog/AppMedicinesIcon.js");
-/* harmony import */ var _UI_Icons_Catalog_AppMedicalEquipment__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../UI/Icons/Catalog/AppMedicalEquipment */ "./components/UI/Icons/Catalog/AppMedicalEquipment.js");
-/* harmony import */ var _UI_Icons_Catalog_AppNonCommodityItemsIcon__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../UI/Icons/Catalog/AppNonCommodityItemsIcon */ "./components/UI/Icons/Catalog/AppNonCommodityItemsIcon.js");
-/* harmony import */ var _UI_Icons_Catalog_AppOpticsIcon__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../UI/Icons/Catalog/AppOpticsIcon */ "./components/UI/Icons/Catalog/AppOpticsIcon.js");
-/* harmony import */ var _UI_Icons_Catalog_AppFoodIcon__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../UI/Icons/Catalog/AppFoodIcon */ "./components/UI/Icons/Catalog/AppFoodIcon.js");
-/* harmony import */ var _UI_Icons_Catalog_AppBeautyAndHygieneProductsIcon__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../../UI/Icons/Catalog/AppBeautyAndHygieneProductsIcon */ "./components/UI/Icons/Catalog/AppBeautyAndHygieneProductsIcon.js");
-/* harmony import */ var _UI_Icons_Catalog_AppHouseholdProductsIcon__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../../UI/Icons/Catalog/AppHouseholdProductsIcon */ "./components/UI/Icons/Catalog/AppHouseholdProductsIcon.js");
-/* harmony import */ var _UI_Icons_Catalog_AppProductsForMotherAndBabyIcon__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../../../UI/Icons/Catalog/AppProductsForMotherAndBabyIcon */ "./components/UI/Icons/Catalog/AppProductsForMotherAndBabyIcon.js");
-/* harmony import */ var _theme__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../../../../theme */ "./theme.js");
-var _jsxFileName = "/Users/maksimmincenko/PhpstormProjects/slim.xppx/r/KNOWLEDGE/JS/__JOB__/super-apteka/components/Navigation/Header/HeaderMainNav/HeaderMainNav.js";
+/* harmony import */ var _UI_AppRouterLink__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../../UI/AppRouterLink */ "./components/UI/AppRouterLink.js");
+/* harmony import */ var _UI_Icons_Catalog_AppMedicinesIcon__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../../UI/Icons/Catalog/AppMedicinesIcon */ "./components/UI/Icons/Catalog/AppMedicinesIcon.js");
+/* harmony import */ var _UI_Icons_Catalog_AppMedicalEquipment__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../../../UI/Icons/Catalog/AppMedicalEquipment */ "./components/UI/Icons/Catalog/AppMedicalEquipment.js");
+/* harmony import */ var _UI_Icons_Catalog_AppNonCommodityItemsIcon__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../../../UI/Icons/Catalog/AppNonCommodityItemsIcon */ "./components/UI/Icons/Catalog/AppNonCommodityItemsIcon.js");
+/* harmony import */ var _UI_Icons_Catalog_AppOpticsIcon__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../../../UI/Icons/Catalog/AppOpticsIcon */ "./components/UI/Icons/Catalog/AppOpticsIcon.js");
+/* harmony import */ var _UI_Icons_Catalog_AppFoodIcon__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../../../UI/Icons/Catalog/AppFoodIcon */ "./components/UI/Icons/Catalog/AppFoodIcon.js");
+/* harmony import */ var _UI_Icons_Catalog_AppBeautyAndHygieneProductsIcon__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../../../../UI/Icons/Catalog/AppBeautyAndHygieneProductsIcon */ "./components/UI/Icons/Catalog/AppBeautyAndHygieneProductsIcon.js");
+/* harmony import */ var _UI_Icons_Catalog_AppHouseholdProductsIcon__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../../../../UI/Icons/Catalog/AppHouseholdProductsIcon */ "./components/UI/Icons/Catalog/AppHouseholdProductsIcon.js");
+/* harmony import */ var _UI_Icons_Catalog_AppProductsForMotherAndBabyIcon__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../../../../../UI/Icons/Catalog/AppProductsForMotherAndBabyIcon */ "./components/UI/Icons/Catalog/AppProductsForMotherAndBabyIcon.js");
+/* harmony import */ var _theme__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../../../../../../theme */ "./theme.js");
+var _jsxFileName = "/Users/maksimmincenko/PhpstormProjects/slim.xppx/r/KNOWLEDGE/JS/__JOB__/super-apteka/components/Navigation/Header/HeaderBottomBar/HeaderPopupMenu/HeaderPopupLeftMenu/HeaderPopupLeftMenu.js";
 var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
 
 
@@ -547,104 +632,156 @@ var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
 
 
 const LeftMenuStyles = styled_components__WEBPACK_IMPORTED_MODULE_1___default.a.div.withConfig({
-  displayName: "HeaderMainNav__LeftMenuStyles",
-  componentId: "sc-1plnt9j-0"
-})(["padding:15px;background-color:", ";"], _theme__WEBPACK_IMPORTED_MODULE_11__["THEME"].BACKGROUND_COLOR);
-const RightMenuStyles = styled_components__WEBPACK_IMPORTED_MODULE_1___default.a.div.withConfig({
-  displayName: "HeaderMainNav__RightMenuStyles",
-  componentId: "sc-1plnt9j-1"
-})(["padding:15px;"]);
-const LeftMenuLinkContainer = styled_components__WEBPACK_IMPORTED_MODULE_1___default.a.div.withConfig({
-  displayName: "HeaderMainNav__LeftMenuLinkContainer",
-  componentId: "sc-1plnt9j-2"
-})(["width:200px;min-height:60px;padding:0 15px;transition:all 0.5s ease;&:hover{background-color:", ";color:", ";}"], _theme__WEBPACK_IMPORTED_MODULE_11__["THEME"].WHITE_COLOR, _theme__WEBPACK_IMPORTED_MODULE_11__["THEME"].MAIN_COLOR);
-const IconContainer = styled_components__WEBPACK_IMPORTED_MODULE_1___default.a.div.withConfig({
-  displayName: "HeaderMainNav__IconContainer",
-  componentId: "sc-1plnt9j-3"
-})(["width:44px;"]);
-const HeaderMainNav = () => {
-  const leftMenuLinksData = [{
+  displayName: "HeaderPopupLeftMenu__LeftMenuStyles",
+  componentId: "sc-8oeei4-0"
+})(["width:320px;padding:15px 0 15px 0;background-color:", ";"], _theme__WEBPACK_IMPORTED_MODULE_11__["THEME"].BACKGROUND_COLOR);
+const LeftMenuLinkContainerStyles = styled_components__WEBPACK_IMPORTED_MODULE_1___default.a.div.withConfig({
+  displayName: "HeaderPopupLeftMenu__LeftMenuLinkContainerStyles",
+  componentId: "sc-8oeei4-1"
+})(["width:200px;height:65px;transition:all 0.5s ease;&:hover{background-color:", ";color:", ";}"], _theme__WEBPACK_IMPORTED_MODULE_11__["THEME"].WHITE_COLOR, _theme__WEBPACK_IMPORTED_MODULE_11__["THEME"].MAIN_COLOR);
+const IconContainerStyles = styled_components__WEBPACK_IMPORTED_MODULE_1___default.a.div.withConfig({
+  displayName: "HeaderPopupLeftMenu__IconContainerStyles",
+  componentId: "sc-8oeei4-2"
+})(["width:44px;height:65px;"]);
+const TitleContainerStyles = styled_components__WEBPACK_IMPORTED_MODULE_1___default.a.div.withConfig({
+  displayName: "HeaderPopupLeftMenu__TitleContainerStyles",
+  componentId: "sc-8oeei4-3"
+})(["width:156px;padding-right:15px;", ""], props => props.isHeader && `font-weight: bold;`);
+const HeaderPopupLeftMenu = () => {
+  const leftMenuLinksData = [[{
+    name: 'Все товары',
+    href: '/',
+    isHeader: true
+  }, {
     name: 'Лекарственные и профилактические средства',
-    href: '#????',
+    href: '#1',
     IconComponent: _UI_Icons_Catalog_AppMedicinesIcon__WEBPACK_IMPORTED_MODULE_3__["AppMedicinesIcon"]
   }, {
     name: 'Медицинская техника и изделия',
-    href: '#????',
+    href: '#2',
     IconComponent: _UI_Icons_Catalog_AppMedicalEquipment__WEBPACK_IMPORTED_MODULE_4__["AppMedicalEquipment"]
   }, {
     name: 'Нетоварные позиции',
-    href: '#????',
+    href: '#3',
     IconComponent: _UI_Icons_Catalog_AppNonCommodityItemsIcon__WEBPACK_IMPORTED_MODULE_5__["AppNonCommodityItemsIcon"]
   }, {
     name: 'Оптика',
-    href: '#????',
+    href: '#4',
     IconComponent: _UI_Icons_Catalog_AppOpticsIcon__WEBPACK_IMPORTED_MODULE_6__["AppOpticsIcon"]
   }, {
     name: 'Продукты питания',
-    href: '#????',
+    href: '#5',
     IconComponent: _UI_Icons_Catalog_AppFoodIcon__WEBPACK_IMPORTED_MODULE_7__["AppFoodIcon"]
   }, {
     name: 'Средства для красоты и гигиены',
-    href: '#????',
+    href: '#6',
     IconComponent: _UI_Icons_Catalog_AppBeautyAndHygieneProductsIcon__WEBPACK_IMPORTED_MODULE_8__["AppBeautyAndHygieneProductsIcon"]
   }, {
     name: 'Товары для дома и сопутствующие',
-    href: '#????',
+    href: '#7',
     IconComponent: _UI_Icons_Catalog_AppHouseholdProductsIcon__WEBPACK_IMPORTED_MODULE_9__["AppHouseholdProductsIcon"]
   }, {
     name: 'Товары для матери и ребенка',
-    href: '#????',
+    href: '#8',
     IconComponent: _UI_Icons_Catalog_AppProductsForMotherAndBabyIcon__WEBPACK_IMPORTED_MODULE_10__["AppProductsForMotherAndBabyIcon"]
-  }];
-  const leftMenuLinks = leftMenuLinksData.map(({
-    name,
-    href,
-    IconComponent
-  }, id) => __jsx(LeftMenuLinkContainer, {
-    key: id,
+  }]];
+  const leftMenuLinks = leftMenuLinksData.map((sectionData, id) => {
+    return sectionData.map(({
+      name,
+      href,
+      IconComponent,
+      isHeader
+    }) => __jsx(LeftMenuLinkContainerStyles, {
+      key: href,
+      __self: undefined,
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 59,
+        columnNumber: 7
+      }
+    }, __jsx(_UI_AppRouterLink__WEBPACK_IMPORTED_MODULE_2__["AppRouterLink"], {
+      href: href,
+      __self: undefined,
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 60,
+        columnNumber: 9
+      }
+    }, __jsx(IconContainerStyles, {
+      className: "d-flex justify-content-center align-items-center",
+      __self: undefined,
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 61,
+        columnNumber: 11
+      }
+    }, !IconComponent ? '' : __jsx(IconComponent, {
+      __self: undefined,
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 62,
+        columnNumber: 37
+      }
+    })), __jsx(TitleContainerStyles, {
+      isHeader: isHeader,
+      __self: undefined,
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 65,
+        columnNumber: 11
+      }
+    }, name))));
+  });
+  return __jsx(LeftMenuStyles, {
+    className: "d-flex justify-content-end",
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 54,
+      lineNumber: 74,
       columnNumber: 5
     }
-  }, __jsx(_UI_AppRouterLink__WEBPACK_IMPORTED_MODULE_2__["AppRouterLink"], {
-    href: href,
+  }, __jsx("div", {
+    className: "d-flex flex-column",
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 55,
+      lineNumber: 75,
       columnNumber: 7
     }
-  }, __jsx(IconContainer, {
-    className: "d-flex justify-content-center align-items-center",
-    __self: undefined,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 56,
-      columnNumber: 9
-    }
-  }, __jsx(IconComponent, {
-    __self: undefined,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 57,
-      columnNumber: 11
-    }
-  })), __jsx("div", {
-    __self: undefined,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 59,
-      columnNumber: 9
-    }
-  }, name))));
+  }, leftMenuLinks));
+};
+
+/***/ }),
+
+/***/ "./components/Navigation/Header/HeaderBottomBar/HeaderPopupMenu/HeaderPopupMenu.js":
+/*!*****************************************************************************************!*\
+  !*** ./components/Navigation/Header/HeaderBottomBar/HeaderPopupMenu/HeaderPopupMenu.js ***!
+  \*****************************************************************************************/
+/*! exports provided: HeaderPopupMenu */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "HeaderPopupMenu", function() { return HeaderPopupMenu; });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _HeaderPopupLeftMenu_HeaderPopupLeftMenu__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./HeaderPopupLeftMenu/HeaderPopupLeftMenu */ "./components/Navigation/Header/HeaderBottomBar/HeaderPopupMenu/HeaderPopupLeftMenu/HeaderPopupLeftMenu.js");
+/* harmony import */ var _HeaderPopupRightMenu_HeaderPopupRightMenu__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./HeaderPopupRightMenu/HeaderPopupRightMenu */ "./components/Navigation/Header/HeaderBottomBar/HeaderPopupMenu/HeaderPopupRightMenu/HeaderPopupRightMenu.js");
+var _jsxFileName = "/Users/maksimmincenko/PhpstormProjects/slim.xppx/r/KNOWLEDGE/JS/__JOB__/super-apteka/components/Navigation/Header/HeaderBottomBar/HeaderPopupMenu/HeaderPopupMenu.js";
+var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
+
+
+
+const HeaderPopupMenu = ({
+  isOpened
+}) => {
+  const containerClass = isOpened ? 'container-fluid' : 'd-none';
   return __jsx("div", {
-    className: "container-fluid",
+    className: containerClass,
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 66,
+      lineNumber: 11,
       columnNumber: 5
     }
   }, __jsx("div", {
@@ -652,31 +789,355 @@ const HeaderMainNav = () => {
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 67,
+      lineNumber: 12,
       columnNumber: 7
     }
-  }, __jsx(LeftMenuStyles, {
-    className: "col-3 flex-column justify-content-end align-items-end",
+  }, __jsx(_HeaderPopupLeftMenu_HeaderPopupLeftMenu__WEBPACK_IMPORTED_MODULE_1__["HeaderPopupLeftMenu"], {
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 68,
+      lineNumber: 13,
       columnNumber: 9
     }
-  }, __jsx(_UI_AppRouterLink__WEBPACK_IMPORTED_MODULE_2__["AppRouterLink"], {
-    href: "/catalog/",
+  }), __jsx(_HeaderPopupRightMenu_HeaderPopupRightMenu__WEBPACK_IMPORTED_MODULE_2__["HeaderPopupRightMenu"], {
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 69,
-      columnNumber: 11
+      lineNumber: 14,
+      columnNumber: 9
     }
-  }, "\u0412\u0441\u0435 \u0442\u043E\u0432\u0430\u0440\u044B"), leftMenuLinks), __jsx(RightMenuStyles, {
-    className: "col-9",
+  })));
+};
+
+/***/ }),
+
+/***/ "./components/Navigation/Header/HeaderBottomBar/HeaderPopupMenu/HeaderPopupRightMenu/HeaderPopupRightMenu.js":
+/*!*******************************************************************************************************************!*\
+  !*** ./components/Navigation/Header/HeaderBottomBar/HeaderPopupMenu/HeaderPopupRightMenu/HeaderPopupRightMenu.js ***!
+  \*******************************************************************************************************************/
+/*! exports provided: HeaderPopupRightMenu */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "HeaderPopupRightMenu", function() { return HeaderPopupRightMenu; });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var styled_components__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! styled-components */ "styled-components");
+/* harmony import */ var styled_components__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(styled_components__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _UI_AppRouterLink__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../../UI/AppRouterLink */ "./components/UI/AppRouterLink.js");
+/* harmony import */ var _UI_Icons_AppCloseIcon__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../../UI/Icons/AppCloseIcon */ "./components/UI/Icons/AppCloseIcon.js");
+/* harmony import */ var _theme__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../../../../theme */ "./theme.js");
+var _jsxFileName = "/Users/maksimmincenko/PhpstormProjects/slim.xppx/r/KNOWLEDGE/JS/__JOB__/super-apteka/components/Navigation/Header/HeaderBottomBar/HeaderPopupMenu/HeaderPopupRightMenu/HeaderPopupRightMenu.js";
+var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
+
+
+
+
+
+const LeftMenuStyles = styled_components__WEBPACK_IMPORTED_MODULE_1___default.a.div.withConfig({
+  displayName: "HeaderPopupRightMenu__LeftMenuStyles",
+  componentId: "vodnci-0"
+})(["position:relative;max-height:870px;padding:20px 15px;overflow:auto;z-index:1000;"]);
+const SectionsContainer = styled_components__WEBPACK_IMPORTED_MODULE_1___default.a.div.withConfig({
+  displayName: "HeaderPopupRightMenu__SectionsContainer",
+  componentId: "vodnci-1"
+})(["float:left;"]);
+const SectionLinksContainer = styled_components__WEBPACK_IMPORTED_MODULE_1___default.a.div.withConfig({
+  displayName: "HeaderPopupRightMenu__SectionLinksContainer",
+  componentId: "vodnci-2"
+})(["float:left;display:inline-block;width:270px;margin-bottom:20px;&:nth-child(3n+1){clear:left;}"]);
+const TitleLinkStyles = styled_components__WEBPACK_IMPORTED_MODULE_1___default.a.div.withConfig({
+  displayName: "HeaderPopupRightMenu__TitleLinkStyles",
+  componentId: "vodnci-3"
+})(["", ""], props => props.isHeader && `
+    margin-bottom: 10px;
+    font-weight: bold;
+  `);
+const CloseIconContainerStyles = styled_components__WEBPACK_IMPORTED_MODULE_1___default.a.div.withConfig({
+  displayName: "HeaderPopupRightMenu__CloseIconContainerStyles",
+  componentId: "vodnci-4"
+})(["position:absolute;top:0;right:385px;cursor:pointer;"]);
+const HeaderPopupRightMenu = ({
+  closeBtnHandler
+}) => {
+  const rightMenuLinksData = [[{
+    name: 'Аптечки',
+    href: '/',
+    isHeader: true
+  }, {
+    name: 'Аптечки автомобильные',
+    href: '#????'
+  }, {
+    name: 'Аптечки универсальные',
+    href: '#????'
+  }], [{
+    name: 'Дезинфицирующие средства',
+    href: '/',
+    isHeader: true
+  }, {
+    name: 'Диагностические тест-системы',
+    href: '#????'
+  }, {
+    name: 'Тесты на беременность',
+    href: '#????'
+  }, {
+    name: 'Тесты на наркотики и алкоголь',
+    href: '#????'
+  }, {
+    name: 'Тесты на овуляцию',
+    href: '#????'
+  }], [{
+    name: 'Экспресс-диагностика',
+    href: '#????',
+    isHeader: true
+  }], [{
+    name: 'Изделия мед назначения',
+    href: '#????',
+    isHeader: true
+  }, {
+    name: 'Беруши и маски для сна',
+    href: '#????'
+  }, {
+    name: 'Гинекологические изделия',
+    href: '#????'
+  }, {
+    name: 'Для инъекций и инфузий',
+    href: '#????'
+  }, {
+    name: 'Для охлаждения и согревания',
+    href: '#????'
+  }, {
+    name: 'Для спринцевания и катетеризации',
+    href: '#????'
+  }, {
+    name: 'Контейнеры для биоматериала',
+    href: '#????'
+  }, {
+    name: 'Одноразовая одежда и средства защиты',
+    href: '#????'
+  }, {
+    name: 'Перчатки и напальчники',
+    href: '#????'
+  }, {
+    name: 'Пипетки',
+    href: '#????'
+  }, {
+    name: 'Презервативы для УЗИ',
+    href: '#????'
+  }], [{
+    name: 'Медицинская одежда',
+    href: '#????',
+    isHeader: true
+  }, {
+    name: 'Хирургические костюмы',
+    href: '#????'
+  }], [{
+    name: 'Медицинская техника',
+    href: '#????',
+    isHeader: true
+  }, {
+    name: 'Адаптеры питания',
+    href: '#????'
+  }, {
+    name: 'Для прогревания',
+    href: '#????'
+  }, {
+    name: 'Ингаляторы и небулайзеры',
+    href: '#????'
+  }, {
+    name: 'Инъекционные помпы',
+    href: '#????'
+  }, {
+    name: 'Ирригаторы',
+    href: '#????'
+  }, {
+    name: 'Контроль сахарного диабета',
+    href: '#????'
+  }, {
+    name: 'Контроль свертывания крови',
+    href: '#????'
+  }, {
+    name: 'Косметические приборы',
+    href: '#????'
+  }, {
+    name: 'Массажеры',
+    href: '#????'
+  }, {
+    name: 'Приборы для стерилизации и обеззараживания',
+    href: '#????'
+  }, {
+    name: 'Слуховые аппараты и комплектующие',
+    href: '#????'
+  }, {
+    name: 'Спирометры и пикфлуометры',
+    href: '#????'
+  }, {
+    name: 'Стетоскопы и фонендоскопы',
+    href: '#????'
+  }, {
+    name: 'Термометры медицинские',
+    href: '#????'
+  }, {
+    name: 'Тонометры',
+    href: '#????'
+  }, {
+    name: 'Электро- и магнитотерапевтические приборы и комплектующие',
+    href: '#????'
+  }], [{
+    name: 'Медицинские инструменты',
+    href: '#????',
+    isHeader: true
+  }], [{
+    name: 'Ортопедические предметы',
+    href: '#????',
+    isHeader: true
+  }, {
+    name: 'Бандажи, пояса',
+    href: '#????'
+  }, {
+    name: 'Корсеты, корректоры осанки',
+    href: '#????'
+  }, {
+    name: 'Ортезы',
+    href: '#????'
+  }, {
+    name: 'Ортопедические принадлежности для ног',
+    href: '#????'
+  }, {
+    name: 'Подушки и матрасы ортопедические',
+    href: '#????'
+  }], [{
+    name: 'Перевязочные средства',
+    href: '#????',
+    isHeader: true
+  }, {
+    name: 'Бинты гипсовые',
+    href: '#????'
+  }, {
+    name: 'Бинты эластичные и тейпы',
+    href: '#????'
+  }, {
+    name: 'Бинты, марля, салфетки марлевые',
+    href: '#????'
+  }, {
+    name: 'Жгуты кровоостанавлювающие',
+    href: '#????'
+  }, {
+    name: 'Клей типа БФ',
+    href: '#????'
+  }, {
+    name: 'Лейкопластыри',
+    href: '#????'
+  }, {
+    name: 'Повязки специальные',
+    href: '#????'
+  }], [{
+    name: 'Уход за больными',
+    href: '#????',
+    isHeader: true
+  }, {
+    name: 'Кислородные баллоны, подушки, коктейли',
+    href: '#????'
+  }, {
+    name: 'Пеленки, простыни, клеенки',
+    href: '#????'
+  }, {
+    name: 'Подгузники для взрослых',
+    href: '#????'
+  }, {
+    name: 'Прокладки урологические',
+    href: '#????'
+  }, {
+    name: 'Профилактика пролежней',
+    href: '#????'
+  }, {
+    name: 'Средства реабилитации',
+    href: '#????'
+  }, {
+    name: 'Средства ухода за кожей и влажные салфетки для больных',
+    href: '#????'
+  }, {
+    name: 'Судна и мочеприемники',
+    href: '#????'
+  }, {
+    name: 'Таблетницы',
+    href: '#????'
+  }], [{
+    name: 'Функциональное белье',
+    href: '#????',
+    isHeader: true
+  }, {
+    name: 'Компрессионный трикотаж и аксессуары',
+    href: '#????'
+  }, {
+    name: 'Пояса, корсеты, шорты для похудения',
+    href: '#????'
+  }, {
+    name: 'Согревающее белье и изделия',
+    href: '#????'
+  }]];
+  const rightMenuLinks = rightMenuLinksData.map((sectionData, id) => {
+    const sectionLinks = sectionData.map(({
+      name,
+      href,
+      isHeader
+    }) => __jsx(_UI_AppRouterLink__WEBPACK_IMPORTED_MODULE_2__["AppRouterLink"], {
+      href: href,
+      key: name,
+      __self: undefined,
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 141,
+        columnNumber: 7
+      }
+    }, __jsx(TitleLinkStyles, {
+      isHeader: isHeader,
+      __self: undefined,
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 142,
+        columnNumber: 9
+      }
+    }, name)));
+    return __jsx(SectionLinksContainer, {
+      key: id,
+      __self: undefined,
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 147,
+        columnNumber: 7
+      }
+    }, sectionLinks);
+  });
+  return __jsx(LeftMenuStyles, {
+    className: "flex-grow-1",
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 72,
+      lineNumber: 154,
+      columnNumber: 5
+    }
+  }, __jsx(SectionsContainer, {
+    __self: undefined,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 155,
+      columnNumber: 7
+    }
+  }, rightMenuLinks), __jsx(CloseIconContainerStyles, {
+    __self: undefined,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 159,
+      columnNumber: 7
+    }
+  }, __jsx(_UI_Icons_AppCloseIcon__WEBPACK_IMPORTED_MODULE_3__["AppCloseIcon"], {
+    color: _theme__WEBPACK_IMPORTED_MODULE_4__["THEME"].FONT_COLOR,
+    __self: undefined,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 160,
       columnNumber: 9
     }
   })));
@@ -857,14 +1318,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var styled_components__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! styled-components */ "styled-components");
 /* harmony import */ var styled_components__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(styled_components__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _UI_AppPhone__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../UI/AppPhone */ "./components/UI/AppPhone.js");
-/* harmony import */ var _UI_Icons_AppLocationIcon__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../UI/Icons/AppLocationIcon */ "./components/UI/Icons/AppLocationIcon.js");
-/* harmony import */ var _UI_Icons_AppChevronIcon__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../UI/Icons/AppChevronIcon */ "./components/UI/Icons/AppChevronIcon.js");
-/* harmony import */ var _UI_Icons_AppCrossIcon__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../UI/Icons/AppCrossIcon */ "./components/UI/Icons/AppCrossIcon.js");
-/* harmony import */ var _UI_Icons_AppEnterIcon__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../UI/Icons/AppEnterIcon */ "./components/UI/Icons/AppEnterIcon.js");
-/* harmony import */ var _UI_AppLink__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../UI/AppLink */ "./components/UI/AppLink.js");
-/* harmony import */ var _theme__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../../../theme */ "./theme.js");
+/* harmony import */ var _UI_AppLink__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../UI/AppLink */ "./components/UI/AppLink.js");
+/* harmony import */ var _UI_Icons_AppLocationIcon__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../UI/Icons/AppLocationIcon */ "./components/UI/Icons/AppLocationIcon.js");
+/* harmony import */ var _UI_Icons_AppChevronIcon__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../UI/Icons/AppChevronIcon */ "./components/UI/Icons/AppChevronIcon.js");
+/* harmony import */ var _UI_Icons_AppCrossIcon__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../UI/Icons/AppCrossIcon */ "./components/UI/Icons/AppCrossIcon.js");
+/* harmony import */ var _UI_Icons_AppEnterIcon__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../UI/Icons/AppEnterIcon */ "./components/UI/Icons/AppEnterIcon.js");
+/* harmony import */ var _UI_Icons_AppPhoneIcon__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../../UI/Icons/AppPhoneIcon */ "./components/UI/Icons/AppPhoneIcon.js");
+/* harmony import */ var _theme__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../../../theme */ "./theme.js");
 var _jsxFileName = "/Users/maksimmincenko/PhpstormProjects/slim.xppx/r/KNOWLEDGE/JS/__JOB__/super-apteka/components/Navigation/Header/HeaderTopBar/HeaderTopBar.js";
 var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
+
 
 
 
@@ -877,11 +1340,11 @@ var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
 const HeaderTopBarStyles = styled_components__WEBPACK_IMPORTED_MODULE_1___default.a.div.withConfig({
   displayName: "HeaderTopBar__HeaderTopBarStyles",
   componentId: "sc-84qcod-0"
-})(["background-color:", ";padding-top:14px;padding-bottom:10px;margin-bottom:15px;"], _theme__WEBPACK_IMPORTED_MODULE_8__["THEME"].BACKGROUND_COLOR);
+})(["background-color:", ";padding-top:14px;padding-bottom:10px;margin-bottom:15px;"], _theme__WEBPACK_IMPORTED_MODULE_9__["THEME"].BACKGROUND_COLOR);
 const LabelStyles = styled_components__WEBPACK_IMPORTED_MODULE_1___default.a.span.withConfig({
   displayName: "HeaderTopBar__LabelStyles",
   componentId: "sc-84qcod-1"
-})(["color:", ";margin-right:10px;font-weight:bold;font-size:9px;line-height:13px;text-transform:uppercase;"], _theme__WEBPACK_IMPORTED_MODULE_8__["THEME"].LABEL_FONT_COLOR);
+})(["color:", ";margin-right:10px;font-weight:bold;font-size:9px;line-height:13px;text-transform:uppercase;"], _theme__WEBPACK_IMPORTED_MODULE_9__["THEME"].LABEL_FONT_COLOR);
 const SpanLinkStyles = styled_components__WEBPACK_IMPORTED_MODULE_1___default.a.span.withConfig({
   displayName: "HeaderTopBar__SpanLinkStyles",
   componentId: "sc-84qcod-2"
@@ -891,7 +1354,7 @@ const HeaderTopBar = () => {
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 35,
+      lineNumber: 36,
       columnNumber: 5
     }
   }, __jsx("div", {
@@ -899,7 +1362,7 @@ const HeaderTopBar = () => {
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 36,
+      lineNumber: 37,
       columnNumber: 7
     }
   }, __jsx("div", {
@@ -907,7 +1370,7 @@ const HeaderTopBar = () => {
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 37,
+      lineNumber: 38,
       columnNumber: 9
     }
   }, __jsx("div", {
@@ -915,7 +1378,7 @@ const HeaderTopBar = () => {
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 38,
+      lineNumber: 39,
       columnNumber: 11
     }
   }, __jsx("div", {
@@ -923,15 +1386,22 @@ const HeaderTopBar = () => {
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 39,
+      lineNumber: 40,
       columnNumber: 13
     }
-  }, __jsx(_UI_AppPhone__WEBPACK_IMPORTED_MODULE_2__["AppPhone"], {
+  }, __jsx(_UI_Icons_AppPhoneIcon__WEBPACK_IMPORTED_MODULE_8__["AppPhoneIcon"], {
+    __self: undefined,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 41,
+      columnNumber: 15
+    }
+  }), __jsx(_UI_AppPhone__WEBPACK_IMPORTED_MODULE_2__["AppPhone"], {
     phone: "+7 (495) 122-22-82",
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 40,
+      lineNumber: 42,
       columnNumber: 15
     }
   })), __jsx("div", {
@@ -939,42 +1409,42 @@ const HeaderTopBar = () => {
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 43,
+      lineNumber: 45,
       columnNumber: 13
     }
   }, __jsx(LabelStyles, {
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 44,
-      columnNumber: 15
-    }
-  }, "\u0440\u0435\u0433\u0438\u043E\u043D"), __jsx(_UI_AppLink__WEBPACK_IMPORTED_MODULE_7__["AppLink"], {
-    __self: undefined,
-    __source: {
-      fileName: _jsxFileName,
       lineNumber: 46,
       columnNumber: 15
     }
-  }, __jsx(_UI_Icons_AppLocationIcon__WEBPACK_IMPORTED_MODULE_3__["AppLocationIcon"], {
+  }, "\u0440\u0435\u0433\u0438\u043E\u043D"), __jsx(_UI_AppLink__WEBPACK_IMPORTED_MODULE_3__["AppLink"], {
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 47,
+      lineNumber: 48,
+      columnNumber: 15
+    }
+  }, __jsx(_UI_Icons_AppLocationIcon__WEBPACK_IMPORTED_MODULE_4__["AppLocationIcon"], {
+    __self: undefined,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 49,
       columnNumber: 17
     }
   }), __jsx(SpanLinkStyles, {
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 48,
+      lineNumber: 50,
       columnNumber: 17
     }
-  }, "\u041C\u043E\u0441\u043A\u0432\u0430"), __jsx(_UI_Icons_AppChevronIcon__WEBPACK_IMPORTED_MODULE_4__["AppChevronIcon"], {
+  }, "\u041C\u043E\u0441\u043A\u0432\u0430"), __jsx(_UI_Icons_AppChevronIcon__WEBPACK_IMPORTED_MODULE_5__["AppChevronIcon"], {
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 49,
+      lineNumber: 51,
       columnNumber: 17
     }
   }))), __jsx("div", {
@@ -982,42 +1452,42 @@ const HeaderTopBar = () => {
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 53,
+      lineNumber: 55,
       columnNumber: 13
     }
   }, __jsx(LabelStyles, {
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 54,
-      columnNumber: 15
-    }
-  }, "\u0430\u043F\u0442\u0435\u043A\u0430"), __jsx(_UI_AppLink__WEBPACK_IMPORTED_MODULE_7__["AppLink"], {
-    __self: undefined,
-    __source: {
-      fileName: _jsxFileName,
       lineNumber: 56,
       columnNumber: 15
     }
-  }, __jsx(_UI_Icons_AppCrossIcon__WEBPACK_IMPORTED_MODULE_5__["AppCrossIcon"], {
+  }, "\u0430\u043F\u0442\u0435\u043A\u0430"), __jsx(_UI_AppLink__WEBPACK_IMPORTED_MODULE_3__["AppLink"], {
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 57,
+      lineNumber: 58,
+      columnNumber: 15
+    }
+  }, __jsx(_UI_Icons_AppCrossIcon__WEBPACK_IMPORTED_MODULE_6__["AppCrossIcon"], {
+    __self: undefined,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 59,
       columnNumber: 17
     }
   }), __jsx(SpanLinkStyles, {
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 58,
+      lineNumber: 60,
       columnNumber: 17
     }
-  }, "\u0421\u0443\u043C\u0441\u043A\u0430\u044F \u0443\u043B\u0438\u0446\u0430, 2/12"), __jsx(_UI_Icons_AppChevronIcon__WEBPACK_IMPORTED_MODULE_4__["AppChevronIcon"], {
+  }, "\u0421\u0443\u043C\u0441\u043A\u0430\u044F \u0443\u043B\u0438\u0446\u0430, 2/12"), __jsx(_UI_Icons_AppChevronIcon__WEBPACK_IMPORTED_MODULE_5__["AppChevronIcon"], {
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 59,
+      lineNumber: 61,
       columnNumber: 17
     }
   })))), __jsx("div", {
@@ -1025,7 +1495,7 @@ const HeaderTopBar = () => {
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 64,
+      lineNumber: 66,
       columnNumber: 11
     }
   }, __jsx("div", {
@@ -1033,14 +1503,14 @@ const HeaderTopBar = () => {
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 65,
+      lineNumber: 67,
       columnNumber: 13
     }
-  }, __jsx(_UI_AppLink__WEBPACK_IMPORTED_MODULE_7__["AppLink"], {
+  }, __jsx(_UI_AppLink__WEBPACK_IMPORTED_MODULE_3__["AppLink"], {
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 66,
+      lineNumber: 68,
       columnNumber: 15
     }
   }, "\u0417\u0430\u0440\u0435\u0433\u0438\u0441\u0442\u0440\u0438\u0440\u043E\u0432\u0430\u0442\u044C\u0441\u044F")), __jsx("div", {
@@ -1048,21 +1518,21 @@ const HeaderTopBar = () => {
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 69,
+      lineNumber: 71,
       columnNumber: 13
     }
-  }, __jsx(_UI_AppLink__WEBPACK_IMPORTED_MODULE_7__["AppLink"], {
+  }, __jsx(_UI_AppLink__WEBPACK_IMPORTED_MODULE_3__["AppLink"], {
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 70,
+      lineNumber: 72,
       columnNumber: 15
     }
-  }, __jsx(_UI_Icons_AppEnterIcon__WEBPACK_IMPORTED_MODULE_6__["AppEnterIcon"], {
+  }, __jsx(_UI_Icons_AppEnterIcon__WEBPACK_IMPORTED_MODULE_7__["AppEnterIcon"], {
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 71,
+      lineNumber: 73,
       columnNumber: 17
     }
   }), "\u0412\u043E\u0439\u0442\u0438"))))));
@@ -1127,31 +1597,25 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _AppLink__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./AppLink */ "./components/UI/AppLink.js");
-/* harmony import */ var _Icons_AppPhoneIcon__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Icons/AppPhoneIcon */ "./components/UI/Icons/AppPhoneIcon.js");
 var _jsxFileName = "/Users/maksimmincenko/PhpstormProjects/slim.xppx/r/KNOWLEDGE/JS/__JOB__/super-apteka/components/UI/AppPhone.js";
 var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
 
 
-
 const AppPhone = ({
   phone,
-  withIcon = true
+  size,
+  color
 }) => __jsx(_AppLink__WEBPACK_IMPORTED_MODULE_1__["AppLink"], {
   href: `tel:${phone}`,
+  size: size,
+  color: color,
   __self: undefined,
   __source: {
     fileName: _jsxFileName,
-    lineNumber: 8,
+    lineNumber: 7,
     columnNumber: 3
   }
-}, withIcon && __jsx(_Icons_AppPhoneIcon__WEBPACK_IMPORTED_MODULE_2__["AppPhoneIcon"], {
-  __self: undefined,
-  __source: {
-    fileName: _jsxFileName,
-    lineNumber: 9,
-    columnNumber: 19
-  }
-}), phone);
+}, phone);
 
 /***/ }),
 
@@ -1222,7 +1686,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AppBasketIcon", function() { return AppBasketIcon; });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _AppIconContainer__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./AppIconContainer */ "./components/UI/Icons/AppIconContainer.js");
+/* harmony import */ var _AppSvgContainer__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./AppSvgContainer */ "./components/UI/Icons/AppSvgContainer.js");
 /* harmony import */ var _theme__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../theme */ "./theme.js");
 var _jsxFileName = "/Users/maksimmincenko/PhpstormProjects/slim.xppx/r/KNOWLEDGE/JS/__JOB__/super-apteka/components/UI/Icons/AppBasketicon.js";
 var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
@@ -1231,7 +1695,7 @@ var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
 
 const AppBasketIcon = ({
   color = _theme__WEBPACK_IMPORTED_MODULE_2__["THEME"].FONT_COLOR
-}) => __jsx(_AppIconContainer__WEBPACK_IMPORTED_MODULE_1__["AppIconContainer"], {
+}) => __jsx(_AppSvgContainer__WEBPACK_IMPORTED_MODULE_1__["AppSvgContainer"], {
   width: "20",
   height: "22",
   viewBoxWidth: "20",
@@ -1291,7 +1755,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AppBonusIcon", function() { return AppBonusIcon; });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _AppIconContainer__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./AppIconContainer */ "./components/UI/Icons/AppIconContainer.js");
+/* harmony import */ var _AppSvgContainer__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./AppSvgContainer */ "./components/UI/Icons/AppSvgContainer.js");
 /* harmony import */ var _theme__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../theme */ "./theme.js");
 var _jsxFileName = "/Users/maksimmincenko/PhpstormProjects/slim.xppx/r/KNOWLEDGE/JS/__JOB__/super-apteka/components/UI/Icons/AppBonusIcon.js";
 var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
@@ -1300,7 +1764,7 @@ var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
 
 const AppBonusIcon = ({
   color = _theme__WEBPACK_IMPORTED_MODULE_2__["THEME"].FONT_COLOR
-}) => __jsx(_AppIconContainer__WEBPACK_IMPORTED_MODULE_1__["AppIconContainer"], {
+}) => __jsx(_AppSvgContainer__WEBPACK_IMPORTED_MODULE_1__["AppSvgContainer"], {
   width: "21",
   height: "15",
   viewBoxWidth: "21",
@@ -1355,7 +1819,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AppBurgerIcon", function() { return AppBurgerIcon; });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _AppIconContainer__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./AppIconContainer */ "./components/UI/Icons/AppIconContainer.js");
+/* harmony import */ var _AppSvgContainer__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./AppSvgContainer */ "./components/UI/Icons/AppSvgContainer.js");
 /* harmony import */ var _theme__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../theme */ "./theme.js");
 var _jsxFileName = "/Users/maksimmincenko/PhpstormProjects/slim.xppx/r/KNOWLEDGE/JS/__JOB__/super-apteka/components/UI/Icons/AppBurgerIcon.js";
 var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
@@ -1364,7 +1828,7 @@ var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
 
 const AppBurgerIcon = ({
   color = _theme__WEBPACK_IMPORTED_MODULE_2__["THEME"].WHITE_COLOR
-}) => __jsx(_AppIconContainer__WEBPACK_IMPORTED_MODULE_1__["AppIconContainer"], {
+}) => __jsx(_AppSvgContainer__WEBPACK_IMPORTED_MODULE_1__["AppSvgContainer"], {
   width: "13",
   height: "13",
   viewBoxWidth: "13",
@@ -1427,7 +1891,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AppChevronIcon", function() { return AppChevronIcon; });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _AppIconContainer__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./AppIconContainer */ "./components/UI/Icons/AppIconContainer.js");
+/* harmony import */ var _AppSvgContainer__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./AppSvgContainer */ "./components/UI/Icons/AppSvgContainer.js");
 /* harmony import */ var _theme__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../theme */ "./theme.js");
 var _jsxFileName = "/Users/maksimmincenko/PhpstormProjects/slim.xppx/r/KNOWLEDGE/JS/__JOB__/super-apteka/components/UI/Icons/AppChevronIcon.js";
 var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
@@ -1436,7 +1900,7 @@ var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
 
 const AppChevronIcon = ({
   color = _theme__WEBPACK_IMPORTED_MODULE_2__["THEME"].FONT_COLOR
-}) => __jsx(_AppIconContainer__WEBPACK_IMPORTED_MODULE_1__["AppIconContainer"], {
+}) => __jsx(_AppSvgContainer__WEBPACK_IMPORTED_MODULE_1__["AppSvgContainer"], {
   width: "8",
   height: "5",
   viewBoxWidth: "8",
@@ -1473,7 +1937,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AppCloseIcon", function() { return AppCloseIcon; });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _AppIconContainer__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./AppIconContainer */ "./components/UI/Icons/AppIconContainer.js");
+/* harmony import */ var _AppSvgContainer__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./AppSvgContainer */ "./components/UI/Icons/AppSvgContainer.js");
 /* harmony import */ var _theme__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../theme */ "./theme.js");
 var _jsxFileName = "/Users/maksimmincenko/PhpstormProjects/slim.xppx/r/KNOWLEDGE/JS/__JOB__/super-apteka/components/UI/Icons/AppCloseIcon.js";
 var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
@@ -1482,7 +1946,7 @@ var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
 
 const AppCloseIcon = ({
   color = _theme__WEBPACK_IMPORTED_MODULE_2__["THEME"].WHITE_COLOR
-}) => __jsx(_AppIconContainer__WEBPACK_IMPORTED_MODULE_1__["AppIconContainer"], {
+}) => __jsx(_AppSvgContainer__WEBPACK_IMPORTED_MODULE_1__["AppSvgContainer"], {
   width: "13",
   height: "13",
   viewBoxWidth: "13",
@@ -1534,7 +1998,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AppCrossIcon", function() { return AppCrossIcon; });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _AppIconContainer__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./AppIconContainer */ "./components/UI/Icons/AppIconContainer.js");
+/* harmony import */ var _AppSvgContainer__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./AppSvgContainer */ "./components/UI/Icons/AppSvgContainer.js");
 /* harmony import */ var _theme__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../theme */ "./theme.js");
 var _jsxFileName = "/Users/maksimmincenko/PhpstormProjects/slim.xppx/r/KNOWLEDGE/JS/__JOB__/super-apteka/components/UI/Icons/AppCrossIcon.js";
 var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
@@ -1543,7 +2007,7 @@ var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
 
 const AppCrossIcon = ({
   color = _theme__WEBPACK_IMPORTED_MODULE_2__["THEME"].MAIN_COLOR
-}) => __jsx(_AppIconContainer__WEBPACK_IMPORTED_MODULE_1__["AppIconContainer"], {
+}) => __jsx(_AppSvgContainer__WEBPACK_IMPORTED_MODULE_1__["AppSvgContainer"], {
   width: "14",
   height: "14",
   viewBoxWidth: "14",
@@ -1596,7 +2060,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AppEnterIcon", function() { return AppEnterIcon; });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _AppIconContainer__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./AppIconContainer */ "./components/UI/Icons/AppIconContainer.js");
+/* harmony import */ var _AppSvgContainer__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./AppSvgContainer */ "./components/UI/Icons/AppSvgContainer.js");
 /* harmony import */ var _theme__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../theme */ "./theme.js");
 var _jsxFileName = "/Users/maksimmincenko/PhpstormProjects/slim.xppx/r/KNOWLEDGE/JS/__JOB__/super-apteka/components/UI/Icons/AppEnterIcon.js";
 var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
@@ -1605,7 +2069,7 @@ var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
 
 const AppEnterIcon = ({
   color = _theme__WEBPACK_IMPORTED_MODULE_2__["THEME"].MAIN_COLOR
-}) => __jsx(_AppIconContainer__WEBPACK_IMPORTED_MODULE_1__["AppIconContainer"], {
+}) => __jsx(_AppSvgContainer__WEBPACK_IMPORTED_MODULE_1__["AppSvgContainer"], {
   width: "10",
   height: "10",
   viewBoxWidth: "10",
@@ -1665,7 +2129,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AppGoodsOnOrderIcon", function() { return AppGoodsOnOrderIcon; });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _AppIconContainer__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./AppIconContainer */ "./components/UI/Icons/AppIconContainer.js");
+/* harmony import */ var _AppSvgContainer__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./AppSvgContainer */ "./components/UI/Icons/AppSvgContainer.js");
 /* harmony import */ var _theme__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../theme */ "./theme.js");
 var _jsxFileName = "/Users/maksimmincenko/PhpstormProjects/slim.xppx/r/KNOWLEDGE/JS/__JOB__/super-apteka/components/UI/Icons/AppGoodsOnOrderIcon.js";
 var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
@@ -1674,7 +2138,7 @@ var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
 
 const AppGoodsOnOrderIcon = ({
   color = _theme__WEBPACK_IMPORTED_MODULE_2__["THEME"].FONT_COLOR
-}) => __jsx(_AppIconContainer__WEBPACK_IMPORTED_MODULE_1__["AppIconContainer"], {
+}) => __jsx(_AppSvgContainer__WEBPACK_IMPORTED_MODULE_1__["AppSvgContainer"], {
   width: "24",
   height: "24",
   viewBoxWidth: "24",
@@ -1734,65 +2198,6 @@ const AppGoodsOnOrderIcon = ({
 
 /***/ }),
 
-/***/ "./components/UI/Icons/AppIconContainer.js":
-/*!*************************************************!*\
-  !*** ./components/UI/Icons/AppIconContainer.js ***!
-  \*************************************************/
-/*! exports provided: AppIconContainer */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AppIconContainer", function() { return AppIconContainer; });
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var styled_components__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! styled-components */ "styled-components");
-/* harmony import */ var styled_components__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(styled_components__WEBPACK_IMPORTED_MODULE_1__);
-var _jsxFileName = "/Users/maksimmincenko/PhpstormProjects/slim.xppx/r/KNOWLEDGE/JS/__JOB__/super-apteka/components/UI/Icons/AppIconContainer.js";
-var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
-
-function _objectWithoutProperties(source, excluded) { if (source == null) return {}; var target = _objectWithoutPropertiesLoose(source, excluded); var key, i; if (Object.getOwnPropertySymbols) { var sourceSymbolKeys = Object.getOwnPropertySymbols(source); for (i = 0; i < sourceSymbolKeys.length; i++) { key = sourceSymbolKeys[i]; if (excluded.indexOf(key) >= 0) continue; if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue; target[key] = source[key]; } } return target; }
-
-function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) return {}; var target = {}; var sourceKeys = Object.keys(source); var key, i; for (i = 0; i < sourceKeys.length; i++) { key = sourceKeys[i]; if (excluded.indexOf(key) >= 0) continue; target[key] = source[key]; } return target; }
-
-
-
-const AppIconContainerStyles = styled_components__WEBPACK_IMPORTED_MODULE_1___default.a.svg.withConfig({
-  displayName: "AppIconContainer__AppIconContainerStyles",
-  componentId: "sc-16i2rmc-0"
-})(["margin-right:5px"]);
-const AppIconContainer = (_ref) => {
-  let {
-    children
-  } = _ref,
-      settings = _objectWithoutProperties(_ref, ["children"]);
-
-  const {
-    width = 12,
-    height = 12,
-    viewBoxX = 0,
-    viewBoxY = 0,
-    viewBoxWidth = 12,
-    viewBoxHeight = 12
-  } = settings;
-  return __jsx(AppIconContainerStyles, {
-    width: width,
-    height: height,
-    viewBox: `${viewBoxX} ${viewBoxY} ${viewBoxWidth} ${viewBoxHeight}`,
-    fill: "none",
-    xmlns: "http://www.w3.org/2000/svg",
-    preserveAspectRatio: "xMidYMid meet",
-    __self: undefined,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 13,
-      columnNumber: 5
-    }
-  }, children);
-};
-
-/***/ }),
-
 /***/ "./components/UI/Icons/AppLocationIcon.js":
 /*!************************************************!*\
   !*** ./components/UI/Icons/AppLocationIcon.js ***!
@@ -1805,7 +2210,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AppLocationIcon", function() { return AppLocationIcon; });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _AppIconContainer__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./AppIconContainer */ "./components/UI/Icons/AppIconContainer.js");
+/* harmony import */ var _AppSvgContainer__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./AppSvgContainer */ "./components/UI/Icons/AppSvgContainer.js");
 /* harmony import */ var _theme__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../theme */ "./theme.js");
 var _jsxFileName = "/Users/maksimmincenko/PhpstormProjects/slim.xppx/r/KNOWLEDGE/JS/__JOB__/super-apteka/components/UI/Icons/AppLocationIcon.js";
 var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
@@ -1814,7 +2219,7 @@ var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
 
 const AppLocationIcon = ({
   color = _theme__WEBPACK_IMPORTED_MODULE_2__["THEME"].MAIN_COLOR
-}) => __jsx(_AppIconContainer__WEBPACK_IMPORTED_MODULE_1__["AppIconContainer"], {
+}) => __jsx(_AppSvgContainer__WEBPACK_IMPORTED_MODULE_1__["AppSvgContainer"], {
   width: "10",
   height: "14",
   viewBoxWidth: "10",
@@ -2031,7 +2436,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AppPercentIcon", function() { return AppPercentIcon; });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _AppIconContainer__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./AppIconContainer */ "./components/UI/Icons/AppIconContainer.js");
+/* harmony import */ var _AppSvgContainer__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./AppSvgContainer */ "./components/UI/Icons/AppSvgContainer.js");
 /* harmony import */ var _theme__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../theme */ "./theme.js");
 var _jsxFileName = "/Users/maksimmincenko/PhpstormProjects/slim.xppx/r/KNOWLEDGE/JS/__JOB__/super-apteka/components/UI/Icons/AppPercentIcon.js";
 var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
@@ -2040,7 +2445,7 @@ var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
 
 const AppPercentIcon = ({
   color = _theme__WEBPACK_IMPORTED_MODULE_2__["THEME"].FONT_COLOR
-}) => __jsx(_AppIconContainer__WEBPACK_IMPORTED_MODULE_1__["AppIconContainer"], {
+}) => __jsx(_AppSvgContainer__WEBPACK_IMPORTED_MODULE_1__["AppSvgContainer"], {
   width: "20",
   height: "20",
   viewBoxWidth: "20",
@@ -2098,7 +2503,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AppPhoneIcon", function() { return AppPhoneIcon; });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _AppIconContainer__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./AppIconContainer */ "./components/UI/Icons/AppIconContainer.js");
+/* harmony import */ var _AppSvgContainer__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./AppSvgContainer */ "./components/UI/Icons/AppSvgContainer.js");
 /* harmony import */ var _theme__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../theme */ "./theme.js");
 var _jsxFileName = "/Users/maksimmincenko/PhpstormProjects/slim.xppx/r/KNOWLEDGE/JS/__JOB__/super-apteka/components/UI/Icons/AppPhoneIcon.js";
 var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
@@ -2107,7 +2512,7 @@ var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
 
 const AppPhoneIcon = ({
   color = _theme__WEBPACK_IMPORTED_MODULE_2__["THEME"].MAIN_COLOR
-}) => __jsx(_AppIconContainer__WEBPACK_IMPORTED_MODULE_1__["AppIconContainer"], {
+}) => __jsx(_AppSvgContainer__WEBPACK_IMPORTED_MODULE_1__["AppSvgContainer"], {
   width: "11.5",
   height: "11.5",
   viewBoxWidth: "11.5",
@@ -2143,7 +2548,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AppSearchIcon", function() { return AppSearchIcon; });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _AppIconContainer__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./AppIconContainer */ "./components/UI/Icons/AppIconContainer.js");
+/* harmony import */ var _AppSvgContainer__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./AppSvgContainer */ "./components/UI/Icons/AppSvgContainer.js");
 /* harmony import */ var _theme__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../theme */ "./theme.js");
 var _jsxFileName = "/Users/maksimmincenko/PhpstormProjects/slim.xppx/r/KNOWLEDGE/JS/__JOB__/super-apteka/components/UI/Icons/AppSearchIcon.js";
 var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
@@ -2152,7 +2557,7 @@ var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
 
 const AppSearchIcon = ({
   color = _theme__WEBPACK_IMPORTED_MODULE_2__["THEME"].WHITE_COLOR
-}) => __jsx(_AppIconContainer__WEBPACK_IMPORTED_MODULE_1__["AppIconContainer"], {
+}) => __jsx(_AppSvgContainer__WEBPACK_IMPORTED_MODULE_1__["AppSvgContainer"], {
   width: "23",
   height: "23",
   viewBoxWidth: "23",
@@ -2188,7 +2593,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AppStarIcon", function() { return AppStarIcon; });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _AppIconContainer__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./AppIconContainer */ "./components/UI/Icons/AppIconContainer.js");
+/* harmony import */ var _AppSvgContainer__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./AppSvgContainer */ "./components/UI/Icons/AppSvgContainer.js");
 /* harmony import */ var _theme__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../theme */ "./theme.js");
 var _jsxFileName = "/Users/maksimmincenko/PhpstormProjects/slim.xppx/r/KNOWLEDGE/JS/__JOB__/super-apteka/components/UI/Icons/AppStarIcon.js";
 var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
@@ -2197,7 +2602,7 @@ var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
 
 const AppStarIcon = ({
   color = _theme__WEBPACK_IMPORTED_MODULE_2__["THEME"].FONT_COLOR
-}) => __jsx(_AppIconContainer__WEBPACK_IMPORTED_MODULE_1__["AppIconContainer"], {
+}) => __jsx(_AppSvgContainer__WEBPACK_IMPORTED_MODULE_1__["AppSvgContainer"], {
   width: "20",
   height: "20",
   viewBoxWidth: "22",
@@ -2224,6 +2629,65 @@ const AppStarIcon = ({
 
 /***/ }),
 
+/***/ "./components/UI/Icons/AppSvgContainer.js":
+/*!************************************************!*\
+  !*** ./components/UI/Icons/AppSvgContainer.js ***!
+  \************************************************/
+/*! exports provided: AppSvgContainer */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AppSvgContainer", function() { return AppSvgContainer; });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var styled_components__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! styled-components */ "styled-components");
+/* harmony import */ var styled_components__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(styled_components__WEBPACK_IMPORTED_MODULE_1__);
+var _jsxFileName = "/Users/maksimmincenko/PhpstormProjects/slim.xppx/r/KNOWLEDGE/JS/__JOB__/super-apteka/components/UI/Icons/AppSvgContainer.js";
+var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
+
+function _objectWithoutProperties(source, excluded) { if (source == null) return {}; var target = _objectWithoutPropertiesLoose(source, excluded); var key, i; if (Object.getOwnPropertySymbols) { var sourceSymbolKeys = Object.getOwnPropertySymbols(source); for (i = 0; i < sourceSymbolKeys.length; i++) { key = sourceSymbolKeys[i]; if (excluded.indexOf(key) >= 0) continue; if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue; target[key] = source[key]; } } return target; }
+
+function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) return {}; var target = {}; var sourceKeys = Object.keys(source); var key, i; for (i = 0; i < sourceKeys.length; i++) { key = sourceKeys[i]; if (excluded.indexOf(key) >= 0) continue; target[key] = source[key]; } return target; }
+
+
+
+const AppIconContainerStyles = styled_components__WEBPACK_IMPORTED_MODULE_1___default.a.svg.withConfig({
+  displayName: "AppSvgContainer__AppIconContainerStyles",
+  componentId: "sc-9v3h82-0"
+})(["margin-right:5px"]);
+const AppSvgContainer = (_ref) => {
+  let {
+    children
+  } = _ref,
+      settings = _objectWithoutProperties(_ref, ["children"]);
+
+  const {
+    width = 12,
+    height = 12,
+    viewBoxX = 0,
+    viewBoxY = 0,
+    viewBoxWidth = 12,
+    viewBoxHeight = 12
+  } = settings;
+  return __jsx(AppIconContainerStyles, {
+    width: width,
+    height: height,
+    viewBox: `${viewBoxX} ${viewBoxY} ${viewBoxWidth} ${viewBoxHeight}`,
+    fill: "none",
+    xmlns: "http://www.w3.org/2000/svg",
+    preserveAspectRatio: "xMidYMid meet",
+    __self: undefined,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 13,
+      columnNumber: 5
+    }
+  }, children);
+};
+
+/***/ }),
+
 /***/ "./components/UI/Icons/Catalog/AppBeautyAndHygieneProductsIcon.js":
 /*!************************************************************************!*\
   !*** ./components/UI/Icons/Catalog/AppBeautyAndHygieneProductsIcon.js ***!
@@ -2236,7 +2700,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AppBeautyAndHygieneProductsIcon", function() { return AppBeautyAndHygieneProductsIcon; });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _AppIconContainer__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../AppIconContainer */ "./components/UI/Icons/AppIconContainer.js");
+/* harmony import */ var _AppSvgContainer__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../AppSvgContainer */ "./components/UI/Icons/AppSvgContainer.js");
 /* harmony import */ var _theme__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../theme */ "./theme.js");
 var _jsxFileName = "/Users/maksimmincenko/PhpstormProjects/slim.xppx/r/KNOWLEDGE/JS/__JOB__/super-apteka/components/UI/Icons/Catalog/AppBeautyAndHygieneProductsIcon.js";
 var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
@@ -2244,8 +2708,8 @@ var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
 
 
 const AppBeautyAndHygieneProductsIcon = ({
-  color = _theme__WEBPACK_IMPORTED_MODULE_2__["THEME"].LEFT_MENU_ICON_COLOR
-}) => __jsx(_AppIconContainer__WEBPACK_IMPORTED_MODULE_1__["AppIconContainer"], {
+  color = _theme__WEBPACK_IMPORTED_MODULE_2__["THEME"].ICON_COLOR
+}) => __jsx(_AppSvgContainer__WEBPACK_IMPORTED_MODULE_1__["AppSvgContainer"], {
   width: "26",
   height: "26",
   viewBoxWidth: "26",
@@ -2283,7 +2747,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AppFoodIcon", function() { return AppFoodIcon; });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _AppIconContainer__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../AppIconContainer */ "./components/UI/Icons/AppIconContainer.js");
+/* harmony import */ var _AppSvgContainer__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../AppSvgContainer */ "./components/UI/Icons/AppSvgContainer.js");
 /* harmony import */ var _theme__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../theme */ "./theme.js");
 var _jsxFileName = "/Users/maksimmincenko/PhpstormProjects/slim.xppx/r/KNOWLEDGE/JS/__JOB__/super-apteka/components/UI/Icons/Catalog/AppFoodIcon.js";
 var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
@@ -2291,8 +2755,8 @@ var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
 
 
 const AppFoodIcon = ({
-  color = _theme__WEBPACK_IMPORTED_MODULE_2__["THEME"].LEFT_MENU_ICON_COLOR
-}) => __jsx(_AppIconContainer__WEBPACK_IMPORTED_MODULE_1__["AppIconContainer"], {
+  color = _theme__WEBPACK_IMPORTED_MODULE_2__["THEME"].ICON_COLOR
+}) => __jsx(_AppSvgContainer__WEBPACK_IMPORTED_MODULE_1__["AppSvgContainer"], {
   width: "26",
   height: "23",
   viewBoxWidth: "26",
@@ -2330,7 +2794,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AppHouseholdProductsIcon", function() { return AppHouseholdProductsIcon; });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _AppIconContainer__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../AppIconContainer */ "./components/UI/Icons/AppIconContainer.js");
+/* harmony import */ var _AppSvgContainer__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../AppSvgContainer */ "./components/UI/Icons/AppSvgContainer.js");
 /* harmony import */ var _theme__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../theme */ "./theme.js");
 var _jsxFileName = "/Users/maksimmincenko/PhpstormProjects/slim.xppx/r/KNOWLEDGE/JS/__JOB__/super-apteka/components/UI/Icons/Catalog/AppHouseholdProductsIcon.js";
 var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
@@ -2338,8 +2802,8 @@ var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
 
 
 const AppHouseholdProductsIcon = ({
-  color = _theme__WEBPACK_IMPORTED_MODULE_2__["THEME"].LEFT_MENU_ICON_COLOR
-}) => __jsx(_AppIconContainer__WEBPACK_IMPORTED_MODULE_1__["AppIconContainer"], {
+  color = _theme__WEBPACK_IMPORTED_MODULE_2__["THEME"].ICON_COLOR
+}) => __jsx(_AppSvgContainer__WEBPACK_IMPORTED_MODULE_1__["AppSvgContainer"], {
   width: "26",
   height: "26",
   viewBoxWidth: "26",
@@ -2377,7 +2841,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AppMedicalEquipment", function() { return AppMedicalEquipment; });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _AppIconContainer__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../AppIconContainer */ "./components/UI/Icons/AppIconContainer.js");
+/* harmony import */ var _AppSvgContainer__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../AppSvgContainer */ "./components/UI/Icons/AppSvgContainer.js");
 /* harmony import */ var _theme__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../theme */ "./theme.js");
 var _jsxFileName = "/Users/maksimmincenko/PhpstormProjects/slim.xppx/r/KNOWLEDGE/JS/__JOB__/super-apteka/components/UI/Icons/Catalog/AppMedicalEquipment.js";
 var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
@@ -2385,8 +2849,8 @@ var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
 
 
 const AppMedicalEquipment = ({
-  color = _theme__WEBPACK_IMPORTED_MODULE_2__["THEME"].LEFT_MENU_ICON_COLOR
-}) => __jsx(_AppIconContainer__WEBPACK_IMPORTED_MODULE_1__["AppIconContainer"], {
+  color = _theme__WEBPACK_IMPORTED_MODULE_2__["THEME"].ICON_COLOR
+}) => __jsx(_AppSvgContainer__WEBPACK_IMPORTED_MODULE_1__["AppSvgContainer"], {
   width: "19",
   height: "26",
   viewBoxWidth: "19",
@@ -2424,7 +2888,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AppMedicinesIcon", function() { return AppMedicinesIcon; });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _AppIconContainer__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../AppIconContainer */ "./components/UI/Icons/AppIconContainer.js");
+/* harmony import */ var _AppSvgContainer__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../AppSvgContainer */ "./components/UI/Icons/AppSvgContainer.js");
 /* harmony import */ var _theme__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../theme */ "./theme.js");
 var _jsxFileName = "/Users/maksimmincenko/PhpstormProjects/slim.xppx/r/KNOWLEDGE/JS/__JOB__/super-apteka/components/UI/Icons/Catalog/AppMedicinesIcon.js";
 var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
@@ -2432,8 +2896,8 @@ var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
 
 
 const AppMedicinesIcon = ({
-  color = _theme__WEBPACK_IMPORTED_MODULE_2__["THEME"].LEFT_MENU_ICON_COLOR
-}) => __jsx(_AppIconContainer__WEBPACK_IMPORTED_MODULE_1__["AppIconContainer"], {
+  color = _theme__WEBPACK_IMPORTED_MODULE_2__["THEME"].ICON_COLOR
+}) => __jsx(_AppSvgContainer__WEBPACK_IMPORTED_MODULE_1__["AppSvgContainer"], {
   width: "26",
   height: "26",
   viewBoxWidth: "26",
@@ -2471,7 +2935,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AppNonCommodityItemsIcon", function() { return AppNonCommodityItemsIcon; });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _AppIconContainer__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../AppIconContainer */ "./components/UI/Icons/AppIconContainer.js");
+/* harmony import */ var _AppSvgContainer__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../AppSvgContainer */ "./components/UI/Icons/AppSvgContainer.js");
 /* harmony import */ var _theme__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../theme */ "./theme.js");
 var _jsxFileName = "/Users/maksimmincenko/PhpstormProjects/slim.xppx/r/KNOWLEDGE/JS/__JOB__/super-apteka/components/UI/Icons/Catalog/AppNonCommodityItemsIcon.js";
 var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
@@ -2479,8 +2943,8 @@ var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
 
 
 const AppNonCommodityItemsIcon = ({
-  color = _theme__WEBPACK_IMPORTED_MODULE_2__["THEME"].LEFT_MENU_ICON_COLOR
-}) => __jsx(_AppIconContainer__WEBPACK_IMPORTED_MODULE_1__["AppIconContainer"], {
+  color = _theme__WEBPACK_IMPORTED_MODULE_2__["THEME"].ICON_COLOR
+}) => __jsx(_AppSvgContainer__WEBPACK_IMPORTED_MODULE_1__["AppSvgContainer"], {
   width: "26",
   height: "26",
   viewBoxWidth: "26",
@@ -2518,7 +2982,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AppOpticsIcon", function() { return AppOpticsIcon; });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _AppIconContainer__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../AppIconContainer */ "./components/UI/Icons/AppIconContainer.js");
+/* harmony import */ var _AppSvgContainer__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../AppSvgContainer */ "./components/UI/Icons/AppSvgContainer.js");
 /* harmony import */ var _theme__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../theme */ "./theme.js");
 var _jsxFileName = "/Users/maksimmincenko/PhpstormProjects/slim.xppx/r/KNOWLEDGE/JS/__JOB__/super-apteka/components/UI/Icons/Catalog/AppOpticsIcon.js";
 var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
@@ -2526,8 +2990,8 @@ var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
 
 
 const AppOpticsIcon = ({
-  color = _theme__WEBPACK_IMPORTED_MODULE_2__["THEME"].LEFT_MENU_ICON_COLOR
-}) => __jsx(_AppIconContainer__WEBPACK_IMPORTED_MODULE_1__["AppIconContainer"], {
+  color = _theme__WEBPACK_IMPORTED_MODULE_2__["THEME"].ICON_COLOR
+}) => __jsx(_AppSvgContainer__WEBPACK_IMPORTED_MODULE_1__["AppSvgContainer"], {
   width: "26",
   height: "18",
   viewBoxWidth: "26",
@@ -2565,7 +3029,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AppProductsForMotherAndBabyIcon", function() { return AppProductsForMotherAndBabyIcon; });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _AppIconContainer__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../AppIconContainer */ "./components/UI/Icons/AppIconContainer.js");
+/* harmony import */ var _AppSvgContainer__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../AppSvgContainer */ "./components/UI/Icons/AppSvgContainer.js");
 /* harmony import */ var _theme__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../theme */ "./theme.js");
 var _jsxFileName = "/Users/maksimmincenko/PhpstormProjects/slim.xppx/r/KNOWLEDGE/JS/__JOB__/super-apteka/components/UI/Icons/Catalog/AppProductsForMotherAndBabyIcon.js";
 var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
@@ -2573,8 +3037,8 @@ var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
 
 
 const AppProductsForMotherAndBabyIcon = ({
-  color = _theme__WEBPACK_IMPORTED_MODULE_2__["THEME"].LEFT_MENU_ICON_COLOR
-}) => __jsx(_AppIconContainer__WEBPACK_IMPORTED_MODULE_1__["AppIconContainer"], {
+  color = _theme__WEBPACK_IMPORTED_MODULE_2__["THEME"].ICON_COLOR
+}) => __jsx(_AppSvgContainer__WEBPACK_IMPORTED_MODULE_1__["AppSvgContainer"], {
   width: "13",
   height: "26",
   viewBoxWidth: "13",
@@ -2621,7 +3085,7 @@ __webpack_require__.r(__webpack_exports__);
 const StyledLink = styled_components__WEBPACK_IMPORTED_MODULE_1___default.a.a.withConfig({
   displayName: "StyledLink",
   componentId: "sc-1mkwfjv-0"
-})(["cursor:pointer;color:", ";&:hover{color:", ";text-decoration:none;}"], _theme__WEBPACK_IMPORTED_MODULE_2__["THEME"].FONT_COLOR, _theme__WEBPACK_IMPORTED_MODULE_2__["THEME"].FONT_COLOR);
+})(["line-height:initial;cursor:pointer;color:", ";font-size:", ";&:hover{color:", ";text-decoration:none;}"], props => props.color || _theme__WEBPACK_IMPORTED_MODULE_2__["THEME"].FONT_COLOR, props => props.size || _theme__WEBPACK_IMPORTED_MODULE_2__["THEME"].FONT_SIZE, _theme__WEBPACK_IMPORTED_MODULE_2__["THEME"].FONT_COLOR);
 
 /***/ }),
 
@@ -2635,89 +3099,67 @@ const StyledLink = styled_components__WEBPACK_IMPORTED_MODULE_1___default.a.a.wi
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MainLayout", function() { return MainLayout; });
-/* harmony import */ var styled_jsx_style__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! styled-jsx/style */ "styled-jsx/style");
-/* harmony import */ var styled_jsx_style__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(styled_jsx_style__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "react");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var next_head__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! next/head */ "next/head");
-/* harmony import */ var next_head__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(next_head__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var next_head__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! next/head */ "next/head");
+/* harmony import */ var next_head__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(next_head__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var styled_components__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! styled-components */ "styled-components");
+/* harmony import */ var styled_components__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(styled_components__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var _components_Navigation_Header_Header__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../components/Navigation/Header/Header */ "./components/Navigation/Header/Header.js");
 /* harmony import */ var _components_Navigation_Footer_Footer__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../components/Navigation/Footer/Footer */ "./components/Navigation/Footer/Footer.js");
 var _jsxFileName = "/Users/maksimmincenko/PhpstormProjects/slim.xppx/r/KNOWLEDGE/JS/__JOB__/super-apteka/layout/MainLayout.js";
-
-var __jsx = react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement;
-
+var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
 
 
 
+
+
+const MainStyled = styled_components__WEBPACK_IMPORTED_MODULE_2___default.a.main.withConfig({
+  displayName: "MainLayout__MainStyled",
+  componentId: "sc-1w4lvll-0"
+})(["min-height:calc(100vh - 180px);"]);
 const MainLayout = ({
   children,
   title
 }) => {
-  return __jsx(react__WEBPACK_IMPORTED_MODULE_1___default.a.Fragment, null, __jsx(next_head__WEBPACK_IMPORTED_MODULE_2___default.a, {
+  return __jsx(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, __jsx(next_head__WEBPACK_IMPORTED_MODULE_1___default.a, {
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 11,
+      lineNumber: 17,
       columnNumber: 7
     }
   }, __jsx("title", {
-    className: "jsx-1776405742",
-    __self: undefined,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 12,
-      columnNumber: 9
-    }
-  }, title), __jsx("meta", {
-    charSet: "utf-8",
-    className: "jsx-1776405742",
-    __self: undefined,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 13,
-      columnNumber: 9
-    }
-  }), __jsx("meta", {
-    name: "viewport",
-    content: "initial-scale=1.0, width=device-width",
-    className: "jsx-1776405742",
-    __self: undefined,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 14,
-      columnNumber: 9
-    }
-  }), __jsx("link", {
-    rel: "icon",
-    href: "/favicon.ico",
-    className: "jsx-1776405742",
-    __self: undefined,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 16,
-      columnNumber: 9
-    }
-  }), __jsx("script", {
-    src: "https://code.jquery.com/jquery-3.4.1.slim.min.js",
-    integrity: "sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n",
-    crossOrigin: "anonymous",
-    className: "jsx-1776405742",
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
       lineNumber: 18,
       columnNumber: 9
     }
-  }), __jsx("script", {
-    src: "https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js",
-    integrity: "sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo",
-    crossOrigin: "anonymous",
-    className: "jsx-1776405742",
+  }, title), __jsx("meta", {
+    charSet: "utf-8",
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 22,
+      lineNumber: 19,
+      columnNumber: 9
+    }
+  }), __jsx("meta", {
+    name: "viewport",
+    content: "initial-scale=1.0, width=device-width",
+    __self: undefined,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 20,
+      columnNumber: 9
+    }
+  }), __jsx("link", {
+    rel: "icon",
+    href: "/favicon.ico",
+    __self: undefined,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 21,
       columnNumber: 9
     }
   }), __jsx("link", {
@@ -2725,51 +3167,35 @@ const MainLayout = ({
     href: "https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css",
     integrity: "sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh",
     crossOrigin: "anonymous",
-    className: "jsx-1776405742",
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 27,
-      columnNumber: 9
-    }
-  }), __jsx("script", {
-    src: "https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js",
-    integrity: "sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6",
-    crossOrigin: "anonymous",
-    className: "jsx-1776405742",
-    __self: undefined,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 33,
+      lineNumber: 23,
       columnNumber: 9
     }
   })), __jsx(_components_Navigation_Header_Header__WEBPACK_IMPORTED_MODULE_3__["Header"], {
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 40,
+      lineNumber: 31,
       columnNumber: 7
     }
-  }), __jsx("main", {
+  }), __jsx(MainStyled, {
     role: "main",
-    className: "jsx-1776405742",
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 42,
+      lineNumber: 33,
       columnNumber: 7
     }
   }, children), __jsx(_components_Navigation_Footer_Footer__WEBPACK_IMPORTED_MODULE_4__["Footer"], {
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 46,
+      lineNumber: 37,
       columnNumber: 7
     }
-  }), __jsx(styled_jsx_style__WEBPACK_IMPORTED_MODULE_0___default.a, {
-    id: "1776405742",
-    __self: undefined
-  }, "@font-face{font-family:'Circe';src:url('/fonts/Circe-Light.eot');src:url('/fonts/Circe-Light.eot?#iefix') format('embedded-opentype'), url('/fonts/Circe-Light.woff2') format('woff2'), url('/fonts/Circe-Light.woff') format('woff'), url('/fonts/Circe-Light.ttf') format('truetype');font-weight:300;font-style:normal;}@font-face{font-family:'Circe Extra';src:url('/fonts/Circe-ExtraBold.eot');src:url('/fonts/Circe-ExtraBold.eot?#iefix') format('embedded-opentype'), url('/fonts/Circe-ExtraBold.woff2') format('woff2'), url('/fonts/Circe-ExtraBold.woff') format('woff'), url('/fonts/Circe-ExtraBold.ttf') format('truetype');font-weight:800;font-style:normal;}@font-face{font-family:'Circe';src:url('/fonts/Circe-Thin.eot');src:url('/fonts/Circe-Thin.eot?#iefix') format('embedded-opentype'), url('/fonts/Circe-Thin.woff2') format('woff2'), url('/fonts/Circe-Thin.woff') format('woff'), url('/fonts/Circe-Thin.ttf') format('truetype');font-weight:100;font-style:normal;}@font-face{font-family:'Circe';src:url('/fonts/Circe-Regular.eot');src:url('/fonts/Circe-Regular.eot?#iefix') format('embedded-opentype'), url('/fonts/Circe-Regular.woff2') format('woff2'), url('/fonts/Circe-Regular.woff') format('woff'), url('/fonts/Circe-Regular.ttf') format('truetype');font-weight:normal;font-style:normal;}@font-face{font-family:'Circe';src:url('/fonts/Circe-Bold.eot');src:url('/fonts/Circe-Bold.eot?#iefix') format('embedded-opentype'), url('/fonts/Circe-Bold.woff2') format('woff2'), url('/fonts/Circe-Bold.woff') format('woff'), url('/fonts/Circe-Bold.ttf') format('truetype');font-weight:bold;font-style:normal;}\n/*# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi9Vc2Vycy9tYWtzaW1taW5jZW5rby9QaHBzdG9ybVByb2plY3RzL3NsaW0ueHBweC9yL0tOT1dMRURHRS9KUy9fX0pPQl9fL3N1cGVyLWFwdGVrYS9sYXlvdXQvTWFpbkxheW91dC5qcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUErQ21CLEFBRytCLEFBV00sQUFXTixBQVdBLEFBV0Esb0JBM0NjLEFBc0JELEFBV0csQUFXSCxNQWpDSywyQkFlYSxBQXNCQSxDQTVDQyxFQWlDRSxRQXRCRSx3TUFZeEMsQUFzQkMsS0E1Q0QsVUFpQ0csQ0FWRCxDQXNCQSxJQTVDQSxVQVVGLEdBYWxCLEFBVW9CLENBWXBCLElBNUNBLFFBVW9CLEtBdUJwQixhQXRCQSIsImZpbGUiOiIvVXNlcnMvbWFrc2ltbWluY2Vua28vUGhwc3Rvcm1Qcm9qZWN0cy9zbGltLnhwcHgvci9LTk9XTEVER0UvSlMvX19KT0JfXy9zdXBlci1hcHRla2EvbGF5b3V0L01haW5MYXlvdXQuanMiLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQgUmVhY3QgZnJvbSAncmVhY3QnXG5pbXBvcnQgSGVhZCBmcm9tICduZXh0L2hlYWQnXG5cbmltcG9ydCB7IEhlYWRlciB9IGZyb20gJy4uL2NvbXBvbmVudHMvTmF2aWdhdGlvbi9IZWFkZXIvSGVhZGVyJ1xuaW1wb3J0IHsgRm9vdGVyIH0gZnJvbSAnLi4vY29tcG9uZW50cy9OYXZpZ2F0aW9uL0Zvb3Rlci9Gb290ZXInXG5cbmV4cG9ydCBjb25zdCBNYWluTGF5b3V0ID0gKHsgY2hpbGRyZW4sIHRpdGxlIH0pID0+IHtcblxuICByZXR1cm4gKFxuICAgIDw+XG4gICAgICA8SGVhZD5cbiAgICAgICAgPHRpdGxlPnsgdGl0bGUgfTwvdGl0bGU+XG4gICAgICAgIDxtZXRhIGNoYXJTZXQ9XCJ1dGYtOFwiLz5cbiAgICAgICAgPG1ldGEgbmFtZT1cInZpZXdwb3J0XCIgY29udGVudD1cImluaXRpYWwtc2NhbGU9MS4wLCB3aWR0aD1kZXZpY2Utd2lkdGhcIi8+XG5cbiAgICAgICAgPGxpbmsgcmVsPVwiaWNvblwiIGhyZWY9XCIvZmF2aWNvbi5pY29cIiAvPlxuXG4gICAgICAgIDxzY3JpcHRcbiAgICAgICAgICBzcmM9XCJodHRwczovL2NvZGUuanF1ZXJ5LmNvbS9qcXVlcnktMy40LjEuc2xpbS5taW4uanNcIlxuICAgICAgICAgIGludGVncml0eT1cInNoYTM4NC1KNnFhNDg0OWJsRTIrcG9UNFdueUtodjV2WkY1U3JQbzBpRWp3QnZLVTdpbUdGQVYwd3dqMXlZZm9SU0pvWituXCJcbiAgICAgICAgICBjcm9zc09yaWdpbj1cImFub255bW91c1wiPjwvc2NyaXB0PlxuICAgICAgICA8c2NyaXB0XG4gICAgICAgICAgc3JjPVwiaHR0cHM6Ly9jZG4uanNkZWxpdnIubmV0L25wbS9wb3BwZXIuanNAMS4xNi4wL2Rpc3QvdW1kL3BvcHBlci5taW4uanNcIlxuICAgICAgICAgIGludGVncml0eT1cInNoYTM4NC1RNkU5Ukh2Ykl5WkZKb2Z0KzJtSmJIYUVXbGRsdkk5SU9ZeTVuM3pWOXp6VHRtSTNVa3NkUVJWdm94TWZvb0FvXCJcbiAgICAgICAgICBjcm9zc09yaWdpbj1cImFub255bW91c1wiPjwvc2NyaXB0PlxuXG4gICAgICAgIDxsaW5rXG4gICAgICAgICAgcmVsPVwic3R5bGVzaGVldFwiXG4gICAgICAgICAgaHJlZj1cImh0dHBzOi8vc3RhY2twYXRoLmJvb3RzdHJhcGNkbi5jb20vYm9vdHN0cmFwLzQuNC4xL2Nzcy9ib290c3RyYXAubWluLmNzc1wiXG4gICAgICAgICAgaW50ZWdyaXR5PVwic2hhMzg0LVZrb284eDRDR3NPMytIaHh2OFQvUTVQYVh0a0t0dTZ1ZzVUT2VOVjZnQmlGZVdQR0ZOOU11aE9mMjNROUlmamhcIlxuICAgICAgICAgIGNyb3NzT3JpZ2luPVwiYW5vbnltb3VzXCJcbiAgICAgICAgLz5cbiAgICAgICAgPHNjcmlwdFxuICAgICAgICAgIHNyYz1cImh0dHBzOi8vc3RhY2twYXRoLmJvb3RzdHJhcGNkbi5jb20vYm9vdHN0cmFwLzQuNC4xL2pzL2Jvb3RzdHJhcC5taW4uanNcIlxuICAgICAgICAgIGludGVncml0eT1cInNoYTM4NC13ZlNERjJFNTBZMkQxdVVkajBPM3VNQkpuanVVRDRJaDdZd2FZZDFpcWZrdGowVW9kOEdDRXhsM09nOGlmd0I2XCJcbiAgICAgICAgICBjcm9zc09yaWdpbj1cImFub255bW91c1wiXG4gICAgICAgID48L3NjcmlwdD5cbiAgICAgIDwvSGVhZD5cblxuICAgICAgPEhlYWRlciAvPlxuXG4gICAgICA8bWFpbiByb2xlPVwibWFpblwiPlxuICAgICAgICB7IGNoaWxkcmVuIH1cbiAgICAgIDwvbWFpbj5cblxuICAgICAgPEZvb3RlciAvPlxuXG4gICAgICA8c3R5bGUganN4PnsgYFxuICAgICAgICBAZm9udC1mYWNlIHtcbiAgICAgICAgICBmb250LWZhbWlseTogJ0NpcmNlJztcbiAgICAgICAgICBzcmM6IHVybCgnL2ZvbnRzL0NpcmNlLUxpZ2h0LmVvdCcpO1xuICAgICAgICAgIHNyYzogdXJsKCcvZm9udHMvQ2lyY2UtTGlnaHQuZW90PyNpZWZpeCcpIGZvcm1hdCgnZW1iZWRkZWQtb3BlbnR5cGUnKSxcbiAgICAgICAgICAgICAgdXJsKCcvZm9udHMvQ2lyY2UtTGlnaHQud29mZjInKSBmb3JtYXQoJ3dvZmYyJyksXG4gICAgICAgICAgICAgIHVybCgnL2ZvbnRzL0NpcmNlLUxpZ2h0LndvZmYnKSBmb3JtYXQoJ3dvZmYnKSxcbiAgICAgICAgICAgICAgdXJsKCcvZm9udHMvQ2lyY2UtTGlnaHQudHRmJykgZm9ybWF0KCd0cnVldHlwZScpO1xuICAgICAgICAgIGZvbnQtd2VpZ2h0OiAzMDA7XG4gICAgICAgICAgZm9udC1zdHlsZTogbm9ybWFsO1xuICAgICAgICB9XG5cbiAgICAgICAgQGZvbnQtZmFjZSB7XG4gICAgICAgICAgZm9udC1mYW1pbHk6ICdDaXJjZSBFeHRyYSc7XG4gICAgICAgICAgc3JjOiB1cmwoJy9mb250cy9DaXJjZS1FeHRyYUJvbGQuZW90Jyk7XG4gICAgICAgICAgc3JjOiB1cmwoJy9mb250cy9DaXJjZS1FeHRyYUJvbGQuZW90PyNpZWZpeCcpIGZvcm1hdCgnZW1iZWRkZWQtb3BlbnR5cGUnKSxcbiAgICAgICAgICAgICAgdXJsKCcvZm9udHMvQ2lyY2UtRXh0cmFCb2xkLndvZmYyJykgZm9ybWF0KCd3b2ZmMicpLFxuICAgICAgICAgICAgICB1cmwoJy9mb250cy9DaXJjZS1FeHRyYUJvbGQud29mZicpIGZvcm1hdCgnd29mZicpLFxuICAgICAgICAgICAgICB1cmwoJy9mb250cy9DaXJjZS1FeHRyYUJvbGQudHRmJykgZm9ybWF0KCd0cnVldHlwZScpO1xuICAgICAgICAgIGZvbnQtd2VpZ2h0OiA4MDA7XG4gICAgICAgICAgZm9udC1zdHlsZTogbm9ybWFsO1xuICAgICAgICB9XG5cbiAgICAgICAgQGZvbnQtZmFjZSB7XG4gICAgICAgICAgZm9udC1mYW1pbHk6ICdDaXJjZSc7XG4gICAgICAgICAgc3JjOiB1cmwoJy9mb250cy9DaXJjZS1UaGluLmVvdCcpO1xuICAgICAgICAgIHNyYzogdXJsKCcvZm9udHMvQ2lyY2UtVGhpbi5lb3Q/I2llZml4JykgZm9ybWF0KCdlbWJlZGRlZC1vcGVudHlwZScpLFxuICAgICAgICAgICAgICB1cmwoJy9mb250cy9DaXJjZS1UaGluLndvZmYyJykgZm9ybWF0KCd3b2ZmMicpLFxuICAgICAgICAgICAgICB1cmwoJy9mb250cy9DaXJjZS1UaGluLndvZmYnKSBmb3JtYXQoJ3dvZmYnKSxcbiAgICAgICAgICAgICAgdXJsKCcvZm9udHMvQ2lyY2UtVGhpbi50dGYnKSBmb3JtYXQoJ3RydWV0eXBlJyk7XG4gICAgICAgICAgZm9udC13ZWlnaHQ6IDEwMDtcbiAgICAgICAgICBmb250LXN0eWxlOiBub3JtYWw7XG4gICAgICAgIH1cblxuICAgICAgICBAZm9udC1mYWNlIHtcbiAgICAgICAgICBmb250LWZhbWlseTogJ0NpcmNlJztcbiAgICAgICAgICBzcmM6IHVybCgnL2ZvbnRzL0NpcmNlLVJlZ3VsYXIuZW90Jyk7XG4gICAgICAgICAgc3JjOiB1cmwoJy9mb250cy9DaXJjZS1SZWd1bGFyLmVvdD8jaWVmaXgnKSBmb3JtYXQoJ2VtYmVkZGVkLW9wZW50eXBlJyksXG4gICAgICAgICAgICAgIHVybCgnL2ZvbnRzL0NpcmNlLVJlZ3VsYXIud29mZjInKSBmb3JtYXQoJ3dvZmYyJyksXG4gICAgICAgICAgICAgIHVybCgnL2ZvbnRzL0NpcmNlLVJlZ3VsYXIud29mZicpIGZvcm1hdCgnd29mZicpLFxuICAgICAgICAgICAgICB1cmwoJy9mb250cy9DaXJjZS1SZWd1bGFyLnR0ZicpIGZvcm1hdCgndHJ1ZXR5cGUnKTtcbiAgICAgICAgICBmb250LXdlaWdodDogbm9ybWFsO1xuICAgICAgICAgIGZvbnQtc3R5bGU6IG5vcm1hbDtcbiAgICAgICAgfVxuXG4gICAgICAgIEBmb250LWZhY2Uge1xuICAgICAgICAgIGZvbnQtZmFtaWx5OiAnQ2lyY2UnO1xuICAgICAgICAgIHNyYzogdXJsKCcvZm9udHMvQ2lyY2UtQm9sZC5lb3QnKTtcbiAgICAgICAgICBzcmM6IHVybCgnL2ZvbnRzL0NpcmNlLUJvbGQuZW90PyNpZWZpeCcpIGZvcm1hdCgnZW1iZWRkZWQtb3BlbnR5cGUnKSxcbiAgICAgICAgICAgICAgdXJsKCcvZm9udHMvQ2lyY2UtQm9sZC53b2ZmMicpIGZvcm1hdCgnd29mZjInKSxcbiAgICAgICAgICAgICAgdXJsKCcvZm9udHMvQ2lyY2UtQm9sZC53b2ZmJykgZm9ybWF0KCd3b2ZmJyksXG4gICAgICAgICAgICAgIHVybCgnL2ZvbnRzL0NpcmNlLUJvbGQudHRmJykgZm9ybWF0KCd0cnVldHlwZScpO1xuICAgICAgICAgIGZvbnQtd2VpZ2h0OiBib2xkO1xuICAgICAgICAgIGZvbnQtc3R5bGU6IG5vcm1hbDtcbiAgICAgICAgfVxuICAgICAgYCB9PC9zdHlsZT5cbiAgICA8Lz5cbiAgKVxufVxuIl19 */\n/*@ sourceURL=/Users/maksimmincenko/PhpstormProjects/slim.xppx/r/KNOWLEDGE/JS/__JOB__/super-apteka/layout/MainLayout.js */"));
+  }));
 };
 
 /***/ }),
@@ -4561,7 +4987,8 @@ const indexPage = ({
 
 async function getStaticProps() {
   const res = await isomorphic_unfetch__WEBPACK_IMPORTED_MODULE_1___default()('https://jsonplaceholder.typicode.com/albums/1/photos');
-  const albums = await res.json();
+  const albumsColl = await res.json();
+  const albums = [albumsColl[0]];
   return {
     props: {
       albums
@@ -4583,17 +5010,20 @@ async function getStaticProps() {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "THEME", function() { return THEME; });
 const THEME = {
+  // COLORS:
   BACKGROUND_COLOR: '#F7F8FA',
   MAIN_COLOR: '#60D67A',
   WHITE_COLOR: '#FFFFFF',
   FONT_COLOR: '#3C3E3F',
   LABEL_FONT_COLOR: '#B8BFC9',
-  LEFT_MENU_ICON_COLOR: '#9399A1'
+  ICON_COLOR: '#9399A1',
+  // SIZES:
+  FONT_SIZE: '14px'
 };
 
 /***/ }),
 
-/***/ 3:
+/***/ 4:
 /*!******************************!*\
   !*** multi ./pages/index.js ***!
   \******************************/
@@ -4679,17 +5109,6 @@ module.exports = require("react-is");
 /***/ (function(module, exports) {
 
 module.exports = require("styled-components");
-
-/***/ }),
-
-/***/ "styled-jsx/style":
-/*!***********************************!*\
-  !*** external "styled-jsx/style" ***!
-  \***********************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-module.exports = require("styled-jsx/style");
 
 /***/ }),
 

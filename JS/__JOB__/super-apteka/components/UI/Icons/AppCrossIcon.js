@@ -1,11 +1,11 @@
 import React from 'react'
 
-import { AppIconContainer } from './AppIconContainer'
+import { AppSvgContainer } from './AppSvgContainer'
 import { THEME } from '../../../theme'
 
 
 export const AppCrossIcon = ({ color = THEME.MAIN_COLOR }) => (
-    <AppIconContainer
+    <AppSvgContainer
       width="14"
       height="14"
       viewBoxWidth="14"
@@ -27,6 +27,6 @@ export const AppCrossIcon = ({ color = THEME.MAIN_COLOR }) => (
         transform="rotate(-90 5 14)"
         fill={ color }
       />
-    </AppIconContainer>
+    </AppSvgContainer>
 )
 

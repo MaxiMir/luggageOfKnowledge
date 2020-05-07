@@ -15,4 +15,7 @@ $ npm i @material-ui/core @material-ui/styles
 $ npm i next-fonts
 
 # ?
+
 # Выравнивание текста
+# Всплывающее меню / Затемнение / Закрытие меню
+

@@ -1,11 +1,11 @@
 import React from 'react'
 
-import { AppIconContainer } from './AppIconContainer'
+import { AppSvgContainer } from './AppSvgContainer'
 import { THEME } from '../../../theme'
 
 
 export const AppChevronIcon = ({ color = THEME.FONT_COLOR }) => (
-  <AppIconContainer
+  <AppSvgContainer
     width="8"
     height="5"
     viewBoxWidth="8"
@@ -16,5 +16,5 @@ export const AppChevronIcon = ({ color = THEME.FONT_COLOR }) => (
       stroke={ color }
       strokeLinecap="round"
     />
-  </AppIconContainer>
+  </AppSvgContainer>
 )

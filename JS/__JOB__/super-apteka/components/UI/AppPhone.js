@@ -1,12 +1,10 @@
 import React from 'react'
 
 import { AppLink } from './AppLink'
-import { AppPhoneIcon } from './Icons/AppPhoneIcon'
 
 
-export const AppPhone = ({ phone, withIcon = true }) => (
-  <AppLink href={ `tel:${ phone }` }>
-    { withIcon && <AppPhoneIcon/> }
+export const AppPhone = ({ phone, size, color }) => (
+  <AppLink href={ `tel:${ phone }` } size={ size } color={ color }>
     { phone }
   </AppLink>
 )

@@ -1,11 +1,11 @@
 import React from 'react'
 
-import { AppIconContainer } from './AppIconContainer'
+import { AppSvgContainer } from './AppSvgContainer'
 import { THEME } from '../../../theme'
 
 
 export const AppCloseIcon = ({ color = THEME.WHITE_COLOR }) => (
-  <AppIconContainer
+  <AppSvgContainer
     width="13"
     height="13"
     viewBoxWidth="13"
@@ -26,6 +26,6 @@ export const AppCloseIcon = ({ color = THEME.WHITE_COLOR }) => (
       transform="matrix(-0.707107 0.707107 0.707107 0.707107 11.0964 0)"
       fill={ color }
     />
-  </AppIconContainer>
+  </AppSvgContainer>
 )
 

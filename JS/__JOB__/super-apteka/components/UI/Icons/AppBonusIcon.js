@@ -1,11 +1,11 @@
 import React from 'react'
 
-import { AppIconContainer } from './AppIconContainer'
+import { AppSvgContainer } from './AppSvgContainer'
 import { THEME } from '../../../theme'
 
 
 export const AppBonusIcon = ({ color = THEME.FONT_COLOR }) => (
-  <AppIconContainer
+  <AppSvgContainer
     width="21"
     height="15"
     viewBoxWidth="21"
@@ -28,6 +28,6 @@ export const AppBonusIcon = ({ color = THEME.FONT_COLOR }) => (
       strokeLinecap="round"
       strokeLinejoin="round"
     />
-  </AppIconContainer>
+  </AppSvgContainer>
 )
 
