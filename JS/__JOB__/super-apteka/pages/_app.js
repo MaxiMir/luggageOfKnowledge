@@ -1,6 +1,6 @@
 import React from 'react'
 import { createGlobalStyle } from 'styled-components'
-
+import 'bootstrap/dist/css/bootstrap.css'
 
 const GlobalStyle = createGlobalStyle`
   @font-face {

@@ -88,7 +88,7 @@ module.exports =
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 4);
+/******/ 	return __webpack_require__(__webpack_require__.s = 3);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -115,10 +115,10 @@ module.exports = require("next/dist/next-server/lib/utils.js");
 
 /***/ }),
 
-/***/ "./components/Basket/BasketWidget/BasketWidget.js":
-/*!********************************************************!*\
-  !*** ./components/Basket/BasketWidget/BasketWidget.js ***!
-  \********************************************************/
+/***/ "./components/Basket/BasketWidget/index.js":
+/*!*************************************************!*\
+  !*** ./components/Basket/BasketWidget/index.js ***!
+  \*************************************************/
 /*! exports provided: BasketWidget */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -131,226 +131,61 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var styled_components__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(styled_components__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _UI_Icons_AppBasketicon__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../UI/Icons/AppBasketicon */ "./components/UI/Icons/AppBasketicon.js");
 /* harmony import */ var _theme__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../theme */ "./theme.js");
-var _jsxFileName = "/Users/maksimmincenko/PhpstormProjects/slim.xppx/r/KNOWLEDGE/JS/__JOB__/super-apteka/components/Basket/BasketWidget/BasketWidget.js";
+var _jsxFileName = "/Users/maksimmincenko/PhpstormProjects/slim.xppx/r/KNOWLEDGE/JS/__JOB__/super-apteka/components/Basket/BasketWidget/index.js";
 var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
 
 
 
 
-const BasketCountContainerStyles = styled_components__WEBPACK_IMPORTED_MODULE_1___default.a.div.withConfig({
-  displayName: "BasketWidget__BasketCountContainerStyles",
-  componentId: "xt2zlp-0"
-})(["display:inline-block!important;width:34px;height:34px;border-radius:50%;background-color:", ";color:", ";font-size:18px;font-weight:bold;text-align:center;vertical-align:middle;line-height:37px;"], _theme__WEBPACK_IMPORTED_MODULE_3__["THEME"].MAIN_COLOR, _theme__WEBPACK_IMPORTED_MODULE_3__["THEME"].WHITE_COLOR);
-const BasketWidgetContainerStyles = styled_components__WEBPACK_IMPORTED_MODULE_1___default.a.div.withConfig({
-  displayName: "BasketWidget__BasketWidgetContainerStyles",
-  componentId: "xt2zlp-1"
+const Block = styled_components__WEBPACK_IMPORTED_MODULE_1___default.a.div.withConfig({
+  displayName: "BasketWidget__Block",
+  componentId: "usbdru-0"
 })(["width:200px;height:56px;padding:12px 33px 10px 34px;border:2px solid #DADFE6;box-sizing:border-box;border-radius:10px;cursor:pointer;"]);
+const CountBlock = styled_components__WEBPACK_IMPORTED_MODULE_1___default.a.div.withConfig({
+  displayName: "BasketWidget__CountBlock",
+  componentId: "usbdru-1"
+})(["display:inline-block!important;width:34px;height:34px;border-radius:50%;background-color:", ";color:", ";font-size:18px;font-weight:bold;text-align:center;vertical-align:middle;line-height:37px;"], _theme__WEBPACK_IMPORTED_MODULE_3__["THEME"].MAIN_COLOR, _theme__WEBPACK_IMPORTED_MODULE_3__["THEME"].WHITE_COLOR);
 const BasketWidget = () => {
   const basketCount = 12;
-  return __jsx(BasketWidgetContainerStyles, {
+  const backCountDisplayed = basketCount > 99 ? '99+' : basketCount;
+  return __jsx(Block, {
     className: "d-flex justify-content-between align-items-center",
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 36,
+      lineNumber: 37,
       columnNumber: 5
     }
   }, __jsx("div", {
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 37,
+      lineNumber: 38,
       columnNumber: 7
     }
   }, "\u041A\u043E\u0440\u0437\u0438\u043D\u0430"), __jsx(_UI_Icons_AppBasketicon__WEBPACK_IMPORTED_MODULE_2__["AppBasketIcon"], {
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 39,
+      lineNumber: 40,
       columnNumber: 7
     }
-  }), __jsx(BasketCountContainerStyles, {
+  }), __jsx(CountBlock, {
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 41,
+      lineNumber: 42,
       columnNumber: 7
     }
-  }, basketCount));
+  }, backCountDisplayed));
 };
 
 /***/ }),
 
-/***/ "./components/Catalog/CatalogSearch/CatalogSearch.js":
-/*!***********************************************************!*\
-  !*** ./components/Catalog/CatalogSearch/CatalogSearch.js ***!
-  \***********************************************************/
-/*! exports provided: CatalogSearch */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CatalogSearch", function() { return CatalogSearch; });
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _CatalogSearchInput_CatalogSearchInput__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./CatalogSearchInput/CatalogSearchInput */ "./components/Catalog/CatalogSearch/CatalogSearchInput/CatalogSearchInput.js");
-var _jsxFileName = "/Users/maksimmincenko/PhpstormProjects/slim.xppx/r/KNOWLEDGE/JS/__JOB__/super-apteka/components/Catalog/CatalogSearch/CatalogSearch.js";
-var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
-
-
-const CatalogSearch = () => {
-  return __jsx(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, __jsx(_CatalogSearchInput_CatalogSearchInput__WEBPACK_IMPORTED_MODULE_1__["CatalogSearchInput"], {
-    __self: undefined,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 9,
-      columnNumber: 7
-    }
-  }));
-};
-
-/***/ }),
-
-/***/ "./components/Catalog/CatalogSearch/CatalogSearchInput/CatalogSearchInput.js":
-/*!***********************************************************************************!*\
-  !*** ./components/Catalog/CatalogSearch/CatalogSearchInput/CatalogSearchInput.js ***!
-  \***********************************************************************************/
-/*! exports provided: CatalogSearchInput */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CatalogSearchInput", function() { return CatalogSearchInput; });
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var styled_components__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! styled-components */ "styled-components");
-/* harmony import */ var styled_components__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(styled_components__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _theme__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../theme */ "./theme.js");
-/* harmony import */ var _UI_AppLink__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../UI/AppLink */ "./components/UI/AppLink.js");
-/* harmony import */ var _UI_Icons_AppSearchIcon__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../UI/Icons/AppSearchIcon */ "./components/UI/Icons/AppSearchIcon.js");
-var _jsxFileName = "/Users/maksimmincenko/PhpstormProjects/slim.xppx/r/KNOWLEDGE/JS/__JOB__/super-apteka/components/Catalog/CatalogSearch/CatalogSearchInput/CatalogSearchInput.js";
-var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
-
-
-
-
-
-const InputStyles = styled_components__WEBPACK_IMPORTED_MODULE_1___default.a.input.withConfig({
-  displayName: "CatalogSearchInput__InputStyles",
-  componentId: "sc-17ulwnr-0"
-})(["padding:20px 12px;border:2px solid ", ";border-radius:10px;font-size:16px;line-height:24px;color:", ";"], _theme__WEBPACK_IMPORTED_MODULE_2__["THEME"].MAIN_COLOR, _theme__WEBPACK_IMPORTED_MODULE_2__["THEME"].LABEL_FONT_COLOR);
-const SearchIconContainer = styled_components__WEBPACK_IMPORTED_MODULE_1___default.a.div.withConfig({
-  displayName: "CatalogSearchInput__SearchIconContainer",
-  componentId: "sc-17ulwnr-1"
-})(["width:86px;height:44px;background-color:", ";border-radius:0px 10px 10px 0px;"], _theme__WEBPACK_IMPORTED_MODULE_2__["THEME"].MAIN_COLOR);
-const CatalogSearchInput = () => {
-  return __jsx("div", {
-    className: "input-group",
-    __self: undefined,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 26,
-      columnNumber: 5
-    }
-  }, __jsx(InputStyles, {
-    type: "text",
-    className: "form-control",
-    placeholder: "\u0418\u0441\u043A\u0430\u0442\u044C \u043F\u043E \u043D\u0430\u0437\u0432\u0430\u043D\u0438\u044E, \u0434\u0435\u0439\u0441\u0442\u0432\u0443\u044E\u0449\u0435\u043C\u0443 \u0432\u0435\u0449\u0435\u0441\u0442\u0432\u0443 \u0438\u043B\u0438 \u043F\u0440\u043E\u0438\u0437\u0432\u043E\u0434\u0438\u0442\u0435\u043B\u044E",
-    "aria-label": "\u0418\u0441\u043A\u0430\u0442\u044C \u043F\u043E \u043D\u0430\u0437\u0432\u0430\u043D\u0438\u044E, \u0434\u0435\u0439\u0441\u0442\u0432\u0443\u044E\u0449\u0435\u043C\u0443 \u0432\u0435\u0449\u0435\u0441\u0442\u0432\u0443 \u0438\u043B\u0438 \u043F\u0440\u043E\u0438\u0437\u0432\u043E\u0434\u0438\u0442\u0435\u043B\u044E",
-    "aria-describedby": "searchSubmit",
-    __self: undefined,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 27,
-      columnNumber: 7
-    }
-  }), __jsx(SearchIconContainer, {
-    className: "input-group-append d-flex justify-content-center align-items-center",
-    __self: undefined,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 33,
-      columnNumber: 7
-    }
-  }, __jsx(_UI_AppLink__WEBPACK_IMPORTED_MODULE_3__["AppLink"], {
-    id: "searchSubmit",
-    __self: undefined,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 34,
-      columnNumber: 9
-    }
-  }, __jsx(_UI_Icons_AppSearchIcon__WEBPACK_IMPORTED_MODULE_4__["AppSearchIcon"], {
-    __self: undefined,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 35,
-      columnNumber: 11
-    }
-  }))));
-};
-
-/***/ }),
-
-/***/ "./components/Navigation/Footer/Footer.js":
-/*!************************************************!*\
-  !*** ./components/Navigation/Footer/Footer.js ***!
-  \************************************************/
-/*! exports provided: Footer */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Footer", function() { return Footer; });
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var styled_components__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! styled-components */ "styled-components");
-/* harmony import */ var styled_components__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(styled_components__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _FooterContacts_FooterContacts__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./FooterContacts/FooterContacts */ "./components/Navigation/Footer/FooterContacts/FooterContacts.js");
-/* harmony import */ var _theme__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../theme */ "./theme.js");
-var _jsxFileName = "/Users/maksimmincenko/PhpstormProjects/slim.xppx/r/KNOWLEDGE/JS/__JOB__/super-apteka/components/Navigation/Footer/Footer.js";
-var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
-
-
-
-
-const FooterStyles = styled_components__WEBPACK_IMPORTED_MODULE_1___default.a.div.withConfig({
-  displayName: "Footer__FooterStyles",
-  componentId: "sc-14mlg6y-0"
-})(["padding:20px;background-color:", ";"], _theme__WEBPACK_IMPORTED_MODULE_3__["THEME"].BACKGROUND_COLOR);
-const Footer = () => {
-  return __jsx(FooterStyles, {
-    className: "footer mt-auto",
-    __self: undefined,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 16,
-      columnNumber: 5
-    }
-  }, __jsx("div", {
-    className: "container",
-    __self: undefined,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 17,
-      columnNumber: 7
-    }
-  }, __jsx(_FooterContacts_FooterContacts__WEBPACK_IMPORTED_MODULE_2__["FooterContacts"], {
-    __self: undefined,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 18,
-      columnNumber: 9
-    }
-  })));
-};
-
-/***/ }),
-
-/***/ "./components/Navigation/Footer/FooterContacts/FooterContacts.js":
-/*!***********************************************************************!*\
-  !*** ./components/Navigation/Footer/FooterContacts/FooterContacts.js ***!
-  \***********************************************************************/
+/***/ "./components/Blocks/Footer/FooterContacts/index.js":
+/*!**********************************************************!*\
+  !*** ./components/Blocks/Footer/FooterContacts/index.js ***!
+  \**********************************************************/
 /*! exports provided: FooterContacts */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -362,7 +197,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _UI_AppPhone__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../UI/AppPhone */ "./components/UI/AppPhone.js");
 /* harmony import */ var _UI_Icons_AppPhoneIcon__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../UI/Icons/AppPhoneIcon */ "./components/UI/Icons/AppPhoneIcon.js");
 /* harmony import */ var _theme__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../theme */ "./theme.js");
-var _jsxFileName = "/Users/maksimmincenko/PhpstormProjects/slim.xppx/r/KNOWLEDGE/JS/__JOB__/super-apteka/components/Navigation/Footer/FooterContacts/FooterContacts.js";
+var _jsxFileName = "/Users/maksimmincenko/PhpstormProjects/slim.xppx/r/KNOWLEDGE/JS/__JOB__/super-apteka/components/Blocks/Footer/FooterContacts/index.js";
 var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
 
 
@@ -413,190 +248,65 @@ const FooterContacts = () => __jsx(react__WEBPACK_IMPORTED_MODULE_0___default.a.
 
 /***/ }),
 
-/***/ "./components/Navigation/Header/Header.js":
-/*!************************************************!*\
-  !*** ./components/Navigation/Header/Header.js ***!
-  \************************************************/
-/*! exports provided: Header */
+/***/ "./components/Blocks/Footer/index.js":
+/*!*******************************************!*\
+  !*** ./components/Blocks/Footer/index.js ***!
+  \*******************************************/
+/*! exports provided: Footer */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Header", function() { return Header; });
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _HeaderTopBar_HeaderTopBar__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./HeaderTopBar/HeaderTopBar */ "./components/Navigation/Header/HeaderTopBar/HeaderTopBar.js");
-/* harmony import */ var _HeaderMiddleBar_HeaderMiddleBar__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./HeaderMiddleBar/HeaderMiddleBar */ "./components/Navigation/Header/HeaderMiddleBar/HeaderMiddleBar.js");
-/* harmony import */ var _HeaderBottomBar_HeaderBottomBar__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./HeaderBottomBar/HeaderBottomBar */ "./components/Navigation/Header/HeaderBottomBar/HeaderBottomBar.js");
-var _jsxFileName = "/Users/maksimmincenko/PhpstormProjects/slim.xppx/r/KNOWLEDGE/JS/__JOB__/super-apteka/components/Navigation/Header/Header.js";
-var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
-
-
-
-
-const Header = () => {
-  return __jsx("header", {
-    __self: undefined,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 10,
-      columnNumber: 5
-    }
-  }, __jsx(_HeaderTopBar_HeaderTopBar__WEBPACK_IMPORTED_MODULE_1__["HeaderTopBar"], {
-    __self: undefined,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 11,
-      columnNumber: 7
-    }
-  }), __jsx(_HeaderMiddleBar_HeaderMiddleBar__WEBPACK_IMPORTED_MODULE_2__["HeaderMiddleBar"], {
-    __self: undefined,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 12,
-      columnNumber: 7
-    }
-  }), __jsx(_HeaderBottomBar_HeaderBottomBar__WEBPACK_IMPORTED_MODULE_3__["HeaderBottomBar"], {
-    __self: undefined,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 13,
-      columnNumber: 7
-    }
-  }));
-};
-
-/***/ }),
-
-/***/ "./components/Navigation/Header/HeaderBottomBar/HeaderBottomBar.js":
-/*!*************************************************************************!*\
-  !*** ./components/Navigation/Header/HeaderBottomBar/HeaderBottomBar.js ***!
-  \*************************************************************************/
-/*! exports provided: HeaderBottomBar */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "HeaderBottomBar", function() { return HeaderBottomBar; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Footer", function() { return Footer; });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var styled_components__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! styled-components */ "styled-components");
 /* harmony import */ var styled_components__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(styled_components__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _Catalog_CatalogSearch_CatalogSearch__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../Catalog/CatalogSearch/CatalogSearch */ "./components/Catalog/CatalogSearch/CatalogSearch.js");
-/* harmony import */ var _HeaderPopupMenu_HeaderPopupMenu__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./HeaderPopupMenu/HeaderPopupMenu */ "./components/Navigation/Header/HeaderBottomBar/HeaderPopupMenu/HeaderPopupMenu.js");
-/* harmony import */ var _UI_Icons_AppBurgerIcon__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../UI/Icons/AppBurgerIcon */ "./components/UI/Icons/AppBurgerIcon.js");
-/* harmony import */ var _UI_Icons_AppCloseIcon__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../UI/Icons/AppCloseIcon */ "./components/UI/Icons/AppCloseIcon.js");
-/* harmony import */ var _UI_AppLink__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../UI/AppLink */ "./components/UI/AppLink.js");
-/* harmony import */ var _theme__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../../theme */ "./theme.js");
-var _jsxFileName = "/Users/maksimmincenko/PhpstormProjects/slim.xppx/r/KNOWLEDGE/JS/__JOB__/super-apteka/components/Navigation/Header/HeaderBottomBar/HeaderBottomBar.js";
+/* harmony import */ var _FooterContacts___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./FooterContacts/ */ "./components/Blocks/Footer/FooterContacts/index.js");
+/* harmony import */ var _theme__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../theme */ "./theme.js");
+var _jsxFileName = "/Users/maksimmincenko/PhpstormProjects/slim.xppx/r/KNOWLEDGE/JS/__JOB__/super-apteka/components/Blocks/Footer/index.js";
 var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
 
 
 
 
-
-
-
-
-const HeaderBottomBarStyles = styled_components__WEBPACK_IMPORTED_MODULE_1___default.a.div.withConfig({
-  displayName: "HeaderBottomBar__HeaderBottomBarStyles",
-  componentId: "sc-19780bz-0"
-})(["padding-bottom:15px;"]);
-const AppLinkContainerStyles = styled_components__WEBPACK_IMPORTED_MODULE_1___default.a.div.withConfig({
-  displayName: "HeaderBottomBar__AppLinkContainerStyles",
-  componentId: "sc-19780bz-1"
-})(["width:129px;height:45px;margin-right:20px;background:linear-gradient(270deg,#37BBEB 5.81%,#37BBEB 97.67%);color:", ";border-radius:10px;"], _theme__WEBPACK_IMPORTED_MODULE_7__["THEME"].WHITE_COLOR);
-const HeaderBottomBar = () => {
-  const {
-    0: isOpenedMenu,
-    1: setIsOpenedMenu
-  } = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(false);
-
-  const menuPopupHandler = isOpenedMenu => {
-    setIsOpenedMenu(isOpenedMenu);
-  };
-
-  const CatalogBtnIcon = isOpenedMenu ? _UI_Icons_AppCloseIcon__WEBPACK_IMPORTED_MODULE_5__["AppCloseIcon"] : _UI_Icons_AppBurgerIcon__WEBPACK_IMPORTED_MODULE_4__["AppBurgerIcon"];
-  return __jsx(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, __jsx(HeaderBottomBarStyles, {
+const FooterStyled = styled_components__WEBPACK_IMPORTED_MODULE_1___default.a.div.withConfig({
+  displayName: "Footer__FooterStyled",
+  componentId: "hmr1y8-0"
+})(["padding:20px;background-color:", ";"], _theme__WEBPACK_IMPORTED_MODULE_3__["THEME"].BACKGROUND_COLOR);
+const Footer = () => {
+  return __jsx(FooterStyled, {
+    className: "footer mt-auto",
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 36,
-      columnNumber: 7
+      lineNumber: 15,
+      columnNumber: 5
     }
   }, __jsx("div", {
     className: "container",
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 37,
-      columnNumber: 9
-    }
-  }, __jsx("div", {
-    className: "row align-items-center",
-    __self: undefined,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 38,
-      columnNumber: 11
-    }
-  }, __jsx(AppLinkContainerStyles, {
-    className: "d-flex justify-content-center align-items-center",
-    __self: undefined,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 39,
-      columnNumber: 13
-    }
-  }, __jsx(_UI_AppLink__WEBPACK_IMPORTED_MODULE_6__["AppLink"], {
-    "data-toggle": "modal",
-    "data-target": ".header-modal-menu",
-    onClick: () => menuPopupHandler(!isOpenedMenu),
-    __self: undefined,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 40,
-      columnNumber: 15
-    }
-  }, __jsx(CatalogBtnIcon, {
-    __self: undefined,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 41,
-      columnNumber: 17
-    }
-  }), "\u041A\u0430\u0442\u0430\u043B\u043E\u0433")), __jsx("div", {
-    className: "flex-grow-1",
-    __self: undefined,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 46,
-      columnNumber: 13
-    }
-  }, __jsx(_Catalog_CatalogSearch_CatalogSearch__WEBPACK_IMPORTED_MODULE_2__["CatalogSearch"], {
-    __self: undefined,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 47,
-      columnNumber: 15
-    }
-  }))))), __jsx(_HeaderPopupMenu_HeaderPopupMenu__WEBPACK_IMPORTED_MODULE_3__["HeaderPopupMenu"], {
-    isOpened: isOpenedMenu,
-    __self: undefined,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 53,
+      lineNumber: 16,
       columnNumber: 7
     }
-  }));
+  }, __jsx(_FooterContacts___WEBPACK_IMPORTED_MODULE_2__["FooterContacts"], {
+    __self: undefined,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 17,
+      columnNumber: 9
+    }
+  })));
 };
 
 /***/ }),
 
-/***/ "./components/Navigation/Header/HeaderBottomBar/HeaderPopupMenu/HeaderPopupLeftMenu/HeaderPopupLeftMenu.js":
-/*!*****************************************************************************************************************!*\
-  !*** ./components/Navigation/Header/HeaderBottomBar/HeaderPopupMenu/HeaderPopupLeftMenu/HeaderPopupLeftMenu.js ***!
-  \*****************************************************************************************************************/
+/***/ "./components/Blocks/Header/HeaderBottomBar/HeaderPopupMenu/HeaderPopupLeftMenu/index.js":
+/*!***********************************************************************************************!*\
+  !*** ./components/Blocks/Header/HeaderBottomBar/HeaderPopupMenu/HeaderPopupLeftMenu/index.js ***!
+  \***********************************************************************************************/
 /*! exports provided: HeaderPopupLeftMenu */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -617,7 +327,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _UI_Icons_Catalog_AppHouseholdProductsIcon__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../../../../UI/Icons/Catalog/AppHouseholdProductsIcon */ "./components/UI/Icons/Catalog/AppHouseholdProductsIcon.js");
 /* harmony import */ var _UI_Icons_Catalog_AppProductsForMotherAndBabyIcon__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../../../../../UI/Icons/Catalog/AppProductsForMotherAndBabyIcon */ "./components/UI/Icons/Catalog/AppProductsForMotherAndBabyIcon.js");
 /* harmony import */ var _theme__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../../../../../../theme */ "./theme.js");
-var _jsxFileName = "/Users/maksimmincenko/PhpstormProjects/slim.xppx/r/KNOWLEDGE/JS/__JOB__/super-apteka/components/Navigation/Header/HeaderBottomBar/HeaderPopupMenu/HeaderPopupLeftMenu/HeaderPopupLeftMenu.js";
+var _jsxFileName = "/Users/maksimmincenko/PhpstormProjects/slim.xppx/r/KNOWLEDGE/JS/__JOB__/super-apteka/components/Blocks/Header/HeaderBottomBar/HeaderPopupMenu/HeaderPopupLeftMenu/index.js";
 var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
 
 
@@ -631,21 +341,21 @@ var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
 
 
 
-const LeftMenuStyles = styled_components__WEBPACK_IMPORTED_MODULE_1___default.a.div.withConfig({
-  displayName: "HeaderPopupLeftMenu__LeftMenuStyles",
-  componentId: "sc-8oeei4-0"
+const LeftMenuStyled = styled_components__WEBPACK_IMPORTED_MODULE_1___default.a.div.withConfig({
+  displayName: "HeaderPopupLeftMenu__LeftMenuStyled",
+  componentId: "sxtrwi-0"
 })(["width:320px;padding:15px 0 15px 0;background-color:", ";"], _theme__WEBPACK_IMPORTED_MODULE_11__["THEME"].BACKGROUND_COLOR);
-const LeftMenuLinkContainerStyles = styled_components__WEBPACK_IMPORTED_MODULE_1___default.a.div.withConfig({
-  displayName: "HeaderPopupLeftMenu__LeftMenuLinkContainerStyles",
-  componentId: "sc-8oeei4-1"
+const LeftMenuLinkContainerStyled = styled_components__WEBPACK_IMPORTED_MODULE_1___default.a.div.withConfig({
+  displayName: "HeaderPopupLeftMenu__LeftMenuLinkContainerStyled",
+  componentId: "sxtrwi-1"
 })(["width:200px;height:65px;transition:all 0.5s ease;&:hover{background-color:", ";color:", ";}"], _theme__WEBPACK_IMPORTED_MODULE_11__["THEME"].WHITE_COLOR, _theme__WEBPACK_IMPORTED_MODULE_11__["THEME"].MAIN_COLOR);
-const IconContainerStyles = styled_components__WEBPACK_IMPORTED_MODULE_1___default.a.div.withConfig({
-  displayName: "HeaderPopupLeftMenu__IconContainerStyles",
-  componentId: "sc-8oeei4-2"
+const IconContainerStyled = styled_components__WEBPACK_IMPORTED_MODULE_1___default.a.div.withConfig({
+  displayName: "HeaderPopupLeftMenu__IconContainerStyled",
+  componentId: "sxtrwi-2"
 })(["width:44px;height:65px;"]);
-const TitleContainerStyles = styled_components__WEBPACK_IMPORTED_MODULE_1___default.a.div.withConfig({
-  displayName: "HeaderPopupLeftMenu__TitleContainerStyles",
-  componentId: "sc-8oeei4-3"
+const TitleContainerStyled = styled_components__WEBPACK_IMPORTED_MODULE_1___default.a.div.withConfig({
+  displayName: "HeaderPopupLeftMenu__TitleContainerStyled",
+  componentId: "sxtrwi-3"
 })(["width:156px;padding-right:15px;", ""], props => props.isHeader && `font-weight: bold;`);
 const HeaderPopupLeftMenu = () => {
   const leftMenuLinksData = [[{
@@ -691,7 +401,7 @@ const HeaderPopupLeftMenu = () => {
       href,
       IconComponent,
       isHeader
-    }) => __jsx(LeftMenuLinkContainerStyles, {
+    }) => __jsx(LeftMenuLinkContainerStyled, {
       key: href,
       __self: undefined,
       __source: {
@@ -707,7 +417,7 @@ const HeaderPopupLeftMenu = () => {
         lineNumber: 60,
         columnNumber: 9
       }
-    }, __jsx(IconContainerStyles, {
+    }, __jsx(IconContainerStyled, {
       className: "d-flex justify-content-center align-items-center",
       __self: undefined,
       __source: {
@@ -722,7 +432,7 @@ const HeaderPopupLeftMenu = () => {
         lineNumber: 62,
         columnNumber: 37
       }
-    })), __jsx(TitleContainerStyles, {
+    })), __jsx(TitleContainerStyled, {
       isHeader: isHeader,
       __self: undefined,
       __source: {
@@ -732,7 +442,7 @@ const HeaderPopupLeftMenu = () => {
       }
     }, name))));
   });
-  return __jsx(LeftMenuStyles, {
+  return __jsx(LeftMenuStyled, {
     className: "d-flex justify-content-end",
     __self: undefined,
     __source: {
@@ -753,68 +463,10 @@ const HeaderPopupLeftMenu = () => {
 
 /***/ }),
 
-/***/ "./components/Navigation/Header/HeaderBottomBar/HeaderPopupMenu/HeaderPopupMenu.js":
-/*!*****************************************************************************************!*\
-  !*** ./components/Navigation/Header/HeaderBottomBar/HeaderPopupMenu/HeaderPopupMenu.js ***!
-  \*****************************************************************************************/
-/*! exports provided: HeaderPopupMenu */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "HeaderPopupMenu", function() { return HeaderPopupMenu; });
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _HeaderPopupLeftMenu_HeaderPopupLeftMenu__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./HeaderPopupLeftMenu/HeaderPopupLeftMenu */ "./components/Navigation/Header/HeaderBottomBar/HeaderPopupMenu/HeaderPopupLeftMenu/HeaderPopupLeftMenu.js");
-/* harmony import */ var _HeaderPopupRightMenu_HeaderPopupRightMenu__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./HeaderPopupRightMenu/HeaderPopupRightMenu */ "./components/Navigation/Header/HeaderBottomBar/HeaderPopupMenu/HeaderPopupRightMenu/HeaderPopupRightMenu.js");
-var _jsxFileName = "/Users/maksimmincenko/PhpstormProjects/slim.xppx/r/KNOWLEDGE/JS/__JOB__/super-apteka/components/Navigation/Header/HeaderBottomBar/HeaderPopupMenu/HeaderPopupMenu.js";
-var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
-
-
-
-const HeaderPopupMenu = ({
-  isOpened
-}) => {
-  const containerClass = isOpened ? 'container-fluid' : 'd-none';
-  return __jsx("div", {
-    className: containerClass,
-    __self: undefined,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 11,
-      columnNumber: 5
-    }
-  }, __jsx("div", {
-    className: "row",
-    __self: undefined,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 12,
-      columnNumber: 7
-    }
-  }, __jsx(_HeaderPopupLeftMenu_HeaderPopupLeftMenu__WEBPACK_IMPORTED_MODULE_1__["HeaderPopupLeftMenu"], {
-    __self: undefined,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 13,
-      columnNumber: 9
-    }
-  }), __jsx(_HeaderPopupRightMenu_HeaderPopupRightMenu__WEBPACK_IMPORTED_MODULE_2__["HeaderPopupRightMenu"], {
-    __self: undefined,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 14,
-      columnNumber: 9
-    }
-  })));
-};
-
-/***/ }),
-
-/***/ "./components/Navigation/Header/HeaderBottomBar/HeaderPopupMenu/HeaderPopupRightMenu/HeaderPopupRightMenu.js":
-/*!*******************************************************************************************************************!*\
-  !*** ./components/Navigation/Header/HeaderBottomBar/HeaderPopupMenu/HeaderPopupRightMenu/HeaderPopupRightMenu.js ***!
-  \*******************************************************************************************************************/
+/***/ "./components/Blocks/Header/HeaderBottomBar/HeaderPopupMenu/HeaderPopupRightMenu/index.js":
+/*!************************************************************************************************!*\
+  !*** ./components/Blocks/Header/HeaderBottomBar/HeaderPopupMenu/HeaderPopupRightMenu/index.js ***!
+  \************************************************************************************************/
 /*! exports provided: HeaderPopupRightMenu */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -828,35 +480,35 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _UI_AppRouterLink__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../../UI/AppRouterLink */ "./components/UI/AppRouterLink.js");
 /* harmony import */ var _UI_Icons_AppCloseIcon__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../../UI/Icons/AppCloseIcon */ "./components/UI/Icons/AppCloseIcon.js");
 /* harmony import */ var _theme__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../../../../theme */ "./theme.js");
-var _jsxFileName = "/Users/maksimmincenko/PhpstormProjects/slim.xppx/r/KNOWLEDGE/JS/__JOB__/super-apteka/components/Navigation/Header/HeaderBottomBar/HeaderPopupMenu/HeaderPopupRightMenu/HeaderPopupRightMenu.js";
+var _jsxFileName = "/Users/maksimmincenko/PhpstormProjects/slim.xppx/r/KNOWLEDGE/JS/__JOB__/super-apteka/components/Blocks/Header/HeaderBottomBar/HeaderPopupMenu/HeaderPopupRightMenu/index.js";
 var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
 
 
 
 
 
-const LeftMenuStyles = styled_components__WEBPACK_IMPORTED_MODULE_1___default.a.div.withConfig({
-  displayName: "HeaderPopupRightMenu__LeftMenuStyles",
-  componentId: "vodnci-0"
+const LeftMenu = styled_components__WEBPACK_IMPORTED_MODULE_1___default.a.div.withConfig({
+  displayName: "HeaderPopupRightMenu__LeftMenu",
+  componentId: "sc-1xi8zph-0"
 })(["position:relative;max-height:870px;padding:20px 15px;overflow:auto;z-index:1000;"]);
 const SectionsContainer = styled_components__WEBPACK_IMPORTED_MODULE_1___default.a.div.withConfig({
   displayName: "HeaderPopupRightMenu__SectionsContainer",
-  componentId: "vodnci-1"
+  componentId: "sc-1xi8zph-1"
 })(["float:left;"]);
 const SectionLinksContainer = styled_components__WEBPACK_IMPORTED_MODULE_1___default.a.div.withConfig({
   displayName: "HeaderPopupRightMenu__SectionLinksContainer",
-  componentId: "vodnci-2"
+  componentId: "sc-1xi8zph-2"
 })(["float:left;display:inline-block;width:270px;margin-bottom:20px;&:nth-child(3n+1){clear:left;}"]);
-const TitleLinkStyles = styled_components__WEBPACK_IMPORTED_MODULE_1___default.a.div.withConfig({
-  displayName: "HeaderPopupRightMenu__TitleLinkStyles",
-  componentId: "vodnci-3"
+const TitleLink = styled_components__WEBPACK_IMPORTED_MODULE_1___default.a.div.withConfig({
+  displayName: "HeaderPopupRightMenu__TitleLink",
+  componentId: "sc-1xi8zph-3"
 })(["", ""], props => props.isHeader && `
     margin-bottom: 10px;
     font-weight: bold;
   `);
-const CloseIconContainerStyles = styled_components__WEBPACK_IMPORTED_MODULE_1___default.a.div.withConfig({
-  displayName: "HeaderPopupRightMenu__CloseIconContainerStyles",
-  componentId: "vodnci-4"
+const CloseIconContainer = styled_components__WEBPACK_IMPORTED_MODULE_1___default.a.div.withConfig({
+  displayName: "HeaderPopupRightMenu__CloseIconContainer",
+  componentId: "sc-1xi8zph-4"
 })(["position:absolute;top:0;right:385px;cursor:pointer;"]);
 const HeaderPopupRightMenu = ({
   closeBtnHandler
@@ -1091,7 +743,7 @@ const HeaderPopupRightMenu = ({
         lineNumber: 141,
         columnNumber: 7
       }
-    }, __jsx(TitleLinkStyles, {
+    }, __jsx(TitleLink, {
       isHeader: isHeader,
       __self: undefined,
       __source: {
@@ -1110,7 +762,7 @@ const HeaderPopupRightMenu = ({
       }
     }, sectionLinks);
   });
-  return __jsx(LeftMenuStyles, {
+  return __jsx(LeftMenu, {
     className: "flex-grow-1",
     __self: undefined,
     __source: {
@@ -1125,7 +777,7 @@ const HeaderPopupRightMenu = ({
       lineNumber: 155,
       columnNumber: 7
     }
-  }, rightMenuLinks), __jsx(CloseIconContainerStyles, {
+  }, rightMenuLinks), __jsx(CloseIconContainer, {
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
@@ -1145,10 +797,193 @@ const HeaderPopupRightMenu = ({
 
 /***/ }),
 
-/***/ "./components/Navigation/Header/HeaderMiddleBar/HeaderMiddleBar.js":
-/*!*************************************************************************!*\
-  !*** ./components/Navigation/Header/HeaderMiddleBar/HeaderMiddleBar.js ***!
-  \*************************************************************************/
+/***/ "./components/Blocks/Header/HeaderBottomBar/HeaderPopupMenu/index.js":
+/*!***************************************************************************!*\
+  !*** ./components/Blocks/Header/HeaderBottomBar/HeaderPopupMenu/index.js ***!
+  \***************************************************************************/
+/*! exports provided: HeaderPopupMenu */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "HeaderPopupMenu", function() { return HeaderPopupMenu; });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _HeaderPopupLeftMenu___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./HeaderPopupLeftMenu/ */ "./components/Blocks/Header/HeaderBottomBar/HeaderPopupMenu/HeaderPopupLeftMenu/index.js");
+/* harmony import */ var _HeaderPopupRightMenu___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./HeaderPopupRightMenu/ */ "./components/Blocks/Header/HeaderBottomBar/HeaderPopupMenu/HeaderPopupRightMenu/index.js");
+var _jsxFileName = "/Users/maksimmincenko/PhpstormProjects/slim.xppx/r/KNOWLEDGE/JS/__JOB__/super-apteka/components/Blocks/Header/HeaderBottomBar/HeaderPopupMenu/index.js";
+var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
+
+
+
+const HeaderPopupMenu = ({
+  isOpened
+}) => {
+  const containerClass = isOpened ? 'container-fluid' : 'd-none';
+  return __jsx("div", {
+    className: containerClass,
+    __self: undefined,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 11,
+      columnNumber: 5
+    }
+  }, __jsx("div", {
+    className: "row",
+    __self: undefined,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 12,
+      columnNumber: 7
+    }
+  }, __jsx(_HeaderPopupLeftMenu___WEBPACK_IMPORTED_MODULE_1__["HeaderPopupLeftMenu"], {
+    __self: undefined,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 13,
+      columnNumber: 9
+    }
+  }), __jsx(_HeaderPopupRightMenu___WEBPACK_IMPORTED_MODULE_2__["HeaderPopupRightMenu"], {
+    __self: undefined,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 14,
+      columnNumber: 9
+    }
+  })));
+};
+
+/***/ }),
+
+/***/ "./components/Blocks/Header/HeaderBottomBar/index.js":
+/*!***********************************************************!*\
+  !*** ./components/Blocks/Header/HeaderBottomBar/index.js ***!
+  \***********************************************************/
+/*! exports provided: HeaderBottomBar */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "HeaderBottomBar", function() { return HeaderBottomBar; });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var styled_components__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! styled-components */ "styled-components");
+/* harmony import */ var styled_components__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(styled_components__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _HeaderPopupMenu___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./HeaderPopupMenu/ */ "./components/Blocks/Header/HeaderBottomBar/HeaderPopupMenu/index.js");
+/* harmony import */ var _Catalog_CatalogSearch___WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../Catalog/CatalogSearch/ */ "./components/Catalog/CatalogSearch/index.js");
+/* harmony import */ var _UI_Icons_AppBurgerIcon__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../UI/Icons/AppBurgerIcon */ "./components/UI/Icons/AppBurgerIcon.js");
+/* harmony import */ var _UI_Icons_AppCloseIcon__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../UI/Icons/AppCloseIcon */ "./components/UI/Icons/AppCloseIcon.js");
+/* harmony import */ var _UI_AppLink__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../UI/AppLink */ "./components/UI/AppLink.js");
+/* harmony import */ var _theme__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../../theme */ "./theme.js");
+var _jsxFileName = "/Users/maksimmincenko/PhpstormProjects/slim.xppx/r/KNOWLEDGE/JS/__JOB__/super-apteka/components/Blocks/Header/HeaderBottomBar/index.js";
+var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
+
+
+
+
+
+
+
+
+const Section = styled_components__WEBPACK_IMPORTED_MODULE_1___default.a.div.withConfig({
+  displayName: "HeaderBottomBar__Section",
+  componentId: "sc-1dbbmyf-0"
+})(["padding-bottom:15px;"]);
+const AppLinkContainer = styled_components__WEBPACK_IMPORTED_MODULE_1___default.a.div.withConfig({
+  displayName: "HeaderBottomBar__AppLinkContainer",
+  componentId: "sc-1dbbmyf-1"
+})(["width:129px;height:45px;margin-right:20px;background:linear-gradient(270deg,#37BBEB 5.81%,#37BBEB 97.67%);color:", ";border-radius:10px;"], _theme__WEBPACK_IMPORTED_MODULE_7__["THEME"].WHITE_COLOR);
+const HeaderBottomBar = () => {
+  const {
+    0: isOpenedMenu,
+    1: setIsOpenedMenu
+  } = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(false);
+
+  const menuPopupHandler = isOpenedMenu => {
+    setIsOpenedMenu(isOpenedMenu);
+  };
+
+  const CatalogBtnIcon = isOpenedMenu ? _UI_Icons_AppCloseIcon__WEBPACK_IMPORTED_MODULE_5__["AppCloseIcon"] : _UI_Icons_AppBurgerIcon__WEBPACK_IMPORTED_MODULE_4__["AppBurgerIcon"];
+  return __jsx(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, __jsx(Section, {
+    __self: undefined,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 36,
+      columnNumber: 7
+    }
+  }, __jsx("div", {
+    className: "container",
+    __self: undefined,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 37,
+      columnNumber: 9
+    }
+  }, __jsx("div", {
+    className: "row align-items-center",
+    __self: undefined,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 38,
+      columnNumber: 11
+    }
+  }, __jsx(AppLinkContainer, {
+    className: "d-flex justify-content-center align-items-center",
+    __self: undefined,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 39,
+      columnNumber: 13
+    }
+  }, __jsx(_UI_AppLink__WEBPACK_IMPORTED_MODULE_6__["AppLink"], {
+    "data-toggle": "modal",
+    "data-target": ".header-modal-menu",
+    onClick: () => menuPopupHandler(!isOpenedMenu),
+    __self: undefined,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 40,
+      columnNumber: 15
+    }
+  }, __jsx(CatalogBtnIcon, {
+    __self: undefined,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 41,
+      columnNumber: 17
+    }
+  }), "\u041A\u0430\u0442\u0430\u043B\u043E\u0433")), __jsx("div", {
+    className: "flex-grow-1",
+    __self: undefined,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 46,
+      columnNumber: 13
+    }
+  }, __jsx(_Catalog_CatalogSearch___WEBPACK_IMPORTED_MODULE_3__["CatalogSearch"], {
+    __self: undefined,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 47,
+      columnNumber: 15
+    }
+  }))))), __jsx(_HeaderPopupMenu___WEBPACK_IMPORTED_MODULE_2__["HeaderPopupMenu"], {
+    isOpened: isOpenedMenu,
+    __self: undefined,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 53,
+      columnNumber: 7
+    }
+  }));
+};
+
+/***/ }),
+
+/***/ "./components/Blocks/Header/HeaderMiddleBar/index.js":
+/*!***********************************************************!*\
+  !*** ./components/Blocks/Header/HeaderMiddleBar/index.js ***!
+  \***********************************************************/
 /*! exports provided: HeaderMiddleBar */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -1159,14 +994,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var styled_components__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! styled-components */ "styled-components");
 /* harmony import */ var styled_components__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(styled_components__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _Basket_BasketWidget_BasketWidget__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../Basket/BasketWidget/BasketWidget */ "./components/Basket/BasketWidget/BasketWidget.js");
+/* harmony import */ var _Basket_BasketWidget___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../Basket/BasketWidget/ */ "./components/Basket/BasketWidget/index.js");
 /* harmony import */ var _UI_AppRouterLink__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../UI/AppRouterLink */ "./components/UI/AppRouterLink.js");
 /* harmony import */ var _UI_Icons_AppLogoIcon__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../UI/Icons/AppLogoIcon */ "./components/UI/Icons/AppLogoIcon.js");
 /* harmony import */ var _UI_Icons_AppPercentIcon__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../UI/Icons/AppPercentIcon */ "./components/UI/Icons/AppPercentIcon.js");
 /* harmony import */ var _UI_Icons_AppStarIcon__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../UI/Icons/AppStarIcon */ "./components/UI/Icons/AppStarIcon.js");
 /* harmony import */ var _UI_Icons_AppBonusIcon__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../UI/Icons/AppBonusIcon */ "./components/UI/Icons/AppBonusIcon.js");
 /* harmony import */ var _UI_Icons_AppGoodsOnOrderIcon__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../../UI/Icons/AppGoodsOnOrderIcon */ "./components/UI/Icons/AppGoodsOnOrderIcon.js");
-var _jsxFileName = "/Users/maksimmincenko/PhpstormProjects/slim.xppx/r/KNOWLEDGE/JS/__JOB__/super-apteka/components/Navigation/Header/HeaderMiddleBar/HeaderMiddleBar.js";
+var _jsxFileName = "/Users/maksimmincenko/PhpstormProjects/slim.xppx/r/KNOWLEDGE/JS/__JOB__/super-apteka/components/Blocks/Header/HeaderMiddleBar/index.js";
 var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
 
 
@@ -1179,7 +1014,7 @@ var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
 
 const HeaderMainNavStyles = styled_components__WEBPACK_IMPORTED_MODULE_1___default.a.div.withConfig({
   displayName: "HeaderMiddleBar__HeaderMainNavStyles",
-  componentId: "sc-1innwr1-0"
+  componentId: "sc-10w4v0-0"
 })(["padding-bottom:15px;"]);
 const HeaderMiddleBar = () => {
   const navLinksData = [{
@@ -1291,7 +1126,7 @@ const HeaderMiddleBar = () => {
       lineNumber: 48,
       columnNumber: 11
     }
-  }, __jsx(_Basket_BasketWidget_BasketWidget__WEBPACK_IMPORTED_MODULE_2__["BasketWidget"], {
+  }, __jsx(_Basket_BasketWidget___WEBPACK_IMPORTED_MODULE_2__["BasketWidget"], {
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
@@ -1303,10 +1138,10 @@ const HeaderMiddleBar = () => {
 
 /***/ }),
 
-/***/ "./components/Navigation/Header/HeaderTopBar/HeaderTopBar.js":
-/*!*******************************************************************!*\
-  !*** ./components/Navigation/Header/HeaderTopBar/HeaderTopBar.js ***!
-  \*******************************************************************/
+/***/ "./components/Blocks/Header/HeaderTopBar/index.js":
+/*!********************************************************!*\
+  !*** ./components/Blocks/Header/HeaderTopBar/index.js ***!
+  \********************************************************/
 /*! exports provided: HeaderTopBar */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -1325,7 +1160,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _UI_Icons_AppEnterIcon__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../UI/Icons/AppEnterIcon */ "./components/UI/Icons/AppEnterIcon.js");
 /* harmony import */ var _UI_Icons_AppPhoneIcon__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../../UI/Icons/AppPhoneIcon */ "./components/UI/Icons/AppPhoneIcon.js");
 /* harmony import */ var _theme__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../../../theme */ "./theme.js");
-var _jsxFileName = "/Users/maksimmincenko/PhpstormProjects/slim.xppx/r/KNOWLEDGE/JS/__JOB__/super-apteka/components/Navigation/Header/HeaderTopBar/HeaderTopBar.js";
+var _jsxFileName = "/Users/maksimmincenko/PhpstormProjects/slim.xppx/r/KNOWLEDGE/JS/__JOB__/super-apteka/components/Blocks/Header/HeaderTopBar/index.js";
 var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
 
 
@@ -1339,15 +1174,15 @@ var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
 
 const HeaderTopBarStyles = styled_components__WEBPACK_IMPORTED_MODULE_1___default.a.div.withConfig({
   displayName: "HeaderTopBar__HeaderTopBarStyles",
-  componentId: "sc-84qcod-0"
+  componentId: "sc-1q2e83y-0"
 })(["background-color:", ";padding-top:14px;padding-bottom:10px;margin-bottom:15px;"], _theme__WEBPACK_IMPORTED_MODULE_9__["THEME"].BACKGROUND_COLOR);
 const LabelStyles = styled_components__WEBPACK_IMPORTED_MODULE_1___default.a.span.withConfig({
   displayName: "HeaderTopBar__LabelStyles",
-  componentId: "sc-84qcod-1"
+  componentId: "sc-1q2e83y-1"
 })(["color:", ";margin-right:10px;font-weight:bold;font-size:9px;line-height:13px;text-transform:uppercase;"], _theme__WEBPACK_IMPORTED_MODULE_9__["THEME"].LABEL_FONT_COLOR);
 const SpanLinkStyles = styled_components__WEBPACK_IMPORTED_MODULE_1___default.a.span.withConfig({
   displayName: "HeaderTopBar__SpanLinkStyles",
-  componentId: "sc-84qcod-2"
+  componentId: "sc-1q2e83y-2"
 })(["margin-right:5px"]);
 const HeaderTopBar = () => {
   return __jsx(HeaderTopBarStyles, {
@@ -1540,6 +1375,172 @@ const HeaderTopBar = () => {
 
 /***/ }),
 
+/***/ "./components/Blocks/Header/index.js":
+/*!*******************************************!*\
+  !*** ./components/Blocks/Header/index.js ***!
+  \*******************************************/
+/*! exports provided: Header */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Header", function() { return Header; });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _HeaderTopBar___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./HeaderTopBar/ */ "./components/Blocks/Header/HeaderTopBar/index.js");
+/* harmony import */ var _HeaderMiddleBar___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./HeaderMiddleBar/ */ "./components/Blocks/Header/HeaderMiddleBar/index.js");
+/* harmony import */ var _HeaderBottomBar___WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./HeaderBottomBar/ */ "./components/Blocks/Header/HeaderBottomBar/index.js");
+var _jsxFileName = "/Users/maksimmincenko/PhpstormProjects/slim.xppx/r/KNOWLEDGE/JS/__JOB__/super-apteka/components/Blocks/Header/index.js";
+var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
+
+
+
+
+const Header = () => {
+  return __jsx("header", {
+    __self: undefined,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 10,
+      columnNumber: 5
+    }
+  }, __jsx(_HeaderTopBar___WEBPACK_IMPORTED_MODULE_1__["HeaderTopBar"], {
+    __self: undefined,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 11,
+      columnNumber: 7
+    }
+  }), __jsx(_HeaderMiddleBar___WEBPACK_IMPORTED_MODULE_2__["HeaderMiddleBar"], {
+    __self: undefined,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 12,
+      columnNumber: 7
+    }
+  }), __jsx(_HeaderBottomBar___WEBPACK_IMPORTED_MODULE_3__["HeaderBottomBar"], {
+    __self: undefined,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 13,
+      columnNumber: 7
+    }
+  }));
+};
+
+/***/ }),
+
+/***/ "./components/Catalog/CatalogSearch/CatalogSearchInput/index.js":
+/*!**********************************************************************!*\
+  !*** ./components/Catalog/CatalogSearch/CatalogSearchInput/index.js ***!
+  \**********************************************************************/
+/*! exports provided: CatalogSearchInput */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CatalogSearchInput", function() { return CatalogSearchInput; });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var styled_components__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! styled-components */ "styled-components");
+/* harmony import */ var styled_components__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(styled_components__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _UI_Icons_AppSearchIcon__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../UI/Icons/AppSearchIcon */ "./components/UI/Icons/AppSearchIcon.js");
+/* harmony import */ var _UI_AppLink__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../UI/AppLink */ "./components/UI/AppLink.js");
+/* harmony import */ var _theme__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../../theme */ "./theme.js");
+var _jsxFileName = "/Users/maksimmincenko/PhpstormProjects/slim.xppx/r/KNOWLEDGE/JS/__JOB__/super-apteka/components/Catalog/CatalogSearch/CatalogSearchInput/index.js";
+var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
+
+
+
+
+
+const Input = styled_components__WEBPACK_IMPORTED_MODULE_1___default.a.input.withConfig({
+  displayName: "CatalogSearchInput__Input",
+  componentId: "sc-1ru7jox-0"
+})(["padding:20px 12px;border:2px solid ", ";border-radius:10px;font-size:16px;line-height:24px;color:", ";:focus:{}"], _theme__WEBPACK_IMPORTED_MODULE_4__["THEME"].MAIN_COLOR, _theme__WEBPACK_IMPORTED_MODULE_4__["THEME"].LABEL_FONT_COLOR);
+const IconBlock = styled_components__WEBPACK_IMPORTED_MODULE_1___default.a.div.withConfig({
+  displayName: "CatalogSearchInput__IconBlock",
+  componentId: "sc-1ru7jox-1"
+})(["width:86px;height:44px;background-color:", ";border-radius:0px 10px 10px 0px;"], _theme__WEBPACK_IMPORTED_MODULE_4__["THEME"].MAIN_COLOR);
+const CatalogSearchInput = () => {
+  return __jsx("div", {
+    className: "input-group",
+    __self: undefined,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 30,
+      columnNumber: 5
+    }
+  }, __jsx(Input, {
+    type: "text",
+    className: "form-control",
+    placeholder: "\u0418\u0441\u043A\u0430\u0442\u044C \u043F\u043E \u043D\u0430\u0437\u0432\u0430\u043D\u0438\u044E, \u0434\u0435\u0439\u0441\u0442\u0432\u0443\u044E\u0449\u0435\u043C\u0443 \u0432\u0435\u0449\u0435\u0441\u0442\u0432\u0443 \u0438\u043B\u0438 \u043F\u0440\u043E\u0438\u0437\u0432\u043E\u0434\u0438\u0442\u0435\u043B\u044E",
+    "aria-label": "\u0418\u0441\u043A\u0430\u0442\u044C \u043F\u043E \u043D\u0430\u0437\u0432\u0430\u043D\u0438\u044E, \u0434\u0435\u0439\u0441\u0442\u0432\u0443\u044E\u0449\u0435\u043C\u0443 \u0432\u0435\u0449\u0435\u0441\u0442\u0432\u0443 \u0438\u043B\u0438 \u043F\u0440\u043E\u0438\u0437\u0432\u043E\u0434\u0438\u0442\u0435\u043B\u044E",
+    "aria-describedby": "searchSubmit",
+    __self: undefined,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 31,
+      columnNumber: 7
+    }
+  }), __jsx(IconBlock, {
+    className: "input-group-append d-flex justify-content-center align-items-center",
+    __self: undefined,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 37,
+      columnNumber: 7
+    }
+  }, __jsx(_UI_AppLink__WEBPACK_IMPORTED_MODULE_3__["AppLink"], {
+    id: "searchSubmit",
+    __self: undefined,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 38,
+      columnNumber: 9
+    }
+  }, __jsx(_UI_Icons_AppSearchIcon__WEBPACK_IMPORTED_MODULE_2__["AppSearchIcon"], {
+    __self: undefined,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 39,
+      columnNumber: 11
+    }
+  }))));
+};
+
+/***/ }),
+
+/***/ "./components/Catalog/CatalogSearch/index.js":
+/*!***************************************************!*\
+  !*** ./components/Catalog/CatalogSearch/index.js ***!
+  \***************************************************/
+/*! exports provided: CatalogSearch */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CatalogSearch", function() { return CatalogSearch; });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _CatalogSearchInput___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./CatalogSearchInput/ */ "./components/Catalog/CatalogSearch/CatalogSearchInput/index.js");
+var _jsxFileName = "/Users/maksimmincenko/PhpstormProjects/slim.xppx/r/KNOWLEDGE/JS/__JOB__/super-apteka/components/Catalog/CatalogSearch/index.js";
+var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
+
+
+const CatalogSearch = () => {
+  return __jsx(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, __jsx(_CatalogSearchInput___WEBPACK_IMPORTED_MODULE_1__["CatalogSearchInput"], {
+    __self: undefined,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 9,
+      columnNumber: 7
+    }
+  }));
+};
+
+/***/ }),
+
 /***/ "./components/UI/AppLink.js":
 /*!**********************************!*\
   !*** ./components/UI/AppLink.js ***!
@@ -1670,6 +1671,115 @@ const AppRouterLink = (_ref) => {
       columnNumber: 7
     }
   }), children));
+};
+
+/***/ }),
+
+/***/ "./components/UI/AppSlider.js":
+/*!************************************!*\
+  !*** ./components/UI/AppSlider.js ***!
+  \************************************/
+/*! exports provided: AppSlider */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AppSlider", function() { return AppSlider; });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react_bootstrap_Carousel__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-bootstrap/Carousel */ "react-bootstrap/Carousel");
+/* harmony import */ var react_bootstrap_Carousel__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_bootstrap_Carousel__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var react_bootstrap_Button__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-bootstrap/Button */ "react-bootstrap/Button");
+/* harmony import */ var react_bootstrap_Button__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react_bootstrap_Button__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var styled_components__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! styled-components */ "styled-components");
+/* harmony import */ var styled_components__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(styled_components__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _theme__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../theme */ "./theme.js");
+var _jsxFileName = "/Users/maksimmincenko/PhpstormProjects/slim.xppx/r/KNOWLEDGE/JS/__JOB__/super-apteka/components/UI/AppSlider.js";
+var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
+
+
+
+
+
+const Caption = styled_components__WEBPACK_IMPORTED_MODULE_3___default()(react_bootstrap_Carousel__WEBPACK_IMPORTED_MODULE_1___default.a.Caption).withConfig({
+  displayName: "AppSlider__Caption",
+  componentId: "hv66ft-0"
+})(["max-width:728px;height:100%;padding:20px 0;right:initial;bottom:0;"]);
+const Header = styled_components__WEBPACK_IMPORTED_MODULE_3___default.a.p.withConfig({
+  displayName: "AppSlider__Header",
+  componentId: "hv66ft-1"
+})(["font-weight:300;font-size:72px;line-height:107%;color:", ";text-align:left;"], _theme__WEBPACK_IMPORTED_MODULE_4__["THEME"].WHITE_COLOR);
+const ButtonLink = styled_components__WEBPACK_IMPORTED_MODULE_3___default()(react_bootstrap_Button__WEBPACK_IMPORTED_MODULE_2___default.a).withConfig({
+  displayName: "AppSlider__ButtonLink",
+  componentId: "hv66ft-2"
+})(["width:161px;height:44px;border-radius:10px;margin-bottom:20px;"]);
+const Note = styled_components__WEBPACK_IMPORTED_MODULE_3___default.a.p.withConfig({
+  displayName: "AppSlider__Note",
+  componentId: "hv66ft-3"
+})(["font-size:10px;line-height:120%;"]);
+const AppSlider = () => {
+  const sliderData = [{
+    img: '/mock/banner1.png',
+    header: 'Доставка лекарств  на дом',
+    buttonTitle: 'Начать покупки',
+    buttonHref: '#??? ',
+    note: 'Имеются противопоказания, требуется консультация специалиста. Правила и подробности доставки уточняйте на www. superapteka.ru'
+  }];
+  return __jsx(react_bootstrap_Carousel__WEBPACK_IMPORTED_MODULE_1___default.a, {
+    __self: undefined,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 51,
+      columnNumber: 5
+    }
+  }, __jsx(react_bootstrap_Carousel__WEBPACK_IMPORTED_MODULE_1___default.a.Item, {
+    __self: undefined,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 52,
+      columnNumber: 7
+    }
+  }, __jsx("img", {
+    className: "d-block w-100",
+    src: "/mock/banner1.png",
+    alt: "First slide",
+    __self: undefined,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 53,
+      columnNumber: 9
+    }
+  }), __jsx(Caption, {
+    className: "d-flex flex-column align-items-start",
+    __self: undefined,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 54,
+      columnNumber: 9
+    }
+  }, __jsx(Header, {
+    __self: undefined,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 55,
+      columnNumber: 11
+    }
+  }, sliderData[0].header), __jsx(ButtonLink, {
+    variant: "outline-light",
+    __self: undefined,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 56,
+      columnNumber: 11
+    }
+  }, sliderData[0].buttonTitle), __jsx(Note, {
+    __self: undefined,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 57,
+      columnNumber: 11
+    }
+  }, sliderData[0].note))));
 };
 
 /***/ }),
@@ -3105,8 +3215,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var next_head__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(next_head__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var styled_components__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! styled-components */ "styled-components");
 /* harmony import */ var styled_components__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(styled_components__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _components_Navigation_Header_Header__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../components/Navigation/Header/Header */ "./components/Navigation/Header/Header.js");
-/* harmony import */ var _components_Navigation_Footer_Footer__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../components/Navigation/Footer/Footer */ "./components/Navigation/Footer/Footer.js");
+/* harmony import */ var _components_Blocks_Header___WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../components/Blocks/Header/ */ "./components/Blocks/Header/index.js");
+/* harmony import */ var _components_Blocks_Footer___WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../components/Blocks/Footer/ */ "./components/Blocks/Footer/index.js");
 var _jsxFileName = "/Users/maksimmincenko/PhpstormProjects/slim.xppx/r/KNOWLEDGE/JS/__JOB__/super-apteka/layout/MainLayout.js";
 var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
 
@@ -3162,22 +3272,11 @@ const MainLayout = ({
       lineNumber: 21,
       columnNumber: 9
     }
-  }), __jsx("link", {
-    rel: "stylesheet",
-    href: "https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css",
-    integrity: "sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh",
-    crossOrigin: "anonymous",
+  })), __jsx(_components_Blocks_Header___WEBPACK_IMPORTED_MODULE_3__["Header"], {
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 23,
-      columnNumber: 9
-    }
-  })), __jsx(_components_Navigation_Header_Header__WEBPACK_IMPORTED_MODULE_3__["Header"], {
-    __self: undefined,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 31,
+      lineNumber: 24,
       columnNumber: 7
     }
   }), __jsx(MainStyled, {
@@ -3185,14 +3284,14 @@ const MainLayout = ({
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 33,
+      lineNumber: 26,
       columnNumber: 7
     }
-  }, children), __jsx(_components_Navigation_Footer_Footer__WEBPACK_IMPORTED_MODULE_4__["Footer"], {
+  }, children), __jsx(_components_Blocks_Footer___WEBPACK_IMPORTED_MODULE_4__["Footer"], {
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 37,
+      lineNumber: 30,
       columnNumber: 7
     }
   }));
@@ -4905,8 +5004,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var isomorphic_unfetch__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! isomorphic-unfetch */ "isomorphic-unfetch");
 /* harmony import */ var isomorphic_unfetch__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(isomorphic_unfetch__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _layout_MainLayout__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../layout/MainLayout */ "./layout/MainLayout.js");
+/* harmony import */ var _components_UI_AppSlider__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../components/UI/AppSlider */ "./components/UI/AppSlider.js");
 var _jsxFileName = "/Users/maksimmincenko/PhpstormProjects/slim.xppx/r/KNOWLEDGE/JS/__JOB__/super-apteka/pages/index.js";
 var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
+
 
 
 
@@ -4918,72 +5019,17 @@ const indexPage = ({
   __self: undefined,
   __source: {
     fileName: _jsxFileName,
-    lineNumber: 7,
+    lineNumber: 9,
     columnNumber: 3
   }
-}, __jsx("div", {
-  className: "container",
-  __self: undefined,
-  __source: {
-    fileName: _jsxFileName,
-    lineNumber: 8,
-    columnNumber: 5
-  }
-}, __jsx("div", {
-  className: "row",
-  __self: undefined,
-  __source: {
-    fileName: _jsxFileName,
-    lineNumber: 9,
-    columnNumber: 7
-  }
-}, __jsx("div", {
-  className: "d-flex flex-wrap justify-content-between mt-4",
+}, __jsx(_components_UI_AppSlider__WEBPACK_IMPORTED_MODULE_3__["AppSlider"], {
   __self: undefined,
   __source: {
     fileName: _jsxFileName,
     lineNumber: 10,
-    columnNumber: 9
+    columnNumber: 5
   }
-}, albums.map(album => __jsx("div", {
-  className: "card text-white bg-primary mb-3",
-  style: {
-    width: '18rem'
-  },
-  key: album.id,
-  __self: undefined,
-  __source: {
-    fileName: _jsxFileName,
-    lineNumber: 12,
-    columnNumber: 13
-  }
-}, __jsx("img", {
-  className: "card-img-top",
-  src: album.url,
-  alt: "Card image cap",
-  __self: undefined,
-  __source: {
-    fileName: _jsxFileName,
-    lineNumber: 13,
-    columnNumber: 15
-  }
-}), __jsx("div", {
-  className: "card-body",
-  __self: undefined,
-  __source: {
-    fileName: _jsxFileName,
-    lineNumber: 14,
-    columnNumber: 15
-  }
-}, __jsx("p", {
-  className: "card-text",
-  __self: undefined,
-  __source: {
-    fileName: _jsxFileName,
-    lineNumber: 15,
-    columnNumber: 17
-  }
-}, album.title))))))));
+}));
 
 async function getStaticProps() {
   const res = await isomorphic_unfetch__WEBPACK_IMPORTED_MODULE_1___default()('https://jsonplaceholder.typicode.com/albums/1/photos');
@@ -5023,7 +5069,7 @@ const THEME = {
 
 /***/ }),
 
-/***/ 4:
+/***/ 3:
 /*!******************************!*\
   !*** multi ./pages/index.js ***!
   \******************************/
@@ -5087,6 +5133,28 @@ module.exports = require("prop-types-exact");
 /***/ (function(module, exports) {
 
 module.exports = require("react");
+
+/***/ }),
+
+/***/ "react-bootstrap/Button":
+/*!*****************************************!*\
+  !*** external "react-bootstrap/Button" ***!
+  \*****************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("react-bootstrap/Button");
+
+/***/ }),
+
+/***/ "react-bootstrap/Carousel":
+/*!*******************************************!*\
+  !*** external "react-bootstrap/Carousel" ***!
+  \*******************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("react-bootstrap/Carousel");
 
 /***/ }),
 

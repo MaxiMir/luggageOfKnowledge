@@ -1,24 +1,13 @@
 import React from 'react'
 import fetch from 'isomorphic-unfetch'
+
 import { MainLayout } from '../layout/MainLayout'
+import { AppSlider } from '../components/UI/AppSlider'
 
 
 const indexPage = ({ albums }) => (
   <MainLayout title="Главная">
-    <div className="container">
-      <div className="row">
-        <div className="d-flex flex-wrap justify-content-between mt-4">
-          { albums.map(album => (
-            <div className="card text-white bg-primary mb-3" style={ { width: '18rem' } } key={album.id}>
-              <img className="card-img-top" src={ album.url } alt="Card image cap"/>
-              <div className="card-body">
-                <p className="card-text">{ album.title }</p>
-              </div>
-            </div>
-          )) }
-        </div>
-      </div>
-    </div>
+    <AppSlider />
   </MainLayout>
 )
 
