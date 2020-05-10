@@ -1,5 +1,0 @@
-# Mobile app for pharmacist
-
-
-
-
