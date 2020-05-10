@@ -89,6 +89,34 @@ $ php artisan make:job BlogPostAfterCreateJob
 $ php artisan make:job BlogPostAfterDeleteJob
 $ php artisan make:job ProccessVideoJob
 
+# Запуск очереди
+$ php artisan queue:work
+# Запускает процесс обработки задач очереди как демон
+# Все изменения сделанные в коде после запуска приняты не будут
+# Те после апдейта кода потребуется перезапуск компанды
+
+$ php artisan queue:work --queue=queueName1,queueName2
+# Сначала выполняются все задачи из очереди queueName1, затем  queueName2
+
+$ php artisan queue:listen
+# Запускает процесс обработки задач указанной очереди.
+# Изменения сделанные в коде после запуска будут приняты
+# Хуже по производительности в сравнении с queue:work
+
+$ php artisan queue:restart
+# Мягкий перезапуск демона queue:work после того как тот завершит выполненную задачу
+
+$ php artisan queue:failed
+# Просмотр таблицы проваленных задач
+
+$ php artisan queue:retry all
+# Возврат в очередь выполнения всех проваленных задач
+
+$ php artisan queue:retry 5
+# Возврат проваленной задачи (id=5) в очередь выполнения
+
+
+# Трейт SerializesModels задаеи поведение для Задачи при котором модель переданная в задачу не будет вся передаваться в очередь (в сериализованном виде), а передает ей id. И во время запуска запуска задачи автоматически произойдет извлечение записи из БД по id.
 # /config/queue.php
 
 # INFO:

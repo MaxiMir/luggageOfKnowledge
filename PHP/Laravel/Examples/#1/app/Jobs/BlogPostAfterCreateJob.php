@@ -23,6 +23,7 @@ class BlogPostAfterCreateJob implements ShouldQueue
     public function __construct(BlogPost $blogPost)
     {
         $this->blogPost = $blogPost;
+        # $this->onQueue('post-queue') # название очереди (по дефолту default)
     }
 
     /**

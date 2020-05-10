@@ -4,6 +4,8 @@
 
   use App\Http\Requests\BlogPostCreateRequest;
   use App\Http\Requests\BlogPostUpdateRequest;
+  use App\Jobs\BlogPostAfterCreateJob;
+  use App\Jobs\BlogPostAfterDeleteJob;
   use App\Models\BlogPost;
   use App\Repositories\BlogCategoryRepository;
   use App\Repositories\BlogPostRepository;
@@ -73,9 +75,13 @@
     public function store(BlogPostCreateRequest $request)
     {
       $data = $request->input();
-      $item = (new BlogPost())->create($data);
+      $item = BlogPost::create($data);
 
       if ($item) {
+        $job = new BlogPostAfterCreateJob($item); // создание очереди
+        $this->dispatch($job); // положим очередь (класс должен имплементировать ShouldQueue иначе выполниться сразу)
+
+
         return redirect()
           ->route(['blog.admin.posts.edit', [$item->id]])
           ->with(['success' => 'Успешно сохранено']);
@@ -163,6 +169,18 @@
       $result = BlogPost::find($id)->forceDelete();
 
       if ($result) {
+        BlogPostAfterDeleteJob::dispatch($id);
+
+        # Варианты запуска:
+        BlogPostAfterDeleteJob::dispatchNow($id); # выполнить моментально
+
+        dispatch(new BlogPostAfterDeleteJob($id))->delay(20); # отсрочка 20 секунд
+        dispatch_now(new BlogPostAfterDeleteJob($id)); # выполнить моментально
+
+        $this->dispatch(new BlogPostAfterDeleteJob($id));
+        $this->dispatchNow(new BlogPostAfterDeleteJob($id)); # выполнить моментально
+
+
         return redirect()
           ->route('blog.admin.posts.index')
           ->with(['success' => "Запись id=[$id] удалена"]);
