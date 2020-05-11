@@ -15,7 +15,8 @@ export const AppBonusIcon = ({ color = THEME.FONT_COLOR }) => (
       x="1"
       y="1"
       width="19"
-      height="13" rx="2"
+      height="13"
+      rx="2"
       stroke={ color }
       strokeWidth="2"
       strokeLinecap="round"

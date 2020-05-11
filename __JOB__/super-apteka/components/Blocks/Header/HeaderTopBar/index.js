@@ -1,4 +1,6 @@
 import React from 'react'
+import Container from 'react-bootstrap/Container'
+import Row from 'react-bootstrap/Row'
 import styled from 'styled-components'
 
 import { AppPhone } from '../../../UI/AppPhone'
@@ -27,6 +29,7 @@ const LabelStyles = styled.span`
   text-transform: uppercase;
 `
 
+
 const SpanLinkStyles = styled.span`
   margin-right: 5px
 `
@@ -34,11 +37,13 @@ const SpanLinkStyles = styled.span`
 export const HeaderTopBar = () => {
   return (
     <HeaderTopBarStyles>
-      <div className="container">
-        <div className="row">
+      <Container>
+        <Row>
           <div className="col d-flex justify-content-between">
             <div className="d-flex align-items-center">
-              <AppPhoneIcon/>
+              <AppPhoneIcon
+
+              />
               <AppPhone phone="+7 (495) 122-22-82"/>
             </div>
 
@@ -75,8 +80,8 @@ export const HeaderTopBar = () => {
               </AppLink>
             </div>
           </div>
-        </div>
-      </div>
+        </Row>
+      </Container>
     </HeaderTopBarStyles>
   )
 }

@@ -31,7 +31,7 @@ const CountBlock = styled.div`
 
 export const BasketWidget = () => {
   const basketCount = 12;
-  const backCountDisplayed = basketCount > 99 ? '99+' : basketCount;
+  const backCountDisplayed = basketCount > 99 ? '99+' : basketCount
 
   return (
     <Block className="d-flex justify-content-between align-items-center">

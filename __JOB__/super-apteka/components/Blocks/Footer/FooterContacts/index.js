@@ -10,6 +10,8 @@ export const FooterContacts = () => (
     <div className="d-flex align-items-center">
       <AppPhoneIcon
         color={ THEME.ICON_COLOR }
+        width="22.8"
+        height="23"
       />
 
       <AppPhone

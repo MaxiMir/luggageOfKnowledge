@@ -1,4 +1,6 @@
 import React, { useState } from 'react'
+import Container from 'react-bootstrap/Container'
+import Row from 'react-bootstrap/Row'
 import styled from 'styled-components'
 
 import { HeaderPopupMenu } from './HeaderPopupMenu/'
@@ -34,10 +36,11 @@ export const HeaderBottomBar = () => {
   return (
     <>
       <Section>
-        <div className="container">
-          <div className="row align-items-center">
+        <Container>
+          <Row className="align-items-center">
             <AppLinkContainer className="d-flex justify-content-center align-items-center">
-              <AppLink data-toggle="modal" data-target=".header-modal-menu" onClick={ () => menuPopupHandler(!isOpenedMenu) }>
+              <AppLink data-toggle="modal" data-target=".header-modal-menu"
+                       onClick={ () => menuPopupHandler(!isOpenedMenu) }>
                 <CatalogBtnIcon/>
                 Каталог
               </AppLink>
@@ -46,8 +49,8 @@ export const HeaderBottomBar = () => {
             <div className="flex-grow-1">
               <CatalogSearch/>
             </div>
-          </div>
-        </div>
+          </Row>
+        </Container>
       </Section>
 
       <HeaderPopupMenu

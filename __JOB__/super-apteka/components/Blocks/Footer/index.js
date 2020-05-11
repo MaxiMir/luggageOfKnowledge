@@ -1,4 +1,6 @@
 import React from 'react'
+import Container from 'react-bootstrap/Container'
+import Row from 'react-bootstrap/Row'
 import styled from 'styled-components'
 
 import { FooterContacts } from './FooterContacts/'
@@ -12,12 +14,13 @@ const FooterStyled = styled.div`
 
 export const Footer = () => {
   return (
-    <FooterStyled className="footer mt-auto">
-      <div className="container">
-        <FooterContacts/>
+    <FooterStyled>
+      <Container>
+        <Row>
+          <FooterContacts/>
 
-
-      </div>
+        </Row>
+      </Container>
     </FooterStyled>
   )
 }

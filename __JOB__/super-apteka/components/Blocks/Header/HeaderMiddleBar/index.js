@@ -1,4 +1,6 @@
 import React from 'react'
+import Container from 'react-bootstrap/Container'
+import Row from 'react-bootstrap/Row'
 import styled from 'styled-components'
 
 import { BasketWidget } from '../../../Basket/BasketWidget/'
@@ -31,8 +33,8 @@ export const HeaderMiddleBar = () => {
 
   return (
     <HeaderMainNavStyles>
-      <div className="container">
-        <div className="row">
+      <Container>
+        <Row>
           <div className="col-3">
             <AppRouterLink href="/" title="На главную">
               <AppLogoIcon/>
@@ -48,8 +50,8 @@ export const HeaderMiddleBar = () => {
           <div className="col-3 d-flex justify-content-end">
             <BasketWidget/>
           </div>
-        </div>
-      </div>
+        </Row>
+      </Container>
     </HeaderMainNavStyles>
   )
 }

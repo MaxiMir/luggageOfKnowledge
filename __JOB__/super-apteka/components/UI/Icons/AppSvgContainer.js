@@ -7,7 +7,7 @@ const AppIconContainerStyles = styled.svg`
 `
 
 export const AppSvgContainer = ({ children, ...settings }) => {
-  const { width = 12, height = 12, viewBoxX = 0, viewBoxY = 0, viewBoxWidth = 12, viewBoxHeight = 12} = settings
+  const { width, height, viewBoxWidth, viewBoxHeight, viewBoxX = 0, viewBoxY = 0 } = settings
 
   return (
     <AppIconContainerStyles
