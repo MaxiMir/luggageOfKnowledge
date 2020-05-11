@@ -18,7 +18,6 @@ export const Footer = () => {
       <Container>
         <Row>
           <FooterContacts/>
-
         </Row>
       </Container>
     </FooterStyled>

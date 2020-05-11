@@ -3,13 +3,12 @@ import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
 import styled from 'styled-components'
 
+import { UserAuthPanel } from '../../../User/UserAuthPanel'
 import { AppPhone } from '../../../UI/AppPhone'
 import { AppLink } from '../../../UI/AppLink'
 import { AppLocationIcon } from '../../../UI/Icons/AppLocationIcon'
 import { AppChevronIcon } from '../../../UI/Icons/AppChevronIcon'
 import { AppCrossIcon } from '../../../UI/Icons/AppCrossIcon'
-import { AppEnterIcon } from '../../../UI/Icons/AppEnterIcon'
-import { AppPhoneIcon } from '../../../UI/Icons/AppPhoneIcon'
 import { THEME } from '../../../../theme'
 
 
@@ -29,22 +28,21 @@ const LabelStyles = styled.span`
   text-transform: uppercase;
 `
 
-
 const SpanLinkStyles = styled.span`
   margin-right: 5px
 `
 
-export const HeaderTopBar = () => {
+export const HeaderTopBar = ({ region, pharmacyPhone, pharmacyAddress, user }) => {
   return (
     <HeaderTopBarStyles>
       <Container>
         <Row>
           <div className="col d-flex justify-content-between">
             <div className="d-flex align-items-center">
-              <AppPhoneIcon
-
+              <AppPhone
+                phone={ pharmacyPhone }
+                withIcon={ true }
               />
-              <AppPhone phone="+7 (495) 122-22-82"/>
             </div>
 
             <div className="d-flex align-items-center">
@@ -52,7 +50,7 @@ export const HeaderTopBar = () => {
 
               <AppLink>
                 <AppLocationIcon/>
-                <SpanLinkStyles>Москва</SpanLinkStyles>
+                <SpanLinkStyles>{ region }</SpanLinkStyles>
                 <AppChevronIcon/>
               </AppLink>
             </div>
@@ -62,24 +60,13 @@ export const HeaderTopBar = () => {
 
               <AppLink>
                 <AppCrossIcon/>
-                <SpanLinkStyles>Сумская улица, 2/12</SpanLinkStyles>
+                <SpanLinkStyles>{ pharmacyAddress }</SpanLinkStyles>
                 <AppChevronIcon/>
               </AppLink>
             </div>
           </div>
 
-          <div className="col d-flex justify-content-end">
-            <div className="d-flex align-items-center mr-4">
-              <AppLink>Зарегистрироваться</AppLink>
-            </div>
-
-            <div className="d-flex align-items-center">
-              <AppLink>
-                <AppEnterIcon/>
-                Войти
-              </AppLink>
-            </div>
-          </div>
+          <UserAuthPanel user={ user }/>
         </Row>
       </Container>
     </HeaderTopBarStyles>

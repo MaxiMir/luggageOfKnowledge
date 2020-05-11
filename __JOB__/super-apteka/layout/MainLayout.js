@@ -11,6 +11,12 @@ const MainStyled = styled.main`
 `
 
 export const MainLayout = ({ children, title }) => {
+  const pageData = {
+    region: "Москва",
+    pharmacyPhone: "+7 (495) 122-22-82",
+    pharmacyAddress: "Сумская улица, 2/12",
+    user: null
+  }
 
   return (
     <>
@@ -21,7 +27,12 @@ export const MainLayout = ({ children, title }) => {
         <link rel="icon" href="/favicon.ico"/>
       </Head>
 
-      <Header/>
+      <Header
+        region={ pageData.region }
+        pharmacyPhone={ pageData.pharmacyPhone }
+        pharmacyAddress={ pageData.pharmacyAddress }
+        user={ pageData.user }
+      />
 
       <MainStyled role="main">
         { children }
