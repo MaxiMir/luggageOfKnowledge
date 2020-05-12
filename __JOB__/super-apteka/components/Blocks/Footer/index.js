@@ -3,24 +3,33 @@ import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
 import styled from 'styled-components'
 
-import { FooterContacts } from './FooterContacts/'
+import { FooterContacts } from './FooterContacts'
+import { FooterMainLinks } from './FooterMainLinks'
+import { FooterSecondLinks } from './FooterSecondLinks'
+import { FooterCopyright } from './FooterCopyright'
 import { THEME } from '../../../theme'
 
 
-const FooterStyled = styled.div`
-  padding: 20px;
+const FooterSection = styled.div`
+  padding: 28px 0;
   background-color: ${ THEME.BACKGROUND_COLOR };
 `
 
-export const Footer = () => {
+export const Footer = ({ host, pharmacyPhone }) => {
   return (
-    <FooterStyled>
+    <FooterSection>
       <Container>
+        <Row className="justify-content-between">
+          <FooterContacts pharmacyPhone={ pharmacyPhone }/>
+          <FooterMainLinks/>
+          <FooterSecondLinks/>
+        </Row>
+
         <Row>
-          <FooterContacts/>
+          <FooterCopyright host={ host }/>
         </Row>
       </Container>
-    </FooterStyled>
+    </FooterSection>
   )
 }
 

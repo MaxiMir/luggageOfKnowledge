@@ -20,7 +20,7 @@ const CountBlock = styled.div`
   width: 34px;
   height: 34px;
   border-radius: 50%;
-  background-color: ${ THEME.MAIN_COLOR };
+  background-color: ${ THEME.GREEN_COLOR };
   color: ${ THEME.WHITE_COLOR };
   font-size: 18px;
   font-weight: bold;

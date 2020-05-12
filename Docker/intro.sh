@@ -230,6 +230,7 @@ $ cd .ssh
 $ mkdir youtube-docker
 $ cd youtube-docker
 $ ssh-keygen -t rsa
+$ ssh-add -K ~/.ssh/youtube-docker/git
 # > Enter file in which to save the key: vscale
 $ cat vscale.pub | pbcopy # pbcopy - в macos вывод копирует в буфер обмена
 

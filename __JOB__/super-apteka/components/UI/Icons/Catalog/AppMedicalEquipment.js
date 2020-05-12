@@ -4,7 +4,7 @@ import { AppSvgContainer } from '../AppSvgContainer'
 import { THEME } from '../../../../theme'
 
 
-export const AppMedicalEquipment = ({ color = THEME.ICON_COLOR }) => (
+export const AppMedicalEquipment = ({ color = THEME.GREY_COLOR }) => (
   <AppSvgContainer
     width="19"
     height="26"

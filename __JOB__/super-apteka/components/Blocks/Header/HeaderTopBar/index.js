@@ -12,7 +12,7 @@ import { AppCrossIcon } from '../../../UI/Icons/AppCrossIcon'
 import { THEME } from '../../../../theme'
 
 
-const HeaderTopBarStyles = styled.div`
+const HeaderTopBarSection = styled.div`
   background-color: ${ THEME.BACKGROUND_COLOR };
   padding-top: 14px;
   padding-bottom: 10px;
@@ -34,7 +34,7 @@ const SpanLinkStyles = styled.span`
 
 export const HeaderTopBar = ({ region, pharmacyPhone, pharmacyAddress, user }) => {
   return (
-    <HeaderTopBarStyles>
+    <HeaderTopBarSection>
       <Container>
         <Row>
           <div className="col d-flex justify-content-between">
@@ -69,6 +69,6 @@ export const HeaderTopBar = ({ region, pharmacyPhone, pharmacyAddress, user }) =
           <UserAuthPanel user={ user }/>
         </Row>
       </Container>
-    </HeaderTopBarStyles>
+    </HeaderTopBarSection>
   )
 }

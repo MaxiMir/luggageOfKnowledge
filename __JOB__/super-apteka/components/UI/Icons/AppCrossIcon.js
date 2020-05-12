@@ -4,7 +4,7 @@ import { AppSvgContainer } from './AppSvgContainer'
 import { THEME } from '../../../theme'
 
 
-export const AppCrossIcon = ({ color = THEME.MAIN_COLOR }) => (
+export const AppCrossIcon = ({ color = THEME.GREEN_COLOR }) => (
     <AppSvgContainer
       width="14"
       height="14"

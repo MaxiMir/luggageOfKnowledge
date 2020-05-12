@@ -5,7 +5,6 @@ import Button from 'react-bootstrap/Button'
 import styled from 'styled-components'
 
 import { THEME } from '../../theme'
-import { AppRouterLink } from './AppRouterLink';
 
 
 const Caption = styled(Carousel.Caption)`

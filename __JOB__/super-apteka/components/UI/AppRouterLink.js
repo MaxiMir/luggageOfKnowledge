@@ -4,12 +4,10 @@ import Link from 'next/link'
 import { StyledLink } from './StyledNativeComponents/StyledLink'
 
 
-export const AppRouterLink = ({ href, children, ...rest }) => {
-  return (
-    <Link href={ href } >
-      <StyledLink { ...rest } className="d-flex align-items-center">
-        { children }
-      </StyledLink>
-    </Link>
-  )
-}
+export const AppRouterLink = ({ href, children, ...rest }) => (
+  <Link href={ href } >
+    <StyledLink className="d-flex align-items-center" { ...rest }>
+      { children }
+    </StyledLink>
+  </Link>
+)

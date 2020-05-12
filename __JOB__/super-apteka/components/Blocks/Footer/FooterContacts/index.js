@@ -1,27 +1,40 @@
 import React from 'react'
+import styled from 'styled-components'
 
 import { AppPhone } from '../../../UI/AppPhone'
-import { AppPhoneIcon } from '../../../UI/Icons/AppPhoneIcon'
+import { AppLink } from '../../../UI/AppLink';
+import { AppMessageIcon } from '../../../UI/Icons/AppMessageIcon'
 import { THEME } from '../../../../theme'
 
 
-export const FooterContacts = () => (
+const MessageLinkText = styled.span`
+  color: ${ THEME.GREY_COLOR };
+  font-size: 18px;
+`
+
+const ContactContainer = styled.div`
+  height: 41px;
+  margin-bottom: 13px;
+`
+
+export const FooterContacts = ({ pharmacyPhone }) => (
   <div className="d-flex flex-column">
-    <AppPhone
-      phone="+7 (495) 122-22-82"
-      size="24px"
-      color={ THEME.ICON_COLOR }
-      withIcon={ true }
-      isSmallIcon={ false }
-      colorIcon={ THEME.ICON_COLOR }
-    />
+    <ContactContainer className="d-flex align-items-center">
+      <AppPhone
+        phone={ pharmacyPhone }
+        size="24px"
+        color={ THEME.GREY_COLOR }
+        withIcon={ true }
+        isSmallIcon={ false }
+        colorIcon={ THEME.GREY_COLOR }
+      />
+    </ContactContainer>
 
-    <div>
-      Написать нам
-    </div>
-
-    <div className="d-flex align-items-center">
-      © 2020 superapteka.ru Все права защищены
-    </div>
+    <ContactContainer className="d-flex align-items-center">
+      <AppLink>
+        <AppMessageIcon/>
+        <MessageLinkText>Написать нам</MessageLinkText>
+      </AppLink>
+    </ContactContainer>
   </div>
 )

@@ -4,7 +4,7 @@ import { AppSvgContainer } from './AppSvgContainer'
 import { THEME } from '../../../theme'
 
 
-export const AppLocationIcon = ({ color = THEME.MAIN_COLOR }) => (
+export const AppLocationIcon = ({ color = THEME.GREEN_COLOR }) => (
   <AppSvgContainer
     width="10"
     height="14"

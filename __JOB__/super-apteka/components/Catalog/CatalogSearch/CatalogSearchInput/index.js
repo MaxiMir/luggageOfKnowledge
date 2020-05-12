@@ -8,7 +8,7 @@ import { THEME } from '../../../../theme'
 
 const Input = styled.input`
   padding: 20px 12px;
-  border: 2px solid ${ THEME.MAIN_COLOR };
+  border: 2px solid ${ THEME.GREEN_COLOR };
   border-radius: 10px;
   font-size: 16px;
   line-height: 24px;
@@ -21,7 +21,7 @@ const Input = styled.input`
 const IconBlock = styled.div`
   width: 86px;
   height: 44px;
-  background-color: ${ THEME.MAIN_COLOR };
+  background-color: ${ THEME.GREEN_COLOR };
   border-radius: 0px 10px 10px 0px;
 `
 

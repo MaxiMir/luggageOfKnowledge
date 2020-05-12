@@ -11,7 +11,7 @@ import { AppLink } from '../../../UI/AppLink'
 import { THEME } from '../../../../theme'
 
 
-const Section = styled.div`
+const HeaderBottomBarSection = styled.div`
   padding-bottom: 15px;
 `
 
@@ -34,28 +34,26 @@ export const HeaderBottomBar = () => {
   const CatalogBtnIcon = isOpenedMenu ? AppCloseIcon : AppBurgerIcon
 
   return (
-    <>
-      <Section>
-        <Container>
-          <Row className="align-items-center">
-            <AppLinkContainer className="d-flex justify-content-center align-items-center">
-              <AppLink data-toggle="modal" data-target=".header-modal-menu"
-                       onClick={ () => menuPopupHandler(!isOpenedMenu) }>
-                <CatalogBtnIcon/>
-                Каталог
-              </AppLink>
-            </AppLinkContainer>
+    <HeaderBottomBarSection>
+      <Container>
+        <Row className="align-items-center">
+          <AppLinkContainer className="d-flex justify-content-center align-items-center">
+            <AppLink data-toggle="modal" data-target=".header-modal-menu"
+                     onClick={ () => menuPopupHandler(!isOpenedMenu) }>
+              <CatalogBtnIcon/>
+              Каталог
+            </AppLink>
+          </AppLinkContainer>
 
-            <div className="flex-grow-1">
-              <CatalogSearch/>
-            </div>
-          </Row>
-        </Container>
-      </Section>
+          <div className="flex-grow-1">
+            <CatalogSearch/>
+          </div>
+        </Row>
+      </Container>
 
       <HeaderPopupMenu
         isOpened={ isOpenedMenu }
       />
-    </>
+    </HeaderBottomBarSection>
   )
 }

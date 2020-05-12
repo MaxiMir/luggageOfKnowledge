@@ -25,7 +25,7 @@ const LeftMenuLinkContainerStyled = styled.div`
   transition: all 0.5s ease;
   &:hover {
     background-color: ${ THEME.WHITE_COLOR };
-    color: ${ THEME.MAIN_COLOR };
+    color: ${ THEME.GREEN_COLOR };
   }
 `
 

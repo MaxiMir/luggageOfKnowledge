@@ -3,6 +3,8 @@ import Head from 'next/head'
 import styled from 'styled-components'
 
 import { Header }  from '../components/Blocks/Header/'
+import { PromoProducts } from '../components/Catalog/PromoProducts'
+import { PromoInstallApplication } from '../components/Blocks/Main/PromoInstallApplication'
 import { Footer } from '../components/Blocks/Footer/'
 
 
@@ -12,6 +14,7 @@ const MainStyled = styled.main`
 
 export const MainLayout = ({ children, title }) => {
   const pageData = {
+    host: "superapteka.ru",
     region: "Москва",
     pharmacyPhone: "+7 (495) 122-22-82",
     pharmacyAddress: "Сумская улица, 2/12",
@@ -28,6 +31,7 @@ export const MainLayout = ({ children, title }) => {
       </Head>
 
       <Header
+        host={ pageData.host }
         region={ pageData.region }
         pharmacyPhone={ pageData.pharmacyPhone }
         pharmacyAddress={ pageData.pharmacyAddress }
@@ -36,9 +40,14 @@ export const MainLayout = ({ children, title }) => {
 
       <MainStyled role="main">
         { children }
+        <PromoProducts />
+        <PromoInstallApplication />
       </MainStyled>
 
-      <Footer/>
+      <Footer
+        host={ pageData.host }
+        pharmacyPhone={ pageData.pharmacyPhone }
+      />
     </>
   )
 }

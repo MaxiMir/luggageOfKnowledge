@@ -6,7 +6,7 @@ import { HeaderBottomBar } from './HeaderBottomBar/'
 
 
 export const Header = props => {
-  const { region, pharmacyPhone, pharmacyAddress, user } = props
+  const { host, region, pharmacyPhone, pharmacyAddress, user } = props
 
   return (
     <header>
@@ -16,7 +16,9 @@ export const Header = props => {
         pharmacyAddress={ pharmacyAddress }
         user={ user }
       />
-      <HeaderMiddleBar/>
+      <HeaderMiddleBar
+        host={ host }
+      />
       <HeaderBottomBar/>
     </header>
   )
