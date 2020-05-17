@@ -4,8 +4,8 @@ const router = Router()
 
 router.get('/', async (req, res) => {
   const courses = await Course.find() // пустой find() забираем все записи
-    .populate('userId', 'email name')
-    .select('price title img')
+    .populate('userId', 'email name') // вместо _id добавляем email name пользователя (в request добавляется через middleware в index.js)
+    .select('price title img') // поля из Course
 
   res.render('courses', {
     title: 'Курсы',

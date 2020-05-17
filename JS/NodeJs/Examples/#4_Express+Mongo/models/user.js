@@ -19,7 +19,7 @@ const userSchema = new Schema({
         },
         courseId: {
           type: Schema.Types.ObjectId,
-          ref: 'Course',
+          ref: 'Course', // должно совпадать с названием в model
           required: true
         }
       }
@@ -28,7 +28,7 @@ const userSchema = new Schema({
 })
 
 
-userSchema.methods.addToCart = function (course) {
+userSchema.methods.addToCart = function (course) { // добавляем метод в модель
   const items = [...this.cart.items]
   const idx = items.findIndex(c => {
     return c.courseId.toString() === course._id.toString()
@@ -46,7 +46,6 @@ userSchema.methods.addToCart = function (course) {
   this.cart = { items }
   return this.save()
 }
-
 
 userSchema.methods.removeFromCart = function (id) {
   let items = [...this.cart.items]

@@ -2,12 +2,17 @@ const express = require('express')
 const path = require('path')
 const mongoose = require('mongoose') // подключаем mongoose
 const exphbs = require('express-handlebars')
+const session = require('express-session')
+
 const homeRoutes = require('./routes/home')
 const cardRoutes = require('./routes/card')
 const addRoutes = require('./routes/add')
 const ordersRoutes = require('./routes/orders')
 const coursesRoutes = require('./routes/courses')
+const authRoutes = require('./routes/auth')
 const User = require('./models/user')
+const varMiddleware = require('./middleware/variables')
+
 
 const app = express()
 
@@ -23,6 +28,7 @@ app.set('views', 'views')
 
 app.use(async (req, res, next) => {
   try {
+    // user будет всегда в REQUEST:
     const user = await User.findById('5cc1d29dcedab01481e03660')
     req.user = user
     next()
@@ -34,12 +40,20 @@ app.use(async (req, res, next) => {
 
 app.use(express.static(path.join(__dirname, 'public')))
 app.use(express.urlencoded({extended: true}))
+app.use(session({ // добавляем пакет express-session в middleware
+  secret: 'secret value',
+  resave: false,
+  saveUninitialized: false
+}))
+app.use(varMiddleware) // созданный нами middleware
+
 
 app.use('/', homeRoutes)
 app.use('/add', addRoutes)
 app.use('/courses', coursesRoutes)
 app.use('/card', cardRoutes)
 app.use('/orders', ordersRoutes)
+app.use('/auth', authRoutes)
 
 const PORT = process.env.PORT || 3000
 
@@ -49,7 +63,7 @@ async function start() {
     const url = `mongodb+srv://maximir:0I5GEL9uLUcR38GC@cluster0-3rrau.mongodb.net/shop` // 0I5GEL9uLUcR38GC - пароль | shop - название БД
     await mongoose.connect(url, {
       useNewUrlParser: true, // лечение warning
-      useFindAndModify: false
+      useFindAndModify: false // лечение warning
     })
 
     const candidate = await User.findOne()

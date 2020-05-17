@@ -16,7 +16,7 @@ const courseSchema = new Schema({
   }
 }) // поле id идет по умолчанию
 
-courseSchema.method('toClient', function () {
+courseSchema.method('toClient', function () { // трансформация данных для client
   const course = this.toObject()
 
   course.id = course._id
