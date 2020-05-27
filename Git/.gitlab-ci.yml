@@ -1,4 +1,4 @@
-// FILE: .gitlab-ci.yml
+# FILE: .gitlab-ci.yml
 image: apline # docker image (по дефолту в gitlub - ruby) - дистрибутив linux более компактный
 stages: # этапы сборки
   - compile
@@ -71,7 +71,6 @@ pages: # pages – название процесса
       - public
   except:
     - master # деплоим все кроме master
-
 
 
 
