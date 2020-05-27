@@ -10,3 +10,6 @@ $ npm i csurf # от CSRF атак
 $ npm i connect-flash # flash сообщения
 
 $ npm install mongoose
+
+# sendgrid.com для email (необходимо сгенерировать Api Key и занести в keys)
+$ npm install nodemailer nodemailer-sendgrid-trapsport

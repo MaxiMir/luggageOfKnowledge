@@ -6,6 +6,7 @@ const mongoose = require('mongoose')
 const exphbs = require('express-handlebars')
 const session = require('express-session')
 const MongoStore = require('connect-mongodb-session')(session) // в () передаем с чем синхронизируем
+const keys = require('keys')
 
 const homeRoutes = require('./routes/home')
 const cardRoutes = require('./routes/card')
@@ -17,7 +18,6 @@ const varMiddleware = require('./middleware/variables')
 const userMiddleware = require('./middleware/user')
 
 
-const MONGODB_URI = `mongodb+srv://maximir:0I5GEL9uLUcR38GC@cluster0-3rrau.mongodb.net/shop` // 0I5GEL9uLUcR38GC - пароль | shop - название БД
 const PORT = process.env.PORT || 3000
 
 const app = express()
@@ -28,7 +28,7 @@ const hbs = exphbs.create({
 
 const store = new MongoStore({
   collection: "sessions", // название коллекции где будем хранить сессии
-  uri: MONGODB_URI
+  uri: keys.MONGODB_URI
 })
 /** Пример sessions:
 {
@@ -54,7 +54,7 @@ app.set('views', 'views')
 app.use(express.static(path.join(__dirname, 'public')))
 app.use(express.urlencoded({extended: true}))
 app.use(session({ // добавляем пакет express-session в middleware
-  secret: 'some secret value',
+  secret: keys.SESSION_SECRET,
   resave: false,
   saveUninitialized: false,
   store  // синхронизированный store для сесссии
@@ -73,7 +73,7 @@ app.use('/auth', authRoutes)
 
 async function start() {
   try {
-    await mongoose.connect(MONGODB_URI, {
+    await mongoose.connect(keys.MONGODB_URI, {
       useNewUrlParser: true, // лечение warning
       useFindAndModify: false // лечение warning
     })
