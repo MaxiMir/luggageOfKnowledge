@@ -1,5 +1,6 @@
 const { Router } = require('express')
 const bcrypt = require('bcryptjs')
+const crypto = require('crypto')
 const nodemailer = require('nodemailer')
 const sendgrid = require('nodemailer-sendgrid-trapsport')
 const keys = require('../keys')
@@ -8,9 +9,8 @@ const regMail = require('../emails/registration')
 const router = Router()
 
 
-
 const transporter = nodemailer.createTransport(sendgrid({
-  auth: {api_key: keys.SENDGRID_API_KEY}
+  auth: { api_key: keys.SENDGRID_API_KEY }
 }))
 
 
@@ -82,5 +82,37 @@ router.post('/register', async (req, res) => {
     console.log(e)
   }
 })
+
+router.get('/reset', (req, res) => {
+  res.render('auth/reset', {
+    title: 'Забыли пароль?',
+    error: req.flash('error')
+  })
+})
+
+router.post('/reset', (req, res) => {
+  try {
+    crypto.randomBytes(32, async (err, buffer) => { // 32 байта
+      if (err) {
+        req.flash('error', 'Что-то пошло не так, повторите попытку позже')
+        return res.redirect('/auth/reset')
+      }
+
+      const token = buffer.toString('hex') // получаем сгенерированное выражение
+      const candidate = await User.findOne({ email: req.body.email })
+
+      if (candidate) {
+
+      } else {
+        req.flash('error', 'Такого email нет')
+        res.redirect('/auth/reset')
+      }
+
+    })
+  } catch (e) {
+    console.log(e)
+  }
+})
+
 
 module.exports = router
