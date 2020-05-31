@@ -11,9 +11,20 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "compression": "^1.7.4",
+    "connect-flash": "^0.1.1",
+    "connect-mongodb-session": "^2.1.1",
+    "csurf": "^1.10.0",
     "express": "^4.16.4",
     "express-handlebars": "^3.0.2",
+    "express-session": "^1.16.1",
+    "express-validator": "^5.3.1",
+    "helmet": "^3.16.0",
     "mongoose": "^5.5.3",
+    "multer": "^1.4.1",
+    "nodemailer": "^6.1.1",
+    "nodemailer-sendgrid-transport": "^0.2.0",
     "uuid": "^3.3.2"
   },
   "devDependencies": {

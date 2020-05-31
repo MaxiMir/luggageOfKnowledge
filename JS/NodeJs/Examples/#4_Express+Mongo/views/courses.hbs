@@ -15,7 +15,9 @@
       <div class="card-action actions">
         <a href="/courses/{{id}}" target="_blank">Открыть курс</a>
         {{#if @root.isAuth}}<!-- обращение к корневому элементу -->
-          <a href="/courses/{{id}}/edit?allow=true">Редактировать</a>
+          {{#ifeq userId._id === @root.userId}}<!-- /utils/hbs-helpers.js -->
+            <a href="/courses/{{id}}/edit?allow=true">Редактировать</a>
+          {{/ifeq}}
           <form action="/card/add" method="POST">
             <input type="hidden" name="_csrf" value="{{@root.csrf}}">
             <input type="hidden" name="id" value="{{id}}">

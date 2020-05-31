@@ -13,3 +13,11 @@ $ npm install mongoose
 
 # sendgrid.com для email (необходимо сгенерировать Api Key и занести в keys)
 $ npm install nodemailer nodemailer-sendgrid-trapsport
+
+$ npm i express-validator # библиотека для валидации (абстракция над validator.js)
+
+$ npm i multer # middleware для загрузки файлов
+
+$ npm i helmet # для защиты приложения - передает специальные HTTP заголовки
+
+$ npm i compression # для сжатия ответов сервера
