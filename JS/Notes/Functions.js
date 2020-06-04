@@ -612,25 +612,8 @@ old()
 
 async function modern() {
   for await (const promise of promises) { // как только промис зарезолвятся он выведится в консоли
-    console.log('Old: ', promise)
+    console.log('New: ', promise)
   }
 }
 
 modern()
-
-
-// @ NULLABLE
-
-const values = {
-  undefined: undefined,
-  null: null,
-  false: false,
-  zero: 0,
-  empty: ''
-}
-
-values.undefined ?? 'default undefined' // default undefined
-values.null ?? 'default null' // default null
-values.false ?? 'default false' // false
-values.zero ?? 'default zero' // 0
-values.empty ?? 'default empty' // ''

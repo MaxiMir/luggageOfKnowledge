@@ -1,4 +1,4 @@
-// @ ES6 КЛАССЫ:
+// @ CLASSES:
 class Animal {
   static type = 'ANIMAL';
 
@@ -63,7 +63,6 @@ cat.ageInfo; // => 56
 
 
 // @ Private Class Fields
-
 class Person {
   name = 'unknown name'
   #year = 1993 // приватное поле
