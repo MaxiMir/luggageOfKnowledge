@@ -13,3 +13,6 @@ comment
 
 $ npm i --save sequelize # Sequelize - ORM для MySQL
 $ npm i mysql2 # драйвер для MySQL
+
+# graphql.org/code # языки
+$ npm i express-graphql graphql

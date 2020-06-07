@@ -1,19 +1,19 @@
 const Sequelize = require('sequelize')
 const sequelize = require('../utils/database')
 
-const todo = sequelize.define('Todo', { // создание модели
+const todo = sequelize.define('Todo', {
   id: {
     primaryKey: true,
     autoIncrement: true,
-    allowNull: false, // не может быть null
-    type: Sequelize.INTEGER // тип
+    allowNull: false,
+    type: Sequelize.INTEGER
   },
   done: {
-    type: Sequelize.BOOLEAN, // тип
+    type: Sequelize.BOOLEAN,
     allowNull: false
   },
   title: {
-    type: Sequelize.STRING, // тип
+    type: Sequelize.STRING,
     allowNull: false
   }
 })

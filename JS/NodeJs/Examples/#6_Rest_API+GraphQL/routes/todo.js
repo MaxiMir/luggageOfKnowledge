@@ -1,5 +1,5 @@
 const {Router} = require('express')
-const Todo = require('../models/todo') // подключение модели
+const Todo = require('../models/todo')
 const router = Router()
 
 // Получение списка задач
@@ -18,7 +18,7 @@ router.get('/', async (req, res) => {
 // Создание новой задачи
 router.post('/', async (req, res) => {
   try {
-    const todo = await Todo.create({ // build + save модели
+    const todo = await Todo.create({
       title: req.body.title,
       done: false
     })
@@ -34,7 +34,7 @@ router.post('/', async (req, res) => {
 // Изменение задачи
 router.put('/:id', async (req, res) => {
   try {
-    const todo = await Todo.findByPk(+ req.params.id)
+    const todo = await Todo.findByPk(+req.params.id)
     todo.done = req.body.done
     await todo.save()
     res.status(200).json({todo})
@@ -51,7 +51,7 @@ router.delete('/:id', async (req, res) => {
   try {
     const todos = await Todo.findAll({
       where: {
-        id: + req.params.id
+        id: +req.params.id
       }
     })
     const todo = todos[0]

@@ -19,9 +19,11 @@ new Vue({
   methods: {
     addTodo() {
       const title = this.todoTitle.trim()
+
       if (!title) {
         return
       }
+
       fetch('/api/todo', {
         method: 'post',
         headers: {'Content-Type': 'application/json'},
