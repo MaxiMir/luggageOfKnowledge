@@ -2,7 +2,7 @@ const {buildSchema} = require('graphql')
 
 module.exports = buildSchema(`
   type User {
-    name: String!
+    name: String! 
     email: String!
     age: Int!
   }
@@ -10,11 +10,6 @@ module.exports = buildSchema(`
   type TestType {
     count: Int!
     users: [User!]!
-  }
-
-  input UserInput {
-    name: String!
-    email: String!
   }
 
   type Todo {
@@ -26,9 +21,14 @@ module.exports = buildSchema(`
   }
 
   type Query {
-    test: TestType!
+    test: TestType!    
     random(min: Int!, max: Int!, count: Int!): [Float!]!
     getTodos: [Todo!]!
+  }
+
+  input UserInput {
+    name: String!
+    email: String!
   }
 
   input TodoInput {
@@ -43,11 +43,17 @@ module.exports = buildSchema(`
   }
 `)
 
+// Query - получение данных
+// test, random, getTodos - резолверы
+
+// Mutation - изменение данных
+
 // ! - данный тип обязателен
 // users: [User!]! - поле users обязательно массив c User`s
-// Подключается в index.js
 
 /*
+// интерфейс /qraphql
+  #1:
   query {
     test {
       count
@@ -57,13 +63,18 @@ module.exports = buildSchema(`
     }
   }
 
+  #2:
   query {
     random(min: 2, max: 12, count: 8)
   }
 
+  #3:
   mutation {
     addTestUser(user: {name: "Test", email: "test@mail.ru"}) {
       age
     }
   }
 */
+
+
+// Подключается в index.js
