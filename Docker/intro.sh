@@ -17,9 +17,6 @@ $ docker rmi $(docker images -q) # удаление всех images (сборо�
 $ docker ps # вывод запущенных контейнеров
 $ docker ps -a # вывод всех контейнеров
 
-$
- # остановка всех контейнеров
-
 # FOLDER /docker-hello-world
 # FOLDER /docker-hello-world/venv/ # виртуальная среда Python
 # FILE: /docker-hello-world/app.py:
@@ -232,7 +229,10 @@ $ cd erkapharm
 $ ssh-keygen -t rsa
 # > Enter file in which to save the key: gitlab
 $ ssh-add -K ~/.ssh/erkapharm/gitlab
+$ eval $(ssh-agent -s) # start the ssh-agent in the background
 $ cat gitlab.pub | pbcopy # pbcopy - в macos вывод копирует в буфер обмена
+# or
+$ clip < ~/.ssh/id_rsa.pub # для windows
 
 
 $ cd .ssh
