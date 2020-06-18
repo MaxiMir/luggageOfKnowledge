@@ -18,7 +18,7 @@ new Vue({
     `
 
     fetch('/graphql', {
-      method: 'post',
+      method: 'post', // ВСЕГДА POST
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json'
@@ -33,9 +33,11 @@ new Vue({
   methods: {
     addTodo() {
       const title = this.todoTitle.trim()
+
       if (!title) {
         return
       }
+
       const query = `
         mutation {
           createTodo(todo: {title: "${title}"}) {
@@ -43,8 +45,9 @@ new Vue({
           }
         }
       `
+
       fetch('/graphql', {
-        method: 'post',
+        method: 'post', // ВСЕГДА POST
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json'
@@ -65,8 +68,9 @@ new Vue({
           deleteTodo(id: "${id}")
         }
       `
+      
       fetch('/graphql', {
-        method: 'post',
+        method: 'post', // ВСЕГДА POST
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json'
@@ -87,9 +91,8 @@ new Vue({
         }
       `
 
-
       fetch('/graphql', {
-        method: 'post',
+        method: 'post', // ВСЕГДА POST
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json'
@@ -120,6 +123,7 @@ new Vue({
         options.minute = '2-digit'
         options.second = '2-digit'
       }
+      
       return new Intl.DateTimeFormat('ru-RU', options).format(new Date(+value))
     }
   }

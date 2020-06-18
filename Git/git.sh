@@ -87,7 +87,7 @@ comment
 # Сейчас другие пользователи GitHub могут просматривать ваш репозиторий. Они могут скачать из него данные и получить полностью работоспособную копию вашего проекта при помощи команды clone.
 
 $ git clone https:#github.com/tutorialzine/awesome-project.git
-
+$ git clone --single-branch --branch <branchname> <remote-repo>
 
 # >>>>> Запрос изменений с сервера <<<<<
 

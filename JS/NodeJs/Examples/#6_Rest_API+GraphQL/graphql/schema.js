@@ -49,6 +49,7 @@ module.exports = buildSchema(`
 // Mutation - изменение данных
 
 // ! - данный тип обязателен
+// ID - тип данных в GraphQL
 // users: [User!]! - поле users обязательно массив c User`s
 
 /*
@@ -75,6 +76,5 @@ module.exports = buildSchema(`
     }
   }
 */
-
 
 // Подключается в index.js
