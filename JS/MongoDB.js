@@ -32,13 +32,11 @@
  $ npm install nodemon -g # для доступа в консоли
  */
 
-
-
 // FILE: package.json:
 {
   "scripts": {
-  "start": "nodemon index.js" // $ npm run start
-}
+    "start": "nodemon index.js" // $ npm run start
+  }
 }
 
 
