@@ -1,11 +1,13 @@
-<?
+<? ################ XML ################
 
-################ XML ################
-
-// XML (Extensible Markup Language) - Расширяемый язык разметки. Предназначен для хранения структурированных данных / обмена между программами.
+/**
+ XML (Extensible Markup Language) - Расширяемый язык разметки.
+ Предназначен для хранения структурированных данных / обмена между программами.
+*/
 
 // FILE: catalog.xml
-/*
+?>
+
 <?xml version="1.0" encoding="utf-8" ?>
 <catalog>
 	<book>
@@ -22,15 +24,14 @@
 		<price>200</price>
 	</book>
 </catalog>
-*/
 
 
-
-#>>>>>>> Sumple Api for XML (SAX) <<<<<<<
+<?
+#>>>>>>> @ Sumple Api for XML (SAX) <<<<<<<
 	
 	$sax = xml_parser_create('utf-8'); // создание парсера
 	
-	// Декларация фукнций обработки событий
+// Декларация функций обработки событий
 	function onStart($parser, $tag, $attributes) { // функция обработчик начальных тегов
 		if ($tag != 'CATALOG' && $tag != 'BOOK')
 			echo '<td>';
@@ -51,22 +52,22 @@
 		echo $text;
 	}
 
-	// Регистрация функций как обработчиков событий
+	
+// Регистрация функций как обработчиков событий:
 	xml_set_element_handler($sax, 'onStart', 'onEnd');
 	xml_set_character_data_handler($sax, 'onText');
 
-	// Запуск парсера
+// Запуск парсера:
 	xml_parse($sax, file_get_contents('catalog.xml'));
 
 
 
 #>>>>>>> DOM <<<<<<<
 
-// Интерфейс, позволяющий программам управлять содержимым документов XMLь а так же изменять их структуру.
+// Интерфейс, позволяющий программам управлять содержимым документов XML а так же изменять их структуру.
+// Чтение, модификация и создание новых XML-документов.
 
-# Чтение, модификация и создание новых XML-документов.
-
-// FILE: dom.php
+// FILE: dom.php:
 	header('Content-Type: text/html; charset=utf-8');
 
 	$dom = new DOMDocument('1.0', 'utf-8'); // создание объекта
@@ -103,22 +104,20 @@
 	$author = $dom->createElelement('author', 'Автор книги'); // Другой вариант создания элемента
 	$book->insertBefore($author, $title); // Добавляем узел к узлу перед другим
 
-
-	// Создаем секцию CDATA
+// Создаем секцию CDATA
 	$description = $dom->createElement('description');
 	$cdata = $dom->createCDATASection('...описание книги...');
 	$description->appendChild($cdata);
 	$book->appendChild($description);
-
 	
-	// Сохраняем документ
+// Сохраняем документ
 	$dom->save('catalog.xml');
+?>
 
 
-	// Пример новостной ленты:
-/*
+<!-- Пример новостной ленты: -->
 <?xml version="1.0" encoding="utf-8" ?>
-<?xml-stylesheet type="text/xsl" href="catalog.xsl" ?> // подключение стилей
+<?xml-stylesheet type="text/xsl" href="catalog.xsl" ?> <!-- подключение стилей -->
 <rss version="2.0">
 	<channel>
 		<title>Заголовок новостной ленты</title>
@@ -134,65 +133,71 @@
 		</item>
 	</channel>	
 </rss>
-*/
 
+
+<?
 	header('Content-Type: text/html; charset=utf-8');
 
-	private function createRss() 
-	{
-		$dom = new DOMDocument('1.0', 'utf-8');
-		$dom->formatOutput = true; // форматирование вывода
-		$dom->preserveWhiteSpace = false; // форматирование вывода	
-
-		$rss = $dom->createElelement('rss');
-		$dom->appendChild($rss);
-
-		$version = $dom->createAttribute('version');
-		$version->value = '2.0';
-		$rss->appendChild($version);
-
-		$channel = $dom->createAttribute('channel');
-		$title = $dom->createAttribute('title', self::RSS_TITLE);
-		$link = $dom->createAttribute('link', self::RSS_LINK);	
-		$channel->addChild($title);
-		$channel->addChild($link);
-		$rss->addChild($channel);
-
-		$lenta = $this->getNews();
+	class RSS {
+		// ...
 		
-		if (!$lenta)
-			return false;
-
-		foreach ($lenta as $news) {
-			$item = $dom->createElement('item');
-			$title = $dom->createElement('title', $news['title']);		
-			$category = $dom->createElement('category', $news['category']);	
-
-			$desc = $dom->createElement('description');
-			$cdata = $dom->createCDATASection($news['description']);
-			$desc->appendChild($cdata);
-
-			$link = $dom->createElement('link', '#');
-
-			$dt = date('r', $news['datetime']);
-			$pubDate = $dom->createElement('pubDate', $dt);
-
-			$item->appendChild($title);
-			$item->appendChild($link);
-			$item->appendChild($desc);
-			$item->appendChild($pubDate);
-			$item->appendChild($category);
-
-			$channel->appendChild($item);
+		private function createRss()
+		{
+			$dom = new DOMDocument('1.0', 'utf-8');
+			$dom->formatOutput = true; // форматирование вывода
+			$dom->preserveWhiteSpace = false; // форматирование вывода
+			
+			$rss = $dom->createElelement('rss');
+			$dom->appendChild($rss);
+			
+			$version = $dom->createAttribute('version');
+			$version->value = '2.0';
+			$rss->appendChild($version);
+			
+			$channel = $dom->createAttribute('channel');
+			$title = $dom->createAttribute('title', self::RSS_TITLE);
+			$link = $dom->createAttribute('link', self::RSS_LINK);
+			$channel->addChild($title);
+			$channel->addChild($link);
+			$rss->addChild($channel);
+			
+			$lenta = $this->getNews();
+			
+			if (!$lenta)
+				return false;
+			
+			foreach ($lenta as $news) {
+				$item = $dom->createElement('item');
+				$title = $dom->createElement('title', $news['title']);
+				$category = $dom->createElement('category', $news['category']);
+				
+				$desc = $dom->createElement('description');
+				$cdata = $dom->createCDATASection($news['description']);
+				$desc->appendChild($cdata);
+				
+				$link = $dom->createElement('link', '#');
+				
+				$dt = date('r', $news['datetime']);
+				$pubDate = $dom->createElement('pubDate', $dt);
+				
+				$item->appendChild($title);
+				$item->appendChild($link);
+				$item->appendChild($desc);
+				$item->appendChild($pubDate);
+				$item->appendChild($category);
+				
+				$channel->appendChild($item);
+			}
+			
+			$dom->save(self::RSS_NAME);
 		}
-
-		$dom->save(self::RSS_NAME);
 	}
+	
 
 
-#>>>>>>> SimpleXML <<<<<<<
+#>>>>>>> @ SimpleXML <<<<<<<
 
-	// Чтение, модификация XML-документов.
+// Чтение, модификация XML-документов.
 	$sxml = simplexml_load_file('catalog.xml'); // загружаем документ и преобразуем его в объект
 	$sxml = simplexml_load_string('XML строка'); // загружаем XML-строку и преобразуем ее в объект
 	
@@ -206,21 +211,22 @@
 
 
 
-#>>>>>>> Преобразование XML с XSL/T <<<<<<<
+#>>>>>>> @ Преобразование XML с XSL/T <<<<<<<
 
-	// Загрузка исходного XML-документа
+// Загрузка исходного XML-документа
 	$xml = new DOMDocument();
 	$xml->load('catalog.xml');
 	
-	// Загрузка таблицы стилей XSL
+// Загрузка таблицы стилей XSL
 	$xsl = new DOMDocument();
 	$xsl->load('catalog.xsl');
 	
 	$processor = new XSLTProccessor(); // создание XSLT процессора
 	$processor->importStylesheet($xsl); // загрузка XSL в процессор
-	$processor->transformToXML($xml); // выполнение преобразовния
+	$processor->transformToXML($xml); // выполнение преобразования
+?>
 
-/*
+
 <?xml version="1.0" encoding="utf-8" ?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 <xsl:output
@@ -229,8 +235,8 @@
 	doctype-system="http://www.w3.org/TR/html4/strict.dtd"
 	indent="yes" />
 
+	
 <!-- Шаблон корневого элемента -->
-
 <xsl:template match="/">
 	<html>
 
@@ -243,11 +249,11 @@
 			}
 		</style>
 </xsl:template>
-*/
 
 
 
-#>>>>>>> Simple Object Access Protocol <<<<<<<
+<?
+#>>>>>>> @ Simple Object Access Protocol <<<<<<<
 
 /**
  * Простой протокол доступа к объектам
@@ -258,8 +264,9 @@
  	* Body
 */
 
-// SOAP запрос
-/*
+?>
+
+<!-- SOAP запрос -->
 <soap:Envelope
 	xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
 	<soap:Body>
@@ -268,10 +275,9 @@
 		</getStock>
 	</soap:Body>
 </soap:Envelope>			 	
-*/
 
-// SOAP ответ
-/*
+
+<!-- SOAP ответ -->
 <soap:Envelope
 	xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
 	<soap:Body>	
@@ -279,14 +285,16 @@
 			<getStockDetailsResult>
 				<id>12345</id>
 				<productName>Стакан Граненный</productName>
-				<decription>Стакан Граненный. 250 мл.</description>
+				<description>Стакан Граненный. 250 мл.</description>
 				<price>9.95</price>
-			</head>getStockDetailsResult>	
-		</head>getStockDetailsResponse>		
-	</head>soap:Body>						
+			</getStockDetailsResult>
+		</getStockDetailsResponse>
+	</soap:Body>
 </soap:Envelope>	
-*/
 
+
+
+<?
 /**
 Для работы необходимо подключить модуль php_soap.dll
 Основные SOAP классы:
@@ -294,12 +302,12 @@
  * SoapClient
 */
 
-	// FILE: server.php:
-	
-	// Описание функции Web-сервиса
+// FILE: server.php:
+// Описание функции Web-сервиса
 	function getStock($id)
 	{
 		$stock = ['a' => 100, 'b' => 200, 'c' => 300, 'd' => 400, 'e' => 500];
+		
 		if (!isset($stock[$id])) {
 			return new SoapFault('Server', 'Несуществующий id товара');
 		}
@@ -307,21 +315,27 @@
 		return $stock[$id];
 	}
 	
-	// Отключение кэширования WSDL-документа
+// Отключение кэширования WSDL-документа
 	ini_set('soap.wsdl_cache_enable', '0');
 	
-	// Создание SOAP-сервера
+// Создание SOAP-сервера
 	$server = new SoapServer('http://mysite.local/demo/soap/stock.wsdl');
-	// Добавить класс серверу
+	
+// Добавить класс серверу
 	$server->addFunction('getStock'); // если функций несколько ['getStock', 'setStock']
-	// Служба является классом, то (getStock, будет методом)
+	
+// Служба является классом, то (getStock, будет методом)
 	$server->setClass();
-	// Запуск сервера
+	
+// Запуск сервера
 	$server->handle();
 
 
-	// FILE: /demo/soap/stock.wsdl:
-/*
+// FILE: /demo/soap/stock.wsdl:
+?>
+
+
+
 <?xml version="1.0" encoding="utf-8"?>
 <definitions name='Stock'
 	targetNamespace='http://localhost/soap'
@@ -351,14 +365,14 @@
 		</port>	
 	</service>
 </definitions>
-*/
 
 
 
+<?
 // FILE: client.php:
 try {
 	$client = new SoapClient('http://mysite.local/demo/soap/stock.wsdl'); // создание SOAP-клиента
-	$result = $client->getStock('b'); // выхзов удаленной процедуры
+	$result = $client->getStock('b'); // вызов удаленной процедуры
 	echo 'Текущий запас на складе: ', $result;
 	print_r($client->__getFunctions()); // посмотреть список доступных операций
 } catch (SoapFault $exception) {
@@ -367,12 +381,13 @@ try {
 
 
 
-#>>>>>>> SOCKET <<<<<<<
+#>>>>>>> @ SOCKET <<<<<<<
 
 // FILE: dummy.php
 	$name = strip_tags($_POST['name']);
 	$age = (int) $_POST['age'];
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -395,21 +410,21 @@ try {
 </html>
 
 <?
-	// FILE: get_dummy.php
-	
+
+// FILE: get_dummy.php
 	header('Content-Type: text/html;charset=utf-8');
 	
-	// Сокетное соединение
-	// Создаем сокет (host+порт)
+// Сокетное соединение
+// Создаем сокет (host+порт)
 	$socket = fsockopen('mysite.local', 80, $sock_errno, $sock_errstr, 30); // 30 - таймаут в секундах
 	
 	if (!$socket)
 		return $sock_errmsg;
 	
-	// Создаем POST-строку
+// Создаем POST-строку
 	$str_query = 'name=John&age=25';
 	
-	// Посылка HTTP-запроса
+// Посылка HTTP-запроса
 	$outData = [];
 	$outData[] = "POST /demo/socket/dummy.php HTTP/1.1\r\n";
 	$outData[] = 'Host: mysite.local\r\n';
@@ -420,47 +435,48 @@ try {
 	$out = implode('', $outData);
 	fwrite($socket, $out);
 	
-	// Получаем и выводим ответ:
+// Получаем и выводим ответ:
 	while (!feof($socket)) {
 		echo fgets($socket);
 	}
 	
-	// Закрытие соединения:
+// Закрытие соединения:
 	fclose($socket);
 	
-	// В ответе сервера $_POST будет пустым, а 'name=Jorn&age=25' будет в $_GLOBALS['HTTP_RAW_POST_DATA'], если не указан "Content-Type: application/x-www-form-urlencoded\r\n";
+// В ответе сервера $_POST будет пустым, а 'name=Jorn&age=25' будет в $_GLOBALS['HTTP_RAW_POST_DATA'], если не указан "Content-Type: application/x-www-form-urlencoded\r\n";
 	
 	
 
 
-#>>>>>>> Сетевые функции <<<<<<<
+#>>>>>>> @ Сетевые функции <<<<<<<
 	
-	// Получаем имя хоста по ip адресу
+// Получаем имя хоста по ip адресу
 	$host_name = gethostbyaddr('127.0.0.0');
 	
-	// Получаем ip-адрес по имени хоста
+// Получаем ip-адрес по имени хоста
 	$ip_adress = gethostbyname('myhost.local');
 	
-	// Получаем массив ip-адрессов по имени хоста
+// Получаем массив ip-адресов по имени хоста
 	$id_adresses = gethostbynamel('mysite.local');
 	
-	// Получаем номер порта по имени службы
+// Получаем номер порта по имени службы
 	$port = getservbyname('http', 'tcp');
 	
-	// Получаем имя службы по номеру порта
+// Получаем имя службы по номеру порта
 	$service = getservbyport(80, 'tcp');
 	
-	// Получаем DNS запись для указанного хоста
+// Получаем DNS запись для указанного хоста
 	$dns_record = dns_get_record('mysite.local');
 	
-	// Получаем MX запись для указанного хоста
+// Получаем MX запись для указанного хоста
 	$dns_record = getmxrr('mysite.local');
 	
-	// Проверяем имя хоста на существование
+// Проверяем имя хоста на существование
 	$existsHost = checkdnsrr('mysite.local');
 	
 
-#>>>>>>> Работа с графикой <<<<<<<
+	
+#>>>>>>> @ Работа с графикой <<<<<<<
 
 /**
 Библиотека GD2 boutell.com/gd/
@@ -475,33 +491,33 @@ try {
 <img src="create_image.php">
 */
 
-	// FILE: create_image.php
+// FILE: create_image.php
 
-	// Создание изображения:
+// Создание изображения:
 	$i = imagecreate(500, 300); // создание изображения 256 цветов
-	// или
+// или
 	$i = imagecreatetruecolor(500, 300); // создание полноцветного изображения
 	
 	
-	// Подготовка к работе:
+// Подготовка к работе:
 	imageantialias($i, true); // применить функции сглаживания
 	
-	// Рисуем текст:
+// Рисуем текст:
 	imagestring($i, 5, 150, 200, 'PHP7', $black); // рисование строки текста горизонтально. 5 - размер шрифта
 	imagechar($i, 3, 20, 20, 'PHP7', $black); // рисование символа по горизонтали
 	imagettftext($i, 30, 10, 300, 150, $green, 'arial.ttf', 'PHP7'); // наносит текст text поверх изображения, используя TrueType шрифт.
 	
-	// Создание цветов для изображения:
+// Создание цветов для изображения:
 	$red = imagecolorallocate($i, 255, 0, 0); // станет фоном для картинки, если используем imagecreate()
 	$green = imagecolorallocate($i, 0, 255, 0);
 	$white = imagecolorallocate($i, 0xFF, 0xFF, 0xFF);
 	$black = imagecolorallocate($i, 0, 0, 0);
 	
-	// Производит заливку:
+// Производит заливку:
 	imagefill($i, 0, 0, $white); // начиная с заданных координат (верхний левый угол имеет координаты 0, 0)
 	
 	
-	// Рисуем примитивы:
+// Рисуем примитивы:
 	imagesetpixel($i, 10, 10, $black); // рисует точку (пиксел) на заданных координатах.
 	imageline($i, 20, 20, 80, 280, $red); // рисует линию
 	imagerectangle($i, 20, 20, 80, 280, $red); // рисует прямоугольник
@@ -517,28 +533,28 @@ try {
 	imagefilledarc($i, 210, 160, 300, 200, 0, 90, $red, IMG_ARC_PIE); // рисует дугу, залитый выбранным цветом
 	
 	
-	// Использование существующего изображения:
+// Использование существующего изображения:
 	$img = imagecreatefromgif('picture.gif');
 	$img = imagecreatefrompng('picture.png');
 	$img = imagecreatefromjpeg('picture.jpg');
 	$img = imagecreatefromstring($string);
 	
 	
-	// Установка толщины линии:
+// Установка толщины линии:
 	imagesetthickness($img, 5);
 	
-	// Использование стилей:
+// Использование стилей:
 	$style = [$red, $red, $red, $black, $black, $black];
 	imagesetstyle($img, $style);
 	imageline($img, 20, 20, 80, 280, $red);
 	
-	// Отдаем изображение:
+// Отдаем изображение:
 	header('Content-Type: image/gif');
 	imagegif($i, 'test.gif'); // сохраняем в файл без отдачи
-	// или
+// или
 	header('Content-Type: image/png');
 	imagepng($i);
-	// или
+// или
 	header('Content-Type: image/jpg');
 	imagejpeg($i, '', 90); // 3-й параметр сжатие(75 - по умолчанию)
 
@@ -547,7 +563,7 @@ try {
 
 #>>>>>>> CAPTCHA <<<<<<<
 
-	// FILE: noise-picture.php:
+// FILE: noise-picture.php:
 	session_start();
 	
 	$img = imagecreatefromjpeg('images/noise.jpg');
@@ -572,7 +588,7 @@ try {
 	imagejpeg($img);
 
 	
-	// FILE: registration.php:
+// FILE: registration.php:
 	session_start();
 	$output = '';
 	if ($_SERVER['REQUEST_METHOD'] == 'POST') {
