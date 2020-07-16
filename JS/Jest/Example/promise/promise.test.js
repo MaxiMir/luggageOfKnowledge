@@ -7,6 +7,7 @@ describe('My promise', () => {
     let executorSpy
 
     const successResult = 42
+    const errorResult = 'I am error'
 
     beforeEach(() => {
         executorSpy = jest.fn(r => t(() => r(successResult), 150))
@@ -34,6 +35,25 @@ describe('My promise', () => {
             .then(num => num * 2)
 
         expect(result).toBe(successResult * 2)
+    })
+
+    test('should catch error', () => {
+        const errorExecutor = (_, reject) => t(() => r(errorResult), 150)
+        const errorPromise = new MyPromise(errorExecutor)
+
+        return new Promise(resolve => {
+            errorPromise.catch(error => {
+                expect(error).toBe(errorResult)
+                resolve()
+            })
+        })
+    })
+
+    test('should call finally method', async () => {
+        const finallySpy = jest.fn(() => {})
+        await promise.finally(finallySpy)
+
+        expect(finallySpy).toHaveBeenCalled()
     })
 })
 
