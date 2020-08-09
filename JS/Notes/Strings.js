@@ -67,3 +67,44 @@ str.padStart(8, 'abc'); // => Helloabc
 
 // @ ПОВТОРЕНИЕ СТРОКИ:
 new Array(4).join("ля"); // ляляля
+
+
+
+// @ ТЕГОВЫЕ ШАБЛОНЫ:
+
+function tag(strings, ...expressions) {
+  console.log(strings)
+  console.log(expressions)
+}
+
+const string = tag`This is a string with ${true} and ${false} and ${100} interpolated inside.`
+
+/* =>
+["This is a string with ", " and ", " and ", " interpolated inside."]
+[true, false, 100]
+*/
+
+function bold(strings, ...expressions) {
+  let finalString = ''
+
+  // Проходимся по всем выражениям
+  expressions.forEach((value, i) => {
+    finalString += `${strings[i]}<strong>${value}</strong>`
+  })
+
+  // Добавляем последний строковой литерал
+  finalString += strings[strings.length - 1]
+
+  return finalString
+}
+
+const string = bold`This is a string with ${true} and ${false} and ${100} interpolated inside.`
+
+console.log(string) // =>
+// This is a string with <strong>true</strong> and <strong>false</strong> and <strong>100</strong> interpolated inside.
+
+
+const rawString = String.raw`I want to write /n without it being escaped.` // стандартный метод String.raw, чтобы предотвратить обработку управляющих последовательностей:
+
+console.log(rawString) // =>
+// I want to write /n without it being escaped.
