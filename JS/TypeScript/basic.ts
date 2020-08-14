@@ -350,4 +350,4 @@ type UserKeysNoMeta2 = Pick<User, 'name' | 'email'> // оставляем опр
 let u1: UserKeysNoMeta = 'name';
 
 
-// tsc types.js // tsc - typescript compilator - компилируем файл -> types.js
+// tsc types.js # tsc - typescript compilator - компилируем файл -> types.js

@@ -21,12 +21,11 @@
         "sourceMap": true, // включить генерацию sourceMap
         "outDir": "./dist", // директория для скомпилированных файлов
         "rootDir": "./src", // корневая директория
-        "removeComments": true, // удаление комменториев в скомпилированных файлах
+        "removeComments": true, // удаление комментариев в скомпилированных файлах
         "noEmitOnError": true, // не запускать компиляцию если есть ошибки (по умолч. false)
         "noUnusedLocals": true,
         "noUnusedParameters": true,
         "noImplicitReturns": true,
-
         "jsx": "preverse", // или react или react-native - настройки для React
         "experimentalDecorators": true // экспериментальная фича - декораторы
     },
@@ -329,8 +328,6 @@ function validate(obj: any): boolean {
     if (!objConfig) {
         return isValid;
     }
-
-    
 
     Object.keys(objConfig).forEach(key => {
         if (objConfig[key] === 'required') {
