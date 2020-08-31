@@ -141,9 +141,9 @@ require "./arSectionsVariables.php";
 require "./obElementVariables.php";
 
 /**
-* @var $obSection # объявлена в obSectionVariables.php
-* @var $arSections # объявлена в arSectionsVariables.php
-* @var $obElement # объявлена в obElementVariables.php
+* @var $obSection // объявлена в obSectionVariables.php
+* @var $arSections // объявлена в arSectionsVariables.php
+* @var $obElement // объявлена в obElementVariables.php
 */
 ```
 
