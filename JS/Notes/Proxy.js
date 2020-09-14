@@ -68,7 +68,7 @@ delete op.age;
   password: '12345'
 };
 
-const formProxy = new Proxy(form, validator); // cледим за объектом form + ловушки
+const formProxy = new Proxy(form, validator); // следим за объектом form + ловушки
 formProxy.login; // tester
 formProxy.password; // 12345
 formProxy['username']; // Поля username в объекте нет
@@ -267,6 +267,7 @@ const styleProxy = {
     return (value) => {
       if (value) {
         object[property] = value;
+
         return new Proxy(object, styleProxy);
       }
 
@@ -286,3 +287,15 @@ style(".menu")      // Returns the style object in a Proxy
   .color("#fff")           // Updates color and returns a Proxy
   .backgroundColor("#000") // Updates bgColor and returns a Proxy
   .opacity("1");           // ... and so on so forth
+
+
+const util = new Proxy({}, {
+  get(_, key) {
+    return (target, ...args) => {
+      return !target[key].call ? target[key]: target[key](...args)
+    }
+  }
+})
+
+util.trim('TRIMMED STRING  ');
+util.length('HOW MANY SYMBOLS?');
