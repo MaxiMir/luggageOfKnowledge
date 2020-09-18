@@ -3,11 +3,13 @@
  Есть очередь из 100 подобных запросов.
  Нужна также статистика по удавшимся и неудавшимся запросам.
  */
+
+// 1
 const fetchIterator = {
-    urns: [],
+    urls: [],
     delay: 500,
-    set setUrns(urns) {
-        this.urns = urns;
+    set seturls(urls) {
+        this.urls = urls;
     },
     set setDelay(delay) {
         this.delay = delay;
@@ -15,9 +17,9 @@ const fetchIterator = {
     [Symbol.asyncIterator]() {
         return {
             delay: this.delay,
-            urns: this.urns,
+            urls: this.urls,
             current: 0,
-            last: this.urns.length - 1,
+            last: this.urls.length - 1,
 
             async next() {
                 let isSuccess = true;
@@ -26,7 +28,7 @@ const fetchIterator = {
                     return {done: true};
                 }
 
-                const urn = this.urns[this.current];
+                const urn = this.urls[this.current];
 
                 await new Promise(resolve => setTimeout(async () => {
                     try {
@@ -46,14 +48,14 @@ const fetchIterator = {
 };
 
 (async () => {
-    const urns = [
+    const urls = [
         'htt1ps://jsonplaceholder.typicode.com/posts',
         'https://jsonplaceholder.typicode.com/posts/1',
         'https://jsonplaceholder.typicode.com/posts/2',
     ];
     const result = {success: 0, error: 0};
 
-    fetchIterator.setUrns = urns;
+    fetchIterator.seturls = urls;
 
     for await (const isSuccess of fetchIterator) {
         const resultType = isSuccess ? 'success' : 'error';
@@ -62,3 +64,49 @@ const fetchIterator = {
 
     console.log(result);
 })();
+
+
+// 2:
+const delay = 500;
+const urls = [
+    'https://jsonplaceholder.typicode.com/posts',
+    'https://jsonplaceholder.typicode.com/posts/1',
+    'https://jsonplaceholder.typicode.com/posts/2',
+];
+let success = 0;
+let failed = 0;
+let intervalId;
+let fetchedUrls = [...urls];
+
+const fetcher = () => {
+    const [url, ...restUrls] = fetchedUrls
+
+    const onSuccess = () => {
+        success += 1;
+    }
+
+    const onError = () => {
+        failed += 1;
+    }
+
+    const onFinally = () => {
+        fetchedUrls = restUrls;
+
+        if (!fetchedUrls.length) {
+            clearInterval(intervalId);
+            console.log(`%cSUCCESS:`, 'color: green; font-size: small', success);
+            console.log(`%cERRORS:`, 'color: red; font-size: small', failed);
+        }
+    }
+
+    try {
+        fetch(url)
+            .then(onSuccess)
+            .catch(onError)
+            .finally(onFinally)
+    } catch {
+        onError();
+    }
+}
+
+intervalId = setInterval(fetcher, delay);
