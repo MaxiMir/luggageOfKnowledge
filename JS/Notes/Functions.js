@@ -758,3 +758,4 @@ for(let i = 1; i < MAX_NUM; i++) {
   new Printer(numTags.find(i, new Tag(i))).print()
 }
 
+

@@ -16,8 +16,8 @@ const fetchIterator = {
     },
     [Symbol.asyncIterator]() {
         return {
-            delay: this.delay,
             urls: this.urls,
+            delay: this.delay,
             current: 0,
             last: this.urls.length - 1,
 
@@ -49,8 +49,8 @@ const fetchIterator = {
 };
 
 (async () => {
-    const urls = Array(100).fill('https://jsonplaceholder.typicode.com/posts');
     const result = {success: 0, error: 0};
+    const urls = Array(100).fill('https://jsonplaceholder.typicode.com/posts');
 
     fetchIterator.setUrls(urls);
 
@@ -64,11 +64,11 @@ const fetchIterator = {
 
 
 // @2:
-const delay = 500;
 const urls = Array(100).fill('https://jsonplaceholder.typicode.com/posts');
+const delay = 500;
+let intervalId;
 let success = 0;
 let failed = 0;
-let intervalId;
 let fetchedUrls = [...urls];
 
 const fetcher = () => {
