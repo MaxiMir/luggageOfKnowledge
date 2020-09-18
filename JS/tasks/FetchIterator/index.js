@@ -4,11 +4,11 @@
  Нужна также статистика по удавшимся и неудавшимся запросам.
  */
 
-// 1
+// @1:
 const fetchIterator = {
     urls: [],
     delay: 500,
-    set seturls(urls) {
+    set setUrls(urls) {
         this.urls = urls;
     },
     set setDelay(delay) {
@@ -23,7 +23,8 @@ const fetchIterator = {
 
             async next() {
                 let isSuccess = true;
-
+                const currentDelay = !this.current ? 0 : this.delay;
+                console.log(currentDelay);
                 if (this.current > this.last) {
                     return {done: true};
                 }
@@ -38,7 +39,7 @@ const fetchIterator = {
                     } finally {
                         resolve();
                     }
-                }, this.delay));
+                }, currentDelay));
 
                 this.current++;
                 return {done: false, value: isSuccess};
@@ -55,7 +56,7 @@ const fetchIterator = {
     ];
     const result = {success: 0, error: 0};
 
-    fetchIterator.seturls = urls;
+    fetchIterator.setUrls = urls;
 
     for await (const isSuccess of fetchIterator) {
         const resultType = isSuccess ? 'success' : 'error';
@@ -66,7 +67,7 @@ const fetchIterator = {
 })();
 
 
-// 2:
+// @2:
 const delay = 500;
 const urls = [
     'https://jsonplaceholder.typicode.com/posts',
