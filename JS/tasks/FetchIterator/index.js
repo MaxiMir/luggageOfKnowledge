@@ -8,10 +8,10 @@
 const fetchIterator = {
     urls: [],
     delay: 500,
-    set setUrls(urls) {
+    setUrls(urls) {
         this.urls = urls;
     },
-    set setDelay(delay) {
+    setDelay(delay) {
         this.delay = delay;
     },
     [Symbol.asyncIterator]() {
@@ -24,16 +24,16 @@ const fetchIterator = {
             async next() {
                 let isSuccess = true;
                 const currentDelay = !this.current ? 0 : this.delay;
-                console.log(currentDelay);
+
                 if (this.current > this.last) {
                     return {done: true};
                 }
 
-                const urn = this.urls[this.current];
+                const url = this.urls[this.current];
 
                 await new Promise(resolve => setTimeout(async () => {
                     try {
-                        await fetch(urn);
+                        await fetch(url);
                     } catch {
                         isSuccess = false;
                     } finally {
@@ -49,31 +49,23 @@ const fetchIterator = {
 };
 
 (async () => {
-    const urls = [
-        'htt1ps://jsonplaceholder.typicode.com/posts',
-        'https://jsonplaceholder.typicode.com/posts/1',
-        'https://jsonplaceholder.typicode.com/posts/2',
-    ];
+    const urls = Array(100).fill('https://jsonplaceholder.typicode.com/posts');
     const result = {success: 0, error: 0};
 
-    fetchIterator.setUrls = urls;
+    fetchIterator.setUrls(urls);
 
     for await (const isSuccess of fetchIterator) {
         const resultType = isSuccess ? 'success' : 'error';
         result[resultType]++;
     }
 
-    console.log(result);
+    console.log(`%cRESULT:`, 'color: green; font-size: small', result);
 })();
 
 
 // @2:
 const delay = 500;
-const urls = [
-    'https://jsonplaceholder.typicode.com/posts',
-    'https://jsonplaceholder.typicode.com/posts/1',
-    'https://jsonplaceholder.typicode.com/posts/2',
-];
+const urls = Array(100).fill('https://jsonplaceholder.typicode.com/posts');
 let success = 0;
 let failed = 0;
 let intervalId;
