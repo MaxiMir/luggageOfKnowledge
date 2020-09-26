@@ -166,3 +166,17 @@ values.null ?? 'default null' // default null
 values.false ?? 'default false' // false
 values.zero ?? 'default zero' // 0
 values.empty ?? 'default empty' // ''
+
+
+// @ Freezing objects:
+const frozen = Object.freeze({x: 2, y: 5})
+
+assert.throws(
+    () => {
+      frozen.x = 3
+    },
+    {
+      name: 'TypeError',
+      message: /^Cannot assing to read only property 'x'/
+    }
+)

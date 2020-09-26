@@ -617,3 +617,20 @@ async function modern() {
 }
 
 modern()
+
+
+// @ Finally is always executed:
+let finallyWasExecuted = false
+
+assert.throws(
+    () => {
+      try {
+        throw new Error(); // even if there return statement
+      } finally {
+        finallyWasExecuted = true
+      }
+    },
+    Error
+)
+
+assert.equal(finallyWasExecuted, true)
