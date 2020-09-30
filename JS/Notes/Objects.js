@@ -66,6 +66,17 @@ for (let key in person) {
 }
 
 
+// @ __proto__ (not recommend):
+// I recommend to avoid the pseudo-property __proto__: not all objects have it.
+const proto = {
+  protoProp: 'a'
+}
+const someObj = {
+  __proto__: proto,
+  someObjProp: 'b'
+}
+
+assert.equal(someObj.protoProp, 'a') // true
 
 // @ ОБЪЕКТ БЕЗ ПРОТОТИПА
 const data = Object.create(null);
