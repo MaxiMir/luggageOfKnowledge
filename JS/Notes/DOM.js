@@ -402,6 +402,8 @@ document.body.innerHTML = '';
 resultQuery.length; // => 1
 resultGet.length; // => 0
 
+// getElementsBy*- возвращают динамическую HTML-коллекцию (HTMLCollection)
+// querySelector* - возвращают статический список нод (NodeList)
 
 // @ ВЫПОЛНЕНИЕ ФУНКЦИИ ПОСЛЕ ЗАГРУЗКИ СТРАНИЦЫ:
 document.readyState === 'complete' ?
