@@ -634,3 +634,27 @@ assert.throws(
 )
 
 assert.equal(finallyWasExecuted, true)
+
+
+// @ Частичное применение:
+Function.prototype.curry = function(...args) {
+  const currying = (fn, ...args) =>
+      (fn.length <= args.length) ?
+          fn(...args)
+          : (...others) => currying(fn, ...args, ...others);
+
+  return currying(this, ...args);
+}
+
+// @ Каррирование:
+const curry = _f => x => y => z => _f(x, y, z);
+
+function f(x, y, z) {
+  return x + y + z
+}
+
+// Использование:
+curry(f)(1)(2)(3); // 6
+f.curry(1)(2)(3); // 6
+
+// Отличие: каррирование всегда возвращает набор унарных функций / частичное применениие как только собрала нужное количество параметров - тут же вызывает функцию
