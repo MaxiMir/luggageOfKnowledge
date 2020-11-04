@@ -1,0 +1,67 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Posts component should render Posts component 1`] = `
+<div
+  className="wrapper"
+>
+  <Title
+    title="Hacker News"
+  />
+  <Input
+    handleChange={[Function]}
+    options={
+      Array [
+        Object {
+          "label": 10,
+          "value": 10,
+        },
+        Object {
+          "label": 20,
+          "value": 20,
+        },
+        Object {
+          "label": 40,
+          "value": 40,
+        },
+        Object {
+          "label": 50,
+          "value": 50,
+        },
+      ]
+    }
+    value={20}
+  />
+  <Pagination
+    lastPage={10}
+    onClick={[Function]}
+    page={1}
+  />
+  <Input
+    onChange={[Function]}
+    onKeyPress={[Function]}
+    value=""
+  />
+  <ul
+    className="newsList"
+  >
+    <Post
+      author="Yauhen"
+      created_at="2020-05-03T23:36:09.816Z"
+      key="1"
+      num_comments={10}
+      points={100}
+      title="Jest & Enzyme"
+      url="//test.url"
+    />
+    <Post
+      author="Stepan"
+      created_at="2020-05-05T23:36:09.816Z"
+      key="2"
+      num_comments={8}
+      points={10}
+      title="TypeScript Basics"
+      url="//test2121.url"
+    />
+  </ul>
+</div>
+`;
