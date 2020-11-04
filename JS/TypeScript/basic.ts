@@ -1,20 +1,24 @@
 // ### TYPESCRIPT: BASIC ###
 
-
 // @ INSTALL:
 // $ npm install -g typescript
 
-
-
 // @ types:
-const isFetching: boolean = true;
+const isFetching: boolean = true; // Boolean
 const isLoading: boolean = false;
 
-const int: number = 42;
+const int: number = 42; // Number
 const float: number = 4.2;
 const num: number = 3e10;
 
-const message: string = 'Hello';
+const message: string = 'Hello'; // String
+
+const u: undefined = undefined; // undefined
+const n: null = null; // null (в нативном typeof null - object)
+
+const greetUser = (): void => { // void - отстутствующие типы (нет return)
+    alert('Hello, nice to see you')
+}
 
 const numberArray2: Array<number> = [1, 2, 3, 4, 6]; // дженерик: в массиве только числа
 const words: Array<string> = ['Hello', 'Typescript']; // дженерик: в массиве только строки
