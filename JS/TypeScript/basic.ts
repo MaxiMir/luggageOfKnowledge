@@ -1,9 +1,8 @@
-// ### TYPESCRIPT: BASIC ###
+// TYPESCRIPT: BASIC
 
-// @ INSTALL:
 // $ npm install -g typescript
 
-// @ types:
+// @ Types:
 const isFetching: boolean = true; // Boolean
 const isLoading: boolean = false;
 
@@ -16,139 +15,71 @@ const message: string = 'Hello'; // String
 const u: undefined = undefined; // undefined
 const n: null = null; // null (в нативном typeof null - object)
 
-const greetUser = (): void => { // void - отстутствующие типы (нет return)
-    alert('Hello, nice to see you')
-}
+const o: object = {name: 'object'}; // object
 
-const numberArray2: Array<number> = [1, 2, 3, 4, 6]; // дженерик: в массиве только числа
-const words: Array<string> = ['Hello', 'Typescript']; // дженерик: в массиве только строки
-// <->
-const words2: string[] = ['Hello', 'Typescript'];
+const words2: string[] = ['Hello', 'Typescript']; // тип данных в массиве строки
 
-// Tuple:
-const concat: [string, number] = ['Maxim', 7774565]; // в массиве только строки и числа
+const words: Array<string> = ['Hello', 'Typescript']; // Generic - в массиве только строки
 
-// Any:
-let variable: any = 42; // тип переменной может меняться
+const concat: [string, number] = ['Maxim', 7774565]; // Tuple - в массиве только строки и числа
+
+let variable: any = 42; // any - тип переменной может меняться
 variable = 'New string';
 
-// Function:
 function sayMyName(name: string): void { // void - функция ничего не возвращает
-    console.log(name);
+	console.log(name);
 }
 
-// Never:
-function throwError(message: string): never { // never - признак для значений, которых никогда не будет. Или, признак для функций, которые никогда не вернут значения, то ли по причине ее зацикленности, например, бесконечный цикл, то ли по причине ее прерывания.
+function throwError(message: string): never { // never - результат из функции не получим
     throw new Error(message);
 }
 
 function infiniteLoop(): never { // бесконечный цикл
-    while (true) {
-
-    }
+    while (true) {}
 }
 
 function infiniteRec(): never { // божественная рекурсия
     return infiniteRec();
 }
 
-// Type:
-type Login = string; // создание собственного типа
-const login: Login = 'admin';
+enum Directions { // Enum - набор именованных числовых констант:
+	Up = 2,
+	Down = 4,
+	Left= 6,
+	Right
+}
 
+Directions.Up; // 2
+Directions.Down; // 4
+Directions.Left; // 6
+Directions.Right; // 7
+
+Directions[2]; // 'Up'
+Directions[4]; // 'Down'
+Directions[6]; // 'Left'
+Directions[7]; // 'Right'
+
+// константные перечисления (оптимизация - генерация только в случае обращения к links):
+const enum links { // при добавлении const компилироваться будет в константу, а не в функцию
+	youtube = 'https://youtube.com',
+	vk = 'https://vk.com',
+}
+
+links.youtube // https://youtube.com
+links.vk // https://youtube.com
+
+
+
+// @ Multiple types:
 type ID = string | number;
 const id: ID = 1234;
 const id2: ID = '1234';
 
 
 
-// @ interfaces:
-interface Rect {
-    readonly id: string, // readonly - только для чтения
-    color ?: string // ? - необязательный параметр
-    size: {
-        width: number,
-        height: number
-    }
-}
-
-const rect: Rect = {
-    id: '1234',
-    size: {
-        width: 20,
-        height: 30
-    }
-};
-
-rect.color = '#ccc';
-
-const react2 = {} as Rect; // приводим объект к типу Rect
-const rect3 = <Rect>{} // <-> старый вид записи
-
-
-// наследование интерфейсов:
-interface ReactWithArea extends Rect {
-    getArea: () => number
-}
-
-const react4: ReactWithArea = {
-    id: '123',
-    size: {
-        width: 20,
-        height: 20
-    },
-    getArea(): number {
-        return this.size.width * this.size.height;
-    }
-};
-
-// имплементация:
-interface IClock {
-    time: Date, // тип Date
-    setTime(date: Date): void
-}
-
-class Clock implements IClock {
-    time: Date = new Date();
-
-    setTime(date: Date): void {
-        this.time = date;
-    }
-}
-
-
-// описание всех ключей и значений в интерфейсе:
-interface Styles {
-    [key: string]: string // ключ и значение - строка
-}
-
-const css: Styles = {
-    border: '1px soild black',
-    marginTop: '2px',
-    borderRadius: '5px'
-};
-
-
-
-// @ enum.js:
-// набор именованных числовых|строковых констант
-
-enum Membership {
-    Simple,
-    Standart,
-    Premium
-}
-
-const membership = Membership.Standart; // 1
-const membershipReverse = Membership[2]; // Premium
-
-enum SocialMedia {
-    VK = 'VK',
-    FACEBOOK = 'FACEBOOK',
-    INSTAGRAMM = 'INSTAGRAMM'
-}
-
-const social = SocialMedia.INSTAGRAMM; // INSTAGRAMM
+// @ type:
+type Login = string; // type - создание пользовательского типа
+const login: Login = 'admin';
 
 
 
@@ -157,12 +88,12 @@ function add(a: number, b: number): number {
     return a + b;
 }
 
-function toUpperCase(str: string): string {
-    return str.trim().toUpperCase();
-}
+const createSkills = (name: string, ...skills: Array<string>): string =>
+	`${name}, my skills are ${skills.join()}`;
 
 
-// Перегрузка:
+
+// @ Перегрузка:
 interface MyPosition {
     x: number | undefined,
     y: number | undefined
@@ -176,7 +107,7 @@ function position(): MyPosition;
 function position(a: number): MyPositionWithDefault;
 function position(a: number, b: number): MyPosition;
 
-function position(a?: number, b?: number) {
+function position(a?: number, b?: number) { // ? - опциональный аргумент
     if (!a && !b) {
         return { x: undefined, y: undefined };
     }
@@ -194,8 +125,79 @@ console.log('Two params: ', position(10, 15));
 
 
 
+// @ Interfaces:
+interface Rect {
+	readonly id: string, // readonly - только для чтения
+	color ?: string // ? - необязательный параметр
+	size: {
+		width: number,
+		height: number
+	}
+}
 
-// @ classes:
+const rect: Rect = {
+	id: '1234',
+	size: {
+		width: 20,
+		height: 30
+	}
+};
+
+rect.color = '#ccc';
+
+const react2 = {} as Rect; // приводим объект к типу Rect
+const rect3 = <Rect>{} // <-> старый вид записи
+
+
+
+// @ Наследование интерфейсов:
+interface ReactWithArea extends Rect {
+	getArea: () => number
+}
+
+const react4: ReactWithArea = {
+	id: '123',
+	size: {
+		width: 20,
+		height: 20
+	},
+	getArea(): number {
+		return this.size.width * this.size.height;
+	}
+};
+
+
+
+// @ Имплементация:
+interface IClock {
+	time: Date, // тип Date
+	setTime(date: Date): void
+}
+
+class Clock implements IClock {
+	time: Date = new Date();
+
+	setTime(date: Date): void {
+		this.time = date;
+	}
+}
+
+
+
+// @ Описание всех ключей и значений в интерфейсе:
+interface Styles {
+	[key: string]: string // ключ и значение - строка
+}
+
+const css: Styles = {
+	border: '1px soild black',
+	marginTop: '2px',
+	borderRadius: '5px'
+};
+
+
+
+// @ Classes:
 class Typescript {
     version: string;
 
@@ -220,13 +222,12 @@ class Car {
 // <-> сокращенный вариант:
 class Car {
     readonly numberOfWheels: number = 4;
-    constructor(readonly model: string) {
-
-    }
+    constructor(readonly model: string) {}
 }
 
 
-// модификаторы:
+
+// Модификаторы:
 class Animal {
     protected voice: string = '';
     public color: string = 'black';
@@ -246,7 +247,9 @@ class Cat extends Animal {
 const cat = new Cat;
 cat.setVoice('test');
 
-// абстрактный класс:
+
+
+// Абстрактный класс:
 abstract class Component {
     abstract render(): void;
     abstract info(): void;
@@ -263,7 +266,8 @@ class AppComponent extends Component {
 }
 
 
-// @ guards:
+
+// @ Guards:
 function strip(x: string | number) {
     if (typeof x  === 'number') {
         return x.toFixed(2);
@@ -307,7 +311,7 @@ setAlertType('warning');
 
 
 
-// @ generic:
+// @ Generic:
 
 // #1:
 const numberArray: Array<number> = [1, 2, 3, 4, 6]; // дженерик. в массиве только числа
@@ -328,7 +332,7 @@ function reverse<T>(array: T[]): T[] { // разные типы данных
 
 
 
-// @ operators:
+// @ Operators:
 // #1
 interface Person {
     name: string,
