@@ -16,6 +16,7 @@ const u: undefined = undefined; // undefined
 const n: null = null; // null (в нативном typeof null - object)
 
 const o: object = {name: 'object'}; // object
+const user: {name: string, age: number} = {name: 'Max', age: 25}
 
 const words2: string[] = ['Hello', 'Typescript']; // тип данных в массиве строки
 
@@ -78,8 +79,26 @@ const id2: ID = '1234';
 
 
 // @ type:
-type Login = string; // type - создание пользовательского типа
-const login: Login = 'admin';
+type Employee = {
+	name: string,
+	age: number,
+	nickName?: string,
+	getPass?: () => string
+};
+
+const developer: Employee = {
+	name: 'John',
+	age: 21,
+	nickName: 'slim'
+};
+
+const designer: Employee = {
+	name: 'Ann',
+	age: 19,
+	getPass() {
+		return 'ann1234'
+	}
+};
 
 
 
@@ -205,7 +224,7 @@ class Typescript {
         this.version = version;
     }
 
-    info(name: string) {
+    info(name: string): string {
         return `[${name}]: Typescript version is ${this.version}`;
     }
 }
@@ -219,17 +238,24 @@ class Car {
     }
 }
 
-// <-> сокращенный вариант:
-class Car {
-    readonly numberOfWheels: number = 4;
-    constructor(readonly model: string) {}
+class Client {
+    constructor( // short
+    	public name: string,
+    	public age: number,
+    	public nickname: string,
+    	readonly pass: number
+    ) {}
+
+    set myAge(age: number) { // setter
+		this.age = age
+    }
 }
 
 
 
 // Модификаторы:
 class Animal {
-    protected voice: string = '';
+    protected voice: string = ''; // protected | private
     public color: string = 'black';
 
     private go() {
@@ -335,8 +361,8 @@ function reverse<T>(array: T[]): T[] { // разные типы данных
 // @ Operators:
 // #1
 interface Person {
-    name: string,
-    age: number
+	name: string,
+	age: number
 }
 
 type PersonKeys = keyof Person; // 'name' | 'age'
