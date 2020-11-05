@@ -18,7 +18,29 @@ HTTP + упаковка передаваемых данных в криптог�
 const socket = new WebSocket("ws://javascript.ru/ws");
 // wss:// - c кодировкой трафика + большая вероятность соединения
 // send - для отправки | onopen | onmessage| onclose | onerror
+
+// NodeJS:
+const WebSocket = require("ws")
+const UUID      = require("uuid")
+const wss       = new WebSocket.Server({ port: 3001 })
+
+function broadcast(clientId, message) {
+  wss.clients.forEach(client => {
+    if(client.readyState === WebSocket.OPEN) {
+      client.send(`[${clientId}]: ${message}`)
+    }
+  })
+}
+
+wss.on('conection', ws => {
+  ws.id = UUID()
+  ws.on('message', message => broadcast(ws.id, message))
+})
 ```
+
+### CORS / Cross-origin resource sharing 
+технология современных браузеров, которая позволяет предоставить веб-странице доступ к ресурсам другого домена.
+Access-Control-Allow-Origin: * || https://developer.mozilla.org
 
 ### После ввода адреса в браузере
 > Поиск IP адреса сайта:
