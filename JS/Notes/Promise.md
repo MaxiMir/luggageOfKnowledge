@@ -1,187 +1,14 @@
-### VAR VS LET:
-```js
-var elems = document.querySelectorAll('p');
++ [PROMISE](#PROMISE)
++ [CATCH IN PROMISE](#PROMISE_CATCH)
++ [PROMISE CHAINING](#PROMISE_CHAINING)
++ [PROMISE ALL](#PROMISE_ALL)
++ [PROMISE RACE](#PROMISE_RACE)
++ [PROMISE RESOLVE](#PROMISE_RESOLVE)
++ [PROMISE REJECT](#PROMISE_REJECT)
++ [PROMISE ASYNC AWAIT](#PROMISE_ASYNC)
++ [ЗАГРУЗКА КАРТИНОК](#PROMISE_IMG)
 
-for (var i = 0; i < elems.length; i++) { 
-    elems[i].addEventListener('click', function () { 
-        this.innerHTML = i; // будет брать i на момент вызова => везде будет подставляеться elems.length + 1
-    });
-}
-
-console.log(i); // => elems.length + 1
-
-
-for (let i = 0; i < elems.length; i++) { 
-    elems[i].addEventListener('click', function () { 
-        this.innerHTML = i; // будет брать текущий i 
-    });
-}
-
-console.log(i); // => Ошибка
-```
-### REST AND SPREAD:
-* нахождение максимального числа через Spread Operator:
-```js
-const nums = [1, 20, 7, 6, 5];
-Math.max(...nums); //  => 20
-```
-* меняем значения a,b местами:
-```js
-let a = 1;
-let b = 2;
-
-[a, b] = [b, a] 
-
-console.log(a); // => 2
-console.log(b); // => 1
-```
-```js
-let arr = [1, 2, 3, 4, 5, 6]; 
-let [num1, num2, ...nums] = arr; 
-
-console.log(num1); // => 1
-console.log(num2); // => 2
-console.log(nums); // => [3, 4, 5, 6]
-```
-```js
-function func(a, ...arrs) {
-	console.log(a); // => [1, 2, 3]
-	console.log(arrs); // => [[4, 5, 6], [7, 8, 9]]
-}
-
-func([1, 2, 3], [4, 5, 6], [7, 8, 9]);
-```
-* конкатенация произвольного количества массивов:
-```js
-const concatArrs = (...arrs) => [].concat(...arrs)
-```
-* Копирование массива
-```js
-const arr = [1, 2, 3];
-const [...clone] = arr; // <-> const clone = [...arr]    
-```
-* создание свойств:
-```js
-let width = 100;
-let height = 200;
-let border = '1px solid red';
-
-let options = {
-	width,
-	height,
-	b: border // меняем название ключа
-};
-
-console.log(options);
-```
-* слайдер:
-```js
-setInterval(() => {
-	[img[0].src, img[1].src, img[2].src] = [img[1].src, img[2].src, img[0].src];
-}, 1000); 
-```
-* Преобразуем строку в массив:
-```js
-const str = 'abcde'; 
-const letters = [...str];
-```
-* деструктуризация свойств DOM элементов при переборе циклом for:
-```js
-const elems = document.querySelectorAll('p');
-
-for (let {id, innerHTML: content} of elems) { // получаем ID элемента и его содержимое
-    console.log(id, content);
-}
-```
-* получение порядкового номера DOM элемента в for of:
-```js
-const elems = document.querySelectorAll('p');
-const entries = elems.entries(); // итератор entries => [ключ, элемент]
-
-for (let [num, {id, innerHTML}] of entries) {
-    console.log(num, id, innerHTML); // в num - порядковый номер элемента 
-}
-```
-### ЦИКЛ ДЛЯ ПЕРЕБОРА МАССИВА:
-```js
-for (let elem of arr) {
-	// code
-}
-
-// При этом цикл для перебора объекта: for (let key in obj) {}, в key - будет значение ключа
-```
-### ЧЕКНУТЬ НА СУЩЕСТВОВАНИЕ ЭЛЕМЕНТА В МАССИВЕ:
-```js
-arr.find(e => e === 'что ищем');
-```
-### УДАЛЕНИЕ ДУБЛЕЙ ИЗ МАССИВА (SET):
-```js
-const uniq = arr => [...new Set(arr)]; // <-> Array.from(new Set(arr))
-
-uniq([1, 2, 1, 3, 4, 2, 5]); // => [1, 2, 3, 4, 5]
-```
-### ДВУМЕРНЫЙ МАССИВ В ОДНОМЕРНЫЙ(FLAT):
-```js
-const array = [[1, 2, 3], [4, 5], [6]]; 
-
-array.reduce((flat, current) => flat.concat(current), []); // => [1, 2, 3, 4, 5, 6]
-```
-### СОБРАТЬ ЭЛЕМЕНТЫ НА КОТОРЫЕ КЛИКНУЛИ (SET):
-```js
-const set = new Set;
-const elems = document.querySelectorAll('p');
-
-for (let elem of elems) {
-    elem.addEventListener('click', function() {
-        set.add(this);
-    });
-}
-
-let button = document.querySelector('button');
-
-button.addEventListener('click', () => {
-    for(let elem of set) {
-        elem.innerHTML += '!';
-    }
-    
-    set.clear(); // очищаем коллекцию
-});
-```
-### ПО НАЖАТИЮ КЛАВИШИ ДВИГАТЬСЯ ПО ИСТОРИИ ВВЕДЕННЫХ ЗНАЧЕНИЙ (MAP):
-```js
-const map = new Map; // создаем новую коллекцию
-
-for (let input in inputs) {
-    map.set(input, {values: [], index: -1}); // для каждого перебираемого input создаем пустой объект
-    
-    input.addEventListener('blur', function () {
-       const {values, index} = map.get(this); // получаем предыдущие значения
-       values.push(this.value); // добавляем текущее значение
-       map.set(this, {values: values, index: index + 1}); //  переопределяем
-       this.value = ''; // удаляем данные из input
-       console.log(map.get(this));
-    });
-    
-    input.addEventListener('keydown', function (event) { // по нажатию кнопки влево - в input выводим предыдущие введенные значения
-        let { values, index } = map.get(this);
-        
-        if (event.key === 'ArrowLeft' && index > -1)  {
-            event.preventDefault();
-            
-            this.value = values[index];
-            map.set(this, {values: values, index: index - 1});
-        }
-        
-        if (event.key === 'ArrowRight' && index < values.lenght - 1)  {
-            event.preventDefault();
-            
-            this.value = values[index + 1];
-            map.set(this, {values: values, index: index + 1});
-        }
-    });
-}
-```
-### PROMISE:
+### <a name="PROMISE"></a> PROMISE:
 предоставляет удобный способ организации асинхронного кода.
 
 СТАТУСЫ:
@@ -290,7 +117,7 @@ function getRandomInt(min, max) { // генерирует случайное ч�
 // 9 3
 // 3 шаг: успешно interval равен 3 или (3 шаг: неудача более 10 итераций)
 ```
-### CATCH IN PROMISE:
+### <a name="PROMISE_CATCH"></a> CATCH IN PROMISE:
 ```js
 // #1:
 promise.then(result => console.log(result), error => console.log(error))
@@ -300,7 +127,7 @@ promise
 	.then(result => console.log(result))
 	.catch(error => console.log(error))
 ```
-### PROMISE CHAINING:
+### <a name="PROMISE_CHAINING"></a> PROMISE CHAINING:
 ```js
 const promise = new Promise((resolve, reject) => {
     setTimeout(() => {
@@ -351,7 +178,7 @@ promise
 // C #1: Успешно: new Data | 2 then
 // БЕЗ #1: Неисправимая ошибка
 ```
-### PROMISE ALL:
+### <a name="PROMISE_ALL"></a> PROMISE ALL:
 ```js
 const heavyOperation = num => new Promise(function(resolve, reject) {
     setTimeout(() => resolve(num * num), 3000);
@@ -394,7 +221,7 @@ Promise
 
 // через 9 секунд => [1, 4, 9]
 ```
-### PROMISE RACE:
+### <a name="PROMISE_RACE"></a> PROMISE RACE:
 ```js
 const promise1 = new Promise((resolve, reject) => setTimeout(resolve, 500, 'one'));
 const promise2 = new Promise((resolve, reject) => setTimeout(resolve, 100, 'two'));
@@ -402,14 +229,14 @@ const promise2 = new Promise((resolve, reject) => setTimeout(resolve, 100, 'two'
 Promise.race([promise1, promise2]).then(value => console.log(value)); // метод race - ждет загрузки 1-го promise, после этого выполняется then
 // => two
 ```
-### PROMISE RESOLVE:
+### <a name="PROMISE_RESOLVE"></a> PROMISE RESOLVE:
 ```js
 const promise1 = Promise.resolve([1, 2, 3]); // создает уже выполнившийся promise
 promise1.then(value => console.log(value));
 
 // => [1, 2, 3]
 ```
-### PROMISE REJECT:
+### <a name="PROMISE_REJECT"></a> PROMISE REJECT:
 ```js
 const resolved = result => console.log(result)
 
@@ -418,7 +245,7 @@ const rejected = result => console.log(result)
 Promise.reject(new Error('fail')).then(resolved, rejected) // создает уже выполнившийся promise c ошибкой
 // => Error: fail
 ```
-### PROMISE ASYNC AWAIT:
+### <a name="PROMISE_ASYNC"></a> PROMISE ASYNC AWAIT:
 ```js
 const getSmthF = () => {
 	return new Promise((resolve, reject) => {
@@ -459,7 +286,7 @@ async function func() {
 }
 ```
 
-### ЗАГРУЗКА КАРТИНОК (PROMISE):
+### <a name="PROMISE_IMG"></a> ЗАГРУЗКА КАРТИНОК (PROMISE):
 ```js
 const loadImage = path => {
 	return new Promise((resolve, reject) => {
