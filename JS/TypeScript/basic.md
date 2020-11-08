@@ -1,4 +1,33 @@
-# TYPESCRIPT: BASIC | $ npm install -g typescript
+# TYPESCRIPT: BASIC 
+
++ [TYPES](#TYPES);
++ [MULTIPLE TYPES](#MULTIPLE_TYPES);
++ [TUPLE](#TUPLE);
++ [TYPE](#TYPE)
++ [ENUM](#ENUM)
++ [FUNCTIONS](#FUNCTIONS)
++ [GUARDS](#GUARDS)
++ [FUNCTION OVERLOAD](#FUNCTION_OVERLOAD)
++ [INTERFACE](#INTERFACE)
++ [PARTIAL](#PARTIAL)
++ [DYNAMIC OBJECT KEYS](#DYNAMIC_OBJECT_KEYS)
++ [READONLY](#READONLY)
++ [REQUIRED](#REQUIRED)
++ [KEYOF](#KEYOF)
++ [RECORD](#RECORD)
++ [PICK](#PICK)
++ [OMIT](#OMIT)
++ [EXCLUDE](#EXCLUDE)
++ [EXTRACT](#EXTRACT)
++ [NonNullable](#NonNullable)
++ [ReturnType](#ReturnType)
++ [InstanceType](#InstanceType)
++ [ABSTRACT CLASS](#ABSTRACT_CLASS)
++ [GENERIC](#GENERIC)
++ [INFER_TYPE](#INFER_TYPE)
++ [CONDITIONAL TYPES](#CONDITIONAL_TYPES)
++ [DECORATOR](#DECORATOR)
++ [NAMESPACE](#NAMESPACE)
 
 ```shell script
 $ npm init -y # по дефолту
@@ -8,7 +37,7 @@ $ tsc # запускаем компиляцию
 $ tsc -w # запуск слежения за изменением файлов
 ```
 
-### TYPES:
+### <a name="TYPES"></a> TYPES:
 
 * Boolean:
 ```typescript
@@ -43,19 +72,19 @@ let variable: any = 42 // тип переменной может менятьс�
 variable = 'New string'
 ```
 
-### MULTIPLE TYPES:
+### <a name="MULTIPLE_TYPES"></a> MULTIPLE TYPES:
 ```typescript
 type ID = string | number
 const id: ID = 1234
 const id2: ID = '1234'
 ```
 
-### TUPLE:
+### <a name="TUPLE"></a> TUPLE:
 ```typescript
 const concat: [string, number] = ['Maxim', 7774565] // массив со строками и числами
 ```
 
-### TYPE:
+### <a name="TYPE"></a> TYPE:
 ```typescript
 type Employee = {
 	name: string,
@@ -79,7 +108,7 @@ const designer: Employee = {
 }
 ```
 
-### ENUM:
+### <a name="ENUM"></a> ENUM:
 ```typescript
 enum Directions { // набор именованных числовых констант:
     Up = 2,
@@ -109,7 +138,7 @@ links.youtube // https://youtube.com
 links.vk // https://youtube.com
 ```
 
-### FUNCTIONS:
+### <a name="FUNCTIONS"></a> FUNCTIONS:
 ```typescript
 function add(a: number, b: number): number {
 	return a + b
@@ -135,7 +164,7 @@ const infiniteRec = (): never => { // с божественной рекурси
 }
 ```
 
-### GUARDS:
+### <a name="GUARDS"></a> GUARDS:
 ```typescript
 class MyResponse {
 	header = 'response header'
@@ -164,7 +193,7 @@ setAlertType('danger')
 setAlertType('warning')
 ```
 
-### FUNCTION OVERLOAD | ПЕРЕГРУЗКА ФУНКЦИИ:
+### <a name="FUNCTION_OVERLOAD"></a> FUNCTION OVERLOAD | ПЕРЕГРУЗКА ФУНКЦИИ:
 ```typescript
 interface MyPosition {
 	x: number | undefined,
@@ -195,7 +224,7 @@ console.log('Empty: ', position())
 console.log('One param: ', position(42))
 console.log('Two params: ', position(10, 15))
 ```
-### INTERFACE:
+### <a name="INTERFACE"></a> INTERFACE:
 ```typescript
 interface Rect {
 	readonly id: string, // readonly - только для чтения
@@ -226,7 +255,28 @@ rect.color = '#ccc'
 const react2 = {} as Rect // приводим объект к типу Rect
 const rect3 = <Rect>{} // <-> старый вид записи
 ```
-### DYNAMIC OBJECT KEYS:
+### <a name="PARTIAL"></a> PARTIAL:
+```typescript
+interface AppleCar {
+	model: string,
+	year: number
+}
+
+function createAndValidateCar(model: string, year: number): AppleCar {
+	const car: Partial<AppleCar> = {} // Partial - временно не хватает определенных ключей
+
+	if (model.length > 3) {
+		car.model = model
+	}
+
+	if (year > 2000) {
+		car.year = year
+	}
+
+	return car as AppleCar
+}
+```
+### <a name="DYNAMIC_OBJECT_KEYS"></a> DYNAMIC OBJECT KEYS:
 ```typescript
 interface Styles {
 	[key: string]: string // ключ и значение - строка
@@ -238,7 +288,7 @@ const css: Styles = {
 	borderRadius: '5px'
 }
 ```
-### READONLY:
+### <a name="READONLY"></a> READONLY:
 ```typescript
 const cars: Readonly<Array<string>> = ['Ford', 'Audi'] // массив только для чтения
 
@@ -252,7 +302,7 @@ const user: Readonly<User> = { // объект только для чтения
 
 user.name = 'John'  // Error: cannot reassign a readonly property
 ```
-### REQUIRED<T>:
+### <a name="REQUIRED"></a> REQUIRED<T>:
 ```typescript
 interface Props {
    a?: number,
@@ -262,7 +312,7 @@ interface Props {
 const obj: Props = {a: 5} // OK
 const obj2: Required<Props> = {a: 5} // Error: property 'b' missing
 ````
-### KEYOF:
+### <a name="KEYOF"></a> KEYOF:
 ```typescript
 interface Person {
 	name: string,
@@ -273,7 +323,7 @@ type PersonKeys = keyof Person // 'name' | 'age'
 
 let key: PersonKeys = 'name' // age
 ```
-### RECORD<K, T>:
+### <a name="RECORD"></a> RECORD<K, T>:
 ```typescript
 interface PageInfo {
    title: string
@@ -287,7 +337,7 @@ const x: Record<Page, PageInfo> = { // сопоставляет
    home: {title: 'home'},
 }
 ```
-### PICK<T, K>:
+### <a name="PICK"></a> PICK<T, K>:
 ```typescript
 interface Todo {
    title: string,
@@ -302,7 +352,7 @@ const todo: TodoPreview = {
    completed: false
 }
 ```
-### OMIT<T, K>:
+### <a name="OMIT"></a> OMIT<T, K>:
 ```typescript
 interface Todo {
    title: string,
@@ -317,7 +367,7 @@ const todo: TodoPreview = {
    completed: false
 } 
 ```
-### EXCLUDE<T, U>:
+### <a name="EXCLUDE"></a> EXCLUDE<T, U>:
 ```typescript
 type T0 = Exclude<"a" | "b" | "c", "a"> // исключаем "a" -> "b" | "c"
 type T1 = Exclude<"a" | "b" | "c", "a" | "b"> // исключаем "a" или "b" -> "c"
@@ -333,17 +383,17 @@ type UserKeysNoMeta = Exclude<keyof User, '_id' | 'createdAt'>
 
 let u1: UserKeysNoMeta = 'name'
 ```
-### EXTRACT<T, U>:
+### <a name="EXTRACT"></a> EXTRACT<T, U>:
 ```typescript
 type T0 = Extract<"a" | "b" | "c", "a" | "f"> // оставляем только "a" или "f" -> "a"
 type T1 = Exclude<string | number | (() => void), Function> // оставляем только функцию -> () => void
 ```
-### NonNullable<T>:
+### <a name="NonNullable"></a> NonNullable<T>:
 ```typescript
 type T0 = NonNullable<string | number | undefined> // string | number
 type T1 = NonNullable<string[] | null | undefined> // string[]
 ```
-### ReturnType<T>:
+### <a name="ReturnType"></a> ReturnType<T>:
 ```typescript
 declare function f1(): {a: number, b: string}
 // создает тип состоящий из возвращемого функцией типа
@@ -357,7 +407,7 @@ type T6 = ReturnType<never> // any
 type T7 = ReturnType<string> // Error
 type T8 = ReturnType<Function> // Error
 ```
-### InstanceType<T>:
+### <a name="InstanceType"></a> ReturnType InstanceType<T>:
 ```typescript
 class C {
    x = 0
@@ -370,7 +420,7 @@ type T1 = InstanceType<never> // any
 type T1 = InstanceType<string> // Error 
 type T1 = InstanceType<Function> // Error
 ```
-### CLASS:
+### <a name="CLASS"></a> CLASS:
 ```typescript
 interface IClock {
 	time: Date, // тип Date
@@ -400,7 +450,7 @@ class Client<T, K extends Number> {
 	}
 }
 ```
-### ABSTRACT CLASS:
+### <a name="ABSTRACT_CLASS"></a> ABSTRACT CLASS:
 ```typescript
 abstract class Component {
 	constructor(public name: string) {}
@@ -420,7 +470,7 @@ class AppComponent extends Component {
 	}
 }
 ```
-### GENERIC:
+### <a name="GENERIC"></a> GENERIC:
 ```typescript
 const words2: string[] = ['Hello', 'Typescript'] // массив строк
 const words: Array<string> = ['Hello', 'Typescript'] // массив строк
@@ -522,29 +572,7 @@ numbers.add(2)
 numbers.remove(3)
 numbers.items // [1, 2, 2]
 ```
-
-### PARTIAL:
-```typescript
-interface AppleCar {
-	model: string,
-	year: number
-}
-
-function createAndValidateCar(model: string, year: number): AppleCar {
-	const car: Partial<AppleCar> = {} // Partial - временно не хватает определенных ключей
-
-	if (model.length > 3) {
-		car.model = model
-	}
-
-	if (year > 2000) {
-		car.year = year
-	}
-
-	return car as AppleCar
-}
-```
-# INFER TYPE
+# <a name="INFER_TYPE"></a> INFER TYPE:
 ```typescript
 type Nullable<T> = null | T
 
@@ -586,7 +614,7 @@ const obj = {
 type objType<T> = T extends {[key: string]: infer U} ? U : never
 const someObj: objType<typeof obj> = {age: 18}
 ```
-### CONDITIONAL TYPES:
+### <a name="CONDITIONAL_TYPES"></a> CONDITIONAL TYPES:
 ```typescript
 type UserType = {
     firstName: string,
@@ -637,7 +665,7 @@ const photo: ConditionalType<'photo'> = {
     small: '1.min.jpg'
 }
 ```
-### DECORATOR:
+### <a name="DECORATOR"></a> DECORATOR:
 ```typescript
 const logClass = (constructor: Function) => {
 	console.log(constructor) // Result of call: class User {}
@@ -853,7 +881,7 @@ if (validate(form)) {
 	console.log('Validation Error')
 }
 ```
-### NAMESPACE:
+### <a name="NAMESPACE"></a> NAMESPACE:
 * FILE: form-namespace.ts:
 ```typescript
 namespace Form { // namespace должны совпадать
