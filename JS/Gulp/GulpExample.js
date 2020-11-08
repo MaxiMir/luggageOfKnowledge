@@ -60,7 +60,7 @@
 */
 
 // FILE: gulpfile.js
-const gulp = require('gulp');
+const gulp = require('GULP.md');
 const sass = require('gulp-sass');
 const browserSync = require('browser-sync');
 const concat = require('gulp-concat');

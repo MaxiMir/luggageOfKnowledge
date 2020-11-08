@@ -1,6 +1,4 @@
-/* ------ GULP ------ */
-
-/*
+```shell script
 $ mkdir gulp-html
 $ npm init -y // инициализируем package.json
 $ npm i -D gulp gulp-file-include gulp-sass gulp-csso browser-sync del gulp-htmlmin gulp-autoprefixer gulp-concat // сохраняем список зависимостей для разработки
@@ -20,10 +18,14 @@ $ touch index.scss
 $ touch second.scss
 $ cd ../..
 $ touch gulpfile.js
-$ code . // открыть текущую директорию в MVC
-*/
+$ code . // открыть текущую директорию в VSC
 
-// FILE gulpfile.js:
+
+$ gulp build // запуск задачи
+$ gulp сlear // запуск задачи
+```
+FILE gulpfile.js:
+```js
 const {src, dest, series, watch} = require('gulp'); // series - позволяет вызывать последовательно несколько задач
 const sass = require('gulp-sass');
 const csso = require('gulp-csso');
@@ -34,7 +36,7 @@ const concat = require('gulp-concat'); // cоединяет множество �
 const autoprefixer = require('gulp-autoprefixer');
 const sync = require('browser-sync').create();
 
-function html() {
+const html = () => {
     return src('src/**.html') // указываем какие файлы обрабатываем (все .html файлы в папке /src)
         .pipe(include({ // добавляем модуль include
             prefix: '@@' // префикс (*1)       
@@ -45,7 +47,7 @@ function html() {
         .pipe(dest('dist')) // dest - переносит результирующий стрим в папку dist и создает новый файл
 }
 
-function scss() {
+const scss = () => {
     return src('src/scss/**.scss') // указываем какие файлы обрабатываем (все .scss файлы в папке /src/scss/)
         .pipe(sass()) // компилируем файлы с помощью sass
         .pipe(autoprefixer({ // добавляем префиксы
@@ -56,11 +58,11 @@ function scss() {
         .pipe(dest('dist')) // dest - переносит результирующий стрим в папку dist и создает новый файл
 }
 
-function clear() {
+const clear = () => {
     return del('dist') // очищаем папку dist
 }
 
-function serve() { 
+const serve = () => { 
     sync.init({ // организуем сервер
         server: './dist' // указываем в какую папку смотреть серверу
     })
@@ -72,37 +74,28 @@ function serve() {
         .on('change', sync.reload)        
 }
 
-
 exports.build = series(clear, scss, html) // регистрируем задачу 
 exports.serve = series(clear, scss, html, serve) // регистрируем задачу 
 exports.clear = clear // регистрируем задачу
-
-
-
-
-
-// FILE: /src/index.html:
-/*
+```
+* FILE: /src/index.html:
+```html
     @@include('parts/header.html) // префикс (*1)
-    
+        
     <h1>Home page</h1>
-
-    @@include('parts/footer.html)    
-*/
-
-
-// FILE: /src/about.html:
-/*
+    
+    @@include('parts/footer.html) 
+```
+* FILE: /src/about.html:
+```html
     @@include('parts/header.html) // префикс (*1)
 
     <h1>About page</h1>
 
     @@include('parts/footer.html)
-*/
-
-
-// FILE: /src/parts/header.html:
-/*
+```
+* FILE: /src/parts/header.html:
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -113,26 +106,22 @@ exports.clear = clear // регистрируем задачу
     <link rel="stylesheet" href="index.css">
 </head>
 <body>
-*/
-
-
-// FILE: /src/parts/footer.html:
-/*
+```
+* FILE: /src/parts/footer.html:
+```html
 </body>
 </html>
-*/
-
-// FILE: /src/scss/index.scss:
-/*
+```
+* FILE: /src/scss/index.scss:
+```scss
 $red: red;
 
 h1 {
     color: $red;
 }
-*/
-
-// FILE: /src/scss/second.scss:
-/*
+```
+* FILE: /src/scss/second.scss:
+```scss
 @mixin clear-list {
     list-style-type: none;
     margin: 0;
@@ -143,8 +132,4 @@ ul {
     @include clear-list();
     display: flex;    
 }
-*/
-
-
-// $ gulp build // запуск задачи
-// $ gulp сlear // запуск задачи
+```

@@ -1,4 +1,4 @@
-import * as $ from 'jquery'
+import * as $ from 'jQuery.md'
 import Post from '@models/Post'
 // import json from './assets/json.json'
 // import xml from './assets/data.xml'

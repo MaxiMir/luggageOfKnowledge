@@ -1,12 +1,12 @@
-/**
- -> URI: mongodb.com
- -> URI: mongoosejs.com - для удобной работы с mongo
+```shell script
+ # URI: mongodb.com
+ # URI: mongoosejs.com - для удобной работы с mongo
  
  
- + FOLDER: mongodb/data
- + FOLDER: mongodb/data/db
- + FOLDER: mongodb/log/
- + FILE: mongodb/log/mongo.log
+ # + FOLDER: mongodb/data
+ # + FOLDER: mongodb/data/db
+ # + FOLDER: mongodb/log/
+ # + FILE: mongodb/log/mongo.log
  
  $ cd bin
  $ mongod --directoryperdb --dbpath С:\mongodb\data\db --logpath С:\mongodb\log\mongo.log --logappend --rest --install
@@ -17,7 +17,6 @@
  # --logappend - конкатенация логов
  # --rest --install - использование mongo как сервиса
  
- 
  $ net start MongoDB # запуск сервиса
  $ mongo # запуск CLI (в bin)
  $ > show databases
@@ -25,23 +24,21 @@
  $ > show collections # => persons
  $ > db.persons.find() # => выведет все записи из коллекции
  
- 
  $ npm init
  $ npm install mongoose --save
  $ npm install nodemon --save-dev # по ctrl+s автоматически перезапускает сервер nodejs
  $ npm install nodemon -g # для доступа в консоли
- */
-
-// FILE: package.json:
+```
+FILE: package.json:
+```json
 {
   "scripts": {
-    "start": "nodemon index.js" // $ npm run start
+    "start": "nodemon index.js"
   }
-}
-
-
-
-// + FILE: index.js:
+}    
+```
+FILE: index.js:
+```js
 const mongoose = require('mongoose')
 require('./person.model')
 
@@ -51,8 +48,6 @@ mongoose.connect('mongodb://localhost/maximir', { // если db maximir нет,
   useMongoClient: true
 }).then(() => console.log('MongoDB has started...'))
 .catch(e => console.log(e))
-
-
 
 const Person = mongoose.model('persons')
 const person = new Person({ // описание нового значения в коллекции
@@ -79,21 +74,19 @@ Person.find({name: {'$in': ['Person 1', 'Person 2']}}) // получение з�
     .then(persons => console.log(persons))
 
 Person.find({age: 24})
-.then(persons => {
-  const p = persons[0]
-  Person.find({_id: p._id}).remove() // удаление записи
-      .then(_ => console.log('Removed'))
-      .catch(e => console.log(e))
-})
+    .then(persons => {
+      const p = persons[0]
+      Person.find({_id: p._id}).remove() // удаление записи
+          .then(_ => console.log('Removed'))
+          .catch(e => console.log(e))
+    })
     
-    
-    [{name: 'Person 1', age: 55}, {name: 'Person 2', age: 70}, {name: 'Person 3', age: 90}].forEach(p => {
+[{name: 'Person 1', age: 55}, {name: 'Person 2', age: 70}, {name: 'Person 3', age: 90}].forEach(p => {
   new Person(p).save()
 })
-
-
-
-// + FILE: person.model.js:
+```
+FILE: person.model.js:
+```js
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
@@ -119,3 +112,4 @@ const personSchema = new Schema({ // описание модели
 })
 
 mongoose.model('persons', personSchema) // persons - название коллекции, в которой будет храниться
+```

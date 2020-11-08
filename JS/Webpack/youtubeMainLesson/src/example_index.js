@@ -1,4 +1,4 @@
-import * as $ from 'jquery'; // импорт jquery
+import * as $ from 'jQuery.md'; // импорт jquery
 import Post from './Post';
 import json from './assets/json' // импорт json файла (для .json расширение можно не указывать)
 import logo from './assets/logo.png'; // импорт картинки

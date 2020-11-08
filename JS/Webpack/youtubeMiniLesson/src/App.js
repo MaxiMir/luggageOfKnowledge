@@ -1,5 +1,5 @@
 import React from 'react'
-import $ from 'jquery'
+import $ from 'jQuery.md'
 
 export default class App extends React.Component {
   componentDidMount() {
