@@ -572,7 +572,7 @@ numbers.add(2)
 numbers.remove(3)
 numbers.items // [1, 2, 2]
 ```
-# <a name="INFER_TYPE"></a> INFER TYPE:
+### <a name="INFER_TYPE"></a> INFER TYPE:
 ```typescript
 type Nullable<T> = null | T
 
