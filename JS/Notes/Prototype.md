@@ -1,4 +1,6 @@
-// @ PROTOTYPE:
+## PROTOTYPE
+
+```js
 const Animal = function(options) {
     this.name = options.name
     this.color = options.color
@@ -35,8 +37,8 @@ Animal.prototype.voice = function() { // переопределение мето
     Animal.prototype.voice.apply(this, arguments) // вызов родительского метода
     console.log(this.name + ' says myay')
 }
-
-// @ Example:
+```
+```js
 const maxiMir = {
     name: "Maxim",
     age: 25,
@@ -53,3 +55,4 @@ Object.prototype.sayHello = () => {
 
 // цепочка наследования - объект __proto__
 maxiMir.sayHello(); // => Hello!
+```
