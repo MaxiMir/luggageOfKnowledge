@@ -1,5 +1,3 @@
-
-
 ```shell script
 $ npx create-react-app react-typescript --template typescript # --template typescript - флаг, включающий все зависимости для работы с TS
 
@@ -231,7 +229,7 @@ class Form extends Component<{}, FormState> {
 }
 ```
 ### PORTAL (ver. >= 16.3):
-Нативный React компонент, который рендерит свое содержимое в любую часть DOM дерева (те вне корневого дива).
+Нативный React компонент, который рендерит свое содержимое в любую часть DOM дерева (т.е. вне корневого дива).
 Применяется для модальных окон, всплывающих подсказок, тултипов и тд.
 ```typescript jsx
 import React, {Component} from 'react'
@@ -253,7 +251,7 @@ class Portal extends Component<PortalProps> {
    }
 
    public render(): React.ReactElement<PortalProps> {
-      return ReactDOM.createPortal(this.prop.children, this.el)
+      return ReactDOM.createPortal(this.props.children, this.el)
    }
 }
 
@@ -264,6 +262,19 @@ class Portal extends Component<PortalProps> {
  children: JSX.ReactChild[] # Better
  children: JSX.ReactNode # Best, accepts everything
 */
+
+class SomeComponent extends Component {
+   render() {
+      return (
+         <div>
+            <h1>SomeComponent</h1>
+            <Portal>
+               <div>TEST PORTAL</div>
+            </Portal>
+         </div>
+      )
+   }
+}
 ```
 ### CONTEXT:
 ```typescript jsx
@@ -428,7 +439,7 @@ const Button = ({primTitle, secTitle, toggle, toggleStatus}: any) => (
    </button>
 )
 
-const withToggle = <BaseProps extends InjectedProps>(PassedComponet: React.ComponentType<BaseProps>) => {
+const withToggle = <BaseProps extends InjectedProps>(PassedComponent: React.ComponentType<BaseProps>) => {
    return (props: BaseProps) => {
       const [toggleStatus, toggle] = useState(false)
     
@@ -462,3 +473,40 @@ const withLoading = <P extends object>(Component: React.ComponentType<P>) => {
       }
     }
 }
+```
+### HTTP RESPONSE:
+```ts
+interface HttpResponse<T> extends Response {
+	parsedBody?: T
+	status: number,
+	redirect: boolean
+	// ... and other necessary parameters
+}
+
+export async function http<T>(request: string): Promise<HttpResponse<T>> {
+	const response: HttpResponse<T> = await fetch(request)
+	
+   try {
+      response.parsedBody = await response.json()
+   } catch (ex) {}
+   
+   if (!response.ok) {
+      // Error if there is response status issue
+      throw new Error(response.statusText)
+   }
+	
+   return response
+}
+
+interface IPost {
+	title?: string,
+	body?: string,
+}
+
+try {
+   const resp = await http<IPost>('https://jsonplaceholder.typicode.com/posts/')
+} catch (resp) {
+   console.error('Error', resp)
+}
+```
+
