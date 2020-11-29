@@ -306,7 +306,7 @@ class Login extends Comment {
 }
 
 // Inner component (old variant with Consumer):
-const Profile: React.FC = (): React.React.Element => (
+const Profile: React.FC = (): React.Element => (
    <AuthContext.Consumer>
       {({isAuth}: IContext) => (
          <h1>{!isAuth ? 'Please login' : 'You are logged in'}</h1>
@@ -355,7 +355,12 @@ interface IUser {
    age?: number
 }
 
-const [value, setValue] = useState<IUser>({name: 'Maxim'})
+const UserWidget: React.SFC = () => { // stateless functional component
+   const [value, setValue] = useState<IUser>({name: 'Maxim'})
+   
+   // ...
+}
+
 ```
 ### HOOK useRef:
 ```typescript jsx
