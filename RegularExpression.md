@@ -10,7 +10,7 @@
 
 `/[a-z]/g` - интервал, любой символ от «a» до «z»
 
-`/\d/g` - десятичная цифра <-> [0-9]
+`/\d/g` - десятичная цифра <=> [0-9]
 
 `/\D/g` - любой символ, кроме десятичной цифры
 
@@ -18,15 +18,15 @@
 
 `/\S/g` - любой символ, кроме пробельного
 
-`/\w/g` - любая цифра, буква или знак подчеркивания  <-> [0-9a-zA-Z_]
+`/\w/g` - любая цифра, буква или знак подчеркивания <=> [0-9a-zA-Z_]
 
 `/\W/g` - любой символ, кроме цифры, буквы или знака подчеркивания
 
-`/[aj]/g` - группа символов 'a', 'j': java => JAvA
+`/[aj]/g` - группа символов 'a', 'j': java => **ja**v**a**
 
 `/[aj-]/g` - группа символов 'a', 'j' и '-'
 
-`/[^aj]/g` ^ - инвертирование java => jaVa
+`/[^aj]/g` ^ - инвертирование java => ja**v**a
 
 #### ЗАДАЧА ####
 Напишите регулярное выражение, в котором:
@@ -42,24 +42,24 @@
 
 `/$script/g` $ - конец строки
 
-`/a\b/g` \b - конец слова: java => javA
+`/a\b/g` \b - конец слова: java => jav**a**
 
-`/\bj/g` \b - начало слова: java => Java
+`/\bj/g` \b - начало слова: java => **j**ava
 
-`/a\B/g` \B - все, что не в конце слова: java => javA
+`/a\B/g` \B - все, что не в конце слова: java => jav**a**
 
-`/\Bj/g` \B - все что в не вначале слова: clojurescriptj => cloJurescriptJ
+`/\Bj/g` \B - все что в не вначале слова: clojurescriptj => clo**j**urescript**j**
 
-`/\Bj\B/g` \B - только в середине слова: clojurescriptj => cloJurescriptj
+`/\Bj\B/g` \B - только в середине слова: clojurescriptj => clo**j**urescriptj
 
 hello and hello again, my friend!
-`/^hello\b/g` => HELLO and hello again, my friend!
+`/^hello\b/g` => **hello** and hello again, my friend!
 
 #### Альтернатива ####
 
-`/gray|grow/g` <-> `/gr(ay|ow)/g` gray grow grey => GRAY GROW grey
+`/gray|grow/g` <=> `/gr(ay|ow)/g` gray grow grey => **gray** **grow** grey
 
-`/gr[ae]y/g` gray grow grey => GRAY grow GREY
+`/gr[ae]y/g` gray grow grey => **gray** grow **grey**
 
 #### ЗАДАЧА ####
 Напишите регулярное выражение, которое соответствует подстрокам one или two или three.
@@ -67,19 +67,19 @@ hello and hello again, my friend!
 `/one|two|three/g`
 
 #### Квантификация ####
-`/col[ou]?r/g` ? количество раз, сколько предыдущая группа может повторятся COLOR, colour, colouur, colouuur
+`/col[ou]?r/g` **?** количество раз, сколько предыдущая группа может повторятся COLOR, colour, colouur, colouuur
 
-`/colou?r/g` ? ни разу или 1 раз: color, colour, colouur, colouuur => COLOR, COLOUR, colouur, colouuur
+`/colou?r/g` ? ни разу или 1 раз: color, colour, colouur, colouuur => **color**, **colouur**, colouur, colouuur
 
-`/colou+r/g` + как минимум 1 раз: color, colour, colouur, colouuur => color, COLOUR, COLOUUR, COLOUUUR
+`/colou+r/g` + как минимум 1 раз: color, colour, colouur, colouuur => color, **colour**, **colouur**, **colouuur**
 
-`/colou*r/g` * ни разу или сколько угодно раз: => color, colour, colouur, colouuur => COLOR, COLOUR, COLOUUR, COLOUUUR
+`/colou*r/g` * ни разу или сколько угодно раз: => color, colour, colouur, colouuur => **color**, **colour**, **colouur**, **colouuur**
 
-`/colou{2}r/g` {n} точное число повторений: color, colour, colouur, colouuur => color, colour, COLOUUR, colouuur
+`/colou{2}r/g` {n} точное число повторений: color, colour, colouur, colouuur => color, colour, **colouur**, colouuur
 
-`/colou{2,}r/g` {n,} минимальное количество повторений:  color, colour, colouur, colouuur => color, colour, COLOUUR, COLOUUUR
+`/colou{2,}r/g` {n,} минимальное количество повторений:  color, colour, colouur, colouuur => color, colour, **colouur**, **colouuur**
 
-`/colou{2,3}r/g` {n,m} повторение от т до m: color, colour, colouur, colouuur => color, colour, COLOUUR, COLOUUUR
+`/colou{2,3}r/g` {n,m} повторение от т до m: color, colour, colouur, colouuur => color, colour, **colouur**, **colouuur**
 
 #### ЗАДАЧА ####
 Напишите регулярное выражение, которое находит email адреса, удовлетворяющие следующим условиям:
@@ -105,11 +105,11 @@ hello and hello again, my friend!
 `\(.+?\)`
 
 #### Группировка. Обратная связь ####
-`/(ta|tu)-\1/g` подставить значение 1 группы:ta-tu ta-ta tu-tu => ta-ta tu-tu
+`/(ta|tu)-\1/g` подставить значение 1 группы: ta-tu ta-ta tu-tu => ta-ta tu-tu
 
 `/(?:ta|tu)-\1/g` отключить обратную связь
 
-`a(?>bc|b|x)cc` атамарная группировка возврат по строке отключается(ищет не с b, c a): abccaxcc => abccAXCC
+`a(?>bc|b|x)cc` атамарная группировка возврат по строке отключается(ищет не с b, c a): abccaxcc => abcc**axcc**
 
 #### ЗАДАЧА ####
 Напишите регулярное выражение, которое находит подстроки состоящие из:
