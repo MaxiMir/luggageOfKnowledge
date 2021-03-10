@@ -3,7 +3,7 @@ package main
 
 import "fmt"
 
-func main () { // выполянется при старте программы
+func main () { // выполняется при старте программы
 	var number int = 12 // создание переменной + указание типа (необязательно)
 	var float float32 = 2.3456 // или float64
 	var str string = "Hello World"

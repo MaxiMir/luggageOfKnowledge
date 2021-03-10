@@ -1,10 +1,10 @@
 <style>
     @supports (display: grid) {
-        /* Стили работают, если браузер поддерживает dispay: grid */
+        /* Стили работают, если браузер поддерживает display: grid */
     }
 
     @supports not (display: grid) {
-        /* Стили работают, если браузер не поддерживает dispay: grid */
+        /* Стили работают, если браузер не поддерживает display: grid */
     }
 
     .grid {
@@ -15,9 +15,9 @@
             max-content - максимальное значение, при котором может расположится контент (например, по строке целиком)
             fit-content(300px) - ограничение по значению - max 300px
             minmax(100px, 300px) - ограничение по значению - min 100 и max 300px
-            repeat(5, 1ft) - повторять 5 столцов по 1fr 
+            repeat(5, 1ft) - повторять 5 столцов по 1fr
             repeat(auto-fill, 100px) - вместить максимальное количество столбцов по 100px
-            repeat(auto-fit, 100px) - вместить максимальное количество столбцов по 100px + анализ количества элементов (не создает лишние столбцы)       
+            repeat(auto-fit, 100px) - вместить максимальное количество столбцов по 100px + анализ количества элементов (не создает лишние столбцы)
             repeat(auto-fill, minmax(100px, 1fr)); пример
         */
 
@@ -28,7 +28,7 @@
         grid-template-rows: repeat(4, 200px); /* задаем явную сетку -> 4 ряда, даже если элементов не хватает */
         /* ИЛИ */
         grid-auto-rows: 50px 100px; /* задаем неявную сетку -> 3 ряда */
-           
+        
     }
 
     /* ### 2 ### */
@@ -42,7 +42,7 @@
     }
 
     .grid__item:nth-child(3) { /* меняем положение элемента */
-        grid-column-start: 4; 
+        grid-column-start: 4;
         grid-column-end: 6;
         /*<->*/
         grid-column: 4 / 6;
@@ -79,10 +79,10 @@
     .grid {
         display: grid;
         grid-template: repeat(3, 100px) / repeat(5, 1fr);
-         
-        grid-auto-columns: 75px; /* задаем неявную сетку */ 
-        grid-auto-rows: 75px; /* задаем неявную сетку */ 
-        grid-template-areas: 
+        
+        grid-auto-columns: 75px; /* задаем неявную сетку */
+        grid-auto-rows: 75px; /* задаем неявную сетку */
+        grid-template-areas:
             'a . . . .' /* . - пустой столбец */
             '. . . c c c c'  /* благодаря неявной сетке выходим за область явной сетки */
             'b b . c c c c'  /* благодаря неявной сетке выходим за область явной сетки */
@@ -90,10 +90,10 @@
             '. . . c c c c'; /* благодаря неявной сетке выходим за область явной сетки */
         
         /* или другой пример сокращенной записи */
-        grid-template: 
+        grid-template:
             'a . . . .' 100px /* - высота столбцов */
             '. . . c c' 100px
-            'b b . c c' 100px    
+            'b b . c c' 100px
             / repeat(5, 1fr); /* - столбцы */
     }
 
@@ -115,10 +115,10 @@
     .grid {
         height: 500px;
         display: grid;
-        grid-template: 
+        grid-template:
             'a . . . .' 100px
             '. . . c c' 100px
-            'b b . c c' 100px    
+            'b b . c c' 100px
             / repeat(5, 1fr);
 
         justify-content: end; /* горизонтальное выравнивание */
@@ -137,7 +137,7 @@
 
         justify-content: center; /* горизонтальное выравнивание содержимого ячеки */
         align-items: end; /* вертикальное выравнивание содержимого ячеки */
-        /* или */    
+        /* или */
         place-items: end center; /* align-content justify-content */
     }
 
@@ -156,7 +156,7 @@
         align-self: center; /* вертикальное выравнивание элемента  */
         /* или */
         place-self: center end;
-    }        
+    }
 
 
 
@@ -183,11 +183,11 @@
         grid-template-rows: [a-start] 100px [a-end c-start] 100px [b-start] 100px [b-end c-end];
 
         /* или #3 */
-        grid-template: 
+        grid-template:
             'a . . . .' 100px
             '. . . c c' 100px
             'b b . c c' 100px
-            / 1fr 1fr 1fr 1fr 1fr;    
+            / 1fr 1fr 1fr 1fr 1fr;
     }
 
     .grid__item:nth-child(1) {
@@ -207,7 +207,7 @@
         grid-area: b;
 
         /* или #3 */
-        grid-area: b-start / b-start / b-end / b-end;        
+        grid-area: b-start / b-start / b-end / b-end;
     }
 
     .grid__item:nth-child(3) {
@@ -217,7 +217,7 @@
         grid-area: c;
 
         /* или #3 */
-        grid-area: c-start / c-start / c-end / c-end;          
+        grid-area: c-start / c-start / c-end / c-end;
     }
 
     
@@ -238,7 +238,7 @@
             column // разместить по столбцам
             column densel; // разместить по столбцам,
             а затем переразместить таким образом, чтобы не было пустого пространства
-            dense; // разместить по строкам, 
+            dense; // разместить по строкам,
             а затем переразместить таким образом, чтобы не было пустого пространства
         */
     }
@@ -287,16 +287,16 @@
         /* #1 */
         grid: repeat(3, 100px) / repeat(4, 1fr);
         /* <-> */
-        grid: 
+        grid:
             '. . . .' 100px
             '. . . .' 100px
             '. . . .' 100px
             / 1fr 1fr 1fr 1fr;
         
         /* #2 */
-        grid: repeat(3, 100px) / auto-flow dense 100px;  
+        grid: repeat(3, 100px) / auto-flow dense 100px;
         
-        /* #3 */  
+        /* #3 */
         grid: auto-flow 100px / repeat(4, 1fr);
 
         /* #4 */
@@ -314,5 +314,5 @@
     <div class="grid-item">4</div>
     <div class="grid-item">5</div>
     <div class="grid-item">6</div>
-    <div class="grid-item">7</div>    
+    <div class="grid-item">7</div>
 </div>
