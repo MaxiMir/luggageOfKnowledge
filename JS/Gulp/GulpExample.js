@@ -2,8 +2,8 @@
 
 /**
  $ npm init
- $ npm i --save-dev gulp 
- $ npm i --save-dev gulp-sass 
+ $ npm i --save-dev gulp
+ $ npm i --save-dev gulp-sass
  $ npm i --save-dev browser-sync
  $ npm i -g bower
  $ npm i --save-dev gulp-concat gulp-uglifyjs
@@ -11,7 +11,7 @@
  $ npm i --save-dev del
  $ npm i --save-dev gulp-imagemin imagemin-pngquant
  $ npm i --save-dev gulp-cache
- $ npm i --save-dev gulp-autoprefixer 
+ $ npm i --save-dev gulp-autoprefixer
 
  // TREE:
  - app (исходники)
@@ -60,7 +60,7 @@
 */
 
 // FILE: gulpfile.js
-const gulp = require('GULP.md');
+const gulp = require('Gulp.md');
 const sass = require('gulp-sass');
 const browserSync = require('browser-sync');
 const concat = require('gulp-concat');
@@ -127,7 +127,7 @@ gulp.task('img', () => {
             interlaced: true,
             progressive: true,
             svgoPlugins: [{removeViewBox: false}],
-            une: [pngquant()]    
+            une: [pngquant()]
         })))
         .pipe(gulp.dest('dist/img'))
 });
