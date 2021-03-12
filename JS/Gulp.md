@@ -24,7 +24,9 @@ $ code . // открыть текущую директорию в VSC
 $ gulp build // запуск задачи
 $ gulp сlear // запуск задачи
 ```
-FILE gulpfile.js:
+
+> FILE gulpfile.js:
+
 ```js
 const {src, dest, series, watch} = require('gulp'); // series - позволяет вызывать последовательно несколько задач
 const sass = require('gulp-sass');
@@ -78,7 +80,9 @@ exports.build = series(clear, scss, html) // регистрируем задач
 exports.serve = series(clear, scss, html, serve) // регистрируем задачу 
 exports.clear = clear // регистрируем задачу
 ```
-* FILE: /src/index.html:
+
+> FILE: /src/index.html:
+
 ```html
     @@include('parts/header.html) // префикс (*1)
         
@@ -86,7 +90,9 @@ exports.clear = clear // регистрируем задачу
     
     @@include('parts/footer.html) 
 ```
-* FILE: /src/about.html:
+
+> FILE: /src/about.html:
+
 ```html
     @@include('parts/header.html) // префикс (*1)
 
@@ -94,7 +100,9 @@ exports.clear = clear // регистрируем задачу
 
     @@include('parts/footer.html)
 ```
-* FILE: /src/parts/header.html:
+
+> FILE: /src/parts/header.html:
+
 ```html
 <!DOCTYPE html>
 <html lang="en">
@@ -107,12 +115,16 @@ exports.clear = clear // регистрируем задачу
 </head>
 <body>
 ```
-* FILE: /src/parts/footer.html:
+
+> FILE: /src/parts/footer.html:
+
 ```html
 </body>
 </html>
 ```
-* FILE: /src/scss/index.scss:
+
+> FILE: /src/scss/index.scss:
+
 ```scss
 $red: red;
 
@@ -120,7 +132,9 @@ h1 {
     color: $red;
 }
 ```
-* FILE: /src/scss/second.scss:
+
+> FILE: /src/scss/second.scss:
+
 ```scss
 @mixin clear-list {
     list-style-type: none;
