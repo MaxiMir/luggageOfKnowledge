@@ -6759,21 +6759,21 @@ map.size; // 4
 
 map.get('key'); // value
 map.get(10); // another value'
-
-```javascript
-Для удаления из Map служит функция delete, которая принимает на вход имя ключа. Функция clear поступает более радикально: удаляет все элементы из Map-объекта. Крайне не рекомендую строить свои алгоритмы таким образом, чтобы пришлось мутировать объекты удалением ключей. Такой код сложен в отладке и понимании.
 ```
 
+Для удаления из Map служит функция delete, которая принимает на вход имя ключа. Функция clear поступает более радикально: удаляет все элементы из Map-объекта. Крайне не рекомендую строить свои алгоритмы таким образом, чтобы пришлось мутировать объекты удалением ключей. Такой код сложен в отладке и понимании.
+
+```js
 // При этом сам map является обычным объектом:
 map instanceof Object // true
 map instanceof Map // true
+```
 
-```javascript
 Но пользоваться им как обычным объектом категорически нельзя, последствия непредсказуемы, и вы точно получите не то, что ожидаете. Ниже будут описаны функции, которые вам понадобятся при работе с Map, все манипуляции должны происходить именно с ними.
 
 Иногда бывает нужно создать Map для уже существующих данных. Такой способ работы также предусмотрен через конструктор. Правда в этом случае придется подготовить данные определенным способом:
-```
 
+```js
 // # Цикл for...of
 const person = new Map([['name', 'John'], ['surname', 'Doe'], ['age', 50]]);
 
@@ -6783,7 +6783,7 @@ const keys = person.keys();
 
 // перебор ключей
 for (const key of keys) {
-console.log(key);
+    console.log(key);
 }
 
 // name
@@ -6795,7 +6795,7 @@ const values = person.values();
 
 // перебор значений
 for (const value of values) {
-console.log(value);
+    console.log(value);
 }
 
 // John
@@ -6808,106 +6808,107 @@ const entries = person.entries();
 
 // перебор записей
 for (const entry of entries) {
-console.log(entry);
+    console.log(entry);
 }
 
 // [ 'name', 'John' ]
 // [ 'surname', 'Doe' ]
 // [ 'age', 50 ]
-
-
-// # Map как коллекция:
-
-```javascript
-У Map-объектов также есть метод forEach, который позволяет удобно сделать перебор ключей и значений. Этот метод вызывается на объекте и принимает на вход callback-функцию. На каждой итерации эта callback-функция принимает ключ и значение очередной записи объекта, поэтому надо предусмотреть для них в сигнатуре функции соответствующие параметры (в примере ниже, это параметры value и key):
 ```
+
+**Map как коллекция:**
+
+У Map-объектов также есть метод forEach, который позволяет удобно сделать перебор ключей и значений. Этот метод вызывается на объекте и принимает на вход callback-функцию. На каждой итерации эта callback-функция принимает ключ и значение очередной записи объекта, поэтому надо предусмотреть для них в сигнатуре функции соответствующие параметры (в примере ниже, это параметры value и key):
+
+```js
 map.keys();
 map.values();
 map.etries(); // [[key, value], [key2, value2]];
 
 map.forEach((key, value) => console.log(key, value));
-
-```javascript
-В качестве ключей для Map-объектов могут быть значения любых типов в js, даже другие объекты типа Map
-
-# Отличие от объекта
-Может возникнуть вопрос, зачем нужен Map если есть объект? И, в реальности, действительно так. Map используется редко. Основная причина его использования в JS заключается в том, что обычный объект имеет множество служебных свойств, которые содержат важную информацию и функции. Если эти функции случайно перезапишут, то программа может просто сломаться.
 ```
 
-#### ЗАДАЧА:
+В качестве ключей для Map-объектов могут быть значения любых типов в js, даже другие объекты типа Map
+
+**Отличие от объекта**
+
+Может возникнуть вопрос, зачем нужен Map если есть объект? И, в реальности, действительно так. Map используется редко. Основная причина его использования в JS заключается в том, что обычный объект имеет множество служебных свойств, которые содержат важную информацию и функции. Если эти функции случайно перезапишут, то программа может просто сломаться.
+
+#### ЗАДАЧА: ####
+
 wordsCount.js
 Реализуйте и экспортируйте по умолчанию функцию, которая принимает на вход два параметра: список слов и список стоп-слов. Задача функции вернуть объект типа Map, содержащий в себе частоту переданных слов. То есть, ключами являются сами слова, а значениями число повторений.
 
 - Слова могут быть в разных регистрах, а подсчет должен работать без учета регистра. Соответственно в результирующем наборе слова должны быть представлены в нижнем регистре.
 - Порядок слов в выходе должен совпадать с порядком появления новых слов во входном наборе.
 - stopWords – это список стоп-слов, которые не должны попадать в результирующую структуру. Стоп-слова указываются в нижнем регистре.
-  ```
-  const stopWords = ['and', 'or', 'a', 'the', ''];
-  const words = ['HellO', 'h', 'And', 'heLlo', '', 'AND', 'DOG', 'oR', 'cat', 'HELLO', 'caT'];
-  wordsCount(words, stopWords); // [['hello', 3], ['h', 1], ['dog', 1], ['cat', 2]]
 
-```javascript
+```js
+const stopWords = ['and', 'or', 'a', 'the', ''];
+const words = ['HellO', 'h', 'And', 'heLlo', '', 'AND', 'DOG', 'oR', 'cat', 'HELLO', 'caT'];
+wordsCount(words, stopWords); // [['hello', 3], ['h', 1], ['dog', 1], ['cat', 2]]
+```
 Подсказки
 - Воспользуйтесь тройкой map/filter/reduce.
 - Функция has типа Map проверяет наличие ключа в мапе
 - Проверка должна быть регистро-независимой
-  ```
 
+```js
 // FILE: /app/wordsCount.js:
-export default (words, stopWords) => words
-.map(word => word.toLowerCase())
-.filter(word => !stopWords.includes(word))
-.reduce((acc, word) => {
-const count = acc.get(word) || 0;
+export default (words, stopWords) => {
+    return words
+        .map(word => word.toLowerCase())
+        .filter(word => !stopWords.includes(word))
+        .reduce((acc, word) => {
+            const count = acc.get(word) || 0;
 
-        return acc.set(word, count + 1);
-    }, new Map());
-
-
-
+            return acc.set(word, count + 1);
+        }, new Map());
+}
+```
 
 #### Set ####
 
+```js
 // Задача по стоп-словам:
 сonst stopWords = ['one', 'two', 'four'];
 const words = [
-'one', 'five', 'six', 'seven',
-'two', 'four', 'nine',
+    'one', 'five', 'six', 'seven',
+    'two', 'four', 'nine',
 ];
 
 const result = words.filter(word => !stopWords.includes(word));
 concole.log(result); // ['five', 'six', 'seven', 'nine']
 
-```javascript
+```
+
 includes - проверяет наличие значения полным перебором массива
 ПРОБЛЕМЫ будут при больших объемах данных и длинном процессинге:
 
-#1: Решение с использованием Map:
-```
-
+**Решение с использованием Map:**
+```js
 сonst stopWords = { // or new Map()
-one: true,
-two: true,
-four: true
+    one: true,
+    two: true,
+    four: true
 };
 
 const words = [
-'one', 'five', 'six', 'seven',
-'two', 'four', 'nine',
+    'one', 'five', 'six', 'seven',
+    'two', 'four', 'nine',
 ];
 
 const result = words.filter(word => !stopWords.[word]);
-
-
-// #2: Решение с использованием Set (cамый правильный, поскольку поиск без перебора):
+```
+**Решение с использованием Set (cамый правильный, поскольку поиск без перебора):**
+```js
 сonst stopWords = new Set(['one', 'two', 'four']);
 const words = [
-'one', 'five', 'six', 'seven',
-'two', 'four', 'nine',
+    'one', 'five', 'six', 'seven',
+    'two', 'four', 'nine',
 ];
 
 const result = words.filter(word => !stopWords.has(word));
-
 
 // # Интерфейс Set:
 const set = new Set();
@@ -6932,36 +6933,37 @@ set.keys();
 set.values();
 
 set.forEach(value => console.log(value));
-
-
-#### ЗАДАЧА:
-difference.js
-Реализуйте и экспортируйте функцию по умолчанию, которая принимает на вход два множества и возвращает множество, составленное из таких элементов, которые есть в первом множестве, но нет во втором.
 ```
 
+#### ЗАДАЧА: ####
+
+difference.js
+Реализуйте и экспортируйте функцию по умолчанию, которая принимает на вход два множества и возвращает множество, составленное из таких элементов, которые есть в первом множестве, но нет во втором.
+
+```js
 difference(new Set([2, 1]), new Set([2, 3])); // → [1]
 
 // FILE: /app/difference.js:
-export default (set1, set2) =>
-new Set(Array.from(set1).filter(value => !set2.has(value)));
-
+export default (set1, set2) => new Set(Array.from(set1).filter(value => !set2.has(value)));
+```
 
 
 #### Fluent interface ####
 
+```js
 // TDD:
 const cars = [
-{ brand: 'bmw', model: 'm5', year: 2014 },
-{ brand: 'bmw', model: 'm4', year: 2013 },
-{ brand: 'kia', model: 'sorento', year: 2014 },
-{ brand: 'kia', model: 'rio', year: 2010 },
+    { brand: 'bmw', model: 'm5', year: 2014 },
+    { brand: 'bmw', model: 'm4', year: 2013 },
+    { brand: 'kia', model: 'sorento', year: 2014 },
+    { brand: 'kia', model: 'rio', year: 2010 },
 ];
 
 const coll = new Enumerable(cars);
 
 const result = coll.orderBy(car => car.year)
-.where(car => car.brand === 'kia')
-.where(car => car.year > 2011);
+    .where(car => car.brand === 'kia')
+    .where(car => car.year > 2011);
 
 assert.deepEqual(result.toArray(), [cars[2], cars[4]]);
 
@@ -6972,9 +6974,9 @@ $(this).find('img').stop().animate({opacity: 0.8}, 300).end();
 // # Реализация:
 
 class Enumerable {
-constructor (collection) {
-this.collection = collection;
-}
+    constructor (collection) {
+        this.collection = collection;
+    }
 
     where (fn) {
         this.collection = this.collection.filter(fn);
@@ -6986,20 +6988,21 @@ this.collection = collection;
         return this.collection;
     }
 }
+```
 
+#### ЗАДАЧА: ####
 
-#### ЗАДАЧА:
 Enumerable.js
 Select
 Реализуйте метод select, который отображает (принцип работы как у функции map) коллекцию, другими словами, извлекает из элементов коллекции нужные данные и возвращает объект с новой (отображенной) коллекцией из этих данных.
-```
 
+```js
 const cars = [
-{ brand: 'bmw', model: 'm5', year: 2014 },
-{ brand: 'bmw', model: 'm4', year: 2013 },
-{ brand: 'kia', model: 'sorento', year: 2014 },
-{ brand: 'kia', model: 'rio', year: 2010 },
-{ brand: 'kia', model: 'sportage', year: 2012 },
+    { brand: 'bmw', model: 'm5', year: 2014 },
+    { brand: 'bmw', model: 'm4', year: 2013 },
+    { brand: 'kia', model: 'sorento', year: 2014 },
+    { brand: 'kia', model: 'rio', year: 2010 },
+    { brand: 'kia', model: 'sportage', year: 2012 },
 ];
 coll = new Enumerable(cars);
 
@@ -7008,7 +7011,8 @@ const result = coll.select(car => car.model);
 
 assert.deepEqual(result.toArray(), ['m5', 'm4', 'sorento', 'rio', 'sportage']);
 
-```javascript
+```
+
 OrderBy
 Реализуйте метод orderBy, который сортирует коллекцию на основе переданных данных.
 
@@ -7016,32 +7020,35 @@ OrderBy
 
 Функция, возвращающая значение, по которому будет происходить сортировка.
 Направление сортировки: asc - по возрастанию, desc - по убыванию (по умолчанию - asc).
-```
+
+```js
 const cars = [
-{ brand: 'bmw', model: 'm5', year: 2014 },
-{ brand: 'bmw', model: 'm4', year: 2013 },
-{ brand: 'kia', model: 'sorento', year: 2014 },
-{ brand: 'kia', model: 'rio', year: 2010 },
-{ brand: 'kia', model: 'sportage', year: 2012 },
+    { brand: 'bmw', model: 'm5', year: 2014 },
+    { brand: 'bmw', model: 'm4', year: 2013 },
+    { brand: 'kia', model: 'sorento', year: 2014 },
+    { brand: 'kia', model: 'rio', year: 2010 },
+    { brand: 'kia', model: 'sportage', year: 2012 },
 ];
 coll = new Enumerable(cars);
 
-const result = coll.orderBy(car => car.year, 'desc')
-.where(car => car.brand === 'bmw')
-.select(car => car.model);
+const result = coll
+    .orderBy(car => car.year, 'desc')
+    .where(car => car.brand === 'bmw')
+    .select(car => car.model);
 
 assert.deepEqual(result.toArray(), ['m5', 'm4']);
 
-```javascript
-Подсказки
-Для выполнения сортировки воспользуйтесь встроенной функцией: sort. https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Array/sort
 ```
 
+Подсказки
+Для выполнения сортировки воспользуйтесь встроенной функцией: sort. https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Array/sort
+
+```js
 // FILE: /app/Enumerable.js:
 class Enumerable {
-constructor(collection) {
-this.collection = collection;
-}
+    constructor(collection) {
+        this.collection = collection;
+    }
 
     select(fn) {
         this.collection = this.collection.map(fn);
@@ -7072,6 +7079,7 @@ this.collection = collection;
 
     where(fn) {
         this.collection = this.collection.filter(fn);
+
         return this;
     }
 
@@ -7081,21 +7089,18 @@ this.collection = collection;
 }
 
 export default Enumerable;
-
-
-
+```
 
 #### Неизменяемость ####
 
-```javascript
 Императивный подход -> Возвращается измененная структура данных
 Функциональный подход -> Возвращается новая структура, являющаяся преобразованием старой
-```
 
+```js
 сlass Enumerable {
-constructor(collection) {
-this.collection = collection;
-}
+    constructor(collection) {
+        this.collection = collection;
+    }
 
     where(fn) {
         const filtered = this.collection.filter(fn);
@@ -7113,18 +7118,19 @@ const arr2 = [5, 1, 3];
 arr2.slice().sort(); // обход изменения исходного массива через slice()
 
 console.log(arr2); // [5, 1, 3]
+```
 
+#### ЗАДАЧА: ####
 
-#### ЗАДАЧА:
 Enumerable.js
 Реализуйте функции select, orderBy используя подход без мутации состояния.
-```
+```js
 
 // FILE: /app/Enumerable.js:
 class Enumerable {
-constructor(collection) {
-this.collection = collection;
-}
+    constructor(collection) {
+        this.collection = collection;
+    }
 
     select(fn) {
         const mapped = this.collection.map(fn);
@@ -7165,44 +7171,43 @@ this.collection = collection;
 }
 
 export default Enumerable;
-
-
+```
 
 
 #### Ленивые вычисления ####
 
-```javascript
-# Lazy Evaluation
-Ленивые вычисления (отложенные) - применяемая в некоторых языках программирования стратегия вычисления, согласно которой вычисления следует откладывать до тех пор, пока не понадобится их результат
-```
+**Lazy Evaluation**
 
+Ленивые вычисления (отложенные) - применяемая в некоторых языках программирования стратегия вычисления, согласно которой вычисления следует откладывать до тех пор, пока не понадобится их результат
+
+```js
 // # Ленивость в JS
 true || console.log('message'); // true
 false && console.log('message'); // false
 
 // # Ленивые коллекции
 сonst numbers = Lazy.generate(Math.random) // библиотека с Git Hub
-.map(e => Math.floor(e * 1000) + 1)
-.uniq()
-.take(300);
+    .map(e => Math.floor(e * 1000) + 1)
+    .uniq()
+    .take(300);
 
 numbers.each(e => console.log(e)); // выполнение здесь
+```
 
-```javascript
 Ленивые коллекции позволяют работать с:
 - Бесконечные списки
 - Эффективная обработка при проходе
-  ```
 
+```js
 // LINQ
 constructor(collection, operations) {
-this.collection = collectionl;
-this.operations = operations || [];
+    this.collection = collectionl;
+    this.operations = operations || [];
 }
 
 select (fn) {
-const newOps = this.operations.slice();
-newOps.push(coll => coll.map(fn)); // откложенные вычисления
+    const newOps = this.operations.slice();
+    newOps.push(coll => coll.map(fn)); // откложенные вычисления
 
     return new Enumerable(this.collection.slice(), newOps); // в newOps - новые операции
 }
@@ -7232,9 +7237,9 @@ console.log(numbers); // [1, 10, 4, 7, 8]
 
 // # Общий пример:
 const f = (a, b, c) => {
-a = a * 10;
-b.item = 'changed';
-c = { item: 'changed' };
+    a = a * 10;
+    b.item = 'changed';
+    c = { item: 'changed' };
 };
 
 const num = 10;
@@ -7246,23 +7251,23 @@ f(num, obj1, obj2);
 console.log(num); // 10
 console.log(obj1.item); // changed
 console.log(obj2.item); // unchanged
+```
 
+#### ЗАДАЧА: ####
 
-#### ЗАДАЧА:
 Enumerable.js
 Реализуйте ленивую версию Enumerable. Интерфейс включает в себя следующие методы: select, where, orderBy, toArray.
 
 Подсказки
 - Так как коллекция ленивая, не нужно выполнять вычислений до вызова toArray, вместо этого необходимо формировать коллекцию из отложенных вычислений.
-  ```
 
-
+```js
 // FILE: /app/Enumerable.js:
 class Enumerable {
-constructor(collection, operations) {
-this.collection = collection;
-this.operations = operations || [];
-}
+    constructor(collection, operations) {
+        this.collection = collection;
+        this.operations = operations || [];
+    }
 
     build(fn) {
         return new Enumerable(this.collection.slice(), this.operations.concat(fn));
@@ -7301,16 +7306,15 @@ this.operations = operations || [];
 
 export default Enumerable;
 
-
-
+```
 
 #### getter и мемоизация ####
 
+```js
 // ...
 coll = new Enumerable(cars);
 
-const result = coll.where(car => car.brand === 'kia')
-.where(car => car.year > 2011);
+const result = coll.where(car => car.brand === 'kia').where(car => car.year > 2011);
 
 result.length; // ???
 
