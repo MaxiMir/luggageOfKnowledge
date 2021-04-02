@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { withRouter } from 'react-router';
-import { Messages, ChatInput, Status, Sidebar } from 'containers';
+import { Messages, ChatInput, Status, Sidebar } from '../../containers';
 import { connect } from 'react-redux';
 
 import './Home.scss';
