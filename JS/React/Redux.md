@@ -183,42 +183,45 @@ const createStore = (reducer, initialState) => {
 
 **Начальное состояние**
 
-// Я говорил про то, что начальное состояние задается в определении редьюсера:
+Я говорил про то, что начальное состояние задается в определении редьюсера:
 `const reducer = (state = 0, action) { /* ... */ }`
 
-// Но часто этого недостаточно. Данные могут прийти из бэкенда и их нужно прогрузить в контейнер перед началом работы. Для этого случая в Redux есть особый путь:
+Но часто этого недостаточно. Данные могут прийти из бэкенда и их нужно прогрузить в контейнер перед началом работы. Для этого случая в Redux есть особый путь:
 
-const store = createStore(reducer, initState);
-// @@redux/INIT
+```js
+const store = createStore(reducer, initState);` // @@redux/INIT
+```
 
-// Redux посылает специальный Action, который нельзя перехватывать. Если редьюсер реализован правильно и содержит default секцию в switch, то контейнер заполнится данными из initState. Пример:
+Redux посылает специальный Action, который нельзя перехватывать. Если редьюсер реализован правильно и содержит default секцию в switch, то контейнер заполнится данными из initState. Пример:
 
-// const reducer = (state = 0, action) => {
-//   switch (action.type) {
-//     case 'INCREMENT':
-//       return state + 1;
-//     case 'DECREMENT':
-//       return state - 1;
-//     default:
-//       return state;
-//   }
-// };
+```js
+const reducer = (state = 0, action) => {
+  switch (action.type) {
+    case 'INCREMENT':
+      return state + 1;
+    case 'DECREMENT':
+      return state - 1;
+    default:
+      return state;
+  }
+};
+
 const store = createStore(reducer, 100);
+```
 
-// В коде выше, функция createStore вызовет редьюсер так: reducer(100, '@@redux/INIT'). Затем выполнится ветка default и состоянием контейнера станет число 100.
+В коде выше, функция createStore вызовет редьюсер так: reducer(100, '@@redux/INIT'). Затем выполнится ветка default и состоянием контейнера станет число 100.
 
-/**@@@
- store.js
- Реализуйте и экспортируйте по умолчанию функцию, которая принимает на вход начальное состояние, а возвращает store. Store должен обрабатывать действия перечисленные в actions.js.
+#### ЗАДАЧА №№№
+store.js
+Реализуйте и экспортируйте по умолчанию функцию, которая принимает на вход начальное состояние, а возвращает store. Store должен обрабатывать действия перечисленные в actions.js.
 
- Структура состояния в store: { [task.id]: task, [task2.id]: task2 }.
+Структура состояния в store: { [task.id]: task, [task2.id]: task2 }.
 
- Подсказки
- Обязательно изучите файл actions.js и тесты. Отследите весь путь движения данных.
- Для удаления из объекта воспользуйтесь функцией omit, взятой из библиотеки lodash.
- */
+Подсказки
+Обязательно изучите файл actions.js и тесты. Отследите весь путь движения данных.
+Для удаления из объекта воспользуйтесь функцией omit, взятой из библиотеки lodash.
 
-
+```js
 // FILE: /app/store.js:
 import { omit } from 'lodash';
 import { createStore } from 'redux';
@@ -227,10 +230,12 @@ const tasks = (state = {}, action) => {
     switch (action.type) {
         case 'TASK_ADD': {
             const { task } = action.payload;
+            
             return { ...state, [task.id]: task };
         }
         case 'TASK_REMOVE': {
             const { id } = action.payload;
+            
             return omit(state, id);
         }
         default:
@@ -264,6 +269,7 @@ import { addTask, removeTask } from '../actions';
 
 test('Store 1', () => {
     const store = generateStore();
+    
     store.dispatch({ type: 'unknown' });
     expect(store.getState()).toEqual({});
 });
@@ -271,6 +277,7 @@ test('Store 1', () => {
 test('Store 2', () => {
     const task0 = { id: 0 };
     const store = generateStore({ [task0.id]: task0 });
+    
     store.dispatch({ type: 'unknown' });
     expect(store.getState()).toEqual({ [task0.id]: task0 });
 
@@ -307,54 +314,54 @@ test('Store 2', () => {
     store.dispatch({ type: 'TASK_REMOVE', payload: { id: 0 } });
     expect(store.getState()).toEqual({});
 });
-
-
+```
 
 
 #### Reducers ####
 
-/*
 Все, что хранится в контейнере, мы называем состоянием, но не все состояния одинаково полезны. Вот какую классификацию вводит документация Redux:
 
-- Domain data — данные приложения, которые нужно отображать, использовать и модифицировать. Например, список пользователей, загруженный с сервера.
-- App state — данные, определяющие поведение приложения. Например, текущий открытый URL.
-- UI state — данные, определяющие то, как выглядит UI. Например, вывод списка в плиточном виде.
+> Domain data — данные приложения, которые нужно отображать, использовать и модифицировать. Например, список пользователей, загруженный с сервера.
+
+> App state — данные, определяющие поведение приложения. Например, текущий открытый URL.
+
+> UI state — данные, определяющие то, как выглядит UI. Например, вывод списка в плиточном виде.
 
 Так как контейнер представляет собой ядро приложения, данные внутри него, должны описываться в терминах domain data и app state, но не как дерево компонентов UI. Например, такой способ формирования состояния state.leftPane.todoList.todos — плохая идея. Крайне редко дерево компонентов отражается напрямую на структуру состояния, и это нормально. Представление зависит от данных, а не данные от представления.
 
 Типичная структура состояния выглядит так:
-*/
+```javascript
 {
     domainData1 : {}, // todos
     domainData2 : {}, // comments
     appState1 : {},
     appState2 : {},
-    uiState1 : {}
+    uiState1 : {},
     uiState2 : {},
 }
+```
 
-/*
 Подробнее про работу с состоянием UI будет рассказано в соответствующем уроке.
 
 Как уже говорилось в курсе "JS: React", структура состояния должна напоминать базу данных. Все максимально плоско и нормализованно.
-*/
 
+```javascript
 {
     todos: [
         { id: 1, name: 'why?' },
         { id: 3, name: 'who?' },
     ],
-        comments: [
-    { id: 23, todoId: 3, text: 'great!' },
-],
+    comments: [
+      { id: 23, todoId: 3, text: 'great!' },
+    ],
 }
+```
 
-/*
 С такой структурой крайне легко писать реакцию на действия, обновлять данные, добавлять новые и удалять старые. Вложенность небольшая, всё просто. Но появляется другая проблема (появляется она в любом случае). С ростом количества сущностей, редьюсер становится очень тяжёлым. Огромный кусок кода, который делает всё.
 
 Redux имеет встроенный механизм, позволяющий создавать множественные редьюсеры и комбинировать их друг с другом. Работает это так: для каждого свойства верхнего уровня пишется свой собственный редьюсер, а затем они с помощью функции combineReducers объединяются в корневой (root) редьюсер, который уже используется для создания контейнера.
-*/
 
+```javascript
 import { combineReducers, createStore } from 'redux';
 
 const todos = (state = {}, action) => {
@@ -367,15 +374,15 @@ const comments = (state = {}, action) => {
 
 const rootReducer = combineReducers({ todos, comments });
 const store = createStore(rootReducer);
+```
 
-/*
 Обратите внимание на то, что если редьюсер именовать так же, как и свойство, то можно написать так: { todos, comments }. В каждый редьюсер приходит state, но это не всё состояние контейнера, а только та часть, которая лежит в соответствующем свойстве. Не забудьте про это.
 
 Редьюсеры могут быть даже вложенными и для этого не нужны никакие специальные средства, обычные функции, принимающие на вход данные и возвращающие новые данные.
 
 С таким подходом появляется одна особенность, которая, по началу, может испугать. Так как каждый редьюсер имеет доступ только к своей части состояния, действия, порождающие изменения сразу в нескольких местах, будут повторяться в разных редьюсерах:
-*/
 
+```javascript
 const todos = (state = {}, action) => {
     switch (action.type) {
         case 'TODO_REMOVE':
@@ -390,18 +397,19 @@ const comments = (state = {}, action) => {
         // ...
     }
 };
+```
 
-/*
 То есть правильный подход состоит в том, чтобы повторять case часть в нужных редьюсерах, а не в том, чтобы пытаться получить недостающие части состояния.
 
-# Дополнительные материалы
-Normalizing State Shape https://redux.js.org/recipes/structuringreducers/normalizingstateshape
-*/
+#### Дополнительные материалы #####
 
-/**@@@
- reducers.js
- Реализуйте в Store следующую структуру состояния:
- */
+Normalizing State Shape https://redux.js.org/recipes/structuringreducers/normalizingstateshape
+
+#### ЗАДАЧА ####
+
+reducers.js
+Реализуйте в Store следующую структуру состояния:
+```javascript
 {
     comments: {
         1: { id: 1, taskId: 1, body: 'comment 1' },
@@ -413,10 +421,11 @@ Normalizing State Shape https://redux.js.org/recipes/structuringreducers/normali
         2: { id: 2, name: 'second task' },
     },
 }
+``` 
 
-// Store должен уметь обрабатывать перечисленные в файле actions.js действия.
+Store должен уметь обрабатывать перечисленные в файле actions.js действия.
 
-
+```javascript
 // FILE: /app/actions.js:
 export const addTask = task => ({
     type: 'TASK_ADD',
@@ -484,19 +493,14 @@ const tasks = (state = {}, action) => {
     }
 };
 
-
 export default combineReducers({
     comments,
     tasks,
 });
+```
 
+#### Ручная интеграция с React ####
 
-
-
-
-#### Ручная интеграция с реактом ####
-
-/*
 Внедрение Redux в приложение, делает его центральной, корневой частью всего приложения. Причём не имеет значения, используем мы React или нет. Структура контейнера и принцип работы с ним останется неизменным в любой ситуации. Общая схема работы приложения становится такой:
 
 1. Возникает событие. Например, пользователь кликнул по кнопке.
@@ -504,8 +508,8 @@ export default combineReducers({
 3. Контейнер по очереди вызывает все функции, добавленные через store.subscribe. Эти функции меняют представление на основе нового состояния внутри контейнера. И так по кругу: Событие -> Изменение состояния -> Отрисовка нового состояния.
 
 Реализуем эту логику в связке с React. Для примера возьмём простой компонент счётчик с одной кнопкой, которая отображает текущее количество кликов. Связку с React сделаем в ручном режиме без использования готовой библиотеки. Тогда процесс работы не покажется магическим. Начнём с контейнера:
-*/
 
+```javascript
 import { createStore } from 'redux';
 
 const reducer = (state = 0, action) => {
@@ -518,14 +522,15 @@ const reducer = (state = 0, action) => {
 };
 
 const store = createStore(reducer);
+```
 
-/*
 Контейнер ничего не знает про существование DOM, его задача - хранить данные и модифицировать их. Эта мысль очень важна, её нужно прочувствовать. Воспринимайте контейнер как базу данных.
 
 Следующим шагом сделаем компонент в React. Вторая важная мысль, раз мы начинаем использовать внешнее хранилище для данных, то внутренний setState нам больше не нужен. Компоненты получают все необходимые данные через пропсы (props).
 
 В будущих уроках мы рассмотрим ситуации, когда внутреннее управление состоянием всё ещё требуется, несмотря на использование Redux
-*/
+
+```jsx
 import React from 'react';
 
 export default class Increment extends React.Component {
@@ -535,19 +540,21 @@ export default class Increment extends React.Component {
 
     render() {
         const { count } = this.props;
+
         return (
             <div>
-            <button>{count}</button>
+              <button>{count}</button>
             </div>
-    )
+        )
     }
 }
-
-/*
+```
 Компонент Increment работает с пропом count. Его имя выбрано произвольно, нам не нужно опираться на структуру контейнера.
 
 Теперь добавим обработчики. Напомню, что каждый обработчик в конце своей работы должен обновить состояние контейнера. С технической точки зрения произойдёт вызов функции store.dispatch и нужного действия. Откуда нам их взять внутри компонента? Всё просто, мы их прокинем как свойства в наш компонент.
-*/
+
+
+```jsx
 import React from 'react';
 
 export default class Increment extends React.Component {
@@ -558,16 +565,18 @@ export default class Increment extends React.Component {
 
     render() {
         const { count } = this.props;
+
         return (
             <div>
-            <button onClick={this.handleClick}>{count}</button>
+              <button onClick={this.handleClick}>{count}</button>
             </div>
-    )
+      )
     }
 }
+```
 
-// Остался последний шаг: нужно вызывать перерисовку компонента после изменения содержимого контейнера. В этом нам поможет функция store.subscribe:
-
+Остался последний шаг: нужно вызывать перерисовку компонента после изменения содержимого контейнера. В этом нам поможет функция store.subscribe:
+````jsx
 import ReactDOM from 'react-dom';
 import React from 'react';
 import { createStore } from 'redux';
@@ -594,19 +603,18 @@ const containerElement = document.getElementById('container');
 store.subscribe(() => {
     const state = store.getState();
     ReactDOM.render(
-    <Increment dispatch={store.dispatch} count={state} increment={increment} />,
-    containerElement,
-);
+      <Increment dispatch={store.dispatch} increment={increment} count={state} />,
+      containerElement,
+    );
 });
-
 
 // Первый раз нужно отрисовать руками
 ReactDOM.render(
-<Increment dispatch={store.dispatch} increment={increment} />,
-containerElement,
+  <Increment dispatch={store.dispatch} increment={increment} />,
+  containerElement,
 );
+````
 
-/*
 Когда все необходимые объекты созданы, происходит первоначальная отрисовка компонента в DOM. В компонент передаются необходимые данные, в нашем случае функция store.dispatch и функция increment. Последняя создаёт действие при своём вызове. Дальше начинает работать последовательность шагов, описанная в начале урока:
 
 1. Пользователь нажимает на кнопку
@@ -617,8 +625,8 @@ containerElement,
 6. Затем эта же функция перерисовывает компонент в DOM передавая ей новое состояние.
 
 На каждом этапе этого процесса можно вносить различные изменения. Например, нам может понадобится передавать несколько функций создающих действия. Достаточно просто их передать. Некоторые из этих функций могут принимать данные, которые store.dispatch передаст внутрь контейнера:
-*/
 
+```jsx
 export const increment = (step = 1) => ({
     type: 'INCREMENT',
     payload: { step },
@@ -630,35 +638,37 @@ case 'INCREMENT':
 return state + action.payload.step;
 
 // Само состояние внутри контейнера может стать структурой, например объектом.
+```
 
 
-/**@@@
- src/components/App.jsx
- Реализуйте компонент, который показывает форму и хранит ее состояние в Redux. Форма состоит из двух элементов: текстового поля и кнопки "сброс". При вводе текста, он отображается под полем ввода. Если нажать на сброс, то текст очищается.
+#### ЗАДАЧА ####
+src/components/App.jsx
+Реализуйте компонент, который показывает форму и хранит ее состояние в Redux. Форма состоит из двух элементов: текстового поля и кнопки "сброс". При вводе текста, он отображается под полем ввода. Если нажать на сброс, то текст очищается.
 
- Интерфейс компонента:
- */
+Интерфейс компонента:
+```jsx
 <App dispatch={store.dispatch} text="text from store" {...actionCreators} />
-
-// Начальное состояние:
+```
+Начальное состояние:
+````html
 <div>
-<form>
-<input type="text" value="">
+  <form>
+    <input type="text" value="">
     <button type="button">Reset</button>
-    </form>
-    </div>
-
-    // После ввода текста:
-
-    <div>
+  </form>
+</div>
+````
+После ввода текста:
+````html
+<div>
     <form>
-    <input type="text" value="hello">
-    <button type="button">Reset</button>
+      <input type="text" value="hello">
+      <button type="button">Reset</button>
     </form>
     <div>hello</div>
-    </div>
+</div>
+````
 
-/*
 src/index.jsx
 Реализуйте интеграцию контейнера с реактом.
 
@@ -667,8 +677,8 @@ src/reducers.js
 
 src/actions.js
 Добавьте необходимые действия.
-*/
 
+```jsx
 // FILE: /app/src/actions.js:
 export const updateText = text => ({
     type: 'TEXT_UPDATE',
@@ -708,12 +718,12 @@ export default class App extends React.Component {
 
         return (
             <div>
-            <form>
-            <input type="text" value={text} onChange={this.handleChange} />
-        <button type="button" onClick={this.handleReset}>Reset</button>
-            </form>
-        {text && <div>{text}</div>}
-        </div>
+              <form>
+                <input type="text" value={text} onChange={this.handleChange} />
+                <button type="button" onClick={this.handleReset}>Reset</button>
+              </form>
+              {text && <div>{text}</div>}
+            </div>
         );
     }
 }
@@ -734,9 +744,9 @@ const store = createStore(
 
 const render = (text) => {
     ReactDOM.render(
-    <App dispatch={store.dispatch} text={text} {...actionCreators} />,
-    document.getElementById('container'),
-);
+      <App dispatch={store.dispatch} text={text} {...actionCreators} />,
+      document.getElementById('container'),
+    );
 };
 
 store.subscribe(() => {
@@ -745,7 +755,6 @@ store.subscribe(() => {
 });
 
 render();
-
 
 // FILE: /app/src/reducers.js:
 import { combineReducers } from 'redux';
@@ -766,13 +775,12 @@ const text = (state = '', action) => {
 export default combineReducers({
     text,
 });
-
+```
 
 
 #### Middlewares ####
 
-/*
-Мидлвары (middlewares) относятся к продвинутым техникам использования Redux. В данном уроке мы посмотрим на них не с точки зрения написания, а исключительно с точки зрения использования. Нам они потребуются для подключения различных библиотек буквально с первого момента использования совместно с React.
+**Мидлвары** (middlewares) относятся к продвинутым техникам использования Redux. В данном уроке мы посмотрим на них не с точки зрения написания, а исключительно с точки зрения использования. Нам они потребуются для подключения различных библиотек буквально с первого момента использования совместно с React.
 
 Мидлвары — функции, которые последовательно вызываются в процессе обновления контейнера.
 
@@ -791,8 +799,8 @@ export default combineReducers({
 - Маршрутизация.
 
 Посмотрим как их подключить:
-*/
 
+```jsx
 import { createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 
@@ -801,6 +809,7 @@ const store = createStore(
     /* preloadedState, */
     applyMiddleware(thunk)
 )
+```
 
 
 /*

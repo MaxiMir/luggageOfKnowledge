@@ -8580,12 +8580,11 @@ export default findFilesByName;
 Как видно из постановки, задачу нельзя решить используя reduce в чистом виде, так как нам не нужен обход всех нод, с другой стороны для подсчёта количества файлов обход нужен. Следовательно наша задача распадается уже на две подзадачи: извлечение детей-директорий текущего корня и вызов подсчёта файлов внутри каждого ребёнка.
 
 Начнём с подсчёта количества файлов. Эта задача содержит один примитивный reduce:
-```
 
+```js
 import { reduce } from 'hexlet-immutable-fs-trees';
 
-const calculateFilesCount = tree =>
-reduce((acc, node) => (node.type === 'file' ? acc + 1 : acc), tree, 0);
+const calculateFilesCount = tree => reduce((acc, node) => (node.type === 'file' ? acc + 1 : acc), tree, 0);
 
 
 // Совершенно типичный reduce который увеличивает аккумулятор на единицу если тип ноды file. Следующий шаг заключается в том чтобы извлечь всех детей из исходного узла и к каждому из них применить подсчёт.
@@ -8594,32 +8593,32 @@ reduce((acc, node) => (node.type === 'file' ? acc + 1 : acc), tree, 0);
 import { mkdir, mkfile } from 'hexlet-immutable-fs-trees';
 
 const tree = mkdir('/', [
-mkdir('etc', [
-mkdir('apache'),
-mkdir('nginx', [
-mkfile('nginx.conf'),
-]),
-]),
-mkdir('consul', [
-mkfile('config.json'),
-mkfile('file.tmp'),
-mkdir('data'),
-]),
-mkfile('hosts'),
-mkfile('resolve'),
+    mkdir('etc', [
+        mkdir('apache'),
+        mkdir('nginx', [
+            mkfile('nginx.conf'),
+        ]),
+    ]),
+    mkdir('consul', [
+        mkfile('config.json'),
+        mkfile('file.tmp'),
+        mkdir('data'),
+    ]),
+    mkfile('hosts'),
+    mkfile('resolve'),
 ]);
 
 const result = tree.children
-.filter(n => n.type === 'directory')
-.map(n => [n.name, calculateFilesCount(n)]);
+    .filter(n => n.type === 'directory')
+    .map(n => [n.name, calculateFilesCount(n)]);
 
 console.log(result);
 // => [['etc', 1], ['consul', 2]]
 
 // То есть мы обратились к детям напрямую сначала отфильтровав их, а затем и выполнив отображение на необходимый массив, содержащий для каждой директории имя и количество файлов в нем.
+```
 
-
-#### ЗАДАЧА:
+#### ЗАДАЧА: ####
 Во многих операционных системах (Linux, MacOS) существует утилита du. Она умеет считать место в указанных файлах и директориях. Например так:
 
 tmp$ du -sh *
@@ -8639,22 +8638,22 @@ du.js
 
 - Обратите внимание на структуру результирующего массива. Каждый элемент - массив с двумя значениями, именем директории и размером файлов внутри.
 - Результат отсортирован по размеру в обратном порядке. То есть сверху самые тяжелые, внизу самые легкие
-  ```
 
+```js
 const tree = mkdir('/', [
-mkdir('etc', [
-mkdir('apache'),
-mkdir('nginx', [
-mkfile('nginx.conf', { size: 800 }),
-]),
-mkdir('consul', [
-mkfile('config.json', { size: 1200 }),
-mkfile('data', { size: 8200 }),
-mkfile('raft', { size: 80 }),
-]),
-]),
-mkfile('hosts', { size: 3500 }),
-mkfile('resolve', { size: 1000 }),
+    mkdir('etc', [
+        mkdir('apache'),
+        mkdir('nginx', [
+            mkfile('nginx.conf', { size: 800 }),
+        ]),
+        mkdir('consul', [
+            mkfile('config.json', { size: 1200 }),
+            mkfile('data', { size: 8200 }),
+            mkfile('raft', { size: 80 }),
+        ]),
+    ]),
+    mkfile('hosts', { size: 3500 }),
+    mkfile('resolve', { size: 1000 }),
 ]);
 
 du(tree);
@@ -8664,62 +8663,60 @@ du(tree);
 //   ['resolve', 1000],
 // ]
 
-
 // FILE: /app/du.js:
 import { reduce } from 'hexlet-immutable-fs-trees';
 
-
 const calculatefilesSize = node => reduce((acc, n) => {
-if (n.type === 'directory') {
-return acc;
-}
+    if (n.type === 'directory') {
+        return acc;
+    }
 
     return acc + n.meta.size;
 }, node, 0);
 
 const du = (node) => {
-const result = node.children.map(n => [n.name, calculatefilesSize(n)]);
-// Обычный дестракчеринг. JS позволяет пропускать имена если они не используются
-result.sort(([, size1], [, size2]) => size2 - size1);
+    const result = node.children.map(n => [n.name, calculatefilesSize(n)]);
+    // Обычный дестракчеринг. JS позволяет пропускать имена если они не используются
+    result.sort(([, size1], [, size2]) => size2 - size1);
 
     return result;
 };
 
 export default du;
+```
 
-
-
-#### ЗАДАЧА:
+#### ЗАДАЧА: ####
 Управление зависимостями - это очень важная задача при разработке программного обеспечения. Обычно в приложениях задействовано множество сторонних компонентов, которые, в свою очередь, тоже могут полагаться на сторонние компоненты. Одной из задач менеджера зависимостей является подключение зависимостей в правильном порядке. Библиотеки, от которых зависят другие, должны подключаться раньше. Определение этой последовательности сводится к задаче сортировки графа.
 
 sortDeps.js
 Реализуйте и экспортируйте по умолчанию функцию sortDeps, которая принимает на вход список зависимостей и возвращает список (массив) отсортированных узлов.
 
 Пример:
-```
+
+```js
 const deps1 = {
-mongo: [],
-tzinfo: ['thread_safe'],
-uglifier: ['execjs'],
-execjs: ['thread_safe', 'json'],
-redis: [],
+    mongo: [],
+    tzinfo: ['thread_safe'],
+    uglifier: ['execjs'],
+    execjs: ['thread_safe', 'json'],
+    redis: [],
 };
 
 console.log(sortDeps(deps1));
 // => ['mongo', 'thread_safe', 'tzinfo', 'json', 'execjs', 'uglifier', 'redis'];
+```
 
-```javascript
 Независимые библиотеки и цепочки библиотек должны быть в порядке, соответствующему порядку элементов в графе зависимостей.
 
 Подсказки
 Об алгоритме: топологическая сортировка https://ru.wikipedia.org/Топологическая_сортировка
-```
 
+```js
 // FILE: /app/sortDeps.js:
 export default (deps) => {
-const add = (acc, node) => {
-const subDeps = deps[node] || [];
-const subAcc = subDeps.reduce(add, []);
+    const add = (acc, node) => {
+        const subDeps = deps[node] || [];
+        const subAcc = subDeps.reduce(add, []);
 
         return { ...acc, ...subAcc, [node]: true };
     };
@@ -8728,58 +8725,56 @@ const subAcc = subDeps.reduce(add, []);
 
     return Object.keys(set);
 };
+```
 
-
-#### ЗАДАЧА:
+#### ЗАДАЧА: ####
 convert.js
 Реализуйте и экспортируйте по умолчанию функцию, которая принимает на вход массив определённой структуры и возвращает объект, полученный из этого массива.
 
 Массив устроен таким образом, что с помощью него можно представлять ассоциативные массивы. Каждое значение внутри него — это массив из двух элементов, где первый элемент — ключ, а второй — значение. В свою очередь, если значение тоже является массивом, то считается, что это вложенное представление ассоциативного массива. Другими словами, любой массив внутри исходного массива всегда рассматривается как данные, которые нужно конвертировать в объект.
-```
 
+```js
 convert([]); // => {}
 convert([['key', 'value']]); // { key: 'value' }
 convert([['key', 'value'], ['key2', 'value2']]); // { key: 'value', key2: 'value2' }
 
 convert([
-['key', [['key2', 'anotherValue']]],
-['key2', 'value2']
+    ['key', [['key2', 'anotherValue']]],
+    ['key2', 'value2']
 ]);
 // { key: { key2: 'anotherValue' }, key2: 'value2' }
 
 
 // FILE: /app/convert.js:
-const convert = items => items.reduce(
-(acc, [key, value]) => ({ ...acc, [key]: value instanceof Array ? convert(value) : value }),
-{},
-);
+const convert = items => items.reduce((acc, [key, value]) => ({ ...acc, [key]: value instanceof Array ? convert(value) : value }), {});
 
 export default convert;
+```
 
+#### ЗАДАЧА: ####
 
-#### ЗАДАЧА:
 flatten.js
 Реализуйте и экспортируйте по умолчанию функцию flatten, которая делает плоским вложенный массив.
-```
+
+```js
 const list = [1, 2, [3, 5], [[4, 3], 2]];
 
 // [1, 2, 3, 5, 4, 3, 2]
 flatten(list);
-```javascript
-Подсказки
-Array.isArray - проверяет является ли элемент массивом.
 ```
 
+Подсказки
+Array.isArray - проверяет является ли элемент массивом.
+
+```js
 // FILE: /app/flatten.js:
-const flatten = list => list.reduce((acc, element) => {
-return (!Array.isArray(element) ? [...acc, element] : [...acc, ...flatten(element)]);
-}, []);
+const flatten = list => list.reduce((acc, element) => !Array.isArray(element) ? [...acc, element] : [...acc, ...flatten(element)], []);
 
 export default flatten;
+```
 
 
-
-#### ЗАДАЧА:
+#### ЗАДАЧА: ####
 Реализуйте и экспортируйте по умолчанию функцию itinerary, которая выстраивает маршрут между городами.
 
 Функция принимает 3 аргумента:
@@ -8790,28 +8785,31 @@ export default flatten;
 и возвращает массив городов, выстроенный в том же порядке, в котором они находятся на пути следования по маршруту.
 
 Примеры
-```
 
+```js
 const tree = ['Moscow', [
-['Smolensk'],
-['Yaroslavl'],
-['Voronezh', [
-['Liski'],
-['Boguchar'],
-['Kursk', [
-['Belgorod', [
-['Borisovka'],
-]],
-['Kurchatov'],
-]],
-]],
-['Ivanovo', [
-['Kostroma'], ['Kineshma'],
-]],
-['Vladimir'],
-['Tver', [
-['Klin'], ['Dubna'], ['Rzhev'],
-]],
+    ['Smolensk'],
+    ['Yaroslavl'],
+    ['Voronezh', [
+        ['Liski'],
+        ['Boguchar'],
+        ['Kursk', [
+            ['Belgorod', [
+                ['Borisovka'],
+            ]],
+        ['Kurchatov'],
+        ]],
+    ]],
+    ['Ivanovo', [
+        ['Kostroma'], 
+        ['Kineshma'],
+    ]],
+    ['Vladimir'],
+    ['Tver', [
+        ['Klin'], 
+        ['Dubna'],
+         ['Rzhev'],
+    ]],
 ]];
 
 itinerary(tree, 'Dubna', 'Kostroma');
@@ -8820,19 +8818,18 @@ itinerary(tree, 'Dubna', 'Kostroma');
 itinerary(tree, 'Borisovka', 'Kurchatov');
 // => ['Borisovka', 'Belgorod', 'Kursk', 'Kurchatov']
 
-```javascript
-Подсказки
-Используйте функции из библиотеки lodash https://lodash.com/docs/
 ```
 
+Подсказки
+Используйте функции из библиотеки lodash https://lodash.com/docs/
 
+```js
 // FILE: /app/itinerary.js:
-
 import _ from 'lodash';
 
 const makeRoute = (tree, route = []) => {
-const [city, rest] = tree;
-const newRoute = route.concat(city);
+    const [city, rest] = tree;
+    const newRoute = route.concat(city);
 
     if (!rest) {
         return newRoute.join('/');
