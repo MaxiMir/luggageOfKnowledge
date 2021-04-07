@@ -811,13 +811,13 @@ const store = createStore(
 )
 ```
 
+thunk — это мидлвар, но перед тем как передать его в функцию `createStore`, нужно применить к нему функцию `applyMiddleware`. 
 
-/*
-thunk — это мидлвар, но перед тем как передать его в функцию createStore, нужно применить к нему функцию applyMiddleware. Также обратите внимание на то, что мидлвар мы передаём вторым параметром, хотя в предыдущем уроке вторым параметром шёл initState. Объясняется это просто — функция createStore проверяет тип второго параметра и в зависимости от этого понимает, что перед ней. В общем случае она принимает три параметра: редьюсер, начальное состояние и мидлвары.
+Также обратите внимание на то, что мидлвар мы передаём вторым параметром, хотя в предыдущем уроке вторым параметром шёл `initState`. Объясняется это просто — функция createStore проверяет тип второго параметра и в зависимости от этого понимает, что перед ней. В общем случае она принимает три параметра: редьюсер, начальное состояние и мидлвары.
 
 В случае если мидлвар несколько, придётся воспользоваться ещё одной функцией:
-*/
 
+```javascript
 import { createStore, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
 import logger from 'redux-logger';
@@ -830,13 +830,16 @@ const store = createStore(
         applyMiddleware(logger)
     ),
 )
+```
 
-/*
-В такой ситуации в контейнер передается результат функции compose. Последняя, в свою очередь, принимает на вход мидлвары.
+В такой ситуации в контейнер передается результат функции `compose`.
+Последняя, в свою очередь, принимает на вход мидлвары.
 
-Теперь мы подобрались к главному. Для редакса написано специальное браузерное расширение Redux DevTools. Установите его в свой браузер.
-*/
+Теперь мы подобрались к главному. 
+Для редакса написано специальное браузерное расширение Redux DevTools. 
+Установите его в свой браузер.
 
+```javascript
 // Ниже код подключения этого экстеншена к хранилищу:
 const reduxDevtools = window.__REDUX_DEVTOOLS_EXTENSION__;
 const store = createStore(
@@ -844,33 +847,29 @@ const store = createStore(
     /* preloadedState, */
     reduxDevtools && reduxDevtools(),
 );
-
-/*
-Обратите внимание на то, что он не требует использования функции applyMiddleware.
-
-В будущих уроках вам не придется подключать его руками. Мы уже сделали это за вас. Все что нужно — установить расширение и не забывать туда смотреть. Это ваш главный помощник в отладке на протяжении всего курса.
+```
+Обратите внимание на то, что он не требует использования функции `applyMiddleware`.
+В будущих уроках вам не придется подключать его руками. 
+Мы уже сделали это за вас. Все что нужно — установить расширение и не забывать туда смотреть. Это ваш главный помощник в отладке на протяжении всего курса.
 
 # Дополнительные материалы
 Официальная документация ReduxDevTools https://github.com/zalmoxisus/redux-devtools-extension
-*/
-
-
 
 #### React Redux ####
 
-
-/*
-Переходим к самой ожидаемой части — интеграции редакса с реактом. Сразу скажу, что дело это не простое и не всегда понятное. Поэтому действовать будем по следующей схеме: я покажу пошагово как скрестить ежа с ужом без погружения в детали, а в дальнейших уроках мы разберемся что да как.
+Переходим к самой ожидаемой части — интеграции редакса с реактом. 
+Сразу скажу, что дело это не простое и не всегда понятное. 
+Поэтому действовать будем по следующей схеме: я покажу пошагово как скрестить ежа с ужом без погружения в детали, а в дальнейших уроках мы разберемся что да как.
 
 Команда Redux создала библиотеку react-redux https://react-redux.js.org/introduction/quick-start, которая значительно упрощает привязку Redux к React. Далее мы пройдём все этапы по её подключению к React-проекту.
 
 Редьюсеры и действия в этом руководстве не описываются. Их структура не зависит от того, с чем интегрируется Redux.
 
-# Провайдер
+**Провайдер**
 
 Провайдер — React-компонент, который делает Redux-контейнер доступным для всего приложения. Он находится на верхнем уровне JSX и "оборачивает" в себя все остальные компоненты.
-*/
 
+```jsx
 import React from 'react';
 import { render } from 'react-dom';
 import { Provider } from 'react-redux'; // импорт компонента!
@@ -881,32 +880,26 @@ import reducers from './reducers'
 const store = createStore(reducers);
 
 render(
-<Provider store={store}>
-    <TasksBox />
+    <Provider store={store}>
+      <TasksBox />
     </Provider>,
-document.getElementById('container'),
+    document.getElementById('container')
 );
 
-// Провайдер кроме прочего, выполняет подписку через store.subscribe. Это значит, что больше не придётся беспокоиться об обновлении приложения при изменении данных внутри контейнера.
+```
+
+Провайдер кроме прочего, выполняет подписку через store.subscribe. 
+Это значит, что больше не придётся беспокоиться об обновлении приложения при изменении данных внутри контейнера.
 
 
-# connect
+**connect**
 
-// Пакет react-redux предоставляет функцию connect. Она связывает данные из контейнера со свойствами конкретного компонента.
+Пакет react-redux предоставляет функцию connect. Она связывает данные из контейнера со свойствами конкретного компонента.
 
-// components/TasksBox.jsx
+```jsx
 // components/TasksBox.jsx
 import React from 'react';
 import { connect } from 'react-redux';
-
-// Эта функция, берет нужные данные из контейнера и отдаёт их компоненту
-// Компоненту TasksBox нужны задачи
-const mapStateToProps = state => {
-    const props = {
-        tasks: state.tasks,
-    }
-    return props;
-};
 
 class TasksBox extends React.Component {
     render() {
@@ -916,31 +909,39 @@ class TasksBox extends React.Component {
     }
 }
 
+// Эта функция, берет нужные данные из контейнера и отдаёт их компоненту
+// Компоненту TasksBox нужны задачи
+const mapStateToProps = state => {
+  const props = {
+    tasks: state.tasks,
+  }
+
+  return props;
+};
+
 // connect соединяет контейнер с текущим компонентом
 // Наружу экспортируется компонент, который используется как обычно (пример выше)
 export default connect(mapStateToProps)(TasksBox);
 
-/*
-Самое главное в этой схеме — функция mapStateToProps. Эта функция принимает на вход состояние из контейнера и должна возвратить объект, свойства которого станут props в подключаемом компоненте (в данном случае <TasksBox>). В тривиальном случае мы всегда можем реализовывать эту функцию так state => state. То есть берём и отдаём в компонент всё состояние. Но делать так не стоит по многим причинам, начиная от полной просадки производительности, заканчивая тем, что появляется сильная зависимость от структуры состояния и лишние данные там, где их не ждут. Более того, всю предварительную обработку данных, подготовленных для вывода, стоит делать именно здесь. В идеале в компоненты должны попадать уже готовые к выводу данные.
-*/
+```
+Самое главное в этой схеме — функция `mapStateToProps`. 
+Эта функция принимает на вход состояние из контейнера и должна возвратить объект, свойства которого станут props в подключаемом компоненте (в данном случае `<TasksBox>`). 
+В тривиальном случае мы всегда можем реализовывать эту функцию так `state => state`. 
+То есть берём и отдаём в компонент всё состояние. 
+Но делать так не стоит по многим причинам, начиная от полной просадки производительности, заканчивая тем, что появляется сильная зависимость от структуры состояния и лишние данные там, где их не ждут. 
+Более того, всю предварительную обработку данных, подготовленных для вывода, стоит делать именно здесь. В идеале в компоненты должны попадать уже готовые к выводу данные.
 
-# dispatch
-
-/*
-Функция connect пробрасывает в компонент дополнительные свойства. Самое важное из них - функция dispatch. Эта функция работает точь-в-точь как и store.dispatch. Ей нужно передать действие, что в свою очередь запустит цепочку вызовов до перерисовки. Полный код компонента ниже:
-*/
-
+**dispatch**
+Функция connect пробрасывает в компонент дополнительные свойства. 
+Самое важное из них - функция `dispatch`. 
+Эта функция работает точь-в-точь как и store.dispatch. 
+Ей нужно передать действие, что в свою очередь запустит цепочку вызовов до перерисовки. 
+Полный код компонента ниже:
+```jsx
 // components/TasksBox.jsx
 import React from 'react';
 import { connect } from 'react-redux';
 import { addTask } from '../actions';
-
-const mapStateToProps = state => {
-    const props = {
-        tasks: state.tasks,
-    }
-    return props;
-};
 
 class TasksBox extends React.Component {
     handleAddTask = (e) => {
@@ -955,84 +956,96 @@ class TasksBox extends React.Component {
     }
 }
 
+const mapStateToProps = state => {
+  const props = {
+    tasks: state.tasks,
+  }
+  return props;
+};
+
 export default connect(mapStateToProps)(TasksBox);
+```
 
+**Файловая структура**
 
-# Файловая структура
+Имея такое количество сущностей, возникает закономерный вопрос о том как их раскладывать в файловой системе. Обычно делают так:
 
-// Имея такое количество сущностей, возникает закономерный вопрос о том как их раскладывать в файловой системе. Обычно делают так:
-actions/index.js
-components/App.jsx
-reducers/index.js
-index.jsx
+* actions/index.js
+* components/App.jsx
+* reducers/index.js
+* index.jsx
 
-/*
 Какой механизм практически полностью заменяет Redux в React?
+
 > Менеджмент состояния. setState напрямую либо не используется вообще никогда, либо изредка в случае работы с UI состоянием, изолированным в конкретных компонентах.
 
 Для чего нужен провайдер?
+
 > Для хранения и доставки Store в компоненты-контейнеры
 
 Каким образом в текущей схеме изменяются данные в Store?
+
 > Через вызов функции dispatch, которая передается в props, и передачу ей соответствующего Action
-*/
 
-/**@@@
- Реализуйте приложение "список задач", которое умеет две вещи:
+#### ЗАДАЧА ####
+Реализуйте приложение "список задач", которое умеет две вещи:
 
- Добавлять задачи в список
- Удалять задачи из списка
- src/index.jsx
- Оберните приложение в провайдер и примонтируйте к элементу с идентификатором container.
+Добавлять задачи в список
+Удалять задачи из списка
+src/index.jsx
+Оберните приложение в провайдер и примонтируйте к элементу с идентификатором container.
 
- src/actions/index.js
- Реализуйте необходимые действия.
+src/actions/index.js
+Реализуйте необходимые действия.
 
- src/reducers/index.js
- Реализуйте необходимую логику.
+src/reducers/index.js
+Реализуйте необходимую логику.
 
- src/components/App.jsx
- Реализуйте компонент <App>
+src/components/App.jsx
+Реализуйте компонент <App>
 
- HTML
- Начальный
- */
+HTML Начальный
+```html
 <div class="col-5">
     <form action="" class="form-inline">
-    <div class="form-group mx-sm-3">
-    <input type="text" required value="">
-    </div>
-    <button type="submit" class="btn btn-primary btn-sm">Add</button>
+        <div class="form-group mx-sm-3">
+          <input type="text" required value="">
+        </div>
+        <button type="submit" class="btn btn-primary btn-sm">Add</button>
     </form>
-    </div>
+</div>
+```
 
-    // HTML после добавления двух задач
-    <div class="col-5">
+HTML после добавления двух задач
+
+```html
+<div class="col-5">
     <form action="" class="form-inline">
-    <div class="form-group mx-sm-3">
-    <input type="text" required value="">
-    </div>
-    <button type="submit" class="btn btn-primary btn-sm">Add</button>
+      <div class="form-group mx-sm-3">
+        <input type="text" required value="">
+      </div>
+      <button type="submit" class="btn btn-primary btn-sm">Add</button>
     </form>
     <div class="mt-3">
-    <ul class="list-group">
-    <li class="list-group-item d-flex">
-    <span className="mr-auto">second Task!</span>
-<button type="button" class="close">
-    <span>&times;</span>
-</button>
-</li>
-<li class="list-group-item d-flex">
-    <span className="mr-auto">first Task!</span>
-<button type="button" class="close">
-    <span>&times;</span>
-</button>
-</li>
-</ul>
+        <ul class="list-group">
+            <li class="list-group-item d-flex">
+                <span className="mr-auto">second Task!</span>
+                <button type="button" class="close">
+                    <span>&times;</span>
+                </button>
+          </li> 
+          <li class="list-group-item d-flex">
+                <span className="mr-auto">first Task!</span>
+                <button type="button" class="close">
+                    <span>&times;</span>
+                </button>
+          </li>
+        </ul>
+    </div>
 </div>
-</div>
+```
 
-
+```jsx
 // FILE: /app/src/actions/index.js:
 export const updateNewTaskText = text => ({
     type: 'TEXT_UPDATE',
@@ -1064,17 +1077,11 @@ import { connect } from 'react-redux';
 import _ from 'lodash';
 import { updateNewTaskText, addTask, removeTask } from '../actions';
 
-
-const mapStateToProps = ({ tasks, text }) => {
-    const props = { tasks, text };
-    return props;
-};
-
 class App extends React.Component {
     handleAddTask = (e) => {
         e.preventDefault();
         const { dispatch, text } = this.props;
-        const task = { text, id: _.uniqueId() };
+        const task = { id: _.uniqueId(), text };
         dispatch(addTask(task));
     };
 
@@ -1092,40 +1099,46 @@ class App extends React.Component {
         if (tasks.length === 0) {
             return null;
         }
+        
         return (
             <div className="mt-3">
-            <ul className="list-group">
-            {tasks.map(({ id, text }) => (
-                    <li key={id} className="list-group-item d-flex">
-                <span className="mr-auto">{text}</span>
-                <button type="button" className="close" onClick={this.handleRemoveTask(id)}>
-                <span>&times;</span>
-        </button>
-        </li>
-    ))}
-    </ul>
-        </div>
-    );
+                <ul className="list-group">
+                    {tasks.map(({ id, text }) => (
+                        <li key={id} className="list-group-item d-flex">
+                          <span className="mr-auto">{text}</span>
+                          <button type="button" className="close" onClick={this.handleRemoveTask(id)}>
+                            <span>&times;</span>
+                          </button>
+                        </li>
+                    ))}
+                </ul>
+            </div>
+        );
     };
 
     render() {
         const { tasks, text } = this.props;
+
         return (
             <div className="col-5">
-            <form action="" className="form-inline" onSubmit={this.handleAddTask}>
-            <div className="form-group mx-sm-3">
-            <input type="text" required value={text} onChange={this.handleUpdateNewTaskText} />
-        </div>
-        <button type="submit" className="btn btn-primary btn-sm">Add</button>
-            </form>
-        {this.renderTasks(tasks)}
-    </div>
-    );
+              <form action="" className="form-inline" onSubmit={this.handleAddTask}>
+                  <div className="form-group mx-sm-3">
+                    <input type="text" required value={text} onChange={this.handleUpdateNewTaskText} />
+                  </div>
+                  <button type="submit" className="btn btn-primary btn-sm">Add</button>
+              </form>
+              {this.renderTasks(tasks)}
+            </div>
+      );
     }
 }
 
-export default connect(mapStateToProps)(App);
+const mapStateToProps = ({ tasks, text }) => {
+  const props = { tasks, text };
+  return props;
+};
 
+export default connect(mapStateToProps)(App);
 
 
 // FILE: /app/src/index.jsx:
@@ -1143,10 +1156,10 @@ const store = createStore(
 
 
 render(
-<Provider store={store}>
-    <App />
+    <Provider store={store}>
+      <App />
     </Provider>,
-document.getElementById('container'),
+    document.getElementById('container'),
 );
 
 
@@ -1183,32 +1196,18 @@ export default combineReducers({
     text,
     tasks,
 });
-
-
-
+```
 
 #### Передача действий ####
 
-/*
 Функция connect позволяет обходиться без явного вызова dispatch. Общий принцип работы такой: в файл с компонентом импортируются необходимые действия и передаются вторым параметром в функцию connect.
-*/
+
+```jsx
 // components/TasksBox.jsx
 import React from 'react';
 import { connect } from 'react-redux';
 // Импортируем нужные действия
 import * as actions from '../actions';
-
-const mapStateToProps = state => {
-    const props = {
-        tasks: state.tasks,
-    }
-    return props;
-};
-
-// Формируем объект с действиями
-const actionCreators = {
-    addTask: actions.addTask,
-};
 
 class TasksBox extends React.Component {
     handleAddTask = (e) => {
@@ -1224,52 +1223,67 @@ class TasksBox extends React.Component {
     }
 }
 
-// Как видите, ничего не надо импортировать, всё есть в props. Технически действия оборачиваются в другие функции таким образом, что интерфейс работы остаётся прежним.
+const mapStateToProps = state => {
+  const props = {
+    tasks: state.tasks,
+  }
+
+  return props;
+};
+
+// Формируем объект с действиями
+const actionCreators = {
+  addTask: actions.addTask,
+};
+```
+
+Как видите, ничего не надо импортировать, всё есть в props. Технически действия оборачиваются в другие функции таким образом, что интерфейс работы остаётся прежним.
 
 
-/*
+#### ЗАДАЧА ####
+Реализуйте компонент <Panel />, который добавит в наше приложение две кнопки:
 
-	Реализуйте компонент <Panel />, который добавит в наше приложение две кнопки:
-	> Generate - создает 5 новых (и случайных) задач взамен уже добавленных
-	> Clean - очищает текущий список задач
+* Generate - создает 5 новых (и случайных) задач взамен уже добавленных
 
-	 actions/index.js
-	 Реализуйте необходимые действия.
+* Clean - очищает текущий список задач
 
-	 reducers/index.js
-	 Реализуйте необходимые обработчики.
+actions/index.js
+Реализуйте необходимые действия.
 
-	 components/Panel.js
-	 Реализуйте необходимую логику.
+reducers/index.js
+Реализуйте необходимые обработчики.
 
-	 Для создания новой задачи используйте такую конструкцию:
+components/Panel.js
+Реализуйте необходимую логику.
 
-	{ id: _.uniqueId(), text: faker.lorem.sentence() };
-*/
+Для создания новой задачи используйте такую конструкцию:
 
+`{ id: _.uniqueId(), text: faker.lorem.sentence() };`
+
+```html
 <div class="col-5">
     <form action="" class="form-inline">
-    <div class="form-group mx-sm-3">
-    <input type="text" required="" value="">
-    </div>
-    <input type="submit" class="btn btn-primary btn-sm" value="Add">
+      <div class="form-group mx-sm-3">
+        <input type="text" required="" value="">
+      </div>
+      <input type="submit" class="btn btn-primary btn-sm" value="Add">
     </form>
     <div class="py-3">
-    <button type="button" data-test="clean" class="btn btn-warning btn-sm mr-3">Clean</button>
-    <button type="button" data-test="generate" class="btn btn-primary btn-sm">Generate</button>
+      <button type="button" data-test="clean" class="btn btn-warning btn-sm mr-3">Clean</button>
+      <button type="button" data-test="generate" class="btn btn-primary btn-sm">Generate</button>
     </div>
     <div class="mt-3">
-    <ul class="list-group">
-    <li class="list-group-item d-flex">
-    <span class="mr-auto">Quia voluptatem quia et vel assumenda rerum quas.</span>
-<button type="button" class="close"><span>×</span></button>
-</li>
-</ul>
+      <ul class="list-group">
+          <li class="list-group-item d-flex">
+            <span class="mr-auto">Quia voluptatem quia et vel assumenda rerum quas.</span>
+            <button type="button" class="close"><span>×</span></button>
+          </li>
+      </ul>
+    </div>
 </div>
-</div>
+```
 
-
-
+```js
 // FILE: /src/actions/index.js
 export const updateNewTaskText = (text) => ({
     type: 'TEXT_UPDATE',
@@ -1312,10 +1326,6 @@ import { connect } from 'react-redux';
 import faker from '../faker';
 import * as actions from '../actions';
 
-const mapStateToProps = (state) => {
-    return {};
-};
-
 const actionCreators = {
     cleanTasks: actions.cleanTasks,
     replaceTasksBy: actions.replaceTasksBy,
@@ -1337,26 +1347,30 @@ class NewTaskForm extends React.Component {
     render() {
         return (
             <div className="py-3">
-            <button
-        type="button"
-        data-test="clean"
-        className="btn btn-warning btn-sm mr-3"
-        onClick={this.handleCleanTasks}
-            >
-            Clean
-            </button>
-            <button
-        type="button"
-        data-test="generate"
-        className="btn btn-primary btn-sm"
-        onClick={this.handleGenerateSamples}
-            >
-            Generate
-            </button>
-            </div>
-    );
+                <button
+                    type="button"
+                    data-test="clean"
+                    className="btn btn-warning btn-sm mr-3"
+                    onClick={this.handleCleanTasks}
+                >
+                  Clean
+                </button>
+                <button
+                    type="button"
+                    data-test="generate"
+                    className="btn btn-primary btn-sm"
+                    onClick={this.handleGenerateSamples}
+                >
+                  Generate
+                </button>
+          </div>
+        );
     }
 }
+
+const mapStateToProps = (state) => {
+  return {};
+};
 
 export default connect(mapStateToProps, actionCreators)(NewTaskForm);
 
@@ -1365,15 +1379,6 @@ export default connect(mapStateToProps, actionCreators)(NewTaskForm);
 import React from 'react';
 import { connect } from 'react-redux';
 import * as actions from '../actions';
-
-const mapStateToProps = (state) => {
-    const { tasks } = state;
-    return { tasks };
-};
-
-const actionCreators = {
-    removeTask: actions.removeTask,
-};
 
 class Tasks extends React.Component {
     handleRemoveTask = id => () => {
@@ -1390,20 +1395,30 @@ class Tasks extends React.Component {
 
         return (
             <div className="mt-3">
-            <ul className="list-group">
-            {tasks.map(({ id, text }) => (
-                    <li key={id} className="list-group-item d-flex">
-                <span className="mr-auto">{text}</span>
-                <button type="button" className="close" onClick={this.handleRemoveTask(id)}>
-                <span>&times;</span>
-        </button>
-        </li>
-    ))}
-    </ul>
-        </div>
-    );
+                <ul className="list-group">
+                    {tasks.map(({ id, text }) => (
+                      <li key={id} className="list-group-item d-flex">
+                        <span className="mr-auto">{text}</span>
+                        <button type="button" className="close" onClick={this.handleRemoveTask(id)}>
+                          <span>&times;</span>
+                        </button>
+                      </li>
+                    ))}
+                </ul>
+            </div>
+        );
     }
 }
+
+const mapStateToProps = (state) => {
+  const { tasks } = state;
+
+  return { tasks };
+};
+
+const actionCreators = {
+  removeTask: actions.removeTask,
+};
 
 export default connect(mapStateToProps, actionCreators)(Tasks);
 
@@ -1449,48 +1464,52 @@ export default combineReducers({
     text,
     tasks,
 });
-
-
+```
 
 
 #### Redux Actions ####
-// Типичный Action выглядит так:
+Типичный Action выглядит так:
+```js
 {
     type: 'TODO_ADD',
     payload: {
         /* data */
     }
 }
+```
 
-/*
-Даже в небольших приложениях на js действий десятки, а то и сотни. В итоге появляется множество одинакового кода. К тому же есть проблема: если ошибиться с именем в редьюсере или даже при формировании действия, то система ничего не скажет и придется отлаживать такую ситуацию руками.
+Даже в небольших приложениях на js действий десятки, а то и сотни. 
+В итоге появляется множество одинакового кода. К тому же есть проблема: если ошибиться с именем в редьюсере или даже при формировании действия, то система ничего не скажет и придется отлаживать такую ситуацию руками.
 
-По этой причине появились библиотеки-хелперы, помогающие сократить код. Самой популярной является redux-actions. Она включает в себя два аспекта:
+По этой причине появились библиотеки-хелперы, помогающие сократить код. 
+Самой популярной является redux-actions. Она включает в себя два аспекта:
 Определение действий.
 Определение хранилища.
 
 Начнем с действий:
-*/
+```js
 import { createAction } from 'redux-actions';
 
 export const addUser = createAction('USER_ADD');
 export const updateUser = createAction('USER_UPDATE');
+```
 
-/*
-Функция createAction формирует новую функцию, которая при вызове возвращает действие (объект { type: ... }). Эта функция принимает на вход данные, которые попадают в свойство payload.
+Функция `createAction` формирует новую функцию, которая при вызове возвращает действие (объект { type: ... }). Эта функция принимает на вход данные, которые попадают в свойство payload.
 
-Подразумевается, что сгенерированные функции экспортируются наружу и используются при вызовах store.dispatch().
-*/
+Подразумевается, что сгенерированные функции экспортируются наружу и используются при вызовах `store.dispatch()`.
 
+```js
 import { addUser } from './actions'
 import reducers from './reducers'
 
 const user = /* get user from somewhere */;
 const store = createStore(reducers);
+
 store.dispatch(addUser({ user }));
+```
+Теперь посмотрим редьюсеры:
 
-// Теперь посмотрим редьюсеры:
-
+```js
 import { handleActions } from 'redux-actions';
 import * as actions from './actions';
 
@@ -1503,33 +1522,34 @@ const users = handleActions({
 export default combineReducers({
     users,
 });
-
-/*
+```
 На первый взгляд может показаться что кода прибавилось, но на самом деле его столько же. Но появились и плюшки:
- * Каждый обработчик теперь отдельная функция, а значит их окружения не пересекаются, как в случае switch.
- * Не нужно описывать поведение по умолчанию, когда возвращается сам state.
- * Стало невозможным диспатчить неправильное действие, так как каждая функция обработчик формируется на основании функций, генерирующих действия.
+
+> Каждый обработчик теперь отдельная функция, а значит их окружения не пересекаются, как в случае switch.
+
+> Не нужно описывать поведение по умолчанию, когда возвращается сам state.
+
+> Стало невозможным диспатчить неправильное действие, так как каждая функция обработчик формируется на основании функций, генерирующих действия.
 
 В остальном все остается по-прежнему. Эта библиотека не делает ничего кардинально нового, но позволяет сократить код и упростить отладку.
-*/
-
-/**@@@
- Допишите добавление и удаление задач используя redux-actions
-
- src/actions/index.js
- Реализуйте необходимые действия
-
- src/reducers/index.js
- Реализуйте редьюсеры
-
- src/components/NewTaskForm.jsx
- Реализуйте необходимые обработчики
-
- src/components/Tasks.jsx
- Реализуйте необходимые обработчики
- */
 
 
+#### ЗАДАЧА ####
+Допишите добавление и удаление задач используя redux-actions
+
+src/actions/index.js
+Реализуйте необходимые действия
+
+src/reducers/index.js
+Реализуйте редьюсеры
+
+src/components/NewTaskForm.jsx
+Реализуйте необходимые обработчики
+
+src/components/Tasks.jsx
+Реализуйте необходимые обработчики
+
+```js
 // FILE: /app/src/actions/index.js:
 import { createAction } from 'redux-actions';
 
@@ -1544,20 +1564,7 @@ import _ from 'lodash';
 import { connect } from 'react-redux';
 import * as actions from '../actions';
 
-const mapStateToProps = (state) => {
-    const props = {
-        text: state.text,
-    };
-    return props;
-};
-
-const actionCreators = {
-    updateNewTaskText: actions.updateNewTaskText,
-    addTask: actions.addTask,
-};
-
 class NewTaskForm extends React.Component {
-
     handleAddTask = (e) => {
         e.preventDefault();
         const { addTask, text } = this.props;
@@ -1575,19 +1582,31 @@ class NewTaskForm extends React.Component {
 
         return (
             <form action="" className="form-inline" onSubmit={this.handleAddTask}>
-            <div className="form-group mx-sm-3">
-            <input
-        type="text"
-        required
-        value={text}
-        onChange={this.handleUpdateNewTaskText}
-        />
-        </div>
-        <input type="submit" className="btn btn-primary btn-sm" value="Add" />
+              <div className="form-group mx-sm-3">
+                <input
+                    type="text"
+                    required
+                    value={text}
+                    onChange={this.handleUpdateNewTaskText}
+                />
+              </div>
+              <input type="submit" className="btn btn-primary btn-sm" value="Add" />
             </form>
-    );
+        );
     }
 }
+
+const mapStateToProps = (state) => {
+  const props = {
+    text: state.text,
+  };
+  return props;
+};
+
+const actionCreators = {
+  updateNewTaskText: actions.updateNewTaskText,
+  addTask: actions.addTask,
+};
 
 export default connect(mapStateToProps, actionCreators)(NewTaskForm);
 
@@ -1621,18 +1640,18 @@ class Tasks extends React.Component {
 
         return (
             <div className="mt-3">
-            <ul className="list-group">
-            {tasks.map(({ id, text }) => (
-                    <li key={id} className="list-group-item d-flex">
-                <span className="mr-auto">{text}</span>
-                <button type="button" className="close" onClick={this.handleRemoveTask(id)}>
-                <span>&times;</span>
-        </button>
-        </li>
-    ))}
-    </ul>
-        </div>
-    );
+                <ul className="list-group">
+                    {tasks.map(({ id, text }) => (
+                        <li key={id} className="list-group-item d-flex">
+                            <span className="mr-auto">{text}</span>
+                            <button type="button" className="close" onClick={this.handleRemoveTask(id)}>
+                              <span>&times;</span>
+                            </button>
+                        </li>
+                    ))}
+                </ul>
+            </div>
+        );
     }
 }
 
@@ -1643,7 +1662,6 @@ export default connect(mapStateToProps, actionCreators)(Tasks);
 import { combineReducers } from 'redux';
 import { handleActions } from 'redux-actions';
 import * as actions from '../actions';
-
 
 const tasks = handleActions({
     [actions.addTask](state, { payload: { task } }) {
@@ -1663,7 +1681,6 @@ const text = handleActions({
     },
 }, '');
 
-
 export default combineReducers({
     text,
     tasks,
@@ -1677,91 +1694,21 @@ import Tasks from './Tasks';
 
 const App = () => (
     <div className="col-5">
-    <NewTaskForm />
-    <Tasks />
+      <NewTaskForm />
+      <Tasks />
     </div>
 );
 
 export default App;
-
-
-#### Библиотека Redux Actions ####
-
-// Типичное действие выглядит так:
-{
-    type: 'TODO_ADD',
-    payload: {
-        /* data */
-    }
-}
-
-/*
-	 Даже в небольших JS-приложениях, действий десятки, а то и сотни. В итоге появляется множество одинакового кода. К тому же есть проблема: если ошибиться с именем в редьюсере или даже при формировании действия, то система ничего не скажет и придётся отлаживать такую ситуацию руками.
-
-	По этой причине появились библиотеки-хелперы, помогающие сократить код. Самой популярной является redux-actions https://redux-actions.js.org/introduction/tutorial. Она включает в себя два аспекта:
-
-	1. Определение действий.
-	2. Определение хранилища.
-
-	Начнём с действий:
-*/
-
-import { createAction } from 'redux-actions';
-
-export const addUser = createAction('USER_ADD');
-export const updateUser = createAction('USER_UPDATE');
-
-
-
-/*
-Функция createAction формирует новую функцию, которая при вызове возвращает действие (объект { type: ... }). Эта функция принимает на вход данные, которые попадают в свойство payload.
-
-Подразумевается, что сгенерированные функции экспортируются наружу и используются при вызовах store.dispatch().
-*/
-
-import { addUser } from './actions'
-import reducers from './reducers'
-
-const user = /* get user from somewhere */;
-const store = createStore(reducers);
-store.dispatch(addUser({ user }));
-
-
-// Теперь посмотрим редьюсеры:
-
-import { handleActions } from 'redux-actions';
-import * as actions from './actions';
-
-const users = handleActions({
-    [actions.addUser](state, { payload: { user } }) {
-        return { ...state, [user.id]: user };
-    },
-}, {});
-
-export default combineReducers({
-    users,
-});
-
-
-/*
-	На первый взгляд может показаться, что кода стало больше, но на самом деле его столько же. Но появились и плюшки:
-	1. Каждый обработчик теперь отдельная функция, а значит их окружения не пересекаются, как в случае switch.
-	2. Не нужно описывать поведение по умолчанию, когда возвращается сам state.
-	3. Стало невозможным отправлять неправильное действие, так как каждая функция обработчик формируется на основании функций, генерирующих действия.
-
-	В остальном всё остаётся по-прежнему. Эта библиотека не делает ничего кардинально нового, но позволяет сократить код и упростить отладку.
-*/
-
+```
 
 
 #### Структура состояния ####
 
-/*
 Данный урок базируется на статье https://redux.js.org/recipes/structuring-reducers/normalizing-state-shape официальной документации
 
 Большинство приложений работают с данными, которые имеют вложенную структуру. Например, у постов в блоге есть автор и комментарии. У комментариев тоже есть авторы и могут быть лайки.
-*/
-
+```js
 const blogPosts = [
     {
         id: 'post1',
@@ -1781,22 +1728,28 @@ const blogPosts = [
         ]
     },
 ];
+```
 
-/*
 Работать с такой структурой напрямую тяжело по нескольким причинам:
-- Внутри неё дублируются данные, например, author. Из-за этого резко усложняется обновление.
-- Логика редьюсеров становится тем сложнее, чем больше вложенность
+> Внутри неё дублируются данные, например, author. Из-за этого резко усложняется обновление.
 
-Правильный подход при работе с Redux — воспринимать его как реляционную базу данных. Данные внутри контейнера должны быть нормализованы. При таком взгляде, каждый редьюсер может восприниматься как отдельная таблица в базе данных.
+> Логика редьюсеров становится тем сложнее, чем больше вложенность
+
+Правильный подход при работе с Redux — воспринимать его как реляционную базу данных. 
+Данные внутри контейнера должны быть нормализованы. 
+При таком взгляде, каждый редьюсер может восприниматься как отдельная таблица в базе данных.
 
 Основные принципы организации данных в контейнере:
 
-- Каждая сущность хранится в своём редьюсере.
-- Коллекция сущностей одного типа хранится в виде объекта, где ключи — идентификаторы объектов, а значения — сами объекты.
-- Порядок данных в этом объекте, задаётся отдельным массивом состоящим только из идентификаторов.
-- Данные ссылаются друг на друга только по идентификаторам
-*/
+> Каждая сущность хранится в своём редьюсере.
 
+> Коллекция сущностей одного типа хранится в виде объекта, где ключи — идентификаторы объектов, а значения — сами объекты.
+
+> Порядок данных в этом объекте, задаётся отдельным массивом состоящим только из идентификаторов.
+
+> Данные ссылаются друг на друга только по идентификаторам
+
+```js
 {
     posts : {
         byId : {
@@ -1846,44 +1799,32 @@ const blogPosts = [
         allIds : ["user1", "user2", "user3"]
     }
 }
+```
+
+Теперь данные нормализованы. Каждая сущность хранится в своём собственном редьюсере. 
+Объект byId хранит сами сущности, а allIds - идентификаторы. Какие преимущества мы получили?
+
+> Данные не повторяются, а значит достаточно поменять только одно место при их изменении
+
+> Редьюсеры не имеют вложенности
+
+> Данные в таком виде легко извлекать и модифицировать
 
 
-/*
-Теперь данные нормализованы. Каждая сущность хранится в своём собственном редьюсере. Объект byId хранит сами сущности, а allIds - идентификаторы. Какие преимущества мы получили?
+#### ЗАДАЧА ####
+Продолжаем улучшать наш todo. Добавим в него возможность изменять состояние завершенности задачи по клику. Если задача завершена, то она перечеркивается.
 
-- Данные не повторяются, а значит достаточно поменять только одно место при их изменении
-- Редьюсеры не имеют вложенности
-- Данные в таком виде легко извлекать и модифицировать
-*/
+src/reducers/index.js
+Реализуйте редьюсеры используя подход, описанный в теории
 
-/**@@@
- Продолжаем улучшать наш todo. Добавим в него возможность изменять состояние завершенности задачи по клику. Если задача завершена, то она перечеркивается.
+src/components/Tasks.jsx
+Реализуйте функцию mapStateToProps
 
- src/reducers/index.js
- Реализуйте редьюсеры используя подход, описанный в теории
-
- src/components/Tasks.jsx
- Реализуйте функцию mapStateToProps
- */
-
-
+```js
 // FILE: /app/src/reducers/index.js:
-/* eslint-disable jsx-a11y/anchor-is-valid */
-
 import React from 'react';
 import { connect } from 'react-redux';
 import * as actions from '../actions';
-
-const mapStateToProps = (state) => {
-    const { tasks: { byId, allIds } } = state;
-    const tasks = allIds.map(id => byId[id]);
-    return { tasks };
-};
-
-const actionCreators = {
-    removeTask: actions.removeTask,
-    toggleTaskState: actions.toggleTaskState,
-};
 
 class Tasks extends React.Component {
     handleRemoveTask = id => () => {
@@ -1905,24 +1846,36 @@ class Tasks extends React.Component {
 
         return (
             <div className="mt-3">
-            <ul className="list-group">
-            {tasks.map(({ id, text, state }) => (
-                    <li key={id} className="list-group-item d-flex">
-                <span className="mr-auto">
-                <a href="#" data-test="task-toggle-state" onClick={this.handleToggleTaskState(id)}>
-                {state === 'active' ? text : <s>{text}</s>}
-            </a>
-            </span>
-            <button type="button" data-test="task-remove" className="close" onClick={this.handleRemoveTask(id)}>
-            <span>&times;</span>
-        </button>
-        </li>
-    ))}
-    </ul>
-        </div>
-    );
+                <ul className="list-group">
+                    {tasks.map(({ id, text, state }) => (
+                        <li key={id} className="list-group-item d-flex">
+                            <span className="mr-auto">
+                                <a href="#" data-test="task-toggle-state" onClick={this.handleToggleTaskState(id)}>
+                                  {state === 'active' ? text : <s>{text}</s>}
+                                </a>
+                            </span>
+                            <button type="button" data-test="task-remove" className="close" onClick={this.handleRemoveTask(id)}>
+                              <span>&times;</span>
+                            </button>
+                        </li>
+                    ))}
+                </ul>
+            </div>
+        );
     }
 }
+
+const mapStateToProps = (state) => {
+  const { tasks: { byId, allIds } } = state;
+  const tasks = allIds.map(id => byId[id]);
+
+  return { tasks };
+};
+
+const actionCreators = {
+  removeTask: actions.removeTask,
+  toggleTaskState: actions.toggleTaskState,
+};
 
 export default connect(mapStateToProps, actionCreators)(Tasks);
 
@@ -1989,8 +1942,8 @@ import Tasks from './Tasks';
 
 const App = () => (
     <div className="col-5">
-    <NewTaskForm />
-    <Tasks />
+        <NewTaskForm />
+        <Tasks />
     </div>
 );
 export default App;
@@ -2001,18 +1954,6 @@ import React from 'react';
 import _ from 'lodash';
 import { connect } from 'react-redux';
 import * as actions from '../actions';
-
-const mapStateToProps = (state) => {
-    const props = {
-        text: state.text,
-    };
-    return props;
-};
-
-const actionCreators = {
-    updateNewTaskText: actions.updateNewTaskText,
-    addTask: actions.addTask,
-};
 
 class NewTaskForm extends React.Component {
     handleAddTask = (e) => {
@@ -2031,41 +1972,41 @@ class NewTaskForm extends React.Component {
         const { text } = this.props;
 
         return (
-            <form action="" className="form-inline" onSubmit={this.handleAddTask}>
+          <form action="" className="form-inline" onSubmit={this.handleAddTask}>
             <div className="form-group mx-sm-3">
-            <input
-        type="text"
-        required
-        value={text}
-        onChange={this.handleUpdateNewTaskText}
-        />
-        </div>
-        <input type="submit" className="btn btn-primary btn-sm" value="Add" />
-            </form>
+              <input
+                type="text"
+                required
+                value={text}
+                onChange={this.handleUpdateNewTaskText}
+              />
+            </div>
+            <input type="submit" className="btn btn-primary btn-sm" value="Add"/>
+          </form>
     );
     }
 }
+
+const mapStateToProps = (state) => {
+  const props = {
+    text: state.text,
+  };
+  return props;
+};
+
+const actionCreators = {
+  updateNewTaskText: actions.updateNewTaskText,
+  addTask: actions.addTask,
+};
+
 
 export default connect(mapStateToProps, actionCreators)(NewTaskForm);
 
 
 // FILE: /app/src/components/Tasks.jsx:
-/* eslint-disable jsx-a11y/anchor-is-valid */
-
 import React from 'react';
 import { connect } from 'react-redux';
 import * as actions from '../actions';
-
-const mapStateToProps = (state) => {
-    const { tasks: { byId, allIds } } = state;
-    const tasks = allIds.map(id => byId[id]);
-    return { tasks };
-};
-
-const actionCreators = {
-    removeTask: actions.removeTask,
-    toggleTaskState: actions.toggleTaskState,
-};
 
 class Tasks extends React.Component {
     handleRemoveTask = id => () => {
@@ -2086,25 +2027,36 @@ class Tasks extends React.Component {
         }
 
         return (
-            <div className="mt-3">
+          <div className="mt-3">
             <ul className="list-group">
-            {tasks.map(({ id, text, state }) => (
-                    <li key={id} className="list-group-item d-flex">
-                <span className="mr-auto">
-                <a href="#" data-test="task-toggle-state" onClick={this.handleToggleTaskState(id)}>
-                {state === 'active' ? text : <s>{text}</s>}
-            </a>
-            </span>
-            <button type="button" data-test="task-remove" className="close" onClick={this.handleRemoveTask(id)}>
-            <span>&times;</span>
-        </button>
-        </li>
-    ))}
-    </ul>
-        </div>
-    );
+              {tasks.map(({id, text, state}) => (
+                <li key={id} className="list-group-item d-flex">
+                  <span className="mr-auto">
+                    <a href="#" data-test="task-toggle-state" onClick={this.handleToggleTaskState(id)}>
+                      {state === 'active' ? text : <s>{text}</s>}
+                    </a>
+                  </span>
+                  <button type="button" data-test="task-remove" className="close" onClick={this.handleRemoveTask(id)}>
+                    <span>&times;</span>
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </div>            
+        );
     }
 }
+
+const mapStateToProps = (state) => {
+  const { tasks: { byId, allIds } } = state;
+  const tasks = allIds.map(id => byId[id]);
+  return { tasks };
+};
+
+const actionCreators = {
+  removeTask: actions.removeTask,
+  toggleTaskState: actions.toggleTaskState,
+};
 
 export default connect(mapStateToProps, actionCreators)(Tasks);
 
@@ -2116,29 +2068,33 @@ import { createStore } from 'redux';
 import reducers from './reducers';
 import App from './components/App';
 
-/* eslint-disable no-underscore-dangle */
 const store = createStore(
     reducers,
     window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
 );
-/* eslint-enable */
 
 render(
-<Provider store={store}>
+  <Provider store={store}>
     <App />
-    </Provider>,
-document.getElementById('container'),
+  </Provider>,
+  document.getElementById('container'),
 );
-
-
+```
 
 
 #### UI State ####
 
-/*
-UI State отличается от остальных видов состояния тем, что относится только к UI и не влияет на остальные части приложения. Например, всплывающая подсказка при наведении мышкой на элемент. В таких ситуациях бывает полезно хранить состояние не в Redux, а внутри компонентов, отвечающих за соответствующий вывод на экран. Преимущества очень простые: не надо создавать действий, не надо задействовать весь механизм диспетчеризации. К тому же перерисовка коснется только небольшой части виртуального дома (скорее всего).
+UI State отличается от остальных видов состояния тем, что относится только к UI и не влияет на остальные части приложения. 
+Например, всплывающая подсказка при наведении мышкой на элемент.
+В таких ситуациях бывает полезно хранить состояние не в Redux, а внутри компонентов, отвечающих за соответствующий вывод на экран. 
+Преимущества очень простые: не надо создавать действий, не надо задействовать весь механизм диспетчеризации.
+К тому же перерисовка коснется только небольшой части виртуального дома (скорее всего).
 
-Практика показывает, что довольно часто нельзя провести четкую грань между app state и ui state. Начнем с того, что отображение на экране зависит вообще от всего. Например, в todo приложениях завершенный todo, как правило, отображается зачеркнутым. В данном случае зачеркнутость определяется тем какое значение в свойстве state у соответствующего todo. Текущий выбранный элемент может быть исключительно элементом UI, а может влиять на поведение программы, например, определенных кнопок, позволяющих выполнять действий в стиле "удалить все выбранное". Вот лишь некоторые примеры, которые можно отнести либо к одной, либо к другой части состояния:
+Практика показывает, что довольно часто нельзя провести четкую грань между app state и ui state. 
+Начнем с того, что отображение на экране зависит вообще от всего.
+Например, в todo приложениях завершенный todo, как правило, отображается зачеркнутым. В данном случае зачеркнутость определяется тем какое значение в свойстве state у соответствующего todo. 
+Текущий выбранный элемент может быть исключительно элементом UI, а может влиять на поведение программы, например, определенных кнопок, позволяющих выполнять действий в стиле "удалить все выбранное". 
+Вот лишь некоторые примеры, которые можно отнести либо к одной, либо к другой части состояния:
 
 * Подсвеченный текущий элемент.
 * Элемент в режиме редактирования.
@@ -2149,25 +2105,30 @@ UI State отличается от остальных видов состоян�
 А вот что говорят по этому поводу разработчики React:
 The rule of thumb is: do whatever is less awkward.
 
-
-Другими словами, делайте так, как наименее тяжело и затратно. По умолчанию исходите из предположения, что все хранится в Redux. В своей практике я припомню лишь несколько случаев, когда использовался локальный стейт. В основном такое бывает у сторонних компонентов или в самописных виджетах. Не забывайте что локальный стейт не участвует в процессе диспетчеризации, а значит его не так легко отлаживать. Он не видим в DevTools редакса.
+Другими словами, делайте так, как наименее тяжело и затратно.
+По умолчанию исходите из предположения, что все хранится в Redux. 
+В своей практике я припомню лишь несколько случаев, когда использовался локальный стейт. 
+В основном такое бывает у сторонних компонентов или в самописных виджетах. 
+Не забывайте что локальный стейт не участвует в процессе диспетчеризации, а значит его не так легко отлаживать. 
+Он не видим в DevTools редакса.
 
 Но чего не стоит делать однозначно, так это примешивать app state и ui state в domain data.
-*/
 
+```js
 const state = {
     tasks: {
         byIds: { 1: { ui: `'opened'` } },
     },
 };
+```
 
-/*
-Обычно, данные приходят с сервера в чистом виде. UI состояние появляется позже, во время взаимодействия с пользователем. Соединяя UI-состояние с самими данными, мы получаем сразу несколько проблем:
+Обычно, данные приходят с сервера в чистом виде. UI состояние появляется позже, во время взаимодействия с пользователем. 
+Соединяя UI-состояние с самими данными, мы получаем сразу несколько проблем:
 1. Все новые данные придется обрабатывать, добавляя в них UI-состояние.
 2. Все что отправляется на сервер, придется чистить от UI-состояния.
 
 Ниже приводится пример правильного разделения:
-*/
+```js
 const state = {
     tasks: {
         byIds: { 1: { /* ... */ } },
@@ -2176,14 +2137,14 @@ const state = {
         1: { state: 'editing' },
     }
 };
+```
 
+#### ЗАДАЧА ####
+src/components/Tasks.jsx
+Реализуйте компонент <Tasks />, добавив в него логику переключения "темы". Тема определяет классы, применяемые к конкретной задаче. По умолчанию используется светлая тема light. При клике на задачу она должна поменяться на dark. Классы для тем описаны в самом компоненте.
 
-/**@@@
- src/components/Tasks.jsx
- Реализуйте компонент <Tasks />, добавив в него логику переключения "темы". Тема определяет классы, применяемые к конкретной задаче. По умолчанию используется светлая тема light. При клике на задачу она должна поменяться на dark. Классы для тем описаны в самом компоненте.
+Задача со светлой темой:
 
- Задача со светлой темой:
- */
 
 <li class="list-group-item d-flex bg-light text-dark">
     <span class="mr-auto">
@@ -2559,7 +2520,7 @@ const mapStateToProps = (state) => {
 > Уменьшение повторных вычислений на неизменившихся данных
 */
 
-/**@@@
+#### ЗАДАЧА ####
  src/components/Filter.jsx
  Реализуйте компонент <Filter />, добавив в него логику фильтрации.
 
@@ -3116,7 +3077,7 @@ redux-form https://redux-form.com/
 */
 
 
-/**@@@
+#### ЗАДАЧА ####
  src/components/NewTaskForm.jsx
  Реализуйте недостающие части компонента <NewTaskForm />.
 
@@ -3417,7 +3378,7 @@ export default reduxForm({
 })(EditTaskForm);
 
 
-/**@@@
+#### ЗАДАЧА ####
  Реализуйте взаимодействие с бекендом для создания задач.
 
  Доступные урлы описаны в файле routes.js
