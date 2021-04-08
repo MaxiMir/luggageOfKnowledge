@@ -1,4 +1,4 @@
-##### YARN #####
+# YARN #
 
 ```shell
 yarn init -y # в автоматическом режиме создаст файл манифест package.json

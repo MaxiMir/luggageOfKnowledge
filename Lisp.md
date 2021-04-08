@@ -1,4 +1,4 @@
-### LISP ###
+# LISP #
 
 ```common-lisp
 // В () выражение

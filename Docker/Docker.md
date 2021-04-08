@@ -1,40 +1,34 @@
-:<<comment
+# DOCKER #
 
-Docker - средство упаковки, доставки и запуска пориложения.
+**Docker** - средство упаковки, доставки и запуска пориложения.
 
-Docker image - сборка (готовое к запуску приложение) read only!
-Docker container - работающее приложение, созданное на базе docker image
+**Docker image** - сборка (готовое к запуску приложение) read only!
+**Docker container** - работающее приложение, созданное на базе docker image
 
 Реестр docker images: hub.docker.com
 
-comment
-
-
+```shell
 $ docker images # вывод локальных images (сборок)
 $ docker rmi mongo # удаление image (сборки)
 $ docker rmi $(docker images -q) # удаление всех images (сборок)
 
 $ docker ps # вывод запущенных контейнеров
 $ docker ps -a # вывод всех контейнеров
+```
 
-# FOLDER /docker-hello-world
-# FOLDER /docker-hello-world/venv/ # виртуальная среда Python
-# FILE: /docker-hello-world/app.py:
-:<<comment
-
+FOLDER /docker-hello-world
+FOLDER /docker-hello-world/venv/ # виртуальная среда Python
+FILE: /docker-hello-world/app.py:
+```
 import time
 
 while True:
     print("Hello, world!")
     time.sleep(1) # скрипт замирает на 1 секунду
-
-comment
-
-
+```
 
 # FILE /docker-hello-world/Dockerfile:
-:<<comment
-
+```dockerfile
 FROM python:3.6 # базовый образ, с которого начинаем сборку (v 3.6)
 
 RUN mkdir -p /usr/src/app/ # определяет какую команду выполнить (здесь создание папки)
@@ -44,13 +38,12 @@ COPY . /usr/src/app/ # переносим все с текущей директ�
 
 CMD ["python", "app.py"] # что выполняем при старте (здесь $ python app.py), выполяется в shell
 
-# ЕЩЕ ПРИМЕР:
-# RUN chmod a+x ./run.sh # даем разрешение на запуск файла
-# ENTRYPOINT ["./run.sh"] # выполняется без shell
+# Еще пример:
+RUN chmod a+x ./run.sh # даем разрешение на запуск файла
+ENTRYPOINT ["./run.sh"] # выполняется без shell
+```
 
-comment
-
-
+```dockerfile
 $ docker build -t hello-world . # создание локального docker образа; -t название образа; . - путь до исходников (текущая директория)
 
 $ docker run hello-world # запуск контейнера hello-world -> Hello, world!
@@ -62,37 +55,27 @@ $ docker ps -a -q # вывод только CONTAINER ID всех контейн
 $ docker rm $(docker ps -qa) # удаляем все контейнеры
 
 $ docker stop hello # остановить контейнер (передавать CONTAINER ID или NAMES)
+```
 
+#### Пример 2 ####
 
-
-############# 2 #############
-# FOLDER /web-hello-world
-# FOLDER /web-hello-world/venv/ # виртуальная среда Python
-# FILE: /web-hello-world/resources/response.json:
-:<<comment
-
+FOLDER /web-hello-world
+FOLDER /web-hello-world/venv/ # виртуальная среда Python
+FILE: /web-hello-world/resources/response.json:
+```json
 {
     "payload": "Hello, World!"
 }
+```
 
-comment
-
-
-
-# FILE: /web-hello-world/requirements.txt:
-:<<comment
-
+FILE: /web-hello-world/requirements.txt:
+```text
 flask==1.1.1
+```
+ИСПОЛЬЗОВАНИЕ ЧЕРЕЗ bash: `$ pip install -r requirements.txt` # устанавливаем зависимости из файла
 
-comment
-
-# ИСПОЛЬЗОВАНИЕ ЧЕРЕЗ bash: $ pip install -r requirements.txt # устанавливаем зависимости из файла
-
-
-
-# FILE: /web-hello-world/app.py:
-:<<comment
-
+FILE: /web-hello-world/app.py:
+```
 import os
 import json
 import datetime
@@ -111,14 +94,10 @@ def hello_world():
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8080, debug=True)
+```
 
-comment
-
-
-
-# FILE /docker-hello-world/Dockerfile:
-:<<comment
-
+FILE /docker-hello-world/Dockerfile:
+````dockerfile
 FROM python:3.6
 
 RUN mkdir -p /usr/src/app/
@@ -132,10 +111,9 @@ EXPOSE 8080 # декларирует порт 8080 !не пробрасывае�
 ENV TZ Europe/Moscow # устанавливаем переменную окружения #1 вариант
 
 CMD ["python", "app.py"]
+````
 
-comment
-
-
+```shell
 $ docker build -t web-hello .
 $ docker run --rm --name web -p 8080:8080 -e TZ=Europe/Moscow web-hello # -p указываем порты - порт на текущей машине:порт внутри докер контейнера | -e устанавливаем переменную окружения #2 вариант
 
@@ -145,14 +123,12 @@ $ docker run --rm --name web -p 8080:8080 -e TZ=Europe/Moscow -v /Users/Maxim/Py
 $ docker volume ls # просмотр текущих volume
 $ docker volume create web # создание volume
 $ docker run --rm --name web -p 8080:8080 -v web:/usr/src/app/resources web-hello ## 2 вариант
+```
 
 
-
-############# 3 #############
-# ...
-
-# FILE: /web-hello-world/app.py:
-:<<comment
+#### Пример 3 ####
+FILE: /web-hello-world/app.py:
+```
 # ...
 
 storage = MongodbService.get_instance()
@@ -168,14 +144,17 @@ for data in storage.get_data():
     print(data)
 
 comment
+```
 
+```shell
 $ docker run --rm -d -p 27017:27017 mongo # запускаем отдельный контейнер с mongo; 27017 - прописанный порт у mongodb. тк локально mongodb не установлена, она установится из dockerhub
+```
 
 
+#### DOCKER COMPOSE (настройка над docker) ####
+FILE: docker-compose.yaml
 
-
-# @ DOCKER COMPOSE (настройка над docker)
-# FILE: docker-compose.yaml
+```yaml
 version: "3"
 
 volumes:
@@ -218,11 +197,13 @@ services:
       volumes:
         - mongodb_volume:/data/db #mongodb_volume монтируем папку
       restart: always
+```
 
 
 
-# @ DEPLOY (Хостинг vscale)
-# Генерируем PUBLIC-KEY:
+#### DEPLOY (Хостинг vscale) ####
+**Генерируем PUBLIC-KEY:**
+```shell
 $ cd ~/.ssh
 $ mkdir erkapharm
 $ cd erkapharm
@@ -234,11 +215,10 @@ $ cat gitlab.pub | pbcopy # pbcopy - в macos вывод копирует в б�
 # or
 $ clip < ~/.ssh/id_rsa.pub # для windows
 
-
 $ cd .ssh
 $ vim config # заносим ->
-:<<comment
-
+```
+```text
 Host vs
   hostname 79.143.29.148 # прописан на хостинге
   user root
@@ -246,10 +226,9 @@ Host vs
 
 Host github.com
   IdentityFile ~/.ssh/youtube-docker/github # путь до ключа (созданного аналогично)
+```
 
-comment
-
-
+```shell
 $ ssh vs
 # INSTALL DOCKER:
 # https://www.digitalocean.com/community/tutorials/docker-ubuntu-18-04-1-ru
@@ -278,6 +257,8 @@ $ docker push maximprojects/statistic-manager # пушим в docker hub
 $ mkdir yt
 $ cd yt/
 $ vim docker-compose.yaml # сюда вставляем
+```
+```dockerfile
 version: "3"
 
 volumes:
@@ -320,3 +301,4 @@ services:
       volumes:
         - mongodb_volume:/data/db
       restart: always
+```

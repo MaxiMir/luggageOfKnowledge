@@ -1,65 +1,71 @@
-/* #@ GULP @# */
+```shell
+$ npm init
+$ npm i --save-dev gulp
+$ npm i --save-dev gulp-sass
+$ npm i --save-dev browser-sync
+$ npm i -g bower
+$ npm i --save-dev gulp-concat gulp-uglifyjs
+$ npm i --save-dev gulp-cssnano gulp-rename
+$ npm i --save-dev del
+$ npm i --save-dev gulp-imagemin imagemin-pngquant
+$ npm i --save-dev gulp-cache
+$ npm i --save-dev gulp-autoprefixer
+```
+TREE:
+- app (исходники)
+    - css
+    - js
+    - common.js
+    - fonts
+    - img
+    - libs - библиотеки
+    - sass
+    - _part.sass - не компилиться как отдельный файл
+    - main.sass
+    - libs.sass - css для библиотек
+    - index.html
+    - dist (продакшн)
+gulpfile.js
+package.json
+.bowerrc
 
-/**
- $ npm init
- $ npm i --save-dev gulp
- $ npm i --save-dev gulp-sass
- $ npm i --save-dev browser-sync
- $ npm i -g bower
- $ npm i --save-dev gulp-concat gulp-uglifyjs
- $ npm i --save-dev gulp-cssnano gulp-rename
- $ npm i --save-dev del
- $ npm i --save-dev gulp-imagemin imagemin-pngquant
- $ npm i --save-dev gulp-cache
- $ npm i --save-dev gulp-autoprefixer
 
- // TREE:
- - app (исходники)
- - css
- - js
- - common.js
- - fonts
- - img
- - libs - библиотеки
- - sass
- - _part.sass - не компилиться как отдельный файл
- - main.sass
- - libs.sass - css для библиотек
- - index.html
- - dist (продакшн)
- gulpfile.js
- package.json
- .bowerrc
- */
+> FILE: .bowerrc:
 
-// FILE: .bowerrc
+```json
 {
-    'directory': 'app/libs' // директория для установки пакетов
+    "directory": "app/libs" // директория для установки пакетов
 }
+```
+```shell
+$ bower i jquery magnific-popup # установка библиотек с помощью bower
+```
 
-// $ bower i jquery magnific-popup # установка библиотек с помощью bower
+> FILE: /app/sass/_part.sass:
 
-
-// FILE: /app/sass/_part.sass:
-/*
+```scss
     body
         font-size: 22pxjquery
-*/
+```
 
-// FILE: /app/sass/main.sass:
-/*
+> FILE: /app/sass/main.sass:
+
+```scss
     @import "part"
 
     body
         background-color: #000;
-*/
+```
 
-// FILE: /app/sass/libs.sass:
-/*
+> FILE: /app/sass/libs.sass:
+
+```scss
     @import "app/libs/magnific-popup/dist/magnific-popup" # если файл css расширение можно не указывать
-*/
+```
 
-// FILE: gulpfile.js
+> FILE: gulpfile.js
+
+```js
 const gulp = require('Gulp.md');
 const sass = require('gulp-sass');
 const browserSync = require('browser-sync');
@@ -120,7 +126,6 @@ gulp.task('clear', () => {
     return cashe.clearAll(); // удаление кэша
 });
 
-
 gulp.task('img', () => {
     return gulp.src('app/img/**/*') // выбираем абсолютно все
         .pipe(cache(imagemin({ // сжимаем|оптимизацируем картинки + кэшируем изображения
@@ -148,7 +153,10 @@ gulp.task('build', ['clean', 'img', 'sass', 'scripts'], () => {
     const buildJs = gulp.src('app/js/**/*').pipe(gulp.dest('dist/js')); // перенос шрифтов в dist/js
     const buildHtml = gulp.src('app/*.html').pipe(gulp.dest('dist')); // перенос шрифтов в dist
 });
+```
 
+```shell
+$ gulp sass  # запуск таска sass
+$ gulp scripts  # запуск таска scripts
+```
 
-// $ gulp sass  # запуск таска sass
-// $ gulp scripts  # запуск таска scripts
