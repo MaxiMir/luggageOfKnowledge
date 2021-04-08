@@ -58,7 +58,6 @@ const addVideoStream = (video, stream) => { // пользовательский 
 }
 
 socket.on('createMessage', (message, userName) => {
-  console.log(111)
   messages.innerHTML += `
     <div class="message">
       <b><i class="far fa-user-circle"></i> <span> ${userName === user ? 'me' : userName}</span> </b>

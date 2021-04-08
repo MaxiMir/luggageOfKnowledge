@@ -6,14 +6,13 @@ const socket = require('socket.io')
 
 const app = express()
 const server = http.Server(app)
-const peerServer = ExpressPeerServer(server, {debug: true})
 const io = socket(server)
 
 app.set('view engine', 'ejs') // шаблонизатор EJS (смотрит в папку views)
 
 app.use(express.static('public')) // открывает доступ ко всем статическим файлам в папке public
 
-app.use('/peerjs', peerServer)
+app.use('/peerjs', ExpressPeerServer(server, {debug: true}))
 
 app.get('/', (req, res) => {
   res.redirect(`/${uuidv4()}`) // создаем случайный уникальный идентификатор для каждой комнаты и перенаправляем пользователя в эту комнату
