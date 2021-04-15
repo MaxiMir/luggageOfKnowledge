@@ -1,10 +1,10 @@
 window.addEventListener('load', async () => {
-  if ('serviceWorker' in navigator) {
+  if ('serviceWorker' in navigator) { // проверка на поддержку SW
     try {
-      const reg = await navigator.serviceWorker.register('/sw.js') // регистрация сервис воркера
+      const reg = await navigator.serviceWorker.register('/sw.js') // регистрация SW
       console.log('Service worker register success', reg)
     } catch (e) {
-      console.log('Service worker register fail')
+      console.error('Service worker register fail')
     }
   }
 

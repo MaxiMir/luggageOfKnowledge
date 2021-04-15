@@ -14,6 +14,7 @@
 4. Подключаем sw.js в app.js
 
 5. Запускаем приложение
+
 ```shell
 $ npx live-server . --port=3001
 ```

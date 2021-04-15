@@ -1,4 +1,5 @@
-// @ CLASSES:
+# CLASSES: #
+```js
 class Animal {
   static type = 'ANIMAL';
 
@@ -59,10 +60,12 @@ cat.voice(); // => I am animal \n I am cat
 cat.ageInfo; // => 49
 cat.ageInfo = 8; // => 49
 cat.ageInfo; // => 56
+```
 
 
+#### Private Class Fields ####
 
-// @ Private Class Fields
+```js
 class Person {
   name = 'unknown name'
   #year = 1993 // приватное поле
@@ -87,9 +90,10 @@ class Person {
     return Person.#area === "EARTH" ? 'Земля' : 'Марс'
   }
 }
+```
 
-
-// # EXAMPLE:
+#### EXAMPLE: ####
+```js
 class Component {
   constructor(selector) {
     this.$el = document.querySelector(selector);
@@ -103,7 +107,6 @@ class Component {
     this.$el.style.display = 'block';
   }
 }
-
 
 class Box extends Component {
   constructor(options) {
@@ -145,3 +148,4 @@ box1.show(); // показываем элемент box1
 
 box2.hide(); // cкрываем элемент box2
 box2.show(); // показываем элемент box2
+```
