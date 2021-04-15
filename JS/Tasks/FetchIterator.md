@@ -1,10 +1,11 @@
-/**
- Есть RESTful API, куда можно отправлять HTTP GET запрос раз в 500 ms только.
- Есть очередь из 100 подобных запросов.
- Нужна также статистика по удавшимся и неудавшимся запросам.
- */
+#### ТЕСТОВОЕ ####
 
-// @1:
+Есть RESTful API, куда можно отправлять HTTP GET запрос раз в 500 ms только.
+Есть очередь из 100 подобных запросов.
+Нужна также статистика по удавшимся и неудавшимся запросам.
+
+**Решение №1**
+```js
 const fetchIterator = {
     urls: [],
     delay: 500,
@@ -61,9 +62,10 @@ const fetchIterator = {
 
     console.log(`%cRESULT:`, 'color: green; font-size: small', result);
 })();
+```
 
-
-// @2:
+**Решение №2**
+```js
 const urls = Array(100).fill('https://jsonplaceholder.typicode.com/posts');
 const delay = 500;
 let intervalId;
@@ -103,3 +105,5 @@ const fetcher = () => {
 }
 
 intervalId = setInterval(fetcher, delay);
+```
+
