@@ -8,12 +8,12 @@
 Реестр docker images: hub.docker.com
 
 ```shell
-$ docker images # вывод локальных images (сборок)
-$ docker rmi mongo # удаление image (сборки)
-$ docker rmi $(docker images -q) # удаление всех images (сборок)
+docker images # вывод локальных images (сборок)
+docker rmi mongo # удаление image (сборки)
+docker rmi $(docker images -q) # удаление всех images (сборок)
 
-$ docker ps # вывод запущенных контейнеров
-$ docker ps -a # вывод всех контейнеров
+docker ps # вывод запущенных контейнеров
+docker ps -a # вывод всех контейнеров
 ```
 
 FOLDER /docker-hello-world
@@ -36,7 +36,7 @@ WORKDIR /usr/src/app/ # указываем в какой директории р
 
 COPY . /usr/src/app/ # переносим все с текущей директории (нашего хоста) в созданную директорию контейнера /usr/src/app/
 
-CMD ["python", "app.py"] # что выполняем при старте (здесь $ python app.py), выполяется в shell
+CMD ["python", "app.py"] # что выполняем при старте (здесь python app.py), выполяется в shell
 
 # Еще пример:
 RUN chmod a+x ./run.sh # даем разрешение на запуск файла
@@ -44,17 +44,17 @@ ENTRYPOINT ["./run.sh"] # выполняется без shell
 ```
 
 ```dockerfile
-$ docker build -t hello-world . # создание локального docker образа; -t название образа; . - путь до исходников (текущая директория)
+docker build -t hello-world . # создание локального docker образа; -t название образа; . - путь до исходников (текущая директория)
 
-$ docker run hello-world # запуск контейнера hello-world -> Hello, world!
-$ docker run -d --rm --name hello hello-world # запуск контейнера hello на базе hello-world | -d запуск в фоне | --rm после окончания работы контейнера удалить его
+docker run hello-world # запуск контейнера hello-world -> Hello, world!
+docker run -d --rm --name hello hello-world # запуск контейнера hello на базе hello-world | -d запуск в фоне | --rm после окончания работы контейнера удалить его
 
-$ docker rm 1eoc7cd00041 # удаление контейнера (передавать CONTAINER ID или NAMES)
+docker rm 1eoc7cd00041 # удаление контейнера (передавать CONTAINER ID или NAMES)
 
-$ docker ps -a -q # вывод только CONTAINER ID всех контейнеров
-$ docker rm $(docker ps -qa) # удаляем все контейнеры
+docker ps -a -q # вывод только CONTAINER ID всех контейнеров
+docker rm $(docker ps -qa) # удаляем все контейнеры
 
-$ docker stop hello # остановить контейнер (передавать CONTAINER ID или NAMES)
+docker stop hello # остановить контейнер (передавать CONTAINER ID или NAMES)
 ```
 
 #### Пример 2 ####
@@ -72,7 +72,7 @@ FILE: /web-hello-world/requirements.txt:
 ```text
 flask==1.1.1
 ```
-ИСПОЛЬЗОВАНИЕ ЧЕРЕЗ bash: `$ pip install -r requirements.txt` # устанавливаем зависимости из файла
+ИСПОЛЬЗОВАНИЕ ЧЕРЕЗ bash: `pip install -r requirements.txt` # устанавливаем зависимости из файла
 
 FILE: /web-hello-world/app.py:
 ```
@@ -114,15 +114,15 @@ CMD ["python", "app.py"]
 ````
 
 ```shell
-$ docker build -t web-hello .
-$ docker run --rm --name web -p 8080:8080 -e TZ=Europe/Moscow web-hello # -p указываем порты - порт на текущей машине:порт внутри докер контейнера | -e устанавливаем переменную окружения #2 вариант
+docker build -t web-hello .
+docker run --rm --name web -p 8080:8080 -e TZ=Europe/Moscow web-hello # -p указываем порты - порт на текущей машине:порт внутри докер контейнера | -e устанавливаем переменную окружения #2 вариант
 
 
-$ docker run --rm --name web -p 8080:8080 -e TZ=Europe/Moscow -v /Users/Maxim/PycharmProjects/youtube/docker/web-hello-world/resources:/usr/src/app/resources/ web-hello # -v монтируем папку к контейнеру - абсолютный путь на хостовой машине:абсолютный внутри контейнера ##1 вариант
+docker run --rm --name web -p 8080:8080 -e TZ=Europe/Moscow -v /Users/Maxim/PycharmProjects/youtube/docker/web-hello-world/resources:/usr/src/app/resources/ web-hello # -v монтируем папку к контейнеру - абсолютный путь на хостовой машине:абсолютный внутри контейнера ##1 вариант
 
-$ docker volume ls # просмотр текущих volume
-$ docker volume create web # создание volume
-$ docker run --rm --name web -p 8080:8080 -v web:/usr/src/app/resources web-hello ## 2 вариант
+docker volume ls # просмотр текущих volume
+docker volume create web # создание volume
+docker run --rm --name web -p 8080:8080 -v web:/usr/src/app/resources web-hello ## 2 вариант
 ```
 
 
@@ -147,7 +147,7 @@ comment
 ```
 
 ```shell
-$ docker run --rm -d -p 27017:27017 mongo # запускаем отдельный контейнер с mongo; 27017 - прописанный порт у mongodb. тк локально mongodb не установлена, она установится из dockerhub
+docker run --rm -d -p 27017:27017 mongo # запускаем отдельный контейнер с mongo; 27017 - прописанный порт у mongodb. тк локально mongodb не установлена, она установится из dockerhub
 ```
 
 
@@ -204,19 +204,19 @@ services:
 #### DEPLOY (Хостинг vscale) ####
 **Генерируем PUBLIC-KEY:**
 ```shell
-$ cd ~/.ssh
-$ mkdir erkapharm
-$ cd erkapharm
-$ ssh-keygen -t rsa
+cd ~/.ssh
+mkdir erkapharm
+cd erkapharm
+ssh-keygen -t rsa
 # > Enter file in which to save the key: gitlab
-$ ssh-add -K ~/.ssh/erkapharm/gitlab
-$ eval $(ssh-agent -s) # start the ssh-agent in the background
-$ cat gitlab.pub | pbcopy # pbcopy - в macos вывод копирует в буфер обмена
+ssh-add -K ~/.ssh/erkapharm/gitlab
+eval $(ssh-agent -s) # start the ssh-agent in the background
+cat gitlab.pub | pbcopy # pbcopy - в macos вывод копирует в буфер обмена
 # or
-$ clip < ~/.ssh/id_rsa.pub # для windows
+clip < ~/.ssh/id_rsa.pub # для windows
 
-$ cd .ssh
-$ vim config # заносим ->
+cd .ssh
+vim config # заносим ->
 ```
 ```text
 Host vs
@@ -229,34 +229,34 @@ Host github.com
 ```
 
 ```shell
-$ ssh vs
+ssh vs
 # INSTALL DOCKER:
 # https://www.digitalocean.com/community/tutorials/docker-ubuntu-18-04-1-ru
-$ sudo apt update
-$ curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-$ sudo add-apt-repository "deb [arch=amd=64] https://download.docker.com/linux/ubuntu bionic stable"
-$ sudo apt install docker-ce
+sudo apt update
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+sudo add-apt-repository "deb [arch=amd=64] https://download.docker.com/linux/ubuntu bionic stable"
+sudo apt install docker-ce
 
 # INSTALL DOCKER-COMPOSE:
 # https://www.digitalocean.com/community/tutorials/how-to-install-docker-compose-on-ubuntu-18-04-ru
-$ sudo curl -L https://github.com/docker/compose/releases/download/1.21.2/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
-$ sudo chmod +x /usr/local/bin/docker-compose
+sudo curl -L https://github.com/docker/compose/releases/download/1.21.2/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
+sudo chmod +x /usr/local/bin/docker-compose
 
-$ docker-compose up -d # -d контейнеры запустить в фоне
-$ docker-compose down # остановить все контейнеры
+docker-compose up -d # -d контейнеры запустить в фоне
+docker-compose down # остановить все контейнеры
 
 
-$ cd StatisticManager
-$ docker build -t maxmprojects/statistic-manager . # maximprojects - ID пользователя
-$ docker login # авторизуемся
-$ docker push maximprojects/statistic-manager # пушим в docker hub
+cd StatisticManager
+docker build -t maxmprojects/statistic-manager . # maximprojects - ID пользователя
+docker login # авторизуемся
+docker push maximprojects/statistic-manager # пушим в docker hub
 
 # аналогично и для WebService
 
 # на сервере:
-$ mkdir yt
-$ cd yt/
-$ vim docker-compose.yaml # сюда вставляем
+mkdir yt
+cd yt/
+vim docker-compose.yaml # сюда вставляем
 ```
 ```dockerfile
 version: "3"

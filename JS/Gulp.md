@@ -1,28 +1,28 @@
 ```shell script
-$ mkdir gulp-html
-$ npm init -y // инициализируем package.json
-$ npm i -D gulp gulp-file-include gulp-sass gulp-csso browser-sync del gulp-htmlmin gulp-autoprefixer gulp-concat // сохраняем список зависимостей для разработки
+mkdir gulp-html
+npm init -y // инициализируем package.json
+npm i -D gulp gulp-file-include gulp-sass gulp-csso browser-sync del gulp-htmlmin gulp-autoprefixer gulp-concat // сохраняем список зависимостей для разработки
 
-$ mkdir src
-$ cd src
-$ touch index.html
-$ touch about.html
-$ mkdir parts
-$ cd parts
-$ touch header.html
-$ touch footer.html
-$ cd ..
-$ mkdir scss
-$ cd scss
-$ touch index.scss
-$ touch second.scss
-$ cd ../..
-$ touch gulpfile.js
-$ code . // открыть текущую директорию в VSC
+mkdir src
+cd src
+touch index.html
+touch about.html
+mkdir parts
+cd parts
+touch header.html
+touch footer.html
+cd ..
+mkdir scss
+cd scss
+touch index.scss
+touch second.scss
+cd ../..
+touch gulpfile.js
+code . // открыть текущую директорию в VSC
 
 
-$ gulp build // запуск задачи
-$ gulp сlear // запуск задачи
+gulp build // запуск задачи
+gulp сlear // запуск задачи
 ```
 
 > FILE gulpfile.js:
