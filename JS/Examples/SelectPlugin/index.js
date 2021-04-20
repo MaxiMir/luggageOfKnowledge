@@ -17,6 +17,5 @@ const select = new Select('#select', {
   }
 })
 
-
 // select.select('4')
 window.s = select

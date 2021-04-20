@@ -8,6 +8,7 @@ class DashboardPage extends Page {
     return root
   }
 }
+
 class ExcelPage extends Page {}
 
 describe('Router:', () => {

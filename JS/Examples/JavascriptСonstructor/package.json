@@ -11,7 +11,7 @@
     "js",
     "javascript"
   ],
-  "author": "Vladilen Minin <minin@vladilen.ru>",
+  "author": "Maxim Minchenko <mmirrev@gmail.ru>",
   "license": "ISC",
   "devDependencies": {
     "css-loader": "^3.6.0",

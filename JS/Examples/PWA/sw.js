@@ -8,33 +8,32 @@ const assetUrls = [ // статические файлы, которые доб�
   'offline.html'
 ]
 
-self.addEventListener('install', async event => { 
+self.addEventListener('install', async event => {
   const cache = await caches.open(staticCacheName) // открываем кэш
 
   await cache.addAll(assetUrls) // добавляем статические файлы в кэш
 
-  // более старый подход <-> event.waitUntil(caches.open().then(cache => cache.addAll([assetUrls]))) // добавляем все статические файлы в кэш 
+  // более старый подход <-> event.waitUntil(caches.open().then(cache => cache.addAll([assetUrls]))) // добавляем все статические файлы в кэш
 })
 
 self.addEventListener('activate', async event => {
   const cacheNames = await caches.keys() // ключи в кэше
 
   await Promise.all(
-    cacheNames
-      .filter(name => name !== staticCacheName)
-      .filter(name => name !== dynamicCacheName)
-      .map(name => caches.delete(name)) // удаляем неактуальные ключи(старой версии)
+    cacheNames.filter(name => name !== staticCacheName).
+      filter(name => name !== dynamicCacheName).
+      map(name => caches.delete(name)) // удаляем неактуальные ключи(старой версии)
   )
 })
 
 self.addEventListener('fetch', event => { // вызывается при запросах (в тч и для статических файлов)
   const {request} = event
   const url = new URL(request.url)
-  
+
   if (url.origin === location.origin) { // location - глобальный объект
     event.respondWith(cacheFirst(request)) // стратегия cacheFirst
     return
-  } 
+  }
 
   event.respondWith(networkFirst(request)) // стратегия networkFirst
 })

@@ -93,9 +93,8 @@ export function upload(selector, options = {}) {
       upload.style.display = 'none'
     }
 
-    const block = preview
-    .querySelector(`[data-name="${name}"]`)
-    .closest('.preview-image')
+    const block = preview.querySelector(`[data-name="${name}"]`).
+      closest('.preview-image')
 
     block.classList.add('removing')
     setTimeout(() => block.remove(), 300)

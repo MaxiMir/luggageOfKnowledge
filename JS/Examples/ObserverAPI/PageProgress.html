@@ -1,26 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Page Progress</title>
-  <style>
-    body {
-      margin: 0;
-    }
-    div {
-      width: 100%;
-      height: 100vh;
-      background: deepskyblue;
-      outline: 1px solid;
-    }
-    p {
-      margin: 0;
-      width: 100%;
-      text-align: center;
-      position: fixed;
-      background: #eee;
-    }
-  </style>
+	<meta charset="UTF-8">
+	<title>Page Progress</title>
+	<style>
+      body {
+          margin: 0;
+      }
+
+      div {
+          width: 100%;
+          height: 100vh;
+          background: deepskyblue;
+          outline: 1px solid;
+      }
+
+      p {
+          margin: 0;
+          width: 100%;
+          text-align: center;
+          position: fixed;
+          background: #eee;
+      }
+	</style>
 </head>
 <body>
 <p></p>
@@ -38,7 +40,7 @@
 
   let observer = new IntersectionObserver((entries, observer) => {
     entries.forEach(entry => {
-      if(entry.isIntersecting){
+      if (entry.isIntersecting) {
         // observer наблюдает за div
         // и сообщает об увеличении количества просмотренных контейнеров
         // выводим эту информацию в параграф

@@ -97,7 +97,6 @@ class LinkedList {
   }
 }
 
-
 const list = new LinkedList()
 
 list.prepend('Hi')

@@ -9,8 +9,8 @@ const isDev = !isProd
 
 const filename = ext => isDev ? `bundle.${ext}` : `bundle.[hash].${ext}`
 
-const cssLoaders = () => {
-  return [
+const cssLoaders = () => (
+  [
     {
       loader: MiniCssExtractPlugin.loader,
       options: {
@@ -21,7 +21,7 @@ const cssLoaders = () => {
     'css-loader',
     'sass-loader'
   ]
-}
+)
 
 const jsLoaders = () => {
   const loaders = [
@@ -83,7 +83,7 @@ module.exports = {
     rules: [
       {
         test: /\.s[ac]ss$/i,
-        use: cssLoaders(),
+        use: cssLoaders()
       },
       {
         test: /\.js$/,

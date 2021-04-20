@@ -11,9 +11,9 @@ window.addEventListener('load', async () => {
   await loadPosts()
 })
 
-
 async function loadPosts() {
-  const res = await fetch('https://jsonplaceholder.typicode.com/posts?_limit=11')
+  const res = await fetch(
+    'https://jsonplaceholder.typicode.com/posts?_limit=11')
   const data = await res.json()
 
   const container = document.querySelector('#posts')

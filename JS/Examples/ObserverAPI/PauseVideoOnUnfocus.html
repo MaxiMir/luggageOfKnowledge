@@ -1,43 +1,43 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Video Pause/Play</title>
-  <style>
-    video {
-      display: block;
-      width: 640px;
-      margin: 90vh auto;
-    }
-  </style>
+	<meta charset="UTF-8">
+	<title>Video Pause/Play</title>
+	<style>
+      video {
+          display: block;
+          width: 640px;
+          margin: 90vh auto;
+      }
+	</style>
 </head>
 
 <body>
 <!--https://coverr.co/-->
 <video
-  src="https://storage.coverr.co/videos/coverr-morning-sunshine-1568653218195?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcHBJZCI6IjExNDMyN0NEOTRCMUFCMTFERTE3IiwiaWF0IjoxNTg0NTQ1NjI0fQ.DvB1ZnMkAWvp0zyyWyj8dltBhvyrFrRL1GiGi3BmOJU"
-  controls></video>
+		src="https://storage.coverr.co/videos/coverr-morning-sunshine-1568653218195?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcHBJZCI6IjExNDMyN0NEOTRCMUFCMTFERTE3IiwiaWF0IjoxNTg0NTQ1NjI0fQ.DvB1ZnMkAWvp0zyyWyj8dltBhvyrFrRL1GiGi3BmOJU"
+		controls></video>
 
 <script>
   // Как только видео выходит за пределы области просмотра больше чем на 40%, его воспроизведение приостанавливается. При попадании в область просмотра > 40% видео, его воспроизведение возобновляется.
 
   window.onload = () => {
-    let video = document.querySelector('video');
+    let video = document.querySelector('video')
 
     let observer = new IntersectionObserver(() => {
       // если видео запущено
       if (!video.paused) {
         // приостанавливаем проигрывание
-        video.pause();
+        video.pause()
         // если видео было запущено ранее (текущее время проигрывания > 0)
       } else if (video.currentTime != 0) {
         // продолжаем проигрывание
-        video.play();
+        video.play()
       }
-    }, {threshold: 0.4});
+    }, {threshold: 0.4})
 
-    observer.observe(video);
-  };
+    observer.observe(video)
+  }
 </script>
 </body>
 </html>

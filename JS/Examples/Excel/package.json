@@ -10,21 +10,21 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/vladilenm/excel-course.git"
+    "url": "git+https://github.com/maximir/excel.git"
   },
   "keywords": [
     "js",
     "javascript",
     "excel"
   ],
-  "author": "Maxim Minchenko <vladilen.minin@gmail.com>",
+  "author": "Maxim Minchenko <mmirrev@gmail.com>",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/vladilenm/excel-course/issues"
+    "url": "https://github.com/maximir/excel/issues"
   },
-  "homepage": "https://github.com/vladilenm/excel-course#readme",
+  "homepage": "https://github.com/maximir/excel#readme",
   "private": true,
-  "browserslist": "> 0.25%, not dead", // ПОДДЕРЖИВАЕМЫЕ БРАУЗЕРЫ
+  "browserslist": "> 0.25%, not dead",
   "devDependencies": {
     "@babel/core": "^7.8.4",
     "@babel/plugin-proposal-class-properties": "^7.8.3",
@@ -36,7 +36,7 @@
     "cross-env": "^7.0.0",
     "css-loader": "^3.4.2",
     "eslint": "^6.8.0",
-    "eslint-config-google": "^0.14.0", // КОНФИГ STYLE GUIDE ОТ GOOGLE
+    "eslint-config-google": "^0.14.0",
     "eslint-loader": "^3.0.3",
     "html-webpack-plugin": "^3.2.0",
     "jest": "^25.2.0",

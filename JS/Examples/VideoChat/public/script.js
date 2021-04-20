@@ -22,24 +22,23 @@ const peer = new Peer(undefined, {
 
 peer.on('open', (id) => socket.emit('join-room', ROOM_ID, id, user)) // socket.on('join-room', ... в server.js
 
-navigator.mediaDevices
-.getUserMedia({audio: true, video: true})
-.then((stream) => {
-  myVideoStream = stream
-  addVideoStream(myVideo, stream)
+navigator.mediaDevices.getUserMedia({audio: true, video: true}).
+  then((stream) => {
+    myVideoStream = stream
+    addVideoStream(myVideo, stream)
 
-  peer.on('call', (call) => {
-    call.answer(stream)
-    const video = document.createElement('video')
-    call.on('stream', (userVideoStream) => {
-      addVideoStream(video, userVideoStream)
+    peer.on('call', (call) => {
+      call.answer(stream)
+      const video = document.createElement('video')
+      call.on('stream', (userVideoStream) => {
+        addVideoStream(video, userVideoStream)
+      })
+    })
+
+    socket.on('user-connected', (userId) => {
+      connectToNewUser(userId, stream)
     })
   })
-
-  socket.on('user-connected', (userId) => {
-    connectToNewUser(userId, stream)
-  })
-})
 
 const connectToNewUser = (userId, stream) => {
   const call = peer.call(userId, stream)
@@ -60,7 +59,9 @@ const addVideoStream = (video, stream) => { // пользовательский 
 socket.on('createMessage', (message, userName) => {
   messages.innerHTML += `
     <div class="message">
-      <b><i class="far fa-user-circle"></i> <span> ${userName === user ? 'me' : userName}</span> </b>
+      <b><i class="far fa-user-circle"></i> <span> ${userName === user
+    ? 'me'
+    : userName}</span> </b>
       <span>${message}</span>
     </div>
   `
@@ -99,7 +100,9 @@ muteButton.addEventListener('click', () => {
 
   myVideoStream.getAudioTracks()[0].enabled = !enabled
   muteButton.classList.toggle('background__red')
-  muteButton.innerHTML = `<i class="fas fa-microphone${!enabled ? '' : '-slash'}"></i>`
+  muteButton.innerHTML = `<i class="fas fa-microphone${!enabled
+    ? ''
+    : '-slash'}"></i>`
 })
 
 stopVideo.addEventListener('click', () => {
@@ -107,7 +110,11 @@ stopVideo.addEventListener('click', () => {
 
   myVideoStream.getVideoTracks()[0].enabled = !enabled
   stopVideo.classList.toggle('background__red')
-  stopVideo.innerHTML = `<i class="fas fa-video${!enabled ? '' : '-slash'}"></i>`
+  stopVideo.innerHTML = `<i class="fas fa-video${!enabled
+    ? ''
+    : '-slash'}"></i>`
 })
 
-inviteButton.addEventListener('click', () => prompt('Copy this link and send it to people you want to meet with', window.location.href))
+inviteButton.addEventListener('click',
+  () => prompt('Copy this link and send it to people you want to meet with',
+    window.location.href))

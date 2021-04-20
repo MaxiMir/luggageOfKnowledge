@@ -1,9 +1,14 @@
 import image from './assets/image.png'
-import {TextBlock, TitleBlock, ImageBlock, TextColumnsBlock} from './classes/blocks'
+import {
+  TextBlock,
+  TitleBlock,
+  ImageBlock,
+  TextColumnsBlock
+} from './classes/blocks'
 import {css} from './utils'
 
 const text = `
-Крутые видео и уроки по JavaScript тут: <a href="https://youtube.com/c/VladilenMinin" target="_blank">Владилен Минин</a>. Тут ты найдешь исчерпывающую информацию по любым аспектам языка, любым фреймворкам, такие как: React, Vue, Angular, Node, Svelte, Express, Next, Nuxt и многое другое. Присоединяйся!
+Крутые видео и уроки по JavaScript тут: <a href="https://youtube.com/с/" target="_blank">Волшебная ссылочка</a>. Тут ты найдешь исчерпывающую информацию по любым аспектам языка
 `
 
 export const model = [

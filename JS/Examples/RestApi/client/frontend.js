@@ -1,6 +1,5 @@
 import Vue from 'https://cdn.jsdelivr.net/npm/vue@2.6.11/dist/vue.esm.browser.js'
 
-
 Vue.component('loader', {
   template: `
     <div style="display: flex;justify-content: center;align-items: center">
@@ -30,7 +29,7 @@ new Vue({
   },
   methods: {
     async createContact() {
-      const { ...contact } = this.form
+      const {...contact} = this.form
 
       const newContact = await request('/api/contacts', 'POST', contact)
 
@@ -40,14 +39,14 @@ new Vue({
     },
     async markContact(id) {
       const contact = this.contacts.find(c => c.id === id)
-      const updated = await request(`/api/contacts/${ id }`, 'PUT', {
+      const updated = await request(`/api/contacts/${id}`, 'PUT', {
         ...contact,
         marked: true
       })
       contact.marked = updated.marked
     },
     async removeContact(id) {
-      await request(`/api/contacts/${ id }`, 'DELETE')
+      await request(`/api/contacts/${id}`, 'DELETE')
       this.contacts = this.contacts.filter(c => c.id !== id)
     }
   },
