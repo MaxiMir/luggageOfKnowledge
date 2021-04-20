@@ -90,11 +90,12 @@ export function createTable(rowsCount = 15, state = {}) {
   const colsCount = CODES.Z - CODES.A + 1 // Compute cols count
   const rows = []
 
-  const cols = new Array(colsCount).fill('').
-    map(toChar).
-    map(withWidthFrom(state)).
-    map(toColumn).
-    join('')
+  const cols = new Array(colsCount)
+    .fill('')
+    .map(toChar)
+    .map(withWidthFrom(state))
+    .map(toColumn)
+    .join('')
 
   rows.push(createRow(null, cols))
 

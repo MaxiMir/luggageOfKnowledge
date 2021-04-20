@@ -32,9 +32,9 @@ export function camelToDashCase(str) {
 }
 
 export function toInlineStyles(styles = {}) {
-  return Object.keys(styles).
-    map(key => `${camelToDashCase(key)}: ${styles[key]}`).
-    join(';')
+  return Object.keys(styles)
+  .map(key => `${camelToDashCase(key)}: ${styles[key]}`)
+  .join(';')
 }
 
 export function debounce(fn, wait) {

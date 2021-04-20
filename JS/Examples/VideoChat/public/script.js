@@ -59,9 +59,7 @@ const addVideoStream = (video, stream) => { // пользовательский 
 socket.on('createMessage', (message, userName) => {
   messages.innerHTML += `
     <div class="message">
-      <b><i class="far fa-user-circle"></i> <span> ${userName === user
-    ? 'me'
-    : userName}</span> </b>
+      <b><i class="far fa-user-circle"></i> <span> ${userName === user ? 'me' : userName}</span> </b>
       <span>${message}</span>
     </div>
   `
@@ -110,9 +108,7 @@ stopVideo.addEventListener('click', () => {
 
   myVideoStream.getVideoTracks()[0].enabled = !enabled
   stopVideo.classList.toggle('background__red')
-  stopVideo.innerHTML = `<i class="fas fa-video${!enabled
-    ? ''
-    : '-slash'}"></i>`
+  stopVideo.innerHTML = `<i class="fas fa-video${!enabled ? '' : '-slash'}"></i>`
 })
 
 inviteButton.addEventListener('click',

@@ -20,9 +20,10 @@ self.addEventListener('activate', async event => {
   const cacheNames = await caches.keys() // ключи в кэше
 
   await Promise.all(
-    cacheNames.filter(name => name !== staticCacheName).
-      filter(name => name !== dynamicCacheName).
-      map(name => caches.delete(name)) // удаляем неактуальные ключи(старой версии)
+    cacheNames
+    .filter(name => name !== staticCacheName)
+    .filter(name => name !== dynamicCacheName)
+    .map(name => caches.delete(name)) // удаляем неактуальные ключи(старой версии)
   )
 })
 
