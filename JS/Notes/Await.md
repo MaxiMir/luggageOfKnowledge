@@ -1,4 +1,9 @@
-#### ЗАГРУЗКА КАРТИНКИ ####
+# AWAIT #
+
++ [Загрузка картинки](#IMG_LOAD)
+
+### <a name="IMG_LOAD"></a> Загрузка картинки:
+
 ```js
 async function myFetch() {
   try {

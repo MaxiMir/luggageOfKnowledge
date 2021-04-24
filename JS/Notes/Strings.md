@@ -64,8 +64,9 @@ string.repeat(3) // конструирует и возвращает новую 
 string.trim() // Hello!
 string.trimEnd() // Hello!
 string.trimStart() // Hello!
-str.padStart(10, '1234') // заполняет текущую строку другой строкой => 12341Hello
-str.padStart(8, 'abc') // => Helloabc
+string.padStart(10, '1234') // заполняет текущую строку другой строкой => 12341Hello
+string.padStart(8, 'abc') // => Helloabc
+'Javascript is the best language'.replaceAll('Javascript', 'Python') // замена всех вхождений
 ```
 ### <a name="REPEAT"></a> ПОВТОРЕНИЕ СТРОКИ:
 ```js

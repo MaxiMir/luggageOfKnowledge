@@ -6,7 +6,6 @@ const second = { b: 2 };
 const obj = Object.assign({}, first, second); // объединяет объект => {a: 1, b: 2}
 
 
-
 // @ Object.fromEntries - метод возвращает массив собственных перечисляемых свойств указанного объекта в формате [key, value]
 const students = {
   amelia: 20,

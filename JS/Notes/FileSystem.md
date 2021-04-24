@@ -1,6 +1,11 @@
-// @ МОДУЛИ:
+# FileSystem
 
-// FOLDER: modules/module.js:
++ [Import](#Import)
+
+### <a name="Import"></a> Import:
+
+```js
+// FILE: modules/module.js:
 const privateVariable = 27;
 
 export const color = "#fff";
@@ -14,17 +19,21 @@ export default {
     console.log(privateVariable)
   }
 }
+```
+**1 вариант:**
+```js
+import Logger, {color, sum} from "./module"
 
-// FOLDER: modules/index.js
-import Logger, {color, sum} from "./module"; // #1
-import * as Module from './module'; // #2
-
-// #1:
 sum(1, 2);
 color;
 Logger.log(); // объект с методом log, экспортируемый по дефолту
+```
+**2 вариант:**
+```js
+// FILE: modules/index.js
+import * as Module from './module'
 
-// #2:
 Module.sum(1, 2);
 Module.color;
 Module.default.log(); // объект с методом log, экспортируемый по дефолту
+```

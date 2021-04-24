@@ -404,7 +404,7 @@ console.log(typeof aRecursion) // undefined
 ### for-await-of (ES7-ES9)
 ```js
 // Async function for iteration with 'for-await-of':
-const showNames = async = () => {
+const showNames = async() => {
   for await(name of names) {
     console.log(name)
   }

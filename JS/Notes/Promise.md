@@ -6,6 +6,7 @@
 + [PROMISE RESOLVE](#PROMISE_RESOLVE)
 + [PROMISE REJECT](#PROMISE_REJECT)
 + [PROMISE ASYNC AWAIT](#PROMISE_ASYNC)
++ [PROMISE ANY](#PROMISE_ANY)
 + [ЗАГРУЗКА КАРТИНОК](#PROMISE_IMG)
 
 ### <a name="PROMISE"></a> PROMISE:
@@ -283,6 +284,33 @@ async function func() {
 	} catch (error) {
 		console.log(error);
 	}
+}
+```
+
+### <a name="PROMISE_ANY"></a> PROMISE ANY:
+```js
+const p1 = createPromise(1, 250)
+const p2 = createPromise(1, 700)
+const p3 = createPromise(1, 150)
+
+start()
+
+function createPromise(value, delay) {
+  return new Promise(resolve => {
+    setTimeout(() => {
+      resolve(value)
+    }, delay)
+  })
+}
+
+async function start() {
+  try {
+    const res = await Promise.any([p1, p2, p3]) // ждет как выполнится один из промисов и резолвится        
+    console.log(res) // 1 или 2 или 3
+  } catch (e) {
+    console.log(e) // Если в промисе будет ошибка -> [AggregateError: All promises where rejected]
+    console.log(e.errors) // массив с ошибками
+  }
 }
 ```
 
