@@ -11,7 +11,7 @@ import { Todo } from './src/Todo'
 
  * ScrollView - аналог View только со скроллом
 
- * FlatList - отображает скролящийся лист данных, которые могут изменятся
+ * FlatList - отображает скроллящийся лист данных, которые могут изменятся
  */
 
 export default function App() {

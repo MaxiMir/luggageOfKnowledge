@@ -25,8 +25,8 @@ function noop() {}
 
 export function upload(selector, options = {}) {
   let files = []
-  const onUpload = options.onUpload ?? noop
   const input = document.querySelector(selector)
+  const onUpload = options.onUpload ?? noop
   const preview = element('div', ['preview'])
   const open = element('button', ['btn'], 'Открыть')
   const upload = element('button', ['btn', 'primary'], 'Загрузить')
@@ -45,7 +45,7 @@ export function upload(selector, options = {}) {
   input.insertAdjacentElement('afterend', upload)
   input.insertAdjacentElement('afterend', open)
 
-  const triggerInput = () => input.click()
+  const triggerInput = () => input.click() // по клику на кнопку инициируем клик по инпуту
 
   const changeHandler = event => {
     if (!event.target.files.length) {
@@ -53,7 +53,7 @@ export function upload(selector, options = {}) {
     }
 
     files = Array.from(event.target.files)
-    preview.innerHTML = ''
+    preview.innerHTML = '' // очищаем предыдущие картинки
     upload.style.display = 'inline'
 
     files.forEach(file => {
@@ -63,8 +63,9 @@ export function upload(selector, options = {}) {
 
       const reader = new FileReader()
 
-      reader.onload = ev => {
-        const src = ev.target.result
+      reader.onload = ev => { // readAsDataURL асинхронна, добавляем обработчик на результат ее работы
+        const src = ev.target.result // картинка в base64
+
         preview.insertAdjacentHTML('afterbegin', `
           <div class="preview-image">
             <div class="preview-remove" data-name="${file.name}">&times;</div>
