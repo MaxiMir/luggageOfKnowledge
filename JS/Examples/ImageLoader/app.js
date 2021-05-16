@@ -20,8 +20,8 @@ upload('#file', {
   accept: ['.png', '.jpg', '.jpeg', '.gif'],
   onUpload(files, blocks) {
     files.forEach((file, index) => {
-      const ref = storage.ref(`images/${file.name}`)
-      const task = ref.put(file)
+      const ref = storage.ref(`images/${file.name}`) // ref для загружаемого файла (в скобках путь до картинки)
+      const task = ref.put(file) // сохраняем файл
 
       task.on('state_changed', snapshot => {
         const percentage = ((snapshot.bytesTransferred / snapshot.totalBytes) *
@@ -31,7 +31,7 @@ upload('#file', {
         block.style.width = percentage
       }, error => {
         console.log(error)
-      }, () => {
+      }, () => { // cb когда загрузка файла была завершена
         task.snapshot.ref.getDownloadURL().then(url => {
           console.log('Download URL', url)
         })
