@@ -553,3 +553,19 @@ for (let input in inputs) {
     })
 }
 ```
+
+### <a name="PIPE"></a> Pipe:
+```js
+const pipe = (...fns) => init => fns.reduce((value, f) => f(value), init)
+
+
+pipe(uppperCase, reverse)('Max')
+```
+
+### <a name="COMPOSE"></a> Compose:
+```js
+const compose = (...fns) => init => fns.reduceRight((value, f) => f(value), init)
+compose(uppperCase, reverse)('Max')
+```
+
+
