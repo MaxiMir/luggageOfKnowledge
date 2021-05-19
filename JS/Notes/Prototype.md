@@ -38,6 +38,7 @@ Animal.prototype.voice = function() { // переопределение мето
     console.log(this.name + ' says myay')
 }
 ```
+
 ```js
 const maxiMir = {
     name: "Maxim",

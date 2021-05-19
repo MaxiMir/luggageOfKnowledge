@@ -1,6 +1,7 @@
 {
   "port": 5000,
   "jwtSecret": "maximir mern",
-  "mongoUri": "mongodb+srv://maximir:1234qwer@cluster0-kggc2.azure.mongodb.net/app?retryWrites=true&w=majority", // берется из Connection String Only
+  "mongoUri": "mongodb+srv://maximir:1234qwer@cluster0-kggc2.azure.mongodb.net/app?retryWrites=true&w=majority",
+  // берется из Connection String Only
   "baseUrl": "http://localhost:5000"
 }

@@ -1,3 +1,3 @@
 export const config = {
-  key: '123456'
+	key: '123456'
 }

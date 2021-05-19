@@ -1,41 +1,41 @@
 <h1>Профиль</h1>
 
 <div class="row">
-  <div class="col s6">
-    {{#if user.avatarUrl}}
-      <img
-        class="avatar"
-        src="/{{user.avatarUrl}}"
-        alt="avatar-{{user.name}}"
-      >
-    {{else}}
-      <p>Аватара нет</p>
-    {{/if}}
-  </div>
+    <div class="col s6">
+        {{#if user.avatarUrl}}
+            <img
+                    class="avatar"
+                    src="/{{user.avatarUrl}}"
+                    alt="avatar-{{user.name}}"
+            >
+        {{else}}
+            <p>Аватара нет</p>
+        {{/if}}
+    </div>
 
-  <div class="col s6">
-    <form action="/profile" method="POST" enctype="multipart/form-data">
-      <p>Ваш email: <strong>{{user.email}}</strong></p>
+    <div class="col s6">
+        <form action="/profile" method="POST" enctype="multipart/form-data">
+            <p>Ваш email: <strong>{{user.email}}</strong></p>
 
-      <div class="input-field">
-        <input id="name" name="name" type="text" class="validate" required value="{{user.name}}">
-        <label for="name">Ваше имя</label>
-        <span class="helper-text" data-error="Имя не может быть пустым"></span>
-      </div>
+            <div class="input-field">
+                <input id="name" name="name" type="text" class="validate" required value="{{user.name}}">
+                <label for="name">Ваше имя</label>
+                <span class="helper-text" data-error="Имя не может быть пустым"></span>
+            </div>
 
-      <div class="file-field input-field">
-        <div class="btn">
-          <span>Аватар</span>
-          <input type="file" name="avatar">
-        </div>
-        <div class="file-path-wrapper">
-          <input class="file-path validate" type="text">
-        </div>
-      </div>
+            <div class="file-field input-field">
+                <div class="btn">
+                    <span>Аватар</span>
+                    <input type="file" name="avatar">
+                </div>
+                <div class="file-path-wrapper">
+                    <input class="file-path validate" type="text">
+                </div>
+            </div>
 
-      <input type="hidden" name="_csrf" value="{{csrf}}">
+            <input type="hidden" name="_csrf" value="{{csrf}}">
 
-      <button type="submit" class="btn">Изменить</button>
-    </form>
-  </div>
+            <button type="submit" class="btn">Изменить</button>
+        </form>
+    </div>
 </div>

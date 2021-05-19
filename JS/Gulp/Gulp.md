@@ -11,7 +11,9 @@ $ npm i --save-dev gulp-imagemin imagemin-pngquant
 $ npm i --save-dev gulp-cache
 $ npm i --save-dev gulp-autoprefixer
 ```
+
 TREE:
+
 - app (исходники)
     - css
     - js
@@ -25,10 +27,7 @@ TREE:
     - libs.sass - css для библиотек
     - index.html
     - dist (продакшн)
-gulpfile.js
-package.json
-.bowerrc
-
+      gulpfile.js package.json .bowerrc
 
 > FILE: .bowerrc:
 
@@ -37,6 +36,7 @@ package.json
     "directory": "app/libs" // директория для установки пакетов
 }
 ```
+
 ```shell
 $ bower i jquery magnific-popup # установка библиотек с помощью bower
 ```
@@ -159,4 +159,3 @@ gulp.task('build', ['clean', 'img', 'sass', 'scripts'], () => {
 $ gulp sass  # запуск таска sass
 $ gulp scripts  # запуск таска scripts
 ```
-

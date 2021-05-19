@@ -2,7 +2,9 @@
 $ npx create-react-app react-typescript --template typescript # --template typescript - флаг, включающий все зависимости для работы с TS
 
 ```
+
 ### FUNCTIONAL COMPONENT:
+
 ```typescript jsx
 type HeaderProps = {
 	text: string
@@ -10,10 +12,13 @@ type HeaderProps = {
 
 const Header = ({text}: HeaderProps) => <b>{text}</b>
 ```
+
 ```typescript jsx
 const HeaderWithoutType: React.FC<{text: string}> = ({text}) => <b>{text}</b>
 ```
+
 ### CLASS:
+
 ```typescript jsx
 type CounterProps = {
    title?: string
@@ -74,6 +79,7 @@ const App: React.FC = () => <Counter title="Counter: "/>
 
 export default App
 ```
+
 ```typescript jsx
 class Form extends Comment<{}, {}> {
    handleCopy = (e: React.ClipboadEvent<HTMLInputElement>): void => {
@@ -111,6 +117,7 @@ const App: React.FC = () => <Form/>
 
 export default App
 ```
+
 ```typescript jsx
 type POSITION = {
    id: string,
@@ -228,9 +235,12 @@ class Form extends Component<{}, FormState> {
    }
 }
 ```
+
 ### PORTAL (ver. >= 16.3):
+
 Нативный React компонент, который рендерит свое содержимое в любую часть DOM дерева (т.е. вне корневого дива).
 Применяется для модальных окон, всплывающих подсказок, тултипов и тд.
+
 ```typescript jsx
 import React, {Component} from 'react'
 import ReactDOM from 'react-dom'
@@ -276,7 +286,9 @@ class SomeComponent extends Component {
    }
 }
 ```
+
 ### CONTEXT:
+
 ```typescript jsx
 interface IContext {
    isAuth: Boolean,
@@ -337,18 +349,25 @@ class Context extends Component<{}, {isAuth: Boolean}> {
    }
 }
 ```
+
 ### HOOK useState:
+
 * Inferred as number:
+
 ```typescript jsx
 const [value, setValue] = useState(0) // при простом значении типизацию делать не надо
 ```
+
 * Explicitly setting the types:
+
 ```typescript jsx
 const [value, setValue] = useState<number | undefined>(undefined) // дефолтное значение - undefined
 ```
+
 ```typescript jsx
 const [value, setValue] = useState<Array<number>>([]) // дефолтное значение - []
 ```
+
 ```typescript jsx
 interface IUser {
    name: sttring,
@@ -357,12 +376,16 @@ interface IUser {
 
 const [value, setValue] = useState<IUser>({name: 'Maxim'})
 ```
+
 ### HOOK useRef:
+
 ```typescript jsx
 const ref1 = useRef<HTMLElement>(null!) // ref1.current - будет доступен только для чтения и управляемой только через react
 const ref2 = useRef<HTMLElement | null>(null) // ref2.current - будет модифицируемым и управляемым мной
 ```
+
 ### HOOK useContext:
+
 ```typescript jsx
 interface ITheme {
    backgroundColor: string,
@@ -378,7 +401,9 @@ const ThemeContext = createContext<ITheme>({
 // Accessing context in a child component:
 const themeContext = useContext<ITheme>(ThemeContext)
 ```
+
 ### HOOK useReducer:
+
 ```typescript jsx
 interface State {
    count: number
@@ -402,16 +427,23 @@ const [state, dispatch] = useReducer(counterReducer, {count: 0})
 dispatch({type: 'increment'}) 
 dispatch({type: 'decrement'}) 
 ```
+
 ### HOOK useCallback & useMemo:
+
 * Inferred as number:
+
 ```typescript jsx
 const memoizedCallback = useCallback(() => {sum(a, b)}, [a, b])
 ```
+
 * Inferred as (value1: number, value2: number) => number:
+
 ```typescript jsx
 const memoizedValue = useMemo((a: number, b: number) => {sum(a, b)}, [a, b])
 ```
+
 ### HOOK useEffect & useLayoutEffect:
+
 ```typescript jsx
 useEffect(() => {
    const subscriber = subsribe(options)
@@ -421,7 +453,9 @@ useEffect(() => {
   };
 }, [options]);
 ```
+
 ### HOC:
+
 ```typescript jsx
 type BaseProps = {
    primTitle: string,
@@ -459,6 +493,7 @@ const App: React.FC = () => <ToggleButton primTitle="Main Title" secTitle="Addit
 
 export default App
 ```
+
 ```typescript jsx
 interface WithLoadingProps {
    loading: boolean
@@ -474,7 +509,9 @@ const withLoading = <P extends object>(Component: React.ComponentType<P>) => {
     }
 }
 ```
+
 ### HTTP RESPONSE:
+
 ```ts
 interface HttpResponse<T> extends Response {
 	parsedBody?: T

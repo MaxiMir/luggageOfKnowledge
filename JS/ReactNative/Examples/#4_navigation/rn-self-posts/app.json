@@ -1,36 +1,53 @@
 {
   "expo": {
-    "name": "Self Blog", // название приложения
-    "slug": "rn-self-posts", // id приложения в expo
-    "privacy": "public", // могут ли другие скачивать
+    "name": "Self Blog",
+    // название приложения
+    "slug": "rn-self-posts",
+    // id приложения в expo
+    "privacy": "public",
+    // могут ли другие скачивать
     "sdkVersion": "35.0.0",
-    "platforms": [ // на какие платформы
+    "platforms": [
+      // на какие платформы
       "ios",
       "android"
     ],
-    "version": "1.0.0", // вручную прописываем версию (мажорная | минорная | патч )
-    "orientation": "default", // для вращения приложения
-    "icon": "./assets/icon.png", // иконка приложения 1024*1024px
-    "splash": { // загрузка приложения
-      "image": "./assets/splash.png", // из документации 1242*2436px
+    "version": "1.0.0",
+    // вручную прописываем версию (мажорная | минорная | патч )
+    "orientation": "default",
+    // для вращения приложения
+    "icon": "./assets/icon.png",
+    // иконка приложения 1024*1024px
+    "splash": {
+      // загрузка приложения
+      "image": "./assets/splash.png",
+      // из документации 1242*2436px
       "resizeMode": "contain",
       "backgroundColor": "#242832"
     },
     "updates": {
-      "fallbackToCacheTimeout": 0 // 0 - проверка обновлений в фоне
+      "fallbackToCacheTimeout": 0
+      // 0 - проверка обновлений в фоне
     },
-    "assetBundlePatterns": [ // все статические файлы идут с приложением
+    "assetBundlePatterns": [
+      // все статические файлы идут с приложением
       "**/*"
     ],
-    "ios": { // параметры для iOS
+    "ios": {
+      // параметры для iOS
       "supportsTablet": true,
-      "bundleIdentifier": "com.maximirdev.self-blog-rn-app", // должно быть уникальным для AppStore
+      "bundleIdentifier": "com.maximirdev.self-blog-rn-app",
+      // должно быть уникальным для AppStore
       "buildNumber": "1.0.0"
     },
-    "android": { // параметры для Android
-      "package": "com.maximirdev.self_blog_rn_app", // должно быть уникальным для Play Market
-      "versionCode": 1, // по умолч., потом меняем +1
-      "permissions": [ // какие доступы необходимы
+    "android": {
+      // параметры для Android
+      "package": "com.maximirdev.self_blog_rn_app",
+      // должно быть уникальным для Play Market
+      "versionCode": 1,
+      // по умолч., потом меняем +1
+      "permissions": [
+        // какие доступы необходимы
         "CAMERA",
         "WRITE_EXTERNAL_STORAGE"
       ]

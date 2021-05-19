@@ -22,22 +22,20 @@
  */
 
 
-
 // + FILE /webpack/Post.js:
 class Post {
-  constructor(title) {
-    this.title = title;
-    this.date = new Date();
-  }
+	constructor(title) {
+		this.title = title;
+		this.date = new Date();
+	}
 
-  toString() {
-    return JSON.stringify({
-      title: this.title,
-      date: this.date.toJSON(),
-    });
-  }
+	toString() {
+		return JSON.stringify({
+			title: this.title,
+			date: this.date.toJSON(),
+		});
+	}
 }
-
 
 
 // + FILE /webpack/index.js:
@@ -46,29 +44,28 @@ const post = new Post("Webpack Post title");
 console.log("title", post.toString());
 
 
-
 // + FILE /webpack/analitics.js:
 function createAnalytics() {
-  let counter = 0;
-  let isDestroyed = false;
+	let counter = 0;
+	let isDestroyed = false;
 
-  const listener = () => counter++;
+	const listener = () => counter++;
 
-  document.addEventListener('click', listener);
+	document.addEventListener('click', listener);
 
-  return {
-    destroy() {
-      document.removeEventListener('click', listener);
-      isDestroyed = true;
-    },
-    getClicks() {
-      if (isDestroyed) {
-        return "Analytics is destroyed";
-      }
+	return {
+		destroy() {
+			document.removeEventListener('click', listener);
+			isDestroyed = true;
+		},
+		getClicks() {
+			if (isDestroyed) {
+				return "Analytics is destroyed";
+			}
 
-      return counter;
-    }
-  }
+			return counter;
+		}
+	}
 }
 
 window.analytics = createAnalytics();

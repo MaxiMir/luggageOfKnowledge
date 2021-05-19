@@ -5,13 +5,17 @@
   // main: "index.js", // если мы не публикуем данный пакет как npm пакет - эту строчку удаляем и указываем:
   "private": true,
   "scripts": {
-    "dev": "cross-env NODE_ENV=development webpack --mode development", // сборка в режиме разработки
+    "dev": "cross-env NODE_ENV=development webpack --mode development",
+    // сборка в режиме разработки
     "build": "cross-env NODE_ENV=production webpack --mode production",
-    "watch": "cross-env NODE_ENV=development webpack --mode development --watch", // процесс запускает сборку в случае изменения файлов (необходима перезагрузка страницы в браузере)
-    "start": "cross-env NODE_ENV=development webpack-dev-server --mode development --open", // процесс запускает сборку в случае изменения файлов + открывает страницу в браузере (автоматическое обновление) + складывает в оперативную память - для появления файлов в папке dist - Ctrl+C и например $ npm run dev
+    "watch": "cross-env NODE_ENV=development webpack --mode development --watch",
+    // процесс запускает сборку в случае изменения файлов (необходима перезагрузка страницы в браузере)
+    "start": "cross-env NODE_ENV=development webpack-dev-server --mode development --open",
+    // процесс запускает сборку в случае изменения файлов + открывает страницу в браузере (автоматическое обновление) + складывает в оперативную память - для появления файлов в папке dist - Ctrl+C и например $ npm run dev
     "stats": "webpack --json > stats.json && webpack-bundle-analyzer stats.json"
   },
-  "browserslist": "> 0.25%, not dead", // настройка для babel
+  "browserslist": "> 0.25%, not dead",
+  // настройка для babel
   "keywords": [
     "js",
     "javascript",

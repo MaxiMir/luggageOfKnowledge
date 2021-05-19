@@ -6,22 +6,20 @@ const $$ = document.querySelectorAll.bind(document);
 $$('p');
 
 
-
 // @ СОХРАНЯЕМ ДАННЫЕ ФОРМЫ НА САЙТЕ ПРИ ПЕРЕЗАГРУЗКЕ СТРАНИЦЫ:
-document.addEventListener("DOMContentLoaded", function() { // событие загрузки страницы
-  // выбираем на странице все элементы типа textarea и input
-  document.querySelectorAll('textarea, input').forEach(e => {
-    // если данные значения уже записаны в sessionStorage, то вставляем их в поля формы
-    // путём этого мы как раз берём данные из памяти браузера, если страница была случайно перезагружена
-    e.value = window.sessionStorage.getItem(e.name, e.value);
-    // на событие ввода данных (включая вставку с помощью мыши) вешаем обработчик
-    e.addEventListener('input', () => {
-      // и записываем в sessionStorage данные, в качестве имени используя атрибут name поля элемента ввода
-      window.sessionStorage.setItem(e.name, e.value);
-    });
-  })
+document.addEventListener("DOMContentLoaded", function () { // событие загрузки страницы
+                                                            // выбираем на странице все элементы типа textarea и input
+	document.querySelectorAll('textarea, input').forEach(e => {
+		// если данные значения уже записаны в sessionStorage, то вставляем их в поля формы
+		// путём этого мы как раз берём данные из памяти браузера, если страница была случайно перезагружена
+		e.value = window.sessionStorage.getItem(e.name, e.value);
+		// на событие ввода данных (включая вставку с помощью мыши) вешаем обработчик
+		e.addEventListener('input', () => {
+			// и записываем в sessionStorage данные, в качестве имени используя атрибут name поля элемента ввода
+			window.sessionStorage.setItem(e.name, e.value);
+		});
+	})
 });
-
 
 
 // @ DEBOUNCING:
@@ -49,35 +47,33 @@ const searchBoxDom = document.getElementById('search-box');
 
 // This represents a very heavy method. Which takes a lot of time to execute
 const makeAPICall = () => {
-  const debounceDom = document.getElementById('debounce-count');
-  const debounceCount = debounceDom.innerHTML || 0;
+	const debounceDom = document.getElementById('debounce-count');
+	const debounceCount = debounceDom.innerHTML || 0;
 
-  debounceDom.innerHTML = parseInt(debounceCount) + 1
+	debounceDom.innerHTML = parseInt(debounceCount) + 1
 };
 
 // Debounce function: Input as function which needs to be debounced and delay is the debounced time in milliseconds
 const debounceFunction = (func, delay) => {
-  // Cancels the setTimeout method execution
-  clearTimeout(timerId);
+	// Cancels the setTimeout method execution
+	clearTimeout(timerId);
 
-  // Executes the func after delay time.
-  timerId = setTimeout(func, delay)
+	// Executes the func after delay time.
+	timerId = setTimeout(func, delay)
 };
 
 // Event listener on the input box
 searchBoxDom.addEventListener('input', () => {
-  const apiCallCountDom = document.getElementById('show-api-call-count');
-  let apiCallCount = apiCallCountDom.innerHTML || 0;
-  apiCallCount = parseInt(apiCallCount) + 1;
+	const apiCallCountDom = document.getElementById('show-api-call-count');
+	let apiCallCount = apiCallCountDom.innerHTML || 0;
+	apiCallCount = parseInt(apiCallCount) + 1;
 
-  // Updates the number of times makeAPICall method is called
-  apiCallCountDom.innerHTML = apiCallCount;
+	// Updates the number of times makeAPICall method is called
+	apiCallCountDom.innerHTML = apiCallCount;
 
-  // Debounces makeAPICall method
-  debounceFunction(makeAPICall, 200)
+	// Debounces makeAPICall method
+	debounceFunction(makeAPICall, 200)
 });
-
-
 
 
 // @ THROTTLING:
@@ -117,41 +113,40 @@ const divBodyDom = document.getElementById('div-body');
 
 // This represents a very heavy method which takes a lot of time to execute
 const makeAPICall = () => {
-  const debounceDom = document.getElementById('debounc-count');
-  let debounceCount = debounceDom.innerHTML || 0;
+	const debounceDom = document.getElementById('debounc-count');
+	let debounceCount = debounceDom.innerHTML || 0;
 
-  debounceDom.innerHTML = parseInt(debounceCount) + 1;
+	debounceDom.innerHTML = parseInt(debounceCount) + 1;
 };
 
 // Throttle function: Input as function which needs to be throttled and delay is the time interval in milliseconds
 const throttleFunction = (func, delay) => {
-  // If setTimeout is already scheduled, no need to do anything
-  if (timerID) {
-    return;
-  }
+	// If setTimeout is already scheduled, no need to do anything
+	if (timerID) {
+		return;
+	}
 
-  // Schedule a setTimeout after delay seconds
-  timerID = setTimeout(() => {
-    func();
-    // Once setTimeout function execution is finished, timerId = undefined so that in <br>
-    // the next scroll event function execution can be scheduled by the setTimeout
-    timerID = undefined;
-  }, delay);
+	// Schedule a setTimeout after delay seconds
+	timerID = setTimeout(() => {
+		func();
+		// Once setTimeout function execution is finished, timerId = undefined so that in <br>
+		// the next scroll event function execution can be scheduled by the setTimeout
+		timerID = undefined;
+	}, delay);
 };
 
 // Event listener on the input box
 divBodyDom.addEventListener('scroll', () => {
-  const apiCallCountDom = document.getElementById('show-api-call-count');
-  let apiCallCount = apiCallCountDom.innerHTML || 0;
-  apiCallCount = parseInt(apiCallCount) + 1;
+	const apiCallCountDom = document.getElementById('show-api-call-count');
+	let apiCallCount = apiCallCountDom.innerHTML || 0;
+	apiCallCount = parseInt(apiCallCount) + 1;
 
-  // Updates the number of times makeAPICall method is called
-  apiCallCountDom.innerHTML = apiCallCount;
+	// Updates the number of times makeAPICall method is called
+	apiCallCountDom.innerHTML = apiCallCount;
 
-  // Throttles makeAPICall method such that it is called once in every 200 milliseconds
-  throttleFunction(makeAPICall, 200);
+	// Throttles makeAPICall method such that it is called once in every 200 milliseconds
+	throttleFunction(makeAPICall, 200);
 });
-
 
 
 // @ ДОБАВЛЕНИЕ ЭЛЕМЕНТОВ:
@@ -186,7 +181,6 @@ const p = document.querySelector('p');
 p.insertAdjacentText('afterbegin', 'foo');
 
 
-
 // @ ДВИГАЕМ ЭЛЕМЕНТЫ:
 /**
  Исходный верстка:
@@ -204,13 +198,11 @@ const h2 = document.querySelector('h2');
 h1.insertAdjacentElement('afterend', h2); //  и <h2> вставляется после <h1> (он просто сдвигается, а не копируется)
 
 
-
 // @ ЗАМЕНЯЕМ ЭЛЕМЕНТЫ:
 const h1 = document.querySelector('h1');
 const h2 = document.querySelector('h2');
 
 h1.replaceWith(h2); // заменой выступает новый элемент, созданный с помощью document.createElement, или элемент, который уже есть в том же документе (тогда он снова будет перfемещён, а не скопирован
-
 
 
 // @ СОЗДАЕМ ЭЛЕМЕНТ ИЗ СЫРОГО HTML:
@@ -222,11 +214,10 @@ h1.replaceWith(h2); // заменой выступает новый элемен
  */
 
 const createElement = domString => {
-  return new DOMParser().parseFromString(domString, 'text/html').body.firstChild;
+	return new DOMParser().parseFromString(domString, 'text/html').body.firstChild;
 };
 
 const a = createElement('<a href="/home" class="active">Главная страница</a>');
-
 
 
 // @ ИНСПЕКТИРУЕМ DOM:
@@ -299,10 +290,8 @@ if (body.compareDocumentPosition(li) & 16) {
 }
 
 
-
 // @ node.sourceIndex:
 // Номер элемента node в порядке прямого обхода дерева. Только для узлов‐элементов.
-
 
 
 // @ ОТСЛЕЖИВАНИЕ ИЗМЕНЕНИЙ В ЛЮБОМ УЗЛЕ DOM:
@@ -353,30 +342,30 @@ observer.observe(target, options);
 
 const target = document.querySelector('#container');
 const callback = (mutations, observer) => {
-  mutations.forEach(mutation => {
-    switch (mutation.type) {
-      case 'attributes':
-        // имя изменённого атрибута находится в
-        // mutation.attributeName
-        // и его старое значение содержится в mutation.oldValue
-        // текущее значение получаем с помощью
-        // target.getAttribute(mutation.attributeName)
-        break;
-      case 'childList':
-        // добавленные узлы хранятся в mutation.addedNodes
-        // удалённые узлы – в mutation.removedNodes
-        break;
-    }
-  });
+	mutations.forEach(mutation => {
+		switch (mutation.type) {
+			case 'attributes':
+				// имя изменённого атрибута находится в
+				// mutation.attributeName
+				// и его старое значение содержится в mutation.oldValue
+				// текущее значение получаем с помощью
+				// target.getAttribute(mutation.attributeName)
+				break;
+			case 'childList':
+				// добавленные узлы хранятся в mutation.addedNodes
+				// удалённые узлы – в mutation.removedNodes
+				break;
+		}
+	});
 };
 
 const observer = new MutationObserver(callback);
 
 observer.observe(target, {
-  attributes: true,
-  attributeFilter: ['foo'], // отслеживает только атрибут 'foo'
-  attributeOldValue: true,
-  childList: true
+	attributes: true,
+	attributeFilter: ['foo'], // отслеживает только атрибут 'foo'
+	attributeOldValue: true,
+	childList: true
 });
 
 // Когда завершаем мониторинг, отключаем наблюдателя и при необходимости вызываем метод takeRecordsдля получения незавершённых изменений, которые ещё не доставлены в обратный вызов:
@@ -384,7 +373,6 @@ observer.observe(target, {
 const mutations = observer.takeRecords();
 callback(mutations);
 observer.disconnect();
-
 
 
 // @ ОТЛИЧИЕ getElementsBy* ОТ querySelectorAll:
@@ -407,16 +395,14 @@ resultGet.length; // => 0
 
 // @ ВЫПОЛНЕНИЕ ФУНКЦИИ ПОСЛЕ ЗАГРУЗКИ СТРАНИЦЫ:
 document.readyState === 'complete' ?
-  someFunction()
-  :
-  window.addEventListener('load', someFunction, false);
-
+	someFunction()
+	:
+	window.addEventListener('load', someFunction, false);
 
 
 // @ ПОЛИФИЛЛ:
 // <script src="//cdn.polyfill.io/v1/polyfill.js?features=es6"></script>
 // При запросе сервис анализирует заголовки, понимает, какая версия какого браузера к нему обратилась и возвращает скрипт‐полифилл, добавляющий в браузер возможности, которых там нет.
-
 
 
 // @ ИСХОДНОЕ ЗНАЧЕНИЕ value
@@ -433,12 +419,10 @@ input.value; // 'new', input.value изменилось
 // Получается, что атрибут input.getAttribute('value') хранит оригинальное (исходное) значение даже после того, как пользователь заполнил поле и свойство изменилось.
 
 
-
 // @ СОБЫТИЕ ОКОНЧАНИЕ АНИМАЦИИ:
 elem.addEventListener("transitionend", () => {
-  console.log("addEventListener");
+	console.log("addEventListener");
 });
-
 
 
 // @ Проверка на видимость элемента:
@@ -449,25 +433,25 @@ elem.addEventListener("transitionend", () => {
  * Для попадания достаточно, чтобы верхняя или нижняя границы элемента были видны.
  */
 const isVisible = elem => {
-  const coords = elem.getBoundingClientRect();
-  const windowHeight = document.documentElement.clientHeight;
-  const topVisible = coords.top > 0 && coords.top < windowHeight;
-  const bottomVisible = coords.bottom > 0 && coords.bottom < windowHeight;
+	const coords = elem.getBoundingClientRect();
+	const windowHeight = document.documentElement.clientHeight;
+	const topVisible = coords.top > 0 && coords.top < windowHeight;
+	const bottomVisible = coords.bottom > 0 && coords.bottom < windowHeight;
 
-  return topVisible || bottomVisible;
+	return topVisible || bottomVisible;
 };
 
 const showVisibleImages = () => {
-  const images = document.getElementsByTagName('img');
+	const images = document.getElementsByTagName('img');
 
-  for (let image of images) {
-    const realSrc = image.getAttribute('realsrc');
+	for (let image of images) {
+		const realSrc = image.getAttribute('realsrc');
 
-    if (realSrc && isVisible(image)) {
-      image.src = realSrc;
-      image.setAttribute('realsrc', '');
-    }
-  }
+		if (realSrc && isVisible(image)) {
+			image.src = realSrc;
+			image.setAttribute('realsrc', '');
+		}
+	}
 };
 
 showVisibleImages();
@@ -481,16 +465,16 @@ window.onscroll = showVisibleImages;
 <img id="img" height="150"></img>
 */
 function readFile() {
-  if (this.files && this.files[0]) {
-    const FileReader = new FileReader();
+	if (this.files && this.files[0]) {
+		const FileReader = new FileReader();
 
-    FileReader.addEventListener("load", e => {
-      document.getElementById("img").src = e.target.result;
-      document.getElementById("b64").innerHTML = e.target.result;
-    });
+		FileReader.addEventListener("load", e => {
+			document.getElementById("img").src = e.target.result;
+			document.getElementById("b64").innerHTML = e.target.result;
+		});
 
-    FileReader.readAsDataURL( this.files[0] );
-  }
+		FileReader.readAsDataURL(this.files[0]);
+	}
 }
 
 document.getElementById("inp").addEventListener("change", readFile);

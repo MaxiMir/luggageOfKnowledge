@@ -11,36 +11,36 @@ import {StateProcessor} from '@core/page/StateProcessor'
 import {LocalStorageClient} from '@/shared/LocalStorageClient'
 
 export class ExcelPage extends Page {
-  constructor(param) {
-    super(param)
+	constructor(param) {
+		super(param)
 
-    this.storeSub = null
-    this.processor = new StateProcessor(
-      new LocalStorageClient(this.params)
-    )
-  }
+		this.storeSub = null
+		this.processor = new StateProcessor(
+			new LocalStorageClient(this.params)
+		)
+	}
 
-  async getRoot() {
-    const state = await this.processor.get()
-    const initialState = normalizeInitialState(state)
-    const store = createStore(rootReducer, initialState)
+	async getRoot() {
+		const state = await this.processor.get()
+		const initialState = normalizeInitialState(state)
+		const store = createStore(rootReducer, initialState)
 
-    this.storeSub = store.subscribe(this.processor.listen)
+		this.storeSub = store.subscribe(this.processor.listen)
 
-    this.excel = new Excel({
-      components: [Header, Toolbar, Formula, Table],
-      store
-    })
+		this.excel = new Excel({
+			components: [Header, Toolbar, Formula, Table],
+			store
+		})
 
-    return this.excel.getRoot()
-  }
+		return this.excel.getRoot()
+	}
 
-  afterRender() {
-    this.excel.init()
-  }
+	afterRender() {
+		this.excel.init()
+	}
 
-  destroy() {
-    this.excel.destroy()
-    this.storeSub.unsubscribe()
-  }
+	destroy() {
+		this.excel.destroy()
+		this.storeSub.unsubscribe()
+	}
 }

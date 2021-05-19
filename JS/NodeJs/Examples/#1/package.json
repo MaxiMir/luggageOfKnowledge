@@ -1,13 +1,13 @@
 {
-    "name": "test",
-    "version": "1.0.0",
-    "description": "",
-    "main": "index.js",
-    "scripts": {
-        "start": "node index",
-        "dev": "nodemon index"
-    },
-    "keywords": [],
-    "author": "",
-    "license": "ISC"
+  "name": "test",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index",
+    "dev": "nodemon index"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
 }

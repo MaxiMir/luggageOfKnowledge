@@ -1,4 +1,4 @@
-import { ADD_TASK, REMOVE_TASK, COMPLETE_TASK, CHANGE_FILTER } from './constants';
+import {ADD_TASK, REMOVE_TASK, COMPLETE_TASK, CHANGE_FILTER} from './constants';
 
 // Store
 export type Filter = string;

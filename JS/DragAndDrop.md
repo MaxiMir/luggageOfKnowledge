@@ -64,7 +64,9 @@
     }
 </script>
 ```
+
 ### Перемещение элемента по окну браузера/в элемент
+
 ```html
 <div id="elem" draggable="true">abcde</div>
 <div id="parent"></div>
@@ -111,7 +113,9 @@
     }
 </script> 
 ```
+
 ### Перетягивание блока с элементами в другой блок
+
 ```html
 <div id="panel">
     <div class="elem" draggable="true">

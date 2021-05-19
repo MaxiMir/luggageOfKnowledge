@@ -1,81 +1,81 @@
 const Todo = require('../models/todo')
 
 const users = [
-  {name: 'Igor', age: 30, email: 'igor@mail.ru'},
-  {name: 'Elena', age: 23, email: 'elena@gmail.com'}
+	{name: 'Igor', age: 30, email: 'igor@mail.ru'},
+	{name: 'Elena', age: 23, email: 'elena@gmail.com'}
 ]
 
 module.exports = {
-  test() {
-    return {
-      count: Math.trunc(Math.random() * 10),
-      users
-    }
-  },
-  random({min, max, count}) { // деструктурируем параметры
-    const arr = []
+	test() {
+		return {
+			count: Math.trunc(Math.random() * 10),
+			users
+		}
+	},
+	random({min, max, count}) { // деструктурируем параметры
+		const arr = []
 
-    for (let i = 0; i < count; i++) {
-      const random = Math.random() * (max - min) + min
-      arr.push(random)
-    }
+		for (let i = 0; i < count; i++) {
+			const random = Math.random() * (max - min) + min
+			arr.push(random)
+		}
 
-    return arr
-  },
-  addTestUser({user: {name, email}}) { // деструктурируем параметры
-    const user = {
-      name, email,
-      age: Math.ceil(Math.random() * 30)
-    }
+		return arr
+	},
+	addTestUser({user: {name, email}}) { // деструктурируем параметры
+		const user = {
+			name, email,
+			age: Math.ceil(Math.random() * 30)
+		}
 
-    users.push(user)
+		users.push(user)
 
-    return user
-  },
-  async getTodos() {
-    try {
-      return await Todo.findAll()
-    } catch (e) {
-      throw new Error('Fetch todos is not available')
-    }
-  },
-  async createTodo({todo}) { // деструктурируем параметры
-    try {
-      return await Todo.create({
-        title: todo.title,
-        done: false
-      })
-    } catch (e) {
-      throw new Error('Title is required')
-    }
-  },
-  async completeTodo({id}) { // деструктурируем параметры
-    try {
-      const todo = await Todo.findByPk(id)
+		return user
+	},
+	async getTodos() {
+		try {
+			return await Todo.findAll()
+		} catch (e) {
+			throw new Error('Fetch todos is not available')
+		}
+	},
+	async createTodo({todo}) { // деструктурируем параметры
+		try {
+			return await Todo.create({
+				title: todo.title,
+				done: false
+			})
+		} catch (e) {
+			throw new Error('Title is required')
+		}
+	},
+	async completeTodo({id}) { // деструктурируем параметры
+		try {
+			const todo = await Todo.findByPk(id)
 
-      todo.done = true
-      await todo.save()
+			todo.done = true
+			await todo.save()
 
-      return todo
-    } catch (e) {
-      throw new Error('Id is required')
-    }
-  },
-  async deleteTodo({id}) { // деструктурируем параметры
-    try {
-      const todos = await Todo.findAll({
-        where: {id}
-      })
+			return todo
+		} catch (e) {
+			throw new Error('Id is required')
+		}
+	},
+	async deleteTodo({id}) { // деструктурируем параметры
+		try {
+			const todos = await Todo.findAll({
+				where: {id}
+			})
 
-      await todos[0].destroy()
+			await todos[0].destroy()
 
-      return true
-    } catch (e) {
-      throw new Error('Id is required')
+			return true
+		} catch (e) {
+			throw new Error('Id is required')
 
-      return false
-    }
-  }
+			return false
+		}
+	}
 }
 
 // Подключается в index.js

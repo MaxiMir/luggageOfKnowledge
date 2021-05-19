@@ -29,7 +29,9 @@
  $ npm install nodemon --save-dev # по ctrl+s автоматически перезапускает сервер nodejs
  $ npm install nodemon -g # для доступа в консоли
 ```
+
 FILE: package.json:
+
 ```json
 {
   "scripts": {
@@ -37,7 +39,9 @@ FILE: package.json:
   }
 }    
 ```
+
 FILE: index.js:
+
 ```js
 const mongoose = require('mongoose')
 require('./person.model')
@@ -45,70 +49,72 @@ require('./person.model')
 mongoose.Promise = global.Promise() // переопределяем Promise из mongoose на глобальный Promise из nodejs (лечение DeprecationWarning)
 
 mongoose.connect('mongodb://localhost/maximir', { // если db maximir нет, mongoose ее создаст
-  useMongoClient: true
+	useMongoClient: true
 }).then(() => console.log('MongoDB has started...'))
-.catch(e => console.log(e))
+	.catch(e => console.log(e))
 
 const Person = mongoose.model('persons')
 const person = new Person({ // описание нового значения в коллекции
-  name: 'Max',
-  age: 24,
-  phones: [4697171]
+	name: 'Max',
+	age: 24,
+	phones: [4697171]
 })
 
 person.save() // сохранение новой записи в коллекции
-    .then(user => console.log(user))
-    .catch(e => console.log(e))
+	.then(user => console.log(user))
+	.catch(e => console.log(e))
 // => {_id: 59ec9910559, name: 'Max', age: 24, phones: [4697171], isMarried: false}
 
 Person.find({}) // получение всех записей из коллекции
-    .then(persons => console.log(persons))
+	.then(persons => console.log(persons))
 
 Person.find({age: 24}) // получение записей с age = 24
-    .sort('age') // сортировка по age ASC
-    .then(persons => console.log(persons))
+	.sort('age') // сортировка по age ASC
+	.then(persons => console.log(persons))
 
 Person.find({name: {'$in': ['Person 1', 'Person 2']}}) // получение записей с name = Person 1 или Person 2
-    .limit(2) // ограничение по кол-ву
-    .sort('-age') // сортировка по age DESC
-    .then(persons => console.log(persons))
+	.limit(2) // ограничение по кол-ву
+	.sort('-age') // сортировка по age DESC
+	.then(persons => console.log(persons))
 
 Person.find({age: 24})
-    .then(persons => {
-      const p = persons[0]
-      Person.find({_id: p._id}).remove() // удаление записи
-          .then(_ => console.log('Removed'))
-          .catch(e => console.log(e))
-    })
-    
-[{name: 'Person 1', age: 55}, {name: 'Person 2', age: 70}, {name: 'Person 3', age: 90}].forEach(p => {
-  new Person(p).save()
+	.then(persons => {
+		const p = persons[0]
+		Person.find({_id: p._id}).remove() // удаление записи
+			.then(_ => console.log('Removed'))
+			.catch(e => console.log(e))
+	})
+
+	[{name: 'Person 1', age: 55}, {name: 'Person 2', age: 70}, {name: 'Person 3', age: 90}].forEach(p => {
+	new Person(p).save()
 })
 ```
+
 FILE: person.model.js:
+
 ```js
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
 const personSchema = new Schema({ // описание модели
-  name: {
-    type: String,
-    required: true
-  },
-  age: {
-    type: Number,
-    min: 18, // валидаторы по значению
-    max: 90, // валидаторы по значению
-    default: 20
-  },
-  isMarried: {
-    type: Boolean,
-    default: false
-  },
-  phones: {
-    type: [Number], // массив чисел
-    default: []
-  }
+	name: {
+		type: String,
+		required: true
+	},
+	age: {
+		type: Number,
+		min: 18, // валидаторы по значению
+		max: 90, // валидаторы по значению
+		default: 20
+	},
+	isMarried: {
+		type: Boolean,
+		default: false
+	},
+	phones: {
+		type: [Number], // массив чисел
+		default: []
+	}
 })
 
 mongoose.model('persons', personSchema) // persons - название коллекции, в которой будет храниться

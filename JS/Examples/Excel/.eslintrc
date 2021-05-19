@@ -2,14 +2,21 @@
   "parser": "babel-parser",
   "env": {
     "es6": true,
-    "browser": true, // работаем в браузере
-    "node": true // работаем в node
+    "browser": true,
+    // работаем в браузере
+    "node": true
+    // работаем в node
   },
-  "rules": { // правила для проекта
-    "semi": "off", // отключаем ; в конце строки
-    "arrow-parens": "off", // отключаем () для единственного параметра в функции
-    "comma-dangle": "off", // запятая для последнего аргумента
-    "require-jsdoc": "off" // отключаем JS Doc
+  "rules": {
+    // правила для проекта
+    "semi": "off",
+    // отключаем ; в конце строки
+    "arrow-parens": "off",
+    // отключаем () для единственного параметра в функции
+    "comma-dangle": "off",
+    // запятая для последнего аргумента
+    "require-jsdoc": "off"
+    // отключаем JS Doc
   },
   "extends": [
     "eslint:recommended",

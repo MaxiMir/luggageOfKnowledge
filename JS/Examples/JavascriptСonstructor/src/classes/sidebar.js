@@ -1,44 +1,44 @@
 import {TextBlock, TitleBlock} from './blocks'
 
 export class Sidebar {
-  constructor(selector, update) {
-    this.$el = document.querySelector(selector)
-    this.update = update
+	constructor(selector, update) {
+		this.$el = document.querySelector(selector)
+		this.update = update
 
-    this.init()
-  }
+		this.init()
+	}
 
-  init() {
-    this.$el.addEventListener('submit', this.addBlock.bind(this))
-    this.$el.innerHTML = this.template
-  }
+	init() {
+		this.$el.addEventListener('submit', this.addBlock.bind(this))
+		this.$el.innerHTML = this.template
+	}
 
-  get template() {
-    return [
-      block('text'),
-      block('title')
-    ].join('')
-  }
+	get template() {
+		return [
+			block('text'),
+			block('title')
+		].join('')
+	}
 
-  addBlock(event) {
-    event.preventDefault()
+	addBlock(event) {
+		event.preventDefault()
 
-    const type = event.target.name
-    const value = event.target.value.value
-    const styles = event.target.styles.value
+		const type = event.target.name
+		const value = event.target.value.value
+		const styles = event.target.styles.value
 
-    const Constructor = type === 'text' ? TextBlock : TitleBlock
+		const Constructor = type === 'text' ? TextBlock : TitleBlock
 
-    const newBlock = new Constructor(value, {styles})
-    this.update(newBlock)
+		const newBlock = new Constructor(value, {styles})
+		this.update(newBlock)
 
-    event.target.value.value = ''
-    event.target.styles.value = ''
-  }
+		event.target.value.value = ''
+		event.target.styles.value = ''
+	}
 }
 
 function block(type) {
-  return `
+	return `
     <form name="${type}">
       <h5>${type}</h5>
       <div class="form-group">

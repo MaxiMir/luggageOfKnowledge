@@ -1,4 +1,4 @@
-# TYPESCRIPT: BASIC 
+# TYPESCRIPT: BASIC
 
 + [TYPES](#TYPES)
 + [MULTIPLE TYPES](#MULTIPLE_TYPES)
@@ -40,39 +40,53 @@ $ tsc -w # запуск слежения за изменением файлов
 ### <a name="TYPES"></a> TYPES:
 
 * Boolean:
+
 ```typescript
 const isFetching: boolean = true
 ```
+
 * Number:
+
 ```typescript
 const int: number = 42
 const float: number = 4.2
 const num: number = 3e10
 ```
+
 * String:
+
 ```typescript
 const message: string = 'Hello'
 ```
+
 * Undefined:
+
 ```typescript
 const u: undefined = undefined
 ```
+
 * Null:
+
 ```typescript
 const n: null = null // в нативном typeof null - object
 ```
+
 * Object:
+
 ```typescript
 const o: object = {name: 'object'} // object
 const user: { name: string, age: number } = {name: 'Max', age: 25}
 ```
+
 * Any:
+
 ```typescript
 let variable: any = 42 // тип переменной может меняться
 variable = 'New string'
 ```
 
 ### <a name="MULTIPLE_TYPES"></a> MULTIPLE TYPES:
+
 ```typescript
 type ID = string | number
 const id: ID = 1234
@@ -80,11 +94,13 @@ const id2: ID = '1234'
 ```
 
 ### <a name="TUPLE"></a> TUPLE:
+
 ```typescript
 const concat: [string, number] = ['Maxim', 7774565] // массив со строками и числами
 ```
 
 ### <a name="TYPE"></a> TYPE:
+
 ```typescript
 type Employee = {
 	name: string,
@@ -109,6 +125,7 @@ const designer: Employee = {
 ```
 
 ### <a name="ENUM"></a> ENUM:
+
 ```typescript
 enum Directions { // набор именованных числовых констант:
     Up = 2,
@@ -127,7 +144,9 @@ Directions[4] // 'Down'
 Directions[6] // 'Left'
 Directions[7] // 'Right'
 ```
+
 * константные перечисления с оптимизацией - генерация только в случае обращения к links:
+
 ```typescript
 const enum links { // при добавлении const компилироваться будет в константу, а не в функцию
 	youtube = 'https://youtube.com',
@@ -139,6 +158,7 @@ links.vk // https://youtube.com
 ```
 
 ### <a name="FUNCTIONS"></a> FUNCTIONS:
+
 ```typescript
 function add(a: number, b: number): number {
 	return a + b
@@ -165,6 +185,7 @@ const infiniteRec = (): never => { // с божественной рекурси
 ```
 
 ### <a name="GUARDS"></a> GUARDS:
+
 ```typescript
 class MyResponse {
 	header = 'response header'
@@ -194,6 +215,7 @@ setAlertType('warning')
 ```
 
 ### <a name="FUNCTION_OVERLOAD"></a> FUNCTION OVERLOAD | ПЕРЕГРУЗКА ФУНКЦИИ:
+
 ```typescript
 interface MyPosition {
 	x: number | undefined,
@@ -224,7 +246,9 @@ console.log('Empty: ', position())
 console.log('One param: ', position(42))
 console.log('Two params: ', position(10, 15))
 ```
+
 ### <a name="INTERFACE"></a> INTERFACE:
+
 ```typescript
 interface Rect {
 	readonly id: string, // readonly - только для чтения
@@ -255,7 +279,9 @@ rect.color = '#ccc'
 const react2 = {} as Rect // приводим объект к типу Rect
 const rect3 = <Rect>{} // <-> старый вид записи
 ```
+
 ### <a name="PARTIAL"></a> PARTIAL:
+
 ```typescript
 interface AppleCar {
 	model: string,
@@ -276,7 +302,9 @@ function createAndValidateCar(model: string, year: number): AppleCar {
 	return car as AppleCar
 }
 ```
+
 ### <a name="DYNAMIC_OBJECT_KEYS"></a> DYNAMIC OBJECT KEYS:
+
 ```typescript
 interface Styles {
 	[key: string]: string // ключ и значение - строка
@@ -288,7 +316,9 @@ const css: Styles = {
 	borderRadius: '5px'
 }
 ```
+
 ### <a name="READONLY"></a> READONLY:
+
 ```typescript
 const cars: Readonly<Array<string>> = ['Ford', 'Audi'] // массив только для чтения
 
@@ -302,7 +332,9 @@ const user: Readonly<User> = { // объект только для чтения
 
 user.name = 'John'  // Error: cannot reassign a readonly property
 ```
+
 ### <a name="REQUIRED"></a> REQUIRED<T>:
+
 ```typescript
 interface Props {
    a?: number,
@@ -312,7 +344,9 @@ interface Props {
 const obj: Props = {a: 5} // OK
 const obj2: Required<Props> = {a: 5} // Error: property 'b' missing
 ````
+
 ### <a name="KEYOF"></a> KEYOF:
+
 ```typescript
 interface Person {
 	name: string,
@@ -323,7 +357,9 @@ type PersonKeys = keyof Person // 'name' | 'age'
 
 let key: PersonKeys = 'name' // age
 ```
+
 ### <a name="RECORD"></a> RECORD<K, T>:
+
 ```typescript
 interface PageInfo {
    title: string
@@ -337,7 +373,9 @@ const x: Record<Page, PageInfo> = { // сопоставляет
    home: {title: 'home'},
 }
 ```
+
 ### <a name="PICK"></a> PICK<T, K>:
+
 ```typescript
 interface Todo {
    title: string,
@@ -352,7 +390,9 @@ const todo: TodoPreview = {
    completed: false
 }
 ```
+
 ### <a name="OMIT"></a> OMIT<T, K>:
+
 ```typescript
 interface Todo {
    title: string,
@@ -367,7 +407,9 @@ const todo: TodoPreview = {
    completed: false
 } 
 ```
+
 ### <a name="EXCLUDE"></a> EXCLUDE<T, U>:
+
 ```typescript
 type T0 = Exclude<"a" | "b" | "c", "a"> // исключаем "a" -> "b" | "c"
 type T1 = Exclude<"a" | "b" | "c", "a" | "b"> // исключаем "a" или "b" -> "c"
@@ -383,17 +425,23 @@ type UserKeysNoMeta = Exclude<keyof User, '_id' | 'createdAt'>
 
 let u1: UserKeysNoMeta = 'name'
 ```
+
 ### <a name="EXTRACT"></a> EXTRACT<T, U>:
+
 ```typescript
 type T0 = Extract<"a" | "b" | "c", "a" | "f"> // оставляем только "a" или "f" -> "a"
 type T1 = Exclude<string | number | (() => void), Function> // оставляем только функцию -> () => void
 ```
+
 ### <a name="NonNullable"></a> NonNullable<T>:
+
 ```typescript
 type T0 = NonNullable<string | number | undefined> // string | number
 type T1 = NonNullable<string[] | null | undefined> // string[]
 ```
+
 ### <a name="ReturnType"></a> ReturnType<T>:
+
 ```typescript
 declare function f1(): {a: number, b: string}
 // создает тип состоящий из возвращемого функцией типа
@@ -407,7 +455,9 @@ type T6 = ReturnType<never> // any
 type T7 = ReturnType<string> // Error
 type T8 = ReturnType<Function> // Error
 ```
+
 ### <a name="InstanceType"></a> ReturnType InstanceType<T>:
+
 ```typescript
 class C {
    x = 0
@@ -420,7 +470,9 @@ type T1 = InstanceType<never> // any
 type T1 = InstanceType<string> // Error 
 type T1 = InstanceType<Function> // Error
 ```
+
 ### <a name="CLASS"></a> CLASS:
+
 ```typescript
 interface IClock {
 	time: Date, // тип Date
@@ -441,6 +493,7 @@ class Clock implements IClock { // interface + class
 	}
 }
 ```
+
 ```typescript
 class Client<T, K extends Number> {
 	constructor(public nickname: T, public age: K) {} // сокращенная запись (модификатор обязателен)
@@ -450,7 +503,9 @@ class Client<T, K extends Number> {
 	}
 }
 ```
+
 ### <a name="ABSTRACT_CLASS"></a> ABSTRACT CLASS:
+
 ```typescript
 abstract class Component {
 	constructor(public name: string) {}
@@ -470,7 +525,9 @@ class AppComponent extends Component {
 	}
 }
 ```
+
 ### <a name="GENERIC"></a> GENERIC:
+
 ```typescript
 const words2: string[] = ['Hello', 'Typescript'] // массив строк
 const words: Array<string> = ['Hello', 'Typescript'] // массив строк
@@ -479,9 +536,11 @@ const getter = <T>(data: T): T => data
 
 getter<Number>(1) // тип Number — это такой же аргумент, как и 1. Он подставляется везде вместо T.
 ```
+
 ```typescript
 const reverse = <T>(array: T[]): T[] => array.reverse()
 ```
+
 ```typescript
 const mergeObjects = <T extends object, R extends object>(a: T, b: R): T & R => {
 	return Object.assign({}, a, b)
@@ -489,6 +548,7 @@ const mergeObjects = <T extends object, R extends object>(a: T, b: R): T & R => 
 
 const merged = mergeObjects({ name: 'Maxim' }, { age: 26 })
 ```
+
 ```typescript
 interface ILength {
 	length: number
@@ -501,6 +561,7 @@ const withCount = <T extends ILength>(value: T): {value: T, count: string} => {
 	}
 } // <T extends ILength> - передаваемый объект должен иметь свойство length
 ```
+
 ```typescript
 const getObjectValue = <T extends object, R extends keyof T>(obj: T, key: R) => {
 	return obj[key]
@@ -515,6 +576,7 @@ console.log(getObjectValue(person, 'name')) // отработает
 console.log(getObjectValue(person, 'age')) // отработает
 console.log(getObjectValue(person, 'job')) // ошибка
 ```
+
 ```typescript
 type Student = {
 	name: string
@@ -534,6 +596,7 @@ const getBy = <T, P extends keyof T>(model: T[], prop: P, value: T[P]): T | null
 
 const result = getBy(students, "name", "Harry")
 ```
+
 ```typescript
 const promise2: Promise<string> = new Promise(resolve => {
 	setTimeout(() => {
@@ -545,6 +608,7 @@ promise.then(data => {
 	console.log(data.toUpperCase())
 })
 ```
+
 ```typescript
 class Collection<T extends number | string> {
 	constructor(private _items: T[] = []) {}
@@ -572,7 +636,9 @@ numbers.add(2)
 numbers.remove(3)
 numbers.items // [1, 2, 2]
 ```
+
 ### <a name="INFER_TYPE"></a> INFER TYPE:
+
 ```typescript
 type Nullable<T> = null | T
 
@@ -614,7 +680,9 @@ const obj = {
 type objType<T> = T extends {[key: string]: infer U} ? U : never
 const someObj: objType<typeof obj> = {age: 18}
 ```
+
 ### <a name="CONDITIONAL_TYPES"></a> CONDITIONAL TYPES:
+
 ```typescript
 type UserType = {
     firstName: string,
@@ -665,7 +733,9 @@ const photo: ConditionalType<'photo'> = {
     small: '1.min.jpg'
 }
 ```
+
 ### <a name="DECORATOR"></a> DECORATOR:
+
 ```typescript
 const logClass = (constructor: Function) => {
 	console.log(constructor) // Result of call: class User {}
@@ -705,7 +775,9 @@ class User {
 	}
 }
 ```
+
 * Factory Decorator
+
 ```typescript
 const factory = (value: any) => { // Factory Decorator
 	return function (target: any) { // Decorator
@@ -728,7 +800,9 @@ class User {
 	}
 }
 ```
+
 * Decorator composition
+
 ```typescript
 // Decorator composition syntax
 // Apply decorations (one line):
@@ -739,7 +813,9 @@ class User {
 @g
 x
 ````
+
 > Выражение для каждого декоратора вычисляется сверху вниз, затем результаты как функции вызываются снизу вверх
+
 ```typescript
 // Two factory decorations
 const first = () => {
@@ -772,6 +848,7 @@ class User {
 // second() called // Decorator 2
 // first() called // Decorator 1
 ```
+
 ```typescript
 interface ComponentDecorator {
 	selector: string,
@@ -802,6 +879,7 @@ function Component(config: ComponentDecorator) {
     `
 })
 ```
+
 ```typescript
 function Bind(_:any, _2: any, descriptor: PropertyDescriptor): PropertyDescriptor {
 	const original = descriptor.value
@@ -828,6 +906,7 @@ const card = new CarComponent('My Card Component')
 const btn = document.querySelector('#btn')!
 btn.addEventListener('click', card.logName) // благодаря декоратору @Bind, вместо card.logName.bind(card)
 ```
+
 ```typescript
 type ValidatorType = 'required' | 'email'
 
@@ -881,8 +960,11 @@ if (validate(form)) {
 	console.log('Validation Error')
 }
 ```
+
 ### <a name="NAMESPACE"></a> NAMESPACE:
+
 * FILE: form-namespace.ts:
+
 ```typescript
 namespace Form { // namespace должны совпадать
 	export type FormType = 'inline' | 'block' // экспортируем из namespace
@@ -894,7 +976,9 @@ namespace Form { // namespace должны совпадать
 	}
 }
 ```
+
 * FILE: my-form.ts:
+
 ```typescript
 /// <reference path="form-namespace.ts" />
 

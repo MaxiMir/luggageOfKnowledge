@@ -1,35 +1,35 @@
 document.addEventListener("DOMContentLoaded", () => {
-    const makeOrderBtn = document.querySelector(".form-calc__submit");
+	const makeOrderBtn = document.querySelector(".form-calc__submit");
 
-    /**
-     * Получаем заполненные опции в форме:
-     */
-    const getOptionsData = () => {
-        const optionsBlocks = document.querySelectorAll('.modal__option');
+	/**
+	 * Получаем заполненные опции в форме:
+	 */
+	const getOptionsData = () => {
+		const optionsBlocks = document.querySelectorAll('.modal__option');
 
-        return [...optionsBlocks].reduce((acc, optionBlock) => {
-            const [optionNameBlock, optionValueBlock] = optionBlock.children;
-            const name = optionNameBlock.innerText;
-            const value = optionValueBlock.innerText;
+		return [...optionsBlocks].reduce((acc, optionBlock) => {
+			const [optionNameBlock, optionValueBlock] = optionBlock.children;
+			const name = optionNameBlock.innerText;
+			const value = optionValueBlock.innerText;
 
-            if (name && value) {
-                acc[name] = value;
-            }
+			if (name && value) {
+				acc[name] = value;
+			}
 
-            return acc;
-        }, {});
-    };
+			return acc;
+		}, {});
+	};
 
 
-    makeOrderBtn.addEventListener("click", () => {
-        const formCalc = document.querySelector('#buyForm');
-        const postData = getOptionsData();
-        const formSettings = {
-            postData,
-            pathToSend: "/includes/request.php"
-        };
+	makeOrderBtn.addEventListener("click", () => {
+		const formCalc = document.querySelector('#buyForm');
+		const postData = getOptionsData();
+		const formSettings = {
+			postData,
+			pathToSend: "/includes/request.php"
+		};
 
-        // инициализируем обработчик для формы:
-        formCalc.initHandler(formSettings);
-    });
+		// инициализируем обработчик для формы:
+		formCalc.initHandler(formSettings);
+	});
 });

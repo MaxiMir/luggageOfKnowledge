@@ -32,6 +32,7 @@
 
     .stop-recording {
       margin-left: 5px;
+
       i {
         svg {
           position: relative;
@@ -50,6 +51,7 @@
       background-color: #f56b6b;
       border-radius: 30px;
       margin-right: 8px;
+
       &::before {
         content: "";
         position: absolute;
@@ -80,9 +82,11 @@
 
     &-upload-btn {
       cursor: pointer;
+
       input {
         cursor: pointer;
       }
+
       &:hover {
         button {
           opacity: 1;
@@ -94,6 +98,7 @@
   input {
     padding: 6px 11px 8px;
     font-size: 14px;
+
     &:focus {
       box-shadow: none;
     }

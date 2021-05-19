@@ -1,13 +1,15 @@
 export class Page {
-  constructor(params) {
-    this.params = params || Date.now().toString()
-  }
+	constructor(params) {
+		this.params = params || Date.now().toString()
+	}
 
-  getRoot() {
-    throw new Error('Method "getRoot" should be implemented')
-  }
+	getRoot() {
+		throw new Error('Method "getRoot" should be implemented')
+	}
 
-  afterRender() {}
+	afterRender() {
+	}
 
-  destroy() {}
+	destroy() {
+	}
 }

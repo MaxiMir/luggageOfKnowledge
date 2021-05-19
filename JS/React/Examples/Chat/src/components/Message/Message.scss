@@ -19,6 +19,7 @@
   &__avatar {
     display: flex;
     flex-direction: column-reverse;
+
     .avatar {
       border-radius: 50px;
       width: 33px;
@@ -52,6 +53,7 @@
     display: flex;
     margin-bottom: 5px;
     order: 1;
+
     &-item {
       $item: &;
       margin-right: 5px;
@@ -102,6 +104,7 @@
         left: -20px;
       }
     }
+
     &-actions {
       display: none;
       transform: rotate(90deg);
@@ -115,11 +118,13 @@
     audio {
       display: none;
     }
+
     #{$self}__bubble {
       width: 280px;
       position: relative;
       overflow: hidden;
     }
+
     #{$self}__audio {
       padding: 15px;
       background-color: #3674ff;
@@ -127,12 +132,14 @@
       width: 250px;
       overflow: hidden;
       position: relative;
+
       &-info {
         display: flex;
         align-items: center;
         justify-content: space-between;
         position: relative;
       }
+
       &-btn {
         button {
           display: flex;
@@ -142,6 +149,7 @@
           height: 28px;
           border-radius: 30px;
           background: #0f3997;
+
           img {
             height: 13px;
             position: relative;
@@ -149,12 +157,14 @@
           }
         }
       }
+
       &-duration {
         color: #fff;
         font-weight: 500;
         opacity: 0.5;
         font-size: 12px;
       }
+
       &-progress {
         left: 0;
         top: 0;
@@ -199,6 +209,7 @@
       box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.0220444);
       border-radius: 12px 12px 0px 12px;
       order: 2;
+
       #{$self}__text {
         color: $black;
       }
@@ -238,6 +249,7 @@
       &:nth-of-type(2) {
         animation: 0.8s typingAnimation infinite ease-out 0.2s;
       }
+
       &:nth-of-type(3) {
         animation: 0.8s typingAnimation infinite ease-out 0.3s;
         margin-right: 0;

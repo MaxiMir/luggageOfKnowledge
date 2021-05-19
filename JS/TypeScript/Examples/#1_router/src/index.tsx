@@ -9,14 +9,14 @@ import Post from './components/post/post'
 import './style.css'
 
 ReactDOM.render((
-	<BrowserRouter>
-		<App>
-			<Switch>
-				<Route exact path='/' component={Home}/>
-				<Route path='/contacts' component={Contacts}/>
-				<Route exact path='/posts' component={Posts}/>
-				<Route path='/posts/:id' component={Post}/>
-			</Switch>
-		</App>
-	</BrowserRouter>
+    <BrowserRouter>
+        <App>
+            <Switch>
+                <Route exact path='/' component={Home}/>
+                <Route path='/contacts' component={Contacts}/>
+                <Route exact path='/posts' component={Posts}/>
+                <Route path='/posts/:id' component={Post}/>
+            </Switch>
+        </App>
+    </BrowserRouter>
 ), document.getElementById('root'))

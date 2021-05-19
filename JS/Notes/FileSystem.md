@@ -20,7 +20,9 @@ export default {
   }
 }
 ```
+
 **1 вариант:**
+
 ```js
 import Logger, {color, sum} from "./module"
 
@@ -28,7 +30,9 @@ sum(1, 2);
 color;
 Logger.log(); // объект с методом log, экспортируемый по дефолту
 ```
+
 **2 вариант:**
+
 ```js
 // FILE: modules/index.js
 import * as Module from './module'

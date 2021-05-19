@@ -1,3 +1,3 @@
 declare module "middlewares" {
-  export function checkAuth(): void;
+    export function checkAuth(): void;
 }

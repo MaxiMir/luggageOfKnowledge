@@ -2,15 +2,15 @@ import React from 'react'
 import Title from './title'
 
 describe('Title component', () => {
-  it('should render Title component with props', () => {
-    const component = shallow(<Title title="Test title"/>)
+	it('should render Title component with props', () => {
+		const component = shallow(<Title title="Test title"/>)
 
-    expect(component).toMatchSnapshot()
-  })
+		expect(component).toMatchSnapshot()
+	})
 
-  it('should render Title component without props', () => {
-    const component = shallow(<Title/>)
+	it('should render Title component without props', () => {
+		const component = shallow(<Title/>)
 
-    expect(component).toMatchSnapshot()
-  })
+		expect(component).toMatchSnapshot()
+	})
 })

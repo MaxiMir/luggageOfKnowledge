@@ -6,15 +6,19 @@
 + [ТЕГОВЫЕ ШАБЛОНЫ](#TEMPLATE)
 
 ### <a name="LOOKBEHIND"></a> LOOKBEHIND-СОПОСТАВЛЕНИЯ (сопоставление с предыдущими символами) ES2018:
-Вы теперь можете писать регулярные выражения, которые ищут символы до того, что вы сопоставляете. 
-Например, чтобы найти все числа, перед которыми стоит знак доллара:
+
+Вы теперь можете писать регулярные выражения, которые ищут символы до того, что вы сопоставляете. Например, чтобы найти
+все числа, перед которыми стоит знак доллара:
+
 ```js
 const regex = /(?<=\$)\d+/
 const text  = 'This cost $400'
 
 text.match(regex) === ['400']
 ```
+
 Всё дело в новой lookbehind-группе, близнеце lookahead-групп:
+
 ```text
 Look ahead:  (?=abc)
 Look behind: (?<=abc)
@@ -22,9 +26,12 @@ Look behind: (?<=abc)
 Look ahead negative:  (?!abc)
 Look behind negative: (?<!abc)
 ```
+
 ### <a name="GROUPS"></a> ИМЕНОВАННЫЕ ГРУППЫ ЗАХВАТА ES2018:
-Регулярные выражения могут выбирать подвыборки и использовать для простого парсинга. 
-До недавнего времени мы могли ссылаться на такие фрагменты только по числам, например:
+
+Регулярные выражения могут выбирать подвыборки и использовать для простого парсинга. До недавнего времени мы могли
+ссылаться на такие фрагменты только по числам, например:
+
 ```js
 const getNameParts  = /(\w+)\s+(\w+)/g
 const name          = "Weyland Smithers"
@@ -43,8 +50,11 @@ const {first, last} = subMatches.groups
 first === 'Weyland'
 last === 'Smithers'
 ```
+
 ### <a name="BITWISE"></a> УНАРНЫЙ ПОБИТОВЫЙ ОПЕРАТОР:
+
 проверка на −1:
+
 ```js
 const str = "Проверка"
 
@@ -54,7 +64,9 @@ if (~str.indexOf("верка")) { // если найдено , т.к. ~n = -(n+1
 
 // <-> str.includes("верка")
 ```
+
 ### <a name="METHODS"></a> МЕТОДЫ:
+
 ```js
 const string = "Hello!"
 string.startsWith("He") // определяет, начинается ли строка с символов другой строки
@@ -68,11 +80,15 @@ string.padStart(10, '1234') // заполняет текущую строку д
 string.padStart(8, 'abc') // => Helloabc
 'Javascript is the best language'.replaceAll('Javascript', 'Python') // замена всех вхождений
 ```
+
 ### <a name="REPEAT"></a> ПОВТОРЕНИЕ СТРОКИ:
+
 ```js
 new Array(4).join("ля") // ляляля
 ```
+
 ### <a name="TEMPLATE"></a> ТЕГОВЫЕ ШАБЛОНЫ:
+
 ```js
 function tag(strings, ...expressions) {
   console.log(strings)

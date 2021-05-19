@@ -13,6 +13,7 @@
 + [time](#time)
 
 ### <a name="consoleCount"></a> console.count:
+
 ```js
 // console.count(label) - выводит общее количество вызовов функции:
 const sayHello = name => {
@@ -22,6 +23,7 @@ const sayHello = name => {
 ```
 
 ### <a name="consoleWarn"></a> console.warn:
+
 ```js
 // console.warn - выводит в консоли предупреждение:
 const sayHello = name => {
@@ -30,7 +32,9 @@ const sayHello = name => {
   }
 };
 ```
+
 ### <a name="consoleTable"></a> console.table:
+
 ```js
 // console.table - выводит массивы или объекты в таблице:
 const pets = {
@@ -65,17 +69,23 @@ const items = [
 
 console.table(items);
 ```
+
 ### <a name="color"></a> color:
+
 ```js
 // Color
 console.log('%cColor of the text is green plus small font size', 'color: green; font-size: x-small');
 ```
+
 ### <a name="clear"></a> clear:
+
 ```js
 // Clear
 console.clear();
 ```
+
 ### <a name="consoleGroup"></a> console.group:
+
 ```js
 // console.group - вывод вложенных групп
 console.log("This is the first level");
@@ -91,17 +101,20 @@ console.log("Back to the first level");
 ```
 
 ### <a name="passObjectVariable"></a> pass object, variable:
+
 ```js
 const userDetails = {"name":"John Miller", "id":2522, "theme":"dark"};
 console.log("Hey %s, here is your details %o in form of object", "John", userDetails);
 ```
 
 ### <a name="memory"></a> memory:
+
 ```js
 console.memory;
 ```
 
 ### <a name="assertion"></a> assertion:
+
 ```js
 const errorMsg = 'Hey! The number is not even';
 
@@ -111,6 +124,7 @@ for (let number = 2; number <= 5; number += 1) {
 ```
 
 ### <a name="time"></a> time and time end:
+
 ```js
 console.time("This");
 let total = 0;

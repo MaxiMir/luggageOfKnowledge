@@ -3,11 +3,11 @@ import Header from './components/header/header'
 import Footer from './components/footer/footer'
 
 const App: React.FC = ({children}) => (
-	<>
-		<Header/>
-		{children}
-		<Footer/>
-	</>
+    <>
+        <Header/>
+        {children}
+        <Footer/>
+    </>
 )
 
 export default App

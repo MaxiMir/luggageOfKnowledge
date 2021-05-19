@@ -5,11 +5,17 @@ path.dirname(__filename) // название директории /Users/.../ref
 path.extname(__filename) // расширение файла -> .js
 path.parse(__filename) // объект с информацией о файле ->
 {
-  root: '/',
-  dir: '/Users/.../refs/path.ref.js'
-  base: 'path.ref.js',
-  ext: '.js',
-  name: 'path.ref'
+	root: '/',
+		dir
+:
+	'/Users/.../refs/path.ref.js'
+	base: 'path.ref.js',
+		ext
+:
+	'.js',
+		name
+:
+	'path.ref'
 }
 
 path.join(__dirname, '..', 'test', 'second.html') // склеивает пути

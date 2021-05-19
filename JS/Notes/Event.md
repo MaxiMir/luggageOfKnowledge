@@ -44,22 +44,26 @@ const event = new CustomEvent("hello", {
 
 elem.dispatchEvent(event)
 ```
+
 ```js
 const event = new Event("click")
 elem.dispatchEvent(event) // инициирование события
 ```
 
 ### <a name="isTrusted"></a> Как отличить реальное нажатие от скриптового?:
+
 ```js
 event.isTrusted // true -если посетитель кликнул сам, и всегда false – если событие инициировал скрипт.
 ```
 
 ### <a name="oncopy"></a> Запрет на копирование текста:
+
 ```html
 <div oncopy="return false"></div>
 ```
 
 ### <a name="exit"></a> Событие переход на другую страницу или сделан клик на «закрыть окно»:
+
 ```js
 window.onbeforeunload = () => alert("Данные не сохранены. Точно перейти?") // приостановливает процесс и спрашивает подтверждение.
 ```

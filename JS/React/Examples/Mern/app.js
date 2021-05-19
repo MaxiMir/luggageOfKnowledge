@@ -5,7 +5,7 @@ const mongoose = require('mongoose')
 
 const app = express()
 
-app.use(express.json({ extended: true })) // middleware для правильного парсинга req.body
+app.use(express.json({extended: true})) // middleware для правильного парсинга req.body
 
 // Регистрация роутов:
 app.use('/api/auth', require('./routes/auth.routes'))
@@ -14,29 +14,29 @@ app.use('/t', require('./routes/redirect.routes'))
 
 
 if (process.env.NODE_ENV === 'production') {
-  app.use('/', express.static(path.join(__dirname, 'client', 'build'))) // отдаем статическую папку
+	app.use('/', express.static(path.join(__dirname, 'client', 'build'))) // отдаем статическую папку
 
-  app.get('*', (req, res) => { // отправляем файл index.html
-    res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'))
-  })
+	app.get('*', (req, res) => { // отправляем файл index.html
+		res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'))
+	})
 }
 
 const PORT = config.get('port') || 5000 // использование пакета config
 
 async function start() {
-  try {
-    await mongoose.connect(config.get('mongoUri'), { // подключение к БД
-      useNewUrlParser: true, // лечение DeprecationWarning
-      useUnifiedTopology: true,
-      useCreateIndex: true
-    })
+	try {
+		await mongoose.connect(config.get('mongoUri'), { // подключение к БД
+			useNewUrlParser: true, // лечение DeprecationWarning
+			useUnifiedTopology: true,
+			useCreateIndex: true
+		})
 
-    app.listen(PORT, () => console.log(`App has been started on port ${ PORT }...`))
-  } catch (e) {
-    console.log('Server Error', e.message)
+		app.listen(PORT, () => console.log(`App has been started on port ${PORT}...`))
+	} catch (e) {
+		console.log('Server Error', e.message)
 
-    process.exit(1) // завершение процесса NodeJS
-  }
+		process.exit(1) // завершение процесса NodeJS
+	}
 }
 
 start()

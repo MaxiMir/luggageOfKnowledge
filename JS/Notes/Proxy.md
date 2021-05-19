@@ -9,6 +9,7 @@
 + [UTIL](#UTIL)
 
 ### <a name="OBJECTS"></a> OBJECTS:
+
 ```js
 const person = {
   name: "Maxim",
@@ -53,6 +54,7 @@ op.qqq = 26 // No qqq field in target
 
 delete op.age // 'Deleting... age
 ```
+
 ```js
 сonst validator = {
   get(target, prop) {
@@ -78,7 +80,9 @@ formProxy.password // 12345
 formProxy['username'] // Поля username в объекте нет
 formProxy.password = '1' // Длина должна быть больше 2х символов
 ```
+
 ### <a name="FUNCTIONS"></a> FUNCTIONS:
+
 ```js
 const log = text => `[Log]: ${text}`
 
@@ -95,6 +99,7 @@ const proxy = new Proxy(log, {
 proxy() // "Количество аргументов не совпадает"
 proxy('TEST')
 ```
+
 ```js
 const log = text => `[Log]: ${text}`
 
@@ -114,7 +119,9 @@ proxy('TEST')
 // Calling fn...
 // "LOG: TEST"
 ```
+
 ### <a name="CLASSES"></a> CLASSES:
+
 ```js
 class Person {
   constructor(name, age) {
@@ -145,7 +152,9 @@ p.name
 // Getting prop name
 // "Maxim"
 ```
+
 ### <a name="WRAPPER"></a> WRAPPER:
+
 ```js
 const withDefaultValue = (target, defaultValue = 0) => {
   return new Proxy(target, {
@@ -166,7 +175,9 @@ position.x // 24
 position.y // 42
 position.z // 0
 ```
+
 ### <a name="HIDDEN"></a> HIDDEN:
+
 ```js
 const withHiddenProps = (target, prefix = '_') => {
   return new Proxy(target, {
@@ -194,7 +205,9 @@ for(let key in data) console.log(key)
 
 Object.keys(data) // ['name', 'age']
 ```
+
 ### <a name="OPTIMIZATION"></a> OPTIMIZATION:
+
 ```js
 const userData = [
   {id: 1, name: 'MaxiMir', job: 'Fullstact', age: 25},
@@ -246,7 +259,9 @@ const users = new IndexedArray([
 users.push({id: 7, name: 'John', job: 'Student', age: 22})
 users.findById(7) // {id: 7, name: 'John', job: 'Student', age: 22}
 ```
+
 ### <a name="CHAINING_STYLES"></a> CHAINING STYLES:
+
 ```js
 const styleProxy = {
   get: (object, property) => {
@@ -274,7 +289,9 @@ style(".menu")      // Returns the style object in a Proxy
   .backgroundColor("#000") // Updates bgColor and returns a Proxy
   .opacity("1")           // ... and so on so forth
 ```
+
 ### <a name="UTIL"></a> UTIL:
+
 ```js
 const util = new Proxy({}, {
   get(_, key) {

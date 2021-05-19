@@ -26,7 +26,9 @@ num.next() // {value: 0, done: false}
 num.next() // {value: 1, done: false}
 num.next() // {value: undefined, done: true}
 ```
+
 **Свой генератор:**
+
 ```js
 // свой генератор:
 const iterator = {
@@ -50,7 +52,9 @@ itr.next() // {value: 1, done: false}
 itr.next() // {value: 2, done: false}
 itr.next() // {value: undefined, done: true}
 ```
+
 **for of:**
+
 ```js
 // работает с объектами, у которых определено свойство Symbol(Symbol.Iterator)
 

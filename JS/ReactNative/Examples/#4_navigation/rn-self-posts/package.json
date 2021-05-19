@@ -7,7 +7,7 @@
     "eject": "expo eject",
     "lint": "esw src/**",
     "lint-watch": "esw -w --changed src/**",
-    "postinstall":"cd ./ios && pod install && cd .."
+    "postinstall": "cd ./ios && pod install && cd .."
   },
   "precommit": "lint",
   "dependencies": {

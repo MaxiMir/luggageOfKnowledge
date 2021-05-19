@@ -10,9 +10,11 @@
 + [ЗАГРУЗКА КАРТИНОК](#PROMISE_IMG)
 
 ### <a name="PROMISE"></a> PROMISE:
+
 предоставляет удобный способ организации асинхронного кода.
 
 СТАТУСЫ:
+
 * pending - ожидание
 * resolved - исполнено
 * rejected - отклонено
@@ -47,6 +49,7 @@ buyTicket(); // !асинхронность =>
 // sleep
 // Win!
 ```
+
 ```js
 let promise = new Promise((resolve, reject) => {
     setTimeout(() => {
@@ -75,6 +78,7 @@ promise.then(
 // 2 шаг
 // 3 шаг - успешно < 50 или (3 шаг: ошибка выпало > 50)
 ```
+
 ```js
 let promise = new Promise((resolve, reject) => {
     let i = 0;
@@ -118,7 +122,9 @@ function getRandomInt(min, max) { // генерирует случайное ч�
 // 9 3
 // 3 шаг: успешно interval равен 3 или (3 шаг: неудача более 10 итераций)
 ```
+
 ### <a name="PROMISE_CATCH"></a> CATCH IN PROMISE:
+
 ```js
 // #1:
 promise.then(result => console.log(result), error => console.log(error))
@@ -128,7 +134,9 @@ promise
 	.then(result => console.log(result))
 	.catch(error => console.log(error))
 ```
+
 ### <a name="PROMISE_CHAINING"></a> PROMISE CHAINING:
+
 ```js
 const promise = new Promise((resolve, reject) => {
     setTimeout(() => {
@@ -149,6 +157,7 @@ promise
 
 // Успешно: запуск | 1 then | 2 then
 ```
+
 ```js
 const promise = new Promise((resolve, reject) => {
     setTimeout(() => reject('запуск | '), 3000);
@@ -179,7 +188,9 @@ promise
 // C #1: Успешно: new Data | 2 then
 // БЕЗ #1: Неисправимая ошибка
 ```
+
 ### <a name="PROMISE_ALL"></a> PROMISE ALL:
+
 ```js
 const heavyOperation = num => new Promise(function(resolve, reject) {
     setTimeout(() => resolve(num * num), 3000);
@@ -204,6 +215,7 @@ Promise
 
 // в results - массив из результов resolve-ов -> через 2 секунды => [4, 9]
 ```
+
 ```js
 let nums = [1, 2, 3];
 
@@ -222,7 +234,9 @@ Promise
 
 // через 9 секунд => [1, 4, 9]
 ```
+
 ### <a name="PROMISE_RACE"></a> PROMISE RACE:
+
 ```js
 const promise1 = new Promise((resolve, reject) => setTimeout(resolve, 500, 'one'));
 const promise2 = new Promise((resolve, reject) => setTimeout(resolve, 100, 'two'));
@@ -230,14 +244,18 @@ const promise2 = new Promise((resolve, reject) => setTimeout(resolve, 100, 'two'
 Promise.race([promise1, promise2]).then(value => console.log(value)); // метод race - ждет загрузки 1-го promise, после этого выполняется then
 // => two
 ```
+
 ### <a name="PROMISE_RESOLVE"></a> PROMISE RESOLVE:
+
 ```js
 const promise1 = Promise.resolve([1, 2, 3]); // создает уже выполнившийся promise
 promise1.then(value => console.log(value));
 
 // => [1, 2, 3]
 ```
+
 ### <a name="PROMISE_REJECT"></a> PROMISE REJECT:
+
 ```js
 const resolved = result => console.log(result)
 
@@ -246,7 +264,9 @@ const rejected = result => console.log(result)
 Promise.reject(new Error('fail')).then(resolved, rejected) // создает уже выполнившийся promise c ошибкой
 // => Error: fail
 ```
+
 ### <a name="PROMISE_ASYNC"></a> PROMISE ASYNC AWAIT:
+
 ```js
 const getSmthF = () => {
 	return new Promise((resolve, reject) => {
@@ -288,6 +308,7 @@ async function func() {
 ```
 
 ### <a name="PROMISE_ANY"></a> PROMISE ANY:
+
 ```js
 const p1 = createPromise(1, 250)
 const p2 = createPromise(1, 700)
@@ -315,6 +336,7 @@ async function start() {
 ```
 
 ### <a name="PROMISE_IMG"></a> ЗАГРУЗКА КАРТИНОК (PROMISE):
+
 ```js
 const loadImage = path => {
 	return new Promise((resolve, reject) => {

@@ -21,30 +21,30 @@ import rootReducer from './redux/rootReducer'
 
 // Для расширения Chrome:
 const composeEnhancers =
-  typeof window === 'object' &&
-  window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ ?
-    window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({
-      // Specify extension’s options like name, actionsBlacklist, actionsCreators, serialize...
-    }) : compose; // compose -  встроенная функция в redux
+	typeof window === 'object' &&
+	window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ ?
+		window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({
+			// Specify extension’s options like name, actionsBlacklist, actionsCreators, serialize...
+		}) : compose; // compose -  встроенная функция в redux
 
 const loggerMiddleware = store => next => action => {
-  const result = next(action)
-  console.log('Middleware', store.getState()) // например: {type: "SUB"} | {type: "ADD"}
-  return result
+	const result = next(action)
+	console.log('Middleware', store.getState()) // например: {type: "SUB"} | {type: "ADD"}
+	return result
 }
 
 const store = createStore(
-  rootReducer,
-  composeEnhancers(
-    applyMiddleware( loggerMiddleware, reduxThunk ) // applyMiddleware - передаем middleware - которые хотим использовать
-    // передаем reduxThunk
-  )
+	rootReducer,
+	composeEnhancers(
+		applyMiddleware(loggerMiddleware, reduxThunk) // applyMiddleware - передаем middleware - которые хотим использовать
+		// передаем reduxThunk
+	)
 )
 
 const app = (
-  <Provider store={store}>
-    <App/>
-  </Provider>
+	<Provider store={store}>
+		<App/>
+	</Provider>
 )
 
 ReactDOM.render(app, document.getElementById('root'));

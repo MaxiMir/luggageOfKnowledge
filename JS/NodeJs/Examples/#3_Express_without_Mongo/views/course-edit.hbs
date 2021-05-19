@@ -1,27 +1,27 @@
 <h1>Редактировать {{course.title}}</h1>
 
 <form action="/courses/edit" method="POST">
-  <div class="input-field">
-    <input id="title" name="title" type="text" class="validate" required value="{{course.title}}">
-    <label for="title">Название курса</label>
-    <span class="helper-text" data-error="Введите название" ></span>
-  </div>
+    <div class="input-field">
+        <input id="title" name="title" type="text" class="validate" required value="{{course.title}}">
+        <label for="title">Название курса</label>
+        <span class="helper-text" data-error="Введите название"></span>
+    </div>
 
-  <div class="input-field">
-    <input id="price" name="price" type="number" class="validate" min="1" required value="{{course.number}}">
-    <label for="price">Цена курса</label>
-    <span class="helper-text" data-error="Введите цену" ></span>
-  </div>
+    <div class="input-field">
+        <input id="price" name="price" type="number" class="validate" min="1" required value="{{course.number}}">
+        <label for="price">Цена курса</label>
+        <span class="helper-text" data-error="Введите цену"></span>
+    </div>
 
-  <div class="input-field">
-    <input id="img" name="img" type="text" class="validate" required value="{{course.img}}">
-    <label for="img">URL картинки</label>
-    <span class="helper-text" data-error="Введите URL картинки" ></span>
-  </div>
+    <div class="input-field">
+        <input id="img" name="img" type="text" class="validate" required value="{{course.img}}">
+        <label for="img">URL картинки</label>
+        <span class="helper-text" data-error="Введите URL картинки"></span>
+    </div>
 
-  <input type="hidden" name="id" value="{{course.id}}">
+    <input type="hidden" name="id" value="{{course.id}}">
 
-  <button class="btn btn-primary">
-    Сохранить
-  </button>
+    <button class="btn btn-primary">
+        Сохранить
+    </button>
 </form>

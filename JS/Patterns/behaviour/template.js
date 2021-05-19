@@ -1,37 +1,37 @@
 class Employee {
-    constructor(name, salary) {
-        this.name = name;
-        this.salay = salary;
-    }
+	constructor(name, salary) {
+		this.name = name;
+		this.salay = salary;
+	}
 
-    work() {
-        return `${this} выполняет ${this.responsibilities()}`;
-    }
+	work() {
+		return `${this} выполняет ${this.responsibilities()}`;
+	}
 
-    getPaid() {
-        return `${this.name} имеет ЗП ${this.salay}`;
-    }
+	getPaid() {
+		return `${this.name} имеет ЗП ${this.salay}`;
+	}
 }
 
-class  Developer extends  Employee {
-    constructor(name, salary) {
-        super(name, salary);
-    }
+class Developer extends Employee {
+	constructor(name, salary) {
+		super(name, salary);
+	}
 
-    responsibilities() {
-        return 'процесс создания программ'
-    }
+	responsibilities() {
+		return 'процесс создания программ'
+	}
 }
 
 
-class  Tester extends  Employee {
-    constructor(name, salary) {
-        super(name, salary);
-    }
+class Tester extends Employee {
+	constructor(name, salary) {
+		super(name, salary);
+	}
 
-    responsibilities() {
-        return 'процесс тестирования';
-    }
+	responsibilities() {
+		return 'процесс тестирования';
+	}
 }
 
 const dev = new Developer('Max', 100000);

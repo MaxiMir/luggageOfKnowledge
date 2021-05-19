@@ -3,10 +3,10 @@ import ToDo from './containers/todo/todo';
 import Title from './components/title/title';
 
 const App = () => (
-  <>
-    <Title title="ToDo App" />
-    <ToDo />
-  </>
+	<>
+		<Title title="ToDo App"/>
+		<ToDo/>
+	</>
 );
 
 export default App;

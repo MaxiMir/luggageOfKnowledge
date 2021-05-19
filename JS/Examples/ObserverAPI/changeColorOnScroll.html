@@ -2,66 +2,66 @@
 <html lang="en">
 
 <head>
-	<meta charset="UTF-8">
-	<title>Images Lazy Loading Background Changing</title>
-	<style>
-      body {
-          margin: 0;
-          text-align: center;
-      }
+    <meta charset="UTF-8">
+    <title>Images Lazy Loading Background Changing</title>
+    <style>
+        body {
+            margin: 0;
+            text-align: center;
+        }
 
-      div {
-          width: 640px;
-          height: 480px;
-          outline: 2px solid;
-          margin: 100vh auto;
-      }
-	</style>
+        div {
+            width: 640px;
+            height: 480px;
+            outline: 2px solid;
+            margin: 100vh auto;
+        }
+    </style>
 </head>
 
 <body>
 <div></div>
 
 <script>
-  // менять фон контейнера при прокрутке страницы пользователем туда и обратно.
+	// менять фон контейнера при прокрутке страницы пользователем туда и обратно.
 
-  window.addEventListener('load', event => {
-    let box = document.querySelector('div')
-    // ratio - процент видимости элемента
-    let prevRatio = 0.0
+	window.addEventListener('load', event => {
+		let box = document.querySelector('div')
+		// ratio - процент видимости элемента
+		let prevRatio = 0.0
 
-    let observer = new IntersectionObserver((entries, observer) => {
-      entries.forEach(entry => {
-        let curRatio = entry.intersectionRatio
+		let observer = new IntersectionObserver((entries, observer) => {
+			entries.forEach(entry => {
+				let curRatio = entry.intersectionRatio
 
-        // при прокрутке цвет меняется от светло-синего до светло-красного
-        // мы хотим наблюдать эффект при прокрутке страницы в обе стороны (вниз и вверх)
-        // поэтому наблюдение за элементом не прекращается
-        curRatio > prevRatio ?
-          entry.target.style.background = `rgba(40,40,190,${curRatio})` :
-          entry.target.style.background = `rgba(190,40,40,${curRatio})`
+				// при прокрутке цвет меняется от светло-синего до светло-красного
+				// мы хотим наблюдать эффект при прокрутке страницы в обе стороны (вниз и вверх)
+				// поэтому наблюдение за элементом не прекращается
+				curRatio > prevRatio ?
+					entry.target.style.background = `rgba(40,40,190,${curRatio})` :
+					entry.target.style.background = `rgba(190,40,40,${curRatio})`
 
-        prevRatio = curRatio
-      })
-    }, {
-      threshold: buildThresholdList()
-    })
+				prevRatio = curRatio
+			})
+		}, {
+			threshold: buildThresholdList()
+		})
 
-    observer.observe(box)
+		observer.observe(box)
 
-    // функция построения шкалы пересечения
-    // шкала представляет собой массив из 20 элементов, определяющих цвет контейнера
-    function buildThresholdList() {
-      let thresholds = []
-      let steps = 20
+		// функция построения шкалы пересечения
+		// шкала представляет собой массив из 20 элементов, определяющих цвет контейнера
+		function buildThresholdList() {
+			let thresholds = []
+			let steps = 20
 
-      for (let i = 1.0; i <= steps; i++) {
-        let ratio = i / steps
-        thresholds.push(ratio)
-      }
-      return thresholds
-    }
-  })
+			for (let i = 1.0; i <= steps; i++) {
+				let ratio = i / steps
+				thresholds.push(ratio)
+			}
+			return thresholds
+		}
+	})
 </script>
 </body>
 

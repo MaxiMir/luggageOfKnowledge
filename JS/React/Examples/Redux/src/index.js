@@ -12,24 +12,24 @@ import thunk from 'redux-thunk' // для асинхронных диспатч�
 
 // Для REDUX DEVTOOLS:
 const composeEnhancers =
-  typeof window === 'object' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
-    ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({})
-    : compose;
+	typeof window === 'object' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
+		? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({})
+		: compose;
 
 
 const store = createStore( // создание store
-  rootReducer, // передаем reducer
-  composeEnhancers(
-    applyMiddleware(thunk)
-  )
+	rootReducer, // передаем reducer
+	composeEnhancers(
+		applyMiddleware(thunk)
+	)
 )
 
 const app = (
-  <Provider store={store}> // оборачиваем приложение + передаем store
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
-  </Provider>
+	<Provider store={store}> // оборачиваем приложение + передаем store
+		<BrowserRouter>
+			<App/>
+		</BrowserRouter>
+	</Provider>
 )
 
 ReactDOM.render(app, document.getElementById('root'))

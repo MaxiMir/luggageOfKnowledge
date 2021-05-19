@@ -27,14 +27,14 @@ const PORT = process.env.PORT || 3000
 
 const app = express()
 const hbs = exphbs.create({
-  defaultLayout: 'main',
-  extname: 'hbs',
-  helpers: require('./utils/hbs-helpers')
+	defaultLayout: 'main',
+	extname: 'hbs',
+	helpers: require('./utils/hbs-helpers')
 })
 
 const store = new MongoStore({
-  collection: "sessions", // название коллекции где будем хранить сессии
-  uri: keys.MONGODB_URI
+	collection: "sessions", // название коллекции где будем хранить сессии
+	uri: keys.MONGODB_URI
 })
 /** Пример sessions:
 {
@@ -51,21 +51,21 @@ const store = new MongoStore({
       __v: 0
       isAuthenticated: true
 }
-*/
+ */
 
 app.engine('hbs', hbs.engine)
 app.set('view engine', 'hbs')
 app.set('views', 'views')
 
 app.use(express.static(path.join(__dirname, 'public'))) // делаем папку статической (файлы доступны от корня)
-app.use('/images' . express.static(path.join(__dirname, 'images'))) // делаем папку статической (файлы доступны от /images)
+app.use('/images'.express.static(path.join(__dirname, 'images'))) // делаем папку статической (файлы доступны от /images)
 
 app.use(express.urlencoded({extended: true}))
 app.use(session({ // добавляем пакет express-session в middleware
-  secret: keys.SESSION_SECRET,
-  resave: false,
-  saveUninitialized: false,
-  store  // синхронизированный store для сесссии
+	secret: keys.SESSION_SECRET,
+	resave: false,
+	saveUninitialized: false,
+	store  // синхронизированный store для сесссии
 }))
 app.use(csrf())
 app.use(fileMiddleware.single('avatar')) // single - загружаем 1 файл (name = avatar)
@@ -85,17 +85,17 @@ app.use('/profile', profileRoutes)
 app.use(errorHandler) // подключаем middleware с 404
 
 async function start() {
-  try {
-    await mongoose.connect(keys.MONGODB_URI, {
-      useNewUrlParser: true, // лечение warning
-      useFindAndModify: false // лечение warning
-    })
-    app.listen(PORT, () => {
-      console.log(`Server is running on port ${PORT}`)
-    })
-  } catch (e) {
-    console.log(e)
-  }
+	try {
+		await mongoose.connect(keys.MONGODB_URI, {
+			useNewUrlParser: true, // лечение warning
+			useFindAndModify: false // лечение warning
+		})
+		app.listen(PORT, () => {
+			console.log(`Server is running on port ${PORT}`)
+		})
+	} catch (e) {
+		console.log(e)
+	}
 }
 
 start()

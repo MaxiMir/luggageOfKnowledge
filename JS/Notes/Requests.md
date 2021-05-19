@@ -2,10 +2,12 @@
 + [ПОСЛЕДОВАТЕЛЬНАЯ ЗАГРУЗКА КАРТИНОК](#IMG)
 
 ### <a name="XMLHttpRequest"></a> XMLHttpRequest:
+
 ```html
 <button id="loadButton">Загрузить</button>
 <div id="result"></div>
 ```
+
 ```js
 const loadButton = document.querySelector('#loadButton')
 const result = document.querySelector('#result')
@@ -41,6 +43,7 @@ loadButton.addEventListener('click', () => {
   })
 })
 ```
+
 ```js
 const requestURL = 'https://jsonplaceholder.typeicode.com/users'
 
@@ -80,7 +83,9 @@ sendRequest("GET", requestURL, body)
   .then(data => console.log(data))
   .catch(err => console.log(err))
 ```
+
 ### <a name="IMG"></a> ПОСЛЕДОВАТЕЛЬНАЯ ЗАГРУЗКА КАРТИНОК:
+
 ```js
 const urls = [
   'https://ya.ru/images/1.png',
