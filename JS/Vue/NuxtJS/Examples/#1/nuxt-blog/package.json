@@ -2,7 +2,7 @@
   "name": "nuxt-blog",
   "version": "1.0.0",
   "description": "My awesome nuxt fullstack blog",
-  "author": "Vladilen Minin",
+  "author": "Maxim Minchenko <mmirrev@gmail.com>",
   "private": true,
   "scripts": {
     "dev": "cross-env NODE_ENV=development nodemon server/index.js --watch server",

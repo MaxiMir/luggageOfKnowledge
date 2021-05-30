@@ -12,7 +12,7 @@
     "rest",
     "api"
   ],
-  "author": "Vladilen",
+  "author": "Maxim Minchenko <mmirrev@gmail.com>",
   "license": "ISC",
   "dependencies": {
     "express": "^4.17.1",
