@@ -1,9 +1,8 @@
-import Tool from "./Tool";
-
+import Tool from "./Tool"
 
 export default class Line extends Tool {
     constructor(canvas) {
-        super(canvas);
+        super(canvas)
         this.listen()
         this.name = 'Line'
     }
@@ -29,13 +28,14 @@ export default class Line extends Tool {
 
     mouseMoveHandler(e) {
         if (this.mouseDown) {
-            this.draw(e.pageX-e.target.offsetLeft, e.pageY-e.target.offsetTop);
+            this.draw(e.pageX-e.target.offsetLeft, e.pageY-e.target.offsetTop)
         }
     }
 
 
     draw(x,y) {
         const img = new Image()
+
         img.src = this.saved
         img.onload = async function () {
             this.ctx.clearRect(0,0, this.canvas.width, this.canvas.height)
