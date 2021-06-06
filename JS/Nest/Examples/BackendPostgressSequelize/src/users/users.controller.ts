@@ -1,31 +1,28 @@
 import { Body, Controller, Get, Post, UseGuards, UsePipes } from '@nestjs/common'
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger'
 import { UsersService } from './users.service'
-import { JwtAuthGuard } from '../auth/jwt-auth.guard'
 import { Roles } from '../auth/roles-auth.decorator'
 import { RolesGuard } from '../auth/roles.guard'
 import { CreateUserDto } from './dto/create-user.dto'
 import { AddRoleDto } from './dto/add-role.dto'
 import { BanUserDto } from './dto/ban-user.dto'
 import { User } from './users.model'
-import { ValidationPipe } from '../pipes/validation.pipe'
 
-@ApiTags('Пользователи')
+@ApiTags('Пользователи') // Декоратор название
 @Controller('users')
 export class UsersController {
 
-	constructor(private usersService: UsersService) {
-	}
+	constructor(private usersService: UsersService) {} // Dependency Injection
 
-	@ApiOperation({ summary: 'Создание пользователя' })
-	@ApiResponse({ status: 200, type: User })
+	@ApiOperation({ summary: 'Создание пользователя' }) // описание для swagger
+	@ApiResponse({ status: 200, type: User }) // статус ответа и что возвращает
 	@Post()
 	create(@Body() userDto: CreateUserDto) {
 		return this.usersService.createUser(userDto)
 	}
 
 	@ApiOperation({ summary: 'Получить всех пользователей' })
-	@ApiResponse({ status: 200, type: [User] })
+	@ApiResponse({ status: 200, type: [User] }) // [User] - массив User
 	@Roles('ADMIN')
 	@UseGuards(RolesGuard)
 	@Get()

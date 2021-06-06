@@ -4,19 +4,21 @@ import { Role } from '../roles/roles.model'
 import { UserRoles } from '../roles/user-roles.model'
 import { Post } from '../posts/posts.model'
 
-interface UserCreationAttrs {
+interface UserCreationAttrs { // Поля нужные для создания объекта
 	email: string;
 	password: string;
 }
 
-@Table({ tableName: 'users' })
+@Table({ tableName: 'users' }) // Дженерик - таблица в БД
 export class User extends Model<User, UserCreationAttrs> {
-	@ApiProperty({ example: '1', description: 'Уникальный идентификатор' })
-	@Column({ type: DataType.INTEGER, unique: true, autoIncrement: true, primaryKey: true })
+	@ApiProperty({ example: '1', description: 'Уникальный идентификатор' }) // Пример и описание
+	@Column({ type: DataType.INTEGER, unique: true, autoIncrement: true, primaryKey: true }) // Дженерик - колонка в таблице
 	id: number
+
 	@ApiProperty({ example: 'user@mail.ru', description: 'Почтовый адрес' })
-	@Column({ type: DataType.STRING, unique: true, allowNull: false })
+	@Column({ type: DataType.STRING, unique: true, allowNull: false }) // allowNull - не може быть null
 	email: string
+
 	@ApiProperty({ example: '12345678', description: 'Пароль' })
 	@Column({ type: DataType.STRING, allowNull: false })
 	password: string
@@ -35,3 +37,5 @@ export class User extends Model<User, UserCreationAttrs> {
 	@HasMany(() => Post)
 	posts: Post[]
 }
+
+// Добавляется в app.module.ts в models и в user.module.ts -> imports ->SequelizeModule.forFeature

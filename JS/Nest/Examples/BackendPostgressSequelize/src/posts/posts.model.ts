@@ -1,7 +1,4 @@
-import { BelongsTo, BelongsToMany, Column, DataType, ForeignKey, Model, Table } from 'sequelize-typescript'
-import { ApiProperty } from '@nestjs/swagger'
-import { Role } from '../roles/roles.model'
-import { UserRoles } from '../roles/user-roles.model'
+import { BelongsTo, Column, DataType, ForeignKey, Model, Table } from 'sequelize-typescript'
 import { User } from '../users/users.model'
 
 interface PostCreationAttrs {

@@ -15,23 +15,23 @@ import * as path from 'path'
 
 @Module({
 	controllers: [],
-	providers: [],
-	imports: [
-		ConfigModule.forRoot({
-			envFilePath: `.${process.env.NODE_ENV}.env`,
+	providers: [], // @Injectable() .service | .guard
+	imports: [ // импортируем другие модули в модуль AppModule
+		ConfigModule.forRoot({ // модуль для считывания конфигов
+			envFilePath: `.${process.env.NODE_ENV}.env`, // путь до файла с системными
 		}),
-		ServeStaticModule.forRoot({
+		ServeStaticModule.forRoot({ // чтобы сервер отдавал статические файлы из static (требует установки дополнительного пакета)
 			rootPath: path.resolve(__dirname, 'static'),
 		}),
-		SequelizeModule.forRoot({
-			dialect: 'postgres',
+		SequelizeModule.forRoot({ // Подлючение к БД
+			dialect: 'postgres', // указываем тип БД
 			host: process.env.POSTGRES_HOST,
 			port: Number(process.env.POSTGRESS_PORT),
 			username: process.env.POSTGRES_USER,
 			password: process.env.POSTGRESS_PASSWORD,
 			database: process.env.POSTGRES_DB,
 			models: [User, Role, UserRoles, Post],
-			autoLoadModels: true,
+			autoLoadModels: true, // создание таблиц на основании моделей, что мы будем создавать
 		}),
 		UsersModule,
 		RolesModule,

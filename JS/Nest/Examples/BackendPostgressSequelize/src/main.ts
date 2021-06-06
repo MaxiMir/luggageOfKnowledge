@@ -10,13 +10,13 @@ async function start() {
 	const app = await NestFactory.create(AppModule)
 
 	const config = new DocumentBuilder()
-		.setTitle('Make Nest great again')
-		.setDescription('Rest Api')
-		.setVersion('1.0.0')
+		.setTitle('Make Nest great again') // название приложения
+		.setDescription('Rest Api') // Описание приложения
+		.setVersion('1.0.0') // Версия проекта
 		.addTag('Nest')
-		.build()
-	const document = SwaggerModule.createDocument(app, config)
-	SwaggerModule.setup('/api/docs', app, document)
+		.build() // конфиг для swagger
+	const document = SwaggerModule.createDocument(app, config) // документ для swagger
+	SwaggerModule.setup('/api/docs', app, document) // 1 - urn для просмотра
 
 	app.useGlobalPipes(new ValidationPipe())
 
