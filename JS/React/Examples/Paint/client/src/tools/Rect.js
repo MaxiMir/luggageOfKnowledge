@@ -33,7 +33,7 @@ export default class Rect extends Tool {
 		this.ctx.beginPath()
 		this.startX = e.pageX - e.target.offsetLeft
 		this.startY = e.pageY - e.target.offsetTop
-		this.saved = this.canvas.toDataURL()
+		this.saved = this.canvas.toDataURL() // сохраняем изображение с canvas
 	}
 
 	mouseMoveHandler(e) {
@@ -48,22 +48,22 @@ export default class Rect extends Tool {
 
 	draw(x, y, w, h) {
 		const img = new Image()
-		img.src = this.saved
-		img.onload = () => {
-			this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
-			this.ctx.drawImage(img, 0, 0, this.canvas.width, this.canvas.height)
-			this.ctx.beginPath()
+		img.src = this.saved // переменная с сохраненным изображением
+		img.onload = () => { // cb изображение установилось
+			this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height) // полная очистка canvas от нарисованных фигур
+			this.ctx.drawImage(img, 0, 0, this.canvas.width, this.canvas.height) // рисуем сохраненное изображение
+			this.ctx.beginPath() // рисование новой фигуры
 			this.ctx.rect(x, y, w, h)
-			this.ctx.fill()
-			this.ctx.stroke()
+			this.ctx.fill() // заполняем
+			this.ctx.stroke() // обводим
 		}
 	}
 
 	static staticDraw(ctx, x, y, w, h, color) {
 		ctx.fillStyle = color
 		ctx.beginPath()
-		ctx.rect(x, y, w, h)
-		ctx.fill()
-		ctx.stroke()
+		ctx.rect(x, y, w, h) // рисуем прямоугольник
+		ctx.fill() // заполнение фигуры
+		ctx.stroke() // обводка фигуры
 	}
 }

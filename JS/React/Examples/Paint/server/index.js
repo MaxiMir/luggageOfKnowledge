@@ -1,14 +1,15 @@
+const fs = require('fs')
+const path = require('path')
 const express = require('express')
 const app = express()
 const WSServer = require('express-ws')(app)
-const aWss = WSServer.getWss()
+const aWss = WSServer.getWss() // широковещательная рассылка
 const cors = require('cors')
+
 const PORT = process.env.PORT || 5000
-const fs = require('fs')
-const path = require('path')
 
 app.use(cors())
-app.use(express.json())
+app.use(express.json()) // парсинг json
 
 app.ws('/', (ws, req) => {
 	ws.on('message', (msg) => {
@@ -34,6 +35,7 @@ app.post('/image', (req, res) => {
 		return res.status(500).json('error')
 	}
 })
+
 app.get('/image', (req, res) => {
 	try {
 		const file = fs.readFileSync(path.resolve(__dirname, 'files', `${req.query.id}.jpg`))
@@ -53,7 +55,7 @@ const connectionHandler = (ws, msg) => {
 }
 
 const broadcastConnection = (ws, msg) => {
-	aWss.clients.forEach(client => {
+	aWss.clients.forEach(client => { // aWss.clients - все открытые веб-сокеты
 		if (client.id === msg.id) {
 			client.send(JSON.stringify(msg))
 		}

@@ -15,7 +15,7 @@ export default class Circle extends Tool {
 
 	mouseDownHandler(e) {
 		this.mouseDown = true
-		let canvasData = this.canvas.toDataURL()
+		const canvasData = this.canvas.toDataURL()
 		this.ctx.beginPath()
 		this.startX = e.pageX - e.target.offsetLeft
 		this.startY = e.pageY - e.target.offsetTop
@@ -27,14 +27,16 @@ export default class Circle extends Tool {
 	}
 
 	mouseMoveHandler(e) {
-		if (this.mouseDown) {
-			let curentX = e.pageX - e.target.offsetLeft
-			let curentY = e.pageY - e.target.offsetTop
-			let width = curentX - this.startX
-			let height = curentY - this.startY
-			let r = Math.sqrt(width ** 2 + height ** 2)
-			this.draw(this.startX, this.startY, r)
+		if (!this.mouseDown) {
+			return
 		}
+
+		const currentX = e.pageX - e.target.offsetLeft
+		const currentY = e.pageY - e.target.offsetTop
+		const width = currentX - this.startX
+		const height = currentY - this.startY
+		const r = Math.sqrt(width ** 2 + height ** 2)
+		this.draw(this.startX, this.startY, r)
 	}
 
 	draw(x, y, r) {

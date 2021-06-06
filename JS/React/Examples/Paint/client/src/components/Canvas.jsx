@@ -9,15 +9,16 @@ import Brush from "../tools/Brush"
 import Rect from "../tools/Rect"
 import "../styles/canvas.scss"
 
-const Canvas = observer(() => {
+const Canvas = observer(() => { // observer - отслеживание изменений в store
 	const canvasRef = useRef()
 	const usernameRef = useRef()
 	const [modal, setModal] = useState(true)
 	const params = useParams()
 
 	useEffect(() => {
-		canvasState.setCanvas(canvasRef.current)
-		let ctx = canvasRef.current.getContext('2d')
+		const ctx = canvasRef.current.getContext('2d')
+		canvasState.setCanvas(canvasRef.current) // сохраняем в store ссылку на DOM элемент canvas
+
 		axios.get(`http://localhost:5000/image?id=${params.id}`)
 			.then(response => {
 				const img = new Image()
@@ -30,38 +31,42 @@ const Canvas = observer(() => {
 	}, [])
 
 	useEffect(() => {
-		if (canvasState.username) {
-			const socket = new WebSocket(`ws://localhost:5000/`)
-			canvasState.setSocket(socket)
-			canvasState.setSessionId(params.id)
-			toolState.setTool(new Brush(canvasRef.current, socket, params.id))
+		if (!canvasState.username) {
+			return
+		}
 
-			socket.onopen = () => {
-				console.log('Подключение установлено')
-				socket.send(JSON.stringify({
-					id: params.id,
-					username: canvasState.username,
-					method: "connection"
-				}))
-			}
-			socket.onmessage = (event) => {
-				const msg = JSON.parse(event.data)
+		const socket = new WebSocket(`ws://localhost:5000/`)
+		canvasState.setSocket(socket)
+		canvasState.setSessionId(params.id)
+		toolState.setTool(new Brush(canvasRef.current, socket, params.id))
 
-				switch (msg.method) {
-					case "connection":
-						console.log(`пользователь ${msg.username} присоединился`)
-						break
-					case "draw":
-						drawHandler(msg)
-						break
-				}
+		socket.onopen = () => {
+			console.log('Подключение установлено')
+			socket.send(JSON.stringify({
+				id: params.id,
+				username: canvasState.username,
+				method: "connection"
+			}))
+		}
+
+		socket.onmessage = (event) => {
+			const msg = JSON.parse(event.data)
+
+			switch (msg.method) {
+				case "connection":
+					console.log(`пользователь ${msg.username} присоединился`)
+					break
+				case "draw":
+					drawHandler(msg)
+					break
 			}
 		}
 	}, [canvasState.username])
 
 	const drawHandler = (msg) => {
-		const figure = msg.figure
+		const {figure} = msg
 		const ctx = canvasRef.current.getContext('2d')
+
 		switch (figure.type) {
 			case "brush":
 				Brush.draw(ctx, figure.x, figure.y)
@@ -74,7 +79,6 @@ const Canvas = observer(() => {
 				break
 		}
 	}
-
 
 	const mouseDownHandler = () => {
 		canvasState.pushToUndo(canvasRef.current.toDataURL())
@@ -103,7 +107,7 @@ const Canvas = observer(() => {
 					</Button>
 				</Modal.Footer>
 			</Modal>
-			<canvas onMouseDown={() => mouseDownHandler()} ref={canvasRef} width={600} height={400}/>
+			<canvas ref={canvasRef} width={600} height={400} onMouseDown={mouseDownHandler}/>
 		</div>
 	)
 })

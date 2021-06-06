@@ -9,7 +9,7 @@ class CanvasState {
 	username = ""
 
 	constructor() {
-		makeAutoObservable(this)
+		makeAutoObservable(this) // делает данные класса отслеживаемыми
 	}
 
 	setSessionId(id) {
@@ -38,31 +38,36 @@ class CanvasState {
 
 	undo() {
 		let ctx = this.canvas.getContext('2d')
-		if (this.undoList.length > 0) {
-			this.redoList.push(this.canvas.toDataURL())
-			let img = new Image()
 
-			img.src = this.undoList.pop()
-			img.onload = () => {
-				ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
-				ctx.drawImage(img, 0, 0, this.canvas.width, this.canvas.height)
-			}
-		} else {
+		if (!this.undoList.length) {
 			ctx.clearRect(0, 0, this.canvas.width, this.canvas.heigth)
+			return
+		}
+
+		this.redoList.push(this.canvas.toDataURL())
+		let img = new Image()
+
+		img.src = this.undoList.pop()
+		img.onload = () => {
+			ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
+			ctx.drawImage(img, 0, 0, this.canvas.width, this.canvas.height)
 		}
 	}
 
 	redo() {
 		let ctx = this.canvas.getContext('2d')
-		if (this.redoList.length > 0) {
-			this.undoList.push(this.canvas.toDataURL())
-			let img = new Image()
 
-			img.src = this.redoList.pop()
-			img.onload = () => {
-				ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
-				ctx.drawImage(img, 0, 0, this.canvas.width, this.canvas.height)
-			}
+		if (!this.redoList.length) {
+			return
+		}
+
+		this.undoList.push(this.canvas.toDataURL())
+		let img = new Image()
+
+		img.src = this.redoList.pop()
+		img.onload = () => {
+			ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
+			ctx.drawImage(img, 0, 0, this.canvas.width, this.canvas.height)
 		}
 	}
 
