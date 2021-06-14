@@ -9,10 +9,10 @@ import { UsersModule } from '../users/users.module'
 	providers: [AuthService],
 	imports: [
 		forwardRef(() => UsersModule),
-		JwtModule.register({
+		JwtModule.register({ // регистрируем Jwt модуль
 			secret: process.env.PRIVATE_KEY || 'SECRET',
 			signOptions: {
-				expiresIn: '24h',
+				expiresIn: '24h', // время жизни токена
 			},
 		}),
 	],

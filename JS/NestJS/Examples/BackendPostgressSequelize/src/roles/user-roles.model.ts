@@ -15,5 +15,4 @@ export class UserRoles extends Model<UserRoles> {
 	@ForeignKey(() => User) // Декоратор внешний ключ (на какую модель ссылается)
 	@Column({ type: DataType.INTEGER })
 	userId: number
-
 }

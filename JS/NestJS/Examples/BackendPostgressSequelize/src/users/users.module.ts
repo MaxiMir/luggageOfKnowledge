@@ -15,7 +15,7 @@ import { Post } from '../posts/posts.model'
 	imports: [
 		SequelizeModule.forFeature([User, Role, UserRoles, Post]), // какие модели используем внутри
 		RolesModule,
-		forwardRef(() => AuthModule),
+		forwardRef(() => AuthModule), // чтобы не было кольцевой зависимости
 	],
 	exports: [
 		UsersService,

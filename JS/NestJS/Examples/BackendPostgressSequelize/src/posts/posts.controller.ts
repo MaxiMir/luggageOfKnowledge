@@ -15,5 +15,4 @@ export class PostsController {
 	           @UploadedFile() image) {
 		return this.postService.create(dto, image)
 	}
-
 }

@@ -26,7 +26,6 @@ export class Post extends Model<Post, PostCreationAttrs> {
 	@Column({ type: DataType.INTEGER })
 	userId: number
 
-	@BelongsTo(() => User)
+	@BelongsTo(() => User) // связь один ко многим
 	author: User
-
 }

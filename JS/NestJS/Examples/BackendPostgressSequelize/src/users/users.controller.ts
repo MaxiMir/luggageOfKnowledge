@@ -16,6 +16,7 @@ export class UsersController {
 
 	@ApiOperation({ summary: 'Создание пользователя' }) // Декоратор описание для swagger
 	@ApiResponse({ status: 200, type: User }) // Декоратор статус ответа и что возвращает
+	// @UsePipes(ValidationPipe)
 	@Post()
 	create(@Body() userDto: CreateUserDto) {
 		return this.usersService.createUser(userDto)
@@ -32,7 +33,7 @@ export class UsersController {
 
 	@ApiOperation({ summary: 'Выдать роль' })
 	@ApiResponse({ status: 200 })
-	@Roles('ADMIN')
+	@Roles('ADMIN') // Использование декоратора roles.guard.ts
 	@UseGuards(RolesGuard)
 	@Post('/role')
 	addRole(@Body() dto: AddRoleDto) {
@@ -42,7 +43,7 @@ export class UsersController {
 	@ApiOperation({ summary: 'Забанить пользователя' })
 	@ApiResponse({ status: 200 })
 	@Roles('ADMIN')
-	@UseGuards(RolesGuard)
+	@UseGuards(RolesGuard) // Декоратор - RolesGuard
 	@Post('/ban')
 	ban(@Body() dto: BanUserDto) {
 		return this.usersService.ban(dto)

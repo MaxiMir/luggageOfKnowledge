@@ -15,7 +15,7 @@ import { ROLES_KEY } from './roles-auth.decorator'
 export class RolesGuard implements CanActivate {
 	constructor(
 		private jwtService: JwtService,
-		private reflector: Reflector
+		private reflector: Reflector // для получения ролей
 	) {}
 
 	canActivate(context: ExecutionContext): boolean | Promise<boolean> | Observable<boolean> {
@@ -31,8 +31,7 @@ export class RolesGuard implements CanActivate {
 
 			const req = context.switchToHttp().getRequest()
 			const authHeader = req.headers.authorization
-			const bearer = authHeader.split(' ')[0]
-			const token = authHeader.split(' ')[1]
+			const [bearer, token] = authHeader.split(' ')
 
 			if (bearer !== 'Bearer' || !token) {
 				throw new UnauthorizedException({ message: 'Пользователь не авторизован' })
@@ -44,8 +43,7 @@ export class RolesGuard implements CanActivate {
 			return user.roles.some(role => requiredRoles.includes(role.value))
 		} catch (e) {
 			console.log(e)
-			throw new HttpException('Нет доступа', HttpStatus.FORBIDDEN)
+			throw new HttpException('Нет доступа', HttpStatus.FORBIDDEN) // Статус нет доступа 401
 		}
 	}
-
 }
