@@ -93,7 +93,7 @@
     "noImplicitUseStrict": false,
     // Компилировать ли каждый файл в строгом режиме и создавать ли 'use strict' для каждого выходного файла? Требуется TypeScript версии 2.1 или новее.
     "alwaysStrict": true,
-    // Включить ли все строги проверки типов сразу: noImplicitAny, noImplicitThis, alwaysStrict, strictNullChecks, strictFunctionTypes, strictPropertyInitialization?
+    // Включить ли все строгие проверки типов сразу: noImplicitAny, noImplicitThis, alwaysStrict, strictNullChecks, strictFunctionTypes, strictPropertyInitialization?
     "strict": false,
     // Удалить все комментарии из итогового файла.
     "removeComments": true,

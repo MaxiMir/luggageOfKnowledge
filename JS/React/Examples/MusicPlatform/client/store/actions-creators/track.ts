@@ -1,6 +1,6 @@
 import { Dispatch } from 'react'
 import axios from 'axios'
-import { TrackAction, TrackActionTypes } from '../types/track'
+import { TrackAction, TrackActionTypes } from 'store/types/track'
 
 export const fetchTracks = () => {
 	return async (dispatch: Dispatch<TrackAction>) => {

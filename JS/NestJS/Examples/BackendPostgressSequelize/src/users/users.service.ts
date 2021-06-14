@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common'
-import { User } from './users.model'
 import { InjectModel } from '@nestjs/sequelize'
+import { User } from './users.model'
 import { CreateUserDto } from './dto/create-user.dto'
 import { RolesService } from '../roles/roles.service'
 import { AddRoleDto } from './dto/add-role.dto'
@@ -10,7 +10,7 @@ import { BanUserDto } from './dto/ban-user.dto'
 export class UsersService {
 
 	constructor(
-		@InjectModel(User) private userRepository: typeof User,
+		@InjectModel(User) private userRepository: typeof User, // Repository - потому что будем взаимодействовать с БД
 		private roleService: RolesService,
 	) {}
 
@@ -23,13 +23,11 @@ export class UsersService {
 	}
 
 	async getAllUsers() {
-		const users = await this.userRepository.findAll({ include: { all: true } })
-		return users
+		return await this.userRepository.findAll({ include: { all: true } })
 	}
 
 	async getUserByEmail(email: string) {
-		const user = await this.userRepository.findOne({ where: { email }, include: { all: true } })
-		return user
+		return await this.userRepository.findOne({ where: { email }, include: { all: true } })
 	}
 
 	async addRole(dto: AddRoleDto) {

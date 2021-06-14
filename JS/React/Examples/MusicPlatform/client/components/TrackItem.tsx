@@ -3,8 +3,8 @@ import { useRouter } from 'next/router'
 import { Card, Grid, IconButton } from '@material-ui/core'
 import { Delete, Pause, PlayArrow } from '@material-ui/icons'
 import { useActions } from '../hooks/useActions'
-import { ITrack } from '../types/track'
-import styles from '../styles/TrackItem.module.scss'
+import { ITrack } from 'store/types/track'
+import styles from 'styles/TrackItem.module.scss'
 
 interface TrackItemProps {
 	track: ITrack;

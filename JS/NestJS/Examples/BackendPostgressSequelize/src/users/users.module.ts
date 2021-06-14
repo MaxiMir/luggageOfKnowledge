@@ -13,7 +13,7 @@ import { Post } from '../posts/posts.model'
 	controllers: [UsersController],
 	providers: [UsersService],
 	imports: [
-		SequelizeModule.forFeature([User, Role, UserRoles, Post]),
+		SequelizeModule.forFeature([User, Role, UserRoles, Post]), // какие модели используем внутри
 		RolesModule,
 		forwardRef(() => AuthModule),
 	],

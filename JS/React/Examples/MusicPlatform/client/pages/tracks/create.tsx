@@ -2,10 +2,10 @@ import { useRouter } from 'next/router'
 import React, { useState } from 'react'
 import axios from 'axios'
 import { Button, Grid, TextField } from '@material-ui/core'
-import { useInput } from '../../hooks/useInput'
-import MainLayout from '../../layouts/MainLayout'
-import StepWrapper from '../../components/StepWrapper'
-import FileUpload from '../../components/FileUpload'
+import { useInput } from 'hooks/useInput'
+import MainLayout from 'layouts/MainLayout'
+import StepWrapper from 'components/StepWrapper'
+import FileUpload from 'components/FileUpload'
 
 const Create = () => {
 	const [activeStep, setActiveStep] = useState(0)

@@ -7,3 +7,5 @@ export class AddRoleDto {
 	@IsNumber({}, { message: 'Должно быть числом' })
 	readonly userId: number
 }
+
+// dto - объект для обмена данными между подсистемами

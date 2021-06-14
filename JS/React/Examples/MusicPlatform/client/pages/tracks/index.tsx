@@ -1,11 +1,11 @@
 import React from 'react'
 import { useRouter } from 'next/router'
 import { Box, Button, Card, Grid } from '@material-ui/core'
-import { useTypedSelector } from '../../hooks/useTypedSelector'
-import { NextThunkDispatch, wrapper } from '../../store'
-import { fetchTracks } from '../../store/actions-creators/track'
-import MainLayout from '../../layouts/MainLayout'
-import TrackList from '../../components/TrackList'
+import { useTypedSelector } from 'hooks/useTypedSelector'
+import { NextThunkDispatch, wrapper } from 'store'
+import { fetchTracks } from 'store/actions-creators/track'
+import MainLayout from 'layouts/MainLayout'
+import TrackList from 'components/TrackList'
 
 const Index = () => {
 	const router = useRouter()

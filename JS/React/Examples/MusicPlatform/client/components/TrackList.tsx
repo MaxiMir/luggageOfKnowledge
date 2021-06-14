@@ -1,6 +1,6 @@
 import React from 'react'
 import { Box, Grid } from '@material-ui/core'
-import { ITrack } from '../types/track'
+import { ITrack } from 'store/types/track'
 import TrackItem from './TrackItem'
 
 interface TrackListProps {

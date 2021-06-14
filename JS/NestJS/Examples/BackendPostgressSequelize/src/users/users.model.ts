@@ -11,8 +11,8 @@ interface UserCreationAttrs { // Поля нужные для создания �
 
 @Table({ tableName: 'users' }) // Дженерик - таблица в БД
 export class User extends Model<User, UserCreationAttrs> {
-	@ApiProperty({ example: '1', description: 'Уникальный идентификатор' }) // Пример и описание
-	@Column({ type: DataType.INTEGER, unique: true, autoIncrement: true, primaryKey: true }) // Дженерик - колонка в таблице
+	@ApiProperty({ example: '1', description: 'Уникальный идентификатор' }) // Декоратор Пример и описание
+	@Column({ type: DataType.INTEGER, unique: true, autoIncrement: true, primaryKey: true }) // Декоратор - колонка в таблице
 	id: number
 
 	@ApiProperty({ example: 'user@mail.ru', description: 'Почтовый адрес' })
@@ -38,4 +38,4 @@ export class User extends Model<User, UserCreationAttrs> {
 	posts: Post[]
 }
 
-// Добавляется в app.module.ts в models и в user.module.ts -> imports ->SequelizeModule.forFeature
+// Добавляется в app.module.ts в models и в user.module.ts + role.module.ts -> imports -> SequelizeModule.forFeature

@@ -8,14 +8,14 @@ import { AddRoleDto } from './dto/add-role.dto'
 import { BanUserDto } from './dto/ban-user.dto'
 import { User } from './users.model'
 
-@ApiTags('Пользователи') // Декоратор название
+@ApiTags('Пользователи') // Декоратор название EndPoint
 @Controller('users')
 export class UsersController {
 
 	constructor(private usersService: UsersService) {} // Dependency Injection
 
-	@ApiOperation({ summary: 'Создание пользователя' }) // описание для swagger
-	@ApiResponse({ status: 200, type: User }) // статус ответа и что возвращает
+	@ApiOperation({ summary: 'Создание пользователя' }) // Декоратор описание для swagger
+	@ApiResponse({ status: 200, type: User }) // Декоратор статус ответа и что возвращает
 	@Post()
 	create(@Body() userDto: CreateUserDto) {
 		return this.usersService.createUser(userDto)

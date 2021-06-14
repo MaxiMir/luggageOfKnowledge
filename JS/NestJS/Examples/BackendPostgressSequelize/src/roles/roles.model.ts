@@ -23,6 +23,8 @@ export class Role extends Model<Role, RoleCreationAttrs> {
 	@Column({ type: DataType.STRING, allowNull: false })
 	description: string
 
-	@BelongsToMany(() => User, () => UserRoles)
-	users: User[]
+	@BelongsToMany(() => User, () => UserRoles) // связь многие ко многим. 1 - параметр сущность / 2-й через какую таблицу
+	users: User[] // аналогично нужно сделать и в самом User
 }
+
+// Добавляется в app.module.ts в models и в role.module.ts -> imports -> SequelizeModule.forFeature

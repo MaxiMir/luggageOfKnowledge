@@ -3,9 +3,9 @@ import { GetServerSideProps } from 'next'
 import React, { useState } from 'react'
 import axios from 'axios'
 import { Button, Grid, TextField } from '@material-ui/core'
-import { ITrack } from '../../types/track'
-import MainLayout from '../../layouts/MainLayout'
-import { useInput } from '../../hooks/useInput'
+import { ITrack } from 'store/types/track'
+import MainLayout from 'layouts/MainLayout'
+import { useInput } from 'hooks/useInput'
 
 const TrackPage = ({ serverTrack }) => {
 	const [track, setTrack] = useState<ITrack>(serverTrack)
