@@ -10,7 +10,7 @@ export class PostsController {
 	}
 
 	@Post()
-	@UseInterceptors(FileInterceptor('image'))
+	@UseInterceptors(FileInterceptor('image')) // Interceptor для работы с файлами | image - название переменной
 	createPost(@Body() dto: CreatePostDto,
 	           @UploadedFile() image) {
 		return this.postService.create(dto, image)
