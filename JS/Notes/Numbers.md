@@ -9,6 +9,7 @@
 + [Неточные вычисления](#IEEE_754)
 + [Генерация случайного числа между min и max](#RANDOM)
 + [Big Int](#BIG_INT)
++ [Округление с помощью эпсилона](#EPSILON)
 
 ### <a name="DEL"></a> Визуальное разделение больших цифр:
 
@@ -119,4 +120,10 @@ typeof 10 // number
 typeof 10n // bigint
 typeof -10n // bigint
 BigInt(4) // приведение к bigint -> 4n
+```
+
+### <a name="EPSILON"></a> Округление с помощью эпсилона:
+```js
+const epsEqu = (x, y) => Math.abs(x - y) < Number.EPSILON * Math.max(Math.abs(x), Math.abs(y))
+epsEqu(0.1 + 0.2, 0.3) // => true
 ```
