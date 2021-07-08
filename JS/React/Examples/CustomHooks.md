@@ -48,6 +48,8 @@ export const useDebounce = (callback, delay) => {
 }
 ```
 
+#### useScroll
+
 ```jsx
 import {useEffect, useRef} from "react"
 
