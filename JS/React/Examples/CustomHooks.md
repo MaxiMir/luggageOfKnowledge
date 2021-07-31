@@ -134,15 +134,16 @@ export const List = () => {
 ### useFocus
 
 ```tsx
-import { useRef } from 'react'
+import { MutableRefObject, useRef } from 'react'
 
-const useFocus = () => {
-  const htmlElRef = useRef<HTMLElement | null>(null)
+const useFocus = (): [MutableRefObject<HTMLElement | null>, () => void] => {
+	const htmlElRef = useRef<HTMLElement | null>(null)
 
-  const setFocus = () => {
-    htmlElRef.current?.focus()
-  }
+	const setFocus = () => {
+		htmlElRef.current?.focus()
+	}
 
-  return [htmlElRef, setFocus]
+	return [htmlElRef, setFocus]
 }
+
 ```
