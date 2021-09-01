@@ -60,6 +60,8 @@ ENV PORT 4200 # системная переменная PORT
 
 EXPOSE $PORT # декларирует порт 4200 !не пробрасывает порт
 
+VOLUME ["/app/data"] # путь до данного VOLUME
+
 CMD ['node', 'app.js'] # запускается при запуске образа
 ```
 
@@ -93,11 +95,15 @@ docker run -d -p 80:4200 --env-file ./config/.env --rm --name logsapp logsapp:en
 
 File: Makefile
 
-```
+```Makefile
 run: 
   docker run -d -p 80:4200 --env-file ./config/.env --rm --name logsapp logsapp:env 
+run-volume: 
+  docker -d -p 3000:3000 -v logs:/app/data --rm --name logsapp logsapp:volumes # -v logs:/app/data - logs - имя VOLUME : /app/data - локальный путь
+run-dev:
+  docker run -d -p 3000:3000 -v "/Users/maxim/WebstormProjets/logs-app:/app" -v /app/node_modules -v logs:/app/data --rm --name logsapp logsapp:volume # -v /app/node_modules анонимный VOLUME
 stop:
-  docker stop logsapp 
+  docker stop logsapp   
 ```
 
 ```shell
@@ -218,6 +224,7 @@ docker run --rm --name web -p 8080:8080 -e TZ=Europe/Moscow -v /Users/Maxim/Pych
 
 docker volume ls # просмотр текущих volume
 docker volume create web # создание volume
+docker volume rm web # удаление volume
 docker run --rm --name web -p 8080:8080 -v web:/usr/src/app/resources web-hello # 2 вариант
 ```
 
