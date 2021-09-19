@@ -12,8 +12,8 @@ const app = express()
 app.use(express.json()) // middleware
 app.use(cookieParser())
 app.use(cors({
-	credentials: true,
-	origin: process.env.CLIENT_URL,
+	credentials: true, // разрешаем куки
+	origin: process.env.CLIENT_URL, // урл фронтенда
 }))
 app.use('/api', router)
 app.use(errorMiddleware) // ! middleware для обработки ошибок должен идти последним
