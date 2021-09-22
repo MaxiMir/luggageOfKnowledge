@@ -2,9 +2,9 @@ import { makeAutoObservable } from 'mobx'
 
 export default class UserStore {
 	constructor() {
-		this._isAuth = false
+		this._isAuth = false // _ - соглашение о том что эта переменная не изменяема
 		this._user = {}
-		makeAutoObservable(this)
+		makeAutoObservable(this) // слежение за изменением этих переменных -> перендеринг
 	}
 
 	setIsAuth(bool) {
