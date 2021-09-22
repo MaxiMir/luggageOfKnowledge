@@ -12,7 +12,7 @@ class DeviceController {
 			img.mv(path.resolve(__dirname, '..', 'static', fileName))
 			const device = await Device.create({ name, price, brandId, typeId, img: fileName })
 
-			if (info) {
+			if (info) { // тк через formData
 				info = JSON.parse(info)
 				info.forEach(i =>
 					DeviceInfo.create({
@@ -56,7 +56,7 @@ class DeviceController {
 		const device = await Device.findOne(
 			{
 				where: { id },
-				include: [{ model: DeviceInfo, as: 'info' }],
+				include: [{ model: DeviceInfo, as: 'info' }], // получаем массив хакарктеристик
 			},
 		)
 		return res.json(device)
