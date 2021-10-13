@@ -145,7 +145,7 @@ ENTRYPOINT ["./run.sh"] # выполняется без shell
 docker build -t hello-world . # создание локального docker образа; -t название образа (можно добавлять теги hello-world:exec -> TAG = exec); . - путь до исходников (текущая директория)
 docker run hello-world # запуск контейнера hello-world -> Hello, world!
 docker run -d --rm --name hello hello-world # запуск контейнера hello на базе hello-world | -d запуск в фоне | --rm после окончания работы контейнера удалить его
-
+docker run -it node:12-slim bash # с bash
 docker stop hello # остановить контейнер (передавать CONTAINER ID или NAMES)
 
 docker rmi mongo # удаление image (сборки)
@@ -218,7 +218,6 @@ CMD ["python", "app.py"]
 ```shell
 docker build -t web-hello .
 docker run --rm --name web -p 8080:8080 -e TZ=Europe/Moscow web-hello # -p указываем порты - порт на текущей машине:порт внутри докер контейнера | -e устанавливаем переменную окружения #2 вариант
-
 
 docker run --rm --name web -p 8080:8080 -e TZ=Europe/Moscow -v /Users/Maxim/PycharmProjects/youtube/docker/web-hello-world/resources:/usr/src/app/resources/ web-hello # -v монтируем папку к контейнеру - абсолютный путь на хостовой машине:абсолютный внутри контейнера #1 вариант
 
