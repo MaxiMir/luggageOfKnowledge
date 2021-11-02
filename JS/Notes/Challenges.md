@@ -167,5 +167,3 @@ const findOdd = arr => {
 // #2:
 const findOdd = arr => arr.reduce((a, b) => a ^ b);
 ```
-
-
