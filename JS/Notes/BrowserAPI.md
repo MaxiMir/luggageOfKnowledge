@@ -125,7 +125,7 @@ const handleVisibilityChange = async () => {
 document.addEventListener('visibilitychange', handleVisibilityChange)
 ```
 
-> Своя анимация:
+> Web Animation API:
  
 ```js
 function ownSetTimeout(callback, duration) {
