@@ -1,4 +1,4 @@
-# OTHER
+# OPERATOR
 
 + [Logical Assigment](#Logical_Assigment)
 
