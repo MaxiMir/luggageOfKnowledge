@@ -1,4 +1,4 @@
-# Events #
+# Events
 
 + [Конструктор Event](#constructor)
 + [Как отличить реальное нажатие от скриптового](#isTrusted)
