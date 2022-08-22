@@ -314,6 +314,7 @@ func sayHello(to name: String) { // to внешнее имя, name - локал�
 }
 
 sayHello(to: "Max")
+```
 ```swift
 func sayHello(_ name: String) { // пропуск имени параметра параметра
     print("Hello \(name)!")
