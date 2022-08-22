@@ -7,6 +7,16 @@ variable = "changed"
 let constant = "ummutable"
 ```
 
+### String:
+```swift
+let string = "Do or do not, there is no try"
+
+string.count // -> 29
+string.hasPrefix("Do") // -> true
+string.uppercased() // DO OR DO NOT, THERE IS NO TRY
+string.sorted() // -> [" ", " ", " ", " ", " ", " ", " ", ",", "D", "d", "e", "e", "h", "i", "n", "n", "o", "o", "o", "o", "o", "r", "r", "r", "s", "t", "t", "t", "y"]
+```
+
 ### Int:
 ```swift
 let int = 10 // Int
@@ -615,6 +625,15 @@ struct Human {
 
 var human = Human(name: "Max", age: 30)
 human.age = 25 // можно мутировать, если задано через var
+```
+```swift
+struct Person {
+    var name: String
+    
+    mutating func makeAnonymous() { // если изменение свойств, то через mutating
+        name = "Anonymous"
+    }
+}
 ```
 
 **value type** - Int, String, Bool, structure
