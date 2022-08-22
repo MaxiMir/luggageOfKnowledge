@@ -197,7 +197,7 @@ let apple = "apple"
 let orange = "orange"
 let fruits = [apple, orange]
 ```
-```tsx
+```swift
 var vegatables = ["tomato", "garlik"]
 vegatables.count // 2
 vegatables.isEmpty // false
@@ -511,7 +511,7 @@ enum Planet: Int { // чистое значение перечисления ч�
 }
 
 let earth = Planet(rawValue: 2) // -> earth
-
+```
 ```swift
 enum Phone: String { // чистое значение перечисления через строку
     case Apple = "iPhone 13"
