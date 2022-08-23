@@ -745,3 +745,39 @@ var double = 5.0
 double.m // 5
 double.km // 5000
 ```
+
+### Протоколы (перечень необходимых свойств и методов для типов данных):
+
+```swift
+protocol ShomItem { // могут наследоваться
+    var label: String { get set }
+    var price: Int { get set }
+}
+
+struct Milk: ShomItem {
+    var label: String
+    var price: Int
+}
+
+struct Bread: ShomItem {
+    var label: String
+    var price: Int
+    var color: [String]
+}
+
+class Book: ShomItem {
+    var label: String
+    var price: Int
+    var amount: Int
+
+    init(label: String, price: Int, amount: Int) {
+        self.label = label
+        self.price = price
+        self.amount = amount
+    }
+}
+
+func buy(_ item: ShomItem) {
+    print("I'm buying \(item.label). It cost me\(item.price)")
+}
+```
