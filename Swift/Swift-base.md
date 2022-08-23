@@ -7,16 +7,6 @@ variable = "changed"
 let constant = "ummutable"
 ```
 
-### String:
-```swift
-let string = "Do or do not, there is no try"
-
-string.count // -> 29
-string.hasPrefix("Do") // -> true
-string.uppercased() // DO OR DO NOT, THERE IS NO TRY
-string.sorted() // -> [" ", " ", " ", " ", " ", " ", " ", ",", "D", "d", "e", "e", "h", "i", "n", "n", "o", "o", "o", "o", "o", "r", "r", "r", "s", "t", "t", "t", "y"]
-```
-
 ### Int:
 ```swift
 let int = 10 // Int
@@ -63,6 +53,14 @@ let hey = "Hello" // String
 let name = "Max"
 let heyMax = hey + name // concatination
 print("Say \(heyMax)") // interpolation
+```
+```swift
+let string = "Do or do not, there is no try"
+
+string.count // -> 29
+string.hasPrefix("Do") // -> true
+string.uppercased() // DO OR DO NOT, THERE IS NO TRY
+string.sorted() // -> [" ", " ", " ", " ", " ", " ", " ", ",", "D", "d", "e", "e", "h", "i", "n", "n", "o", "o", "o", "o", "o", "r", "r", "r", "s", "t", "t", "t", "y"]
 ```
 
 ### Condition:
@@ -559,6 +557,7 @@ class Human {
     var status: String { // computed property (геттер)
         isQualified ? "\(name) is qualifies for this job" : "\(name) isn't qualifies for this job"
     }
+    lazy var question = "Who are you?" // ленивое свойство - инициализируются только при обращении к ним | изначально nil
 
     func sayHey() {
         print("Hey. I'm \(name)")
@@ -573,6 +572,8 @@ class Human {
 
 let max = Human(name: "Max", age: 30, isQualified: true)
 max.status // -> Max is qualifies for this job
+max.question
+
 ```
 ```swift 
 class Account {
@@ -587,6 +588,7 @@ class Account {
         }
     }
     var rate: Double = 0.01 // процентная ставки
+    staic var howManyAccounts = 0 // свойство класса
     
     var profit: Double {
         get {
@@ -601,6 +603,7 @@ class Account {
     init(sum: Double, rate: Double) {
         self.sum = sum
         self.rate = rate
+        Account.howManyAccounts += 1
     }
 }
 
@@ -610,6 +613,7 @@ myAcc.profit // getter -> 1100.0
 // ожидаемая прибыль:
 myAcc.profit = 2000 // setter
 myAcc.sum // -> 1818.1818
+Account.howManyAccounts // -> 1
 ```
 
 **Экземпляры классов передаются по ссылке!**
@@ -620,7 +624,15 @@ myAcc.sum // -> 1818.1818
 ```swift
 struct Human {
     var name: String
-    var age: Int
+    static var maxAge = 30 // свойство структуры | чтобы прокинуть в didSet
+
+    var age: Int {
+        didSet {
+            if (age > Human.maxAge) {
+                age = oldValue
+            }
+        }
+    }
 }
 
 var human = Human(name: "Max", age: 30)
@@ -633,6 +645,11 @@ struct Person {
     mutating func makeAnonymous() { // если изменение свойств, то через mutating
         name = "Anonymous"
     }
+
+    init(name: String) { // переопределяем init для struct
+        selt.name = name
+        print("initialization...")
+    }
 }
 ```
 
@@ -640,3 +657,91 @@ struct Person {
 **reference type** - enum, class
 
 **Экземпляры структур не передаются по ссылке, а просто копируются!**
+
+
+### Наследование:
+```swift
+class Dog {
+    var name = ""
+    var breed = ""
+    var info: String {
+        "The breed of \(name) is \(breed)"
+    }
+    
+    func makeNoize() -> String {
+        "Gav-gav"
+    }
+}
+
+class Corgi: Dog { // наследование
+    var isHappy: Bool
+
+    override var info: String { // переопределяем свойство
+        name + breed
+    }
+
+    override func makeNoize() -> String { // переопределяем родительский метод
+        super.makeNoize() + " Sir!"
+    }
+    
+    init(isHappy: Bool) {
+        self.isHappy = isHappy
+        // super.init(name: "Alisa", breed: "Corgi") // вызов родительского init если нужно определить свойства родительского класса.
+    }
+}
+
+let corgi = Corgi(isHappy: true)
+corgi.name = "Alisa"
+corgi.breed = "Corgi"
+corgi.info // -> Alisa Corgi
+corgi.makeNoize() // -> Gav-gav Sir!
+```
+
+### Расширения:
+
+```swift
+extension Int {
+    var isEven: Bool { // вычисляемое свойство
+        self % 2 == 0
+    }
+    
+    func repetion(task: () -> Void) {
+        for _ in 0..<self {
+            task()
+        }
+    }
+
+    func squared() -> Int {
+        self * self
+    }
+}
+
+var number = 10
+number.isEven // true
+number.squared() // -> 100
+number.repetion {
+    print("Task scoring...")
+}
+
+extension Double {
+    var m: Double {
+        self
+    }
+    
+    var km: Double {
+        self * 1000
+    }
+    
+    var cm: Double {
+        self / 100
+    }
+    
+    var mm: Double {
+        self / 1000
+    }
+}
+
+var double = 5.0
+double.m // 5
+double.km // 5000
+```
