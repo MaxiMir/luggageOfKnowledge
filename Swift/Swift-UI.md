@@ -18,7 +18,8 @@ struct ContentView: View {
             Divider() // полоска
             
             Spacer() // занимает все доступное пространство
-            Spacer().frame(width: 50, height: 50) // задание определенного размера
+            Spacer()
+                .frame(width: 50, height: 50) // задание определенного размера
 
             Text("It's, Swift baby! 😎")
                 .padding(.bottom, 25) // если просто число со всех
@@ -125,7 +126,8 @@ struct ContentView: View {
         VStack { // max 10 view решение - убернуть в Group
             Toggle(isOn: $showHello) { // switch
                 Text("Show Hello")
-            }.padding()
+            }
+            .padding()
             
             if showHello {
                 Text("Hello developer 🪬!")
@@ -152,7 +154,10 @@ struct ContentView: View {
                 self.showDetails.toggle() // toggle boolean variable
             }) {
                 Text("Show details ⚙️")
-            }.padding().background(.green).clipShape(RoundedRectangle(cornerRadius: 20))
+            }
+            .padding()
+            .background(.green)
+            .clipShape(RoundedRectangle(cornerRadius: 20))
             
             if showDetails {
                 Text("Some details 🔮").font(.largeTitle)
@@ -175,8 +180,10 @@ struct ContentView: View {
     
     var body: some View {
         VStack {
-            TextField("Enter your name", text: $name).textFieldStyle(RoundedBorderTextFieldStyle()) // $ - можем изменять
-            SecureField("Enter your password", text: $password).textFieldStyle(RoundedBorderTextFieldStyle())
+            TextField("Enter your name", text: $name)
+                .textFieldStyle(RoundedBorderTextFieldStyle()) // $ - можем изменять
+            SecureField("Enter your password", text: $password)
+                .textFieldStyle(RoundedBorderTextFieldStyle())
             Text("Hello, \(name)")
         }
     }
@@ -221,7 +228,8 @@ struct ContentView: View {
                 ForEach(Colors.allCases) {
                     Text($0.rawValue.capitalized)
                 }
-            }.pickerStyle(.segmented)
+            }
+            .pickerStyle(.segmented)
             Text("You selected: \(selectedColor.rawValue)")
         }
     }
@@ -351,7 +359,8 @@ struct ContentView: View {
                     TaskRow()
                     TaskRow()
                     TaskRow()
-                }.listStyle(GroupedListStyle())
+                }
+                .listStyle(GroupedListStyle())
                 .listRowBackground(Color.yellow)
             }
         }
@@ -361,7 +370,7 @@ struct ContentView: View {
 
 ### NavigationView:
 
-```tsx
+```swift
 import SwiftUI
 
 struct ContentView: View {
@@ -434,7 +443,8 @@ struct ContentView: View {
                         ForEach(0..<colors.count, id: \.self) {
                             Text(self.colors[$0])
                         }
-                    }.pickerStyle(SegmentedPickerStyle())
+                    }
+                    .pickerStyle(SegmentedPickerStyle())
                 }
                 Toggle(isOn: $additaionalSettings) {
                     Text("Addintional settings")
@@ -443,7 +453,8 @@ struct ContentView: View {
                     print("Send selectedColor: \(self.colors[selectedColor]); additaionalSettings: \(additaionalSettings)")
                 }) {
                     Text("Save changes")
-                }.disabled(!additaionalSettings)
+                }
+                .disabled(!additaionalSettings)
             }
         }.navigationBarTitle("Settings")
     }
@@ -451,3 +462,155 @@ struct ContentView: View {
 ```
 
 ### Action Sheets:
+
+```swift
+import SwiftUI
+
+struct ContentView: View {
+    @State private var showingAlert = false
+    @State private var showingDeleteAlert = false
+    @State private var showingSheet = false
+
+    var body: some View {
+        VStack {
+            Button("Show Alert") {
+                self.showingAlert = true
+            }
+            .alert(isPresented: $showingAlert) {
+                Alert(title: Text("HelloSwiftUI"), message: Text("Some detail message"), dismissButton: .default(Text("OK"))) // dismissButton: .cancel()
+            }
+            Button("Show Delete Modal") {
+                self.showingDeleteAlert = true
+            }
+            .alert(isPresented: $showingDeleteAlert) {
+                Alert(title: Text("Are you sure want to delete this?"), message: Text("There is no way back"), primaryButton: .destructive(Text("Delete")) {
+                    print("Deleting...")
+                }, secondaryButton: .cancel())
+            }
+            Button(action: {
+                self.showingSheet = true
+            }) {
+                Text("Show Action Sheets")
+            }
+            .actionSheet(isPresented: $showingSheet) {
+                ActionSheet(title: Text("What do you want to do?"), message: Text("There is only one choise..."), buttons: [.default(Text("Dismiss Action Sheet")), .cancel(), .destructive(Text("Delete"))])
+            }
+        }
+        
+    }
+}
+```
+
+### Modifiers:
+
+```swift
+import SwiftUI
+
+struct CustomText: View { // кастомный текст
+    var name: String
+    var useGreenText: Bool
+    
+    var body: some View {
+        Text(name)
+            .font(.largeTitle)
+            .padding()
+            .foregroundColor(useGreenText ? .green : .red)
+    }
+}
+
+struct customModifier: ViewModifier { // кастомный модификатор
+    func body(content: Content) -> some View {
+        content.font(.largeTitle).foregroundColor(.white)
+            .padding()
+            .background()
+    }
+}
+
+extension View { // добавляем модификтор во View
+    func customM() -> some View {
+        self.modifier(customModifier())
+    }
+}
+
+struct ContentView: View {
+    @State private var useGreenText = false
+
+    var body: some View {
+        VStack(spacing: 30) {
+            Button("Hello, World") {
+                self.useGreenText.toggle()
+            }
+            CustomText(name: "First", useGreenText: useGreenText)
+            CustomText(name: "Second", useGreenText: useGreenText)
+            
+            Text("Custom Modifier")
+                .modifier(customModifier())
+            
+            Text("Custom Modifier from extenstion")
+                .customM()
+        }
+    }
+}
+```
+
+### @ObservedObject / @Published / @EnvironmentObject:
+
+```swift
+import SwiftUI
+
+struct User {
+    var firstName = "Max"
+    var lastName = "Maximir"
+}
+
+class UserFromClass: ObservableObject { // подписываем на ObservableObject могут быть использованы в нескольких View
+    @Published var firstName = "Max" // @Published - свойства меняются -> Изменить View
+    @Published var lastName = "Maximir"
+}
+
+struct ContentView: View {
+    
+    @State private var user = User()
+    
+    @ObservedObject var userFromClass = UserFromClass()
+
+    var body: some View {
+        VStack {
+            Text("Your name is \(user.firstName) \(user.lastName)")
+            TextField("First name", text: $user.firstName)
+            TextField("Last name", text: $user.lastName)
+        }
+    }
+}
+
+// @ObservedObject - для связи нескольких View
+```
+
+```swift
+import SwiftUI
+
+// в другом месте:
+class UserSettings: ObservableObject {
+    @Published var score = 0
+}
+
+struct ContentView: View {
+    
+    @State private var settings = UserSettings()
+
+    var body: some View {
+        VStack {
+            Text("Your score is \(settings.score)")
+            Button(action: {
+                self.settings.score += 1
+            }) {
+                Text("Increase Score")
+            }
+        }
+    }
+}
+
+// @EnvironmentObject - поделится данными со всеми View
+```
+
+### Переходы между View:
