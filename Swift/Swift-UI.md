@@ -614,3 +614,140 @@ struct ContentView: View {
 ```
 
 ### Переходы между View:
+
+```swift
+import SwiftUI
+
+// Вынести в отдельный файл
+struct DetailView: View {
+    var body: some View {
+        Text("This is the detail view")
+    }
+}
+
+struct ContentView: View {
+    var body: some View {
+        NavigationView {
+            VStack {
+                NavigationLink(destination: DetailView()) {
+                  Text("Go to Detail View")
+                }
+                .navigationBarTitle("Navigation")
+            }
+        }
+    }
+}
+```
+
+```swift
+import SwiftUI
+
+struct Dog: Identifiable {
+    var id = UUID()
+    var name: String
+}
+
+struct DogRow: View {
+    var dog: Dog
+    
+    var body: some View {
+        Text(dog.name)
+    }
+}
+
+struct DogView: View {
+    var dog: Dog
+    
+    var body: some View {
+        Text("Come and choose a \(dog.name)")
+            .font(.largeTitle)
+    }
+}
+
+struct ContentView: View {
+    var body: some View {
+        let first = Dog(name: "🐕")
+        let dogs = [first]
+        
+        return NavigationView {
+            List(dogs) { dog in
+                NavigationLink(destination: DogView(dog: dog)) {
+                    DogRow(dog: dog)
+                }
+            }
+            .navigationBarTitle("Choose a dog")
+        }
+    }
+}
+```
+
+```swift
+import SwiftUI
+
+struct DetailView: View {
+    @Environment(\.presentationMode) var presentationMode // для кнопки назад
+
+    var body: some View {
+        VStack {
+            Text("DetailView")
+            Button("Back") {
+                self.presentationMode.wrappedValue.dismiss() // кнопка вернуться назад
+            }
+        }
+    }
+}
+
+struct ContentView: View {
+    @State private var showingDetail = false
+    
+    var body: some View {
+        Button(action: {
+            self.showingDetail.toggle()
+        }) {
+            Text("Show detail")
+        }
+        .sheet(isPresented: $showingDetail) { // всплывающее View
+            DetailView() // куда переходим
+        }
+    }
+}
+```
+
+### UserDefaults:
+
+```swift
+import SwiftUI
+
+// UserDefaults - хранит небольшое количество пользовательских данных в приложении
+
+struct User: Codable { // структура для UserDefaults
+    var firstName: String
+    var lastName: String
+}
+
+
+
+struct ContentView: View {
+    @State private var tapCount = UserDefaults.standard.integer(forKey: "Tab") // получение
+    
+    @State private var user = User(firstName: "Max", lastName: "Maximir")
+    
+    var body: some View {
+        VStack {
+            Button("Tab count: \(tapCount)") {
+                self.tapCount += 1
+                UserDefaults.standard.set(self.tapCount, forKey: "Tap") // установка
+            }
+            Button("Save user") {
+                let encoder = JSONEncoder()
+                
+                if let data = try? encoder.encode(self.user) {
+                    UserDefaults.standard.set(data, forKey: "UserData")
+                }
+            }
+        }
+        
+    }
+}
+
+```
