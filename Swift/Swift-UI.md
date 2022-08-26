@@ -751,3 +751,80 @@ struct ContentView: View {
 }
 
 ```
+
+### Внешний вид View:
+
+```swift
+import SwiftUI
+
+
+struct ContentView: View {
+    var body: some View {
+        ZStack(alignment: .bottomTrailing) {
+            Image("banana")
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+            Text("This photo was made by 📱")
+                .padding(4)
+                .background(.black)
+                .foregroundColor(.white)
+                .border(.red, width: 5) // или
+                .overlay(RoundedRectangle(cornerRadius: 15).stroke(.green, lineWidth: 5)) // закругленная рамка
+                .offset(x: -7, y: -7) // враво - +x | вниз y+
+            Circle()
+                .stroke(.red, lineWidth: 5) // рамка половина width идет внутрь, половина наружу
+                .strokeBorder(.red, lineWidth: 5) // width идет внутрь
+                .frame(width: 100, height: 100) // рамка
+            Circle()
+                .stroke(.red, style: StrokeStyle(lineWidth: 5, dash: [10, 1])) // круг пунктиром
+            Text("Hello, Swift")
+                .padding()
+                .shadow(color: .red, radius: 5, x: 10, y: -10) // тень
+                .border(.red, width: 5) // граница
+            Button(action: {
+                print("Button tapped")
+            }) {
+                Image(systemName: "cloud.fill")
+                    .foregroundColor(.white)
+                    .padding()
+                    .background(.orange)
+                    .clipShape(Capsule()) // обрезаем как овал
+            }
+            Text("Rotation Effect")
+                .rotationEffect(.degrees(90)) // поворачиваем текст на 90 градусов | .radians(.pi/2) - радианы
+        }
+    }
+}
+```
+```swift
+import SwiftUI
+
+struct ContentView: View {
+    @State private var rotation = 0.0
+
+    var body: some View {
+        VStack() {
+            Slider(value: $rotation, in: 0...360, step: 1.0)
+            Text("Rotating Text")
+                .rotationEffect(.degrees(rotation), anchor: .topLeading) // anchor - точка вращения
+            Text("Rotating 3D Text")
+                .font(.largeTitle)
+                .rotation3DEffect(.degrees(45), axis: (x: 0, y: 1, z: 0))
+            Text("Scale Text")
+                .scaleEffect(3, anchor: .bottomLeading) // в 3 раза увеличили
+            Text("Corner Text")
+                .padding()
+                .background(.green)
+                .cornerRadius(20) // скругление View
+                .opacity(0.5) // прозрачность
+                .blur(radius: 15) // размытие
+            Image("banana")
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .colorMultiply(.red) // заливка картинок цветов
+                .saturation(0.5) // насыщенность
+                .contrast(0.5) // контрастность
+        }
+    }
+}
+```
