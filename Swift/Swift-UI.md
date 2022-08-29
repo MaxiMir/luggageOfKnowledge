@@ -182,8 +182,10 @@ struct ContentView: View {
         VStack {
             TextField("Enter your name", text: $name)
                 .textFieldStyle(RoundedBorderTextFieldStyle()) // $ - можем изменять
+
             SecureField("Enter your password", text: $password)
                 .textFieldStyle(RoundedBorderTextFieldStyle())
+
             Text("Hello, \(name)")
         }
     }
@@ -201,6 +203,7 @@ struct ContentView: View {
     var body: some View {
         VStack {
             Slider(value: $celsius, in: -100...100, step: 0.1)
+            
             Text("\(celsius) Celsius is \(celsius * 9/5 + 32) Fahrenheit")
         }
     }
@@ -230,6 +233,7 @@ struct ContentView: View {
                 }
             }
             .pickerStyle(.segmented)
+
             Text("You selected: \(selectedColor.rawValue)")
         }
     }
@@ -415,6 +419,7 @@ struct ContentView: View {
                     Image(systemName: "1.circle")
                     Text("First")
                 }.tag(1)
+
             Text("Second View")
                 .tabItem {
                     Image(systemName: "2.circle")
@@ -446,9 +451,11 @@ struct ContentView: View {
                     }
                     .pickerStyle(SegmentedPickerStyle())
                 }
+
                 Toggle(isOn: $additaionalSettings) {
                     Text("Addintional settings")
                 }
+
                 Button(action: {
                     print("Send selectedColor: \(self.colors[selectedColor]); additaionalSettings: \(additaionalSettings)")
                 }) {
@@ -479,6 +486,7 @@ struct ContentView: View {
             .alert(isPresented: $showingAlert) {
                 Alert(title: Text("HelloSwiftUI"), message: Text("Some detail message"), dismissButton: .default(Text("OK"))) // dismissButton: .cancel()
             }
+
             Button("Show Delete Modal") {
                 self.showingDeleteAlert = true
             }
@@ -487,6 +495,7 @@ struct ContentView: View {
                     print("Deleting...")
                 }, secondaryButton: .cancel())
             }
+            
             Button(action: {
                 self.showingSheet = true
             }) {
@@ -540,7 +549,9 @@ struct ContentView: View {
             Button("Hello, World") {
                 self.useGreenText.toggle()
             }
+
             CustomText(name: "First", useGreenText: useGreenText)
+
             CustomText(name: "Second", useGreenText: useGreenText)
             
             Text("Custom Modifier")
@@ -690,6 +701,7 @@ struct DetailView: View {
     var body: some View {
         VStack {
             Text("DetailView")
+
             Button("Back") {
                 self.presentationMode.wrappedValue.dismiss() // кнопка вернуться назад
             }
@@ -738,6 +750,7 @@ struct ContentView: View {
                 self.tapCount += 1
                 UserDefaults.standard.set(self.tapCount, forKey: "Tap") // установка
             }
+
             Button("Save user") {
                 let encoder = JSONEncoder()
                 
@@ -764,6 +777,7 @@ struct ContentView: View {
             Image("banana")
                 .resizable()
                 .aspectRatio(contentMode: .fit)
+
             Text("This photo was made by 📱")
                 .padding(4)
                 .background(.black)
@@ -771,16 +785,20 @@ struct ContentView: View {
                 .border(.red, width: 5) // или
                 .overlay(RoundedRectangle(cornerRadius: 15).stroke(.green, lineWidth: 5)) // закругленная рамка
                 .offset(x: -7, y: -7) // враво - +x | вниз y+
+
             Circle()
                 .stroke(.red, lineWidth: 5) // рамка половина width идет внутрь, половина наружу
                 .strokeBorder(.red, lineWidth: 5) // width идет внутрь
                 .frame(width: 100, height: 100) // рамка
+
             Circle()
                 .stroke(.red, style: StrokeStyle(lineWidth: 5, dash: [10, 1])) // круг пунктиром
+
             Text("Hello, Swift")
                 .padding()
                 .shadow(color: .red, radius: 5, x: 10, y: -10) // тень
                 .border(.red, width: 5) // граница
+
             Button(action: {
                 print("Button tapped")
             }) {
@@ -790,6 +808,7 @@ struct ContentView: View {
                     .background(.orange)
                     .clipShape(Capsule()) // обрезаем как овал
             }
+            
             Text("Rotation Effect")
                 .rotationEffect(.degrees(90)) // поворачиваем текст на 90 градусов | .radians(.pi/2) - радианы
         }
@@ -805,25 +824,88 @@ struct ContentView: View {
     var body: some View {
         VStack() {
             Slider(value: $rotation, in: 0...360, step: 1.0)
+
             Text("Rotating Text")
                 .rotationEffect(.degrees(rotation), anchor: .topLeading) // anchor - точка вращения
+
             Text("Rotating 3D Text")
                 .font(.largeTitle)
                 .rotation3DEffect(.degrees(45), axis: (x: 0, y: 1, z: 0))
+
             Text("Scale Text")
                 .scaleEffect(3, anchor: .bottomLeading) // в 3 раза увеличили
+
             Text("Corner Text")
                 .padding()
                 .background(.green)
                 .cornerRadius(20) // скругление View
                 .opacity(0.5) // прозрачность
                 .blur(radius: 15) // размытие
+                
             Image("banana")
                 .resizable()
                 .aspectRatio(contentMode: .fit)
                 .colorMultiply(.red) // заливка картинок цветов
                 .saturation(0.5) // насыщенность
                 .contrast(0.5) // контрастность
+        }
+    }
+}
+```
+
+### Анимации:
+```swift
+import SwiftUI
+
+struct ContentView: View {
+    @State private var scale: CGFloat = 1 // CGFloat - Core Graphics | применяется для работы с графикой
+    @State private var angle: Double = 0
+    @State private var borderThickness: CGFloat = 1
+    
+    var body: some View {
+        VStack {
+            Button(action: {
+                self.scale += 1
+            }) {
+                Text("Tap me")
+                    .scaleEffect(scale)
+                    .animation(.linear(duration: 5)) // .animation(.spring())
+            }
+            Button(action: {
+                self.angle += 45
+                self.borderThickness += 1
+            }) {
+                Text("Tap me")
+                    .padding()
+                    .border(.red, width: borderThickness)
+                    .rotationEffect(.degrees(angle))
+                    .animation(.interpolatingSpring(mass: 1, stiffness: 1, damping: 0.5, initialVelocity: 20)) // анимация при каждом нажатии скорость будет анимации будет увеличиваться
+            }
+            
+        }
+        
+    }
+}
+```
+```swift
+import SwiftUI
+
+struct ContentView: View {
+    @State private var showLabel: Bool = false
+    private let timer = Timer.publish(every: 3, on: .main, in: .default).autoconnect()
+    
+    var body: some View {
+        VStack {
+            if showLabel {
+                Text("Hello, Swift 🎃")
+                    .font(.largeTitle)
+                    .transition(.opacity) // описываем как Text будет появляться или скрываться на экране
+            }
+        }.onReceive(timer) { input in // при появлении ContentView подключаем таймер
+            // С анимацией автоматически скрываем или показываем Text
+            withAnimation {
+                showLabel.toggle()
+            }
         }
     }
 }
