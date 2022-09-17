@@ -1,3 +1,5 @@
+## RelativeTimeFormat
+
 ```js
 const formatter = new Intl.RelativeTimeFormat('ru')
 const diff = new Date() - new Date('4/18/2022')
