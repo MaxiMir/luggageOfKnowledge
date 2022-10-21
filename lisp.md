@@ -1,4 +1,4 @@
-# LISP #
+# LISP
 
 ```common-lisp
 // В () выражение
@@ -13,7 +13,7 @@ pi2 // => 3.14159
 (define circumference (* 2 pi radius)) 
 circumference // => 106,814150022205297
 ```
-#### Составные процедуры ####
+#### Составные процедуры
 ```common-lisp
 (define (square x) (* x x)) // x - параметр для процедуры, (* x x) - возврат процедуры
 (square 2) // => 4
@@ -25,7 +25,7 @@ square // => <procedure: square>
 (define (f a) (sum-of-squares (+ a 1) (+ a 2)))
 (f 5) // 85
 ```
-#### Предикат ####
+#### Предикат
 ```common-lisp
 (define (abs x)
 	(cond ((> x 0) x) // cond - условие
@@ -40,7 +40,7 @@ square // => <procedure: square>
 (> 10 5) // true => #t
 ```
 
-#### Cинтаксический сахар ####
+#### Cинтаксический сахар
 ```common-lisp
 (define (abs x)
 	(if (< x 0) (- x) x)) // if - только если 2 условия
@@ -56,7 +56,7 @@ square // => <procedure: square>
 (>= 10 10) // => #t
 ```
 
-#### Рекурсия ####
+#### Рекурсия
 ```common-lisp
 (define (sqrt-iter guess x)
 	(if (good-enough? guess x) guess

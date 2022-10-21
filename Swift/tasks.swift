@@ -6,15 +6,15 @@ func checkOnUniq(input: String) -> Bool {
 
 func checkOnUniq(input: String) -> Bool  {
     var checkedSymbols = [Character]()
-    
+
     for symbol in input {
         if checkedSymbols.contains(symbol) {
             return false
         }
-        
+
         checkedSymbols.append(symbol)
     }
-    
+
     return true
 }
 
@@ -24,29 +24,29 @@ checkOnUniq(input: "ab")
 
 // Написать функцию полиндром игнорируя регистр:
 
-func checkOnPalindrom(input: String) -> Bool {
-    let lowercased = input.lowercased()
+func checkOnPalindrome(input: String) -> Bool {
+    let lowerCased = input.lowercased()
 
-    return String(lowercased.reversed()) == lowercased
+    return String(lowerCased.reversed()) == lowerCased
 }
 
-checkOnPalindrom(input: "казак")
+checkOnPalindrome(input: "казак")
 
 
 // Написать функцию, которая принмает две строки и возвращает true если эти строки содержат одни и теже символы в любом порядке с учетом регистра
 
 func checkOnContains(input1: String, input2: String) -> Bool {
     var checkString = input2
-    
+
     for letter in input1 {
         if let index = checkString.firstIndex(of: letter) { // сказывается на производительности
             checkString.remove(at: index)
             continue
         }
-        
+
         return false
     }
-    
+
     return checkString.count == 0
 }
 
@@ -78,7 +78,7 @@ func getCount(input: String, character: Character) -> Int {
 
     for letter in input {
         if letter == character {
-            letterCount += 1        
+            letterCount += 1
         }
     }
 
@@ -136,7 +136,7 @@ func checkOnPangram() {
     let letters = set.filter {
         $0 >= "a" && $0 <= "z"
     }
-    
+
     return letterCount.count = 26
 }
 
