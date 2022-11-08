@@ -12,7 +12,7 @@ export function useFetch(url) {
         setLoading(true)
         fetch(url, { signal: controller.signal })
             .then(setData)
-            .then(setError)
+            .catch(setError)
             .finally(() => setLoading(false))            
 
         return () => {
