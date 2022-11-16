@@ -28,6 +28,7 @@
 + [CONDITIONAL TYPES](#CONDITIONAL_TYPES)
 + [DECORATOR](#DECORATOR)
 + [NAMESPACE](#NAMESPACE)
++ [SATISFIES](#SATISFIES)
 
 ```shell script
 $ npm init -y # по дефолту
@@ -1000,3 +1001,41 @@ namespace Form { // namespace должны совпадать
 	const myForm = new MyForm('m@m.ru')
 }
 ```
+
+### <a name="SATISFIES"></a> SATISFIES (TS >= 4.9):
+
+```typescript
+type RGB = readonly [red: number, green: number, blue: number]
+type Color = RGB | string
+```
+**Old way**:
+```typescript
+const color: Color = 'red'
+color.toUpperCase()
+```
+**New way**:
+```typescript
+const color = 'red' satisfies Color
+color.toUpperCase() // valid operation as myColor is a string
+
+const incorrectColor = 100 satisfies Color // throws error
+
+// with const:
+
+const palette = {
+	red: [255, 0, 0],
+	green: "#00ff00",
+	blue: [1,2,3],
+} satisfies Record<string, Color>
+
+console.log(palette.green) // green is string
+
+const constantPalette = {
+	red: [255, 0, 0],
+	green: "#00ff00",
+	blue: [1,2,3],
+} as const satisfies Record<string, Color>
+
+console.log(constantPalette.green) // green is "#00ff00"
+```
+

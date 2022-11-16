@@ -86,3 +86,21 @@ const [firstMovieTitle, secondMovieTitle] = movies
 firstMovieTitle // => 'Heat'
 secondMovieTitle // => 'Interstellar'
 ```
+
+```js
+const person = {
+	name: "Max",
+	age: 21
+}
+
+person[Symbol.iterator] = function* () {
+	yield 'f'
+	yield 'u'
+	yield 'c'
+	yield 'k'
+}
+
+for (let key of person) {
+	console.log(key)
+} // f u c k
+```
