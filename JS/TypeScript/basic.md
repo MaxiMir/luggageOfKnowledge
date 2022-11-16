@@ -1016,7 +1016,7 @@ color.toUpperCase()
 **New way**:
 ```typescript
 const color = 'red' satisfies Color
-color.toUpperCase() // valid operation as myColor is a string
+color.toUpperCase() // valid operation as color is a string
 
 const incorrectColor = 100 satisfies Color // throws error
 
