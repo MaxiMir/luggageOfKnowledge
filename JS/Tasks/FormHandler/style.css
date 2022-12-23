@@ -1,7 +1,7 @@
 :root {
-    --_color-success: #0d8052;
-    --_color-error: #8b0000;
-    --_color-loader: #669900;
+    --color-success: #0d8052;
+    --color-error: #8b0000;
+    --color-loader: #669900;
 }
 
 /* @ Форма заполняется: */
@@ -30,7 +30,7 @@
 }
 
 .form--error .response-data {
-    border: 1px solid var(--_color-error);
+    border: 1px solid var(--color-error);
 }
 
 /* @ Форма данные с сервера получены (SUCCESS): */
@@ -45,12 +45,12 @@
 }
 
 .form--finish .response-data {
-    border: 1px solid var(--_color-success);
+    border: 1px solid var(--color-success);
 }
 
 /* Поля: */
 .field--error {
-    border-color: var(--_color-error);
+    border-color: var(--color-error);
 }
 
 /* Блоки: */
@@ -63,7 +63,7 @@
 }
 
 .field--success {
-    border-color: var(--_color-success);
+    border-color: var(--color-success);
 }
 
 /* Loader: */
@@ -82,8 +82,8 @@
     height: 0;
     margin: 8px;
     box-sizing: border-box;
-    border: 32px solid #fff;
-    border-color: var(--_color-loader) transparent var(--_color-loader) transparent;
+    border-width: 32px;
+    border-color: var(--color-loader) transparent var(--color-loader) transparent;
     animation: form__loaders 1.2s infinite;
 }
 

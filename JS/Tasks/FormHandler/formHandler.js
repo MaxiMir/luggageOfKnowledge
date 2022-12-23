@@ -24,9 +24,6 @@ HTMLFormElement.prototype.initHandler = function (userSettings) {
 
 	/**
 	 * Проверяет на валидность переданные настройки и данные формы
-	 * @param settings
-	 * @param formResultBlock
-	 * @returns {[]}
 	 */
 	const getErrorsInSettings = (settings, formResultBlock) => {
 		const errors = [];
@@ -46,8 +43,6 @@ HTMLFormElement.prototype.initHandler = function (userSettings) {
 
 	/**
 	 * Создает промисифицированную задержку в ms
-	 * @param ms
-	 * @returns {Promise<unknown>}
 	 */
 	const delay = async ms => {
 		return new Promise(resolve => {
@@ -60,7 +55,6 @@ HTMLFormElement.prototype.initHandler = function (userSettings) {
 
 	/**
 	 * Проверяет есть ли измененения в state
-	 * @param newState
 	 */
 	const componentNeedUpdate = newState => {
 		return JSON.stringify(state) !== JSON.stringify(newState);
@@ -69,7 +63,6 @@ HTMLFormElement.prototype.initHandler = function (userSettings) {
 
 	/**
 	 * Обновление State и в случае изменений запускает перерендеринг компонента:
-	 * @param newState
 	 */
 	const setState = newState => {
 		const newMergingState = {...state, ...newState};
@@ -85,7 +78,6 @@ HTMLFormElement.prototype.initHandler = function (userSettings) {
 
 	/**
 	 * Возвращает { empty [селекторы пустых обязательных полей], completed [селекторы заполненных полей] }
-	 * @returns {*}
 	 */
 	const checkFields = () => {
 		const fieldsData = {emptyFields: [], completedFields: []};
@@ -118,8 +110,6 @@ HTMLFormElement.prototype.initHandler = function (userSettings) {
 
 	/**
 	 * Посылает и записывает в state результат запроса:
-	 * @param sentData
-	 * @returns {Promise<string>}
 	 */
 	const processPostData = async sentData => {
 		const request = new XMLHttpRequest();
@@ -149,8 +139,6 @@ HTMLFormElement.prototype.initHandler = function (userSettings) {
 
 	/**
 	 * Обработчик события клика по кнопке отправить форму:
-	 * @param e
-	 * @returns {Promise<void>}
 	 */
 	const formSubmitHandler = async e => {
 		e.preventDefault();
