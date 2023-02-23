@@ -13,7 +13,7 @@
   "dependencies": {
     "express": "^4.16.4",
     "mysql2": "^1.6.5",
-    "sequelize": "^5.8.1"
+    "sequelize": "^6.28.2"
   },
   "devDependencies": {
     "nodemon": "^1.19.0"
