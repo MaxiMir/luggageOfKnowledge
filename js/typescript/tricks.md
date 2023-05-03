@@ -40,10 +40,12 @@ function exhaustiveCheck(param: never) {
 }
 
 function todoSmthWithCar(car: Car) {
-    case: 'bmw':
+	switch (car) {
+        case 'bmw':
         // todo
-    default: 
-        exhaustiveCheck(car) // если будут необработанные значения - TS будет ругаться
+        default:
+            exhaustiveCheck(car) // если будут необработанные значения - TS будет ругаться
+	}
 }
 ```
 
@@ -105,8 +107,8 @@ function todo<T>(arg: T): DataOrCar<T> {
     
 }
 
-const value = todo('1') // type Data
-const value = todo(1) // type Car
+const data = todo('1') // type Data
+const car = todo(1) // type Car
 ```
 
 ### Immutable:

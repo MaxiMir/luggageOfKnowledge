@@ -28,7 +28,7 @@ gulp сlear // запуск задачи
 > FILE gulpfile.js:
 
 ```js
-const { src, dest, series, watch } = require('JS/gulp/examples'); // series - позволяет вызывать последовательно несколько задач
+const { src, dest, series, watch } = require('js/gulp/examples'); // series - позволяет вызывать последовательно несколько задач
 const sass = require('gulp-sass');
 const csso = require('gulp-csso');
 const include = require('gulp-file-include'); // пакет отвечает за соединение данных файлов

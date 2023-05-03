@@ -66,7 +66,7 @@ $ bower i jquery magnific-popup # установка библиотек с по�
 > FILE: gulpfile.js
 
 ```js
-const gulp = require('JS/gulp/gulp.md');
+const gulp = require('js/gulp/gulp.md');
 const sass = require('gulp-sass');
 const browserSync = require('browser-sync');
 const concat = require('gulp-concat');

@@ -52,7 +52,7 @@ export default {
 }
 
 // @ C Vuex:
-import { mapGetters, mapActions } from 'JS/vue/vuex'; // #2 вариант получения
+import { mapGetters, mapActions } from 'js/vue/vuex'; // #2 вариант получения
 import PostForm from './components/PostForm';
 
 export default {
@@ -87,7 +87,7 @@ export default {
 // + FOLDER: /store/
 // + FILE: /store/index.js:
 import Vue from 'vue';
-import Vuex from 'JS/vue/vuex';
+import Vuex from 'js/vue/vuex';
 import post from './modules/post'; // импортируем отдельный модуль
 
 Vue.use(Vuex); // регистрируем плагин
@@ -179,7 +179,7 @@ new Vue({
 </template>
 
 <script>
-    import { mapMutations } from 'JS/vue/vuex';
+    import { mapMutations } from 'js/vue/vuex';
 
     export default {
         data() {
