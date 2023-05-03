@@ -27,7 +27,7 @@ export function Button({ name, onClick }: ButtonProps): JSX.Element {
 ```jsx
 import React, { ComponentProps } from 'react'
 
-export interface ButtonDisabledProps extends ComponentProps<typeof Button>  {
+interface ButtonDisabledProps extends ComponentProps<typeof Button>  {
   disabled: boolean
 }
 
