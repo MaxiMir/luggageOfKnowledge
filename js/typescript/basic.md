@@ -680,6 +680,30 @@ const obj = {
 
 type objType<T> = T extends {[key: string]: infer U} ? U : never
 const someObj: objType<typeof obj> = {age: 18}
+
+
+// Function’s second argument
+type GetSecondArgumentOfAnyFunction<T> = T extends (
+    first: any,
+    second: infer SecondArgument,
+    ...args: any[]
+) => any
+	? SecondArgument
+	: never
+
+type t = GetSecondArgumentOfAnyFunction<(name: string, age: number) => void> // number
+
+// Promise return type
+
+type PromiseReturnType<T> = T extends Promise<infer Return> ? Return : T
+
+type t = PromiseReturnType<Promise<string>> // string
+
+// Array type
+
+type ArrayType<T> = T extends (infer Item)[] ? Item : T
+
+type t = ArrayType<[string, number]> // string | number
 ```
 
 ### <a name="CONDITIONAL_TYPES"></a> CONDITIONAL TYPES:
