@@ -12,10 +12,10 @@ import { Route } from 'shared/config'
 type Context = Parameters<GetServerSideProps>[0]
 
 export function createServerSideProps<T>(
-    toSSP: (c: Context) => Promise<GetServerSidePropsResult<T>>,
+    toSSP?: (c: Context) => Promise<GetServerSidePropsResult<T>>,
 ): GetServerSideProps {
     return async (context) => {
-        const result = await (toSSP(context) || Promise.resolve({}))
+        const result = await (toSSP?.(context) || Promise.resolve({}))
 
         if ('redirect' in result || 'notFound' in result) {
             return result
