@@ -85,15 +85,15 @@ Access-Control-Allow-Origin: * || https://developer.mozilla.org
 
 ### LIFECYCLE HOOKS REACT (OLD SCHOOL)
 
-* componentWillMount - перед рендерингом, в основном для настройки компонента
-* render - процесс рендеринга
-* componentDidMount - уведомляет, про то, что компонент соединен с DOM деревом
-* componentWillReceiveProps - уведомляет, про то, что приходят новые входящие свойства в компонент
-* shouldComponentUpdate - решает, нужно ли делать ре-рендеринг* componentWillUpdate - уведомляет, что компонент будет
-  обновлен
-* componentDidUpdate - уведомляет, что компонент был обновлен
-* componentWillUnmount - используется для удаления слушателей и очистки компонента. Вызывается перед удалением
-  компонента
+* componentWillMount - перед рендерингом, в основном для настройки компонента;
+* render - процесс рендеринга;
+* componentDidMount - уведомляет, про то, что компонент соединен с DOM деревом;
+* componentWillReceiveProps - уведомляет, про то, что приходят новые входящие свойства в компонент;
+* shouldComponentUpdate - решает, нужно ли делать ре-рендеринг;
+* componentWillUpdate - уведомляет, что компонент будет обновлен;
+* componentDidUpdate - уведомляет, что компонент был обновлен;
+* componentWillUnmount - используется для удаления слушателей и очистки компонента;
+* Вызывается перед удалением компонента.
 
 ### TESTS
 
