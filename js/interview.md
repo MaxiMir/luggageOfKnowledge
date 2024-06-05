@@ -1,9 +1,14 @@
 # INTERVIEW
 
 + [Замыкания (closures)](#closures)
-+ [this](#this)
++ [Отличие cookie, sessionStorage, localStorage](#cookie)
++ [TCP/IP, HTTP, HTTPS](#http)
++ [CORS / Cross-origin resource sharing](#cors)
++ [После ввода адреса в браузере](#browser)
 
-### <a name="closures"></a> Замыкания (closures):
+После ввода адреса в браузере
+
+### <a name="closures"></a> Замыкания (closures)
 
 **Замыкание** – это функция, которая запоминает свои внешние переменные и может получить к ним доступ.
 
@@ -17,7 +22,7 @@ _Environment Record_ - объект, в котором хранятся лока
 
 _[[Environment]]_ – ссылка на внешнее | глобальное окружение
 
-###	Отличие cookie, sessionStorage, localStorage:
+### <a name="cookie"></a> Отличие cookie, sessionStorage, localStorage
 
 **Cookies**:
 
@@ -38,7 +43,7 @@ _[[Environment]]_ – ссылка на внешнее | глобальное о
 * Не отправляется на сервер;
 * 5MB+ данных (в некоторых браузерах и больше).
 
-### TCP/IP
+### <a name="http"></a> TCP/IP, HTTP, HTTPS
 
 * IP - протокол для доставки по адресу сетевых пакетов;
 * TCP - протокол для установления надежного соединения и передачи данных;
@@ -62,13 +67,13 @@ TCP-порт 443.
 * Для работы HTTPS требуется SSL-сертификат, который подтверждает идентичность веб-сайта;
 
 
-### CORS / Cross-origin resource sharing
+### <a name="cors"></a> CORS / Cross-origin resource sharing
 
 технология современных браузеров, которая позволяет предоставить веб-странице доступ к ресурсам другого домена.
 
 Access-Control-Allow-Origin: * || https://developer.mozilla.org
 
-### После ввода адреса в браузере
+### <a name="browser"></a> После ввода адреса в браузере
 
 > Поиск IP адреса сайта:
 Запрашивает IP в DNS(Domain Name System), если не нашел в:
