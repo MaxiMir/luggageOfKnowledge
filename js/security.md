@@ -141,8 +141,7 @@ shop.example.com
 
 ## <a name="cors"></a> 🔐 Что такое CORS?
 
-CORS (Cross-Origin Resource Sharing) — это механизм, который позволяет серверу явно указать, каким другим источникам (
-origin) можно обращаться к его ресурсам через браузер.
+CORS (Cross-Origin Resource Sharing) — это механизм, который позволяет серверу явно указать, каким другим источникам (origin) можно обращаться к его ресурсам через браузер.
 
 👉 Без CORS браузер заблокирует клиентский запрос к ресурсу с другого origin, даже если сервер ответил 200 OK.
 
@@ -174,7 +173,8 @@ Access-Control-Allow-Origin: https://frontend.com
 * Метод: PUT, DELETE, PATCH, нестандартные POST
 * Заголовки: кастомные (Authorization, X-Token, и т.п.)
 * Content-Type: application/json — уже вызывает preflight!
-* Браузер сначала делает OPTIONS-запрос (preflight), чтобы спросить у сервера: «а можно?»
+
+Браузер сначала делает OPTIONS-запрос (preflight), чтобы спросить у сервера: «а можно?»
 
 Пример запроса:
 
@@ -221,7 +221,7 @@ Access-Control-Allow-Origin: https://frontend.com
 Access-Control-Allow-Credentials: true
 ```
 
-❗ Нельзя использовать * с Allow-Credentials: true!
+❗ Нельзя использовать `*` с Allow-Credentials: true!
 
 ---
 
@@ -301,16 +301,6 @@ Content-Security-Policy: default-src 'self'; script-src 'self'
 import DOMPurify from 'dompurify';
 
 const clean = DOMPurify.sanitize(userInput);
-```
-
-### 💥 Пример DOM-based XSS
-
-```html
-
-<script>
-    const hash = location.hash;
-    document.getElementById("output").innerHTML = hash; // ❌ XSS
-</script>
 ```
 
 ---
