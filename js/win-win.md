@@ -2,7 +2,7 @@
 
 * [Типы](#types)
 * [Замыкание](#closure)
-* [📊 Сравнение: cookie vs localStorage vs sessionStorage](#cookieVSlocalStorageVSsessionStorage)
+* [📊 Сookie vs localStorage vs sessionStorage](#cookieVSlocalStorageVSsessionStorage)
 * [📊 IP, TCP, HTTP, HTTPS](#protocols)
 * [🔐 Same-Origin Policy (SOP)](#sop)
 * [📬 Метод postMessage](#postmessage)
@@ -11,12 +11,12 @@
 * [💣 CSRF (Cross-Site Request Forgery)](#csrf)
 * [🧱 Атрибут sandbox](#sandbox)
 * [🔐 CSP (Content Security Policy)](#csp)
-* [📊 Сравнение XSS и CSRF](#xss-vs-csrf)
+* [📊 XSS vs CSRF](#xss-vs-csrf)
 * [🖱️ Clickjacking](#clickjacking)
 * [🏛 Архитектура приложений](#architecture)
 * [✅ Тестирование в разработке](#testing)
-* [🌳 Структуры данных в JavaScript](#struscture)
-* [📈Сравнение: Map, Set, WeakMap, WeakSet](#weak)
+* [🌳 Структуры данных](#struscture)
+* [📊 Map vs Set vs WeakMap vs WeakSet](#weak)
 
 ## <a name="types"></a> Типы
 
@@ -134,7 +134,7 @@ console.log(fns.map(fn => fn())); // → [0, 1, 2]
 
 📌 `let` создаёт новое лексическое окружение на каждую итерацию — `var` нет.
 
-## <a name="cookieVSlocalStorageVSsessionStorage"></a> 📊 Сравнение: `cookie` vs `localStorage` vs `sessionStorage`
+## <a name="cookieVSlocalStorageVSsessionStorage"></a> 📊 `Cookie` vs `localStorage` vs `sessionStorage`
 
 | Характеристика               | `Cookies`                                | `localStorage`                      | `sessionStorage`                |
 |------------------------------|------------------------------------------|-------------------------------------|---------------------------------|
@@ -934,7 +934,7 @@ fetch("/api/transfer", {
 
 ---
 
-## <a name="xss-vs-csrf"></a> 🧩 Краткое сравнение XSS и CSRF
+## <a name="xss-vs-csrf"></a> 📈 XSS vs CSRF
 
 |                       | XSS                        | CSRF                                                |
 |-----------------------|----------------------------|-----------------------------------------------------|
@@ -1211,7 +1211,7 @@ Content-Security-Policy: frame-ancestors 'none';
 
 ---
 
-## 📈 Сравнение
+### 📈 Сравнение
 
 | Уровень     | Кол-во     | Скорость    | Надёжность | Стоимость  |
 |-------------|------------|-------------|------------|------------|
@@ -1221,7 +1221,7 @@ Content-Security-Policy: frame-ancestors 'none';
 
 ---
 
-## 🧠 Best Practices
+### 🧠 Best Practices
 
 - Не дублируй проверку одного и того же на всех уровнях
 - Unit-тесты = "тестируем бизнес-логику"
@@ -1229,7 +1229,7 @@ Content-Security-Policy: frame-ancestors 'none';
 - Мокаешь только внешний мир (fetch, API, БД), но не саму бизнес-логику
 - Используй `CI` (например, GitHub Actions) для прогонки тестов
 
-## <a name="struscture"></a> 🌳 Структуры данных в JavaScript
+## <a name="struscture"></a> 🌳 Структуры данных
 
 Структуры данных (СД) — это способы организации и хранения информации для эффективного доступа и модификации.
 
@@ -1421,7 +1421,7 @@ class Node {
 * В среднем. В худшем случае (много коллизий) может быть O(n)
 
 
-## <a name="weak"></a> 📈Сравнение: Map, Set, WeakMap, WeakSet
+## <a name="weak"></a> 📊 Map vs Set vs WeakMap vs WeakSet
 
 Эти структуры данных введены в ES6 (ES2015) и предназначены для **более гибкой работы с коллекциями данных**, чем
 обычные `Object` или `Array`.
