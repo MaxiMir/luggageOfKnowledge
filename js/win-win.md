@@ -89,9 +89,9 @@ const fn = outer();
 console.log(fn()); // ❌ ReferenceError: x is not defined
 ```
 
-`LexicalEnvironment` - внутренний (скрытый) объект у выполняемых функций | блока кода | скрипта.
+`LexicalEnvironment` - внутренний (скрытый) объект у выполняемых функций / блока кода / скрипта.
 
-`LexicalEnvironment` состоит из 2 частей:
+Состоит из 2 частей:
 
 `Environment Record` - объект, в котором хранятся локальные переменные.
 
