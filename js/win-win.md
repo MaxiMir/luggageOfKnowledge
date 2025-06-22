@@ -82,7 +82,7 @@ console.log(fn()); // ❌ ReferenceError: x is not defined
 
 `Environment Record` - объект, в котором хранятся локальные переменные.
 
-`[[Environment]]` – ссылка на внешнее | глобальное окружение
+`[[Environment]]` – ссылка на внешнее или глобальное окружение
 
 ---
 
