@@ -191,3 +191,10 @@ const App = () => {
     )
 }
 ```
+
+
+### Empty Array
+
+```ts
+type A = readonly never[];
+```
