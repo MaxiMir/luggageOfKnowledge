@@ -17,6 +17,7 @@
 * [✅ Тестирование в разработке](#testing)
 * [🌳 Структуры данных](#structure)
 * [📊 Map vs Set vs WeakMap vs WeakSet](#weak)
+* [📋 Задачи](#tasks)
 
 ## <a name="types"></a> 🏷️ Типы
 
@@ -1866,3 +1867,113 @@ useEffect(() => {
     return () => eventBus.off('user:login', setUser);
 }, []);
 ```
+
+## <a name="tasks"></a> 📋 Задачи:
+
+🔹 Задача 1: Метод двух указателей
+
+Дан отсортированный массив чисел и целевое значение `target`.
+Найди индексы двух чисел, сумма которых равна `target`.
+
+📥 Ввод: `numbers = [1, 2, 4, 6, 10]`, `target = 8`
+📤 Вывод: `[1, 3]` (2 + 6)
+
+```js
+function findTwoSum(numbers: number[], target: number) {
+    let leftIndex = 0;
+    let rightIndex = numbers.at(-1); // numbers[numbers.length - 1]
+
+    while (leftIndex < rightIndex) {
+        const sum = numbers[leftIndex] + numbers[rightIndex];
+
+        if (sum === target) return [leftIndex, rightIndex];
+        if (sum < target) leftIndex++;
+        else rightIndex--;
+    }
+
+    return null;
+}
+```
+
+⏱️ Сложность: O(n)
+📌 Почему работает: массив отсортирован → можно двигать указатели к нужной сумме.
+
+🔹 Задача 2: Бинарный поиск
+
+📘 Условие:
+Реализуй бинарный поиск в отсортированном массиве.
+
+📥 Ввод: `numbers = [1, 3, 5, 7, 9]`, `target = 5`
+📤 Вывод: `2`
+
+```ts
+function binarySearch(numbers: number[], target: number) {
+  let leftIndex = 0;
+  let rightIndex = numbers.at(-1); // numbers[numbers.length - 1]
+
+  while (leftIndex <= rightIndex) {
+    const middleIndex = Math.floor((leftIndex + rightIndex) / 2);
+    const middleValue = numbers[middleIndex];
+
+    if (middleValue === target) return middleIndex;
+    if (middleValue < target) leftIndex = middleIndex + 1;
+    else rightIndex = middleIndex - 1;
+  }
+
+  return -1;
+}
+```
+
+⏱️ Сложность: O(log n)
+📌 Ключ: уменьшение области поиска в 2 раза каждый раз.
+
+🔹 Задача 3: Поиск в ширину (BFS)
+
+📘 Условие:
+Найди кратчайший путь от вершины start до target в неориентированном графе.
+
+📥 Ввод:
+
+```ts
+graph = {
+  1: [2, 3],
+  2: [2],
+  3: [4],
+  4: []
+}, start = 1, target = 4
+```
+
+📤 Вывод: `2`
+
+```ts
+function bfsShortestPath(graph: Record<number, number[]>, start: number, target: number): number {
+  // Очередь для обхода: элементы — [номер вершины, глубина от start]
+  const queue: [number, number][] = [[start, 0]];
+  // Множество посещённых вершин, чтобы не зациклиться
+  const visited = new Set<number>();
+
+  // Пока есть вершины для обработки
+  while (queue.length) {
+    // Извлекаем из начала очереди (FIFO)
+    const [node, depth] = queue.shift();
+
+    if (node === target) return depth;
+
+    visited.add(node);
+
+    // Перебираем всех соседей текущей вершины
+    for (const neighbor of graph[node] || []) {
+      // Если сосед ещё не был посещён — ставим в очередь с увеличенной глубиной
+      if (!visited.has(neighbor)) {
+        queue.push([neighbor, depth + 1]);
+      }
+    }
+  }
+
+  return -1;
+}
+```
+
+⏱️ Сложность: O(V + E), где V – число вершин, E – число рёбер
+📌 BFS гарантирует, что первая встреча с target будет по кратчайшему пути.
+
