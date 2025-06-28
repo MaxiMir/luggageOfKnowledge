@@ -21,6 +21,7 @@
 * [📊 Map vs Set vs WeakMap vs WeakSet](#weak)
 * [📋 Задачи](#tasks)
 * [🔃 Задачи на EventLoop](#eventloop)
+* [🔖 TS задачи](#ts-tasks)
 * [🗂 Virtual DOM (VDOM)](#virtual-dom)
 
 ## <a name="var"></a> 📊 var vs let vs const
@@ -2043,7 +2044,6 @@ function bfsShortestPath(graph: Record<number, number[]>, start: number, target:
 ⏱️ Сложность: O(V + E), где V – число вершин, E – число рёбер
 📌 BFS гарантирует, что первая встреча с target будет по кратчайшему пути.
 
-
 ## <a name="eventloop"></a> 🔃 Задачи на EventLoop
 
 ```js
@@ -2134,6 +2134,34 @@ Promise.resolve()
 console.log('end'); //  2️⃣ Синхронно: выводим 'end'
 
 // ℹ️ После каждой макротаски браузер гарантированно опустошает очередь микротаск целиком, прежде чем перейти к следующей макротаске.
+```
+
+## <a name="ts-tasks"></a> 🔖 TS задачи
+
+```ts
+type MyPick<T, K extends keyof T> = {
+  [P in K]: T[P];
+};
+
+type MyExclude<T, U> = T extends U ? never : T;
+type MyNonNullable<T> = T extends null | undefined ? never : T;
+
+type MyReadonly<T> = {
+  readonly [P in keyof T]: T[P];
+};
+type MyDeepReadonly<T> = {
+  readonly [P in keyof T]: T[P] extends object ? DeepReadonly<T[P]> : T[P];
+};
+
+type Flatten<T> = T extends Array<infer U> ? U : T;
+type X = Flatten<string[]>; // -> string
+
+type MyReturnType<T> = T extends (...args: unknown[]) => infer R ? R : never;
+
+type MyFirstArg<T> = T extends (arg: infer A, ...args: unknown[]) => unknown ? A : never;
+
+type MyAwaited<T> = T extends Promise<infer U> ? U : T;
+type DeepAwaited<T> = T extends Promise<infer U> ? DeepAwaited<U> : T;
 ```
 
 ## <a name="virtual-dom"></a> 🗂 Virtual DOM (VDOM)
