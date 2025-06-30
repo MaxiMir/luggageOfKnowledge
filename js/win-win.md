@@ -2089,6 +2089,57 @@ function digit(array) {
 
 ⏱️ Сложность: O(n * k)
 
+🔹 Задача: Форматирование числовых диапазонов
+
+📘 Условие: Дан неотсортированный массив целых чисел values: number[]. Нужно объединить смежные последовательные числа в
+диапазоны,
+а остальные числа оставить как есть.
+
+📥 Ввод:
+
+```js
+[1, 3, 4, 5, 7, 9]
+```
+
+📤 Вывод:
+
+```js
+"1,3-5,7,9"
+```
+
+```js
+function range(values: number[]): string {
+  if (!values.length) return '';
+
+  const result: string[] = [];
+  const sorted = [...values].sort((a, b) => a - b);
+
+  let startRange = sorted[0];
+  let endRange = sorted[0];
+
+  for (let i = 1; i < sorted.length; i++) {
+    const value = sorted[i];
+
+    if (value === endRange + 1) {
+      endRange = value; // продолжаем диапазон
+    } else {
+      result.push(convertToRange(startRange, endRange)); // сохраняем завершённый диапазон
+      startRange = value; // начинаем новый диапазон
+      endRange = value; // начинаем новый диапазон
+  }
+
+  result.push(convertToRange(startRange, endRange));
+
+  return result.join(',');
+}
+
+function convertToRange(startRange: number, endRange: number) {
+  return startRange === endRange ? `${startRange}` : `${startRange}-${endRange}`;
+}
+```
+
+⏱️ Сложность: O(n log n)
+
 
 ## <a name="eventloop"></a> 🔃 Задачи на EventLoop
 
