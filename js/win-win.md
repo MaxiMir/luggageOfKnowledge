@@ -2040,6 +2040,56 @@ function bfsShortestPath(graph: Record<number, number[]>, start: number, target:
 
 BFS гарантирует, что первая встреча с target будет по кратчайшему пути.
 
+🔹 Задача 4: Группировка чисел по составу цифр
+
+📘 Условие:
+Даны целые положительные числа. Нужно сгруппировать их по одинаковому составу цифр (например, 123 и 321 попадают в одну группу).
+
+📥 Ввод:
+
+```js
+[321, 123, 132, 231, 213, 312, 456, 654]
+```
+
+📤 Ожидаемый вывод:
+
+```js
+[
+  [321, 123, 132, 231, 213, 312],
+  [456, 654]
+]
+```
+
+```js
+function digit(array) {
+  const valuesMap = {};
+
+  for (const value of array) {
+    const digitCounts = new Array(10).fill(0);
+
+    let num = value;
+
+    while (num > 0) {
+      digitCounts[num % 10]++; // num % 10 - берет последнюю цифру числа - увеличиваем считчик этого числа.
+      num = Math.floor(num / 10); // Удаляем последнюю цифру.
+    }
+
+    const key = digitCounts.join('#'); // Создаём уникальный ключ по частотам цифр
+
+    if (!valuesMap[key]) {
+      valuesMap[key] = [];
+    }
+
+    valuesMap[key].push(value);
+  }
+
+  return Object.values(valuesMap);
+}
+```
+
+⏱️ Сложность: O(n * k)
+
+
 ## <a name="eventloop"></a> 🔃 Задачи на EventLoop
 
 ```js
@@ -2166,6 +2216,7 @@ type PromiseValue2 = MyAwaited<number>; // -> number
 
 type DeepAwaited<T> = T extends Promise<infer U> ? DeepAwaited<U> : T;
 ```
+
 
 ## <a name="virtual-dom"></a> 🗂 Virtual DOM (VDOM)
 
