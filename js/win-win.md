@@ -2058,29 +2058,29 @@ BFS гарантирует, что первая встреча с target буд�
 ```
 
 ```js
-function digit(array) {
-  const valuesMap = {};
+function groupNumbers(numbers) {
+  const groups = {};
 
-  for (const value of array) {
-    const digitCounts = new Array(10).fill(0);
+  for (const number of numbers) {
+    const digitCount = Array(10).fill(0);
 
-    let num = value;
+    let initialNumber = number;
 
-    while (num > 0) {
-      digitCounts[num % 10]++; // num % 10 - берет последнюю цифру числа - увеличиваем считчик этого числа.
-      num = Math.floor(num / 10); // Удаляем последнюю цифру.
+    while (initialNumber > 0) {
+      digitCount[initialNumber % 10]++; // num % 10 - берет последнюю цифру числа - увеличиваем считчик этого числа
+      initialNumber = Math.floor(initialNumber / 10); // Удаляем последнюю цифру
     }
 
-    const key = digitCounts.join('#'); // Создаём уникальный ключ по частотам цифр
+    const key = digitCount.join('#');
 
-    if (!valuesMap[key]) {
-      valuesMap[key] = [];
+    if (!groups[key]) {
+      groups[key] = [];
     }
 
-    valuesMap[key].push(value);
+    groups[key].push(number);
   }
 
-  return Object.values(valuesMap);
+  return Object.values(groups);
 }
 ```
 
