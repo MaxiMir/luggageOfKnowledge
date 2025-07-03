@@ -1871,7 +1871,7 @@ store.set({ userId: 1 });
 // shared-store.ts
 
 // 1️⃣ с Zustand:
-import {create} from 'zustand';
+import { create } from 'zustand';
 
 type State = {
   user: { id: number } | null;
@@ -1884,7 +1884,7 @@ export const useSharedStore = create<State>((set) => ({
 }));
 
 // 2️⃣ с EventEmitter:
-import {EventEmitter} from 'events';
+import { EventEmitter } from 'events';
 
 export const eventBus = new EventEmitter();
 ```
@@ -1908,7 +1908,7 @@ new ModuleFederationPlugin({
 
 ```js
 // MFE #1
-import {sharedStore} from 'shared-store';
+import { sharedStore } from 'shared-store';
 
 useEffect(() => {
     // 1️⃣ с Zustand:
@@ -1965,7 +1965,7 @@ function findTwoSum(numbers: number[], target: number) {
 📤 Вывод: `2`
 
 ```ts
-function binarySearch(numbers: number[], target: number) {
+function binarySearch(numbers, target) {
   let leftIndex = 0;
   let rightIndex = numbers.at(-1); // numbers[numbers.length - 1]
 
