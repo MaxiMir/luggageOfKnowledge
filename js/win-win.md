@@ -821,7 +821,7 @@ shop.example.com
     // Дожидаемся загрузки iframe:
     iframe.onload = () => {
         // Отправляем сообщение во фрейм:
-        iframe.contentWindow.postMessage({type: 'ping'}, 'https://child.com');
+        iframe.contentWindow.postMessage({ type: 'ping' }, 'https://child.com');
         // 🚨 ОБЯЗАТЕЛЬНО указываем origin получателя,
     };
 
@@ -846,7 +846,7 @@ shop.example.com
         console.log('Сообщение от родителя:', event.data);
 
         // Отправляем родителю:
-        event.source.postMessage({type: 'pong'}, event.origin);
+        event.source.postMessage({ type: 'pong' }, event.origin);
     });
 </script>
 ```
@@ -1763,7 +1763,7 @@ window.addEventListener('userLoggedIn', (e: Event) => {
 
 ```ts
 // MFE #1 — запись данных
-localStorage.setItem('userLoggedIn', JSON.stringify({userId: 42}));
+localStorage.setItem('userLoggedIn', JSON.stringify({ userId: 42 }));
 
 // MFE #2
 window.addEventListener('storage', (event: StorageEvent) => {
@@ -1791,7 +1791,7 @@ window.addEventListener('storage', (event: StorageEvent) => {
 ```ts
 // MFE #1 — отправка
 const channel = new BroadcastChannel('mfe_channel');
-channel.postMessage({userId: 42});
+channel.postMessage({ userId: 42 });
 
 // MFE #2 — прослушивание
 const channel = new BroadcastChannel('mfe_channel');
@@ -1847,7 +1847,7 @@ export class SharedStore<T> {
 ```tsx
 // В контейнере:
 const store = new SharedStore<{ userId: number }>();
-store.set({userId: 1});
+store.set({ userId: 1 });
 
 <ReactMFE1 sharedStore={store}/>
 <ReactMFE2 sharedStore={store}/>
@@ -1880,7 +1880,7 @@ type State = {
 
 export const useSharedStore = create<State>((set) => ({
   user: null,
-  setUser: (user) => set({user}),
+  setUser: (user) => set({ user }),
 }));
 
 // 2️⃣ с EventEmitter:
@@ -2409,7 +2409,7 @@ self.onmessage = (e) => {
 // main.js
 const worker = new Worker('worker.js');
 
-worker.postMessage({x: 1});
+worker.postMessage({ x: 1 });
 
 worker.onmessage = (e) => {
     console.log('Result:', e.data);
