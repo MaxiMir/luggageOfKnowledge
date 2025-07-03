@@ -2135,6 +2135,46 @@ function convertToRange(startRange: number, endRange: number) {
 }
 ```
 
+🔹 Задача 3: Глубокое клонирование объекта
+
+📘 Условие:
+Реализуй функцию `deepClone`, которая создаёт полную копию объекта или массива. Циклические ссылки должны поддерживаться (не приводят к бесконечной рекурсии).
+
+📥 Ввод:
+
+```tsx
+const a: any = {};
+a.self = a;
+deepClone(a);
+```
+
+📤 Вывод:
+
+Новый объект, который повторяет структуру a, но не является той же самой ссылкой.
+
+```ts
+function deepClone<T>(obj: T, weak = new WeakMap()): T {
+  if (obj === null || typeof obj !== "object") return obj;
+
+  // Защита от зацикливания:
+  if (weak.has(obj)) return weak.get(obj);
+
+  if (obj instanceof Date) return new Date(obj);
+  if (obj instanceof RegExp) return new RegExp(obj);
+
+  const result = Array.isArray(obj) ? [] : {};
+  weak.set(obj, result);
+
+  for (const key in obj) {
+    if (Object.prototype.hasOwnProperty.call(obj, key)) {
+      result[key] = deepClone(obj[key], weak);
+    }
+  }
+
+  return result;
+}
+```
+
 ⏱️ Сложность: O(n log n)
 
 
@@ -2317,7 +2357,7 @@ type DeepAwaited<T> = T extends Promise<infer U> ? DeepAwaited<U> : T;
 * Если `key` в списке разный — React считает, что элемент другой.
 * Алгоритм оптимизирован: не сравнивает целиком, а по поддеревьям.
 
-### Reconciliation
+### ℹ️  Reconciliation
 
 **Reconciliation** — это алгоритм React, который сравнивает два Virtual DOM-дерева и определяет:
 
@@ -2329,7 +2369,7 @@ type DeepAwaited<T> = T extends Promise<infer U> ? DeepAwaited<U> : T;
 
 --- 
 
-### Что такое Fiber
+### ℹ️ Что такое Fiber
 
 Fiber — это новая архитектура React (с версии 16+), которая переписала Reconciliation.
 
@@ -2358,7 +2398,7 @@ Fiber — это новая архитектура React (с версии 16+), 
 
 ```js
 self.onmessage = (e) => {
-    const {x} = e.data;
+    const { x } = e.data;
     self.postMessage(x * 2);
 };
 ```
@@ -2411,15 +2451,7 @@ worker.onmessage = (e) => {
 
 ### 🔧 Реализация:
 
-* Создать Worker-скрипт (worker.js):
-
-```js
-if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('/sw.js');
-}
-```
-
-* Использование:
+* Создать Service Worker-скрипт (sw.js):
 
 ```js
 self.addEventListener('fetch', (event) => {
@@ -2429,6 +2461,16 @@ self.addEventListener('fetch', (event) => {
         })
     );
 });
+```
+
+* Использование:
+
+```js
+// main.js
+
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/sw.js');
+}
 ```
 
 ---
@@ -2466,7 +2508,7 @@ self.addEventListener('fetch', (event) => {
 
 ```js
 const debounce = (fn, delay) => {
-    let timeoutId;
+    let timeoutId = 0;
 
     return function (...args) {
         clearTimeout(timeoutId);
@@ -2474,19 +2516,17 @@ const debounce = (fn, delay) => {
     };
 };
 
-const throttle = (fn, limit) => {
-    let inThrottle;
+const throttle = (fn, delay) => {
+    let lastCall = 0;	
 
     return function (...args) {
-        if (inThrottle) return;
+        const now = Date.now();
 
-        inThrottle = true;
+        if (now - lastCall < delay) return;
+
+        lastCall = now;
 
         fn.apply(this, args);
-
-        setTimeout(() => {
-            inThrottle = false;
-        }, limit);
     };
 };
 ```
