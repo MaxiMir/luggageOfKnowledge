@@ -2153,7 +2153,7 @@ deepClone(a);
 Новый объект, который повторяет структуру a, но не является той же самой ссылкой.
 
 ```ts
-function deepClone<T>(obj: T, weak = new WeakMap()): T {
+function deepClone(obj, weak = new WeakMap()) {
   if (obj === null || typeof obj !== "object") return obj;
 
   // Защита от зацикливания:
@@ -2172,6 +2172,52 @@ function deepClone<T>(obj: T, weak = new WeakMap()): T {
   }
 
   return result;
+}
+
+
+function deepEqual(a, b) {
+  if (a === b) return true;
+
+  if (typeof a !== 'object' || a === null || typeof b !== 'object' || b === null) return false;
+
+  // Даты:
+  if (a instanceof Date && b instanceof Date) {
+    return a.getTime() === b.getTime();
+  }
+
+  // RegExp:
+  if (a instanceof RegExp && b instanceof RegExp) {
+    return a.source === b.source && a.flags === b.flags;
+  }
+
+  // Массивы:
+  if (Array.isArray(a) && Array.isArray(b)) {
+    if (a.length !== b.length) return false;
+
+    for (let i = 0; i < a.length; i++) {
+      if (!deepEqual(a[i], b[i])) return false;
+    }
+
+    return true;
+  }
+
+  // Один массив и другой объект:
+  if (Array.isArray(a) !== Array.isArray(b)) return false;
+
+  // Оба объекты:
+  const keysA = Object.keys(a);
+  const keysB = Object.keys(b);
+
+  // Разное количество ключей в объектах:
+  if (keysA.length !== keysB.length) return false;
+
+  for (const key of keysA) {
+    if (!Object.prototype.hasOwnProperty.call(b, key)) return false;
+
+    if (!deepEqual(a[key], b[key])) return false;
+  }
+
+  return true;
 }
 ```
 
