@@ -2105,33 +2105,35 @@ function digit(array) {
 ```
 
 ```js
-function range(values: number[]): string {
-  if (!values.length) return '';
+function createRange(numbers) {
+  if (!numbers.length) return '';
 
-  const result: string[] = [];
-  const sorted = [...values].sort((a, b) => a - b);
+  const result = [];
+  const sortedNumbers = [...numbers].sort((a, b) => a - b);
 
-  let startRange = sorted[0];
-  let endRange = sorted[0];
+  let startRange = sortedNumbers[0];
+  let endRange = sortedNumbers[0];
 
-  for (let i = 1; i < sorted.length; i++) {
-    const value = sorted[i];
+  // Начинаем с 2 элемента:
+  for (let i = 1; i < sortedNumbers.length; i++) {
+    const number = sortedNumbers[i];
 
-    if (value === endRange + 1) {
-      endRange = value; // продолжаем диапазон
+    if (number === endRange - 1) {
+      endRange = number; // продолжаем диапазон
     } else {
-      result.push(convertToRange(startRange, endRange)); // сохраняем завершённый диапазон
-      startRange = value; // начинаем новый диапазон
-      endRange = value; // начинаем новый диапазон
+      result.push(createRangeValue(startRange, endRange)); // сохраняем завершённый диапазон
+      startRange = number; // начинаем новый диапазон
+      endRange = number; // начинаем новый диапазон
+    }
   }
 
-  result.push(convertToRange(startRange, endRange));
+  result.push(createRangeValue(startRange, endRange));
 
   return result.join(',');
 }
 
-function convertToRange(startRange: number, endRange: number) {
-  return startRange === endRange ? `${startRange}` : `${startRange}-${endRange}`;
+function createRangeValue(a, b) {
+  return a === b ? `${a}` : `${a}-${b}`;
 }
 ```
 
