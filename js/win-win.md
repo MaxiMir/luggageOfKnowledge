@@ -2118,7 +2118,7 @@ function createRange(numbers) {
   for (let i = 1; i < sortedNumbers.length; i++) {
     const number = sortedNumbers[i];
 
-    if (number === endRange - 1) {
+    if (number === endRange + 1) {
       endRange = number; // продолжаем диапазон
     } else {
       result.push(createRangeValue(startRange, endRange)); // сохраняем завершённый диапазон
