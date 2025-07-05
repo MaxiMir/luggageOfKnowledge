@@ -2413,6 +2413,10 @@ type MyPick<T, K extends keyof T> = {
 type MyExclude<T, U> = T extends U ? never : T;
 type Excluded = MyExclude<'a' | 'b' | 'c', 'b'>; // -> 'a' | 'c'
 
+type MyOmit<T, K extends keyof T> = {
+  [P in keyof T as P extends K ? never : P]: T[P];
+};
+
 type MyNonNullable<T> = T extends null | undefined ? never : T;
 type NonNullableType = MyNonNullable<string | null | undefined>; // -> string
 
@@ -2420,7 +2424,7 @@ type MyReadonly<T> = {
   readonly [P in keyof T]: T[P];
 };
 type MyDeepReadonly<T> = {
-  readonly [P in keyof T]: T[P] extends object ? DeepReadonly<T[P]> : T[P];
+  readonly [P in keyof T]: T[P] extends object ? MyDeepReadonly<T[P]> : T[P];
 };
 
 type Flatten<T> = T extends Array<infer U> ? U : T;
@@ -2436,6 +2440,18 @@ type PromiseValue1 = MyAwaited<Promise<string>>; // -> string
 type PromiseValue2 = MyAwaited<number>; // -> number
 
 type DeepAwaited<T> = T extends Promise<infer U> ? DeepAwaited<U> : T;
+
+type FilterValues<T, U> = {
+  [P in keyof T as T[P] extends U ? P : never]: T[P];
+};
+type Values = { a: number; b: string; c: number };
+type FilteredValues = FilterValues<Values, number>; // -> { a: number; c: number }
+
+type AddPrefix<T, Prefix extends string> = {
+  [P in keyof T as `${Prefix}${Extract<P, string>}`]: T[P];
+};
+type Data = { id: number; name: string };
+type DataWithPrefix = AddPrefix<Data, 'my_'>; // -> { my_id: number; my_name: string }
 ```
 
 
