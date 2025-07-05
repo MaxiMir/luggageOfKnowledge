@@ -2414,7 +2414,7 @@ type MyExclude<T, U> = T extends U ? never : T;
 type Excluded = MyExclude<'a' | 'b' | 'c', 'b'>; // -> 'a' | 'c'
 
 type MyOmit<T, K extends keyof T> = {
-  [P in keyof T as P extends K ? never : P]: T[P];
+  [Key in keyof T as Key extends K ? never : Key]: T[Key]; // или as Exclude<P, K>
 };
 
 type MyNonNullable<T> = T extends null | undefined ? never : T;
@@ -2442,13 +2442,13 @@ type PromiseValue2 = MyAwaited<number>; // -> number
 type DeepAwaited<T> = T extends Promise<infer U> ? DeepAwaited<U> : T;
 
 type FilterValues<T, U> = {
-  [P in keyof T as T[P] extends U ? P : never]: T[P];
+  [Key in keyof T as T[Key] extends U ? Key : never]: T[Key];
 };
 type Values = { a: number; b: string; c: number };
 type FilteredValues = FilterValues<Values, number>; // -> { a: number; c: number }
 
 type AddPrefix<T, Prefix extends string> = {
-  [P in keyof T as `${Prefix}${Extract<P, string>}`]: T[P];
+  [Key in keyof T as `${Prefix}${Extract<Key, string>}`]: T[Key];
 };
 type Data = { id: number; name: string };
 type DataWithPrefix = AddPrefix<Data, 'my_'>; // -> { my_id: number; my_name: string }
