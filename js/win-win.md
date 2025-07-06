@@ -3026,6 +3026,7 @@ class Singleton {
     if (!Singleton.instance) {
       Singleton.instance = new Singleton();
     }
+
     return Singleton.instance;
   }
 }
@@ -3064,6 +3065,7 @@ class MacButton implements Button {
 
 function createButton(os: string): Button {
   if (os === 'windows') return new WinButton();
+
   return new MacButton();
 }
 
@@ -3140,9 +3142,9 @@ class Sorter {
 }
 
 const sorter = new Sorter(new AscendingSort());
-console.log(sorter.sort([3, 1, 2])); // [1, 2, 3]
+console.log(sorter.sort([3, 1, 2])); // -> [1, 2, 3]
 sorter.setStrategy(new DescendingSort());
-console.log(sorter.sort([3, 1, 2])); // [3, 2, 1]
+console.log(sorter.sort([3, 1, 2])); // -> [3, 2, 1]
 ```
 
 **Польза:** меняешь логику без изменения контекста.
@@ -3231,3 +3233,199 @@ console.log(adapted.request()); // New API
 | Decorator | Динамическое расширение   |
 | Adapter   | Совместимость интерфейсов |
 
+**KISS** — Keep It Simple, Stupid
+
+**YAGNI** — You Aren’t Gonna Need It
+
+> Делай проще, дурак.
+
+Чем проще код — тем легче его читать, тестировать, поддерживать.
+
+> Тебе это не понадобится.
+
+Не пиши код или фичу «на будущее», если сейчас это не нужно.
+
+Кратко, чётко, в твоём стиле — **SOLID** с минимальными JS/TS-примерами.
+
+---
+
+### SOLID
+
+### S — Single Responsibility Principle (Принцип единственной ответственности)
+
+**Суть:** класс (или модуль) должен иметь только одну причину для изменения — выполнять одну роль.
+
+**Пример:**
+
+❌ Плохо:
+
+```ts
+class User {
+  saveToDB() {
+  }
+
+  validateData() {
+  }
+}
+```
+
+✅ Хорошо:
+
+```ts
+class UserValidator {
+  validate(data: object) {
+  }
+}
+
+class UserRepository {
+  save(user: object) {
+  }
+}
+```
+
+---
+
+### Open/Closed Principle (Принцип открытости/закрытости)
+
+**Суть:** класс открыт для расширения, но закрыт для модификации.
+
+**Пример:**
+
+```ts
+interface Shape {
+  area(): number;
+}
+
+class Circle implements Shape {
+  constructor(private r: number) {
+  }
+
+  area() {
+    return Math.PI * this.r ** 2;
+  }
+}
+
+class Square implements Shape {
+  constructor(private s: number) {
+  }
+
+  area() {
+    return this.s ** 2;
+  }
+}
+
+function totalArea(shapes: Shape[]) {
+  return shapes.reduce((sum, shape) => sum + shape.area(), 0);
+}
+```
+
+Добавляем новую фигуру — код `totalArea` не меняется.
+
+---
+
+### L — Liskov Substitution Principle (Принцип подстановки Барбары Лисков)
+
+**Суть:** наследник должен полностью сохранять поведение базового типа.
+
+**Пример:**
+
+```ts
+class Bird {
+  fly() {
+  }
+}
+
+class Duck extends Bird {
+}
+
+class Ostrich extends Bird {
+  fly() {
+    throw new Error('I can’t fly');
+  } // Нарушение LSP
+}
+```
+
+`Ostrich` не подходит как `Bird` — ломает ожидания.
+
+---
+
+### I — Interface Segregation Principle (Принцип разделения интерфейсов)
+
+**Суть:** не заставляй клиента реализовывать лишнее.
+
+**Пример:**
+
+❌ Плохо:
+
+```ts
+interface Animal {
+  fly(): void;
+
+  run(): void;
+}
+
+class Dog implements Animal {
+  fly() {
+  } // Лишнее
+  run() {
+  }
+}
+```
+
+✅ Хорошо:
+
+```ts
+interface Runner {
+  run(): void;
+}
+
+interface Flyer {
+  fly(): void;
+}
+
+class Dog implements Runner {
+  run() {
+  }
+}
+```
+
+---
+
+### D — Dependency Inversion Principle (Принцип инверсии зависимостей)
+
+**Суть:** зависимости строятся через абстракции, а не через конкретные реализации.
+
+**Пример:**
+
+❌ Плохо:
+
+```ts
+class MySQLDatabase {
+  query() {
+  }
+}
+
+class UserService {
+  db = new MySQLDatabase(); // Жёсткая связь
+}
+```
+
+✅ Хорошо:
+
+```ts
+interface Database {
+  query(): void;
+}
+
+class MySQLDatabase implements Database {
+  query() {
+  }
+}
+
+class UserService {
+  constructor(private db: Database) {
+  }
+}
+```
+
+**Dependency Injection (DI)** — это реализация этого принципа.
