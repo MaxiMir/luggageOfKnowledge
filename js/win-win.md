@@ -2752,13 +2752,22 @@ worker.onmessage = (e) => {
 * Создать Service Worker-скрипт (sw.js):
 
 ```js
-self.addEventListener('fetch', (event) => {
-    event.respondWith(
-        caches.match(event.request).then((resp) => {
-            return resp || fetch(event.request);
-        })
-    );
+self.addEventListener('fetch', event => {
+  event.respondWith(handleRequest(event.request));
 });
+
+async function handleRequest(request) {
+  const cached = await caches.match(request);
+
+  if (cached) return cached;
+
+  const response = await fetch(request);
+
+  const cache = await caches.open('my-cache');
+  cache.put(request, response.clone());
+
+  return response;
+}
 ```
 
 * Использование:
@@ -2828,3 +2837,74 @@ const throttle = (fn, delay) => {
     };
 };
 ```
+
+## <a name="gb"></a> 🧹 Garbage Collector
+
+**Garbage Collector** — часть движка (V8, SpiderMonkey и др.), которая автоматически освобождает память, когда объект больше не нужен.
+
+JS — язык с автоматическим управлением памятью: программист не освобождает память вручную, всё делает GC.
+
+### 📌 Главный принцип — достижимость (reachability)
+
+* Пока объект достижим (есть хотя бы одна ссылка из кода или глобального контекста) — он жив.
+* Если на объект нет ссылок — память можно освободить.
+
+### 📌 Что считается достижимым
+
+* Переменные в текущем стеке вызовов.
+* Глобальные переменные.
+* Замыкания и всё, что «удерживается» функциями.
+
+### 📌 Алгоритм
+
+Современный GC в JS обычно реализован как алгоритм «Mark-and-Sweep» (пометить и убрать).
+
+**Шаги:**
+
+* 1️⃣ Mark (пометить):
+
+GC стартует с корневых объектов (window, стек вызова) и отмечает все объекты, до которых есть ссылки.
+
+* 2️⃣ Sweep (очистить):
+
+Всё, что не помечено → unreachable → память освобождается.
+
+
+## <a name="spec-css"></a> 🎨 Формула специфичности в CSS:
+
+Специфичность записывается как четырёхзначное число: (a,b,c,d)
+* a — inline-стили: 1, если есть, иначе 0.
+* b — количество ID-селекторов.
+* c — количество классов, атрибутов, псевдоклассов.
+* d — количество тегов и псевдоэлементов.
+
+## <a name="css-animate"></a> ## 📋 Список свойств, которые обычно не рекомендуется анимировать
+
+1️⃣ Свойства, вызывающие полную переработку макета (layout/reflow)
+
+Эти свойства при изменении заставляют браузер пересчитывать положение и размер всех зависимых элементов:
+
+* `width`
+* `height`
+* `top, right, bottom, left`
+* `margin`
+* `padding`
+
+2️⃣ Свойства, вызывающие дорогой repaint
+
+* `background` (цвет или градиент)
+* `border`
+* `box-shadow`
+* `color`
+
+3️⃣ Свойства, требующие комбинированного reflow + repaint
+
+* font-size
+* line-height
+
+Если важна производительность:
+
+* Анимировать `transform` и `opacity`.
+* Избегать анимации `width`, `height`, `top`, `left` и подобных.
+* Для сложных случаев использовать `will-change` или GPU-ускорение осознанно.
+
