@@ -26,6 +26,8 @@
 * [📊 Web Workers VS Service Workers](#workers)
 * [📈 Core Web Vitals](#web-vitals)
 * [📊 Debounce VS Throttle](#debounce)
+* [🫆 Принципы ООП](#princips)
+* [🦿 Паттерны проектирования](#patterns)
 
 ## <a name="var"></a> 📊 var vs let vs const
 
@@ -43,49 +45,46 @@
 
 ## <a name="types"></a> 🏷️ Типы
 
-| Тип           | `typeof` результат   | Особенности                                                                     |
-|---------------|----------------------|---------------------------------------------------------------------------------|
-| `undefined`   | 🔄                   | Получают объявленные, но не инициализированные переменные                       |
-| `null`        | `object`             | Баг, но так и осталось                                                          |
-| `boolean`     | 🔄                   | -                                                                               |
-| `number`      | 🔄                   | Включает `NaN`, `Infinity`, `-0`                                                |
-| `bigint`      | 🔄                   | Для очень больших целых чисел, пример: `9007199254740991n`                      |
-| `string`      | 🔄                   | Последовательность UTF-16 символов                                              |
-| `symbol`      | 🔄                   | Уникальные, не сериализуются, не сравниваются напрямую                          | 
-| `object`      | `object`             | Массивы, объекты, null                                                          |
-|       -       |          -           |                                       -                                         |
-| `function`    | `function`           | Объект с внутренним методом `[[Call]]` — можно вызывать                         |
-| `class`       | `function`           | Синтаксический сахар над функциями-конструкторами                               |
+| Тип         | `typeof` результат | Особенности                                                |
+|-------------|--------------------|------------------------------------------------------------|
+| `undefined` | 🔄                 | Получают объявленные, но не инициализированные переменные  |
+| `null`      | `object`           | Баг, но так и осталось                                     |
+| `boolean`   | 🔄                 | -                                                          |
+| `number`    | 🔄                 | Включает `NaN`, `Infinity`, `-0`                           |
+| `bigint`    | 🔄                 | Для очень больших целых чисел, пример: `9007199254740991n` |
+| `string`    | 🔄                 | Последовательность UTF-16 символов                         |
+| `symbol`    | 🔄                 | Уникальные, не сериализуются, не сравниваются напрямую     | 
+| `object`    | `object`           | Массивы, объекты, null                                     |
+| -           | -                  | -                                                          |
+| `function`  | `function`         | Объект с внутренним методом `[[Call]]` — можно вызывать    |
+| `class`     | `function`         | Синтаксический сахар над функциями-конструкторами          |
 
 TS:
 
-| Категория        | Тип                      | Пример / Особенности                                                     |
-|------------------|--------------------------|--------------------------------------------------------------------------|
-| **Объектные**    | `object`                 | Любой не-примитив                                                        |
-|                  | `{ [key: string]: any }` | Объект с динамическими ключами                                           |
-|                  | `Array<T>` или `T[]`     | Массив элементов одного типа                                             |
-|                  | `[T1, T2]`               | Кортеж фиксированной длины c предопределенными типами                    |
-|                  | `class`                  | Пользовательский класс                                                   |
-|                  | `interface`              | Описание формы объекта                                                   |
-| **Функции**      | `(a: T) => U`            | Тип функции с аргументами и возвращаемым значением                       |
-| **Специальные**  | `any`                    | Отключает проверку типов                                                 |
-|                  | `unknown`                | Неизвестный тип — требует проверки перед использованием                  |
-|                  | `never`                  | Никогда не возвращается (`throw` или бесконечный цикл)                   |
-|                  | `void`                   | Нет возвращаемого значения                                               |
-| **Литеральные**  | `'a' \| 'b'`             | Строго фиксированные значения                                            |
-| **Объединения**  | `A \| B`                 | Значение — одно из нескольких типов                                      |
-| **Пересечения**  | `A & B`                  | Комбинирует свойства нескольких типов                                    |
-| **Generics**     | `<T>`                    | Обобщённый параметр                                                      |
-| **Утилиты**      | `Partial<T>`             | Все свойства становятся опциональными                                    |
-|                  | `Required<T>`            | Все свойства обязательны                                                 |
-|                  | `Readonly<T>`            | Только для чтения                                                        |
-|                  | `Pick<T, K>`             | Выбирает подмножество свойств                                            |
-|                  | `Record<K, T>`           | Сопоставляет ключи с типами                                              |
-| **Enum**         | `enum`                   | Числовое или строковое перечисление                                      |
-| **Модули/Alias** | `type`                   | Алиас для любого типа или комбинации типов                               |
-
-
-
+| Категория        | Тип                      | Пример / Особенности                                    |
+|------------------|--------------------------|---------------------------------------------------------|
+| **Объектные**    | `object`                 | Любой не-примитив                                       |
+|                  | `{ [key: string]: any }` | Объект с динамическими ключами                          |
+|                  | `Array<T>` или `T[]`     | Массив элементов одного типа                            |
+|                  | `[T1, T2]`               | Кортеж фиксированной длины c предопределенными типами   |
+|                  | `class`                  | Пользовательский класс                                  |
+|                  | `interface`              | Описание формы объекта                                  |
+| **Функции**      | `(a: T) => U`            | Тип функции с аргументами и возвращаемым значением      |
+| **Специальные**  | `any`                    | Отключает проверку типов                                |
+|                  | `unknown`                | Неизвестный тип — требует проверки перед использованием |
+|                  | `never`                  | Никогда не возвращается (`throw` или бесконечный цикл)  |
+|                  | `void`                   | Нет возвращаемого значения                              |
+| **Литеральные**  | `'a' \| 'b'`             | Строго фиксированные значения                           |
+| **Объединения**  | `A \| B`                 | Значение — одно из нескольких типов                     |
+| **Пересечения**  | `A & B`                  | Комбинирует свойства нескольких типов                   |
+| **Generics**     | `<T>`                    | Обобщённый параметр                                     |
+| **Утилиты**      | `Partial<T>`             | Все свойства становятся опциональными                   |
+|                  | `Required<T>`            | Все свойства обязательны                                |
+|                  | `Readonly<T>`            | Только для чтения                                       |
+|                  | `Pick<T, K>`             | Выбирает подмножество свойств                           |
+|                  | `Record<K, T>`           | Сопоставляет ключи с типами                             |
+| **Enum**         | `enum`                   | Числовое или строковое перечисление                     |
+| **Модули/Alias** | `type`                   | Алиас для любого типа или комбинации типов              |
 
 ## <a name="closure"></a> 🔗 Замыкание
 
@@ -347,7 +346,8 @@ Signature Algorithm: sha256WithRSAEncryption  # Алгоритм цифрово�
   * обе стороны видели одни и те же handshake-сообщения,
   * никто не вмешивался в процесс установки соединения.
 
-TLS-поток переходит в защищённый режим: все данные (HTTP-запросы и ответы) передаются в виде зашифрованных TLS-записей (TLS Records).
+TLS-поток переходит в защищённый режим: все данные (HTTP-запросы и ответы) передаются в виде зашифрованных TLS-записей (
+TLS Records).
 
 ---
 
@@ -681,6 +681,8 @@ const width = element.offsetWidth; // браузер вынужден сдела
 
 ### 📦 Что именно делает IP?
 
+Версии: IP v4 (`192.168.0.1`) / v6 (`2001:0db8:85a3:0000:0000:8a2e:0370:7334`)
+
 * Разбивает данные на пакеты
 * Маркирует каждый пакет IP-адресами отправителя и получателя
 * Определяет маршрут (через маршрутизаторы) до конечного узла
@@ -689,26 +691,7 @@ const width = element.offsetWidth; // браузер вынужден сдела
   * доставку вообще (нет подтверждения доставки)
   * защиту от потерь или дубликатов
 
-📌 IP = доставка пакетов «как есть», без надёжности.
-
-### 📊 Таблица сравнения: IP, TCP, HTTP, HTTPS
-
-| Характеристика                | **IP**                         | **TCP**                                     | **HTTP**                                  | **HTTPS**                                                 |
-|-------------------------------|--------------------------------|---------------------------------------------|-------------------------------------------|-----------------------------------------------------------|
-| 📌 Назначение                 | Доставка пакетов по IP-адресам | Надёжная доставка данных между хостами      | Передача данных между клиентом и сервером | Защищённая передача данных между клиентом и сервером      |
-| 📚 Протокол уровня            | Сетевой (Layer 3)              | Транспортный (Layer 4)                      | Прикладной (Layer 7)                      | Прикладной (Layer 7)                                      |
-| 🔄 Поддержка соединения       | ❌ Нет (connectionless)         | ✅ Да (connection-oriented)                  | ✅ Через TCP                               | ✅ Через TCP (обычно порт 443)                             |
-| 🧠 Особенности                | Разбивает данные на IP-пакеты  | Упорядочивает, подтверждает и ретранслирует | Основан на запрос/ответ, stateless        | HTTP + TLS: шифрование + аутентификация                   |
-| 🔐 Шифрование                 | ❌ Нет                          | ❌ Нет                                       | ❌ Нет                                     | ✅ TLS/SSL                                                 |
-| 🔐 Устойчивость к MITM        | ❌ Нет                          | ❌ Нет                                       | ❌ Нет                                     | ✅ Защита от перехвата и подмены                           |
-| 🌐 Порт по умолчанию          | —                              | —                                           | 80                                        | 443                                                       |
-| 🧾 Необходимость сертификата  | ❌                              | ❌                                           | ❌                                         | ✅ Требуется SSL/TLS сертификат                            |
-| ⚡ Современные версии          | IP v4 / v6                     | TCP                                         | HTTP/1.0, HTTP/1.1                        | HTTP/2 (по TCP + TLS), HTTP/3 (по QUIC + TLS 1.3)         |
-| 🧩 Используется как база для… | TCP, UDP, ICMP и др.           | HTTP, FTP, WebSockets и др.                 | Веб-приложения, REST API                  | Всё, что требует безопасного обмена (банки, OAuth и т.д.) |
-
-> ICMP - вспомогательный сетевой протокол для обмена статусными сообщениями и диагностики.
-
----
+⚠️ IP = доставка пакетов «как есть», без надёжности.
 
 ### 🚀 HTTP/2 и HTTP/3
 
@@ -853,7 +836,7 @@ shop.example.com
     // Дожидаемся загрузки iframe:
     iframe.onload = () => {
         // Отправляем сообщение во фрейм:
-        iframe.contentWindow.postMessage({ type: 'ping' }, 'https://child.com');
+        iframe.contentWindow.postMessage({type: 'ping'}, 'https://child.com');
         // 🚨 ОБЯЗАТЕЛЬНО указываем origin получателя,
     };
 
@@ -878,7 +861,7 @@ shop.example.com
         console.log('Сообщение от родителя:', event.data);
 
         // Отправляем родителю:
-        event.source.postMessage({ type: 'pong' }, event.origin);
+        event.source.postMessage({type: 'pong'}, event.origin);
     });
 </script>
 ```
@@ -892,7 +875,8 @@ shop.example.com
 
 ## <a name="cors"></a> 🔐 Что такое CORS?
 
-**CORS** (Cross-Origin Resource Sharing) — это механизм, который позволяет серверу явно указать, каким другим источникам (origin) можно обращаться к его ресурсам через браузер.
+**CORS** (Cross-Origin Resource Sharing) — это механизм, который позволяет серверу явно указать, каким другим
+источникам (origin) можно обращаться к его ресурсам через браузер.
 
 👉 Без CORS браузер заблокирует клиентский запрос к ресурсу с другого origin, даже если сервер ответил 200 OK.
 
@@ -1300,7 +1284,8 @@ fetch("/api/transfer", {
 
 ## <a name="clickjacking"></a> 🖱️ Clickjacking
 
-**Clickjacking** (перехват кликов) — это тип атаки, при которой злоумышленник встраивает доверенный сайт в iframe, визуально
+**Clickjacking** (перехват кликов) — это тип атаки, при которой злоумышленник встраивает доверенный сайт в iframe,
+визуально
 маскирует его, и заставляет пользователя нажимать на реальные кнопки, думая, что он взаимодействует с чем-то другим.
 
 ---
@@ -1311,8 +1296,8 @@ fetch("/api/transfer", {
 2. На странице загружается iframe с доверенным сайтом (например, банк, соцсеть)
 3. Этот iframe:
 
-  * может быть прозрачным (opacity: 0)
-  * может быть подложен под кнопку («получить приз»)
+* может быть прозрачным (opacity: 0)
+* может быть подложен под кнопку («получить приз»)
 
 4. Пользователь нажимает — и на самом деле нажимает на настоящую кнопку во фрейме (например, "Подтвердить перевод", "
    Добавить в друзья", "Купить")
@@ -1795,7 +1780,7 @@ window.addEventListener('userLoggedIn', (e: Event) => {
 
 ```ts
 // MFE #1 — запись данных
-localStorage.setItem('userLoggedIn', JSON.stringify({ userId: 42 }));
+localStorage.setItem('userLoggedIn', JSON.stringify({userId: 42}));
 
 // MFE #2
 window.addEventListener('storage', (event: StorageEvent) => {
@@ -1823,7 +1808,7 @@ window.addEventListener('storage', (event: StorageEvent) => {
 ```ts
 // MFE #1 — отправка
 const channel = new BroadcastChannel('mfe_channel');
-channel.postMessage({ userId: 42 });
+channel.postMessage({userId: 42});
 
 // MFE #2 — прослушивание
 const channel = new BroadcastChannel('mfe_channel');
@@ -1879,7 +1864,7 @@ export class SharedStore<T> {
 ```tsx
 // В контейнере:
 const store = new SharedStore<{ userId: number }>();
-store.set({ userId: 1 });
+store.set({userId: 1});
 
 <ReactMFE1 sharedStore={store}/>
 <ReactMFE2 sharedStore={store}/>
@@ -1903,7 +1888,7 @@ store.set({ userId: 1 });
 // shared-store.ts
 
 // 1️⃣ с Zustand:
-import { create } from 'zustand';
+import {create} from 'zustand';
 
 type State = {
   user: { id: number } | null;
@@ -1912,11 +1897,11 @@ type State = {
 
 export const useSharedStore = create<State>((set) => ({
   user: null,
-  setUser: (user) => set({ user }),
+  setUser: (user) => set({user}),
 }));
 
 // 2️⃣ с EventEmitter:
-import { EventEmitter } from 'events';
+import {EventEmitter} from 'events';
 
 export const eventBus = new EventEmitter();
 ```
@@ -1940,7 +1925,7 @@ new ModuleFederationPlugin({
 
 ```js
 // MFE #1
-import { sharedStore } from 'shared-store';
+import {sharedStore} from 'shared-store';
 
 useEffect(() => {
     // 1️⃣ с Zustand:
@@ -2068,7 +2053,8 @@ BFS гарантирует, что первая встреча с target буд�
 🔹 Группировка чисел по составу цифр
 
 📘 Условие:
-Даны целые положительные числа. Нужно сгруппировать их по одинаковому составу цифр (например, 123 и 321 попадают в одну группу).
+Даны целые положительные числа. Нужно сгруппировать их по одинаковому составу цифр (например, 123 и 321 попадают в одну
+группу).
 
 📥 Ввод:
 
@@ -2080,35 +2066,35 @@ BFS гарантирует, что первая встреча с target буд�
 
 ```js
 [
-  [321, 123, 132, 231, 213, 312],
-  [456, 654]
+    [321, 123, 132, 231, 213, 312],
+    [456, 654]
 ]
 ```
 
 ```js
 function groupNumbers(numbers) {
-  const groups = {};
+    const groups = {};
 
-  for (const number of numbers) {
-    const digitCount = Array(10).fill(0);
+    for (const number of numbers) {
+        const digitCount = Array(10).fill(0);
 
-    let initialNumber = number;
+        let initialNumber = number;
 
-    while (initialNumber > 0) {
-      digitCount[initialNumber % 10]++; // num % 10 - берет последнюю цифру числа - увеличиваем считчик этого числа
-      initialNumber = Math.floor(initialNumber / 10); // Удаляем последнюю цифру
+        while (initialNumber > 0) {
+            digitCount[initialNumber % 10]++; // num % 10 - берет последнюю цифру числа - увеличиваем считчик этого числа
+            initialNumber = Math.floor(initialNumber / 10); // Удаляем последнюю цифру
+        }
+
+        const key = digitCount.join('#');
+
+        if (!groups[key]) {
+            groups[key] = [];
+        }
+
+        groups[key].push(number);
     }
 
-    const key = digitCount.join('#');
-
-    if (!groups[key]) {
-      groups[key] = [];
-    }
-
-    groups[key].push(number);
-  }
-
-  return Object.values(groups);
+    return Object.values(groups);
 }
 ```
 
@@ -2134,41 +2120,42 @@ function groupNumbers(numbers) {
 
 ```js
 function createRange(numbers) {
-  if (!numbers.length) return '';
+    if (!numbers.length) return '';
 
-  const result = [];
-  const sortedNumbers = [...numbers].sort((a, b) => a - b);
+    const result = [];
+    const sortedNumbers = [...numbers].sort((a, b) => a - b);
 
-  let startRange = sortedNumbers[0];
-  let endRange = sortedNumbers[0];
+    let startRange = sortedNumbers[0];
+    let endRange = sortedNumbers[0];
 
-  // Начинаем с 2 элемента:
-  for (let i = 1; i < sortedNumbers.length; i++) {
-    const number = sortedNumbers[i];
+    // Начинаем с 2 элемента:
+    for (let i = 1; i < sortedNumbers.length; i++) {
+        const number = sortedNumbers[i];
 
-    if (number === endRange + 1) {
-      endRange = number; // продолжаем диапазон
-    } else {
-      result.push(createRangeValue(startRange, endRange)); // сохраняем завершённый диапазон
-      startRange = number; // начинаем новый диапазон
-      endRange = number; // начинаем новый диапазон
+        if (number === endRange + 1) {
+            endRange = number; // продолжаем диапазон
+        } else {
+            result.push(createRangeValue(startRange, endRange)); // сохраняем завершённый диапазон
+            startRange = number; // начинаем новый диапазон
+            endRange = number; // начинаем новый диапазон
+        }
     }
-  }
 
-  result.push(createRangeValue(startRange, endRange));
+    result.push(createRangeValue(startRange, endRange));
 
-  return result.join(',');
+    return result.join(',');
 }
 
 function createRangeValue(a, b) {
-  return a === b ? `${a}` : `${a}-${b}`;
+    return a === b ? `${a}` : `${a}-${b}`;
 }
 ```
 
 🔹 Глубокое клонирование объекта
 
 📘 Условие:
-Реализуй функцию `deepClone`, которая создаёт полную копию объекта или массива. Циклические ссылки должны поддерживаться (не приводят к бесконечной рекурсии).
+Реализуй функцию `deepClone`, которая создаёт полную копию объекта или массива. Циклические ссылки должны
+поддерживаться (не приводят к бесконечной рекурсии).
 
 📥 Ввод:
 
@@ -2257,14 +2244,14 @@ function deepEqual(a, b) {
 
 ```js
 function curry(fn) {
-  return function curried(...args) {
-    if (args.length >= fn.length) {
-      return fn.apply(this, args);
-    }
-    return function (...next) {
-      return curried.apply(this, args.concat(next));
+    return function curried(...args) {
+        if (args.length >= fn.length) {
+            return fn.apply(this, args);
+        }
+        return function (...next) {
+            return curried.apply(this, args.concat(next));
+        };
     };
-  };
 }
 ```
 
@@ -2272,38 +2259,59 @@ function curry(fn) {
 
 ```js
 function myBind(fn, ctx, ...presetArgs) {
-  return function (...args) {
-    return fn.apply(ctx, [...presetArgs, ...args]);
-  };
+    return function (...args) {
+        return fn.apply(ctx, [...presetArgs, ...args]);
+    };
 }
 ```
 
-🔹 Сортировка пузырьком
+🔹 Сортировка пузырьком O(n²)
 
 ```js
 function bubbleSort(arr) {
-  const result = arr.slice();
-  const length = result.length;
+    const result = arr.slice();
+    const length = result.length;
 
-  for (let i = 0; i < length - 1; i++) {
-    let swapped = false;
+    for (let i = 0; i < length - 1; i++) {
+        let swapped = false;
 
-    for (let j = 0; j < length - 1 - i; j++) {
-      if (result[j] > result[j + 1]) {
-        const maxSwap = result[j];
+        for (let j = 0; j < length - 1 - i; j++) {
+            if (result[j] > result[j + 1]) {
+                const maxSwap = result[j];
 
-        result[j] = result[j + 1];
-        result[j + 1] = maxSwap;
+                result[j] = result[j + 1];
+                result[j + 1] = maxSwap;
 
-        swapped = true;
-      }
+                swapped = true;
+            }
+        }
+
+        // Если за проход не было перестановок — массив уже отсортирован:
+        if (!swapped) break;
     }
 
-    // Если за проход не было перестановок — массив уже отсортирован:
-    if (!swapped) break;
-  }
+    return result;
+}
 
-  return result;
+// Реализация Quick Sort -> O(n log n) среднее, O(n²) худшее
+function quickSort(arr: number[]): number[] {
+    if (arr.length <= 1) {
+        return arr;
+    }
+
+    const pivot = arr[arr.length - 1];
+    const left: number[] = [];
+    const right: number[] = [];
+
+    for (let i = 0; i < arr.length - 1; i++) {
+        if (arr[i] < pivot) {
+            left.push(arr[i]);
+        } else {
+            right.push(arr[i]);
+        }
+    }
+
+    return [...quickSort(left), pivot, ...quickSort(right)];
 }
 ```
 
@@ -2312,83 +2320,83 @@ function bubbleSort(arr) {
 ```js
 /** Реализация Promise.all: */
 function promiseAll(promises) {
-  return new Promise((resolve, reject) => {
-    const result = [];
-    let completedCount = 0;
+    return new Promise((resolve, reject) => {
+        const result = [];
+        let completedCount = 0;
 
-    // Если массив пустой — резолвим пустой массив
-    if (!promises.length) return resolve([]);
+        // Если массив пустой — резолвим пустой массив
+        if (!promises.length) return resolve([]);
 
-    promises.forEach((promise, index) => {
-      // Оборачиваем значение в Promise на случай, если это не промис
-      Promise.resolve(promise)
-        .then((value) => {
-          result[index] = value;
+        promises.forEach((promise, index) => {
+            // Оборачиваем значение в Promise на случай, если это не промис
+            Promise.resolve(promise)
+                .then((value) => {
+                    result[index] = value;
 
-          completedCount++;
+                    completedCount++;
 
-          if (completedCount === promises.length) resolve(result);
-        })
-        .catch(reject);
+                    if (completedCount === promises.length) resolve(result);
+                })
+                .catch(reject);
+        });
     });
-  });
 }
 
 /** Реализация Promise.allSettled: */
 function promiseAllSettled(promises) {
-  return new Promise((resolve, reject) => {
-    const result = [];
+    return new Promise((resolve, reject) => {
+        const result = [];
 
-    let completedCount = 0;
+        let completedCount = 0;
 
-    if (!promises.length) resolve([]);
+        if (!promises.length) resolve([]);
 
-    promises.forEach((promise, index) => {
-      Promise.resolve(promise)
-        .then((value) => {
-          result[index] = { status: 'fulfilled', value };
-        })
-        .catch((reason) => {
-          result[index] = { status: 'rejected', reason };
-        })
-        .finally(() => {
-          completedCount++;
+        promises.forEach((promise, index) => {
+            Promise.resolve(promise)
+                .then((value) => {
+                    result[index] = {status: 'fulfilled', value};
+                })
+                .catch((reason) => {
+                    result[index] = {status: 'rejected', reason};
+                })
+                .finally(() => {
+                    completedCount++;
 
-          if (completedCount === promises.length) resolve(result);
+                    if (completedCount === promises.length) resolve(result);
+                });
         });
     });
-  });
 }
 
 /** Реализация Promise.any: */
 function promiseAny(promises) {
-  return new Promise((resolve, reject) => {
-    const rejections = [];
+    return new Promise((resolve, reject) => {
+        const rejections = [];
 
-    let rejectedCount = 0;
+        let rejectedCount = 0;
 
-    if (!promises.length) reject(new AggregateError([], 'empty list'));
+        if (!promises.length) reject(new AggregateError([], 'empty list'));
 
-    promises.forEach((promise, index) => {
-      Promise.resolve(promise)
-        .then(resolve)
-        .catch((reason) => {
-          rejections[index] = reason;
-          rejectedCount++;
+        promises.forEach((promise, index) => {
+            Promise.resolve(promise)
+                .then(resolve)
+                .catch((reason) => {
+                    rejections[index] = reason;
+                    rejectedCount++;
 
-          if (rejectedCount === promises.length) reject(new AggregateError(rejections, 'all promises rejected'));
+                    if (rejectedCount === promises.length) reject(new AggregateError(rejections, 'all promises rejected'));
+                });
         });
     });
-  });
 }
 
 /** Реализация Promise.race: */
 function promiseRace(promises) {
-  return new Promise((resolve, reject) => {
-    promises.forEach((p) => {
-      Promise.resolve(p).then(resolve, reject);
+    return new Promise((resolve, reject) => {
+        promises.forEach((p) => {
+            Promise.resolve(p).then(resolve, reject);
+        });
     });
-  });
 }
 ```
 
@@ -2396,26 +2404,26 @@ function promiseRace(promises) {
 
 ```js
 const BRACKETS = {
-  '(': ')',
-  '[': ']',
-  '{': '}',
-  '<': '>',
+    '(': ')',
+    '[': ']',
+    '{': '}',
+    '<': '>',
 };
 
 function checkBrackets(value) {
-  const stack = [];
+    const stack = [];
 
-  for (const char of value) {
-    if (BRACKETS[char]) {
-      stack.push(char);
-    } else {
-      const last = stack.pop();
+    for (const char of value) {
+        if (BRACKETS[char]) {
+            stack.push(char);
+        } else {
+            const last = stack.pop();
 
-      if (BRACKETS[last] !== char) return false;
+            if (BRACKETS[last] !== char) return false;
+        }
     }
-  }
 
-  return stack.length === 0;
+    return stack.length === 0;
 }
 ```
 
@@ -2423,26 +2431,26 @@ function checkBrackets(value) {
 
 ```js
 function sortEvenNumbers(numbers) {
-  const evenIndexes = [];
-  const evenValues = [];
+    const evenIndexes = [];
+    const evenValues = [];
 
-  // Собираем индексы и значения:
-  for (let i = 0; i < numbers.length; i++) {
-    if (numbers[i] % 2 === 0) {
-      evenIndexes.push(i);
-      evenValues.push(numbers[i]);
+    // Собираем индексы и значения:
+    for (let i = 0; i < numbers.length; i++) {
+        if (numbers[i] % 2 === 0) {
+            evenIndexes.push(i);
+            evenValues.push(numbers[i]);
+        }
     }
-  }
 
-  // Сортируем четные значения:
-  evenValues.sort((a, b) => a - b);
+    // Сортируем четные значения:
+    evenValues.sort((a, b) => a - b);
 
-  // Проходим по четным индексам и вставляем в исходный массив
-  for (let i = 0; i < evenIndexes.length; i++) {
-    numbers[evenIndexes[i]] = evenValues[i];
-  }
+    // Проходим по четным индексам и вставляем в исходный массив
+    for (let i = 0; i < evenIndexes.length; i++) {
+        numbers[evenIndexes[i]] = evenValues[i];
+    }
 
-  return numbers;
+    return numbers;
 }
 ```
 
@@ -2542,20 +2550,20 @@ console.log('end'); //  2️⃣ Синхронно: выводим 'end'
 console.log('0'); // 1️⃣ Синхронно: сразу выводим '0'
 
 setTimeout(() => {
-  console.log('1'); // 6️⃣ Макротаска: выполнится через ~100мс после основной фазы и микротаск
+    console.log('1'); // 6️⃣ Макротаска: выполнится через ~100мс после основной фазы и микротаск
 }, 100);
 
 const p = new Promise((resolve) => {
-  console.log('2'); // 2️⃣ Синхронно: выводим '2' при создании промиса
-  resolve(); // Промис переходит в состояние fulfilled
+    console.log('2'); // 2️⃣ Синхронно: выводим '2' при создании промиса
+    resolve(); // Промис переходит в состояние fulfilled
 });
 
 p.then(() => {
-  console.log('3'); // 4️⃣ Микротаска: выполнится после завершения основной фазы
+    console.log('3'); // 4️⃣ Микротаска: выполнится после завершения основной фазы
 });
 
 setTimeout(() => {
-  console.log('5'); // 5️⃣ Макротаска: выполнится в первом available макротасковом тике (~0мс)
+    console.log('5'); // 5️⃣ Макротаска: выполнится в первом available макротасковом тике (~0мс)
 }, 0);
 
 console.log('6'); // 3️⃣ Синхронно: последняя строка в основном потоке
@@ -2612,7 +2620,8 @@ type Data = { id: number; name: string };
 type DataWithPrefix = AddPrefix<Data, 'my_'>; // -> { my_id: number; my_name: string }
 ```
 
-Ниже — структурированный и чуть более чёткий вариант твоего текста в Markdown. Я сократил повторы, убрал лишние смайлы, добавил единообразие оформления и сделал заголовки более строгими.
+Ниже — структурированный и чуть более чёткий вариант твоего текста в Markdown. Я сократил повторы, убрал лишние смайлы,
+добавил единообразие оформления и сделал заголовки более строгими.
 
 ---
 
@@ -2677,8 +2686,6 @@ type DataWithPrefix = AddPrefix<Data, 'my_'>; // -> { my_id: number; my_name: st
 
 ---
 
-
-
 ## <a name="workers"></a> 📊 Web Workers VS Service Workers
 
 ### Web Workers
@@ -2696,7 +2703,7 @@ type DataWithPrefix = AddPrefix<Data, 'my_'>; // -> { my_id: number; my_name: st
 
 ```js
 self.onmessage = (e) => {
-    const { x } = e.data;
+    const {x} = e.data;
     self.postMessage(x * 2);
 };
 ```
@@ -2707,7 +2714,7 @@ self.onmessage = (e) => {
 // main.js
 const worker = new Worker('worker.js');
 
-worker.postMessage({ x: 1 });
+worker.postMessage({x: 1});
 
 worker.onmessage = (e) => {
     console.log('Result:', e.data);
@@ -2753,20 +2760,20 @@ worker.onmessage = (e) => {
 
 ```js
 self.addEventListener('fetch', event => {
-  event.respondWith(handleRequest(event.request));
+    event.respondWith(handleRequest(event.request));
 });
 
 async function handleRequest(request) {
-  const cached = await caches.match(request);
+    const cached = await caches.match(request);
 
-  if (cached) return cached;
+    if (cached) return cached;
 
-  const response = await fetch(request);
+    const response = await fetch(request);
 
-  const cache = await caches.open('my-cache');
-  cache.put(request, response.clone());
+    const cache = await caches.open('my-cache');
+    cache.put(request, response.clone());
 
-  return response;
+    return response;
 }
 ```
 
@@ -2824,7 +2831,7 @@ const debounce = (fn, delay) => {
 };
 
 const throttle = (fn, delay) => {
-    let lastCall = 0;	
+    let lastCall = 0;
 
     return function (...args) {
         const now = Date.now();
@@ -2840,7 +2847,8 @@ const throttle = (fn, delay) => {
 
 ## <a name="gb"></a> 🧹 Garbage Collector
 
-**Garbage Collector** — часть движка (V8, SpiderMonkey и др.), которая автоматически освобождает память, когда объект больше не нужен.
+**Garbage Collector** — часть движка (V8, SpiderMonkey и др.), которая автоматически освобождает память, когда объект
+больше не нужен.
 
 JS — язык с автоматическим управлением памятью: программист не освобождает память вручную, всё делает GC.
 
@@ -2869,10 +2877,10 @@ GC стартует с корневых объектов (window, стек вы�
 
 Всё, что не помечено → unreachable → память освобождается.
 
-
 ## <a name="spec-css"></a> 🎨 Формула специфичности в CSS:
 
 Специфичность записывается как четырёхзначное число: (a,b,c,d)
+
 * a — inline-стили: 1, если есть, иначе 0.
 * b — количество ID-селекторов.
 * c — количество классов, атрибутов, псевдоклассов.
@@ -2907,4 +2915,319 @@ GC стартует с корневых объектов (window, стек вы�
 * Анимировать `transform` и `opacity`.
 * Избегать анимации `width`, `height`, `top`, `left` и подобных.
 * Для сложных случаев использовать `will-change` или GPU-ускорение осознанно.
+
+## <a name="princips"></a> 🫆 Принципы ООП
+
+### Абстракция (Abstraction)
+
+* Суть: определить общий контракт и поведение, без деталей реализации.
+
+* Пример: `abstract class Shape` описывает, что у любой фигуры есть метод `area()`, но не указывает, как именно
+  вычислять площадь.
+
+```ts
+abstract class Shape {
+  abstract area(): number; // Абстрактный метод — обязателен для наследников
+
+  printArea() {
+    console.log(`Area: ${this.area()}`);
+  }
+}
+```
+
+**Польза**: позволяет работать с общим типом `Shape` и не заботиться о конкретной геометрии — детали решают наследники (
+Circle, Square).
+
+---
+
+### Инкапсуляция (Encapsulation)
+
+* **Суть:** скрыть внутреннее состояние объекта и управлять доступом к нему только через методы.
+
+* **Пример:** в `Circle` поле `radius` объявлено `private`. Извне его нельзя менять напрямую — только через публичные
+  методы.
+
+```ts
+class Circle extends Shape {
+  constructor(private radius: number) {
+    super();
+  }
+
+  area(): number {
+    return Math.PI * this.radius ** 2;
+  }
+}
+```
+
+**Польза:** защищает данные от неконтролируемого изменения, поддерживает целостность объекта.
+
+---
+
+### Наследование (Inheritance)
+
+* **Суть:** создавать новые классы на основе существующих, переиспользуя их логику.
+
+* **Пример:** `Square` наследует `Shape` через `extends` — получают метод `printArea()` и обязаны реализовать `area()`.
+
+```ts
+class Square extends Shape {
+  constructor(private side: number) {
+    super();
+  }
+
+  area(): number {
+    return this.side ** 2;
+  }
+}
+```
+
+**Польза:** уменьшает дублирование кода, позволяет расширять поведение базового класса.
+
+---
+
+### Полиморфизм (Polymorphism)
+
+* **Суть:** один интерфейс — разные реализации.
+
+* **Пример:** метод `printArea()` вызывает `area()`, не зная, `Shape` это `Circle` или `Square`. Каждый класс считает
+  по-своему.
+
+```ts
+const shapes: Shape[] = [
+  new Circle(5),
+  new Square(4)
+];
+
+shapes.forEach(shape => shape.printArea());
+```
+
+**Польза:** можно работать с разными типами фигур через общий тип `Shape` — детали скрыты внутри реализации.
+
+Даю кратко и в том же формате — **ключевые паттерны проектирования**, с акцентом на их суть и JS/TS-примеры.
+
+---
+
+## <a name="patterns"></a> ## 🦿 Паттерны проектирования
+
+### Singleton
+
+* **Суть:** гарантирует, что у класса есть только один экземпляр.
+
+* **Пример:** общий конфиг или глобальный менеджер состояния.
+
+```ts
+class Singleton {
+  private static instance: Singleton;
+
+  private constructor() {
+  }
+
+  static getInstance() {
+    if (!Singleton.instance) {
+      Singleton.instance = new Singleton();
+    }
+    return Singleton.instance;
+  }
+}
+
+const s1 = Singleton.getInstance();
+const s2 = Singleton.getInstance();
+// s1 === s2
+```
+
+**Польза:** один источник правды, не дублируется.
+
+---
+
+### Factory Method
+
+* **Суть:** делегирует создание объектов подклассам или фабричным методам.
+
+* **Пример:** генерация объектов с разной реализацией под общий интерфейс.
+
+```ts
+interface Button {
+  render(): void;
+}
+
+class WinButton implements Button {
+  render() {
+    console.log('Windows Button');
+  }
+}
+
+class MacButton implements Button {
+  render() {
+    console.log('Mac Button');
+  }
+}
+
+function createButton(os: string): Button {
+  if (os === 'windows') return new WinButton();
+  return new MacButton();
+}
+
+const button = createButton('mac');
+button.render();
+```
+
+**Польза:** код не зависит от конкретных классов.
+
+---
+
+### Observer
+
+* **Суть:** подписчики слушают объект и реагируют на изменения.
+
+* **Пример:** реализация подписки на события.
+
+```ts
+class Subject {
+  private observers: (() => void)[] = [];
+
+  subscribe(observer: () => void) {
+    this.observers.push(observer);
+  }
+
+  notify() {
+    this.observers.forEach(cb => cb());
+  }
+}
+
+const subject = new Subject();
+subject.subscribe(() => console.log('Updated!'));
+subject.notify();
+```
+
+**Польза:** легко строить реактивные системы.
+
+---
+
+### Strategy
+
+* **Суть:** выбирать алгоритм во время выполнения.
+
+* **Пример:** сортировка с разными стратегиями.
+
+```ts
+interface SortStrategy {
+  sort(data: number[]): number[];
+}
+
+class AscendingSort implements SortStrategy {
+  sort(data: number[]) {
+    return [...data].sort((a, b) => a - b);
+  }
+}
+
+class DescendingSort implements SortStrategy {
+  sort(data: number[]) {
+    return [...data].sort((a, b) => b - a);
+  }
+}
+
+class Sorter {
+  constructor(private strategy: SortStrategy) {
+  }
+
+  setStrategy(strategy: SortStrategy) {
+    this.strategy = strategy;
+  }
+
+  sort(data: number[]) {
+    return this.strategy.sort(data);
+  }
+}
+
+const sorter = new Sorter(new AscendingSort());
+console.log(sorter.sort([3, 1, 2])); // [1, 2, 3]
+sorter.setStrategy(new DescendingSort());
+console.log(sorter.sort([3, 1, 2])); // [3, 2, 1]
+```
+
+**Польза:** меняешь логику без изменения контекста.
+
+---
+
+### Decorator
+
+* **Суть:** динамически добавляет новые возможности объекту.
+
+* **Пример:** обёртка, расширяющая метод.
+
+```ts
+class Coffee {
+  cost() {
+    return 5;
+  }
+}
+
+class MilkDecorator {
+  constructor(private coffee: Coffee) {
+  }
+
+  cost() {
+    return this.coffee.cost() + 2;
+  }
+}
+
+const coffee = new Coffee();
+const milkCoffee = new MilkDecorator(coffee);
+console.log(milkCoffee.cost()); // 7
+```
+
+**Польза:** гибкое расширение без изменения исходного класса.
+
+---
+
+### Adapter
+
+* **Суть:** приводит интерфейс одного класса к интерфейсу, который ожидает клиент.
+
+* **Пример:** старый API и новый API.
+
+```ts
+class OldApi {
+  request() {
+    return 'Old API';
+  }
+}
+
+class NewApi {
+  get() {
+    return 'New API';
+  }
+}
+
+class Adapter {
+  constructor(private newApi: NewApi) {
+  }
+
+  request() {
+    return this.newApi.get();
+  }
+}
+
+const oldApi = new OldApi();
+const newApi = new NewApi();
+const adapted = new Adapter(newApi);
+
+console.log(oldApi.request()); // Old API
+console.log(adapted.request()); // New API
+```
+
+**Польза:** совместимость старого и нового кода.
+
+---
+
+## Итог
+
+| Паттерн   | Суть                      |
+|-----------|---------------------------|
+| Singleton | Один экземпляр            |
+| Factory   | Гибкое создание объектов  |
+| Observer  | Реакция на события        |
+| Strategy  | Переключаемые алгоритмы   |
+| Decorator | Динамическое расширение   |
+| Adapter   | Совместимость интерфейсов |
 
