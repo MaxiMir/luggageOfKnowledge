@@ -1926,7 +1926,7 @@ useEffect(() => {
 
 ## <a name="tasks"></a> 📋 Задачи:
 
-🔹 Задача 1: Метод двух указателей
+🔹 Метод двух указателей
 
 Дан отсортированный массив чисел и целевое значение `target`.
 Найди индексы двух чисел, сумма которых равна `target`.
@@ -1955,11 +1955,7 @@ function findTwoSum(numbers: number[], target: number) {
 
 ⏱️ Сложность: O(n)
 
-Почему работает: массив отсортирован → можно двигать указатели к нужной сумме.
-
-🔹 Задача 2: Бинарный поиск
-
-📘 Условие: Реализуй бинарный поиск в отсортированном массиве.
+🔹 Бинарный поиск в отсортированном массиве.
 
 📥 Ввод: `numbers = [1, 3, 5, 7, 9]`, `target = 5`
 
@@ -1988,7 +1984,7 @@ function binarySearch(numbers, target) {
 
 Ключ: уменьшение области поиска в 2 раза каждый раз.
 
-🔹 Задача 3: Поиск в ширину (BFS)
+🔹 Поиск в ширину (BFS)
 
 📘 Условие: Найди кратчайший путь от вершины start до target в неориентированном графе.
 
@@ -2038,7 +2034,7 @@ function bfsShortestPath(graph: Record<number, number[]>, start: number, target:
 
 BFS гарантирует, что первая встреча с target будет по кратчайшему пути.
 
-🔹 Задача 4: Группировка чисел по составу цифр
+🔹 Группировка чисел по составу цифр
 
 📘 Условие:
 Даны целые положительные числа. Нужно сгруппировать их по одинаковому составу цифр (например, 123 и 321 попадают в одну группу).
@@ -2087,7 +2083,7 @@ function groupNumbers(numbers) {
 
 ⏱️ Сложность: O(n * k)
 
-🔹 Задача: Форматирование числовых диапазонов
+🔹 Форматирование числовых диапазонов
 
 📘 Условие: Дан неотсортированный массив целых чисел values: number[]. Нужно объединить смежные последовательные числа в
 диапазоны,
@@ -2138,7 +2134,7 @@ function createRangeValue(a, b) {
 }
 ```
 
-🔹 Задача 3: Глубокое клонирование объекта
+🔹 Глубокое клонирование объекта
 
 📘 Условие:
 Реализуй функцию `deepClone`, которая создаёт полную копию объекта или массива. Циклические ссылки должны поддерживаться (не приводят к бесконечной рекурсии).
@@ -2226,13 +2222,9 @@ function deepEqual(a, b) {
 
 ⏱️ Сложность: O(n log n)
 
+🔹 Каррирование
+
 ```js
-// Каррирование:
-// Преобразует функцию с множеством аргументов
-// в последовательность вложенных функций,
-// каждая из которых принимает часть аргументов.
-// Когда набрано достаточно аргументов (fn.length),
-// исходная функция вызывается с ними.
 function curry(fn) {
   return function curried(...args) {
     if (args.length >= fn.length) {
@@ -2243,24 +2235,21 @@ function curry(fn) {
     };
   };
 }
+```
 
-// Реализация bind:
-// Фиксирует контекст this и часть аргументов (частичное применение).
-// Возвращает новую функцию, которая вызывает исходную
-// с переданным контекстом и всеми аргументами.
+🔹 bind
+
+```js
 function myBind(fn, ctx, ...presetArgs) {
   return function (...args) {
     return fn.apply(ctx, [...presetArgs, ...args]);
   };
 }
+```
 
-// Сортировка пузырьком:
-// Последовательно сравнивает пары соседних элементов,
-// переставляя их, если порядок нарушен.
-// После каждого прохода самый большой элемент
-// «всплывает» в конец массива.
-// Оптимизация: если за проход не было перестановок,
-// сортировка завершается досрочно.
+🔹 Сортировка пузырьком
+
+```js
 function bubbleSort(arr) {
   const result = arr.slice();
   const length = result.length;
@@ -2287,7 +2276,144 @@ function bubbleSort(arr) {
 }
 ```
 
+🔹 Promise
 
+```js
+/** Реализация Promise.all: */
+function promiseAll(promises) {
+  return new Promise((resolve, reject) => {
+    const result = [];
+    let completedCount = 0;
+
+    // Если массив пустой — резолвим пустой массив
+    if (!promises.length) return resolve([]);
+
+    promises.forEach((promise, index) => {
+      // Оборачиваем значение в Promise на случай, если это не промис
+      Promise.resolve(promise)
+        .then((value) => {
+          result[index] = value;
+
+          completedCount++;
+
+          if (completedCount === promises.length) resolve(result);
+        })
+        .catch(reject);
+    });
+  });
+}
+
+/** Реализация Promise.allSettled: */
+function promiseAllSettled(promises) {
+  return new Promise((resolve, reject) => {
+    const result = [];
+
+    let completedCount = 0;
+
+    if (!promises.length) resolve([]);
+
+    promises.forEach((promise, index) => {
+      Promise.resolve(promise)
+        .then((value) => {
+          result[index] = { status: 'fulfilled', value };
+        })
+        .catch((reason) => {
+          result[index] = { status: 'rejected', reason };
+        })
+        .finally(() => {
+          completedCount++;
+
+          if (completedCount === promises.length) resolve(result);
+        });
+    });
+  });
+}
+
+/** Реализация Promise.any: */
+function promiseAny(promises) {
+  return new Promise((resolve, reject) => {
+    const rejections = [];
+
+    let rejectedCount = 0;
+
+    if (!promises.length) reject(new AggregateError([], 'empty list'));
+
+    promises.forEach((promise, index) => {
+      Promise.resolve(promise)
+        .then(resolve)
+        .catch((reason) => {
+          rejections[index] = reason;
+          rejectedCount++;
+
+          if (rejectedCount === promises.length) reject(new AggregateError(rejections, 'all promises rejected'));
+        });
+    });
+  });
+}
+
+/** Реализация Promise.race: */
+function promiseRace(promises) {
+  return new Promise((resolve, reject) => {
+    promises.forEach((p) => {
+      Promise.resolve(p).then(resolve, reject);
+    });
+  });
+}
+```
+
+🔹 Проверка закрывающих ковычек
+
+```js
+const BRACKETS = {
+  '(': ')',
+  '[': ']',
+  '{': '}',
+  '<': '>',
+};
+
+function checkBrackets(value) {
+  const stack = [];
+
+  for (const char of value) {
+    if (BRACKETS[char]) {
+      stack.push(char);
+    } else {
+      const last = stack.pop();
+
+      if (BRACKETS[last] !== char) return false;
+    }
+  }
+
+  return stack.length === 0;
+}
+```
+
+🔹 Сортировка только четных чисел
+
+```js
+function sortEvenNumbers(numbers) {
+  const evenIndexes = [];
+  const evenValues = [];
+
+  // Собираем индексы и значения:
+  for (let i = 0; i < numbers.length; i++) {
+    if (numbers[i] % 2 === 0) {
+      evenIndexes.push(i);
+      evenValues.push(numbers[i]);
+    }
+  }
+
+  // Сортируем четные значения:
+  evenValues.sort((a, b) => a - b);
+
+  // Проходим по четным индексам и вставляем в исходный массив
+  for (let i = 0; i < evenIndexes.length; i++) {
+    numbers[evenIndexes[i]] = evenValues[i];
+  }
+
+  return numbers;
+}
+```
 
 ## <a name="eventloop"></a> 🔃 Задачи на EventLoop
 
@@ -2455,56 +2581,70 @@ type Data = { id: number; name: string };
 type DataWithPrefix = AddPrefix<Data, 'my_'>; // -> { my_id: number; my_name: string }
 ```
 
-
-## <a name="virtual-dom"></a> 🗂 Virtual DOM (VDOM)
-
-> Virtual DOM (VDOM) — это абстрактное представление реального DOM в памяти JavaScript.
-
-* Реальный DOM медленный для частых прямых манипуляций.
-* Virtual DOM — это легковесная копия структуры DOM, которую React использует для расчётов и оптимизации.
+Ниже — структурированный и чуть более чёткий вариант твоего текста в Markdown. Я сократил повторы, убрал лишние смайлы, добавил единообразие оформления и сделал заголовки более строгими.
 
 ---
 
-### **Как работает**
+## Virtual DOM (VDOM)
 
-* **Рендер**: Компонент создаёт дерево объектов (VDOM-дерево). Это обычные JS-объекты (`{ type: 'div', props: {...} }`).
+**Virtual DOM (VDOM)** — абстрактное представление реального DOM в памяти JavaScript.
 
-* Сравнение (**Diffing**): При изменениях React создаёт новое VDOM-дерево. Старое и новое сравниваются (алгоритм **Reconciliation**).
-
-* **Patch**: React находит минимальный набор изменений (появился новый элемент, изменились атрибуты, удалился узел).
-
-* **Commit:** React применяет эти изменения к реальному DOM одной или несколькими пачками.
-
+* Реальный DOM медленный при частых прямых манипуляциях.
+* Virtual DOM — лёгкая копия структуры DOM, которую React использует для расчётов и оптимизации обновлений.
 
 ---
 
-### 📌 Особенности алгоритма **Diffing**
+## Как работает Virtual DOM
 
-* Сравнение происходит на уровне дерева: тип узла, props, key.
-* Если `key` в списке разный — React считает, что элемент другой.
-* Алгоритм оптимизирован: не сравнивает целиком, а по поддеревьям.
+1. **Рендер**
+   Компонент создаёт VDOM-дерево — обычные JS-объекты:
 
-### ℹ️  Reconciliation
+   ```js
+   { type: 'div', props: { ... } }
+   ```
 
-**Reconciliation** — это алгоритм React, который сравнивает два Virtual DOM-дерева и определяет:
+2. **Diffing (Сравнение)**
+   При изменениях создаётся новое VDOM-дерево. Старое и новое сравниваются алгоритмом **Reconciliation**.
 
-* какие элементы изменить
-* какие удалить
+3. **Patch (Вычисление изменений)**
+   React находит минимальный набор различий: новые элементы, изменённые атрибуты, удалённые узлы.
+
+4. **Commit (Применение)**
+   React применяет изменения к реальному DOM одной или несколькими пачками.
+
+---
+
+## Алгоритм Diffing
+
+* Сравнение происходит по дереву: тип узла, `props`, `key`.
+* Если `key` в списке разный — элемент считается другим.
+* Сравнение оптимизировано: выполняется по поддеревьям, а не всему дереву целиком.
+
+---
+
+## Reconciliation
+
+**Reconciliation** — процесс сравнения двух Virtual DOM-деревьев для определения:
+
+* какие элементы обновить,
+* какие удалить,
 * какие создать.
 
-Задача: найти минимально достаточный набор изменений, чтобы синхронизировать Virtual DOM с реальным DOM.
+Цель — вычислить минимально достаточный набор изменений для синхронизации Virtual DOM с реальным DOM.
 
---- 
+---
 
-### ℹ️ Что такое Fiber
+## Что такое Fiber
 
-Fiber — это новая архитектура React (с версии 16+), которая переписала Reconciliation.
+**Fiber** — архитектура React с версии 16+, переписывающая Reconciliation.
 
-Задача Fiber:
+Задачи Fiber:
 
-* Сделать Reconciliation инкрементальным и прерываемым.
-* Делить работу на маленькие куски (units of work).
+* Делить работу на мелкие единицы (**units of work**).
+* Делать Reconciliation инкрементальным и прерываемым.
 * Приостанавливать и возобновлять рендеринг, чтобы не блокировать главный поток.
+
+---
 
 
 
