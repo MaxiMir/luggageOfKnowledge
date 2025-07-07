@@ -1033,7 +1033,7 @@ document.getElementById("output").textContent = location.hash; // ✅ Безоп
 Устанавливает правила, откуда можно загружать скрипты
 
 ```
-Content-Security-Policy: default-src 'self'; script-src 'self'
+Content-Security-Policy: default-src 'self'; script-src 'self'; connect-src 'self' https://api.example.com https://auth.example.org;
 ```
 
 🔹 4. Санитизация (очистка) данных
