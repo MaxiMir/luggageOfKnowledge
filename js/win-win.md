@@ -2373,9 +2373,9 @@ function promiseAll(promises) {
 function promiseAllSettled(promises) {
     return new Promise((resolve, reject) => {
         const result = [];
-
         let completedCount = 0;
 
+        // Если массив пустой — резолвим пустой массив
         if (!promises.length) resolve([]);
 
         promises.forEach((promise, index) => {
