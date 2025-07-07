@@ -1030,7 +1030,7 @@ document.getElementById("output").textContent = location.hash; // ✅ Безоп
 
 🔹 3. Content Security Policy (CSP)
 
-Устанавливает правила, откуда можно загружать скрипты
+Устанавливает правила, откуда можно загружать скрипты и делать `fetch` запросы
 
 ```
 Content-Security-Policy: default-src 'self'; script-src 'self'; connect-src 'self' https://api.example.com https://auth.example.org;
