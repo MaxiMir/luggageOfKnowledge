@@ -1045,6 +1045,12 @@ import DOMPurify from 'dompurify';
 const clean = DOMPurify.sanitize(userInput);
 ```
 
+🔹 5. Установка `modsecurity` для Nginx
+
+Может распознавать XSS-паттерны и блокировать по сигнатурам. 
+
+Он анализирует не только URI, но и заголовки, тело запроса, куки и др.
+
 ## <a name="sandbox"></a> 🧱 Что такое sandbox?
 
 `sandbox` — это атрибут HTML-тега `iframe`, который включает ограничения безопасности для содержимого внутри iframe.
