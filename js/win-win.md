@@ -1955,7 +1955,7 @@ useEffect(() => {
 ```js
 function findTwoSum(numbers: number[], target: number) {
     let leftIndex = 0;
-    let rightIndex = numbers.at(-1); // numbers[numbers.length - 1]
+    let rightIndex = numbers.length - 1;
 
     while (leftIndex < rightIndex) {
         const sum = numbers[leftIndex] + numbers[rightIndex];
@@ -1983,7 +1983,7 @@ function findTwoSum(numbers: number[], target: number) {
 ```ts
 function binarySearch(numbers, target) {
   let leftIndex = 0;
-  let rightIndex = numbers.at(-1); // numbers[numbers.length - 1]
+  let rightIndex = numbers.length - 1;
 
   while (leftIndex <= rightIndex) {
     const middleIndex = Math.floor((leftIndex + rightIndex) / 2);
