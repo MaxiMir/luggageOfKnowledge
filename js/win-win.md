@@ -2129,35 +2129,35 @@ function groupNumbers(numbers) {
 ```
 
 ```js
-function createRange(numbers) {
-    if (!numbers.length) return '';
+function formatRanges(numbers) {
+  if (!numbers.length) return '';
 
-    const result = [];
-    const sortedNumbers = [...numbers].sort((a, b) => a - b);
+  const ranges = [];
+  const sortedNumbers = [...new Set(numbers)].sort((a, b) => a - b);
 
-    let startRange = sortedNumbers[0];
-    let endRange = sortedNumbers[0];
+  let startRange = sortedNumbers[0];
+  let endRange = sortedNumbers[0];
 
-    // Начинаем с 2 элемента:
-    for (let i = 1; i < sortedNumbers.length; i++) {
-        const number = sortedNumbers[i];
+  // Начинаем с 2 элемента:
+  for (let i = 1; i < sortedNumbers.length; i++) {
+    const number = sortedNumbers[i];
 
-        if (number === endRange + 1) {
-            endRange = number; // продолжаем диапазон
-        } else {
-            result.push(createRangeValue(startRange, endRange)); // сохраняем завершённый диапазон
-            startRange = number; // начинаем новый диапазон
-            endRange = number; // начинаем новый диапазон
-        }
+    if (number === endRange + 1) {
+      endRange = number; // продолжаем диапазон
+    } else {
+      ranges.push(formatRange(startRange, endRange)); // сохраняем завершённый диапазон
+      startRange = number; // начинаем новый диапазон
+      endRange = number; // начинаем новый диапазон
     }
+  }
 
-    result.push(createRangeValue(startRange, endRange));
+  ranges.push(formatRange(startRange, endRange));
 
-    return result.join(',');
+  return ranges.join(',');
 }
 
-function createRangeValue(a, b) {
-    return a === b ? `${a}` : `${a}-${b}`;
+function formatRange(a, b) {
+  return a === b ? `${a}` : `${a}-${b}`;
 }
 ```
 
