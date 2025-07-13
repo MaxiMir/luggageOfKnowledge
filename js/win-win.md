@@ -1990,9 +1990,9 @@ function binarySearch(numbers, target) {
     const middleIndex = Math.floor((leftIndex + rightIndex) / 2);
     const middleValue = numbers[middleIndex];
 
-    if (target === middleValue) return middleIndex;
+    if (middleValue === target) return middleIndex;
 
-    if (target > middleValue) leftIndex = middleIndex + 1;
+    if (middleValue < target) leftIndex = middleIndex + 1;
     else rightIndex = middleIndex - 1;
   }
 
