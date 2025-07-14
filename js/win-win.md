@@ -2255,15 +2255,16 @@ function deepEqual(a, b) {
 **🔹 Каррирование**
 
 ```js
-function curry(fn) {
-    return function curried(...args) {
-        if (args.length >= fn.length) {
-            return fn.apply(this, args);
-        }
-        return function (...next) {
-            return curried.apply(this, args.concat(next));
-        };
+function curry(originalFn) {
+  return function curried(...args) {
+    if (args.length >= originalFn.length) {
+      return originalFn.apply(this, args);
+    }
+
+    return function nextCurried(...nextArgs) {
+      return curried.apply(this, [...args, ...nextArgs]);
     };
+  };
 }
 ```
 
@@ -2284,50 +2285,49 @@ function myBind(fn, ctx, ...presetArgs) {
 **🔹 Сортировка пузырьком O(n²)**
 
 ```js
-function bubbleSort(arr) {
-    const result = arr.slice();
-    const length = result.length;
+function bubbleSort(numbers) {
+  const sorted = numbers.slice();
+  const length = sorted.length;
 
-    for (let i = 0; i < length - 1; i++) {
-        let swapped = false;
+  for (let i = 0; i < length - 1; i++) {
+    let swapped = false;
 
-        for (let j = 0; j < length - 1 - i; j++) {
-            if (result[j] > result[j + 1]) {
-                const maxSwap = result[j];
+    for (let j = 0; j < length - 1 - i; j++) {
+      if (sorted[j] > sorted[j + 1]) {
+        const temp = sorted[j];
 
-                result[j] = result[j + 1];
-                result[j + 1] = maxSwap;
+        sorted[j] = sorted[j + 1];
+        sorted[j + 1] = temp;
 
-                swapped = true;
-            }
-        }
-
-        // Если за проход не было перестановок — массив уже отсортирован:
-        if (!swapped) break;
+        swapped = true;
+      }
     }
 
-    return result;
+    // Если за проход не было перестановок — массив уже отсортирован:
+    if (!swapped) break;
+  }
+
+  return sorted;
 }
 
 // Реализация Quick Sort -> O(n log n) среднее, O(n²) худшее
-function quickSort(arr: number[]): number[] {
-    if (arr.length <= 1) {
-        return arr;
+function quickSort(numbers) {
+  if (numbers.length <= 1) return numbers;
+
+  const pivot = numbers[numbers.length - 1];
+  const left = [];
+  const right = [];
+
+  // Обход всех элементов, кроме pivot (последнего)
+  for (let i = 0; i < numbers.length - 1; i++) {
+    if (numbers[i] < pivot) {
+      left.push(numbers[i]);
+    } else {
+      right.push(numbers[i]);
     }
+  }
 
-    const pivot = arr[arr.length - 1];
-    const left: number[] = [];
-    const right: number[] = [];
-
-    for (let i = 0; i < arr.length - 1; i++) {
-        if (arr[i] < pivot) {
-            left.push(arr[i]);
-        } else {
-            right.push(arr[i]);
-        }
-    }
-
-    return [...quickSort(left), pivot, ...quickSort(right)];
+  return [...quickSort(left), pivot, ...quickSort(right)];
 }
 ```
 
