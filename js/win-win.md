@@ -3655,3 +3655,251 @@ class UserService {
 | **Monitoring/Logging Stack**  | Prometheus, ELK, Grafana и т.д.                               |
 
 
+## 🚀 Оптимизация FCP (First Contentful Paint)
+
+---
+
+### 📦 `SplitChunksPlugin`
+
+**Что делает:**
+Выносит общий и внешне-зависимый код (например, `node_modules`) в отдельные чанки.
+
+**Зачем:**
+
+* Позволяет браузеру загружать критический и некритический код параллельно.
+* Улучшает кэшируемость: `vendors.[hash].js` меняется только при обновлении зависимостей, а не при каждом билде.
+* Уменьшает размер первоначального JS-бандла.
+
+**Пример:**
+
+```
+optimization: {
+  splitChunks: {
+    chunks: 'all',
+    cacheGroups: {
+      vendor: {
+        test: /[\\/]node_modules[\\/]/,
+        name: 'vendors',
+        enforce: true,
+      },
+    },
+  },
+  runtimeChunk: 'single',
+}
+```
+
+---
+
+### 📈 Scope Hoisting (`concatenateModules`)
+
+**Что делает:**
+Объединяет все модули в одно замыкание — уменьшает количество обвязок вокруг каждого модуля.
+
+**Зачем:**
+
+* Быстрее выполнение JS за счёт уменьшения количества функций и `require`-вызовов.
+* Снижается размер итогового кода.
+
+```
+optimization: {
+  concatenateModules: true,
+}
+```
+
+---
+
+### ✂️ Tree Shaking + `sideEffects`
+
+**Что делает:**
+Удаляет неиспользуемые экспорты из модулей на уровне сборки.
+
+**Как:**
+Установить в `package.json`:
+
+```json
+"sideEffects": false
+```
+
+> Если проект использует CSS-импорты: `"sideEffects": ["*.css"]`
+
+---
+
+### 📉 Минификация JS, CSS и HTML
+
+**JS и CSS:**
+
+```
+optimization: {
+  minimize: true,
+  minimizer: [new TerserPlugin(), new CssMinimizerPlugin()],
+}
+```
+
+**HTML:**
+
+```js
+new HtmlWebpackPlugin({
+    minify: {
+        collapseWhitespace: true,
+        removeComments: true,
+    },
+})
+```
+
+---
+
+### 🎯 Разделение entry-пунктов
+
+**Что делает:**
+Разносит критически важный код (напр. шапка, above-the-fold) и вторичный код (напр. виджеты) по отдельным точкам входа.
+
+```
+entry: {
+  critical: './src/critical.js',
+  nonCritical: './src/deferred.js',
+}
+```
+
+**Как применяется:**
+
+* `critical.js` подключается в `<head>` с `defer`.
+* `nonCritical.js` загружается позже, возможно асинхронно.
+
+---
+
+### 📁 `asset/resource` + preload
+
+**Что делает:**
+Оптимально подключает ресурсы (шрифты, иконки, SVG) и указывает preload на важные файлы.
+
+```
+module: {
+  rules: [
+    { test: /\.(woff2?|ttf|svg)$/, type: 'asset/resource' },
+  ]
+}
+```
+
+```js
+new HtmlWebpackPlugin({
+    preload: ['main.css', 'logo.svg'],
+})
+```
+
+---
+
+### 🖼️ Изображения: WebP / AVIF, сжатие и `<picture>`
+
+**Что делает:**
+
+* Сжимает исходные изображения при сборке.
+* Генерирует WebP/AVIF-версии.
+* Использует `<picture>` для выбора оптимального формата.
+* Применяет `loading="lazy"` и фиксированные размеры, чтобы избежать layout shift.
+
+```
+module: {
+  rules: [
+    {
+      test: /\.(jpe?g|png)$/i,
+      use: [
+        {
+          loader: 'responsive-loader',
+          options: {
+            adapter: require('responsive-loader/sharp'),
+            format: 'webp',
+            quality: 75,
+          },
+        },
+        {
+          loader: 'image-webpack-loader',
+          options: {
+            mozjpeg: { progressive: true, quality: 75 },
+            optipng: { enabled: true },
+          },
+        },
+      ],
+    },
+  ],
+}
+```
+
+```html
+
+<picture>
+    <source srcset="img.avif" type="image/avif">
+    <source srcset="img.webp" type="image/webp">
+    <img src="img.jpg" width="600" height="400" loading="lazy" alt="">
+</picture>
+```
+
+---
+
+### 🧵 Загрузка стилей без блокировки рендера
+
+```html
+
+<link rel="stylesheet" href="style.css" media="print" onload="this.media='all'">
+```
+
+**Механизм:**
+
+* `media="print"` откладывает применение стилей.
+* Стили загружаются параллельно, но не блокируют рендеринг.
+* После загрузки `onload` переключает `media` на `all`, и CSS применяется.
+
+---
+
+## 🌍 Серверная оптимизация
+
+---
+
+### 🧭 HTTP-кэширование
+
+**Цель:** кэшировать статические ресурсы на 1 год, а HTML — не кэшировать (чтобы получать свежую версию).
+
+```nginx
+location ~* \.(js|css|woff2|svg|png|jpg)$ {
+  expires 1y;
+  add_header Cache-Control "public, immutable";
+}
+
+location = /index.html {
+  add_header Cache-Control "no-cache";
+}
+```
+
+---
+
+### 🔀 HTTP/2
+
+**Что даёт:**
+Мультиплексирует все чанки и ассеты по одному TCP-соединению — снижает накладные расходы, ускоряет загрузку.
+
+---
+
+### 🌐 CDN
+
+**Что даёт:**
+
+* Кеширование статики на edge-узлах.
+* Доставка ресурсов из ближайшего POP (point of presence).
+* Снижение TTFB.
+
+---
+
+### 📦 Сжатие (Brotli/GZIP)
+
+```nginx
+gzip on;
+gzip_types text/css application/javascript application/json;
+
+brotli on;
+brotli_types text/css application/javascript application/json;
+```
+
+**Рекомендация:**
+Использовать `gzip_static` и `brotli_static` с заранее подготовленными `.gz` и `.br` версиями.
+
+
+
