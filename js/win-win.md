@@ -2650,9 +2650,6 @@ type Data = { id: number; name: string };
 type DataWithPrefix = AddPrefix<Data, 'my_'>; // -> { my_id: number; my_name: string }
 ```
 
-Ниже — структурированный и чуть более чёткий вариант твоего текста в Markdown. Я сократил повторы, убрал лишние смайлы,
-добавил единообразие оформления и сделал заголовки более строгими.
-
 ---
 
 ## Virtual DOM (VDOM)
@@ -2997,7 +2994,7 @@ class Circle extends Shape {
 
 * **Суть:** создавать новые классы на основе существующих, переиспользуя их логику.
 
-* **Пример:** `Square` наследует `Shape` через `extends` — получают метод `printArea()` и обязаны реализовать `area()`.
+* **Пример:** `Square` наследует `Shape` через `extends` — получают метод `printArea()` и обязан реализовать `area()`.
 
 ```ts
 class Square extends Shape {
@@ -3032,8 +3029,6 @@ shapes.forEach(shape => shape.printArea());
 ```
 
 **Польза:** можно работать с разными типами фигур через общий тип `Shape` — детали скрыты внутри реализации.
-
-Даю кратко и в том же формате — **ключевые паттерны проектирования**, с акцентом на их суть и JS/TS-примеры.
 
 ---
 
@@ -3270,33 +3265,28 @@ console.log(adapted.request()); // New API
 
 ### 📍 S — Single Responsibility Principle (Принцип единственной ответственности)
 
-**Суть:** класс (или модуль) должен выполнять только одну роль.
+**Суть:** У класса или функции должна быть только одна причина для изменения — т.e. он должна отвечать за что-то одно.
 
 **Пример:**
 
 **❌ Плохо:**
 
 ```ts
-class User {
-  saveToDB() {
-  }
-
-  validateData() {
-  }
+class UserService {
+  createUser(user) { /* логика создания */ }
+  sendEmail(user) { /* логика отправки письма */ }
 }
 ```
 
 **✅ Хорошо:**
 
 ```ts
-class UserValidator {
-  validate(data: object) {
-  }
+class UserService {
+  createUser(user) { /* логика создания */ }
 }
 
-class UserRepository {
-  save(user: object) {
-  }
+class EmailService {
+  sendEmail(user) { /* логика отправки письма */ }
 }
 ```
 
@@ -3304,39 +3294,39 @@ class UserRepository {
 
 ### 📍 Open/Closed Principle (Принцип открытости/закрытости)
 
-**Суть:** класс открыт для расширения, но закрыт для модификации.
+**Суть:** Класс или функция должна быть открыта для расширения, но закрыта для изменения - т.e. добавлять поведение нужно без изменения старого кода.
 
 **Пример:**
 
+**❌ Плохо:**
+
 ```ts
-interface Shape {
-  area(): number;
-}
-
-class Circle implements Shape {
-  constructor(private r: number) {
-  }
-
-  area() {
-    return Math.PI * this.r ** 2;
-  }
-}
-
-class Square implements Shape {
-  constructor(private s: number) {
-  }
-
-  area() {
-    return this.s ** 2;
-  }
-}
-
-function totalArea(shapes: Shape[]) {
-  return shapes.reduce((sum, shape) => sum + shape.area(), 0);
+function getDiscount(type: string) {
+  if (type === 'gold') return 0.3;
+  if (type === 'silver') return 0.2;
+  return 0;
 }
 ```
 
-Добавляем новую фигуру — код `totalArea` не меняется.
+**✅ Хорошо:**
+
+```ts
+interface DiscountStrategy {
+  getDiscount(): number;
+}
+
+class GoldDiscount implements DiscountStrategy {
+  getDiscount() { return 0.3; }
+}
+
+class SilverDiscount implements DiscountStrategy {
+  getDiscount() { return 0.2; }
+}
+
+function calculateDiscount(strategy: DiscountStrategy) {
+  return strategy.getDiscount();
+}
+```
 
 ---
 
@@ -3346,45 +3336,16 @@ function totalArea(shapes: Shape[]) {
 
 **Пример:**
 
+**❌ Плохо:**
+
 ```ts
 class Bird {
-  fly() {
-  }
-}
-
-class Duck extends Bird {
+  fly() { /* летит */ }
 }
 
 class Ostrich extends Bird {
   fly() {
-    throw new Error('I can’t fly');
-  } // Нарушение LSP
-}
-```
-
-`Ostrich` не подходит как `Bird` — ломает ожидания.
-
----
-
-### 📍 I — Interface Segregation Principle (Принцип разделения интерфейсов)
-
-**Суть:** не заставляй клиента реализовывать лишнее.
-
-**Пример:**
-
-**❌ Плохо:**
-
-```ts
-interface Animal {
-  fly(): void;
-
-  run(): void;
-}
-
-class Dog implements Animal {
-  fly() {
-  } // Лишнее
-  run() {
+    throw new Error('Остриж не умеет летать');
   }
 }
 ```
@@ -3392,17 +3353,52 @@ class Dog implements Animal {
 **✅ Хорошо:**
 
 ```ts
-interface Runner {
-  run(): void;
+class Bird {}
+
+class FlyingBird extends Bird {
+  fly() { /* летит */ }
+}
+
+class Ostrich extends Bird {
+  // не наследует fly()
+}
+```
+
+---
+
+### 📍 I — Interface Segregation Principle (Принцип разделения интерфейсов)
+
+**Суть:** классы не должны реализовывать ненужные методы.
+
+**Пример:**
+
+**❌ Плохо:**
+
+```ts
+interface Animal {
+  eat(): void;
+  fly(): void;
+}
+
+class Dog implements Animal {
+  eat() {}
+  fly() { throw new Error('Собаки не летают'); }
+}
+```
+
+**✅ Хорошо:**
+
+```ts
+interface Eater {
+  eat(): void;
 }
 
 interface Flyer {
   fly(): void;
 }
 
-class Dog implements Runner {
-  run() {
-  }
+class Dog implements Eater {
+  eat() {}
 }
 ```
 
@@ -3417,13 +3413,12 @@ class Dog implements Runner {
 **❌ Плохо:**
 
 ```ts
-class MySQLDatabase {
-  query() {
-  }
+class MongoDB {
+  save() { /* сохраняет в Mongo */ }
 }
 
 class UserService {
-  db = new MySQLDatabase(); // Жёсткая связь
+  db = new MongoDB(); // жёсткая зависимость
 }
 ```
 
@@ -3431,16 +3426,18 @@ class UserService {
 
 ```ts
 interface Database {
-  query(): void;
+  save(): void;
 }
 
-class MySQLDatabase implements Database {
-  query() {
-  }
+class MongoDB implements Database {
+  save() { /* сохраняет в Mongo */ }
 }
 
 class UserService {
-  constructor(private db: Database) {
+  constructor(private db: Database) {}
+
+  saveUser() {
+    this.db.save();
   }
 }
 ```
@@ -3554,7 +3551,7 @@ class UserService {
 **🔹 Master-Slave (Primary-Replica)**
 
 * Есть один **master** (primary) — на него идут все **записи**.
-* Есть один или несколько **slave** (replica) — они получают копии данных и обслуживают **чтения**.
+* Есть один или несколько **slave** (replica) — они получают копии данных и обслуживают **чтениe**.
 * Slave нельзя использовать для записи напрямую.
 * Применяется для масштабирования чтения и отказоустойчивости.
 
