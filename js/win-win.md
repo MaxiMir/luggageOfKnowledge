@@ -2516,6 +2516,39 @@ async function asyncLimit(fn, limit) {
 }
 ```
 
+🔹 MinStack — стек с поддержкой минимального значения за O(1)
+Реализация структуры данных "стек", которая помимо стандартных операций `push` и `pop` позволяет получать минимальный элемент на текущий момент за константное время.
+
+```js
+class MinStack {
+  #state;
+
+  constructor() {
+    this.#state = [];
+  }
+
+  push(value) {
+    const min = this.#state.length ? Math.min(value, this.#state.at(-1).min) : value;
+
+    this.#state.push({ value, min });
+  }
+
+  pop() {
+    if (!this.#state.length) return;
+
+    const { value } = this.#state.pop();
+
+    return value;
+  }
+
+  getMin() {
+    if (!this.#state.length) return;
+
+    return this.#state.at(-1).min;
+  }
+}
+```
+
 
 ---
 
