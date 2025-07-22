@@ -2478,6 +2478,48 @@ function sortEvenNumbers(numbers) {
 }
 ```
 
+Вот аналогичное оформление для `asyncLimit`:
+
+---
+
+🔹 Ограничение времени выполнения асинхронной функции (`asyncLimit`)
+
+Создай обёртку над асинхронной функцией, которая завершает выполнение с ошибкой, если оно занимает больше заданного времени.
+
+```js
+const fn = async (n) => {
+  await new Promise((r) => setTimeout(r, 100));
+  return n * n;
+};
+
+const limitedFn = asyncLimit(fn, 50);
+await limitedFn(5); // -> rejected 'Превышен лимит времени исполнения'
+
+const limitedFn = asyncLimit(fn, 150);
+await limitedFn(5); // -> resolved 25
+```
+
+```js
+async function asyncLimit(fn, limit) {
+  return (...args) => {
+    return new Promise((resolve, reject) => {
+      const timeoutId = setTimeout(() => {
+        reject('Превышен лимит времени исполнения');
+      }, limit);
+
+      fn(...args)
+        .then(resolve)
+        .catch(reject)
+        .finally(() => clearTimeout(timeoutId));
+    });
+  };
+}
+```
+
+
+---
+
+
 ## <a name="eventloop"></a> 🔃 Задачи на EventLoop
 
 ```js
