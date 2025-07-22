@@ -1954,7 +1954,7 @@ useEffect(() => {
 📤 Вывод: `[1, 3]` (2 + 6)
 
 ```js
-function findTwoSum(numbers: number[], target: number) {
+function findTwoSum(numbers, target) {
     let leftIndex = 0;
     let rightIndex = numbers.length - 1;
 
@@ -1982,7 +1982,7 @@ function findTwoSum(numbers: number[], target: number) {
 📤 Вывод: `2`
 
 ```ts
-function binarySearch(numbers, target) {
+function applyBinarySearch(numbers, target) {
   let leftIndex = 0;
   let rightIndex = numbers.length - 1;
 
@@ -2081,32 +2081,30 @@ BFS гарантирует, что первая встреча с target буд�
 
 ```js
 function groupNumbers(numbers) {
-    const groups = {};
+  const groups = {};
 
-    for (const number of numbers) {
-        const digitCount = Array(10).fill(0);
+  for (const number of numbers) {
+    const digitCounts = new Array(10).fill(0);
 
-        let initialNumber = number;
+    let remaining = number;
 
-        while (initialNumber > 0) {
-            digitCount[initialNumber % 10]++; // num % 10 - берет последнюю цифру числа - увеличиваем считчик этого числа
-            initialNumber = Math.floor(initialNumber / 10); // Удаляем последнюю цифру
-        }
-
-        const key = digitCount.join('#');
-
-        if (!groups[key]) {
-            groups[key] = [];
-        }
-
-        groups[key].push(number);
+    while (remaining) {
+        digitCounts[remaining % 10]++;
+      remaining = Math.floor(remaining / 10);
     }
 
-    return Object.values(groups);
+    const key = digitCounts.join('#');
+
+    if (!groups[key]) groups[key] = [];
+
+    groups[key].push(number);
+  }
+
+  return Object.values(groups);
 }
 ```
 
-⏱️ Сложность: O(n * k)
+⏱️ Сложность: O(n * d), n - кол-во чисел, d - количество чисел в числе
 
 ---
 
@@ -2161,6 +2159,8 @@ function formatRange(a, b) {
 }
 ```
 
+⏱️ Сложность: O(n log n)
+
 ---
 
 **🔹 Глубокое клонирование объекта**
@@ -2172,7 +2172,7 @@ function formatRange(a, b) {
 📥 Ввод:
 
 ```tsx
-const a: any = {};
+const a = {};
 a.self = a;
 deepClone(a);
 ```
@@ -2249,6 +2249,8 @@ function deepEqual(a, b) {
   return true;
 }
 ```
+
+⏱️ Сложность: O(n log n)
 
 ---
 
