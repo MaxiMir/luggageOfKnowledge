@@ -1120,38 +1120,58 @@ Content-Security-Policy: script-src 'self'
 | Директива                  | Что контролирует                                                   |
 |----------------------------|--------------------------------------------------------------------|
 | `default-src`              | Базовая политика по умолчанию                                      |
-| `script-src`               | Источники JS                                                       |
-| `style-src`                | Источники CSS                                                      |
-| `img-src`                  | Изображения                                                        |
-| `font-src`                 | Шрифты                                                             |
-| `connect-src`              | AJAX / WebSocket                                                   |
+| `script-src`               | Источники JS, включая inline-скрипты и `eval` (управление через `unsafe-inline`, `unsafe-eval`).                                                       |
+| `style-src`                | Источники CSS, включая inline-стили через (управление через `unsafe-inline`)                                                     |
+| `img-src`                  | Источники изображений                                                        |
+| `font-src`                 | Источники шрифтов                                                             |
+| `connect-src`              | AJAX, WebSocket, EventSource, Fetch                                                  |
 | `frame-src`                | `iframe` и встраивание                                             |
-| `media-src`                | аудио / видео                                                      |
-| `object-src`               | Flash, плагины (лучше `none`)                                      |
+| `media-src`                | Источники аудио / видео                                                      |
+| `object-src`               | Flash, Java апплеты, плагины (лучше ставить `none`)                                      |
 | `form-action`              | Куда можно отправлять формы                                        |
 | `frame-ancestors`          | Кто может встраивать этот сайт в `iframe` (защита от clickjacking) |
 | `report-uri` / `report-to` | Куда отправлять отчеты о нарушениях                                |
+
+
+Вот обновлённая таблица CSP с современными рекомендациями (CSP Level 3) и примерами:
+
+| Директива                   | Что контролирует                                  | Пример значений / комментарий                                         |
+| --------------------------- | ------------------------------------------------- | --------------------------------------------------------------------- |
+| `default-src`               | Базовая политика по умолчанию для всех ресурсов   | `'self'`, `'none'`, `https://cdn.example.com`                         |
+| `script-src`                | Источники JavaScript, включая inline и `eval`     | `'self'`, `'unsafe-inline'`, `'nonce-...`', `https://cdn.example.com` |
+| `style-src`                 | Источники CSS, включая inline                     | `'self'`, `'unsafe-inline'`, `https://fonts.googleapis.com`           |
+| `img-src`                   | Источники изображений                             | `'self'`, `data:`, `https://images.example.com`                       |
+| `font-src`                  | Источники шрифтов                                 | `'self'`, `https://fonts.gstatic.com`                                 |
+| `connect-src`               | AJAX, Fetch, WebSocket, EventSource               | `'self'`, `wss://example.com`                                         |
+| `frame-src` / `child-src`   | Источники для встраиваемых фреймов (`iframe`)     | `'self'`, `https://player.example.com`                                |
+| `media-src`                 | Источники аудио и видео                           | `'self'`, `https://media.example.com`                                 |
+| `object-src`                | Плагины, Flash, Java-апплеты                      | `'none'` (рекомендуется)                                              |
+| `form-action`               | Куда можно отправлять формы                       | `'self'`, `https://payments.example.com`                              |
+| `frame-ancestors`           | Кто может встраивать сайт в iframe (clickjacking) | `'none'`, `'self'`, `https://trusted.com`                             |
+| `report-to` / `report-uri`  | Куда отправлять отчёты о нарушениях CSP           | `report-to: myCSPGroup` (CSP3), `report-uri: /csp-report-endpoint`    |
+| `base-uri`                  | Разрешённые базовые URL для `<base>`              | `'self'`                                                              |
+| `manifest-src`              | Источники манифестов для PWA                      | `'self'`                                                              |
+| `worker-src`                | Источники для Web Worker и Shared Worker          | `'self'`, `blob:`                                                     |
+| `prefetch-src`              | Источники для предзагрузки ресурсов               | `'self'`                                                              |
+| `upgrade-insecure-requests` | Автоматическое обновление HTTP-запросов на HTTPS  | —                                                                     |
+
+Особенности:
+
+* `frame-src` устарела, используется `child-src` для CSP3, но старые браузеры поддерживают только `frame-src`.
+* `report-uri` устарела, теперь рекомендуют `report-to`.
+* Inline-скрипты и стили контролируются через `'unsafe-inline'` или `nonce/hashes`.
+
 
 ### 📍 Пример базовой политики CSP
 
 ```
 Content-Security-Policy:
-  default-src 'self';
-  script-src 'self' https://trusted.cdn.com;
-  style-src 'self' 'unsafe-inline';
-  img-src *;
-  object-src 'none';
+  default-src 'self'; 							# только с того же origin
+  script-src 'self' https://trusted.cdn.com;	# разрешает только локальные и CDN-скрипты
+  style-src 'self' 'unsafe-inline';				# в style-src разрешает inline-стили (⚠️ нежелательно)
+  img-src *;									# можно грузить картинки откуда угодно
+  object-src 'none';							# полностью запрещает плагины (в т.ч. Flash)
 ```
-
-### 📍 Разбор:
-
-* `'self'` — только с того же origin
-* `script-src` — разрешает только локальные и CDN-скрипты
-* `'unsafe-inline'` в style-src разрешает inline-стили (⚠️ нежелательно)
-* `img-src *` — можно грузить картинки откуда угодно
-* `object-src 'none'` — полностью запрещает плагины (в т.ч. Flash)
-
-`*` — любой источник (иногда допустим, например для картинок, но не для скриптов)
 
 ---
 
@@ -1717,17 +1737,18 @@ class Node {
 
 ### 📊 Сравнительная таблица
 
-| СД              | Доступ      | Вставка  | Удаление | Применение                     |
-|-----------------|-------------|----------|----------|--------------------------------|
-| **Stack**       | O(1)        | O(1)     | O(1)     | Рекурсия, call stack           |
-| **Queue**       | O(1)        | O(1)     | O(1)     | События, BFS                   |
-| **Linked List** | O(n)        | O(1)     | O(1)     | Динамические списки            |
-| **Hash Table**  | O(1)\*      | O(1)\*   | O(1)\*   | Map, кэширование               |
-| **Graph**       | O(1) – O(n) | O(1)     | O(1)     | Навигация, связи, алгоритмы    |
-| **Tree**        | O(log n)    | O(log n) | O(log n) | DOM, ИИ, поиск, индексирование |
+| СД              | Доступ                     | Вставка                                     | Удаление                                    | Применение                     |
+| --------------- | -------------------------- | ------------------------------------------- | ------------------------------------------- | ------------------------------ |
+| **Stack**       | O(n), O(1) к вершине стека | O(1)                                        | O(1)                                        | Рекурсия, call stack           |
+| **Queue**       | O(n), O(1) к голове/хвосту | O(1)                                        | O(1)                                        | События, BFS                   |
+| **Linked List** | O(n)                       | O(1) при известном узле, O(n) по индексу    | O(1) при известном узле                     | Динамические списки            |
+| **Hash Table**  | O(1)\*                     | O(1)\*                                      | O(1)\*                                      | Map, кэширование               |
+| **Graph**       | O(1)-O(n)                  | O(1) для списка смежности, O(n) для матрицы | O(1) для списка смежности, O(n) для матрицы | Навигация, связи, алгоритмы    |
+| **Tree**        | O(log n)\*\*               | O(log n)\*\*                                | O(log n)\*\*                                | DOM, ИИ, поиск, индексирование |
 
 * В среднем. В худшем случае (много коллизий) может быть O(n)
-
+** Для сбалансированных деревьев; в худшем случае несбалансированного дерева — O(n)
+  
 ## <a name="weak"></a> 📊 Map vs Set vs WeakMap vs WeakSet
 
 Эти структуры данных введены в ES6 (ES2015) и предназначены для **более гибкой работы с коллекциями данных**, чем
@@ -2478,7 +2499,80 @@ function sortEvenNumbers(numbers) {
 }
 ```
 
-Вот аналогичное оформление для `asyncLimit`:
+
+🔹 Крестики-нолики
+
+```js
+export class TicTacToe {
+    constructor(size) {
+        this.size = size;
+        this.board = Array(size)
+            .fill(null)
+            .map(() => Array(size).fill(null));
+        this.player = 'X';
+        this.winner = null;
+    }
+
+    makeMove(row, col) {
+        if (!this.checkCanMove(row, col)) return false;
+
+        this.board[row][col] = this.player;
+
+        if (this.checkWinner(row, col)) {
+            this.winner = this.player;
+        } else if (this.checkDraw()) {
+            this.winner = 'draw';
+        } else {
+            this.player = this.player === 'X' ? 'O' : 'X';
+        }
+
+        return true;
+    }
+
+    checkWinner(row, col) {
+        return (
+            this.checkRowWin(row) ||
+            this.checkColWin(col) ||
+            this.checkDiagonalWin(row, col) ||
+            this.checkReverseDiagonalWin(row, col)
+        );
+    }
+
+    checkValidCell(cell) {
+        return cell >= 0 && cell < this.size;
+    }
+
+    checkCanMove(row, col) {
+        if (!checkValidCell(row) || !checkValidCell(col)) return false;
+
+        return !this.winner && !this.board[row][col];
+    }
+
+    checkRowWin(row) {
+        return this.board[row].every((cell) => cell === this.player);
+    }
+
+    checkColWin(col) {
+        return this.board.every((row) => row[col] === this.player);
+    }
+
+    checkDiagonalWin(row, col) {
+        if (row !== col) return false;
+
+        return this.board.every((r, i) => r[i] === this.player);
+    }
+
+    checkReverseDiagonalWin(row, col) {
+        if (row + col !== this.size - 1) return false;
+
+        return this.board.every((r, i) => r[this.size - i - 1] === this.player);
+    }
+
+    checkDraw() {
+        return this.board.flat().every(Boolean);
+    }
+}
+```
 
 ---
 
