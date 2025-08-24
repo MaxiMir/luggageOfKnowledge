@@ -204,14 +204,14 @@ console.log(fns.map(fn => fn())); // → [0, 1, 2]
 **Шаг 1**. Клиент посылает `SYN`
 
 ```yaml
-Frame 1: 66 bytes			   # кадр на уровне канала передачи данных с порядковым номером
+Frame 1: 66 bytes			   		# кадр на уровне канала передачи данных с порядковым номером
   Ethernet II
   Internet Protocol Version 4
   Transmission Control Protocol
-Source Port: 50231             # случайный порт приложения (обычно 1024–65535)
-Destination Port: 443          # порт HTTPS сервера Google
-Flags: 0x002 (SYN)             # инициация соединения
-Sequence Number: ⟨client_ISN⟩  # случайное начальное число
+Source Port: 50231             		# случайный порт приложения (обычно 1024–65535)
+Destination Port: 443          		# порт HTTPS сервера Google
+Flags: 0x002 (SYN)             		# инициация соединения
+Sequence Number: ⟨client_ISN⟩  		# случайное начальное число
 ```
 
 > Флаг SYN — это сигнал: «Я хочу установить TCP-соединение»
@@ -225,11 +225,11 @@ Frame 2: 66 bytes
   Ethernet II
   Internet Protocol Version 4
   Transmission Control Protocol
-Source Port: 443               # порт сервера
-Destination Port: 50231        # порт клиента
-Flags: 0x012 (SYN, ACK)        # инициализация + подтверждение установления соединения
-Sequence Number: ⟨server_ISN⟩  # случайное начальное число сервера
-Ack Number: ⟨client_ISN + 1⟩   # подтверждает SYN клиента; указывает следующий ожидаемый байт
+Source Port: 443               		# порт сервера
+Destination Port: 50231        		# порт клиента
+Flags: 0x012 (SYN, ACK)        		# инициализация + подтверждение установления соединения
+Sequence Number: ⟨server_ISN⟩  		# случайное начальное число сервера
+Ack Number: ⟨client_ISN + 1⟩   		# подтверждает SYN клиента; указывает следующий ожидаемый байт
 ```
 
 > Флаг ACK — это сигнал: «Я подтверждаю получение данных»
@@ -242,11 +242,11 @@ Frame 3: 66 bytes
   Ethernet II
   Internet Protocol Version 4
   Transmission Control Protocol
-Source Port: 50231                 # порт клиента
-Destination Port: 443              # порт сервера
-Flags: 0x010 (ACK)                 # подтверждение получения SYN+ACK от сервера
-Sequence Number: ⟨client_ISN + 1⟩  # следующий за своим ISN
-Ack Number: ⟨server_ISN + 1⟩       # подтверждает SYN сервера
+Source Port: 50231                 	  # порт клиента
+Destination Port: 443              	  # порт сервера
+Flags: 0x010 (ACK)                    # подтверждение получения SYN+ACK от сервера
+Sequence Number: ⟨client_ISN + 1⟩     # следующий за своим ISN
+Ack Number: ⟨server_ISN + 1⟩          # подтверждает SYN сервера
 ```
 
 ✅ TCP-соединение установлено, данные можно передавать.
@@ -299,17 +299,17 @@ ClientHello
 
 ``` 
 ServerHello
-- selected_version      # выбранная версия TLS
-- selected_cipher       # выбранный шифр
-- server_random         # случайный набор байтов + UNIX timestamp
-- key_share             # открытый ключ сервера [для TLS 1.3]
+- selected_version        # выбранная версия TLS
+- selected_cipher         # выбранный шифр
+- server_random           # случайный набор байтов + UNIX timestamp
+- key_share               # открытый ключ сервера [для TLS 1.3]
 
 Certificate (X.509)
-Subject: CN = google.com              # CN (Common Name) — доменное имя сервера
-Issuer: CN = DigiCert TLS RSA CA G1   # Центр сертификации (CA), выдавший сертификат
-Valid from: Jan 1 00:00:00 2024 GMT   # Начало срока действия сертификата
-Valid to  : Jan 1 23:59:59 2025 GMT   # Конец срока действия сертификата
-Public Key Algorithm: RSA (2048 bits) # Алгоритм и длина ключа, используемые сервером
+Subject: CN = google.com              		  # CN (Common Name) — доменное имя сервера
+Issuer: CN = DigiCert TLS RSA CA G1           # Центр сертификации (CA), выдавший сертификат
+Valid from: Jan 1 00:00:00 2024 GMT           # Начало срока действия сертификата
+Valid to  : Jan 1 23:59:59 2025 GMT           # Конец срока действия сертификата
+Public Key Algorithm: RSA (2048 bits)         # Алгоритм и длина ключа, используемые сервером
 Signature Algorithm: sha256WithRSAEncryption  # Алгоритм цифровой подписи CA
 ```
 
