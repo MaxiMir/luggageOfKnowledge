@@ -2094,7 +2094,7 @@ function groupNumbers(numbers) {
 
     while (remaining) {
         digitCounts[remaining % 10]++;
-      remaining = Math.floor(remaining / 10);
+        remaining = Math.floor(remaining / 10);
     }
 
     const key = digitCounts.join('#');
