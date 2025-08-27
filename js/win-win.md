@@ -2386,6 +2386,161 @@ function promiseRace(promises) {
         });
     });
 }
+
+
+/** Реализация Promise: */
+const STATE = {
+  PENDING: "pending",
+  FULFILLED: "fulfilled",
+  REJECTED: "rejected",
+};
+
+// Класс ошибки для необработанных промисов
+class UncaughtPromiseError extends Error {
+  constructor(error) {
+    super(error);
+    this.stack = `(in promise) ${error.stack}`;
+  }
+}
+
+class MyPromise {
+  #state = STATE.PENDING;
+  #value;
+  #thenCallbacks = [];
+  #catchCallbacks = [];
+  #onSuccessBind = this.#onSuccess.bind(this);
+  #onFailBind = this.#onFail.bind(this);
+
+  constructor(cb) {
+    try {
+      cb(this.#onSuccessBind, this.#onFailBind);
+    } catch (error) {
+      this.#onFail(error);
+    }
+  }
+
+  #runCallbacks() {
+    if (this.#state === STATE.FULFILLED) {
+      this.#thenCallbacks.forEach((callback) => callback(this.#value));
+      this.#thenCallbacks = [];
+    }
+
+    if (this.#state === STATE.REJECTED) {
+      this.#catchCallbacks.forEach((callback) => callback(this.#value));
+      this.#catchCallbacks = [];
+    }
+  }
+
+  #onSuccess(value) {
+    queueMicrotask(() => {
+      if (this.#state !== STATE.PENDING) return;
+
+      // если value — другой MyPromise, цепляемся к нему
+      if (value instanceof MyPromise) {
+        value.then(this.#onSuccessBind, this.#onFailBind);
+        return;
+      }
+
+      this.#value = value;
+      this.#state = STATE.FULFILLED;
+      this.#runCallbacks();
+    });
+  }
+
+  #onFail(reason) {
+    queueMicrotask(() => {
+      if (this.#state !== STATE.PENDING) return;
+
+      // если reason — промис, цепляемся к нему
+      if (reason instanceof MyPromise) {
+        reason.then(this.#onSuccessBind, this.#onFailBind);
+        return;
+      }
+
+      this.#value = reason;
+      this.#state = STATE.REJECTED;
+
+      // если нет колбеков catch, бросаем ошибку
+      if (!this.#catchCallbacks.length) {
+        throw new UncaughtPromiseError(reason);
+      }
+
+      this.#runCallbacks();
+    });
+  }
+
+  then(thenCallback, catchCallback) {
+    return new MyPromise((resolve, reject) => {
+      this.#thenCallbacks.push((result) => {
+        if (typeof thenCallback !== "function") {
+          resolve(result);
+          return;
+        }
+
+        try {
+          resolve(thenCallback(result));
+        } catch (error) {
+          reject(error);
+        }
+      });
+
+      this.#catchCallbacks.push((result) => {
+        if (typeof catchCallback !== "function") {
+          reject(result);
+          return;
+        }
+
+        try {
+          resolve(catchCallback(result));
+        } catch (error) {
+          reject(error);
+        }
+      });
+
+      if (typeof thenCallback === "function")
+        this.#thenCallbacks.push(thenCallback);
+
+      if (typeof catchCallback === "function")
+        this.#catchCallbacks.push(catchCallback);
+
+      this.#runCallbacks();
+    });
+  }
+
+  catch(callback) {
+    return this.then(undefined, callback);
+  }
+
+  finally(callback) {
+    return this.then(
+      (value) => {
+        const result = callback();
+        // если callback возвращает промис, ждём его
+        if (result instanceof MyPromise) {
+          return result.then(() => value);
+        }
+        return value;
+      },
+      (reason) => {
+        const ret = callback();
+        if (ret instanceof MyPromise) {
+          return ret.then(() => {
+            throw reason;
+          });
+        }
+        throw reason;
+      }
+    );
+  }
+
+  static resolve(value) {
+    return new MyPromise((resolve) => resolve(value));
+  }
+
+  static reject(value) {
+    return new MyPromise((resolve, reject) => reject(value));
+  }
+}
 ```
 
 ---
