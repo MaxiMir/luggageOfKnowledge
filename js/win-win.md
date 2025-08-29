@@ -2515,6 +2515,71 @@ class MyPromise {
     return new MyPromise((resolve, reject) => reject(value));
   }
 }
+
+
+/** Написать обертку, создающую функцию "smartFetch(id)", склеивающую вызовы в один (c окном timeout мс). **/
+
+function smartFetch(timeout) {
+  // Map для накопления id и соответствующих resolve;
+  let pending = new Map(); // { id -> { resolve } }
+  let timeoutId = null;
+
+  return function smartFetch(id) {
+    return new Promise((resolve) => {
+      if (!pending.has(id)) pending.set(id, { resolve });
+
+      if (!timeoutId) {
+        timeoutId = setTimeout(() => {
+          const pendingCopy = new Map(pending);
+          // Собираем все id из накопленных вызовов:
+          const ids = Array.from(pendingCopy.keys());
+
+          timeoutId = null;
+          pending.clear();
+
+          // Делаем запрос один запрос к бэкенду:
+          batchFetch(ids).then((data) => {
+            ids.forEach((id) => pendingCopy.get(id).resolve(data[id]));
+          });
+        }, timeout);
+      }
+    });
+  };
+}
+
+(async function () {
+  console.clear();
+
+  const smartFetch = createSmartFetch(100);
+
+  const a = smartFetch(10);
+  const b = smartFetch(20);
+
+  console.log('ждём 100 мс, накапливаем запросы');
+  await new Promise((resolve) => setTimeout(resolve, 100));
+
+  const c = smartFetch(30);
+  const d = smartFetch(40);
+
+  console.log('ждём 100 мс, накапливаем запросы');
+  await new Promise((resolve) => setTimeout(resolve, 100));
+
+  console.log('a:', await a); // a: { id: 10, title: 10 }
+  console.log('b:', await b); // b: { id: 20, title: 20 }
+})();
+
+function batchFetch(ids) {
+  return new Promise((resolve) => {
+    console.log('запрос к бэкенду', ids);
+    setTimeout(() => {
+      const res = {};
+      ids.forEach((id) => (res[id] = { id, title: id }));
+      resolve(res);
+    }, Math.random() * 1000);
+  });
+}
+
+
 ```
 
 ---
