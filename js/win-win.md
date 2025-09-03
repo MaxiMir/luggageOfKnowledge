@@ -41,7 +41,6 @@
 | **Переобъявление**    | ✅ Разрешено в одной области               | ❌ Ошибка в одной области             | ❌ Ошибка в одной области                      |
 | **Переназначение**    | ✅ Разрешено                               | ✅ Разрешено                          | ❌ Запрещено (только мутировать объект/массив) |
 | **TDZ**               | ❌ Нет                                     | ✅ Есть                               | ✅ Есть                                        |
-| **Глобальный объект** | ✅ Создаёт свойство в `window` (если объявлен вне функции)            | ❌ Не создаёт                         | ❌ Не создаёт                                  |
 
 > **Temporal Dead Zone** (TDZ) — это участок кода между началом области видимости блока и фактической инициализацией
 > переменной `let` или `const`.
@@ -237,7 +236,7 @@ Ack Number: ⟨server_ISN + 1⟩          # подтверждает SYN сер�
 
 > TLS - Transport Layer Security (cryptographic protocol).
 
-* Шифрует весь трафик (включая заголовки и тело)
+* Шифрует весь трафик (включая заголовки и тело), но имя хоста, IP, порт и размеры записей видны
 * Гарантирует целостность (ничего не подменили `MITM`)
 * Проверяет подлинность сервера (через SSL-сертификат)
 
@@ -702,7 +701,7 @@ SOP (Политика одного источника) — это механиз
 
 Источник (origin) состоит из трёх компонентов:
 
-* **Scheme** (протокол): `htt`p / `https`;
+* **Scheme** (протокол): `http` / `https`;
 * **Host** (домен): `example.com` / `api.example.com`;
 * **Port** (порт): `80`, `443`, `3000`, и т.д.
 
@@ -811,7 +810,7 @@ SOP ограничивает доступ к:
 
 > **CORS** (Cross-Origin Resource Sharing) — это механизм, который позволяет серверу явно указать, каким другим источникам (origin) можно обращаться к его ресурсам через браузер.
 
-👉 Без CORS браузер заблокирует клиентский запрос к ресурсу с другого origin, даже если сервер ответил 200 OK.
+👉 Без CORS браузер ограничит доступ к ответу ресурса с другого origin.
 
 ---
 
@@ -1078,7 +1077,6 @@ Content-Security-Policy: script-src 'self'
 
 Особенности:
 
-* `frame-src` устарела, используется `child-src` для CSP3, но старые браузеры поддерживают только `frame-src`.
 * `report-uri` устарела, теперь рекомендуют `report-to`.
 * Inline-скрипты и стили контролируются через `'unsafe-inline'` или `nonce/hashes`.
 
@@ -1198,7 +1196,7 @@ if (req.headers.origin !== "https://yourapp.com") {
 
 **🔹 4. Уйти от cookie-based auth → использовать JWT в header**
 
-Если SPA использует Bearer-токен (в Authorization), CSRF невозможен по определению.
+Если SPA использует Bearer-токен (в Authorization), браузер не добавляет заголовок автоматически, поэтому классическая CSRF не сработает.
 
 ```js
 fetch("/api/transfer", {
@@ -1249,19 +1247,10 @@ fetch("/api/transfer", {
 ```html
 <!-- Прозрачный iframe -->
 <iframe src="https://bank.com/transfer" style="
-    opacity: 0;
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 800px;
-    height: 600px;
-    pointer-events: auto;
+  position:absolute; inset:0; width:100%; height:100%;
+  opacity:0; z-index:1000; pointer-events:auto;
 "></iframe>
-
-<!-- Кнопка "получить подарок" -->
-<button style="position: absolute; top: 0; left: 0; z-index: 1000;">
-    Получить приз 🎁
-</button>
+<button style="position:relative; z-index:1;">Получить приз 🎁</button>
 ```
 
 Пользователь думает, что нажимает на кнопку «приз», но кликает на кнопку в банке.
@@ -2192,8 +2181,6 @@ function deepEqual(a, b) {
 }
 ```
 
-⏱️ Сложность: O(n log n)
-
 ---
 
 **🔹 Каррирование**
@@ -2395,13 +2382,15 @@ class MyPromise {
 
   #runCallbacks() {
     if (this.#state === STATE.FULFILLED) {
-      this.#thenCallbacks.forEach((callback) => callback(this.#value));
+      // чтобы не обходить "живой" массив, который могут менять сами колбэки - делаем копию:
+      const list = this.#thenCallbacks.slice();
       this.#thenCallbacks = [];
+      list.forEach((cb) => cb(this.#value));
     }
-
     if (this.#state === STATE.REJECTED) {
-      this.#catchCallbacks.forEach((callback) => callback(this.#value));
+      const list = this.#catchCallbacks.slice();
       this.#catchCallbacks = [];
+      list.forEach((cb) => cb(this.#value));
     }
   }
 
@@ -2443,41 +2432,36 @@ class MyPromise {
     });
   }
 
-  then(thenCallback, catchCallback) {
+  then(onFulfilled, onRejected) {
     return new MyPromise((resolve, reject) => {
-      this.#thenCallbacks.push((result) => {
-        if (typeof thenCallback !== "function") {
-          resolve(result);
-          return;
-        }
-
+      const handleFulfilled = (value) => {
         try {
-          resolve(thenCallback(result));
-        } catch (error) {
-          reject(error);
+          if (typeof onFulfilled === 'function') {
+            resolve(onFulfilled(value));
+          } else {
+            resolve(value);
+          }
+        } catch (e) {
+          reject(e);
         }
-      });
+      };
 
-      this.#catchCallbacks.push((result) => {
-        if (typeof catchCallback !== "function") {
-          reject(result);
-          return;
-        }
-
+      const handleRejected = (reason) => {
         try {
-          resolve(catchCallback(result));
-        } catch (error) {
-          reject(error);
+          if (typeof onRejected === 'function') {
+            resolve(onRejected(reason));
+          } else {
+            reject(reason);
+          }
+        } catch (e) {
+          reject(e);
         }
-      });
+      };
 
-      if (typeof thenCallback === "function")
-        this.#thenCallbacks.push(thenCallback);
+      this.#thenCallbacks.push(handleFulfilled);
+      this.#catchCallbacks.push(handleRejected);
 
-      if (typeof catchCallback === "function")
-        this.#catchCallbacks.push(catchCallback);
-
-      this.#runCallbacks();
+      queueMicrotask(() => this.#runCallbacks());
     });
   }
 
@@ -2521,26 +2505,31 @@ class MyPromise {
 
 function smartFetch(timeout) {
   // Map для накопления id и соответствующих resolve;
-  let pending = new Map(); // { id -> { resolve } }
+  let pending = new Map(); // { [id]: Array<{ resolve, reject }> }
   let timeoutId = null;
 
   return function smartFetch(id) {
     return new Promise((resolve) => {
-      if (!pending.has(id)) pending.set(id, { resolve });
+      if (!pending.has(id)) pending.set(id, []);
+      pending.get(id).push({ resolve, reject });
 
       if (!timeoutId) {
         timeoutId = setTimeout(() => {
           const pendingCopy = new Map(pending);
           // Собираем все id из накопленных вызовов:
-          const ids = Array.from(pendingCopy.keys());
+          const ids = [...pendingCopy.keys()];
 
           timeoutId = null;
           pending.clear();
 
           // Делаем запрос один запрос к бэкенду:
-          batchFetch(ids).then((data) => {
-            ids.forEach((id) => pendingCopy.get(id).resolve(data[id]));
-          });
+          batchFetch(ids)
+			.then((data) => {
+              ids.forEach((id) => snapshot.get(id).forEach(({ resolve }) => resolve(data[id])););
+            })
+            .catch((err) => {
+              ids.forEach((id) => snapshot.get(id).forEach(({ reject }) => reject(err)));
+            });
         }, timeout);
       }
     });
@@ -2593,6 +2582,7 @@ const BRACKETS = {
     '{': '}',
     '<': '>',
 };
+const CLOSE_BRACKETS = Object.values(BRACKETS);
 
 function checkBrackets(value) {
     const stack = [];
@@ -2600,7 +2590,7 @@ function checkBrackets(value) {
     for (const char of value) {
         if (BRACKETS[char]) {
             stack.push(char);
-        } else {
+        } else if (CLOSE_BRACKETS.includes(char)) {
             const last = stack.pop();
 
             if (BRACKETS[last] !== char) return false;
@@ -2684,7 +2674,7 @@ export class TicTacToe {
     }
 
     checkCanMove(row, col) {
-        if (!checkValidCell(row) || !checkValidCell(col)) return false;
+        if (!this.checkValidCell(row) || !this.checkValidCell(col)) return false;
 
         return !this.winner && !this.board[row][col];
     }
@@ -2735,14 +2725,14 @@ await limitedFn(5); // -> resolved 25
 ```
 
 ```js
-async function asyncLimit(fn, limit) {
+function asyncLimit(fn, limit) {
   return (...args) => {
     return new Promise((resolve, reject) => {
       const timeoutId = setTimeout(() => {
         reject('Превышен лимит времени исполнения');
       }, limit);
 
-      fn(...args)
+      Promise.resolve().then(() => fn(...args))
         .then(resolve)
         .catch(reject)
         .finally(() => clearTimeout(timeoutId));
@@ -3145,7 +3135,7 @@ if ('serviceWorker' in navigator) {
 | Метрика                            | Что измеряет                                                  | Хорошее значение | Что тормозит                                                                | Как улучшить                                                                                           |
 |------------------------------------|---------------------------------------------------------------|------------------|-----------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------|
 | **LCP (Largest Contentful Paint)** | Когда основной контент виден.                                 | ≤ 2.5 сек        | Большие изображения, рендер-блокирующий CSS, шрифты, медленный сервер       | Оптимизировать картинки (`next/image`), использовать `<link rel="preload">` для шрифтов и CSS, SSR/SSG |
-| **FID (First Input Delay)**        | Время отклика на первое взаимодействие.                       | ≤ 100 мс         | Большой JS-бандл, тяжёлые синхронные скрипты                                | Разделять бандлы (`dynamic()`), выносить тяжёлый JS, откладывать неважные скрипты                      |
+| **FID (First Input Delay)**        | Время отклика на первое взаимодействие. Больше не метрика CWV - заменен на INP (Interaction to Next Paint) с порогом хорошо ≤ 200 мс                        | ≤ 100 мс         | Большой JS-бандл, тяжёлые синхронные скрипты                                | Разделять бандлы (`dynamic()`), выносить тяжёлый JS, откладывать неважные скрипты                      |
 | **CLS (Cumulative Layout Shift)**  | Насколько сильно «прыгает» макет при загрузке.                | ≤ 0.1            | Отсутствие фиксированных размеров для `<img>`, динамические баннеры/реклама | Всегда задавать `width`/`height` для изображений, резервировать место для рекламы                      |
 | **FCP (First Contentful Paint)**   | Когда что-то, кроме background, впервые появляется на экране. | ≤ 1.8 сек        | Медленный TTFB, большие CSS, блокирующие шрифты                             | Уменьшить TTFB, использовать `next/font`, минимизировать критический CSS                               |
 | **TTFB (Time To First Byte)**      | Время от запроса до первого байта от сервера.                 | ≤ 200 мс         | Медленный сервер, отсутствие кэша                                           | Использовать CDN, Edge runtime, ISR, кешировать HTML и API                                             |
@@ -3659,7 +3649,7 @@ class Bird {
 
 class Ostrich extends Bird {
   fly() {
-    throw new Error('Остриж не умеет летать');
+    throw new Error('Страус не умеет летать');
   }
 }
 ```
@@ -3782,6 +3772,7 @@ class UserService {
 * `301 Moved Permanently` — ресурс переехал навсегда.
 * `302 Found` — временный редирект.
 * `304 Not Modified` — ресурс не изменён, можно использовать кеш.
+* `307 Temporary Redirect` — временный редирект + сохранение метода при редиректе
 
 ---
 
@@ -4183,8 +4174,6 @@ brotli on;
 brotli_types text/css application/javascript application/json;
 ```
 
-**Рекомендация:**
-Использовать `gzip_static` и `brotli_static` с заранее подготовленными `.gz` и `.br` версиями.
 
 
 
