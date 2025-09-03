@@ -137,7 +137,7 @@
 * Обеспечивает масштабируемость и отказоустойчивость.
 * Примеры: Redis Cluster, Hazelcast, Aerospike.
 
-4**Database Cache**
+4. **Database Cache**
 
 * Встроенные механизмы кэширования внутри БД.
 * Например, query cache, page cache в MySQL/Postgres.
