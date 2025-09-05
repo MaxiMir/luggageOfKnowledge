@@ -128,7 +128,6 @@ CDN работает поверх **DNS/Anycast**: пользовательск�
 * **Nginx**, **HAProxy**, **Envoy**, **Traefik** — open-source решения.
 * **AWS ELB/ALB/NLB**, **GCP Load Balancer**, **Azure Load Balancer** — облачные.
 * **F5**, **Citrix ADC** — hardware enterprise решения.
-* 
 
 
 ### Алгоритмы балансировки
